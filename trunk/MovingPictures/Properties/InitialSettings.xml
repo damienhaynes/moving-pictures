@@ -1,0 +1,38 @@
+<MoviesPluginSettings>
+  
+  <group name="Movie Importer">
+    <group name="General">
+      <setting id="importer_thread_count" name="Thread Count" type="INT">
+        <default>5</default>
+        <description>The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.</description>
+      </setting>
+    </group>
+
+    <!--group name="Config GUI">
+      <setting id="gui_approve_on_select" name="Approve Match on Select" type="BOOL">
+        <default>true</default>
+        <description>When a possible match is selected from the possible match dropdown list in the Media Importer, it will automatically be approved and queued for commiting. If this is set to false, a match must be manually approved even after an update.</description>
+      </setting>
+    </group-->
+    
+    <group name="Movie-XML Provider">
+      
+      <setting id="xml_max_timeouts" name="Max Timeouts" type="INT">
+        <default>10</default>
+        <description>The maximum number of timeouts received from the server before a thread returns an error condition.</description>        
+      </setting>
+
+      <setting id="xml_timeout_length" name="Timeout Length" type="INT">
+        <default>5000</default>
+        <description>The base length of time (in milliseconds) for a timeout when connecting to the Movie-XML.com data service.</description>
+      </setting>
+
+      <setting id="xml_timeout_increment" name="Timeout Increment" type="INT">
+        <default>1000</default>
+        <description>The amount of time (in milliseconds) added to the timeout limit  after each timeout failure. A non-zero value will help when the server is experience a large amount of congestion.</description>
+      </setting> 
+
+    </group>
+  </group>
+
+</MoviesPluginSettings>
