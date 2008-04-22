@@ -1,45 +1,30 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4D585473-868D-4192-8C31-A1E3083E0C54}</ProjectGuid>
+    <ProjectGuid>{443F8F2C-44D2-47FB-B552-636664C8EC53}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MediaPortal.Plugins.MovingPictures</RootNamespace>
-    <AssemblyName>MoviesPlugin</AssemblyName>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>MovingPictures</AssemblyName>
+    <RootNamespace>MovingPictures</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>.\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>.\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -47,12 +32,6 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigScreen\AdvancedSettingsPane.cs">
@@ -111,7 +90,7 @@
     <Compile Include="Database\MovingPicturesTables\DBSetting.cs" />
     <Compile Include="Database\MovingPicturesTables\DBUser.cs" />
     <Compile Include="Database\MovingPicturesTables\DBUserMovieSettings.cs" />
-    <Compile Include="Database\MovingPicturesTables\MoviesPluginDBTable.cs" />
+    <Compile Include="Database\MovingPicturesTables\MovingPicturesDBTable.cs" />
     <Compile Include="Database\SettingsManager.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
     <Compile Include="DataProviders\MovieXMLProvider.cs" />
@@ -126,26 +105,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MediaPortal\Core\Core.csproj">
-      <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MediaPortal\Databases\Databases.csproj">
-      <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
-      <Name>Databases</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MediaPortal\DirectShowLib\DirectShowLib.csproj">
-      <Project>{CE009BFA-5EF6-4153-B2A1-2FA79698A9AE}</Project>
-      <Name>DirectShowLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MediaPortal\MediaPortal.Support\MediaPortal.Support.csproj">
-      <Project>{BD4A3413-C9F9-4299-BB52-ED45027EE7CC}</Project>
-      <Name>MediaPortal.Support</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MediaPortal\Utils\Utils.csproj">
-      <Project>{6DA0E4DF-6230-4642-98B5-E690BB6942BB}</Project>
-      <Name>Utils</Name>
-    </ProjectReference>
+    <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.Database.MoviesPluginTables.DBUser.datasource" />
+    <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.LocalMediaManagement.MediaMatches.datasource" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ConfigScreen\AdvancedSettingsPane.resx">
@@ -157,12 +118,12 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\MovieImporterPane.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>MovieImporterPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\MoviesPluginConfig.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>MoviesPluginConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\SearchStringPopup.resx">
       <DependentUpon>SearchStringPopup.cs</DependentUpon>
@@ -173,8 +134,8 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\UserManagementPane.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>UserManagementPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
@@ -183,60 +144,40 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.Database.MoviesPluginTables.DBUser.datasource" />
-    <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.LocalMediaManagement.MediaMatches.datasource" />
+    <Content Include="Images\accept.png" />
+    <Content Include="Images\approved.png" />
+    <Content Include="Images\arrow_divide.png" />
+    <Content Include="Images\arrow_join.png" />
+    <Content Include="Images\arrow_rotate_clockwise.png" />
+    <Content Include="Images\bullet_arrow_down.png" />
+    <Content Include="Images\bullet_arrow_down_dark.png" />
+    <Content Include="Images\cross.png" />
+    <Content Include="Images\exclamation.png" />
+    <Content Include="Images\ignored.png" />
+    <Content Include="Images\information.png" />
+    <Content Include="Images\list-add.png" />
+    <Content Include="Images\list-remove.png" />
+    <Content Include="Images\MediaPause.png" />
+    <Content Include="Images\MediaPlay.png" />
+    <Content Include="Images\tick.png" />
+    <Content Include="Properties\InitialSettings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\InitialSettings.xml" />
+    <ProjectReference Include="..\..\MediaPortal\Core\Core.csproj">
+      <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
+      <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
+      <Name>Databases</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MediaPortal\Utils\Utils.csproj">
+      <Project>{6DA0E4DF-6230-4642-98B5-E690BB6942BB}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\bullet_arrow_down_dark.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\accept.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\bullet_arrow_down.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\exclamation.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\approved.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\information.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\tick.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\arrow_divide.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\arrow_join.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\arrow_rotate_clockwise.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\cross.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\ignored.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\MediaPause.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\MediaPlay.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
 </Project>
