@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
 using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
+using System.Drawing;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("movie_info")]
@@ -169,14 +172,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
 
         [DBFieldAttribute(FieldName="movie_xml_id")]
-        public int MovieXmlID {
+        public int? MovieXmlID {
             get { return _movieXmlID; }
 
             set {
                 _movieXmlID = value;
                 commitNeeded = true;
             }
-        } private int _movieXmlID;
+        } private int? _movieXmlID;
 
 
         [DBFieldAttribute(FieldName = "imdb_id")]
@@ -189,6 +192,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             }
         } private string _imdbID;
 
+
         [DBFieldAttribute]
         public DBObjectList<DBLocalMedia> LocalMedia {
             get { return _localMedia; }
@@ -197,6 +201,102 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                 commitNeeded = true;
             }
         } private DBObjectList<DBLocalMedia> _localMedia;
+
+
+        [DBFieldAttribute]
+        public StringList AlternateCovers {
+            get { return _covers; }
+
+            set {
+                _covers = value;
+                commitNeeded = true;
+            }
+        } private StringList _covers;
+
+
+        public Image Cover {
+            get {
+                if (_cover == null && File.Exists(CoverFullPath))
+                    _cover = Image.FromFile(CoverFullPath);
+                return _cover;
+            }
+        } private Image _cover = null;
+
+
+        [DBFieldAttribute]
+        public String CoverFullPath
+        {
+            get {
+                if (_coverFullPath.Trim().Length == 0 && AlternateCovers.Count > 0)
+                    _coverFullPath = AlternateCovers[0];
+                return _coverFullPath; 
+            }
+
+            set {
+                _coverFullPath = value;
+                _cover = null;
+                commitNeeded = true;
+            }
+        } private String _coverFullPath;
+
+
+        public Image CoverThumb {
+            get {
+                if (_coverThumb == null && File.Exists(CoverThumbFullPath))
+                    _coverThumb = Image.FromFile(CoverThumbFullPath);
+
+                return _coverThumb;
+            }
+        } private Image _coverThumb = null;
+
+
+        [DBFieldAttribute]
+        public String CoverThumbFullPath {
+            get {
+                if (_coverThumbFullPath.Trim().Length == 0)
+                    GenerateThumbnail();
+                return _coverThumbFullPath;
+            }
+
+            set {
+                _coverThumbFullPath = value;
+                _coverThumb = null;
+                commitNeeded = true;
+            }
+        } private String _coverThumbFullPath;
+
+        #endregion'
+
+        #region Coverart Management Methods
+        public bool LoadArtwork() {
+            return (Cover != null && CoverThumb != null);
+        }
+
+        public void GenerateThumbnail() {
+            if (Cover == null)
+                return;
+
+            string thumbsFolder = (String)MovingPicturesPlugin.SettingsManager["cover_thumbs_folder"].Value;
+            string filename = new FileInfo(CoverFullPath).Name;
+            string fullname = thumbsFolder + '\\' + filename;
+
+            if (File.Exists(fullname)) {
+                _coverThumbFullPath = fullname;
+                return;
+            }
+
+            int width = 150;
+            int height = (int)(Cover.Height * ((float)width / (float)Cover.Width));
+
+            Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
+            _coverThumb = Cover.GetThumbnailImage(width, height, myCallback, IntPtr.Zero);
+            _coverThumb.Save(fullname);
+            _coverThumbFullPath = fullname;
+        }
+
+        public bool ThumbnailCallback() {
+            return false;
+        }
 
         #endregion
 

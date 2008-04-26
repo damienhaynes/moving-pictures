@@ -58,15 +58,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.countProgressLabel = new System.Windows.Forms.Label();
             this.currentTaskDesc = new System.Windows.Forms.Label();
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.startStopButton = new System.Windows.Forms.Button();
             this.unapprovedMatchesBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.importerGroupBox.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.matchesTabPage.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).BeginInit();
             this.settingsTabPage.SuspendLayout();
+            this.helpTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedMatchesBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // importerGroupBox
@@ -321,6 +323,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // helpTab
             // 
+            this.helpTab.Controls.Add(this.pictureBox1);
             this.helpTab.Location = new System.Drawing.Point(4, 25);
             this.helpTab.Name = "helpTab";
             this.helpTab.Padding = new System.Windows.Forms.Padding(3);
@@ -369,23 +372,21 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.dataGridViewComboBoxColumn1.HeaderText = "Possible Matches";
             this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
             // 
-            // startStopButton
-            // 
-            this.startStopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.startStopButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.startStopButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.MediaPlay;
-            this.startStopButton.Location = new System.Drawing.Point(605, 394);
-            this.startStopButton.Name = "startStopButton";
-            this.startStopButton.Size = new System.Drawing.Size(27, 27);
-            this.startStopButton.TabIndex = 5;
-            this.startStopButton.UseVisualStyleBackColor = true;
-            this.startStopButton.Visible = false;
-            this.startStopButton.Click += new System.EventHandler(this.startStopButton_Click);
-            // 
             // unapprovedMatchesBindingSource
             // 
             this.unapprovedMatchesBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MediaMatch);
             this.unapprovedMatchesBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.unapprovedMatchesBindingSource_ListChanged);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Location = new System.Drawing.Point(7, 7);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(609, 313);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // MovieImporterPane
             // 
@@ -406,7 +407,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).EndInit();
             this.settingsTabPage.ResumeLayout(false);
+            this.helpTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedMatchesBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -441,6 +444,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private Label countProgressLabel;
         private Label currentTaskDesc;
         private ProgressBar progressBar;
-        private Button startStopButton;
+        private PictureBox pictureBox1;
     }
 }

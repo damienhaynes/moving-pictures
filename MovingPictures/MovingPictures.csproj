@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -6,7 +6,12 @@
     <OutputType>Library</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
     <AssemblyName>MovingPictures</AssemblyName>
-    <RootNamespace>MovingPictures</RootNamespace>
+    <RootNamespace>MediaPortal.Plugins.MovingPictures</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -159,6 +164,9 @@
     <Content Include="Images\list-remove.png" />
     <Content Include="Images\MediaPause.png" />
     <Content Include="Images\MediaPlay.png" />
+    <None Include="Images\MediaStop.png" />
+    <None Include="Images\noatunplay.png" />
+    <None Include="Images\noatunstop.png" />
     <Content Include="Images\tick.png" />
     <Content Include="Properties\InitialSettings.xml" />
   </ItemGroup>
