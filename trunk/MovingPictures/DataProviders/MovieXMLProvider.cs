@@ -11,6 +11,7 @@ using System.Threading;
 using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using NLog;
+using System.Drawing;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     class MovieXMLProvider: IMovieProvider {
@@ -19,7 +20,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         private const string urlGetByName = "http://www.movie-xml.com/interfaces/getmovie.php?moviename=";
         private const string urlGetByID = "http://www.movie-xml.com/interfaces/getmovieID.php?id=";
         private const string urlGetByImdbID = "http://www.movie-xml.com/interfaces/getmovieimdb.php?imdb=";
-        private const string urlGetCoverByID = "http://www.movie-xml.com/interfaces/getmovieCovers.php?id=";
+        private const string urlGetCoverByID = "http://www.movie-xml.com/interfaces/getmoviecovers.php?id=";
+        private const string urlCoverRetrievePrefix = "http://www.movie-xml.com/banners/";
 
         // Returns a list of DBMovieInfo objects closely matching the given movie title, 
         // using http://www.movie-xml.com as a datasource.
@@ -61,6 +63,67 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
                 movie.CopyUpdatableValues(newInfo);
             }
+        }
+
+        // Grabs artwork provided by movie-xml.com. Much of this needs to be refactored to
+        // DBMovieInfo. Should pass in a URL to an image.
+        public bool GetArtwork(DBMovieInfo movie) {
+            if (movie == null || movie.MovieXmlID == null)
+                return false;
+
+            // grab coverart loading settings
+            int maxCovers = (int) MovingPicturesPlugin.SettingsManager["max_covers_per_movie"].Value;
+            int maxCoversInSession = (int) MovingPicturesPlugin.SettingsManager["max_covers_per_session"].Value;
+            int minWidth = (int) MovingPicturesPlugin.SettingsManager["min_cover_width"].Value;
+            int minHeight = (int) MovingPicturesPlugin.SettingsManager["min_cover_height"].Value;
+            string artFolder = (string) MovingPicturesPlugin.SettingsManager["cover_art_folder"].Value;
+            
+            // if we have already hit our limit for the number of covers to load, quit
+            if (maxCovers <= movie.AlternateCovers.Count)
+                return true;
+
+            // grab the list of URLs for cover art from movie-xml.com 
+            XmlNodeList xmlNodes = getXML(urlGetCoverByID + movie.MovieXmlID);
+            if (xmlNodes == null)
+                return false;
+
+            int coversAdded = 0;
+            foreach (XmlNode currNode in xmlNodes) {
+                // if we have hit our limit quit
+                if (movie.AlternateCovers.Count >= maxCovers || coversAdded > maxCoversInSession)
+                    return true;
+                
+                // check we have a valid xml element
+                XmlElement filenameElement = currNode["filename"];
+                if (filenameElement == null)
+                    continue;
+
+                // get url for cover and filename it will be saved as
+                string coverPath = urlCoverRetrievePrefix + filenameElement.InnerText;
+                string filename = artFolder + "\\" + HttpUtility.UrlEncode(movie.Name.Replace(' ', '.')) + 
+                                  " [" + coverPath.GetHashCode() + "].jpg";
+                
+                // if we already have a file for this movie from this URL, move on
+                if (File.Exists(filename)) {
+                    if (!movie.AlternateCovers.Contains(filename))
+                        movie.AlternateCovers.Add(filename);
+
+                    continue;
+                }
+
+                // grab and save the image
+                Image currImage = getImageFromUrl(coverPath);
+                if (currImage != null) 
+                    if (currImage.Width > minWidth && currImage.Height > minHeight) {
+                        currImage.Save(filename);
+                        movie.AlternateCovers.Add(filename);
+                        coversAdded++;
+                    }
+            }
+
+            movie.GenerateThumbnail();
+            return true;
+
         }
 
         #region Private Methods
@@ -114,7 +177,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             return null;
         }
-
+        
         // Takes an XmlNodeList of Item nodes returned from movie-xml.com and converts it to 
         // a list of DBMovieInfo objects.
         private List<DBMovieInfo> parseXML(XmlNodeList xmlNodes) {
@@ -205,7 +268,40 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             return movieList;
         }
-        
+
+        private Image getImageFromUrl(string url) {
+            Image rtn = null;
+
+            // pull in timeout settings
+            int tryCount = 0;
+            int maxRetries = (int)MovingPicturesPlugin.SettingsManager["xml_max_timeouts"].Value;
+            int timeout = (int)MovingPicturesPlugin.SettingsManager["xml_timeout_length"].Value;
+            int timeoutIncrement = (int)MovingPicturesPlugin.SettingsManager["xml_timeout_increment"].Value;
+
+            while (rtn == null && tryCount < maxRetries) {
+                try {
+                    // try to grab the image
+                    tryCount++;
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Timeout = timeout + (timeoutIncrement * tryCount);
+                    request.ReadWriteTimeout = 20000;
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                    // parse the stream into an image file
+                    rtn = Image.FromStream(response.GetResponseStream());
+                }
+                catch (WebException e) {
+                    // if we timed out past our try limit
+                    if (tryCount == maxRetries) {
+                        logger.ErrorException("Failed to retrieve artwork from " + url + ". Reached retry limit of " + maxRetries, e);
+                        return null;
+                    }
+                }
+            }
+
+            return rtn;
+        }
+
         #endregion
     }
 }

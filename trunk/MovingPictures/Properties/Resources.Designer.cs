@@ -39,7 +39,7 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MovingPictures.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MediaPortal.Plugins.MovingPictures.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -181,6 +181,27 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         internal static System.Drawing.Bitmap MediaPlay {
             get {
                 object obj = ResourceManager.GetObject("MediaPlay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap MediaStop {
+            get {
+                object obj = ResourceManager.GetObject("MediaStop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap noatunplay {
+            get {
+                object obj = ResourceManager.GetObject("noatunplay", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap noatunstop {
+            get {
+                object obj = ResourceManager.GetObject("noatunstop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

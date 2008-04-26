@@ -586,6 +586,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // update, associate, and commit the movie
             dataProvider.Update(movie);
+            dataProvider.GetArtwork(movie);
             movie.LocalMedia.AddRange(localMedia);
             movie.Commit();
 

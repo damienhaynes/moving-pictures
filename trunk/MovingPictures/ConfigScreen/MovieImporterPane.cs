@@ -135,6 +135,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     break;
                 case MovieImporterAction.COMMITED:
                     imageCell.Value = Resources.accept;
+                    if (obj.Selected.Movie.Cover != null)
+                        pictureBox1.Image = obj.Selected.Movie.CoverThumb;
                     break;
                 case MovieImporterAction.IGNORED:
                     imageCell.Value = Resources.ignored;
@@ -282,12 +284,23 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             else splitJoinButton.Enabled = false;
 
             /*
-            if (MovingPictures.Importer.IsScanning())
-                startStopButton.Image = Resources.MediaPause;
-            else
-                startStopButton.Image = Resources.MediaPlay;
-             */
+            // set the display icon for starting or stopping the importer
+            if (MovingPicturesPlugin.Importer.IsScanning()) {
+                startStopButton.Image = Resources.noatunstop;
+                startStopButton.ToolTipText = "Stop the Media Importer";
 
+                filterSplitButton.Enabled = true;
+            } else {
+                startStopButton.Image = Resources.noatunplay;
+                startStopButton.ToolTipText = "Start the Media Importer";
+
+                splitJoinButton.Enabled = false;
+                approveButton.Enabled = false;
+                rescanButton.Enabled = false;
+                ignoreButton.Enabled = false;
+                filterSplitButton.Enabled = false;
+            }
+            */
         }
 
         private void splitJoinButton_Click(object sender, EventArgs e) {
@@ -303,18 +316,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
             
         }
-
+        /*
         private void startStopButton_Click(object sender, EventArgs e) {
             if (MovingPicturesPlugin.Importer.IsScanning())
                 MovingPicturesPlugin.Importer.Stop();
             else
                 MovingPicturesPlugin.Importer.Start();
 
-
-            if (MovingPicturesPlugin.Importer.IsScanning())
-                startStopButton.Image = Resources.MediaPause;
-            else
-                startStopButton.Image = Resources.MediaPlay;
+            updateButtons();
         }
+        */
     }
 }

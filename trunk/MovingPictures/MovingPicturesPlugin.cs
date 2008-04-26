@@ -97,11 +97,28 @@ namespace MediaPortal.Plugins.MovingPictures {
             LogManager.Configuration = config; 
         }
 
+        private void initAdditionalSettings() {
+            if (((String)SettingsManager["cover_art_folder"].Value).Trim().Equals(""))
+                SettingsManager["cover_art_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Covers";
+
+            // create the covers folder if it doesn't already exist
+            if (!Directory.Exists((string)SettingsManager["cover_art_folder"].Value))
+                Directory.CreateDirectory((string)SettingsManager["cover_art_folder"].Value);
+
+            if (((String)SettingsManager["cover_thumbs_folder"].Value).Trim().Equals(""))
+                SettingsManager["cover_thumbs_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Thumbs";
+
+            // create the thumbs folder if it doesn't already exist
+            if (!Directory.Exists((string)SettingsManager["cover_thumbs_folder"].Value))
+                Directory.CreateDirectory((string)SettingsManager["cover_thumbs_folder"].Value);
+        }
+
         public MovingPicturesPlugin() {
             initLogger();
             logger.Info("Plugin Lanched");
 
             initDB();
+            initAdditionalSettings();
         }
 
         ~MovingPicturesPlugin() {
@@ -127,8 +144,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         // show the setup dialog
         public void ShowPlugin() {
-            initSettings();
-            
             //Thread.Sleep(1000);
             MoviesPluginConfig configScr = new MoviesPluginConfig();
             //List<DBMovieInfo> movieList = DBMovieInfo.GetAll();

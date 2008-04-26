@@ -6,6 +6,38 @@
         <default>5</default>
         <description>The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.</description>
       </setting>
+
+    </group>
+    
+    <group name="Cover Art">
+      <setting id="cover_art_folder" name="Cover Artwork Folder" type="STRING">
+        <description>The folder in which cover art should be saved to disk.</description>
+      </setting>
+
+      <setting id="cover_thumbs_folder" name="Cover Artwork Thumbnails Folder" type="STRING">
+        <description>The folder in which cover art thumbnails should be saved to disk.</description>
+      </setting>
+
+      <setting id="max_covers_per_movie" name="Max Covers per Movie" type="INT">
+        <default>9</default>
+        <description>When the movie importer automatically downloads cover art, it will not retrieve more than the given number of covers for a movie.</description>
+      </setting>
+
+      <setting id="max_covers_per_session" name="Max Covers per Movie per Session" type="INT">
+        <default>3</default>
+        <description>When the movie importer automatically downloads cover art it will not retrieve more than the given number of covers for a movie in a single update / import session. Next time a full update is done, if there are additional covers to download, it will grab those as well.</description>
+      </setting>
+
+      <setting id="min_cover_width" name="Minimum Cover Width" type="INT">
+        <default>150</default>
+        <description>The minimum width in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.</description>
+      </setting>
+
+      <setting id="min_cover_height" name="Minimum Cover Height" type="INT">
+        <default>250</default>
+        <description>The minimum height in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.</description>
+      </setting>
+
     </group>
 
     <!--group name="Config GUI">
@@ -14,9 +46,9 @@
         <description>When a possible match is selected from the possible match dropdown list in the Media Importer, it will automatically be approved and queued for commiting. If this is set to false, a match must be manually approved even after an update.</description>
       </setting>
     </group-->
-    
+
     <group name="Movie-XML Provider">
-      
+ 
       <setting id="xml_max_timeouts" name="Max Timeouts" type="INT">
         <default>10</default>
         <description>The maximum number of timeouts received from the server before a thread returns an error condition.</description>        
