@@ -1,3 +1,5 @@
+#summary Intro section of instructions to get up a working development environment setup to contribute to Moving Pictures.
+
 = Getting the Latest Source Code =
 === Folder Structure ===
 So first things first, let's get the latest version of the source code. Before you do this though, you will need to decide where you want your projects to be stored. You can setup your project and solution files anywhere, but the default location for Visual Studio Projects is "`My Documents\Visual Studio 2008\Projects`". Any location will do if you would rather not work from there. To give you a little visibility, this is the folder structure I am recommending:
