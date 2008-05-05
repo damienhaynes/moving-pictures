@@ -34,7 +34,7 @@ https://mediaportal.svn.sourceforge.net/svnroot/mediaportal/tags
 
 Expand the tags node and pick the most recent version listed, and click OK. Now, back on the Checkout Dialog again, click OK to start the checkout. MediaPortal is a bit large so this may take a few minutes depending on your connection speed.
 
-http://moving-pictures.googlecode.com/svn/wiki/Images/checkout.png
+http://moving-pictures.googlecode.com/svn/wiki/Images/tags.png
 
 
 
