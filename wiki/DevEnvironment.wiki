@@ -26,24 +26,4 @@ We will be using TortoiseSVN for retrieving the latest source code and changes f
 
 [http://tortoisesvn.net/downloads]
 
-----
-= Getting the Latest Code =
-=== Folder Structure ===
-So first things first, let's get the latest version of the source code. Before you do this though, you will need to decide where you want your projects to be stored. You can setup your project and solution files anywhere, but the default location for Visual Studio Projects is "`My Documents\Visual Studio 2008\Projects`". Any location will do if you would rather not work from there. To give you a little visibility, this is the folder structure I am recommending:
-
-http://moving-pictures.googlecode.com/svn/trunk/MovingPictures/Images/MediaPlay.png
-
-{{{
-IMAGE HERE
-}}}
-
-So go ahead and create your folder structure. Create the `PluginDev` folder and the `MediaPortal` and `Moving Pictures` folders below that. These three are all you need to do manually, everything else will automatically be pulled down by TortoiseSVN.
-
-=== Getting the MediaPortal Code ===
-Now that you have your folders created, we need to pull down the latest code for two major projects. The Moving Pictures project and the MediaPortal project. MediaPortal is a dependency of Moving Pictures, so this is a requirement.
-
-Right click the MediaPortal folder you created previously and click SVN Checkout. If you do not see this you either don't have TortoiseSVN installed or it is not setup properly.
-
-= Setting up your Visual Studio Solution =
-So now that you have Visual Studio and TortoiseSVN installed, you need to setup a Visual Studio solution. This solution will contain the Moving Pictures Project, the Moving Pictures Config Tester project, and a subset of the MediaPortal Projects. If you work on other MediaPortal plugins it might make sense to add those projects to this Solution as well.
-
+== NEXT ==
