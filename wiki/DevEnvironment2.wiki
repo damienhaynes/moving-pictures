@@ -1,0 +1,41 @@
+= Getting the Latest Source Code =
+=== Folder Structure ===
+So first things first, let's get the latest version of the source code. Before you do this though, you will need to decide where you want your projects to be stored. You can setup your project and solution files anywhere, but the default location for Visual Studio Projects is "`My Documents\Visual Studio 2008\Projects`". Any location will do if you would rather not work from there. To give you a little visibility, this is the folder structure I am recommending:
+
+{{{
+IMAGE HERE
+}}}
+
+So go ahead and create your folder structure. Create the `PluginDev` folder and the `MediaPortal` and `Moving Pictures` folders below that. These three are all you need to do manually, everything else will automatically be pulled down by TortoiseSVN.
+
+=== Getting the !MediaPortal Source Code ===
+==== Checking Out ====
+Now that you have your folders created, we need to pull down the latest code for two major projects. The Moving Pictures project and the !MediaPortal project. !MediaPortal is a dependency of Moving Pictures, so this is a requirement.
+
+Right click the MediaPortal folder you created previously and click SVN Checkout. If you do not see this you either don't have TortoiseSVN installed or it is not setup properly.
+
+http://moving-pictures.googlecode.com/svn/wiki/Images/checkout_popup.png http://moving-pictures.googlecode.com/svn/wiki/Images/checkout.png
+
+==== Picking Your Repository ====
+
+The only thing you need to change on this popup is the "URL of Repository" field. You have a choice though, you can go with the latest and greatest source code from the !MediaPortal project, or you can go with the source code from the latest tested release. If you want the latest, greatest (and possibly buggy) !MediaPortal code, cut and paste the following URL for your Repository URL, then click OK:
+
+{{{
+https://mediaportal.svn.sourceforge.net/svnroot/mediaportal/trunk
+}}}
+
+We are not working on cutting edge MediaPortal code though, we are working on cutting edge Moving Pictures code! So you may want to go with the latest stable code base. In that case you will want to cut and paste the following URL into the Repository URL _*then click the "..." button to popup the repository browser*_:
+
+{{{
+https://mediaportal.svn.sourceforge.net/svnroot/mediaportal/tags
+}}}
+
+Expand the tags node and pick the most recent version listed, and click OK. Now, back on the Checkout Dialog again, click OK to start the checkout. MediaPortal is a bit large so this may take a few minutes depending on your connection speed.
+
+http://moving-pictures.googlecode.com/svn/wiki/Images/checkout.png
+
+
+
+
+= Setting up your Visual Studio Solution =
+So now that you have Visual Studio and TortoiseSVN installed, you need to setup a Visual Studio solution. This solution will contain the Moving Pictures Project, the Moving Pictures Config Tester project, and a subset of the MediaPortal Projects. If you work on other MediaPortal plugins it might make sense to add those projects to this Solution as well.
