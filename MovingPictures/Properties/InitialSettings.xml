@@ -18,6 +18,11 @@
         <description>The folder in which cover art thumbnails should be saved to disk.</description>
       </setting>
 
+      <setting id="redownload_coverart" name="Redownload Coverart on Rescan" type="BOOL">
+        <default>false</default>
+        <description>When a full rescan is performed this setting determines if coverart that has already been downloaded will be reretrieved and the local copy updated.</description>
+      </setting>
+
       <setting id="max_covers_per_movie" name="Max Covers per Movie" type="INT">
         <default>9</default>
         <description>When the movie importer automatically downloads cover art, it will not retrieve more than the given number of covers for a movie.</description>
@@ -29,12 +34,12 @@
       </setting>
 
       <setting id="min_cover_width" name="Minimum Cover Width" type="INT">
-        <default>150</default>
+        <default>175</default>
         <description>The minimum width in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.</description>
       </setting>
 
       <setting id="min_cover_height" name="Minimum Cover Height" type="INT">
-        <default>250</default>
+        <default>260</default>
         <description>The minimum height in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.</description>
       </setting>
 

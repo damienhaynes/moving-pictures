@@ -14,6 +14,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             : base() {
             dirInfo = null;
         }
+
+        public override void CleanUpForDeletion() {
+        }
         
         public DirectoryInfo Directory {
             get { return dirInfo; }

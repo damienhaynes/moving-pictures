@@ -33,6 +33,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
@@ -44,6 +45,19 @@
     </Compile>
     <Compile Include="ConfigScreen\AdvancedSettingsPane.Designer.cs">
       <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Controls\DBObjectList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Controls\DBTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\DesignMode\DatabaseTableTypeConverter.cs" />
+    <Compile Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.Designer.cs">
+      <DependentUpon>DBObjectListFieldEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\ImportPathsPane.cs">
       <SubType>UserControl</SubType>
@@ -57,22 +71,40 @@
     <Compile Include="ConfigScreen\MovieImporterPane.Designer.cs">
       <DependentUpon>MovieImporterPane.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\MovieManagerPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\MovieManagerPane.Designer.cs">
+      <DependentUpon>MovieManagerPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\MoviesPluginConfig.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConfigScreen\MoviesPluginConfig.Designer.cs">
       <DependentUpon>MoviesPluginConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\SearchStringPopup.cs">
+    <Compile Include="ConfigScreen\Popups\CoverPopup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConfigScreen\SearchStringPopup.Designer.cs">
+    <Compile Include="ConfigScreen\Popups\CoverPopup.Designer.cs">
+      <DependentUpon>CoverPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\CoverURLPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\CoverURLPopup.Designer.cs">
+      <DependentUpon>CoverURLPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\SearchStringPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\SearchStringPopup.Designer.cs">
       <DependentUpon>SearchStringPopup.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\SettingPopup.cs">
+    <Compile Include="ConfigScreen\Popups\SettingPopup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConfigScreen\SettingPopup.Designer.cs">
+    <Compile Include="ConfigScreen\Popups\SettingPopup.Designer.cs">
       <DependentUpon>SettingPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\UserManagementPane.cs">
@@ -118,6 +150,14 @@
       <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Controls\DBObjectList.resx">
+      <DependentUpon>DBObjectList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.resx">
+      <DependentUpon>DBObjectListFieldEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\ImportPathsPane.resx">
       <DependentUpon>ImportPathsPane.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -126,15 +166,27 @@
       <DependentUpon>MovieImporterPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\MovieManagerPane.resx">
+      <DependentUpon>MovieManagerPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\MoviesPluginConfig.resx">
       <DependentUpon>MoviesPluginConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\SearchStringPopup.resx">
+    <EmbeddedResource Include="ConfigScreen\Popups\CoverPopup.resx">
+      <DependentUpon>CoverPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\CoverURLPopup.resx">
+      <DependentUpon>CoverURLPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\SearchStringPopup.resx">
       <DependentUpon>SearchStringPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\SettingPopup.resx">
+    <EmbeddedResource Include="ConfigScreen\Popups\SettingPopup.resx">
       <DependentUpon>SettingPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -158,6 +210,7 @@
     <Content Include="Images\bullet_arrow_down_dark.png" />
     <Content Include="Images\cross.png" />
     <Content Include="Images\exclamation.png" />
+    <None Include="Images\folder_image.png" />
     <Content Include="Images\ignored.png" />
     <Content Include="Images\information.png" />
     <Content Include="Images\list-add.png" />
@@ -167,7 +220,11 @@
     <None Include="Images\MediaStop.png" />
     <None Include="Images\noatunplay.png" />
     <None Include="Images\noatunstop.png" />
+    <None Include="Images\resultset_next.png" />
+    <None Include="Images\resultset_previous.png" />
     <Content Include="Images\tick.png" />
+    <None Include="Images\zoom.png" />
+    <None Include="Images\world_add.png" />
     <Content Include="Properties\InitialSettings.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("local_media")]
     public class DBLocalMedia: MoviesPluginDBTable {
 
+        public override void CleanUpForDeletion() {
+        }
+
         public FileInfo File {
             get { return fileInfo; }
 

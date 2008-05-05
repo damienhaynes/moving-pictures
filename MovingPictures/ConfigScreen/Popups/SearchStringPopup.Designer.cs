@@ -1,4 +1,4 @@
-﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
+﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     partial class SearchStringPopup {
         /// <summary>
         /// Required designer variable.
@@ -117,6 +117,7 @@
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
             this.Name = "SearchStringPopup";
+            this.ShowInTaskbar = false;
             this.Text = "New Search String";
             this.ResumeLayout(false);
             this.PerformLayout();

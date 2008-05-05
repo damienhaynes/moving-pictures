@@ -20,8 +20,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             advancedSettingsPane.populateTree(MovingPicturesPlugin.SettingsManager);
         }
 
-        private void goButton_Click(object sender, EventArgs e) {
-            
+        private void MoviesPluginConfig_Load(object sender, EventArgs e) {
+            // manually flip to the second tab (media importer) very quickly 
+            // to force it to load into memory
+            mainTabControl.SelectedIndex = 1;
+            mainTabControl.SelectedIndex = 0;
         }
     }
 }

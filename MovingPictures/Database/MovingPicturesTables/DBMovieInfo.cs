@@ -6,12 +6,32 @@ using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
+using NLog;
+using System.Web;
+using System.Net;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
+    public enum CoverArtLoadStatus {
+        SUCCESS,
+        ALREADY_LOADED,
+        FAILED,
+        FAILED_RES_REQUIREMENTS
+    }
+
     [DBTableAttribute("movie_info")]
-    public class DBMovieInfo: MoviesPluginDBTable {
+    public class DBMovieInfo: MoviesPluginDBTable, IComparable {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        
         public DBMovieInfo()
             : base() {
+        }
+
+        public override void CleanUpForDeletion() {
+            if (ID == null) {
+                while (AlternateCovers.Count > 0)
+                    this.DeleteCurrentCover();
+            }
         }
 
         #region Database Fields
@@ -22,9 +42,27 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
             set {
                 _name = value;
+                populateSortName();
+
                 commitNeeded = true;
             }
         } private string _name;
+
+
+        [DBFieldAttribute]
+        public string SortName {
+            get {
+                if (_sortName.Trim().Length == 0)
+                    populateSortName();
+
+                return _sortName; 
+            }
+
+            set {
+                _sortName = value;
+                commitNeeded = true;
+            }
+        } private string _sortName;
 
 
         [DBFieldAttribute]
@@ -234,7 +272,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
             set {
                 _coverFullPath = value;
-                _cover = null;
+                _coverThumbFullPath = "";
+                UnloadArtwork();
                 commitNeeded = true;
             }
         } private String _coverFullPath;
@@ -260,16 +299,218 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
             set {
                 _coverThumbFullPath = value;
-                _coverThumb = null;
+                UnloadArtwork();
                 commitNeeded = true;
             }
         } private String _coverThumbFullPath;
 
-        #endregion'
+        #endregion
 
         #region Coverart Management Methods
+
+        // rotates the selected cover art to the next available cover
+        public void NextCover() {
+            if (AlternateCovers.Count <= 1)
+                return;
+
+            int index = AlternateCovers.IndexOf(CoverFullPath) + 1;
+            if (index >= AlternateCovers.Count)
+                index = 0;
+
+            CoverFullPath = AlternateCovers[index];
+        }
+
+        // rotates the selected cover art to the previous available cover
+        public void PreviousCover() {
+            if (AlternateCovers.Count <= 1)
+                return;
+
+            int index = AlternateCovers.IndexOf(CoverFullPath) - 1;
+            if (index < 0)
+                index = AlternateCovers.Count - 1;
+
+            CoverFullPath = AlternateCovers[index];
+        }
+
+        // removes the current cover from the selection list and deletes it and it's thumbnail 
+        // from disk
+        public void DeleteCurrentCover() {
+            if (AlternateCovers.Count == 0)
+                return;
+            
+            UnloadArtwork();
+            try {
+                FileInfo coverFile = new FileInfo(CoverFullPath);
+                if (coverFile.Exists)
+                    coverFile.Delete();
+
+                FileInfo thumbFile = new FileInfo(CoverThumbFullPath);
+                if (thumbFile.Exists)
+                    thumbFile.Delete();
+            }
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
+                logger.Warn("Failed to delete cover art '" + CoverFullPath + "' and/or '" + CoverThumbFullPath + "'");
+            }
+
+            AlternateCovers.Remove(CoverFullPath);
+            CoverFullPath = "";
+        }
+
+        // Loads existing cover art and thumbnail into memory. This only 
+        // loads the currently selected cover.
         public bool LoadArtwork() {
             return (Cover != null && CoverThumb != null);
+        }
+
+        // Unloads coverart information from memory
+        public void UnloadArtwork() {
+            if (_cover != null)
+                _cover.Dispose();
+
+            if (_coverThumb != null)
+                _coverThumb.Dispose();
+            
+            _cover = null;
+            _coverThumb = null;
+        }
+
+        public bool AddCoverFromFile(string filename) {
+            int minWidth = (int)MovingPicturesPlugin.SettingsManager["min_cover_width"].Value;
+            int minHeight = (int)MovingPicturesPlugin.SettingsManager["min_cover_height"].Value;
+            string artFolder = (string)MovingPicturesPlugin.SettingsManager["cover_art_folder"].Value;
+            
+            Image newCover = Image.FromFile(filename);
+
+            if (newCover == null) {
+                logger.Error("Failed loading cover artwork for '" + Name + "' [" + ID + "] from " + filename + ".");
+                return false;
+            }
+
+            // genrate a filename for the new cover. should be unique based on the file path hash
+            string safeName = HttpUtility.UrlEncode(Name.Replace(' ', '.'));
+            string newFileName = artFolder + "\\" + safeName + " [" + filename.GetHashCode() + "].jpg";
+
+            // save the artwork
+            newCover.Save(newFileName);
+            AlternateCovers.Add(newFileName);
+            GenerateThumbnail();
+            return true;
+        }
+
+        // Attempts to load cover art for this movie from a given URL. Optionally
+        // ignores minimum resolution restrictions
+        public CoverArtLoadStatus AddCoverFromURL(string url, bool ignoreRestrictions) {
+            int minWidth = (int)MovingPicturesPlugin.SettingsManager["min_cover_width"].Value;
+            int minHeight = (int)MovingPicturesPlugin.SettingsManager["min_cover_height"].Value;
+            string artFolder = (string)MovingPicturesPlugin.SettingsManager["cover_art_folder"].Value;
+            string thumbsFolder = (String)MovingPicturesPlugin.SettingsManager["cover_thumbs_folder"].Value;
+            bool redownloadCovers = (bool)MovingPicturesPlugin.SettingsManager["redownload_coverart"].Value;
+
+            // genrate a filename for a movie. should be unique based on the url hash
+            string safeName = HttpUtility.UrlEncode(Name.Replace(' ', '.'));
+            string filename = artFolder + "\\" + safeName + " [" + url.GetHashCode() + "].jpg";
+            
+            // if we already have a file for this movie from this URL, move on
+            if (File.Exists(filename)) {
+                if (redownloadCovers) {
+                    FileInfo file = new FileInfo(filename);
+                    string thumbFileName = thumbsFolder + "\\" + file.Name;
+                    FileInfo thumbFile = new FileInfo(thumbFileName);
+                    try {
+                        file.Delete();
+                        thumbFile.Delete();
+                    }
+                    catch (Exception e) {
+                        if (e.GetType() == typeof(ThreadAbortException))
+                            throw e;
+
+                        logger.Warn("Problem reloading artwork for '" + Name + "' [" + ID + "]. Failed old file deletion.");
+                    }
+                }
+                else {
+                    if (!AlternateCovers.Contains(filename))
+                        AlternateCovers.Add(filename);
+
+                    logger.Info("Cover art for '" + Name + "' [" + ID + "] already exists from " + url + ".");
+                    return CoverArtLoadStatus.ALREADY_LOADED;
+                }
+            }
+
+            // try to grab the image if failed, exit
+            Image currImage = getImageFromUrl(url);
+            if (currImage == null) {
+                logger.Error("Failed retrieving cover artwork for '" + Name + "' [" + ID + "] from " + url + ".");
+                return CoverArtLoadStatus.FAILED;
+            }
+
+            // check resolution
+            if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
+                logger.Info("Cover art for '" + Name + "' [" + ID + "] failed minimum resolution requirements: " + url);
+                return CoverArtLoadStatus.FAILED_RES_REQUIREMENTS;
+            }
+
+            // save the artwork
+            currImage.Save(filename);
+            AlternateCovers.Add(filename);
+            GenerateThumbnail();
+            return CoverArtLoadStatus.SUCCESS;
+        }
+
+        // Attempts to load cover art for this movie from a given URL. Honors 
+        // minimum resolution restrictions
+        public CoverArtLoadStatus AddCoverFromURL(string url) {
+            return AddCoverFromURL(url, false);
+        }
+
+        // given a URL, returns an image stored at that URL. Returns null if not 
+        // an image or connection error.
+        private Image getImageFromUrl(string url) {
+            Image rtn = null;
+
+            // pull in timeout settings
+            int tryCount = 0;
+            int maxRetries = (int)MovingPicturesPlugin.SettingsManager["xml_max_timeouts"].Value;
+            int timeout = (int)MovingPicturesPlugin.SettingsManager["xml_timeout_length"].Value;
+            int timeoutIncrement = (int)MovingPicturesPlugin.SettingsManager["xml_timeout_increment"].Value;
+
+            while (rtn == null && tryCount < maxRetries) {
+                try {
+                    // try to grab the image
+                    tryCount++;
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Timeout = timeout + (timeoutIncrement * tryCount);
+                    request.ReadWriteTimeout = 20000;
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                    // parse the stream into an image file
+                    rtn = Image.FromStream(response.GetResponseStream());
+                }
+                catch (WebException e) {
+                    // if we timed out past our try limit
+                    if (tryCount == maxRetries) {
+                        logger.ErrorException("Failed to retrieve artwork from " + url + ". Reached retry limit of " + maxRetries, e);
+                        return null;
+                    }
+                }
+                catch (UriFormatException) {
+                    logger.Error("Bad URL format, failed loading image: " + url);
+                    return null;
+                }
+                catch (ArgumentException) {
+                    logger.Error("URL does not point to an image: " + url);
+                    return null;
+                }
+            }
+
+            if (rtn == null) {
+                logger.Error("Failed loading image from url: " + url);
+                return null;
+            }
+
+            return rtn;
         }
 
         public void GenerateThumbnail() {
@@ -285,7 +526,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                 return;
             }
 
-            int width = 150;
+            int width = 175;
             int height = (int)(Cover.Height * ((float)width / (float)Cover.Width));
 
             Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
@@ -320,5 +561,27 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         }
 
         #endregion
+
+        public int CompareTo(object obj) {
+            if (obj.GetType() == typeof(DBMovieInfo)) {
+                return SortName.CompareTo(((DBMovieInfo)obj).SortName);
+            }
+            return 0;
+        }
+
+        private void populateSortName() {
+            // loop through and try to remove a preposition
+            string[] prepositions = { "the", "a", "an" };
+            foreach (string currWord in prepositions) {
+                string word = currWord + " ";
+                if (_name.ToLower().IndexOf(word) == 0) {
+                    SortName = _name.Substring(word.Length);
+                    return;
+                }
+            }
+
+            // if no preposition to remove, just use the name
+            SortName = _name;
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
-    public class MoviesPluginDBTable: DatabaseTable {
+    public abstract class MoviesPluginDBTable: DatabaseTable {
 
         public MoviesPluginDBTable()
             : base() {

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Database;
 using System.Collections;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class AdvancedSettingsPane : UserControl {

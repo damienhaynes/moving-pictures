@@ -17,6 +17,7 @@ using System.ComponentModel;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using System.Reflection;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesPlugin: ISetupForm {
@@ -115,7 +116,11 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public MovingPicturesPlugin() {
             initLogger();
+            
+            Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+            logger.Info("Moving Pictures (" + ver.Major + "." + ver.Minor + "." + ver.Build + ":" + ver.Revision +")");
             logger.Info("Plugin Lanched");
+
 
             initDB();
             initAdditionalSettings();

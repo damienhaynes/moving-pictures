@@ -10,6 +10,7 @@ using System.Collections;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using MediaPortal.Plugins.MovingPictures.Properties;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
@@ -60,11 +61,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
-        private void matchListChangedListener(MediaMatch obj, MovieImporterAction action) {
+        private void movieStatusChangedListener(MediaMatch obj, MovieImporterAction action) {
             // This ensures we are thread safe. Makes sure this method is run by
             // the thread that created this panel.
             if (InvokeRequired) {
-                Delegate method = new MovieImporter.MatchListChangedHandler(matchListChangedListener);
+                Delegate method = new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
                 object[] parameters = new object[] { obj, action };
                 this.Invoke(method, parameters);
                 return;
@@ -154,7 +155,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void MovieImporterPane_Load(object sender, EventArgs e) {
             if (!DesignMode) {
                 MovingPicturesPlugin.Importer.Progress += new MovieImporter.ImportProgressHandler(progressListener);
-                MovingPicturesPlugin.Importer.MatchListChanged += new MovieImporter.MatchListChangedHandler(matchListChangedListener);
+                MovingPicturesPlugin.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
 
                 // fixes a bug in DataGridView. switching to tab it is on forces
                 // it to initialize, so adding stuff to the binding source works properly

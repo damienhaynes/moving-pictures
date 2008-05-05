@@ -123,6 +123,13 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap folder_image {
+            get {
+                object obj = ResourceManager.GetObject("folder_image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ignored {
             get {
                 object obj = ResourceManager.GetObject("ignored", resourceCulture);
@@ -146,10 +153,11 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///        &lt;default&gt;5&lt;/default&gt;
         ///        &lt;description&gt;The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.&lt;/description&gt;
         ///      &lt;/setting&gt;
-        ///    &lt;/group&gt;
         ///
-        ///    &lt;!--group name=&quot;Config GUI&quot;&gt;
-        ///      &lt;setting id=&quot;gui [rest of string was truncated]&quot;;.
+        ///    &lt;/group&gt;
+        ///    
+        ///    &lt;group name=&quot;Cover Art&quot;&gt;
+        ///      &lt;setting id=&quot;c [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string InitialSettings {
             get {
@@ -206,9 +214,37 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap resultset_next {
+            get {
+                object obj = ResourceManager.GetObject("resultset_next", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap resultset_previous {
+            get {
+                object obj = ResourceManager.GetObject("resultset_previous", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap tick {
             get {
                 object obj = ResourceManager.GetObject("tick", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap world_add {
+            get {
+                object obj = ResourceManager.GetObject("world_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap zoom {
+            get {
+                object obj = ResourceManager.GetObject("zoom", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

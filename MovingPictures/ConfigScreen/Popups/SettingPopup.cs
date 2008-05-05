@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
+namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     public partial class SettingPopup : Form {
         Color validColor;
         Color invalidColor;

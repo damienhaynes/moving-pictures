@@ -10,7 +10,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     public class DBSetting : MoviesPluginDBTable {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public DBSetting() {
+        public DBSetting():
+            base() {
+        }
+
+        public override void CleanUpForDeletion() {
         }
 
         #region Database Fields
