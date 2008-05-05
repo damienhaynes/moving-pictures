@@ -1,4 +1,4 @@
-﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen
+﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups
 {
     partial class SettingPopup
     {

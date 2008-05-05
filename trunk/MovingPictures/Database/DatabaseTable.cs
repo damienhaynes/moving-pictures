@@ -8,7 +8,7 @@ using System.ComponentModel;
 using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
-    public class DatabaseTable {
+    public abstract class DatabaseTable {
         #region Properties
 
         public int? ID {
@@ -45,6 +45,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public string GetTableName() {
             return DatabaseManager.GetTableName(this);
         }
+
+        public abstract void CleanUpForDeletion();
 
         // Loads data into this object based on the given database record.
         public void LoadByRow(SQLiteResultSet.Row row) {

@@ -6,6 +6,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("users")]
     public class DBUser: MoviesPluginDBTable {
 
+        public override void CleanUpForDeletion() {
+        }
+
         #region Database Fields
 
         [DBFieldAttribute(Default="New User")]

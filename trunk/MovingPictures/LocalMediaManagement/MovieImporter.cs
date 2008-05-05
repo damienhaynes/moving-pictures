@@ -93,8 +93,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // updates listeners of changes to the match lists. This will not provide info on when
         // pending matches are externally approved.
-        public delegate void MatchListChangedHandler(MediaMatch obj, MovieImporterAction action);
-        public event MatchListChangedHandler MatchListChanged;
+        public delegate void MovieStatusChangedHandler(MediaMatch obj, MovieImporterAction action);
+        public event MovieStatusChangedHandler MovieStatusChanged;
 
         // Creates a MovieImporter object which will scan ImportPaths and import new media.
         public MovieImporter() {
@@ -186,8 +186,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // notify any listeners of the status change
-            if (MatchListChanged != null)
-                MatchListChanged(match, MovieImporterAction.APPROVED);
+            if (MovieStatusChanged != null)
+                MovieStatusChanged(match, MovieImporterAction.APPROVED);
 
         }
 
@@ -195,6 +195,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // to be ignored in the future.
         public void Ignore(MediaMatch match) {
             RemoveFromMatchLists(match);
+            RemoveCommitedRelations(match.LocalMedia);
 
             foreach (DBLocalMedia currFile in match.LocalMedia) {
                 currFile.Ignored = true;
@@ -202,8 +203,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // notify any listeners of the status change
-            if (MatchListChanged != null)
-                MatchListChanged(match, MovieImporterAction.IGNORED);
+            if (MovieStatusChanged != null)
+                MovieStatusChanged(match, MovieImporterAction.IGNORED);
 
 
         }
@@ -211,6 +212,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // rescans for possible movie matches using the specified search string
         public void Reprocess(MediaMatch match, string searchString) {
             RemoveFromMatchLists(match);
+            RemoveCommitedRelations(match.LocalMedia);
 
             // clear the ignored flag in case these files were previously on the ignore list
             foreach (DBLocalMedia currFile in match.LocalMedia) {
@@ -223,8 +225,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // notify any listeners of the status change
-            if (MatchListChanged != null)
-                MatchListChanged(match, MovieImporterAction.REPROCCESSING_PENDING);
+            if (MovieStatusChanged != null)
+                MovieStatusChanged(match, MovieImporterAction.REPROCCESSING_PENDING);
         }
 
         // takes the given match containing multiple files and splits it up into
@@ -234,11 +236,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return;
 
             RemoveFromMatchLists(match);
+            RemoveCommitedRelations(match.LocalMedia);
             match.Deleted = true;
 
             // notify any listeners of the status change
-            if (MatchListChanged != null)
-                MatchListChanged(match, MovieImporterAction.SPLIT);
+            if (MovieStatusChanged != null)
+                MovieStatusChanged(match, MovieImporterAction.SPLIT);
 
             foreach (DBLocalMedia currFile in match.LocalMedia) {
                 // clear the ignored flag in case these files were previously on the ignore list
@@ -250,8 +253,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     pendingMatches.Insert(0, newMatch);
                 }
 
-                if (MatchListChanged != null)
-                    MatchListChanged(newMatch, MovieImporterAction.ADDED_FROM_SPLIT);
+                if (MovieStatusChanged != null)
+                    MovieStatusChanged(newMatch, MovieImporterAction.ADDED_FROM_SPLIT);
             }
         }
 
@@ -267,12 +270,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // build the file list and clear out old matches
             foreach (MediaMatch currMatch in matchList) {
                 RemoveFromMatchLists(currMatch);
+                RemoveCommitedRelations(currMatch.LocalMedia);
                 currMatch.Deleted = true;
                 fileList.AddRange(currMatch.LocalMedia);
 
                 // notify any listeners of the status change
-                if (MatchListChanged != null)
-                    MatchListChanged(currMatch, MovieImporterAction.JOINED);
+                if (MovieStatusChanged != null)
+                    MovieStatusChanged(currMatch, MovieImporterAction.JOINED);
             }
 
             // build the new match and add it for processing
@@ -283,8 +287,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // notify any listeners of the status change
-            if (MatchListChanged != null)
-                MatchListChanged(newMatch, MovieImporterAction.ADDED_FROM_JOIN);
+            if (MovieStatusChanged != null)
+                MovieStatusChanged(newMatch, MovieImporterAction.ADDED_FROM_JOIN);
         }
 
         #endregion
@@ -376,8 +380,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         pendingMatches.Add(newMatch);
                     }
 
-                    if (MatchListChanged != null)
-                        MatchListChanged(newMatch, MovieImporterAction.ADDED);
+                    if (MovieStatusChanged != null)
+                        MovieStatusChanged(newMatch, MovieImporterAction.ADDED);
 
                     currFileSet = new List<DBLocalMedia>();
                     currFileSet.Add(currFile);
@@ -390,8 +394,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 newMatch.LocalMedia = currFileSet;
                 pendingMatches.Add(newMatch);
 
-                if (MatchListChanged != null)
-                    MatchListChanged(newMatch, MovieImporterAction.ADDED);
+                if (MovieStatusChanged != null)
+                    MovieStatusChanged(newMatch, MovieImporterAction.ADDED);
             }
         }
 
@@ -478,8 +482,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
 
             // notify any listeners of the status change
-            if (MatchListChanged != null)
-                MatchListChanged(currMatch, MovieImporterAction.GETTING_DETAILS);
+            if (MovieStatusChanged != null)
+                MovieStatusChanged(currMatch, MovieImporterAction.GETTING_DETAILS);
 
             // commit the match and move it to the commited array
             AssignFileToMovie(currMatch.LocalMedia, currMatch.Selected.Movie);
@@ -499,8 +503,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return;
             
             // notify any listeners of the status change
-            if (MatchListChanged != null) 
-                MatchListChanged(currMatch, MovieImporterAction.COMMITED);
+            if (MovieStatusChanged != null) 
+                MovieStatusChanged(currMatch, MovieImporterAction.COMMITED);
         }
 
         // retrieves possible matches for the next item (or group of items) in the mediaQueue
@@ -561,12 +565,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // otherwise place it in the pending queue for approval
             if (mediaMatch.Selected != null && mediaMatch.Selected.MatchValue <= 3) {
                 approvedMatches.Add(mediaMatch);
-                if (MatchListChanged != null)
-                    MatchListChanged(mediaMatch, MovieImporterAction.APPROVED);
+                if (MovieStatusChanged != null)
+                    MovieStatusChanged(mediaMatch, MovieImporterAction.APPROVED);
             } else {
                 matchesNeedingInput.Add(mediaMatch);
-                if (MatchListChanged != null)
-                    MatchListChanged(mediaMatch, MovieImporterAction.NEED_INPUT);
+                if (MovieStatusChanged != null)
+                    MovieStatusChanged(mediaMatch, MovieImporterAction.NEED_INPUT);
             }
         }
 
@@ -656,7 +660,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // and get rid of them
             foreach (DBMovieInfo currMovie in oldMovies)
-                MovingPicturesPlugin.DatabaseManager.Delete(currMovie);
+                currMovie.Delete();
         }
 
 
@@ -668,8 +672,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             string searchStr = mediaMatch.SearchString;
 
             // notify any listeners we are checking for matches
-            if (MatchListChanged != null)
-                MatchListChanged(mediaMatch, MovieImporterAction.GETTING_MATCHES);
+            if (MovieStatusChanged != null)
+                MovieStatusChanged(mediaMatch, MovieImporterAction.GETTING_MATCHES);
 
             // grab a list of movies from our dataProvider and rank each returned movie on 
             // how close a match it is

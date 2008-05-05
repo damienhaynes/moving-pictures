@@ -61,7 +61,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         
         // Loads into memory metadata about a given table type. 
         private static void loadFieldList(Type tableType) {
-            if (fieldLists.ContainsKey(tableType))
+            if (tableType == null || fieldLists.ContainsKey(tableType))
                 return;
 
             List<DBField> newFieldList = new List<DBField>();
@@ -222,6 +222,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         // Returns the list of DBFields for the given type. Developer should normally
         // directly use the properties of the class, but this allows for iteration.
         public static List<DBField> GetFieldList(Type tableType) {
+            if (tableType == null)
+                return new List<DBField>();
+
             loadFieldList(tableType);
             return fieldLists[tableType];
         }
@@ -401,6 +404,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 dbClient.Execute(query);
                 cache.Remove(dbObject);
                 dbObject.ID = null;
+                dbObject.CleanUpForDeletion();
             }
             catch (SQLiteException e) {
                 logger.ErrorException("Error deleting object from " + GetTableName(dbObject) + " table.", e);
