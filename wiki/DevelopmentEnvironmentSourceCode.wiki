@@ -12,27 +12,20 @@ So go ahead and create your folder structure. Create the `PluginDev` folder and 
 
 = Getting the !MediaPortal Source Code =
 === Checking Out ===
-Now that you have your folders created, we need to pull down the latest code for two major projects. The Moving Pictures project and the !MediaPortal project. !MediaPortal is a dependency of Moving Pictures, so this is a requirement.
-
-Right click the MediaPortal folder you created previously and click SVN Checkout. If you do not see this you either don't have TortoiseSVN installed or it is not setup properly.
+Now that you have your folders created, we need to pull down the latest code for two major projects. The Moving Pictures project and the !MediaPortal project. !MediaPortal is a dependency of Moving Pictures, so let's start with that. Right click the !MediaPortal folder you created previously and click SVN Checkout. If you do not see this you either don't have TortoiseSVN installed or it is not setup properly.
 
 http://moving-pictures.googlecode.com/svn/wiki/Images/checkout_popup.png http://moving-pictures.googlecode.com/svn/wiki/Images/checkout.png
 
 === Picking Your Repository ===
 
-The only thing you need to change on this popup is the "URL of Repository" field. You have a choice though, you can go with the latest and greatest source code from the !MediaPortal project, or you can go with the source code from the latest tested release. If you want the latest, greatest (and possibly buggy) !MediaPortal code, cut and paste the following URL for your Repository URL, then click OK:
+The only thing you need to change on this popup is the "URL of Repository" field. You have a choice though, you can go with the latest and greatest source code from the !MediaPortal project, or you can go with the source code from the latest tested release. If you want the latest, greatest (and possibly buggy) !MediaPortal code, cut and paste the first of the two URLs below into for your Repository URL, then click OK. 
+
+Using the _latest_ code base for !MediaPortal, one of our dependencies, may not be the best idea though. Most of the users of Moving Pictures are going to be running the plug-in against the latest _release_ of !MediaPortal. So if you want to get the code for the most recent official release, cut and paste the second URL below. *Don't hit OK yet though!* Click the "..." button to pop up the repository browser, right click and refresh the "tags" node and pick the most recent version. At the time of writing, the latest version is 1.0.0.0 RC1, but there may be a newer release by now. Pick the newest. Once you have picked which version of the !MediaPortal code you want, back on the Checkout Dialog click OK to start the checkout. !MediaPortal is a bit large so this may take a few minutes depending on your connection speed.
 
 {{{
 https://mediaportal.svn.sourceforge.net/svnroot/mediaportal/trunk
+https://mediaportal.svn.sourceforge.net/svnroot/mediaportal/tags/Version 1.0.0.0 RC1/
 }}}
-
-We are not working on cutting edge MediaPortal code though, we are working on cutting edge Moving Pictures code! So you may want to go with the latest stable code base. In that case you will want to cut and paste the following URL into the Repository URL _*then click the "..." button to popup the repository browser*_:
-
-{{{
-https://mediaportal.svn.sourceforge.net/svnroot/mediaportal/tags
-}}}
-
-Expand the tags node and pick the most recent version listed, and click OK. Now, back on the Checkout Dialog again, click OK to start the checkout. MediaPortal is a bit large so this may take a few minutes depending on your connection speed.
 
 http://moving-pictures.googlecode.com/svn/wiki/Images/tags.png
 
