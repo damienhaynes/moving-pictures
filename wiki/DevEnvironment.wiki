@@ -1,0 +1,49 @@
+#summary Instructions to get up a working development environment setup to contribute to Moving Pictures.
+
+*_THIS PAGE IS CURRENTLY A WORK IN PROGRESS PLEASE COME BACK SOON_*
+
+= About This Document =
+=== Introduction ===
+This document will walk you through setting up your development environment to contribute to the Moving Pictures project. If you follow this guide, you should be able to retrieve the latest version of the source code, make bug fixes or enhancements, and submit your changes. This guide details a development environment utilizing Visual Studio 2008 Express and Tortoise SVN, both available for free. It is of course possible to use the full version of Visual Studio along with a source control plug-in such as VisualSVN, but this is not covered here.
+
+=== Table of Contents ===
+  * [DevEnvironment#About_This_Document About This Document] 
+  * [DevEnvironment#Prerequisites Prerequisites]
+
+----
+
+= Prerequisites =
+As mentioned above, you will need two tools to work with the Moving Pictures source code, and optionally you can use a third SQLite database browser for debugging purposes.
+=== Visual Studio 2008 ===
+All project files for Moving Pictures are in the Visual C# 2008 Project file format. Because Moving Pictures is currently targeted for .NET 2.0, it is possible to use earlier versions of Visual Studio. This is not covered by this guide, and if you choose to use an earlier version, _please do not overwrite the 2008 project files_.
+
+If you do not already have it installed, you will need to install Visual C# before you proceed with the rest of this guide. Visual C# is a subset of Visual Studio, and it is the only portion of Visual Studio you will need. Throughout this document though, these terms will be used interchangeably. Don't get confused, all you need is Visual C#. A walk through for the Visual Studio installation is outside the scope of this guide, but you should not need anything beyond a standard install of the Visual C# component of Visual Studio. The Express edition of Visual Studio 2008 is available from Microsoft, free of charge at the following URL, again, you will only need the Visual C# component:
+
+[http://www.microsoft.com/express/download/]
+
+=== TortoiseSVN ===
+We will be using TortoiseSVN for retrieving the latest source code and changes from the Subversion repository here at Google Code. There are many other Subversion clients you could use, TortoiseSVN just happens to be our favorite. You will need TortoiseSVN installed before proceeding with this guide. You can get the latest version of TortoiseSVN from the following URL:
+
+[http://tortoisesvn.net/downloads]
+
+----
+= Getting the Latest Code =
+=== Folder Structure ===
+So first things first, let's get the latest version of the source code. Before you do this though, you will need to decide where you want your projects to be stored. You can setup your project and solution files anywhere, but the default location for Visual Studio Projects is "`My Documents\Visual Studio 2008\Projects`". Any location will do if you would rather not work from there. To give you a little visibility, this is the folder structure I am recommending:
+
+http://moving-pictures.googlecode.com/svn/trunk/MovingPictures/Images/MediaPlay.png
+
+{{{
+IMAGE HERE
+}}}
+
+So go ahead and create your folder structure. Create the `PluginDev` folder and the `MediaPortal` and `Moving Pictures` folders below that. These three are all you need to do manually, everything else will automatically be pulled down by TortoiseSVN.
+
+=== Getting the MediaPortal Code ===
+Now that you have your folders created, we need to pull down the latest code for two major projects. The Moving Pictures project and the MediaPortal project. MediaPortal is a dependency of Moving Pictures, so this is a requirement.
+
+Right click the MediaPortal folder you created previously and click SVN Checkout. If you do not see this you either don't have TortoiseSVN installed or it is not setup properly.
+
+= Setting up your Visual Studio Solution =
+So now that you have Visual Studio and TortoiseSVN installed, you need to setup a Visual Studio solution. This solution will contain the Moving Pictures Project, the Moving Pictures Config Tester project, and a subset of the MediaPortal Projects. If you work on other MediaPortal plugins it might make sense to add those projects to this Solution as well.
+
