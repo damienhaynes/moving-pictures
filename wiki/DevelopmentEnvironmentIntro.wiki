@@ -14,7 +14,8 @@ This document will walk you through setting up your development environment to c
 ----
 
 = Prerequisites =
-As mentioned above, you will need two tools to work with the Moving Pictures source code, and optionally you can use a third SQLite database browser for debugging purposes.
+As mentioned above, you will at a minimum need two tools to work with the Moving Pictures source code.
+
 === Visual Studio 2008 ===
 All project files for Moving Pictures are in the Visual C# 2008 Project file format. Because Moving Pictures is currently targeted for .NET 2.0, it is possible to use earlier versions of Visual Studio. This is not covered by this guide, and if you choose to use an earlier version, _please do not overwrite the 2008 project files_.
 
