@@ -1,8 +1,8 @@
-#summary Intro section of instructions to get up a working development environment setup to contribute to Moving Pictures.
+#summary Source code section of instructions to get up a working development environment setup to contribute to Moving Pictures.
 #labels Phase-Implementation
 
 = Folder Structure =
-So first things first, let's get the latest version of the source code. Before you do this though, you will need to decide where you want your projects to be stored. You can setup your project and solution files anywhere, but the default location for Visual Studio Projects is "`My Documents\Visual Studio 2008\Projects`". Any location will do if you would rather not work from there. To give you a little visibility, this is the folder structure I am recommending:
+So now that you have your tools setup, you will want to pull down the latest source code for Moving Pictures. Before you do that though, you will have to decide where you want your projects to be stored. You can setup your project and solution files anywhere, but the default location for Visual Studio Projects is "`My Documents\Visual Studio 2008\Projects`". Any location will do if you would rather not work from there. To give you a little visibility, this is the folder structure I am recommending:
 
 {{{
 IMAGE HERE
@@ -12,7 +12,7 @@ So go ahead and create your folder structure. Create the `PluginDev` folder and 
 
 = Getting the !MediaPortal Source Code =
 === Checking Out ===
-Now that you have your folders created, we need to pull down the latest code for two major projects. The Moving Pictures project and the !MediaPortal project. !MediaPortal is a dependency of Moving Pictures, so let's start with that. Right click the !MediaPortal folder you created previously and click SVN Checkout. If you do not see this you either don't have TortoiseSVN installed or it is not setup properly.
+Now that you have your folders created, we need to pull down the latest code for the Moving Pictures project and the !MediaPortal project. !MediaPortal is a dependency of Moving Pictures, so let's start with that. Right click the !MediaPortal folder you created previously and click "SVN Checkout". If you do not see this you most likely either do not have TortoiseSVN installed or it is not setup properly.
 
 http://moving-pictures.googlecode.com/svn/wiki/Images/checkout_popup.png http://moving-pictures.googlecode.com/svn/wiki/Images/checkout.png
 
