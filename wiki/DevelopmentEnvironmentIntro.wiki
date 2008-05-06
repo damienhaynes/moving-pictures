@@ -19,13 +19,13 @@ As mentioned above, you will at a minimum need two tools to work with the Moving
 === Visual Studio 2008 ===
 All project files for Moving Pictures are in the Visual C# 2008 Project file format. Because Moving Pictures is currently targeted for .NET 2.0, it is possible to use earlier versions of Visual Studio. This is not covered by this guide, and if you choose to use an earlier version, _please do not overwrite the 2008 project files_.
 
-If you do not already have it installed, you will need to install Visual C# before you proceed with the rest of this guide. Visual C# is a subset of Visual Studio, and it is the only portion of Visual Studio you will need. Throughout this document though, these terms will be used interchangeably. Don't get confused, all you need is Visual C#. A walk through for the Visual Studio installation is outside the scope of this guide, but you should not need anything beyond a standard install of the Visual C# component of Visual Studio. The Express edition of Visual Studio 2008 is available from Microsoft, free of charge at the following URL, again, you will only need the Visual C# component:
+If you do not already have it installed, you will need to install Visual C# before you proceed with the rest of this guide. Visual C# is a subset of Visual Studio, and it is the only portion of Visual Studio you will need. Throughout this document though, these terms will be used interchangeably. Don't get confused, all you need is Visual C#. A walk through for the Visual Studio installation is outside the scope of this guide, but you should not need anything beyond a standard install of the Visual Studio. The Express edition of Visual Studio 2008 is available from Microsoft, free of charge at the following URL, again, you will only need the Visual C# component:
 
 [http://www.microsoft.com/express/download/]
 
 === TortoiseSVN ===
-We will be using TortoiseSVN for retrieving the latest source code and changes from the Subversion repository here at Google Code. There are many other Subversion clients you could use, TortoiseSVN just happens to be our favorite. You will need TortoiseSVN installed before proceeding with this guide. You can get the latest version of TortoiseSVN from the following URL:
+We will be using TortoiseSVN for retrieving the latest source code and changes from the Subversion repositories for both MediaPortal and Moving Pictures. There are many other Subversion clients you could use, TortoiseSVN just happens to be our favorite. You will need TortoiseSVN installed before proceeding with this guide. You can get the latest version of TortoiseSVN from the following URL:
 
 [http://tortoisesvn.net/downloads]
 
-== [DevelopmentEnvironmentSourceCode Next Page] >> ==
+== [DevelopmentEnvironmentSourceCode Next Page >>] ==
