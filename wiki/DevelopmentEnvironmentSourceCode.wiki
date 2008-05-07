@@ -33,7 +33,7 @@ Once you have picked the latest version of the !MediaPortal code, click OK. Back
 
 = Getting the Moving Pictures Source Code =
 
-Alright so now that you have retrieved the source code for !MediaPortal, you will need to get the source code for Moving Pictures. The Moving Pictures source code is also hosted in a subversion repository so the procedure is virtually identical. In fact it's even a it easier because, as of the time of this writing, there have been no Moving Pictures releases (that's what we are trying to change)! This means that you don't have to pick which code base to work from. So just right click the Moving Picture folder you created previously, and click "SVN Checkout. The "URL of Repository" field should be populated with the following URL:
+Alright so now that you have retrieved the source code for !MediaPortal, you will need to get the source code for Moving Pictures. The Moving Pictures source code is also hosted in a subversion repository so the procedure is virtually identical. In fact it's even a bit easier because, as of the time of this writing, there have been no Moving Pictures releases (that's what we are trying to change)! This means that you don't have to pick which code base to work from. So just right click the Moving Picture folder you created previously, and click "SVN Checkout. The "URL of Repository" field should be populated with the following URL:
 
 {{{
 http://moving-pictures.googlecode.com/svn/trunk/
@@ -43,5 +43,4 @@ http://moving-pictures.googlecode.com/svn/wiki/Images/checkout_popup.png http://
 
 Click OK and wait for the checkout to complete. This should be significantly faster than the !MediaPortal checkout.
 
-= Setting up your Visual Studio Solution =
-So now that you have Visual Studio and TortoiseSVN installed, you need to setup a Visual Studio solution. This solution will contain the Moving Pictures Project, the Moving Pictures Config Tester project, and a subset of the MediaPortal Projects. If you work on other MediaPortal plugins it might make sense to add those projects to this Solution as well.
+== [DevelopmentEnvironmentIDE NEXT >>] ==
