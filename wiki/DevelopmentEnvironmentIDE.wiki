@@ -1,0 +1,13 @@
+#summary IDE section of instructions to get up a working development environment setup to contribute to Moving Pictures.
+
+= Setting up your Visual Studio Solution =
+=== Introduction ===
+So now that you have the source code for Moving Pictures and !MediaPortal, you need to setup a work environment by creating a Visual Studio Solution. There are currently two C# Projects that make up the Moving Pictures application and there are over a dozen that make up the !MediaPortal application. We will be loading both Moving Pictures projects and a subset of the !MediaPortal projects.
+
+You might be wondering why a solution file for Moving Pictures is not committed to Subversion. If you work on any other !MediaPortal plug-ins you could add them to the same Visual Studio Solution you are using here for Moving Pictures. For example it would make sense to have the MP-TVSeries project loaded in the same Solution as Moving Pictures if you occasionally do a few bug fixes for that project. This setup may not be the desired setup for everyone though, different people will be working on different projects, so only the project files for Moving Pictures are committed to Subversion, and everyone is free to setup their Solution file as they see fit.
+
+=== Creating the Solution ===
+
+= Testing Your Setup =
+
+= Submitting Changes =
