@@ -1,5 +1,5 @@
 #summary Intro section of instructions to get up a working development environment setup to contribute to Moving Pictures.
-#labels Phase-Implementation
+#labels Phase-Implementation,Featured
 
 = About This Document =
 === Introduction ===
