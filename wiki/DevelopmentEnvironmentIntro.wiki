@@ -10,6 +10,9 @@ This document will walk you through setting up your development environment to c
   * [DevelopmentEnvironmentIntro#Prerequisites Prerequisites]
   * [DevelopmentEnvironmentSourceCode#Folder_Structure Folder Structure]
   * [DevelopmentEnvironmentSourceCode#Getting_the_MediaPortal_Source_Code Getting the MediaPortal Source Code]
+  * [DevelopmentEnvironmentIDE#Setting_up_your_Visual_Studio_Solution Setting up your Visual Studio Solution]
+  * [DevelopmentEnvironmentIDE#Testing_Your_Setup Testing Your Setup]
+  * [DevelopmentEnvironmentIDE#Submitting_Changes Submitting Changes]
 
 ----
 
