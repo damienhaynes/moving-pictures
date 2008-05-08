@@ -18,7 +18,12 @@ This document will walk you through setting up your development environment to c
 ----
 
 = Prerequisites =
-As mentioned above, you will at a minimum need two tools to work with the Moving Pictures source code.
+As mentioned above, you will at a minimum need two tools to work with the Moving Pictures source code, in addition to the the .NET framework. Once you get going though you might want to consider grabbing a program to browse the Moving Pictures database. Any app that can read SQLite3 database will do.
+
+=== .NET Framework ===
+The .NET framework is the foundation for all .NET (and in turn C#) applications. If you use !MediaPortal the odds are that you already have some version of this installed, but it might be a good idea to grab the latest version. Later in the guide if you have any trouble with References on any of the C# projects (particularly the !MediaPortal projects) you might want to try installing the latest version of the .NET framework. It is very likely downloading and installing this now will save you time and a headache later, so I would recommend going ahead and grabbing this. At the time of writing the following download is the latest and most complete installation of the .NET framework:
+
+http://www.microsoft.com/downloads/details.aspx?FamilyId=333325FD-AE52-4E35-B531-508D977D32A6
 
 === Visual Studio 2008 ===
 All project files for Moving Pictures are in the Visual C# 2008 Project file format. Because Moving Pictures is currently targeted for .NET 2.0, it is possible to use earlier versions of Visual Studio. This is not covered by this guide, and if you choose to use an earlier version, _please do not overwrite the 2008 project files_.
