@@ -18,10 +18,10 @@ This document will walk you through setting up your development environment to c
 ----
 
 = Prerequisites =
-As mentioned above, you will at a minimum need two tools to work with the Moving Pictures source code, in addition to the the .NET framework. Once you get going though you might want to consider grabbing a program to browse the Moving Pictures database. Any app that can read SQLite3 database will do.
+As mentioned above, you will at a minimum need two tools to work with the Moving Pictures source code, in addition to the the .NET framework SDK. Once you get going though you might want to consider grabbing a program to browse the Moving Pictures database. Any app that can read a SQLite3 database will do.
 
-=== Windows & .NET Framework SDK ===
-The .NET framework is the foundation for all .NET (and in turn C#) applications. If you use !MediaPortal the odds are that you already have some version of this installed, but it might be a good idea to grab the latest version. Later in the guide if you have any trouble with References on any of the C# projects (particularly the !MediaPortal projects) you might want to try installing the latest version of the .NET framework. It is very likely downloading and installing this now will save you time and a headache later, so I would recommend going ahead and grabbing this. At the time of writing the following download is the latest and most complete installation of the .NET framework:
+=== Windows SDK ===
+!MediaPortal has a few unique assembly references that are not included with a standard Visual Studio Express installation. These assemblies are included in the Windows & .NET SDK available from Microsoft. This can be a bit of a large install, so if you know what you are doing feel free to uncheck components of the SDK you think you wont use. Again, what we are focusing on here is the .NET framework. If you are unsure, just use the default options. The latest download at the time of this writing is available at the following URL. And don't worry that it says 2008 Server, that only means the SDK has information about API changes included in Windows Server 2008. The SDK is valid for any operating system.
 
 http://www.microsoft.com/downloads/details.aspx?FamilyId=E6E1C3DF-A74F-4207-8586-711EBE331CDC
 
@@ -33,7 +33,7 @@ If you do not already have it installed, you will need to install Visual C# befo
 [http://www.microsoft.com/express/download/]
 
 === TortoiseSVN ===
-We will be using TortoiseSVN for retrieving the latest source code and changes from the Subversion repositories for both MediaPortal and Moving Pictures. There are many other Subversion clients you could use, TortoiseSVN just happens to be our favorite. You will need TortoiseSVN installed before proceeding with this guide. You can get the latest version of TortoiseSVN from the following URL:
+We will be using TortoiseSVN for retrieving the latest source code and changes from the Subversion repositories for both !MediaPortal and Moving Pictures. There are many other Subversion clients you could use, TortoiseSVN just happens to be our favorite. You will need TortoiseSVN installed before proceeding with this guide. You can get the latest version of TortoiseSVN from the following URL:
 
 [http://tortoisesvn.net/downloads]
 
