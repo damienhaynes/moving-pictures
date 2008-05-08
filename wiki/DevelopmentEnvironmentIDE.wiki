@@ -7,6 +7,30 @@ So now that you have the source code for Moving Pictures and !MediaPortal, you n
 You might be wondering why a solution file for Moving Pictures is not committed to Subversion. If you work on any other !MediaPortal plug-ins you could add them to the same Visual Studio Solution you are using here for Moving Pictures. For example it would make sense to have the MP-TVSeries project loaded in the same Solution as Moving Pictures if you occasionally do a few bug fixes for that project. This setup may not be the desired setup for everyone though, different people will be working on different projects, so only the project files for Moving Pictures are committed to Subversion, and everyone is free to setup their Solution file as they see fit.
 
 === Creating the Solution ===
+Creating your own solution is pretty easy. In Windows Explorer browse to the Moving Pictures folder that you recently pulled the source code into and go to the "MovingPictures" sub folder. You will see the !MovingPictures project file (with the extension .csproj). Double click the file to launch it in Visual Studio 2008. In opening the project, Visual Studio will also create a Solution to host this project in. Not so hard right?
+
+http://moving-pictures.googlecode.com/svn/wiki/Images/project_loc.png 
+
+Now we need to save the solution to an appropriate folder. On the right side of the screen you will see the Solution Explorer and in this panel at the top you will see a node for the newly created solution. Click this node so that it's highlighted then click the save icon on the task bar. *Don't click OK on the save dialog yet though!* We want to change the location of the Solution. By default it will be placed in the same directory as the Moving Pictures project, but we will be using multiple projects in the solution. So go back up to the !PluginDev directory you created earlier and save your solution here. You probably will want to change the name to something more generic as well (like !PluginDev.sln).
+
+http://moving-pictures.googlecode.com/svn/wiki/Images/sol_explorer.png http://moving-pictures.googlecode.com/svn/wiki/Images/save_solution.png
+
+=== Adding Additional Projects ===
+Now that you have created your solution you are almost done. All that is left is to add the remaining projects to the solution. Currently your solution only contains the primary !MovingPictures project, but you will also need the !MovingPicturesConfigTester project and the !MediaPortal projects that Moving Pictures depends on. Let's start with the dependencies of the !MovingPictures pictures project. If you expand the References node of the project in the Solution Explorer you can see all the dependencies and the ones that Visual Studio is having a hard time finding. At the time of this writing the only !MediaPortal dependencies required by Moving Pictures are Core, Databases, and Utils. These in turn depend on !DirectShowLib and !MediaPortal.Support projects though so you will need to add all five.
+
+So right click the solution node in the Solution Explorer and click Add -> Existing Project. In the dialog you will have to select each of the five project files I mentioned above. Their locations are listed below.
+
+{{{
+PluginDev\MediaPortal\Core\Core.csproj
+PluginDev\MediaPortal\Database\Database.csproj
+PluginDev\MediaPortal\Utils\Utils.csproj
+PluginDev\MediaPortal\DirectShowLib\DirectShowLib.csproj
+PluginDev\MediaPortal\MediaPortal.Support\MediaPortal.Support.csproj
+}}}
+
+http://moving-pictures.googlecode.com/svn/wiki/Images/missing_assemblies.png
+http://moving-pictures.googlecode.com/svn/wiki/Images/add_project.png 
+
 
 = Testing Your Setup =
 
