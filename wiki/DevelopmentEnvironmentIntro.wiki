@@ -18,12 +18,12 @@ This document will walk you through setting up your development environment to c
 ----
 
 = Prerequisites =
-As mentioned above, you will at a minimum need two tools to work with the Moving Pictures source code, in addition to the the .NET framework SDK. Once you get going though you might want to consider grabbing a program to browse the Moving Pictures database. Any app that can read a SQLite3 database will do.
+As mentioned above, you will at a minimum need two tools to work with the Moving Pictures source code, in addition to the the .NET Framework 2.0 SDK. Once you get going though you might want to consider grabbing a program to browse the Moving Pictures database. Any app that can read a SQLite3 database will do.
 
-=== Windows SDK ===
-!MediaPortal has a few unique assembly references that are not included with a standard Visual Studio Express installation. These assemblies are included in the Windows & .NET SDK available from Microsoft. This can be a bit of a large install, so if you know what you are doing feel free to uncheck components of the SDK you think you wont use. Again, what we are focusing on here is the .NET framework. If you are unsure, just use the default options. The latest download at the time of this writing is available at the following URL. And don't worry that it says 2008 Server, that only means the SDK has information about API changes included in Windows Server 2008. The SDK is valid for any operating system.
+=== .NET Framework 2.0 SDK ===
+!MediaPortal has a few unique assembly references that are not included with a standard Visual Studio Express 2008 installation. These assemblies are included in the .NET 2.0 SDK available from Microsoft, so before you get started you will need to install this SDK. Please note that the .NET 3.5 SDK does *not* include the required assemblies, you specifically need the 2.0 SDK. You can download the installer for this here:
 
-http://www.microsoft.com/downloads/details.aspx?FamilyId=E6E1C3DF-A74F-4207-8586-711EBE331CDC
+http://www.microsoft.com/downloads/details.aspx?familyid=FE6F2099-B7B4-4F47-A244-C96D69C35DEC
 
 === Visual Studio 2008 ===
 All project files for Moving Pictures are in the Visual C# 2008 Project file format. Because Moving Pictures is currently targeted for .NET 2.0, it is possible to use earlier versions of Visual Studio. This is not covered by this guide, and if you choose to use an earlier version, _please do not overwrite the 2008 project files_.
