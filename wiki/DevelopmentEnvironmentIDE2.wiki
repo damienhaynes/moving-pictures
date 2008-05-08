@@ -19,7 +19,7 @@ Most new developers on the project will be using this method first. Subversion g
 === Commiting Changes to Subversion ===
 If you start making regular contributions to the project then you'll probably be added as a Project Member. This means you can commit changes directly to Subversion via TortoiseSVN. I am not going to cover this process here but it is pretty simple. Just be sure that you fill out a meaningful log message. The ability to skim through the past log messages in Subversion is very important, and if you make a commit without logging a message _you will get yelled at_. Also try to commit groups of files all at once. If you have made changes to five files all for one bug fix or enhancement, then these five files should all be commited together. Don't check them in one at a time individually, this just makes it more difficult to track changes in the version history.
 
-= Comments? =
+= Comments =
 So that's all I have. This document took a while to write so I hope you  have found it useful. If you have any suggestions, feel free to leave a comment below. And if you have had or are still having any trouble, feel free to post in the Google Group, we are friendly people and would be glad to help you get started.
 
 -- John
