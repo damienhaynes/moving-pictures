@@ -41,4 +41,4 @@ http://moving-pictures.googlecode.com/svn/wiki/Images/checkout_popup.png http://
 
 Click OK and wait for the checkout to complete. This should be significantly faster than the !MediaPortal checkout.
 
-== [DevelopmentEnvironmentIDE NEXT >>] ==
+== [DevelopmentEnvironmentIDE Next Page >>] ==
