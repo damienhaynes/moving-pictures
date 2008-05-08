@@ -4,9 +4,7 @@
 = Folder Structure =
 So now that you have your tools setup, you will want to pull down the latest source code for Moving Pictures. Before you do that though, you will have to decide where you want your projects to be stored. You can setup your project and solution files anywhere, but the default location for Visual Studio Projects is "`My Documents\Visual Studio 2008\Projects`". Any location will do if you would rather not work from there. To give you a little visibility, this is the folder structure I am recommending:
 
-{{{
-IMAGE HERE
-}}}
+http://moving-pictures.googlecode.com/svn/wiki/Images/folders.png
 
 So go ahead and create your folder structure. Create the `PluginDev` folder and the `MediaPortal` and `Moving Pictures` folders below that. These three are all you need to do manually, everything else will automatically be pulled down by TortoiseSVN.
 
