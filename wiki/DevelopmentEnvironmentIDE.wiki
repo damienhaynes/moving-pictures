@@ -1,4 +1,5 @@
 #summary IDE section of instructions to get up a working development environment setup to contribute to Moving Pictures.
+#labels Phase-Implementation
 
 = Setting up your Visual Studio Solution =
 === Introduction ===
