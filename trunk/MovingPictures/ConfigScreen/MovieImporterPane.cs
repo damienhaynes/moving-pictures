@@ -149,7 +149,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void scanButton_Click(object sender, EventArgs e) {
             MovingPicturesPlugin.Importer.Start();
-            MovingPicturesPlugin.Importer.ForceFullScan();
+            MovingPicturesPlugin.Importer.StartFullScan();
         }
 
         private void MovieImporterPane_Load(object sender, EventArgs e) {

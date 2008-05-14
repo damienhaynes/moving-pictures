@@ -11,7 +11,7 @@ using System.Drawing.Design;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
     [Designer(typeof(DBObjectListDesigner))]
-    public class DBObjectList: UserControl {
+    public class DBObjectList: UserControl, IDBBackedControl {
         #region Private Variables
 
         DataGridView grid;
@@ -138,7 +138,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
                 DataGridViewRow currRow = grid.Rows[rowNum];
                 currRow.Tag = currField;
                 currRow.ReadOnly = properties.ReadOnly;
-                //currRow.Cells["valueColumn"].Style.BackColor = 
+                
+                // build the custom value cell
+                DBTextBoxCell valueCell = new DBTextBoxCell();
+                valueCell.Table = Table;
+                valueCell.DatabaseFieldName = properties.FieldName;
+                valueCell.DatabaseObject = DatabaseObject;
+                currRow.Cells["valueColumn"] = valueCell;
 
                 currRow.Cells["fieldColumn"].Value = properties.DisplayName;
             }
@@ -150,7 +156,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
 
             foreach (DataGridViewRow currRow in grid.Rows) {
                 DBField currField = (DBField)currRow.Tag;
-                currRow.Cells["valueColumn"].Value = currField.GetValue(DatabaseObject);
+                ((IDBBackedControl)currRow.Cells["valueColumn"]).DatabaseObject = DatabaseObject;
             }
 
             grid.AutoResizeRows();
@@ -215,12 +221,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
     // A property object representing display information for a DBField on a DBObject list.
     // These objects should normally be created and populated by the Visual Studio Designer.
     public class FieldProperty {
-        #region Private Variables
-
-        
-
-        #endregion
-
         #region Properties
 
         [Browsable(false)]

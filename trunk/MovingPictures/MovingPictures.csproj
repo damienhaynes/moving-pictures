@@ -46,6 +46,7 @@
     <Compile Include="ConfigScreen\AdvancedSettingsPane.Designer.cs">
       <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\Controls\IDBBackedControl.cs" />
     <Compile Include="ConfigScreen\Controls\DBObjectList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -53,6 +54,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ConfigScreen\DesignMode\DatabaseTableTypeConverter.cs" />
+    <Compile Include="ConfigScreen\DesignMode\DBFieldTypeConverter.cs" />
     <Compile Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -204,8 +206,10 @@
     <Content Include="Images\accept.png" />
     <Content Include="Images\approved.png" />
     <Content Include="Images\arrow_divide.png" />
+    <None Include="Images\arrow_down.png" />
     <Content Include="Images\arrow_join.png" />
     <Content Include="Images\arrow_rotate_clockwise.png" />
+    <Content Include="Images\arrow_switch.png" />
     <Content Include="Images\bullet_arrow_down.png" />
     <Content Include="Images\bullet_arrow_down_dark.png" />
     <Content Include="Images\cross.png" />

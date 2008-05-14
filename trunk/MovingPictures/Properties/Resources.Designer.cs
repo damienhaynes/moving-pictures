@@ -81,6 +81,13 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap arrow_down {
+            get {
+                object obj = ResourceManager.GetObject("arrow_down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap arrow_down1 {
             get {
                 object obj = ResourceManager.GetObject("arrow_down1", resourceCulture);
@@ -105,6 +112,13 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         internal static System.Drawing.Bitmap arrow_rotate_clockwise {
             get {
                 object obj = ResourceManager.GetObject("arrow_rotate_clockwise", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap arrow_switch {
+            get {
+                object obj = ResourceManager.GetObject("arrow_switch", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
