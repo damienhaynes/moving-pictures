@@ -108,6 +108,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             return base.GetHashCode();
         }
 
+        public override string ToString() {
+            if (File != null)
+                return File.Name;
+
+            return base.ToString();
+        }
+
         #region Database Management Methods
 
         // Gets the cooresponding Setting based on the given record ID.

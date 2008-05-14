@@ -231,7 +231,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         } private string _imdbID;
 
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowAutoUpdate=false)]
         public DBObjectList<DBLocalMedia> LocalMedia {
             get { return _localMedia; }
             set {
@@ -241,7 +241,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         } private DBObjectList<DBLocalMedia> _localMedia;
 
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowAutoUpdate = false)]
         public StringList AlternateCovers {
             get { return _covers; }
 
@@ -261,7 +261,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         } private Image _cover = null;
 
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowAutoUpdate = false)]
         public String CoverFullPath
         {
             get {
@@ -289,7 +289,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         } private Image _coverThumb = null;
 
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowAutoUpdate = false)]
         public String CoverThumbFullPath {
             get {
                 if (_coverThumbFullPath.Trim().Length == 0)
@@ -303,6 +303,20 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                 commitNeeded = true;
             }
         } private String _coverThumbFullPath;
+
+        #endregion
+
+        #region General Management Methods
+        
+        // deletes this movie from the database and sets all related DBLocalMedia to ignored
+        public void DeleteAndIgnore() {
+            foreach (DBLocalMedia currFile in LocalMedia) {
+                currFile.Ignored = true;
+                currFile.Commit();
+            }
+
+            Delete();
+        }
 
         #endregion
 

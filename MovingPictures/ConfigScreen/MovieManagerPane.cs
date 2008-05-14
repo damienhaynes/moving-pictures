@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using System.Diagnostics;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {
@@ -40,8 +41,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 ReloadList();
 
                 MovingPicturesPlugin.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
-
-                movieTitleTextBox.DatabaseField = DBMovieInfo.GetField("Name");
             }
         }
 
@@ -105,7 +104,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (CurrentMovie == null)
                 return;
 
-            // setup coverart thumbnail
+            // setup coverart thumbnail panel
             if (CurrentMovie.CoverThumb != null) {
                 coverImage.Image = CurrentMovie.CoverThumb;
                 resolutionLabel.Text = CurrentMovie.Cover.Width + " x " + CurrentMovie.Cover.Height;
@@ -128,22 +127,41 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 nextCoverButton.Enabled = true;
             }
 
-            // enable/disable zoom & delete buttons
+            // enable/disable zoom & delete buttons for cover art
             if (CurrentMovie.Cover != null) {
                 zoomButton.Enabled = true;
-                deleteButton.Enabled = true;
+                deleteCoverButton.Enabled = true;
             }
             else {
                 zoomButton.Enabled = false;
-                deleteButton.Enabled = false;
+                deleteCoverButton.Enabled = false;
             }
             
             // populate movie details fields
-            movieTitleTextBox.Text = CurrentMovie.Name;
-
             movieTitleTextBox.DatabaseObject = CurrentMovie;
-            dbObjectList1.DatabaseObject = CurrentMovie;
+            movieDetailsList.DatabaseObject = CurrentMovie;
 
+        }
+
+        private void updateFilePanel() {
+            if (CurrentMovie == null)
+                return;
+
+            // populate file list combo
+            fileCombo.Items.Clear();
+            foreach (DBLocalMedia currFile in CurrentMovie.LocalMedia) 
+                fileCombo.Items.Add(currFile);
+
+            // select first file            
+            if (fileCombo.Items.Count > 0) {
+                fileCombo.SelectedIndex = 0;
+            }
+
+            // only allow user to drop down if there is more than one movie file
+            if (fileCombo.Items.Count > 1)
+                fileCombo.Enabled = true;
+            else
+                fileCombo.Enabled = false;
         }
 
         private void movieTree_BeforeSelect(object sender, TreeViewCancelEventArgs e) {
@@ -160,6 +178,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
 
             updateMoviePanel();
+            updateFilePanel();
         }
 
         private void previousCoverButton_Click(object sender, EventArgs e) {
@@ -176,23 +195,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             CurrentMovie.NextCover();
             updateMoviePanel();
-        }
-
-        private void movieTitleTextBox_TextChanged(object sender, EventArgs e) {
-            if (CurrentMovie == null)
-                return;
-
-            CurrentMovie.Name = movieTitleTextBox.Text;
-        }
-
-        private void movieTitleTextBox_Enter(object sender, EventArgs e) {
-            movieTitleTextBox.BorderStyle = BorderStyle.FixedSingle;
-            movieTitleTextBox.BackColor = System.Drawing.SystemColors.Window;
-        }
-
-        private void movieTitleTextBox_Leave(object sender, EventArgs e) {
-            movieTitleTextBox.BorderStyle = BorderStyle.None;
-            movieTitleTextBox.BackColor = System.Drawing.SystemColors.Control;
         }
 
         private void zoomButton_Click(object sender, EventArgs e) {
@@ -214,14 +216,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void loadCoverArtFromFileToolStripMenuItem_Click(object sender, EventArgs e) {
-            loadFromFile();
+            loadCoverFromFile();
         }
 
         private void loadNewCoverButton_ButtonClick(object sender, EventArgs e) {
-            loadFromFile();
+            loadCoverFromFile();
         }
 
-        private void loadFromFile() {
+        private void loadCoverFromFile() {
             if (CurrentMovie == null)
                 return;
 
@@ -266,7 +268,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
-        private void deleteButton_Click(object sender, EventArgs e) {
+        private void deleteCoverButton_Click(object sender, EventArgs e) {
             if (CurrentMovie == null || CurrentMovie.AlternateCovers.Count == 0)
                 return;
             
@@ -279,6 +281,49 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
+        private void fileCombo_SelectedIndexChanged(object sender, EventArgs e) {
+            if (fileCombo.SelectedItem != null)
+                fileDetailsList.DatabaseObject = (DBLocalMedia) fileCombo.SelectedItem;
+        }
+
+        private void deleteMovieButton_Click(object sender, EventArgs e) {
+            if (CurrentMovie != null) {
+                DialogResult result =
+                    MessageBox.Show("Are you sure you want to remove this movie from the\n" +
+                                    "database and ignore all related video files in\n" +
+                                    "future scans?", "Delete Movie", MessageBoxButtons.YesNo);
+
+                if (result == System.Windows.Forms.DialogResult.Yes) {
+                    DBMovieInfo movie = CurrentMovie;
+                    movie.DeleteAndIgnore();
+                    movieTree.Nodes.Remove(movieNodes[movie]);
+                    movieNodes.Remove(movie);
+
+                }
+            }
+        }
+
+        private void playMovieButton_Click(object sender, EventArgs e) {
+            if (fileCombo.SelectedItem == null)
+                return;
+
+            ProcessStartInfo processInfo = new ProcessStartInfo(((DBLocalMedia)fileCombo.SelectedItem).File.FullName);
+            Process.Start(processInfo);
+        }
+
+        private void refreshMovieButton_Click(object sender, EventArgs e) {
+            if (CurrentMovie == null)
+                return;
+            DialogResult result = 
+                MessageBox.Show("You are about to refresh all movie metadata, overwriting\n" +
+                                "any custom modifications to this film.",
+                                "Refresh Movie", MessageBoxButtons.OKCancel);
+
+            if (result == System.Windows.Forms.DialogResult.OK) {
+                MovingPicturesPlugin.MovieProvider.Update(CurrentMovie);
+                updateMoviePanel();
+            }
+        }
 
     }
 }

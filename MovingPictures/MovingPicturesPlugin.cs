@@ -60,6 +60,15 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private static SettingsManager settingsManager;
 
+        public static IMovieProvider MovieProvider {
+            get {
+                if (_dataProvider == null)
+                    _dataProvider = new MovieXMLProvider();
+
+                return _dataProvider;
+            }
+        } private static IMovieProvider _dataProvider = null;
+
         // Initializes the database connection to the Movies Plugin database
         private static void initDB() {
             string fullDBFileName = Config.GetFile(Config.Dir.Database, dbFileName);
@@ -120,7 +129,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
             logger.Info("Moving Pictures (" + ver.Major + "." + ver.Minor + "." + ver.Build + ":" + ver.Revision +")");
             logger.Info("Plugin Lanched");
-
 
             initDB();
             initAdditionalSettings();

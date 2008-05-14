@@ -163,7 +163,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return (mediaScannerThreads.Count != 0);
         }
 
-        public void ForceFullScan() {
+        public void StartFullScan() {
             fullScanNeeded = true;
         }
 
@@ -205,8 +205,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // notify any listeners of the status change
             if (MovieStatusChanged != null)
                 MovieStatusChanged(match, MovieImporterAction.IGNORED);
-
-
         }
 
         // rescans for possible movie matches using the specified search string
@@ -585,8 +583,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 RemoveCommitedRelations(currFile);
 
             // write the file(s) to the DB
-            foreach (DBLocalMedia currFile in localMedia)
+            int count = 1;
+            foreach (DBLocalMedia currFile in localMedia) {
+                currFile.Part = count;
                 currFile.Commit();
+
+                count++;
+            }
 
             // update, associate, and commit the movie
             dataProvider.Update(movie);
