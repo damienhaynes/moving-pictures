@@ -86,13 +86,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                             DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName);
                             
                             // if this file is in the database continue if we only want new files
-                            if (newFile != null && returnOnlyNew)
+                            if (newFile.ID != null && returnOnlyNew)
                                 continue;
-
-                            if (newFile == null) {
-                                newFile = new DBLocalMedia();
-                                newFile.File = currFile;
-                            }
 
                             rtn.Add(newFile);
                             break;

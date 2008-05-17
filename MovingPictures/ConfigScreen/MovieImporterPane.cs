@@ -71,8 +71,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
             }
 
-            if (action == MovieImporterAction.SPLIT ||
-                action == MovieImporterAction.JOINED) {
+            if (action == MovieImporterAction.REMOVED_FROM_SPLIT ||
+                action == MovieImporterAction.REMOVED_FROM_JOIN) {
 
                 lastSplitJoinLocation = unapprovedMatchesBindingSource.IndexOf(obj);
                 unapprovedMatchesBindingSource.Remove(obj);
@@ -119,7 +119,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 case MovieImporterAction.ADDED_FROM_JOIN:
                     imageCell.Value = blank;
                     break;
-                case MovieImporterAction.REPROCCESSING_PENDING:
+                case MovieImporterAction.PENDING:
                     imageCell.Value = Resources.arrow_rotate_clockwise;
                     break;
                 case MovieImporterAction.GETTING_MATCHES:
@@ -194,6 +194,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
                 MediaMatch selectedMatch = (MediaMatch)currRow.DataBoundItem;
+                selectedMatch.HighPriority = true;
                 MovingPicturesPlugin.Importer.Approve(selectedMatch);
             }
         }
@@ -217,8 +218,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 popup.ShowDialog(this);
 
                 if (popup.DialogResult == DialogResult.OK) {
-                    string searchStr = popup.GetSearchString();
-                    MovingPicturesPlugin.Importer.Reprocess(selectedMatch, searchStr);
+                    selectedMatch.SearchString = popup.GetSearchString();
+                    MovingPicturesPlugin.Importer.Reprocess(selectedMatch);
                 }
             }
         }

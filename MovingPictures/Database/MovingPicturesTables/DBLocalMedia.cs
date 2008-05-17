@@ -135,7 +135,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                 return resultSet[0];
             }
 
-            return null;
+            DBLocalMedia newFile = new DBLocalMedia();
+            newFile.FullPath = fullPath;
+
+            return newFile;
         }
 
         public static DBField GetField(string fieldName) {

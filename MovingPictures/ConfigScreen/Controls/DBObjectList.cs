@@ -151,9 +151,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
         }
 
         private void repopulateValues() {
-            if (DatabaseObject == null)
-                return;
-
             foreach (DataGridViewRow currRow in grid.Rows) {
                 DBField currField = (DBField)currRow.Tag;
                 ((IDBBackedControl)currRow.Cells["valueColumn"]).DatabaseObject = DatabaseObject;

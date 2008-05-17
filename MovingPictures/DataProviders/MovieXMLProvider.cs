@@ -14,7 +14,7 @@ using NLog;
 using System.Drawing;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
-    class MovieXMLProvider: IMovieProvider {
+    class MovieXMLProvider : IMovieProvider, ICoverArtProvider {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private const string urlGetByName = "http://www.movie-xml.com/interfaces/getmovie.php?moviename=";
@@ -58,17 +58,24 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public void Update(DBMovieInfo movie) {
-            if (movie.MovieXmlID != 0) {
+            if (movie.ImdbID.Trim().Length != 0) {
                 DBMovieInfo newInfo = getByImdbID(movie.ImdbID);
 
                 movie.CopyUpdatableValues(newInfo);
             }
         }
 
-        // Grabs artwork provided by movie-xml.com. Much of this needs to be refactored to
-        // DBMovieInfo. Should pass in a URL to an image.
+        // Grabs artwork provided by movie-xml.com. 
         public bool GetArtwork(DBMovieInfo movie) {
-            if (movie == null || movie.MovieXmlID == null)
+            if (movie == null)
+                return false;
+
+            // if we don't have the moviexml id (required for cover art retireval) try to grab it
+            if (movie.MovieXmlID == null)
+                getMovieXmlID(movie);
+
+            // if we still have no ID, fail.
+            if (movie.MovieXmlID == null)
                 return false;
 
             // grab coverart loading settings
@@ -105,6 +112,15 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         #region Private Methods
+
+        // Grabs the Movie-XML.com ID based on the IMDB ID
+        private void getMovieXmlID(DBMovieInfo movie) {
+            if (movie.ImdbID.Trim().Length != 0) {
+                DBMovieInfo newInfo = getByImdbID(movie.ImdbID);
+
+                movie.MovieXmlID = newInfo.MovieXmlID;
+            }
+        }
 
         // given a url, retrieves the xml result set and returns the nodelist of Item objects
         private XmlNodeList getXML(string url) {
