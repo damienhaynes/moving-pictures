@@ -10,6 +10,7 @@ using NLog;
 using System.Web;
 using System.Net;
 using System.Threading;
+using System.Collections;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     public enum CoverArtLoadStatus {
@@ -583,13 +584,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             return 0;
         }
 
+        public override string ToString() {
+            return Name;
+        }
+
         private void populateSortName() {
             // loop through and try to remove a preposition
             string[] prepositions = { "the", "a", "an" };
             foreach (string currWord in prepositions) {
                 string word = currWord + " ";
                 if (_name.ToLower().IndexOf(word) == 0) {
-                    SortName = _name.Substring(word.Length);
+                    SortName = _name.Substring(word.Length) + ", " + _name.Substring(0, currWord.Length);
                     return;
                 }
             }

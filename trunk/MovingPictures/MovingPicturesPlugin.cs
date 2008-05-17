@@ -69,6 +69,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         } private static IMovieProvider _dataProvider = null;
 
+        public static ICoverArtProvider CoverProvider {
+            get {
+                if (_coverProvider == null)
+                    _coverProvider = new MovieXMLProvider();
+
+                return _coverProvider;
+            }
+        } private static ICoverArtProvider _coverProvider = null;
+
         // Initializes the database connection to the Movies Plugin database
         private static void initDB() {
             string fullDBFileName = Config.GetFile(Config.Dir.Database, dbFileName);

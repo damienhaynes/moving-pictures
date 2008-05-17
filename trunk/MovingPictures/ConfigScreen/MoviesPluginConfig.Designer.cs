@@ -26,11 +26,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void InitializeComponent() {
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.managerTab = new System.Windows.Forms.TabPage();
-            this.movieManagerPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManagerPane();
             this.importSettingsTab = new System.Windows.Forms.TabPage();
+            this.settingsTab = new System.Windows.Forms.TabPage();
+            this.movieManagerPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManagerPane();
             this.movieImporterPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieImporterPane();
             this.importPathsListView1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImportPathsPane();
-            this.settingsTab = new System.Windows.Forms.TabPage();
             this.advancedSettingsPane = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AdvancedSettingsPane();
             this.userManagementPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.UserManagementPane();
             this.mainTabControl.SuspendLayout();
@@ -64,14 +64,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.managerTab.Text = "Movie Manager";
             this.managerTab.UseVisualStyleBackColor = true;
             // 
-            // movieManagerPane1
-            // 
-            this.movieManagerPane1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.movieManagerPane1.Location = new System.Drawing.Point(3, 3);
-            this.movieManagerPane1.Name = "movieManagerPane1";
-            this.movieManagerPane1.Size = new System.Drawing.Size(616, 612);
-            this.movieManagerPane1.TabIndex = 0;
-            // 
             // importSettingsTab
             // 
             this.importSettingsTab.Controls.Add(this.movieImporterPane1);
@@ -79,10 +71,30 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importSettingsTab.Location = new System.Drawing.Point(4, 22);
             this.importSettingsTab.Name = "importSettingsTab";
             this.importSettingsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.importSettingsTab.Size = new System.Drawing.Size(560, 564);
+            this.importSettingsTab.Size = new System.Drawing.Size(622, 618);
             this.importSettingsTab.TabIndex = 0;
             this.importSettingsTab.Text = "Movie Importer";
             this.importSettingsTab.UseVisualStyleBackColor = true;
+            // 
+            // settingsTab
+            // 
+            this.settingsTab.Controls.Add(this.advancedSettingsPane);
+            this.settingsTab.Controls.Add(this.userManagementPane1);
+            this.settingsTab.Location = new System.Drawing.Point(4, 22);
+            this.settingsTab.Name = "settingsTab";
+            this.settingsTab.Padding = new System.Windows.Forms.Padding(3);
+            this.settingsTab.Size = new System.Drawing.Size(622, 618);
+            this.settingsTab.TabIndex = 1;
+            this.settingsTab.Text = "Additional Settings";
+            this.settingsTab.UseVisualStyleBackColor = true;
+            // 
+            // movieManagerPane1
+            // 
+            this.movieManagerPane1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.movieManagerPane1.Location = new System.Drawing.Point(3, 3);
+            this.movieManagerPane1.Name = "movieManagerPane1";
+            this.movieManagerPane1.Size = new System.Drawing.Size(616, 612);
+            this.movieManagerPane1.TabIndex = 0;
             // 
             // movieImporterPane1
             // 
@@ -93,7 +105,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieImporterPane1.Location = new System.Drawing.Point(3, 196);
             this.movieImporterPane1.MinimumSize = new System.Drawing.Size(422, 250);
             this.movieImporterPane1.Name = "movieImporterPane1";
-            this.movieImporterPane1.Size = new System.Drawing.Size(554, 365);
+            this.movieImporterPane1.Size = new System.Drawing.Size(616, 419);
             this.movieImporterPane1.TabIndex = 1;
             // 
             // importPathsListView1
@@ -102,20 +114,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importPathsListView1.Location = new System.Drawing.Point(3, 3);
             this.importPathsListView1.MinimumSize = new System.Drawing.Size(524, 150);
             this.importPathsListView1.Name = "importPathsListView1";
-            this.importPathsListView1.Size = new System.Drawing.Size(554, 188);
+            this.importPathsListView1.Size = new System.Drawing.Size(616, 188);
             this.importPathsListView1.TabIndex = 0;
-            // 
-            // settingsTab
-            // 
-            this.settingsTab.Controls.Add(this.advancedSettingsPane);
-            this.settingsTab.Controls.Add(this.userManagementPane1);
-            this.settingsTab.Location = new System.Drawing.Point(4, 22);
-            this.settingsTab.Name = "settingsTab";
-            this.settingsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.settingsTab.Size = new System.Drawing.Size(647, 567);
-            this.settingsTab.TabIndex = 1;
-            this.settingsTab.Text = "Additional Settings";
-            this.settingsTab.UseVisualStyleBackColor = true;
             // 
             // advancedSettingsPane
             // 
@@ -144,6 +144,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.ClientSize = new System.Drawing.Size(654, 668);
             this.Controls.Add(this.mainTabControl);
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "MoviesPluginConfig";
             this.ShowIcon = false;

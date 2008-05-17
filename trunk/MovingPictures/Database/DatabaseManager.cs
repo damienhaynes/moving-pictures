@@ -18,7 +18,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         private DatabaseCache cache;
         private string dbFilename;
         private SQLiteClient dbClient;
-        
+
+        private static string[] maintainanceQueries = 
+              { // remove orphaned local media files
+                "delete from local_media " +
+                "where ignored <> 1 and id not in " +
+                "      (select  lm.id from local_media lm " +
+                "        inner join movie_info mi on mi.localmedia like '%|' || lm.id || '|%') " 
+              };
+
+
 
         static DatabaseManager() {
             fieldLists = new Dictionary<Type, List<DBField>>();
@@ -30,9 +39,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             initDB();
             cache = new DatabaseCache();
         }
+
+        #region Events
+
+        public delegate void ObjectAffectedDelegate(DatabaseTable obj);
+        public event ObjectAffectedDelegate ObjectInserted;
+        public event ObjectAffectedDelegate ObjectDeleted;
+        public event ObjectAffectedDelegate ObjectUpdated;
         
+        #endregion
+
         #region Private Methods
-        
+
         // Attempts to initialize the connection to the database file
         private void initDB() {
             try {
@@ -43,6 +61,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 logger.FatalException("Could Not Open Database: " + dbFilename, e);
                 dbClient = null;
             }
+
+            try {
+                foreach (string currQuery in maintainanceQueries) {
+                    dbClient.Execute(currQuery);
+                }
+
+                logger.Info("Successfully executed " + maintainanceQueries.Length + " maintainance queries.");
+
+            }
+            catch (Exception) {
+                logger.Error("Failed executing maintainance queries.");
+            }
+
         }
 
         // Returns a select statement retrieving all fields ordered as defined by FieldList
@@ -132,32 +163,40 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         // inserts a new object to the database
         private void insert(DatabaseTable dbObject) {
-            try {
-                string queryFieldList = "";
-                string queryValueList = "";
+                try {
+                    string queryFieldList = "";
+                    string queryValueList = "";
 
-                // loop through the fields and build the strings for the query
-                foreach (DBField currField in fieldLists[dbObject.GetType()]) {
-                    if (queryFieldList != "") {
-                        queryFieldList += ", ";
-                        queryValueList += ", ";
+                    // loop through the fields and build the strings for the query
+                    foreach (DBField currField in fieldLists[dbObject.GetType()]) {
+                        if (queryFieldList != "") {
+                            queryFieldList += ", ";
+                            queryValueList += ", ";
+                        }
+
+                        queryFieldList += currField.FieldName;
+                        queryValueList += getSQLiteString(currField.GetValue(dbObject));
                     }
 
-                    queryFieldList += currField.FieldName;
-                    queryValueList += getSQLiteString(currField.GetValue(dbObject));
+                    string query = "insert into " + GetTableName(dbObject.GetType()) +
+                                   " (" + queryFieldList + ") values (" + queryValueList + ")";
+
+                    logger.Info("inserting: " + dbObject.ToString());
+                    lock (this) {
+                        dbClient.Execute(query);
+                        dbObject.ID = dbClient.LastInsertID();
+                    }
+                    dbObject.DBManager = this;
+                    cache.Add(dbObject);
+
+                    // notify any listeners of the status change
+                    if (ObjectInserted != null)
+                        ObjectInserted(dbObject);
                 }
-
-                string query = "insert into " + GetTableName(dbObject.GetType()) +
-                               " (" + queryFieldList + ") values (" + queryValueList + ")";
-
-                dbClient.Execute(query);
-                dbObject.ID = dbClient.LastInsertID();
-                dbObject.DBManager = this;
-                cache.Add(dbObject);
-            }
-            catch (SQLiteException e) {
-                logger.ErrorException("Could not commit to " + GetTableName(dbObject.GetType()) + " table.", e);
-            }
+                catch (Exception e) {
+                    logger.ErrorException("Could not commit to " + GetTableName(dbObject.GetType()) + " table.", e);
+                }
+            
         }
 
         // updates the given object in the database. assumes the object was previously retrieved 
@@ -176,20 +215,25 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     firstField = false;
 
                     query += currField.FieldName + " = " + getSQLiteString(currField.GetValue(dbObject));
-                    
+
                 }
 
                 // add the where clause
                 query += " where id = " + dbObject.ID;
 
                 // execute the query
-                dbClient.Execute(query);
-
+                logger.Info("updating: " + dbObject.ToString());
+                lock (this) dbClient.Execute(query);
                 dbObject.DBManager = this;
+
+                // notify any listeners of the status change
+                if (ObjectUpdated != null)
+                    ObjectUpdated(dbObject);
             }
             catch (SQLiteException e) {
                 logger.ErrorException("Could not commit to " + GetTableName(dbObject.GetType()) + " table.", e);
             }
+
         }
 
         #endregion
@@ -251,7 +295,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         // Checks that the table coorisponding to this type exists, and if it is missing, it creates it.
         // Also verifies all columns represented in the class are also present in the table, creating 
         // any missing. Needs to be enhanced to allow for changed defaults.
-        public void verifyTable(Type tableType) {
+        public void VerifyTable(Type tableType) {
             lock (this) {
                 // check that we haven't already verified this table
                 if (isVerified.ContainsKey(tableType))
@@ -321,33 +365,35 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         // Returns a list of objects of the specified type, based on the specified criteria.
         public List<DatabaseTable> Get(Type tableType, ICriteria criteria) {
-            verifyTable(tableType);
+            VerifyTable(tableType);
 
-            List<DatabaseTable> rtn = new List<DatabaseTable>();
+            lock (this) {
+                List<DatabaseTable> rtn = new List<DatabaseTable>();
 
-            try {
-                // build and execute the query
-                string query = getSelectQuery(tableType);
-                if (criteria != null)
-                    query += criteria.GetWhereClause();
+                try {
+                    // build and execute the query
+                    string query = getSelectQuery(tableType);
+                    if (criteria != null)
+                        query += criteria.GetWhereClause();
 
-                SQLiteResultSet resultSet = dbClient.Execute(query);
+                    SQLiteResultSet resultSet = dbClient.Execute(query);
 
-                // store each one
-                foreach (SQLiteResultSet.Row row in resultSet.Rows) {
-                    DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
-                    newRecord.DBManager = this;
-                    newRecord.LoadByRow(row);
-                    rtn.Add(newRecord);
+                    // store each one
+                    foreach (SQLiteResultSet.Row row in resultSet.Rows) {
+                        DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
+                        newRecord.DBManager = this;
+                        newRecord.LoadByRow(row);
+                        rtn.Add(newRecord);
+                    }
+
+                    cache.Sync(rtn);
+                }
+                catch (SQLiteException e) {
+                    logger.ErrorException("Error retrieving with criteria from " + tableType.Name + " table.", e);
                 }
 
-                cache.Sync(rtn);
+                return rtn;
             }
-            catch (SQLiteException e) {
-                logger.ErrorException("Error retrieving with criteria from " + tableType.Name + " table.", e);
-            }
-
-            return rtn;
         }
 
         // Based on the given table type and id, returns the cooresponding record.
@@ -361,32 +407,34 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (cachedObj != null)
                 return cachedObj;
             
-            verifyTable(tableType);
+            VerifyTable(tableType);
 
-            try {
-                // build and execute the query
-                string query = getSelectQuery(tableType);
-                query += "where id = " + id;
-                SQLiteResultSet resultSet = dbClient.Execute(query);
+            lock (this) {
+                try {
+                    // build and execute the query
+                    string query = getSelectQuery(tableType);
+                    query += "where id = " + id;
+                    SQLiteResultSet resultSet = dbClient.Execute(query);
 
-                // make new object
-                DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
+                    // make new object
+                    DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
 
-                // if the given id doesn't exist, create a new uncommited record 
-                if (resultSet.Rows.Count == 0) {
-                    newRecord.Clear();
+                    // if the given id doesn't exist, create a new uncommited record 
+                    if (resultSet.Rows.Count == 0) {
+                        newRecord.Clear();
+                        return newRecord;
+                    }
+
+                    // otherwise load it into the object
+                    newRecord.DBManager = this;
+                    newRecord.LoadByRow(resultSet.Rows[0]);
+                    cache.Add(newRecord);
                     return newRecord;
                 }
-
-                // otherwise load it into the object
-                newRecord.DBManager = this;
-                newRecord.LoadByRow(resultSet.Rows[0]);
-                cache.Add(newRecord);
-                return newRecord;
-            }
-            catch (SQLiteException e) {
-                logger.ErrorException("Error getting by ID from " + GetTableName(tableType) + " table.", e);
-                return null;
+                catch (SQLiteException e) {
+                    logger.ErrorException("Error getting by ID from " + GetTableName(tableType) + " table.", e);
+                    return null;
+                }
             }
         }
 
@@ -398,7 +446,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (!dbObject.CommitNeeded)
                 return;
 
-            verifyTable(dbObject.GetType());
+            VerifyTable(dbObject.GetType());
 
             if (dbObject.ID == null)
                 insert(dbObject);
@@ -410,21 +458,28 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         // Deletes a given object from the database, object in memory persists and could be recommited.
         public void Delete (DatabaseTable dbObject) {
-            try {
-                if (dbObject.ID == null) {
+                try {
+                    if (ObjectDeleted != null)
+                        ObjectDeleted(dbObject);
+
+                    lock (this) {
+                        if (dbObject.ID == null) {
+                            return;
+                        }
+
+                        logger.Info("DELETING: " + dbObject);
+                        string query = "delete from " + GetTableName(dbObject) + " where ID = " + dbObject.ID;
+                        dbClient.Execute(query);
+                        cache.Remove(dbObject);
+                        dbObject.ID = null;
+                        dbObject.CleanUpForDeletion();
+                    }
+                }
+                catch (SQLiteException e) {
+                    logger.ErrorException("Error deleting object from " + GetTableName(dbObject) + " table.", e);
                     return;
                 }
-
-                string query = "delete from " + GetTableName(dbObject) + " where ID = " + dbObject.ID;
-                dbClient.Execute(query);
-                cache.Remove(dbObject);
-                dbObject.ID = null;
-                dbObject.CleanUpForDeletion();
-            }
-            catch (SQLiteException e) {
-                logger.ErrorException("Error deleting object from " + GetTableName(dbObject) + " table.", e);
-                return;
-            }
+            
         }
 
         #endregion

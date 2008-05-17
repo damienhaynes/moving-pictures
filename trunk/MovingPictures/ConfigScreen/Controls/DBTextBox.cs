@@ -298,6 +298,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
                 _databaseObject = value;
                 if (DatabaseField != null && Table != null && _databaseObject != null)
                     Value = DatabaseField.GetValue(_databaseObject);
+                else
+                    Value = "";
             }
         } private DatabaseTable _databaseObject = null;
 

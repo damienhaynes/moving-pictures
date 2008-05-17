@@ -8,6 +8,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public interface IMovieProvider {
         List<DBMovieInfo> Get(string movieTitle);
         void Update(DBMovieInfo movie);
+    }
+
+    public interface ICoverArtProvider {
         bool GetArtwork(DBMovieInfo movie);
     }
 }

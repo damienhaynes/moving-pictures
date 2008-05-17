@@ -9,101 +9,163 @@ using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using System.Diagnostics;
+using MediaPortal.Plugins.MovingPictures.Database;
+using System.Collections;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {
-        private Dictionary<DBMovieInfo, TreeNode> movieNodes;
+
+        private Dictionary<DBMovieInfo, ListViewItem> listItems;
+        private List<DBLocalMedia> reassigningFiles;
+        
+        private delegate void InvokeDelegate();
+        private delegate DBMovieInfo DBMovieInfoDelegate();
 
         public DBMovieInfo CurrentMovie {
             get {
-                if (movieTree == null || movieTree.SelectedNode == null ||
-                    movieTree.SelectedNode.Tag == null ||
-                    movieTree.SelectedNode.Tag.GetType() != typeof(DBMovieInfo))
+                if (movieListBox == null || movieListBox.SelectedItems.Count != 1)
                     return null;
 
-                return (DBMovieInfo)movieTree.SelectedNode.Tag;
+                return (DBMovieInfo)movieListBox.SelectedItems[0].Tag;
             }
         }
 
         public MovieManagerPane() {
             InitializeComponent();
-
-            movieNodes = new Dictionary<DBMovieInfo, TreeNode>();
+            
+            listItems = new Dictionary<DBMovieInfo, ListViewItem>();
+            reassigningFiles = new List<DBLocalMedia>();
         }
 
         ~MovieManagerPane() {
-            foreach (DBMovieInfo currMovie in movieNodes.Keys)
+            foreach (DBMovieInfo currMovie in listItems.Keys)
                 currMovie.Commit();
         }
 
         private void MovieManagerPane_Load(object sender, EventArgs e) {
+            movieListBox.ListViewItemSorter = new DBMovieInfoComparer();
+            
             if (!DesignMode) {
                 ReloadList();
 
-                MovingPicturesPlugin.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
+                MovingPicturesPlugin.DatabaseManager.ObjectDeleted +=
+                    new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
+
+                MovingPicturesPlugin.DatabaseManager.ObjectInserted +=
+                    new DatabaseManager.ObjectAffectedDelegate(movieInsertedListener);
             }
         }
 
         // loads from scratch all movies in the database into the side panel
         public void ReloadList() {
-            List<DBMovieInfo> movieList = DBMovieInfo.GetAll();
-            movieList.Sort();
-
             // turn off redraws temporarily and clear the list
-            movieTree.BeginUpdate();
-            movieTree.Nodes.Clear();
-
-            foreach (DBMovieInfo currMovie in movieList)
+            movieListBox.BeginUpdate();
+            movieListBox.Items.Clear();
+            
+            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) 
                 addMovie(currMovie);
+            
+            movieListBox.EndUpdate();
 
-            movieTree.EndUpdate();
+            if (movieListBox.Items.Count > 0)
+                movieListBox.Items[0].Selected = true;
         }
 
         // adds the given movie and it's related files to the tree view
         private void addMovie(DBMovieInfo movie) {
-            TreeNode movieNode = new TreeNode(movie.Name);
-            movieNode.Tag = movie;
-            movieTree.Nodes.Add(movieNode);
-            movieNodes[movie] = movieNode;
-
-            foreach (DBLocalMedia currFile in movie.LocalMedia) {
-                TreeNode fileNode = new TreeNode(currFile.File.Name);
-                fileNode.Tag = currFile;
-                movieNode.Nodes.Add(fileNode);
-            }
+            ListViewItem newItem = new ListViewItem(movie.Name);
+            newItem.Tag = movie;
+            movieListBox.Items.Add(newItem);
+            listItems[movie] = newItem;
         }
 
-        private void movieStatusChangedListener(MediaMatch obj, MovieImporterAction action) {
+        private void movieDeletedListener(DatabaseTable obj) {
             // This ensures we are thread safe. Makes sure this method is run by
             // the thread that created this panel.
             if (InvokeRequired) {
-                Delegate method = new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
-                object[] parameters = new object[] { obj, action };
+                Delegate method = new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
+                object[] parameters = new object[] { obj };
                 this.Invoke(method, parameters);
                 return;
             }
 
-            switch (action) {
-                case MovieImporterAction.COMMITED:
-                    addMovie(obj.Selected.Movie);
-                    break;
-                
-                case MovieImporterAction.JOINED:
-                case MovieImporterAction.SPLIT:
-                case MovieImporterAction.IGNORED:
-                case MovieImporterAction.REPROCCESSING_PENDING:
-                    if (obj.Selected != null && movieNodes.ContainsKey(obj.Selected.Movie)) {
-                        movieTree.Nodes.Remove(movieNodes[obj.Selected.Movie]);
-                        movieNodes.Remove(obj.Selected.Movie);
-                    }
-                    break;
+            // if this is not a movie object, break
+            if (obj.GetType() != typeof(DBMovieInfo))
+                return;
+
+            // remove movie from list
+            DBMovieInfo movie = (DBMovieInfo)obj;
+            if (listItems.ContainsKey(movie)) {
+                listItems[movie].Selected = false;
+                updateMoviePanel();
+                updateFilePanel();
+
+                movieListBox.Items.Remove(listItems[movie]);
+                listItems.Remove(movie);
             }
+            
+        }
+
+        private void movieInsertedListener(DatabaseTable obj) {
+            // This ensures we are thread safe. Makes sure this method is run by
+            // the thread that created this panel.
+            if (InvokeRequired) {
+                Delegate method = new DatabaseManager.ObjectAffectedDelegate(movieInsertedListener);
+                object[] parameters = new object[] { obj };
+                this.Invoke(method, parameters);
+                return;
+            }
+
+            // if this is not a movie object, break
+            if (obj.GetType() != typeof(DBMovieInfo))
+                return;
+
+            // add movie to the list
+            addMovie((DBMovieInfo)obj);
+
+            bool reassigning = false;
+            foreach (DBLocalMedia currFile in reassigningFiles) {
+                if (((DBMovieInfo)obj).LocalMedia.Contains(currFile))
+                    reassigning = true;
+                else {
+                    reassigning = false;
+                    break;
+                }
+            }
+
+            if (reassigning)
+                listItems[(DBMovieInfo)obj].Selected = true;
+
         }
 
         private void updateMoviePanel() {
-            if (CurrentMovie == null)
+            if (InvokeRequired) {
+                this.Invoke(new InvokeDelegate(updateMoviePanel));
                 return;
+            }
 
+            if (CurrentMovie == null) {
+                // if we have no movie selcted (or multiple movies selected) clear out details
+                movieTitleTextBox.DatabaseObject = null;
+                movieDetailsList.DatabaseObject = null;
+                movieDetailsList.Enabled = false;
+                coverImage.Image = null;
+                resolutionLabel.Text = "";
+                coverNumLabel.Text = "";
+
+                if (movieListBox.SelectedItems.Count > 1) {
+                    reassignMovieButton.Enabled = false;
+                    playMovieButton.Enabled = false;
+                }
+               
+                return;
+            }
+            movieDetailsList.Enabled = true;
+
+            reassignMovieButton.Enabled = true;
+            playMovieButton.Enabled = true;
+            
             // setup coverart thumbnail panel
             if (CurrentMovie.CoverThumb != null) {
                 coverImage.Image = CurrentMovie.CoverThumb;
@@ -144,8 +206,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void updateFilePanel() {
-            if (CurrentMovie == null)
+            // if no object selected (or multiple objects selected) clear details
+            if (CurrentMovie == null) {
+                fileCombo.Items.Clear();
+                fileCombo.Enabled = false;
+                fileDetailsList.DatabaseObject = null;
                 return;
+            }
 
             // populate file list combo
             fileCombo.Items.Clear();
@@ -164,18 +231,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 fileCombo.Enabled = false;
         }
 
-        private void movieTree_BeforeSelect(object sender, TreeViewCancelEventArgs e) {
-            if (CurrentMovie == null)
+        private void movieTree_AfterSelect(object sender, EventArgs e) {
+            // drop out if we for some reason dont have a movie from out list
+            if (movieListBox.SelectedItems.Count == 0)
                 return;
 
-            CurrentMovie.UnloadArtwork();
-            CurrentMovie.Commit();
-        }
-
-        private void movieTree_AfterSelect(object sender, TreeViewEventArgs e) {
-            // drop out if we for some reason dont have a tag from out tree
-            if (movieTree.SelectedNode.Tag == null)
-                return;
+            // unload the artowrk and commit for the previously selected movie
+            if (movieDetailsList.DatabaseObject != null) {
+                ((DBMovieInfo)movieDetailsList.DatabaseObject).UnloadArtwork();
+                ((DBMovieInfo)movieDetailsList.DatabaseObject).Commit();
+            }
 
             updateMoviePanel();
             updateFilePanel();
@@ -250,21 +315,32 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             popup.ShowDialog(this);
 
             if (popup.DialogResult == DialogResult.OK) {
-                CoverArtLoadStatus result = CurrentMovie.AddCoverFromURL(popup.GetURL(), true);
+                DBMovieInfo movie = CurrentMovie;
 
-                switch (result) {
-                    case CoverArtLoadStatus.SUCCESS:
-                        // set new cover to current and update screen
-                        CurrentMovie.CoverFullPath = CurrentMovie.AlternateCovers[CurrentMovie.AlternateCovers.Count - 1];
-                        updateMoviePanel();
-                        break;
-                    case CoverArtLoadStatus.ALREADY_LOADED:
-                        MessageBox.Show("Cover art from the specified URL has already been loaded.");
-                        break;
-                    case CoverArtLoadStatus.FAILED:
-                        MessageBox.Show("Failed loading cover art from specified URL.");
-                        break;
-                }
+                // the retrieval process can take a little time, so spawn it off in another thread
+                ThreadStart actions = delegate {
+                    startArtProgressBar();
+                    CoverArtLoadStatus result = movie.AddCoverFromURL(popup.GetURL(), true);
+                    stopArtProgressBar();
+
+                    switch (result) {
+                        case CoverArtLoadStatus.SUCCESS:
+                            // set new cover to current and update screen
+                            movie.CoverFullPath = movie.AlternateCovers[movie.AlternateCovers.Count - 1];
+                            updateMoviePanel();
+                            break;
+                        case CoverArtLoadStatus.ALREADY_LOADED:
+                            MessageBox.Show("Cover art from the specified URL has already been loaded.");
+                            break;
+                        case CoverArtLoadStatus.FAILED:
+                            MessageBox.Show("Failed loading cover art from specified URL.");
+                            break;
+                    }
+                };
+
+                Thread thread = new Thread(actions);
+                thread.Name = "ArtUpdater";
+                thread.Start();
             }
         }
 
@@ -287,19 +363,24 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void deleteMovieButton_Click(object sender, EventArgs e) {
-            if (CurrentMovie != null) {
+            if (movieListBox.SelectedItems.Count > 0) {
                 DialogResult result =
                     MessageBox.Show("Are you sure you want to remove this movie from the\n" +
                                     "database and ignore all related video files in\n" +
                                     "future scans?", "Delete Movie", MessageBoxButtons.YesNo);
 
                 if (result == System.Windows.Forms.DialogResult.Yes) {
-                    DBMovieInfo movie = CurrentMovie;
-                    movie.DeleteAndIgnore();
-                    movieTree.Nodes.Remove(movieNodes[movie]);
-                    movieNodes.Remove(movie);
+                    List<DBMovieInfo> deleteList = new List<DBMovieInfo>();
+                    foreach (ListViewItem currItem in movieListBox.SelectedItems) 
+                        deleteList.Add((DBMovieInfo)currItem.Tag);
 
+                    foreach (DBMovieInfo currMovie in deleteList)
+                        currMovie.DeleteAndIgnore();
+                    
                 }
+
+                updateMoviePanel();
+                updateFilePanel();
             }
         }
 
@@ -312,18 +393,93 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void refreshMovieButton_Click(object sender, EventArgs e) {
-            if (CurrentMovie == null)
+            if (movieListBox.SelectedItems.Count == 0)
                 return;
-            DialogResult result = 
+
+            DialogResult result =
                 MessageBox.Show("You are about to refresh all movie metadata, overwriting\n" +
                                 "any custom modifications to this film.",
                                 "Refresh Movie", MessageBoxButtons.OKCancel);
 
             if (result == System.Windows.Forms.DialogResult.OK) {
-                MovingPicturesPlugin.MovieProvider.Update(CurrentMovie);
+                foreach (ListViewItem currItem in movieListBox.SelectedItems) {
+                    DBMovieInfo movie = (DBMovieInfo)currItem.Tag;
+                    MovingPicturesPlugin.MovieProvider.Update(movie);
+                }
+
                 updateMoviePanel();
             }
         }
 
+        private void reassignMovieButton_Click(object sender, EventArgs e) {
+            if (CurrentMovie == null)
+                return;
+            DialogResult result = MessageBox.Show(
+                    "You are about to reassign this file or set of files\n" +
+                    "to a new movie. You will loose all custom modifications\n" +
+                    "to metadata and all user settings.\n\n" +
+                    "Are you sure you want to continue?",
+                    "Reassign Movie", MessageBoxButtons.YesNo);
+
+            if (result == System.Windows.Forms.DialogResult.Yes) {
+                reassigningFiles.AddRange(CurrentMovie.LocalMedia);
+                SingleMovieImporterPopup popup = new SingleMovieImporterPopup(CurrentMovie);
+                popup.ShowDialog();
+                reassigningFiles.Clear();
+            }
+        }
+
+        private void refreshArtButton_Click(object sender, EventArgs e) {
+            if (CurrentMovie == null)
+                return;
+
+            DBMovieInfo movie = CurrentMovie;
+
+            // the update process can take a little time, so spawn it off in another thread
+            ThreadStart actions = delegate {
+                startArtProgressBar();
+                MovingPicturesPlugin.CoverProvider.GetArtwork(movie);
+                stopArtProgressBar();
+                updateMoviePanel();
+            };
+
+            Thread thread = new Thread(actions);
+            thread.Name = "ArtUpdater";
+            thread.Start();
+        }
+
+
+        private void startArtProgressBar() {
+            if (InvokeRequired) {
+                Invoke(new InvokeDelegate(startArtProgressBar));
+                return;
+            }
+
+            artworkProgressBar.Visible = true;
+        }
+
+        private void stopArtProgressBar() {
+            if (InvokeRequired) {
+                Invoke(new InvokeDelegate(stopArtProgressBar));
+                return;
+            }
+
+            artworkProgressBar.Visible = false;
+        }
+    }
+
+
+    public class DBMovieInfoComparer : IComparer {
+        public int Compare(object x, object y) {
+            try {
+                DBMovieInfo movieX = ((DBMovieInfo)((ListViewItem)x).Tag);
+                DBMovieInfo movieY = ((DBMovieInfo)((ListViewItem)y).Tag);
+
+                return movieX.SortName.CompareTo(movieY.SortName);
+            }
+            catch {
+                return 0;
+            }
+        }
     }
 }

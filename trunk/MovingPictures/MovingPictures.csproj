@@ -109,6 +109,12 @@
     <Compile Include="ConfigScreen\Popups\SettingPopup.Designer.cs">
       <DependentUpon>SettingPopup.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\Popups\SingleMovieImporterPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\SingleMovieImporterPopup.Designer.cs">
+      <DependentUpon>SingleMovieImporterPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\UserManagementPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -192,6 +198,10 @@
       <DependentUpon>SettingPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\SingleMovieImporterPopup.resx">
+      <DependentUpon>SingleMovieImporterPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\UserManagementPane.resx">
       <DependentUpon>UserManagementPane.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -205,6 +215,7 @@
   <ItemGroup>
     <Content Include="Images\accept.png" />
     <Content Include="Images\approved.png" />
+    <Content Include="Images\arrow_cross.png" />
     <Content Include="Images\arrow_divide.png" />
     <None Include="Images\arrow_down.png" />
     <Content Include="Images\arrow_join.png" />
@@ -249,4 +260,8 @@
   <ProjectExtensions>
     <VisualStudio AllowExistingFolder="true" />
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -1,4 +1,5 @@
-﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
+﻿using System.Windows.Forms;
+namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     partial class MovieManagerPane {
         /// <summary> 
         /// Required designer variable.
@@ -47,7 +48,6 @@
             MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty22 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
             MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty23 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
             MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty24 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
-            this.movieTree = new System.Windows.Forms.TreeView();
             this.coverPanel = new System.Windows.Forms.Panel();
             this.coverImage = new System.Windows.Forms.PictureBox();
             this.resolutionLabel = new System.Windows.Forms.Label();
@@ -72,8 +72,11 @@
             this.playMovieButton = new System.Windows.Forms.ToolStripButton();
             this.refreshMovieButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.deleteMovieButton = new System.Windows.Forms.ToolStripButton();
             this.reassignMovieButton = new System.Windows.Forms.ToolStripButton();
+            this.deleteMovieButton = new System.Windows.Forms.ToolStripButton();
+            this.movieListBox = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.artworkProgressBar = new System.Windows.Forms.ProgressBar();
             this.fileDetailsList = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.DBObjectList();
             this.movieTitleTextBox = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.DBTextBox();
             this.movieDetailsList = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.DBObjectList();
@@ -84,26 +87,10 @@
             this.movieToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // movieTree
-            // 
-            this.movieTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.movieTree.BackColor = System.Drawing.SystemColors.Window;
-            this.movieTree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.movieTree.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.movieTree.FullRowSelect = true;
-            this.movieTree.HideSelection = false;
-            this.movieTree.Location = new System.Drawing.Point(3, 3);
-            this.movieTree.Name = "movieTree";
-            this.movieTree.ShowRootLines = false;
-            this.movieTree.Size = new System.Drawing.Size(178, 292);
-            this.movieTree.TabIndex = 2;
-            this.movieTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.movieTree_AfterSelect);
-            this.movieTree.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.movieTree_BeforeSelect);
-            // 
             // coverPanel
             // 
             this.coverPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.coverPanel.Controls.Add(this.artworkProgressBar);
             this.coverPanel.Controls.Add(this.coverImage);
             this.coverPanel.Controls.Add(this.resolutionLabel);
             this.coverPanel.Controls.Add(this.coverNumLabel);
@@ -218,6 +205,7 @@
             this.refreshArtButton.Size = new System.Drawing.Size(23, 22);
             this.refreshArtButton.Text = "toolStripButton2";
             this.refreshArtButton.ToolTipText = "Refesh Cover Art Selection from Online Data Sources";
+            this.refreshArtButton.Click += new System.EventHandler(this.refreshArtButton_Click);
             // 
             // loadNewCoverButton
             // 
@@ -311,11 +299,11 @@
             this.playMovieButton,
             this.refreshMovieButton,
             this.toolStripSeparator4,
-            this.deleteMovieButton,
-            this.reassignMovieButton});
-            this.movieToolStrip.Location = new System.Drawing.Point(522, 11);
+            this.reassignMovieButton,
+            this.deleteMovieButton});
+            this.movieToolStrip.Location = new System.Drawing.Point(553, 11);
             this.movieToolStrip.Name = "movieToolStrip";
-            this.movieToolStrip.Size = new System.Drawing.Size(132, 25);
+            this.movieToolStrip.Size = new System.Drawing.Size(101, 25);
             this.movieToolStrip.TabIndex = 14;
             this.movieToolStrip.Text = "toolStrip1";
             // 
@@ -346,17 +334,6 @@
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
-            // deleteMovieButton
-            // 
-            this.deleteMovieButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.deleteMovieButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cross;
-            this.deleteMovieButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.deleteMovieButton.Name = "deleteMovieButton";
-            this.deleteMovieButton.Size = new System.Drawing.Size(23, 22);
-            this.deleteMovieButton.Text = "toolStripButton1";
-            this.deleteMovieButton.ToolTipText = "Delete Movie and Ignore File(s) in Future Scans";
-            this.deleteMovieButton.Click += new System.EventHandler(this.deleteMovieButton_Click);
-            // 
             // reassignMovieButton
             // 
             this.reassignMovieButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -365,7 +342,53 @@
             this.reassignMovieButton.Name = "reassignMovieButton";
             this.reassignMovieButton.Size = new System.Drawing.Size(23, 22);
             this.reassignMovieButton.Text = "toolStripButton1";
-            this.reassignMovieButton.ToolTipText = "Reassign File(s) to New Movie";
+            this.reassignMovieButton.ToolTipText = "Reassign Files to New Movie";
+            this.reassignMovieButton.Click += new System.EventHandler(this.reassignMovieButton_Click);
+            // 
+            // deleteMovieButton
+            // 
+            this.deleteMovieButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.deleteMovieButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cross;
+            this.deleteMovieButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.deleteMovieButton.Name = "deleteMovieButton";
+            this.deleteMovieButton.Size = new System.Drawing.Size(23, 22);
+            this.deleteMovieButton.Text = "toolStripDropDownButton1";
+            this.deleteMovieButton.ToolTipText = "Remove Movie and Ignore Files";
+            this.deleteMovieButton.Click += new System.EventHandler(this.deleteMovieButton_Click);
+            // 
+            // movieListBox
+            // 
+            this.movieListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.movieListBox.BackColor = System.Drawing.SystemColors.Window;
+            this.movieListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.movieListBox.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+            this.movieListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.movieListBox.FullRowSelect = true;
+            this.movieListBox.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.movieListBox.HideSelection = false;
+            this.movieListBox.Location = new System.Drawing.Point(3, 3);
+            this.movieListBox.Name = "movieListBox";
+            this.movieListBox.Size = new System.Drawing.Size(178, 287);
+            this.movieListBox.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.movieListBox.TabIndex = 2;
+            this.movieListBox.UseCompatibleStateImageBehavior = false;
+            this.movieListBox.View = System.Windows.Forms.View.Details;
+            this.movieListBox.SelectedIndexChanged += new System.EventHandler(this.movieTree_AfterSelect);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Width = 160;
+            // 
+            // artworkProgressBar
+            // 
+            this.artworkProgressBar.Location = new System.Drawing.Point(1, 39);
+            this.artworkProgressBar.Name = "artworkProgressBar";
+            this.artworkProgressBar.Size = new System.Drawing.Size(176, 18);
+            this.artworkProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.artworkProgressBar.TabIndex = 5;
+            this.artworkProgressBar.Visible = false;
             // 
             // fileDetailsList
             // 
@@ -504,7 +527,7 @@
             this.Controls.Add(this.movieTitleTextBox);
             this.Controls.Add(this.movieDetailsList);
             this.Controls.Add(this.coverPanel);
-            this.Controls.Add(this.movieTree);
+            this.Controls.Add(this.movieListBox);
             this.Name = "MovieManagerPane";
             this.Size = new System.Drawing.Size(657, 614);
             this.Load += new System.EventHandler(this.MovieManagerPane_Load);
@@ -524,7 +547,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView movieTree;
+        private ListView movieListBox;
         private System.Windows.Forms.ToolStrip coverToolStrip;
         private System.Windows.Forms.ToolStripButton previousCoverButton;
         private System.Windows.Forms.ToolStripButton nextCoverButton;
@@ -549,10 +572,12 @@
         private System.Windows.Forms.ComboBox fileCombo;
         private System.Windows.Forms.Panel filePanel;
         private System.Windows.Forms.ToolStrip movieToolStrip;
-        private System.Windows.Forms.ToolStripButton deleteMovieButton;
         private System.Windows.Forms.ToolStripButton refreshMovieButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton reassignMovieButton;
         private System.Windows.Forms.ToolStripButton playMovieButton;
+        private System.Windows.Forms.ToolStripButton deleteMovieButton;
+        private ColumnHeader columnHeader1;
+        private ProgressBar artworkProgressBar;
     }
 }

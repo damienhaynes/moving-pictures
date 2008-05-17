@@ -9,6 +9,7 @@ namespace MovingPicturesConfigTester {
 
         [STAThreadAttribute]
         static void Main(string[] args) {
+            System.Windows.Forms.Application.EnableVisualStyles();
 
             MovingPicturesPlugin plugin = new MovingPicturesPlugin();
             plugin.ShowPlugin();
