@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
+using System.Collections.ObjectModel;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("local_media")]
@@ -20,20 +22,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         }
         private FileInfo fileInfo;
 
-        /*
-        public DBMovieInfo Movie {
-            get { return movie; }
-            set {
-                movie = value;
-                if (movie != null)
-                    movieID = movie.ID;
-                
-                commitNeeded = true;
-            }
-        }
-        private DBMovieInfo movie;
-        */
-          
+         
         #region Database Fields
 
         [DBFieldAttribute]
@@ -92,8 +81,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         }
         private bool ignored;
 
+        [DBRelation(AutoRetrieve=true)]
+        public RelationList<DBLocalMedia, DBMovieInfo> AttachedMovies {
+            get {
+                if (_attachedMovies == null) {
+                    _attachedMovies = new RelationList<DBLocalMedia, DBMovieInfo>(this);
+                }
+                return _attachedMovies;
+            }
+        } RelationList<DBLocalMedia, DBMovieInfo> _attachedMovies;
+
         #endregion
 
+        #region Overrides
         public override bool Equals(object obj) {
             if (obj.GetType() == typeof(DBLocalMedia) && ((DBLocalMedia)obj).File != null && this.File != null)
                 return (this.File.FullName.Equals(((DBLocalMedia)obj).File.FullName));
@@ -114,20 +114,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
             return base.ToString();
         }
+        #endregion
 
         #region Database Management Methods
 
-        // Gets the cooresponding Setting based on the given record ID.
-        public static DBLocalMedia Get(int id) {
-            return MovingPicturesPlugin.DatabaseManager.Get<DBLocalMedia>(id);
-        }
-
-        public static List<DBLocalMedia> GetAll() {
-            return MovingPicturesPlugin.DatabaseManager.Get<DBLocalMedia>(null);
-        }
-
         public static DBLocalMedia Get(string fullPath) {
-            DBField pathField = GetField("FullPath");
+            DBField pathField = DBField.GetField(typeof(DBLocalMedia), "FullPath");
             ICriteria criteria = new BaseCriteria(pathField, "=", fullPath);
             List<DBLocalMedia> resultSet = MovingPicturesPlugin.DatabaseManager.Get<DBLocalMedia>(criteria);
 
@@ -139,15 +131,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             newFile.FullPath = fullPath;
 
             return newFile;
-        }
-
-        public static DBField GetField(string fieldName) {
-            List<DBField> fieldList = DatabaseManager.GetFieldList(typeof(DBLocalMedia));
-            foreach (DBField currField in fieldList) {
-                if (currField.Name.ToLower() == fieldName.ToLower())
-                    return currField;
-            }
-            return null;
         }
 
         #endregion

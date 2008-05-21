@@ -19,7 +19,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
         }
 
         // Gets or sets the element at the specified index.
-        public new T this[int index] {
+        public virtual new T this[int index] {
             get {
                 return base[index];
             }
@@ -30,37 +30,37 @@ namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
         }
 
         // Adds an object to the end of the List.
-        public new void Add(T item) {
+        public virtual new void Add(T item) {
             base.Add(item);
             OnChanged(EventArgs.Empty);
         }
 
         // Adds the elements of the specified collection to the end of the List.
-        public new void AddRange(IEnumerable<T> collection) {
+        public virtual new void AddRange(IEnumerable<T> collection) {
             base.AddRange(collection);
             OnChanged(EventArgs.Empty);
         }
 
         // Removes all elements from the List.
-        public new void Clear() {
+        public virtual new void Clear() {
             base.Clear();
             OnChanged(EventArgs.Empty);
         }
 
         // Inserts an element into the List at the specified index.
-        public new void Insert(int index, T item) {
+        public virtual new void Insert(int index, T item) {
             base.Insert(index, item);
             OnChanged(EventArgs.Empty);
         }
 
         // Inserts the elements of a collection into the List at the specified index.
-        public new void InsertRange(int index, IEnumerable<T> collection) {
+        public virtual new void InsertRange(int index, IEnumerable<T> collection) {
             base.InsertRange(index, collection);
             OnChanged(EventArgs.Empty);
         }
 
         // Removes the first occurrence of a specific object from the List.
-        public new bool Remove(T item) {
+        public virtual new bool Remove(T item) {
             if (base.Remove(item)) {
                 OnChanged(EventArgs.Empty);
                 return true;
@@ -70,7 +70,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
         }
 
         // Removes the all the elements that match the conditions defined by the specified predicate.
-        public new int RemoveAll(Predicate<T> match) {
+        public virtual new int RemoveAll(Predicate<T> match) {
             int result = base.RemoveAll(match);
             if (result > 0) 
                 OnChanged(EventArgs.Empty);
@@ -79,13 +79,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
         }
 
         // Removes the element at the specified index of the List.
-        public new void RemoveAt(int index) {
+        public virtual new void RemoveAt(int index) {
             base.RemoveAt(index);
             OnChanged(EventArgs.Empty);
         }
 
         // Removes a range of elements from the List.
-        public new void RemoveRange(int index, int count) {
+        public virtual new void RemoveRange(int index, int count) {
             base.RemoveRange(index, count);
             OnChanged(EventArgs.Empty);
         }

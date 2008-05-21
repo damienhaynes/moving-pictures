@@ -40,7 +40,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
 
                     // populates the field list based on the new table
                     _fields.Clear();
-                    foreach (DBField currField in DatabaseManager.GetFieldList(Table))
+                    foreach (DBField currField in DBField.GetFieldList(Table))
                         _fields.Add(currField);
 
                     // if we are in the designer make sure we have all the properties we need

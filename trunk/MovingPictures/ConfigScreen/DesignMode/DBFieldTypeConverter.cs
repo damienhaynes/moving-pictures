@@ -51,7 +51,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
 
         private List<string> getTypeList(IDBBackedControl control) {
             List<string> fieldNameList = new List<string>();
-            foreach (DBField currField in DatabaseManager.GetFieldList(control.Table)) {
+            foreach (DBField currField in DBField.GetFieldList(control.Table)) {
                 fieldNameList.Add(currField.Name);
             }
 

@@ -20,13 +20,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
 
         public SingleMovieImporterPopup(DBMovieInfo movie) {
             InitializeComponent();
-            localMedia = movie.LocalMedia;
+            localMedia = new List<DBLocalMedia>(movie.LocalMedia);
             movie.Delete();
         }
 
         public SingleMovieImporterPopup(List<DBLocalMedia> files) {
             InitializeComponent();
-            localMedia = files;
+            localMedia = new List<DBLocalMedia>(files);
         }
 
         private void SingleMovieImporterPopup_Load(object sender, EventArgs e) {

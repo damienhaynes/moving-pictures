@@ -165,7 +165,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // will add all files to 
         public void Import(List<DBLocalMedia> fileList, bool reloadIfExists) {
             List<DBLocalMedia> fileSet = new List<DBLocalMedia>();
-            foreach (DBLocalMedia currFile in fileList) {
+            foreach (DBLocalMedia currFile in new List<DBLocalMedia>(fileList)) {
                 // if file is already in importer, reload if requested
                 if (matchesInSystem.ContainsKey(currFile)) {
                     if (reloadIfExists)
@@ -655,8 +655,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             MovingPicturesPlugin.CoverProvider.GetArtwork(movie);
             movie.LocalMedia.Clear();
             movie.LocalMedia.AddRange(localMedia);
+            movie.UnloadArtwork(); 
             movie.Commit();
-
+            
             // create user related data object for each user
             foreach (DBUser currUser in DBUser.GetAll()) {
                 DBUserMovieSettings userSettings = new DBUserMovieSettings();
@@ -721,14 +722,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         private void RemoveCommitedRelations(DBLocalMedia file) {
-            // pull a list of all movies assigned to this file
-            DBField localMediaField = DBMovieInfo.GetField("LocalMedia");
-            ICriteria criteria = new BaseCriteria(localMediaField, "like", "%|" + file.ID + "|%");
-            List<DBMovieInfo> oldMovies = MovingPicturesPlugin.DatabaseManager.Get<DBMovieInfo>(criteria);
-
-            // and get rid of them
-            foreach (DBMovieInfo currMovie in oldMovies)
+            foreach (DBMovieInfo currMovie in file.AttachedMovies)
                 currMovie.Delete();
+
+            file.AttachedMovies.Clear();
         }
 
 
@@ -803,98 +800,98 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     }
 
     public class MediaMatch {
-        private List<DBLocalMedia> localMedia;
-        private List<PossibleMatch> possibleMatches;
-        private PossibleMatch selected;
-        private string localMediaString = string.Empty;
-        private string longLocalMediaString = string.Empty;
-        private string searchString = string.Empty;
+        public bool Deleted {
+            get { return _deleted; }
+            set { _deleted = value; }
+        } private bool _deleted = false;
 
-        public bool Deleted = false;
-        public bool HighPriority = false;
+        public bool HighPriority {
+            get { return _highPriority; }
+            set { _highPriority = value; }
+        } private bool _highPriority = false;
 
         public List<DBLocalMedia> LocalMedia {
             get {
-                if (localMedia == null)
-                    localMedia = new List<DBLocalMedia>();
-                return localMedia; 
+                if (_localMedia == null)
+                    _localMedia = new List<DBLocalMedia>();
+                return _localMedia; 
             }
 
-            set { localMedia = value; }
-        }
+            set { _localMedia = value; }
+        } private List<DBLocalMedia> _localMedia;
 
         public string LocalMediaString {
             get {
-                if (localMediaString == string.Empty) {
-                    localMediaString = "";
+                if (_localMediaString == string.Empty) {
+                    _localMediaString = "";
                     foreach (DBLocalMedia currFile in LocalMedia) {
-                        if (localMediaString.Length > 0)
-                            localMediaString += ", ";
+                        if (_localMediaString.Length > 0)
+                            _localMediaString += ", ";
 
-                        localMediaString += currFile.File.Name;
+                        _localMediaString += currFile.File.Name;
                     }
                 }
 
-                return localMediaString;
+                return _localMediaString;
             }
-        }
+        } private string _localMediaString = string.Empty;
 
         public string LongLocalMediaString {
             get {
-                if (longLocalMediaString == string.Empty) {
-                    longLocalMediaString = "";
+                if (_longLocalMediaString == string.Empty) {
+                    _longLocalMediaString = "";
                     foreach (DBLocalMedia currFile in LocalMedia) {
-                        if (longLocalMediaString.Length > 0)
-                            longLocalMediaString += "\n";
+                        if (_longLocalMediaString.Length > 0)
+                            _longLocalMediaString += "\n";
 
-                        longLocalMediaString += currFile.File.FullName;
+                        _longLocalMediaString += currFile.File.FullName;
                     }
                 }
 
-                return longLocalMediaString;
+                return _longLocalMediaString;
             }
-        }
+        } private string _longLocalMediaString = string.Empty;
 
         public List<PossibleMatch> PossibleMatches {
             get {
-                if (possibleMatches == null)
-                    possibleMatches = new List<PossibleMatch>();
+                if (_possibleMatches == null)
+                    _possibleMatches = new List<PossibleMatch>();
 
-                return possibleMatches; 
+                return _possibleMatches; 
             }
             set { 
-                possibleMatches = value;
-                if (possibleMatches != null && possibleMatches.Count != 0) {
-                    possibleMatches.Sort();
-                    Selected = possibleMatches[0];
+                _possibleMatches = value;
+                if (_possibleMatches != null && _possibleMatches.Count != 0) {
+                    _possibleMatches.Sort();
+                    Selected = _possibleMatches[0];
                 }
             }
-        }
+        } private List<PossibleMatch> _possibleMatches;
 
         public PossibleMatch Selected {
-            get { return selected; }
-            set { selected = value; }
-        }
+            get { return _selected; }
+            set { _selected = value; }
+        } private PossibleMatch _selected;
 
         public string SearchString {
             get {
-                if (searchString.Equals(string.Empty)) {
+                if (_searchString.Equals(string.Empty)) {
                     if (LocalMedia == null || LocalMedia.Count == 0)
-                        searchString = "";
+                        _searchString = "";
                     else if (LocalMedia.Count == 1)
-                        searchString = MovieImporter.GetSearchString(LocalMedia[0].File);
+                        _searchString = MovieImporter.GetSearchString(LocalMedia[0].File);
                     else
-                        searchString = MovieImporter.getSearchString(LocalMedia[0].File.Directory);
+                        _searchString = MovieImporter.getSearchString(LocalMedia[0].File.Directory);
                 }
 
-                return searchString;
+                return _searchString;
             }
             
 
             set {
-                searchString = value;
+                _searchString = value;
             }
-        }
+        } private string _searchString = string.Empty;
     }
 
     public class PossibleMatch: IComparable {
@@ -928,7 +925,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (this.matchValue < ((PossibleMatch)o).matchValue)
                 return -1;
             if (this.matchValue == ((PossibleMatch)o).matchValue)
-                return 0;
+                return ((PossibleMatch)o).movie.Popularity.CompareTo(this.movie.Popularity);
             else
                 return 1;
         }

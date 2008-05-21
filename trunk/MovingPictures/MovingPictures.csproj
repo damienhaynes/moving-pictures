@@ -25,6 +25,8 @@
     <Optimize>true</Optimize>
     <OutputPath>.\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -125,9 +127,12 @@
     <Compile Include="Database\CustomTypes\DynamicList.cs" />
     <Compile Include="Database\CustomTypes\IDynamic.cs" />
     <Compile Include="Database\CustomTypes\IStringSourcedObject.cs" />
+    <Compile Include="Database\CustomTypes\RelationList.cs" />
     <Compile Include="Database\CustomTypes\StringList.cs" />
     <Compile Include="Database\DatabaseCache.cs" />
+    <Compile Include="Database\DBField.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
+    <Compile Include="Database\DBRelation.cs" />
     <Compile Include="Database\DatabaseTable.cs" />
     <Compile Include="Database\MovingPicturesTables\DBImportPath.cs" />
     <Compile Include="Database\MovingPicturesTables\DBLocalMedia.cs" />

@@ -10,35 +10,17 @@ using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public class DatabaseManager {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-        
-        private static Dictionary<Type, List<DBField>> fieldLists;
+        #region Private
 
-        private Dictionary<Type, bool> isVerified;
-        private DatabaseCache cache;
-        private string dbFilename;
         private SQLiteClient dbClient;
-
-        private static string[] maintainanceQueries = 
-              { // remove orphaned local media files
-                "delete from local_media " +
-                "where ignored <> 1 and id not in " +
-                "      (select  lm.id from local_media lm " +
-                "        inner join movie_info mi on mi.localmedia like '%|' || lm.id || '|%') " 
-              };
+        private string dbFilename;
+        private DatabaseCache cache;
+        private Dictionary<Type, bool> isVerified;
 
 
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        static DatabaseManager() {
-            fieldLists = new Dictionary<Type, List<DBField>>();
-        }
-
-        public DatabaseManager(string dbFilename) {
-            this.dbFilename = dbFilename;
-            isVerified = new Dictionary<Type, bool>();
-            initDB();
-            cache = new DatabaseCache();
-        }
+        #endregion
 
         #region Events
 
@@ -46,7 +28,183 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public event ObjectAffectedDelegate ObjectInserted;
         public event ObjectAffectedDelegate ObjectDeleted;
         public event ObjectAffectedDelegate ObjectUpdated;
-        
+
+        #endregion
+
+        #region Public Methods
+        // Creates a new DatabaseManager based on the given filename.
+        public DatabaseManager(string dbFilename) {
+            this.dbFilename = dbFilename;
+            initDB();
+
+            isVerified = new Dictionary<Type, bool>();
+            cache = new DatabaseCache();
+        }
+
+        // Returns a list of objects of the specified type, based on the specified criteria.
+        public List<T> Get<T>(ICriteria criteria) where T : DatabaseTable {
+            List<T> rtn = new List<T>();
+            List<DatabaseTable> objList = Get(typeof(T), criteria);
+            foreach (DatabaseTable currObj in objList) {
+                rtn.Add((T)currObj);
+            }
+
+            return rtn;
+        }
+
+        // Returns a list of objects of the specified type, based on the specified criteria.
+        public List<DatabaseTable> Get(Type tableType, ICriteria criteria) {
+            verifyTable(tableType);
+
+            lock (dbClient) {
+                List<DatabaseTable> rtn = new List<DatabaseTable>();
+
+                try {
+                    // build and execute the query
+                    string query = getSelectQuery(tableType);
+                    if (criteria != null)
+                        query += criteria.GetWhereClause();
+
+                    SQLiteResultSet resultSet = dbClient.Execute(query);
+
+                    // store each one
+                    foreach (SQLiteResultSet.Row row in resultSet.Rows) {
+                        DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
+                        newRecord.DBManager = this;
+                        newRecord.LoadByRow(row);
+                        getAllRelationData(newRecord);
+                        rtn.Add(newRecord);
+                    }
+
+                    cache.Sync(rtn);
+                }
+                catch (SQLiteException e) {
+                    logger.ErrorException("Error retrieving with criteria from " + tableType.Name + " table.", e);
+                }
+
+                return rtn;
+            }
+        }
+
+        // Based on the given table type and id, returns the cooresponding record.
+        public T Get<T>(int id) where T : DatabaseTable {
+            return (T)Get(typeof(T), id);
+        }
+
+        public DatabaseTable Get(Type tableType, int id) {
+            // if we have already pulled this record down, don't query the DB
+            DatabaseTable cachedObj = cache.Get(tableType, id);
+            if (cachedObj != null)
+                return cachedObj;
+
+            verifyTable(tableType);
+
+            lock (this) {
+                try {
+                    // build and execute the query
+                    string query = getSelectQuery(tableType);
+                    query += "where id = " + id;
+                    SQLiteResultSet resultSet = dbClient.Execute(query);
+
+                    // make new object
+                    DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
+
+                    // if the given id doesn't exist, create a new uncommited record 
+                    if (resultSet.Rows.Count == 0) {
+                        newRecord.Clear();
+                        return newRecord;
+                    }
+
+                    // otherwise load it into the object
+                    newRecord.DBManager = this;
+                    newRecord.LoadByRow(resultSet.Rows[0]);
+                    cache.Add(newRecord);
+                    getAllRelationData(newRecord);
+                    return newRecord;
+                }
+                catch (SQLiteException e) {
+                    logger.ErrorException("Error getting by ID from " + GetTableName(tableType) + " table.", e);
+                    return null;
+                }
+            }
+        }
+
+        public void Populate(IRelationList relationList) {
+            getRelationData(relationList.Owner, relationList.MetaData);
+        }
+
+        // Writes the given object to the database.
+        public void Commit(DatabaseTable dbObject) {
+            if (dbObject == null)
+                return;
+
+            if (!dbObject.CommitNeeded)
+                return;
+
+            verifyTable(dbObject.GetType());
+
+            if (dbObject.ID == null)
+                insert(dbObject);
+            else
+                update(dbObject);
+
+            dbObject.CommitNeeded = false;
+        }
+
+        // Deletes a given object from the database, object in memory persists and could be recommited.
+        public void Delete(DatabaseTable dbObject) {
+            try {
+                if (ObjectDeleted != null)
+                    ObjectDeleted(dbObject);
+
+                if (dbObject.ID == null) {
+                    return;
+                }
+
+                string query = "delete from " + GetTableName(dbObject) + " where ID = " + dbObject.ID;
+                logger.Debug("DELETING: " + dbObject);
+                logger.Debug(query);
+
+                deleteAllRelationData(dbObject);
+                lock (dbClient) dbClient.Execute(query);
+
+                cache.Remove(dbObject);
+                dbObject.ID = null;
+                dbObject.CleanUpForDeletion();
+            }
+            catch (SQLiteException e) {
+                logger.ErrorException("Error deleting object from " + GetTableName(dbObject) + " table.", e);
+                return;
+            }
+
+        }
+
+        #endregion
+
+        #region Public Static Methods
+
+        // Returns the name of the table of the given type.
+        public static string GetTableName(Type tableType) {
+            return getDBTableAttribute(tableType).TableName;
+        }
+
+        // Returns the name of the table of the given type.
+        public static string GetTableName(DatabaseTable tableObject) {
+            return GetTableName(tableObject.GetType());
+        }
+
+        public static bool IsDatabaseTableType(Type t) {
+            Type currType = t.BaseType;
+            while (currType != null) {
+                if (currType == typeof(DatabaseTable)) {
+                    return true;
+                }
+                currType = currType.BaseType;
+            }
+
+            return false;
+        }
+
         #endregion
 
         #region Private Methods
@@ -61,26 +219,118 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 logger.FatalException("Could Not Open Database: " + dbFilename, e);
                 dbClient = null;
             }
+        }
 
-            try {
-                foreach (string currQuery in maintainanceQueries) {
-                    dbClient.Execute(currQuery);
+        // Checks that the table coorisponding to this type exists, and if it is missing, it creates it.
+        // Also verifies all columns represented in the class are also present in the table, creating 
+        // any missing. Needs to be enhanced to allow for changed defaults.
+        private void verifyTable(Type tableType) {
+            lock (dbClient) {
+                // check that we haven't already verified this table
+                if (isVerified.ContainsKey(tableType))
+                    return;
+
+                // attempt to grab table info for the type. if none exists, it's not tagged to be a table
+                DBTableAttribute tableAttr = getDBTableAttribute(tableType);
+                if (tableAttr == null)
+                    return;
+
+                try {
+                    // check if the table exists in the database, if not, create it
+                    SQLiteResultSet resultSet = dbClient.Execute("select * from sqlite_master where type='table' and name = '" + tableAttr.TableName + "'");
+                    if (resultSet.Rows.Count == 0) {
+                        resultSet = dbClient.Execute("create table " + tableAttr.TableName + " (id INTEGER primary key )");
+                        logger.Info("Created " + tableAttr.TableName + " table.");
+                    }
+
+                    // grab existing table info from the DB
+                    resultSet = dbClient.Execute("PRAGMA table_info(" + tableAttr.TableName + ")");
+
+                    // loop through the CLASS DEFINED fields, and verify each is contained in the result set
+                    foreach (DBField currField in DBField.GetFieldList(tableType)) {
+
+                        // loop through all defined columns in DB to ensure this col exists 
+                        bool exists = false;
+                        foreach (SQLiteResultSet.Row currRow in resultSet.Rows) {
+                            if (currField.FieldName == currRow.fields[1]) {
+                                exists = true;
+                                break;
+                            }
+                        }
+
+                        // if we couldn't find the column create it
+                        if (!exists) {
+                            string defaultValue;
+                            if (currField.Default == null)
+                                defaultValue = "NULL";
+                            else
+                                defaultValue = getSQLiteString(currField.Default);
+
+                            dbClient.Execute("alter table " + tableAttr.TableName + " add column " + currField.FieldName + " " +
+                                             currField.DBType.ToString() + " default " + defaultValue);
+                            logger.Info("Added " + tableAttr.TableName + "." + currField.FieldName + " column.");
+                        }
+                    }
+
+                    verifyRelationTables(tableType);
+                    isVerified[tableType] = true;
                 }
-
-                logger.Info("Successfully executed " + maintainanceQueries.Length + " maintainance queries.");
-
+                catch (SQLiteException e) {
+                    logger.ErrorException("Internal error verifying " + tableAttr.TableName + " (" + tableType.ToString() + ") table.", e);
+                }
             }
-            catch (Exception) {
-                logger.Error("Failed executing maintainance queries.");
+        }
+
+        private void verifyRelationTables(Type primaryType) {
+            foreach (DBRelation currRelation in DBRelation.GetRelationList(primaryType)) {
+                try {
+                    // check if the table exists in the database, if not, create it
+                    SQLiteResultSet resultSet = dbClient.Execute("select * from sqlite_master where type='table' and name = '" + currRelation.TableName + "'");
+                    if (resultSet.Rows.Count == 0) {
+                        // create table
+                        string createQuery =
+                            "create table " + currRelation.TableName + " (id INTEGER primary key, " +
+                            GetTableName(currRelation.PrimaryType) + "_id INTEGER, " +
+                            GetTableName(currRelation.SecondaryType) + "_id INTEGER)";
+
+                        logger.Debug(createQuery);
+                        resultSet = dbClient.Execute(createQuery);
+
+                        // create index1
+                        resultSet = dbClient.Execute("create index " + currRelation.TableName + "__index1 on " +
+                            currRelation.TableName + " (" + GetTableName(currRelation.PrimaryType) + "_id)");
+
+                        // create index2
+                        resultSet = dbClient.Execute("create index " + currRelation.TableName + "__index2 on " +
+                            currRelation.TableName + " (" + GetTableName(currRelation.SecondaryType) + "_id)");
+
+                        logger.Info("Created " + currRelation.TableName + " sub-table.");
+                    }
+                }
+                catch (SQLiteException) {
+                    logger.Fatal("Error verifying " + currRelation.TableName + " subtable.");
+                }
+            }
+        }
+
+        // Returns the table attribute information for the given type.
+        private static DBTableAttribute getDBTableAttribute(Type tableType) {
+            // loop through the custom attributes of the type, if one of them is the type
+            // we want, return it.
+            object[] customAttrArray = tableType.GetCustomAttributes(true);
+            foreach (object currAttr in customAttrArray) {
+                if (currAttr.GetType() == typeof(DBTableAttribute))
+                    return (DBTableAttribute)currAttr;
             }
 
+            return null;
         }
 
         // Returns a select statement retrieving all fields ordered as defined by FieldList
         // for the given Table Type. A where clause can be appended
         private static string getSelectQuery(Type tableType) {
             string query = "select ";
-            foreach (DBField currField in fieldLists[tableType]) {
+            foreach (DBField currField in DBField.GetFieldList(tableType)) {
                 if (query != "select ")
                     query += ", ";
 
@@ -90,31 +340,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return query;
         }
         
-        // Loads into memory metadata about a given table type. 
-        private static void loadFieldList(Type tableType) {
-            if (tableType == null || fieldLists.ContainsKey(tableType))
-                return;
-
-            List<DBField> newFieldList = new List<DBField>();
-
-            // loop through each property in the class
-            PropertyInfo[] propertyArray = tableType.GetProperties();
-            foreach (PropertyInfo currProperty in propertyArray) {
-                object[] customAttrArray = currProperty.GetCustomAttributes(true);
-                // for each property, loop through it's custom attributes
-                // if one of them is ours, store the property info for later use
-                foreach (object currAttr in customAttrArray) {
-                    if (currAttr.GetType() == typeof(DBFieldAttribute)) {
-                        DBField newField = new DBField(currProperty, (DBFieldAttribute)currAttr);
-                        newFieldList.Add(newField);
-                        break;
-                    }
-                }
-            }
-
-            fieldLists[tableType] = newFieldList;
-        }
-
         // creates an escaped, quoted string representation of the given object
         public static string getSQLiteString(object value) {
             if (value == null)
@@ -149,18 +374,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return "'" + strVal + "'";
         }
 
-        public static bool IsDatabaseTableType(Type t) {
-            Type currType = t.BaseType;
-            while (currType != null) {
-                if (currType == typeof(DatabaseTable)) {
-                    return true;
-                }
-                currType = currType.BaseType;
-            }
-
-            return false;
-        }
-
         // inserts a new object to the database
         private void insert(DatabaseTable dbObject) {
                 try {
@@ -168,7 +381,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     string queryValueList = "";
 
                     // loop through the fields and build the strings for the query
-                    foreach (DBField currField in fieldLists[dbObject.GetType()]) {
+                    foreach (DBField currField in DBField.GetFieldList(dbObject.GetType())) {
                         if (queryFieldList != "") {
                             queryFieldList += ", ";
                             queryValueList += ", ";
@@ -181,22 +394,23 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     string query = "insert into " + GetTableName(dbObject.GetType()) +
                                    " (" + queryFieldList + ") values (" + queryValueList + ")";
 
-                    logger.Info("inserting: " + dbObject.ToString());
-                    lock (this) {
+                    logger.Debug("INSERTING: " + dbObject.ToString());
+                    logger.Debug(query);
+                    lock (dbClient) {
                         dbClient.Execute(query);
                         dbObject.ID = dbClient.LastInsertID();
                     }
                     dbObject.DBManager = this;
+                    updateRelationTables(dbObject);
                     cache.Add(dbObject);
 
                     // notify any listeners of the status change
                     if (ObjectInserted != null)
                         ObjectInserted(dbObject);
                 }
-                catch (Exception e) {
+                catch (SQLiteException e) {
                     logger.ErrorException("Could not commit to " + GetTableName(dbObject.GetType()) + " table.", e);
                 }
-            
         }
 
         // updates the given object in the database. assumes the object was previously retrieved 
@@ -207,7 +421,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 // loop through the fields and build the strings for the query
                 bool firstField = true;
-                foreach (DBField currField in fieldLists[dbObject.GetType()]) {
+                foreach (DBField currField in DBField.GetFieldList(dbObject.GetType())) {
                     if (!firstField) {
                         query += ", ";
                     }
@@ -222,10 +436,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 query += " where id = " + dbObject.ID;
 
                 // execute the query
-                logger.Info("updating: " + dbObject.ToString());
-                lock (this) dbClient.Execute(query);
+                logger.Debug("UPDATING: " + dbObject.ToString());
+                logger.Debug(query);
+                lock (dbClient) dbClient.Execute(query);
                 dbObject.DBManager = this;
 
+                updateRelationTables(dbObject);
+                
                 // notify any listeners of the status change
                 if (ObjectUpdated != null)
                     ObjectUpdated(dbObject);
@@ -236,489 +453,84 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         }
 
-        #endregion
+        /// <summary>
+        /// Inserts into the database all relation information. Dependent objects will be commited.
+        /// </summary>
+        /// <param name="dbObject">The primary object owning the RelationList to be populated.</param>
+        /// <param name="forceRetrieval">Determines if ALL relations will be retrieved.</param>
+        private void updateRelationTables(DatabaseTable dbObject) {
+            foreach (DBRelation currRelation in DBRelation.GetRelationList(dbObject.GetType())) {
+                // clear out old values then insert the new
+                deleteRelationData(dbObject, currRelation);
 
-        #region Public Static Methods
-
-        // Returns the table attribute information for the given type.
-        public static DBTableAttribute GetDBTableAttribute(Type tableType) {
-            // loop through the custom attributes of the type, if one of them is the type
-            // we want, return it.
-            object[] customAttrArray = tableType.GetCustomAttributes(true);
-            foreach (object currAttr in customAttrArray) {
-                if (currAttr.GetType() == typeof(DBTableAttribute)) 
-                    return (DBTableAttribute) currAttr;
-            }
-
-            return null;
-        }
-
-        // Returns the name of the table of the given type.
-        public static string GetTableName(Type tableType) {
-            return GetDBTableAttribute(tableType).TableName;
-        }
-
-        // Returns the name of the table of the given type.
-        public static string GetTableName(DatabaseTable tableObject) {
-            return GetTableName(tableObject.GetType());
-        }
-
-        // Returns the list of DBFields for the given type. Developer should normally
-        // directly use the properties of the class, but this allows for iteration.
-        public static List<DBField> GetFieldList(Type tableType) {
-            if (tableType == null)
-                return new List<DBField>();
-
-            loadFieldList(tableType);
-            return fieldLists[tableType];
-        }
-
-        // Returns the DBField with the specified name for the specified table.
-        public static DBField GetField(Type tableType, string fieldName) {
-            if (tableType == null) {
-                return null;
-            }
-
-            List<DBField> fieldList = GetFieldList(tableType);
-            foreach (DBField currField in fieldList) {
-                if (currField.Name.Equals(fieldName)) 
-                    return currField;
-            }
-
-            return null;
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        // Checks that the table coorisponding to this type exists, and if it is missing, it creates it.
-        // Also verifies all columns represented in the class are also present in the table, creating 
-        // any missing. Needs to be enhanced to allow for changed defaults.
-        public void VerifyTable(Type tableType) {
-            lock (this) {
-                // check that we haven't already verified this table
-                if (isVerified.ContainsKey(tableType))
-                    return;
-
-                // attempt to grab table info for the type. if none exists, it's not tagged to be a table
-                DBTableAttribute tableAttr = GetDBTableAttribute(tableType);
-                if (tableAttr == null)
-                    return;
-
-                try {
-                    // check if the table exists in the database, if not, create it
-                    SQLiteResultSet resultSet = dbClient.Execute("select * from sqlite_master where type='table' and name = '" + tableAttr.TableName + "'");
-                    if (resultSet.Rows.Count == 0) {
-                        resultSet = dbClient.Execute("create table " + tableAttr.TableName + " (id INTEGER primary key )");
-                    }
-
-                    // ensure our column list for this type has been created
-                    loadFieldList(tableType);
-
-                    // grab existing table info from the DB
-                    resultSet = dbClient.Execute("PRAGMA table_info(" + tableAttr.TableName + ")");
-
-                    // loop through the CLASS DEFINED fields, and verify each is contained in the result set
-                    foreach (DBField currField in fieldLists[tableType]) {
-
-                        // loop through all defined columns in DB to ensure this col exists 
-                        bool exists = false;
-                        foreach (SQLiteResultSet.Row currRow in resultSet.Rows) {
-                            if (currField.FieldName == currRow.fields[1]) {
-                                exists = true;
-                                break;
-                            }
-                        }
-
-                        // if we couldn't find the column create it
-                        if (!exists) {
-                            string defaultValue;
-                            if (currField.Default == null)
-                                defaultValue = "NULL";
-                            else
-                                defaultValue = getSQLiteString(currField.Default);
-
-                            dbClient.Execute("alter table " + tableAttr.TableName + " add column " + currField.FieldName + " " +
-                                             currField.DBType.ToString() + " default " + defaultValue);
-                        }
-                    }
-
-                    isVerified[tableType] = true;
-                }
-                catch (Exception e) {
-                    logger.ErrorException("Internal error verifying " + tableAttr.TableName + " (" + tableType.ToString() + ") table.", e);
-                }
-            }
-        }
-
-        // Returns a list of objects of the specified type, based on the specified criteria.
-        public List<T> Get<T>(ICriteria criteria) where T : DatabaseTable{
-            List<T> rtn = new List<T>();
-            List<DatabaseTable> objList = Get(typeof(T), criteria);
-            foreach (DatabaseTable currObj in objList) {
-                rtn.Add((T)currObj);
-            }
-
-            return rtn;
-        }
-
-        // Returns a list of objects of the specified type, based on the specified criteria.
-        public List<DatabaseTable> Get(Type tableType, ICriteria criteria) {
-            VerifyTable(tableType);
-
-            lock (this) {
-                List<DatabaseTable> rtn = new List<DatabaseTable>();
-
-                try {
-                    // build and execute the query
-                    string query = getSelectQuery(tableType);
-                    if (criteria != null)
-                        query += criteria.GetWhereClause();
-
-                    SQLiteResultSet resultSet = dbClient.Execute(query);
-
-                    // store each one
-                    foreach (SQLiteResultSet.Row row in resultSet.Rows) {
-                        DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
-                        newRecord.DBManager = this;
-                        newRecord.LoadByRow(row);
-                        rtn.Add(newRecord);
-                    }
-
-                    cache.Sync(rtn);
-                }
-                catch (SQLiteException e) {
-                    logger.ErrorException("Error retrieving with criteria from " + tableType.Name + " table.", e);
+                // make sure all related objects have an ID
+                foreach (object currObj in (IList)currRelation.GetRelationList(dbObject)) {
+                    if (((DatabaseTable)currObj).ID == null)
+                        Commit((DatabaseTable)currObj);
                 }
 
-                return rtn;
-            }
-        }
+                // insert all relations to the database
+                foreach (object currObj in (IList)currRelation.GetRelationList(dbObject)) {
+                    DatabaseTable currDBObj = (DatabaseTable)currObj;
+                    string insertQuery = "insert into " + currRelation.TableName + "(" +
+                        GetTableName(dbObject) + "_id, " +
+                        GetTableName(currDBObj) + "_id) values (" +
+                        dbObject.ID + ", " + currDBObj.ID + ")";
 
-        // Based on the given table type and id, returns the cooresponding record.
-        public T Get<T>(int id) where T : DatabaseTable {
-            return (T) Get(typeof(T), id);
-        }
-
-        public DatabaseTable Get(Type tableType, int id) {
-            // if we have already pulled this record down, don't query the DB
-            DatabaseTable cachedObj = cache.Get(tableType, id);
-            if (cachedObj != null)
-                return cachedObj;
-            
-            VerifyTable(tableType);
-
-            lock (this) {
-                try {
-                    // build and execute the query
-                    string query = getSelectQuery(tableType);
-                    query += "where id = " + id;
-                    SQLiteResultSet resultSet = dbClient.Execute(query);
-
-                    // make new object
-                    DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
-
-                    // if the given id doesn't exist, create a new uncommited record 
-                    if (resultSet.Rows.Count == 0) {
-                        newRecord.Clear();
-                        return newRecord;
-                    }
-
-                    // otherwise load it into the object
-                    newRecord.DBManager = this;
-                    newRecord.LoadByRow(resultSet.Rows[0]);
-                    cache.Add(newRecord);
-                    return newRecord;
+                    lock (dbClient) dbClient.Execute(insertQuery);
                 }
-                catch (SQLiteException e) {
-                    logger.ErrorException("Error getting by ID from " + GetTableName(tableType) + " table.", e);
-                    return null;
-                }
-            }
+            }            
         }
 
-        // Writes the given object to the database.
-        public void Commit(DatabaseTable dbObject) {
-            if (dbObject == null)
+        // deletes all subtable data for the given object.
+        private void deleteAllRelationData(DatabaseTable dbObject) {
+            foreach (DBRelation currRelation in DBRelation.GetRelationList(dbObject.GetType()))
+                deleteRelationData(dbObject, currRelation);
+        }
+
+        private void deleteRelationData(DatabaseTable dbObject, DBRelation relation) {
+            if (relation.PrimaryType != dbObject.GetType())
                 return;
 
-            if (!dbObject.CommitNeeded)
-                return;
-
-            VerifyTable(dbObject.GetType());
-
-            if (dbObject.ID == null)
-                insert(dbObject);
-            else
-                update(dbObject);
-
-            dbObject.CommitNeeded = false;
+            string column = GetTableName(relation.PrimaryType) + "_id";
+            string deleteQuery = "delete from " + relation.TableName + " where " + column + "=" + dbObject.ID;
+            logger.Debug("deleteQuery");
+            lock (dbClient) dbClient.Execute(deleteQuery);
         }
 
-        // Deletes a given object from the database, object in memory persists and could be recommited.
-        public void Delete (DatabaseTable dbObject) {
-                try {
-                    if (ObjectDeleted != null)
-                        ObjectDeleted(dbObject);
-
-                    lock (this) {
-                        if (dbObject.ID == null) {
-                            return;
-                        }
-
-                        logger.Info("DELETING: " + dbObject);
-                        string query = "delete from " + GetTableName(dbObject) + " where ID = " + dbObject.ID;
-                        dbClient.Execute(query);
-                        cache.Remove(dbObject);
-                        dbObject.ID = null;
-                        dbObject.CleanUpForDeletion();
-                    }
-                }
-                catch (SQLiteException e) {
-                    logger.ErrorException("Error deleting object from " + GetTableName(dbObject) + " table.", e);
-                    return;
-                }
-            
-        }
-
-        #endregion
-
-    }
-
-    // A very simple object representing a database field. 
-    public class DBField {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, DB_OBJECT }
-
-        #region Private Variables
-        private PropertyInfo propertyInfo;
-        private DBFieldAttribute attribute;
-        private DBDataType type;
-        #endregion
-
-        #region Constructors
-        public DBField(PropertyInfo propertyInfo, DBFieldAttribute attribute) {
-            this.propertyInfo = propertyInfo;
-            this.attribute = attribute;
-
-            // determine how this shoudl be stored in the DB
-            type = DBDataType.TEXT;
-
-            if (propertyInfo.PropertyType == typeof(string))
-                type = DBDataType.TEXT;
-            else if (propertyInfo.PropertyType == typeof(int))
-                type = DBDataType.INTEGER;
-            else if (propertyInfo.PropertyType == typeof(int?))
-                type = DBDataType.INTEGER;
-            else if (propertyInfo.PropertyType == typeof(float))
-                type = DBDataType.REAL;
-            else if (propertyInfo.PropertyType == typeof(float?))
-                type = DBDataType.REAL;
-            else if (propertyInfo.PropertyType == typeof(double))
-                type = DBDataType.REAL;
-            else if (propertyInfo.PropertyType == typeof(double?))
-                type = DBDataType.REAL;
-            else if (propertyInfo.PropertyType == typeof(bool))
-                type = DBDataType.BOOL;
-            else if (propertyInfo.PropertyType == typeof(bool?))
-                type = DBDataType.BOOL;
-            else if (propertyInfo.PropertyType == typeof(Boolean))
-                type = DBDataType.BOOL;
-            else if (DatabaseManager.IsDatabaseTableType(propertyInfo.PropertyType))
-                type = DBDataType.DB_OBJECT;
-            else {
-                // check for string object types
-                foreach (Type currInterface in propertyInfo.PropertyType.GetInterfaces())
-                    if (currInterface == typeof(IStringSourcedObject)) {
-                        type = DBDataType.STRING_OBJECT;
-                        return;
-                    }
-            }
-        }
-        #endregion
-
-        #region Public Properties
-        // Returns the name of this attribute.
-        public string Name {
-            get { return propertyInfo.Name; }
-        }
-
-        // Returns the name of this field in the database. Generally the same as Name,
-        // but this is not gauranteed.
-        public string FieldName {
-            get {
-                if (attribute.FieldName == string.Empty)
-                    return Name.ToLower();
-                else
-                    return attribute.FieldName;
+        private void getAllRelationData(DatabaseTable dbObject) {
+            foreach (DBRelation currRelation in DBRelation.GetRelationList(dbObject.GetType())) {
+                if (currRelation.AutoRetrieve)
+                    getRelationData(dbObject, currRelation);
             }
         }
 
-        // Returns the type the field will be stored as in the database.
-        public DBDataType DBType {
-            get { return type; }
-        }
+        private void getRelationData(DatabaseTable dbObject, DBRelation relation) {
+            // build query
+            string selectQuery = "select " + GetTableName(relation.SecondaryType) + "_id from " +
+                       relation.TableName + " where " + GetTableName(relation.PrimaryType) + "_id=" + dbObject.ID;
 
-        // Returns the default value for the field. Currently always returns in type string.
-        public object Default {
-            get {
-                if (attribute.Default == null)
-                    return null;
+            // and retireve relations
+            logger.Debug(selectQuery);
+            SQLiteResultSet resultSet;
+            lock (dbClient) resultSet = dbClient.Execute(selectQuery);
 
-                switch (DBType) {
-                    case DBDataType.INTEGER:
-                        if (attribute.Default == "")
-                            return 0;
-                        else
-                            return int.Parse(attribute.Default);
-                    case DBDataType.REAL:
-                        if (attribute.Default == "")
-                            return 0.0;
-                        else
-                            return float.Parse(attribute.Default);
-                    case DBDataType.BOOL:
-                        if (attribute.Default == "")
-                            return false;
-                        else
-                            return attribute.Default == "true" || attribute.Default.ToString() == "1";
-                    case DBDataType.STRING_OBJECT:
-                        IStringSourcedObject newObj = (IStringSourcedObject)propertyInfo.PropertyType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
-                        newObj.LoadFromString(attribute.Default);
-                        return newObj;
-                    case DBDataType.DB_OBJECT:
-                        DatabaseTable newDBObj = (DatabaseTable)propertyInfo.PropertyType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
-                        return newDBObj;
-                    default:
-                        if (attribute.Default == "")
-                            return " ";
-                        else
-                            return attribute.Default;
-                }
+            // parse results and add them to the list
+            IRelationList list = relation.GetRelationList(dbObject);
+            list.Clear();
+            foreach (SQLiteResultSet.Row currRow in resultSet.Rows) {
+                int objID = int.Parse(currRow.fields[0]);
+                DatabaseTable newObj = Get(relation.SecondaryType, objID);
+                list.AddIgnoreSisterList(newObj);
             }
+
+            // update flags as needed
+            list.Populated = true;
+            list.CommitNeeded = false;
         }
 
-        // Returns true if this field should be updated when pulling updated data in from
-        // an external source. 
-        public bool AutoUpdate {
-            get { return attribute.AllowAutoUpdate; }
-        }
-
-        #endregion
-
-        #region Public Methods
-        // Returns the value of this field for the given object.
-        public object GetValue(DatabaseTable owner) {
-            return propertyInfo.GetGetMethod().Invoke(owner, null);
-        }
-
-        // sets the default value based on the datatype.
-        public void initValue(DatabaseTable owner) {
-            SetValue(owner, Default);
-        }
-
-        // Sets the value of this field for the given object.
-        public void SetValue(DatabaseTable owner, object value) {
-            try {
-                
-                // if we were passed a null value, try to set that. 
-                if (value == null) {
-                    propertyInfo.GetSetMethod().Invoke(owner, new object[] { null });
-                    return;
-                }
-
-                // if we were passed a matching object, just set it
-                if (value.GetType() == propertyInfo.PropertyType) {
-                    propertyInfo.GetSetMethod().Invoke(owner, new object[] { value });
-                    return;
-                }
-
-                switch (DBType) {
-                    case DBDataType.INTEGER:
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { int.Parse(value.ToString()) });
-                        break;
-                    case DBDataType.REAL:
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { float.Parse(value.ToString()) });
-                        break;
-                    case DBDataType.BOOL:
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { (value.ToString() == "true" || value.ToString() == "1") });
-                        break;
-                    case DBDataType.STRING_OBJECT:
-                        // create a new object and populate it
-                        IStringSourcedObject newObj = (IStringSourcedObject) propertyInfo.PropertyType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
-                        newObj.LoadFromString(value.ToString());
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { newObj });
-                        break;
-                    case DBDataType.DB_OBJECT:
-                        DatabaseTable newDBObj = owner.DBManager.Get(propertyInfo.PropertyType, int.Parse(value.ToString()));
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { newDBObj });
-                        break;
-                    default:
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { value.ToString() });
-                        break;
-                }
-            }
-            catch (Exception e) {
-                logger.ErrorException("Error writing to " + owner.GetType().Name + "." + this.Name + 
-                                " Property. Sometimes indicates an out of date DB.", e);
-            }
-        }
         #endregion
     }
-    
-    #region Table Definition Attributes
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class DBFieldAttribute : System.Attribute {
-        private string fieldName = string.Empty;
-        private string description = string.Empty;
-        private string defaultValue = string.Empty;
-        private bool allowAutoUpdate = true;
-
-        // if unassigned, the name of the parameter should be used for the field name
-        public string FieldName {
-            get { return fieldName; }
-            set { fieldName = value; }
-        }
-
-        public string Description {
-            get { return description; }
-            set { description = value; }
-        }
-
-        public string Default {
-            get { return defaultValue; }
-            set { defaultValue = value; }
-        }
-
-        public bool AllowAutoUpdate {
-            get { return allowAutoUpdate; }
-            set { allowAutoUpdate = value; }
-        }
-
-        public DBFieldAttribute() {
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class DBTableAttribute : System.Attribute {
-        private string tableName;
-        private string description = string.Empty;
-
-        public string TableName {
-            get { return tableName; }
-            set { tableName = value; }
-        }
-
-        public string Description {
-            get { return description; }
-            set { description = value; }
-        }
-
-        public DBTableAttribute(string tableName) {
-            this.tableName = tableName;
-        }
-    }
-    #endregion
 
     #region Criteria Classes
     public interface ICriteria {
