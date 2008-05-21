@@ -10,11 +10,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         }
 
         public void Commit() {
-            MovingPicturesPlugin.DatabaseManager.Commit(this);
+            if (DBManager == null)
+                DBManager = MovingPicturesPlugin.DatabaseManager;
+
+            base.Commit();
         }
 
         public void Delete() {
-            MovingPicturesPlugin.DatabaseManager.Delete(this);
+            if (DBManager == null)
+                DBManager = MovingPicturesPlugin.DatabaseManager;
+
+            base.Delete();
         }
     }
 }

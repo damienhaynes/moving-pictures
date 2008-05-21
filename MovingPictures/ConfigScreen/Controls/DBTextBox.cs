@@ -21,7 +21,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
             }
             set {
                 _table = value;
-                _databaseField = DatabaseManager.GetField(_table, _databaseFieldName);
+                _databaseField = DBField.GetField(_table, _databaseFieldName);
             }
         } private Type _table;
 
@@ -34,7 +34,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
             }
             set {
                 _databaseFieldName = value;
-                _databaseField = DatabaseManager.GetField(_table, _databaseFieldName);
+                _databaseField = DBField.GetField(_table, _databaseFieldName);
                 RevertText();
 
                 if (DesignMode)
@@ -284,7 +284,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
             get { return _databaseFieldName; }
             set {
                 _databaseFieldName = value;
-                _databaseField = DatabaseManager.GetField(_table, _databaseFieldName);
+                _databaseField = DBField.GetField(_table, _databaseFieldName);
             }
         } private String _databaseFieldName = null;
 

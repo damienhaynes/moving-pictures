@@ -136,8 +136,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     break;
                 case MovieImporterAction.COMMITED:
                     imageCell.Value = Resources.accept;
-                    if (obj.Selected.Movie.Cover != null)
-                        pictureBox1.Image = obj.Selected.Movie.CoverThumb;
                     break;
                 case MovieImporterAction.IGNORED:
                     imageCell.Value = Resources.ignored;

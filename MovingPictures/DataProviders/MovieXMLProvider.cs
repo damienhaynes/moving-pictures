@@ -243,8 +243,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                             if (ok)
                                 newMovie.Score = tmpFloat;
                             break;
-                        case "Trailerlink":
-                            newMovie.TrailerLink = currElement.InnerText;
+                        case "hits":
+                            ok = int.TryParse(currElement.InnerText.Trim(), out tmpInt);
+                            if (ok)
+                                newMovie.Popularity = tmpInt;
                             break;
                         case "Certification":
                             newMovie.Certification = currElement.InnerText;

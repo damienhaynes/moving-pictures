@@ -177,26 +177,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         } private float _score;
 
 
-        [DBFieldAttribute(FieldName="trailer_link")]
-        public string TrailerLink {
-            get { return _trailerLink; }
-
-            set {
-                _trailerLink = value;
-                commitNeeded = true;
-            }
-        } private string _trailerLink;
-
-
         [DBFieldAttribute]
-        public string PosterUrl {
-            get { return _posterUrl; }
+        public int Popularity {
+            get { return _popularity; }
 
             set {
-                _posterUrl = value;
+                _popularity = value;
                 commitNeeded = true;
             }
-        } private string _posterUrl;
+        } private int _popularity;
 
 
         [DBFieldAttribute]
@@ -232,14 +221,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         } private string _imdbID;
 
 
-        [DBFieldAttribute(AllowAutoUpdate=false)]
-        public DBObjectList<DBLocalMedia> LocalMedia {
-            get { return _localMedia; }
-            set {
-                _localMedia = value;
-                commitNeeded = true;
+        [DBRelation(AutoRetrieve=true)]
+        public RelationList<DBMovieInfo, DBLocalMedia> LocalMedia {
+            get {
+                if (_localMedia == null) {
+                    _localMedia = new RelationList<DBMovieInfo, DBLocalMedia>(this);
+                }
+                return _localMedia; 
             }
-        } private DBObjectList<DBLocalMedia> _localMedia;
+        } RelationList<DBMovieInfo, DBLocalMedia> _localMedia;
 
 
         [DBFieldAttribute(AllowAutoUpdate = false)]
@@ -411,6 +401,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             // save the artwork
             newCover.Save(newFileName);
             AlternateCovers.Add(newFileName);
+            _cover = newCover;
             GenerateThumbnail();
             return true;
         }
@@ -441,8 +432,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                     catch (Exception e) {
                         if (e.GetType() == typeof(ThreadAbortException))
                             throw e;
-
-                        logger.Warn("Problem reloading artwork for '" + Name + "' [" + ID + "]. Failed old file deletion.");
                     }
                 }
                 else {
@@ -450,6 +439,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                         AlternateCovers.Add(filename);
 
                     logger.Info("Cover art for '" + Name + "' [" + ID + "] already exists from " + url + ".");
+                    GenerateThumbnail();
                     return CoverArtLoadStatus.ALREADY_LOADED;
                 }
             }
@@ -464,12 +454,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             // check resolution
             if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
                 logger.Info("Cover art for '" + Name + "' [" + ID + "] failed minimum resolution requirements: " + url);
+                currImage.Dispose();
                 return CoverArtLoadStatus.FAILED_RES_REQUIREMENTS;
             }
 
             // save the artwork
             currImage.Save(filename);
             AlternateCovers.Add(filename);
+            _cover = currImage;
             GenerateThumbnail();
             return CoverArtLoadStatus.SUCCESS;
         }
@@ -529,7 +521,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         }
 
         public void GenerateThumbnail() {
-            if (Cover == null)
+            if (CoverFullPath.Trim().Length == 0)
                 return;
 
             string thumbsFolder = (String)MovingPicturesPlugin.SettingsManager["cover_thumbs_folder"].Value;
@@ -540,6 +532,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                 _coverThumbFullPath = fullname;
                 return;
             }
+
+            if (Cover == null)
+                return;
 
             int width = 175;
             int height = (int)(Cover.Height * ((float)width / (float)Cover.Width));
@@ -564,15 +559,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
         public static List<DBMovieInfo> GetAll() {
             return MovingPicturesPlugin.DatabaseManager.Get<DBMovieInfo>(null);
-        }
-
-        public static DBField GetField(string fieldName) {
-            List<DBField> fieldList = DatabaseManager.GetFieldList(typeof(DBMovieInfo));
-            foreach (DBField currField in fieldList) {
-                if (currField.Name.ToLower() == fieldName.ToLower())
-                    return currField;
-            }
-            return null;
         }
 
         #endregion

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.ComponentModel;
 using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
+using System.Collections.ObjectModel;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public abstract class DatabaseTable {
@@ -28,8 +29,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             get { return commitNeeded; }
             set { commitNeeded = value; }
         } protected bool commitNeeded;
-        
-        
+
         protected void commitNeededEventHandler(object sender, EventArgs e) {
             commitNeeded = true;
         }
@@ -50,7 +50,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         // Loads data into this object based on the given database record.
         public void LoadByRow(SQLiteResultSet.Row row) {
-            List<DBField> fieldList = DatabaseManager.GetFieldList(this.GetType());
+            ReadOnlyCollection<DBField> fieldList = DBField.GetFieldList(this.GetType());
 
             // load each field one at a time. they should have been retrieved in the
             // ordering in FieldList
@@ -73,7 +73,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         // not set to default.
         public void CopyUpdatableValues(DatabaseTable newData) {
             if (newData == null) return;
-            List<DBField> fieldList = DatabaseManager.GetFieldList(newData.GetType());
+            ReadOnlyCollection<DBField> fieldList = DBField.GetFieldList(newData.GetType());
 
             foreach (DBField currField in fieldList) {
                 object newValue = currField.GetValue(newData);
@@ -103,7 +103,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             id = null;
             commitNeeded = true;
 
-            List<DBField> fieldList = DatabaseManager.GetFieldList(this.GetType());
+            ReadOnlyCollection<DBField> fieldList = DBField.GetFieldList(this.GetType());
             foreach (DBField currField in fieldList) {
                 object defaultVal = currField.Default;
                 currField.SetValue(this, defaultVal);
@@ -112,8 +112,51 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (defaultVal != null && defaultVal.GetType() == typeof(IDynamic))
                     ((IDynamic) defaultVal).Changed += new ChangedEventHandler(commitNeededEventHandler);
             }
+
+            ReadOnlyCollection<DBRelation> relationList = DBRelation.GetRelationList(this.GetType());
+            foreach (DBRelation currRelation in relationList) {
+                try {
+                    currRelation.GetRelationList(this).Changed += new ChangedEventHandler(commitNeededEventHandler);
+                }
+                catch (NullReferenceException) {
+                    throw new System.InvalidOperationException("RelationLists must be initialized in the get{} property method.");
+                }
+            }
         }
+
+        public virtual void Commit() {
+            if (DBManager != null)
+                DBManager.Commit(this);
+        }
+
+        public virtual void Delete() {
+            if (DBManager != null)
+                DBManager.Delete(this);
+        }
+
 
         #endregion
     }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class DBTableAttribute : System.Attribute {
+        private string tableName;
+        private string description = string.Empty;
+
+        public string TableName {
+            get { return tableName; }
+            set { tableName = value; }
+        }
+
+        public string Description {
+            get { return description; }
+            set { description = value; }
+        }
+
+        public DBTableAttribute(string tableName) {
+            this.tableName = tableName;
+        }
+    }
 }
+
+
