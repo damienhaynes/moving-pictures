@@ -137,7 +137,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
             logger.Info("Moving Pictures (" + ver.Major + "." + ver.Minor + "." + ver.Build + ":" + ver.Revision +")");
-            logger.Info("Plugin Lanched");
+            logger.Info("Plugin Launched");
 
             initDB();
             initAdditionalSettings();

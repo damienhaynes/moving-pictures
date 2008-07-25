@@ -2,9 +2,26 @@
   
   <group name="Movie Importer">
     <group name="General">
+      
       <setting id="importer_thread_count" name="Thread Count" type="INT">
         <default>5</default>
         <description>The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.</description>
+      </setting>
+
+      <setting id="importer_prefer_foldername" name="Use Folders For Matching" type="BOOL">
+        <default>false</default>
+        <description>Enable this setting if each movie has it's own folder.</description>
+      </setting>
+
+      <setting id="importer_strict_year" name="Only Show Results From Same Year" type="BOOL">
+        <default>false</default>
+        <description>If a year keyword is detected and no exact match is found only show the results from the same year or blank year. (experimental)</description>
+      </setting>
+      
+      <!-- this should be a multi-entry setting much like the mp-tvseries filter options -->
+      <setting id="importer_filter" name="Regular Expression Filter" type="STRING">
+        <default>((720p|1080p|1080i|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264)[-]?.*?$)</default>
+        <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
 
     </group>
