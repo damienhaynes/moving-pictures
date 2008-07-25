@@ -20,7 +20,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
                 fileListBox.Items.Add(currFile.File);
             }
 
-            searchStrTextBox.Text = match.SearchString;
+            searchStrTextBox.Text = match.SearchString.Replace("|","");
         }
 
         public string GetSearchString() {

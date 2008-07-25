@@ -571,7 +571,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void ProcessNextPendingMatch() {
             MediaMatch mediaMatch = null;
             
-            // check for a match needing reproccesing
+            // check for a match needing reprocessing
             lock (priorityPendingMatches.SyncRoot) {
                 if (priorityPendingMatches.Count != 0) {
                     // grab match
@@ -734,7 +734,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void GetMatches(MediaMatch mediaMatch) {
             List<DBMovieInfo> movieList;
             List<PossibleMatch> rankedMovieList = new List<PossibleMatch>();
-            string searchStr = mediaMatch.SearchString;
+
+            string[] searchArray = mediaMatch.SearchString.Split('|');
+            string searchStr = searchArray[0];
+            int searchYear = (searchArray.Length > 1) ? int.Parse(searchArray[1]) : 0;      
 
             // notify any listeners we are checking for matches
             if (MovieStatusChanged != null)
@@ -743,12 +746,38 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // grab a list of movies from our dataProvider and rank each returned movie on 
             // how close a match it is
             movieList = MovingPicturesPlugin.MovieProvider.Get(searchStr);
+
+            bool strictYear = (bool)MovingPicturesPlugin.SettingsManager["importer_strict_year"].Value;
+
             foreach (DBMovieInfo currMovie in movieList) {
                 PossibleMatch currMatch = new PossibleMatch();
                 currMatch.Movie = currMovie;
-                currMatch.MatchValue = AdvancedStringComparer.Levenshtein(currMovie.Name.ToLower().Trim(),
-                                                                          searchStr.ToLower().Trim());
-                rankedMovieList.Add(currMatch);
+                
+                // if we have 'year' data to compare add it to the string compare
+                // this should give the match a higher priority
+                
+                string sMovie = currMovie.Name.ToLower().Trim();
+                string sSearch = searchStr.ToLower().Trim();
+                
+                // if both have a year then add the year to the comparison variables
+                if (searchYear > 0 && currMovie.Year > 0) {
+                    sMovie +=  ' ' + currMovie.Year.ToString();
+                    sSearch += ' ' + searchYear.ToString();
+                }
+
+                currMatch.MatchValue = AdvancedStringComparer.Levenshtein(sMovie,sSearch);
+
+                if ((searchYear > 0) && strictYear)
+                {
+                    // Strict year match (don't show results that don't match on year)
+                    if (currMovie.Year == searchYear || currMovie.Year == 0)
+                        rankedMovieList.Add(currMatch);
+                }
+                else
+                {
+                    rankedMovieList.Add(currMatch);
+                }
+              
             }
 
             mediaMatch.PossibleMatches = rankedMovieList;
@@ -778,19 +807,33 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // cleans a string up for movie name matching.
         private static string getSearchString(string inputStr) {
             string rtn = inputStr;
-
+            
+            // @todo do not limit to search string only - we should probably make 
+            // this return a key/value pair with 'title' being the default key
+            // we could then include 'year', 'edition' etc as extra keys
+            // if we have a data provider that accepts extra parameters it could use
+            // the extra keys for better search.
+            
             // if there are no spaces, but a period, assume the period is replacement for spaces.
             // lets clean that up.
             if (!rtn.Contains(" "))
                 rtn = rtn.Replace('.', ' ');
+            
+            // a lot of keywords that could poison the result so let's clean them according to our given exp.
+            // regexParser = new Regex(@"((720p|1080p|DVDRip|DTS|AC3|Bluray|HDDVD|XviD|DiVX|x264)[-]?.*?$)", RegexOptions.IgnoreCase);
+            Regex regexParser = new Regex(MovingPicturesPlugin.SettingsManager["importer_filter"].Value.ToString(), RegexOptions.IgnoreCase);
+            rtn = regexParser.Replace(rtn, "");
 
             // if there is a four digit number that looks like a year, parse it out
-            Regex regexParser = new Regex(@"(^.*?)[\[\(]?([0-9]{4})[\]\)]?(.+)");
+            // Regex regexParser = new Regex(@"(^.*?)[\[\(]?([0-9]{4})[\]\)]?(.+)");
+            regexParser = new Regex(@"(^.+)[\[\(]?([0-9]{4})[\]\)]?(.+)");
             Match match = regexParser.Match(rtn);
-            if (match.Success) {
+            if (match.Success)
+            {
                 int year = int.Parse(match.Groups[2].Value);
                 if (year > 1900 && year < DateTime.Now.Year + 2)
-                    rtn = match.Groups[1].Value;
+                    // Seperate year from the title and pass it along (using the pipe as marker)
+                    rtn = match.Groups[1].Value + "|" + match.Groups[2].Value;
             }
 
             return rtn;
@@ -873,12 +916,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             set { _selected = value; }
         } private PossibleMatch _selected;
 
-        public string SearchString {
+        public string SearchString {        
             get {
                 if (_searchString.Equals(string.Empty)) {
+                    bool preferFolder = (bool)MovingPicturesPlugin.SettingsManager["importer_prefer_foldername"].Value;
+
                     if (LocalMedia == null || LocalMedia.Count == 0)
                         _searchString = "";
-                    else if (LocalMedia.Count == 1)
+                    else if (LocalMedia.Count == 1 && !preferFolder)
                         _searchString = MovieImporter.GetSearchString(LocalMedia[0].File);
                     else
                         _searchString = MovieImporter.getSearchString(LocalMedia[0].File.Directory);
@@ -915,7 +960,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // see previous comment
         public String DisplayMember {
-            get { return ToString(); }
+            get { return ToString() + " (" + this.movie.Year.ToString() + ")"; }
         }
 
         public int CompareTo(object o) {

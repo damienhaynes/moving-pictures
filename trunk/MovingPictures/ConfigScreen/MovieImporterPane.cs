@@ -110,7 +110,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             movieListCombo.Items.Clear();
             foreach (PossibleMatch currMatch in obj.PossibleMatches)
                 movieListCombo.Items.Add(currMatch);
-            
+             
             // set the status icon
             DataGridViewImageCell imageCell = (DataGridViewImageCell)unapprovedGrid.Rows[rowNum].Cells["statusColumn"];
             switch (action) {
