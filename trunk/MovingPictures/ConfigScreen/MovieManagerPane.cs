@@ -202,7 +202,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // populate movie details fields
             movieTitleTextBox.DatabaseObject = CurrentMovie;
             movieDetailsList.DatabaseObject = CurrentMovie;
-
         }
 
         private void updateFilePanel() {
@@ -466,6 +465,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             artworkProgressBar.Visible = false;
         }
+
     }
 
 

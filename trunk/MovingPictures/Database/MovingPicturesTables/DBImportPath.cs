@@ -7,7 +7,7 @@ using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("import_path")]
-    class DBImportPath: MoviesPluginDBTable  {
+    class DBImportPath: MovingPicturesDBTable  {
         private static Logger logger = LogManager.GetCurrentClassLogger();
                 
         public DBImportPath()
@@ -15,7 +15,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             dirInfo = null;
         }
 
-        public override void CleanUpForDeletion() {
+        public override void AfterDelete() {
         }
         
         public DirectoryInfo Directory {

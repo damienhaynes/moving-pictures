@@ -1,15 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using MediaPortal.Plugins.MovingPictures.Database;
-using System.Drawing;
 using System.ComponentModel;
+using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode;
+using System.Collections;
+using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
-    public class DBTextBox : TextBox, IDBFieldBackedControl, IDataGridViewEditingControl {
-        #region Properties
+    public class DBComboBox : ComboBox, IDBFieldBackedControl, IDataGridViewEditingControl {
+        #region Private Variables
+        private IEnumerable customChoices = null;
+        #endregion
+
+        #region IDBBackedControl Implementation
 
         // The database object type that this object displays data about.
         [Category("Display Properties")]
@@ -35,11 +40,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
             set {
                 _databaseFieldName = value;
                 _databaseField = DBField.GetField(_table, _databaseFieldName);
-                
-                if (_databaseField != null)
-                    _dbType = _databaseField.DBType;
-                
-                RevertText();
+
+                Revert();
 
                 if (DesignMode)
                     Text = _databaseFieldName;
@@ -54,162 +56,37 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
         } private DBField _databaseField = null;
 
         [Browsable(false)]
-        public DatabaseTable DatabaseObject {
-            get {
-                return _databaseObject;
-            }
-            set {
-                _databaseObject = value;
-                RevertText();
-            }
-        } private DatabaseTable _databaseObject = null;
-
-        [Category("Display Properties")]
-        [Description("The datatype that this TextBox displays. Can be overridden if the real type is a String")]
         public DBField.DBDataType DBTypeOverride {
             get {
                 return _dbType;
             }
             set {
                 _dbType = value;
-                UpdateValidationColor();
             }
         } private DBField.DBDataType _dbType;
 
-
-        [Category("Display Properties")]
-        [Description("Determines if this textbox should look like a label until clicked.")]
-        [DefaultValue(false)]
-        public bool EmulateLabel {
+        [Browsable(false)]
+        public DatabaseTable DatabaseObject {
             get {
-                return _emulateLabel;
+                return _databaseObject;
             }
             set {
-                _emulateLabel = value;
-
-                if (_emulateLabel)
-                    DrawAsLabel();
-                else
-                    DrawAsTextBox();
-
+                _databaseObject = value;
+                Revert();
             }
-        } private bool _emulateLabel = false;
-
-        #endregion
-
-        #region Public Methods
-
-        public DBTextBox() {
-            TextChanged += new System.EventHandler(DBTextBox_TextChanged);
-            Leave += new System.EventHandler(DBTextBox_Leave);
-            Enter += new System.EventHandler(DBTextBox_Enter);
-        }
-
-        ~DBTextBox() {
-            //Sync();
-        }
-
-        // If current value in the control is valid for the linked DBField, returns true.
-        public bool IsValid() {
-            if (DatabaseField == null || DatabaseObject == null)
-                return false;
-
-            try {
-                switch (DBTypeOverride) {
-                    case DBField.DBDataType.BOOL:
-                        bool.Parse(Text);
-                        break;
-                    case DBField.DBDataType.INTEGER:
-                        int.Parse(Text);
-                        break;
-                    case DBField.DBDataType.REAL:
-                        float.Parse(Text);
-                        break;
-                }
-
-                return true;
-            }
-            catch (Exception) {
-                return false;
-            }
-        }
-
-        // If current value in control is valid, writes to the object, 
-        // otherwise reverts to the stored value.
-        public void Sync() {
-            if (!SaveText())
-                RevertText();
-        }
-
-        // If valid, writes the Text in the control to the database object. This does
-        // NOT commit the object to the disk. Returns false if unsuccessful.
-        public bool SaveText() {
-            if (IsValid()) {
-                DatabaseField.SetValue(DatabaseObject, Text);
-                return true;
-            }
-
-            return false;
-        }
-
-        // Reverts the text in the control to what is stored in the database object.
-        public void RevertText() {
-            if (DatabaseField == null || DatabaseObject == null) {
-                Text = "";
-                return;
-            }
-
-            Text = DatabaseField.GetValue(DatabaseObject).ToString();
-            UpdateValidationColor();
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private void DBTextBox_TextChanged(object sender, EventArgs e) {
-            UpdateValidationColor();
-        }
-
-        private void DBTextBox_Enter(object sender, EventArgs e) {
-            if (EmulateLabel)
-                DrawAsTextBox();
-        }
-
-        private void DBTextBox_Leave(object sender, EventArgs e) {
-            if (EmulateLabel)
-                DrawAsLabel();
-
-            Sync();
-        }
-
-        private void DrawAsLabel() {
-            BorderStyle = BorderStyle.None;
-            BackColor = System.Drawing.SystemColors.Control;
-        }
-
-        private void DrawAsTextBox() {
-            BorderStyle = BorderStyle.FixedSingle;
-            BackColor = System.Drawing.SystemColors.Window;
-        }
-
-        private void UpdateValidationColor() {
-            if (IsValid() || DesignMode)
-                ForeColor = DefaultForeColor;
-            else
-                ForeColor = Color.Red;
-        }
+        } private DatabaseTable _databaseObject = null;
 
         #endregion
 
         #region IDataGridViewEditingControl Implementation
-
-        #region Private Variables
         
+        #region Private Variables
+
         private DataGridView dataGridView;
         private bool valueChanged = false;
         private int rowIndex;
-        
+        private bool reverting = false;
+
         #endregion
 
         #region Properties
@@ -217,29 +94,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
         [Browsable(false)]
         [ReadOnly(true)]
         public object EditingControlFormattedValue {
-            get { 
-                 switch (DBTypeOverride) {
-                    case DBField.DBDataType.BOOL:
-                        return bool.Parse(Text);
-                    case DBField.DBDataType.INTEGER:
-                        return int.Parse(Text);
-                    case DBField.DBDataType.REAL:
-                        return float.Parse(Text);
-                    default:
-                        return this.Text; 
-                 }
-            }
+            get { return this.SelectedItem; }
             set {
-                if (value is String) {
-                    Text = (String) value;
-                }
+                this.SelectedItem = value;
             }
         }
-        
+
         [Browsable(false)]
         [ReadOnly(true)]
         public int EditingControlRowIndex {
-            get { return rowIndex;  }
+            get { return rowIndex; }
             set { rowIndex = value; }
         }
 
@@ -252,7 +116,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
         [Browsable(false)]
         [ReadOnly(true)]
         public DataGridView EditingControlDataGridView {
-            get { return dataGridView;  }
+            get { return dataGridView; }
             set { dataGridView = value; }
         }
 
@@ -282,7 +146,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
             this.ForeColor = dataGridViewCellStyle.ForeColor;
             this.BackColor = dataGridViewCellStyle.BackColor;
         }
-                
+
         public bool EditingControlWantsInputKey(Keys key, bool dataGridViewWantsInputKey) {
             return true;
         }
@@ -296,8 +160,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
 
         #region Listeners
 
-        protected override void OnTextChanged(EventArgs e) {
-            base.OnTextChanged(e);
+        protected override void OnSelectionChangeCommitted(EventArgs e) {
+            base.OnSelectionChangeCommitted(e);
             valueChanged = true;
 
             if (EditingControlDataGridView != null) {
@@ -306,11 +170,96 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
         }
 
         #endregion
+        
+        #endregion
 
+        #region Public Methods
+
+        public DBComboBox() {
+            DropDownStyle = ComboBoxStyle.DropDownList;
+            this.SelectedIndexChanged += new System.EventHandler(DBComboBox_SelectedIndexChanged);
+        }
+
+        // If current value in the control is valid for the linked DBField, returns true.
+        public bool IsValid() {
+            if (DatabaseField == null || DatabaseObject == null)
+                return false;
+
+            return true;
+        }
+
+        // If current value in control is valid, writes to the object, 
+        // otherwise reverts to the stored value.
+        public void Sync() {
+            if (!Save())
+                Revert();
+        }
+
+        // If valid, writes the Text in the control to the database object. This does
+        // NOT commit the object to the disk. Returns false if unsuccessful.
+        public bool Save() {
+            if (IsValid()) {
+                DatabaseField.SetValue(DatabaseObject, SelectedItem);
+                return true;
+            }
+
+            return false;
+        }
+
+        // Reverts the text in the control to what is stored in the database object.
+        public void Revert() {
+            reverting = true;
+            this.Items.Clear();
+
+            if (DatabaseField == null || DatabaseObject == null) {
+                Text = "";
+                return;
+            }
+
+            // if we are using custom choices (most likely the attribute dialog) set the drop down 
+            // options up
+            if (customChoices != null) {
+                foreach (object currChoice in customChoices) {
+                    if (currChoice is DBAttrPossibleValues)
+                        this.Items.Add(((DBAttrPossibleValues)currChoice).Value);
+                    else
+                        this.Items.Add(currChoice);
+                }
+
+                if (Items.Contains(DatabaseField.GetValue(DatabaseObject)))
+                    SelectedItem = DatabaseField.GetValue(DatabaseObject);
+            }
+
+            // if we are representing an enum, set that up, otherwise combo support is not implemented.
+            else if (DatabaseField.DBType == DBField.DBDataType.ENUM) {
+                Enum selectedValue = (Enum) DatabaseField.GetValue(DatabaseObject);
+                foreach (object currValue in Enum.GetValues(selectedValue.GetType())) {
+                    this.Items.Add(currValue);
+                }
+                this.SelectedItem = selectedValue;                
+            }
+            
+            reverting = false;
+        }
+
+        public void SetCustomChoices(IEnumerable choices) {
+            customChoices = choices;
+            Revert();
+        }
+
+        private void DBComboBox_SelectedIndexChanged(object sender, EventArgs e) {
+            if (!reverting)
+                Sync();
+        }
+        
         #endregion
     }
 
-    public class DBTextBoxCell : DataGridViewTextBoxCell, IDBFieldBackedControl {
+    public class DBComboBoxCell : DataGridViewTextBoxCell, IDBFieldBackedControl {
+
+        #region Private Variables
+        IEnumerable customChoices = null;
+        #endregion
 
         #region DBBackedControl Implementation
 
@@ -359,24 +308,33 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
 
         public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle) {
             base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
-            DBTextBox control = DataGridView.EditingControl as DBTextBox;
+            DBComboBox control = DataGridView.EditingControl as DBComboBox;
 
-            control.Multiline = false;
             control.Table = Table;
             control.DatabaseFieldName = DatabaseFieldName;
             control.DBTypeOverride = DBTypeOverride;
+            control.SetCustomChoices(customChoices);
             control.DatabaseObject = DatabaseObject;
         }
 
         public override Type EditType {
-            get { return typeof(DBTextBox); }
+            get { return typeof(DBComboBox); }
         }
 
         public override Type ValueType {
-            get { return typeof(String); }
+            get { 
+                if (DBTypeOverride == DBField.DBDataType.BOOL)
+                    return typeof(bool);
+                if (DBTypeOverride == DBField.DBDataType.ENUM)
+                    return DatabaseField.GetValue(DatabaseObject).GetType();
+                return typeof(string);
+            }
+        }
+
+        public void SetCustomChoices(IEnumerable choices) {
+            customChoices = choices;
         }
 
         #endregion
     }
-
 }

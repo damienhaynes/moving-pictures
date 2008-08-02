@@ -7,14 +7,14 @@ using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("settings")]
-    public class DBSetting : MoviesPluginDBTable {
+    public class DBSetting : MovingPicturesDBTable {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public DBSetting():
             base() {
         }
 
-        public override void CleanUpForDeletion() {
+        public override void AfterDelete() {
         }
 
         #region Database Fields

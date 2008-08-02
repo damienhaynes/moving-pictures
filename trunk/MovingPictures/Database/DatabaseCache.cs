@@ -23,20 +23,27 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
+
+        public ICollection<DatabaseTable> GetAll(Type type) {
+            if (cache.ContainsKey(type))
+                return cache[type].Values;
+
+            return new List<DatabaseTable>();
+        }
+
         // Adds the given element to the cacheing system
-        public void Add(DatabaseTable obj) {
+        public DatabaseTable Add(DatabaseTable obj) {
             if (obj == null || obj.ID == null)
-                return;
+                return obj;
 
             if (!cache.ContainsKey(obj.GetType()))
                 cache[obj.GetType()] = new Dictionary<int,DatabaseTable>();
 
-            cache[obj.GetType()][(int)obj.ID] = obj;
-        }
+            if (!cache[obj.GetType()].ContainsKey((int)obj.ID))
+                cache[obj.GetType()][(int)obj.ID] = obj;
 
-        public void Sync<T>(IList<T> list) where T : DatabaseTable {
+            return cache[obj.GetType()][(int)obj.ID];
         }
-
 
         // Goes through the list and if any elements reference an object already in
         // memory, it updates the reference in the list with the in memory version.

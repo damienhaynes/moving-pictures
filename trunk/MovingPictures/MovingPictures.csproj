@@ -48,6 +48,15 @@
     <Compile Include="ConfigScreen\AdvancedSettingsPane.Designer.cs">
       <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\Controls\AttributesEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Controls\AttributesEditor.Designer.cs">
+      <DependentUpon>AttributesEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Controls\DBComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ConfigScreen\Controls\IDBBackedControl.cs" />
     <Compile Include="ConfigScreen\Controls\DBObjectList.cs">
       <SubType>UserControl</SubType>
@@ -55,6 +64,7 @@
     <Compile Include="ConfigScreen\Controls\DBTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ConfigScreen\Controls\IDBFieldBackedControl.cs" />
     <Compile Include="ConfigScreen\DesignMode\DatabaseTableTypeConverter.cs" />
     <Compile Include="ConfigScreen\DesignMode\DBFieldTypeConverter.cs" />
     <Compile Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.cs">
@@ -86,6 +96,12 @@
     </Compile>
     <Compile Include="ConfigScreen\MoviesPluginConfig.Designer.cs">
       <DependentUpon>MoviesPluginConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\AttributeTypeEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\AttributeTypeEditor.Designer.cs">
+      <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\Popups\CoverPopup.cs">
       <SubType>Form</SubType>
@@ -134,12 +150,14 @@
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Database\DBRelation.cs" />
     <Compile Include="Database\DatabaseTable.cs" />
+    <Compile Include="Database\MovingPicturesTables\DBAttribute.cs" />
     <Compile Include="Database\MovingPicturesTables\DBImportPath.cs" />
     <Compile Include="Database\MovingPicturesTables\DBLocalMedia.cs" />
     <Compile Include="Database\MovingPicturesTables\DBMovieInfo.cs" />
     <Compile Include="Database\MovingPicturesTables\DBSetting.cs" />
     <Compile Include="Database\MovingPicturesTables\DBUser.cs" />
     <Compile Include="Database\MovingPicturesTables\DBUserMovieSettings.cs" />
+    <Compile Include="Database\MovingPicturesTables\IAttributeOwner.cs" />
     <Compile Include="Database\MovingPicturesTables\MovingPicturesDBTable.cs" />
     <Compile Include="Database\SettingsManager.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
@@ -161,6 +179,10 @@
   <ItemGroup>
     <EmbeddedResource Include="ConfigScreen\AdvancedSettingsPane.resx">
       <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Controls\AttributesEditor.resx">
+      <DependentUpon>AttributesEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Controls\DBObjectList.resx">
@@ -185,6 +207,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\MoviesPluginConfig.resx">
       <DependentUpon>MoviesPluginConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\AttributeTypeEditor.resx">
+      <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\CoverPopup.resx">

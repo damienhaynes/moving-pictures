@@ -16,6 +16,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         private string dbFilename;
         private DatabaseCache cache;
         private Dictionary<Type, bool> isVerified;
+        private Dictionary<Type, bool> doneFullRetrieve;
 
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -38,6 +39,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             initDB();
 
             isVerified = new Dictionary<Type, bool>();
+            doneFullRetrieve = new Dictionary<Type, bool>();
             cache = new DatabaseCache();
         }
 
@@ -56,6 +58,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public List<DatabaseTable> Get(Type tableType, ICriteria criteria) {
             verifyTable(tableType);
 
+            // if this is a request for all object of this type, if we already have done this 
+            // type of request, just return the cached objects. This assumes no one else is changing
+            // the DB.
+            if (criteria == null) {
+                if (doneFullRetrieve.ContainsKey(tableType))
+                    return new List<DatabaseTable>(cache.GetAll(tableType));
+
+                doneFullRetrieve[tableType] = true;
+            }
+
             lock (dbClient) {
                 List<DatabaseTable> rtn = new List<DatabaseTable>();
 
@@ -72,11 +84,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
                         newRecord.DBManager = this;
                         newRecord.LoadByRow(row);
+                        newRecord = cache.Add(newRecord);
                         getAllRelationData(newRecord);
                         rtn.Add(newRecord);
                     }
-
-                    cache.Sync(rtn);
                 }
                 catch (SQLiteException e) {
                     logger.ErrorException("Error retrieving with criteria from " + tableType.Name + " table.", e);
@@ -133,6 +144,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             getRelationData(relationList.Owner, relationList.MetaData);
         }
 
+        public void Commit(IRelationList relationList) {
+            updateRelationTable(relationList.Owner, relationList.MetaData);
+        }
+
         // Writes the given object to the database.
         public void Commit(DatabaseTable dbObject) {
             if (dbObject == null)
@@ -143,12 +158,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             verifyTable(dbObject.GetType());
 
-            if (dbObject.ID == null)
-                insert(dbObject);
-            else
-                update(dbObject);
+            dbObject.BeforeCommit();
+
+            if (dbObject.ID == null) insert(dbObject);
+            else update(dbObject);
 
             dbObject.CommitNeeded = false;
+            dbObject.AfterCommit();
         }
 
         // Deletes a given object from the database, object in memory persists and could be recommited.
@@ -161,6 +177,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     return;
                 }
 
+                dbObject.BeforeDelete();
+
                 string query = "delete from " + GetTableName(dbObject) + " where ID = " + dbObject.ID;
                 logger.Debug("DELETING: " + dbObject);
                 logger.Debug(query);
@@ -170,7 +188,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 cache.Remove(dbObject);
                 dbObject.ID = null;
-                dbObject.CleanUpForDeletion();
+                dbObject.AfterDelete();
             }
             catch (SQLiteException e) {
                 logger.ErrorException("Error deleting object from " + GetTableName(dbObject) + " table.", e);
@@ -460,26 +478,33 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         /// <param name="forceRetrieval">Determines if ALL relations will be retrieved.</param>
         private void updateRelationTables(DatabaseTable dbObject) {
             foreach (DBRelation currRelation in DBRelation.GetRelationList(dbObject.GetType())) {
-                // clear out old values then insert the new
-                deleteRelationData(dbObject, currRelation);
-
-                // make sure all related objects have an ID
-                foreach (object currObj in (IList)currRelation.GetRelationList(dbObject)) {
-                    if (((DatabaseTable)currObj).ID == null)
-                        Commit((DatabaseTable)currObj);
-                }
-
-                // insert all relations to the database
-                foreach (object currObj in (IList)currRelation.GetRelationList(dbObject)) {
-                    DatabaseTable currDBObj = (DatabaseTable)currObj;
-                    string insertQuery = "insert into " + currRelation.TableName + "(" +
-                        GetTableName(dbObject) + "_id, " +
-                        GetTableName(currDBObj) + "_id) values (" +
-                        dbObject.ID + ", " + currDBObj.ID + ")";
-
-                    lock (dbClient) dbClient.Execute(insertQuery);
-                }
+                updateRelationTable(dbObject, currRelation);
             }            
+        }
+
+        private void updateRelationTable(DatabaseTable dbObject, DBRelation currRelation) {
+            if (!currRelation.GetRelationList(dbObject).CommitNeeded)
+                return;
+
+            // clear out old values then insert the new
+            deleteRelationData(dbObject, currRelation);
+
+            // make sure all related objects have an ID
+            foreach (object currObj in (IList)currRelation.GetRelationList(dbObject)) {
+                if (((DatabaseTable)currObj).ID == null)
+                    Commit((DatabaseTable)currObj);
+            }
+
+            // insert all relations to the database
+            foreach (object currObj in (IList)currRelation.GetRelationList(dbObject)) {
+                DatabaseTable currDBObj = (DatabaseTable)currObj;
+                string insertQuery = "insert into " + currRelation.TableName + "(" +
+                    GetTableName(dbObject) + "_id, " +
+                    GetTableName(currDBObj) + "_id) values (" +
+                    dbObject.ID + ", " + currDBObj.ID + ")";
+
+                lock (dbClient) dbClient.Execute(insertQuery);
+            }
         }
 
         // deletes all subtable data for the given object.
@@ -506,17 +531,25 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         private void getRelationData(DatabaseTable dbObject, DBRelation relation) {
+            IRelationList list = relation.GetRelationList(dbObject);
+
+            if (list.Populated)
+                return;
+
+            bool oldCommitNeededFlag = dbObject.CommitNeeded;
+            list.Populated = true;
+
+
             // build query
             string selectQuery = "select " + GetTableName(relation.SecondaryType) + "_id from " +
                        relation.TableName + " where " + GetTableName(relation.PrimaryType) + "_id=" + dbObject.ID;
 
             // and retireve relations
-            logger.Debug(selectQuery);
+            logger.Debug("Getting Relation Data for " + dbObject.GetType().Name + "[" + dbObject.ID + "]" + relation.SecondaryType.Name + "::: " + selectQuery);
             SQLiteResultSet resultSet;
             lock (dbClient) resultSet = dbClient.Execute(selectQuery);
 
             // parse results and add them to the list
-            IRelationList list = relation.GetRelationList(dbObject);
             list.Clear();
             foreach (SQLiteResultSet.Row currRow in resultSet.Rows) {
                 int objID = int.Parse(currRow.fields[0]);
@@ -525,8 +558,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             // update flags as needed
-            list.Populated = true;
             list.CommitNeeded = false;
+            dbObject.CommitNeeded = oldCommitNeededFlag;
         }
 
         #endregion
