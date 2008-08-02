@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
-    public abstract class MoviesPluginDBTable: DatabaseTable {
+    public abstract class MovingPicturesDBTable: DatabaseTable {
 
-        public MoviesPluginDBTable()
+        public MovingPicturesDBTable()
             : base() {
         }
 
-        public void Commit() {
+        public override void Commit() {
             if (DBManager == null)
                 DBManager = MovingPicturesPlugin.DatabaseManager;
 
             base.Commit();
         }
 
-        public void Delete() {
+        public override void Delete() {
             if (DBManager == null)
                 DBManager = MovingPicturesPlugin.DatabaseManager;
 

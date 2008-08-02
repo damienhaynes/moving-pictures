@@ -46,7 +46,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return DatabaseManager.GetTableName(this);
         }
 
-        public abstract void CleanUpForDeletion();
+        public virtual void BeforeCommit() {
+        }
+
+        public virtual void AfterCommit() {
+        }
+
+        public virtual void BeforeDelete() {
+        }
+
+        public virtual void AfterDelete() {
+        }
 
         // Loads data into this object based on the given database record.
         public void LoadByRow(SQLiteResultSet.Row row) {

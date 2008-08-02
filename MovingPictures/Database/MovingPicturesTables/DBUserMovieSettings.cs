@@ -4,9 +4,9 @@ using System.Text;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("user_movie_settings")]
-    class DBUserMovieSettings: MoviesPluginDBTable {
+    class DBUserMovieSettings: MovingPicturesDBTable {
 
-        public override void CleanUpForDeletion() {
+        public override void AfterDelete() {
         }
 
         #region Database Fields

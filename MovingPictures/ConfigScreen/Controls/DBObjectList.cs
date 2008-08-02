@@ -140,11 +140,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
                 currRow.ReadOnly = properties.ReadOnly;
                 
                 // build the custom value cell
-                DBTextBoxCell valueCell = new DBTextBoxCell();
+                IDBFieldBackedControl valueCell;
+                if (currField.DBType == DBField.DBDataType.ENUM)
+                    valueCell = new DBComboBoxCell();
+                else 
+                    valueCell = new DBTextBoxCell();
+
                 valueCell.Table = Table;
                 valueCell.DatabaseFieldName = properties.FieldName;
                 valueCell.DatabaseObject = DatabaseObject;
-                currRow.Cells["valueColumn"] = valueCell;
+                currRow.Cells["valueColumn"] = (DataGridViewCell) valueCell;
 
                 currRow.Cells["fieldColumn"].Value = properties.DisplayName;
             }

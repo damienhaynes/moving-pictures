@@ -7,9 +7,9 @@ using System.Collections.ObjectModel;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("local_media")]
-    public class DBLocalMedia: MoviesPluginDBTable {
+    public class DBLocalMedia: MovingPicturesDBTable {
 
-        public override void CleanUpForDeletion() {
+        public override void AfterDelete() {
         }
 
         public FileInfo File {

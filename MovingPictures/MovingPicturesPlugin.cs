@@ -110,7 +110,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             config.AddTarget("file", fileTarget);
 
-            LoggingRule rule = new LoggingRule("*", LogLevel.Info, fileTarget);
+            LoggingRule rule = new LoggingRule("*", LogLevel.Debug, fileTarget);
             config.LoggingRules.Add(rule);
 
             LogManager.Configuration = config; 
@@ -169,6 +169,16 @@ namespace MediaPortal.Plugins.MovingPictures {
             //Thread.Sleep(1000);
             MoviesPluginConfig configScr = new MoviesPluginConfig();
             //List<DBMovieInfo> movieList = DBMovieInfo.GetAll();
+
+            //List<DBAttrDescription> attrs = DatabaseManager.Get<DBAttrDescription>(null);
+            //MessageBox.Show(attrs.Count.ToString());
+            //DBAttrDescription attr = new DBAttrDescription();
+            //attr.Name = "Kicks Ass";
+            //attr.Table = typeof(DBMovieInfo);
+            //attr.ValueType = DBAttrDescription.ValueTypeEnum.BOOL;
+            //attr.SelectionMode = DBAttrDescription.SelectionModeEnum.Dynamic;
+            //attr.Commit();
+
             configScr.ShowDialog();
         }
 

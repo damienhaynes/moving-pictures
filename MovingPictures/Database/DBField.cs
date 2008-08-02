@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public class DBField {
-        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, DB_OBJECT }
+        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, TYPE, ENUM, DB_OBJECT }
 
         #region Private Variables
         
@@ -49,6 +49,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 type = DBDataType.BOOL;
             else if (propertyInfo.PropertyType == typeof(Boolean))
                 type = DBDataType.BOOL;
+            else if (propertyInfo.PropertyType == typeof(Type))
+                type = DBDataType.TYPE;
+            else if (propertyInfo.PropertyType.IsEnum)
+                type = DBDataType.ENUM;
+            // nullable enum
+            else if (Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null ? Nullable.GetUnderlyingType(propertyInfo.PropertyType).IsEnum : false)
+                type = DBDataType.ENUM;
             else if (DatabaseManager.IsDatabaseTableType(propertyInfo.PropertyType))
                 type = DBDataType.DB_OBJECT;
             else {
@@ -168,8 +175,26 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         newObj.LoadFromString(value.ToString());
                         propertyInfo.GetSetMethod().Invoke(owner, new object[] { newObj });
                         break;
+                    case DBDataType.TYPE:
+                        Type newTypeObj = Type.GetType(value.ToString());
+                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { newTypeObj });
+                        break;
+                    case DBDataType.ENUM:
+                        if (value.ToString().Trim().Length != 0) {
+                            Type enumType = propertyInfo.PropertyType;
+                            if (Nullable.GetUnderlyingType(enumType) != null)
+                                enumType = Nullable.GetUnderlyingType(enumType);
+
+                            object enumVal = Enum.Parse(enumType, value.ToString());
+                            propertyInfo.GetSetMethod().Invoke(owner, new object[] { enumVal });
+                        }
+                        break;
                     case DBDataType.DB_OBJECT:
-                        DatabaseTable newDBObj = owner.DBManager.Get(propertyInfo.PropertyType, int.Parse(value.ToString()));
+                        DatabaseTable newDBObj;
+                        if (value.ToString().Trim().Length == 0)
+                            newDBObj = null;
+                        else newDBObj = owner.DBManager.Get(propertyInfo.PropertyType, int.Parse(value.ToString()));
+
                         propertyInfo.GetSetMethod().Invoke(owner, new object[] { newDBObj });
                         break;
                     default:

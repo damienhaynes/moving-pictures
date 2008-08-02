@@ -47,6 +47,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
 
         #region Methods
 
+        public void Commit() {
+            if (Owner.DBManager != null)
+                Owner.DBManager.Commit(this);
+        }
+
         public bool RemoveIgnoreSisterList(DatabaseTable item) {
             if (item.GetType() != typeof(T2))
                 return false;

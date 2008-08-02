@@ -21,14 +21,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     }
 
     [DBTableAttribute("movie_info")]
-    public class DBMovieInfo: MoviesPluginDBTable, IComparable {
+    public class DBMovieInfo: MovingPicturesDBTable, IComparable, IAttributeOwner {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         
         public DBMovieInfo()
             : base() {
         }
 
-        public override void CleanUpForDeletion() {
+        public override void AfterDelete() {
             if (ID == null) {
                 while (AlternateCovers.Count > 0)
                     this.DeleteCurrentCover();
@@ -176,6 +176,26 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             }
         } private float _score;
 
+        [DBFieldAttribute(FieldName="user_score")]
+        public float UserScore {
+            get { return _userScore; }
+
+            set {
+                _userScore = value;
+                commitNeeded = true;
+            }
+        } private float _userScore;
+
+        [DBFieldAttribute(Default="false")]
+        public bool Watched {
+            get { return _watched; }
+
+            set {
+                _watched = value;
+                commitNeeded = true;
+            }
+        } private bool _watched;
+
 
         [DBFieldAttribute]
         public int Popularity {
@@ -230,6 +250,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                 return _localMedia; 
             }
         } RelationList<DBMovieInfo, DBLocalMedia> _localMedia;
+
+
+        [DBRelation(AutoRetrieve = true)]
+        public RelationList<DBMovieInfo, DBAttribute> Attributes {
+            get {
+                if (_attributes == null) {
+                    _attributes = new RelationList<DBMovieInfo, DBAttribute>(this);
+                }
+                return _attributes;
+            }
+        } RelationList<DBMovieInfo, DBAttribute> _attributes;
 
 
         [DBFieldAttribute(AllowAutoUpdate = false)]
