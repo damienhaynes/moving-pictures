@@ -11,14 +11,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
         public override void Commit() {
             if (DBManager == null)
-                DBManager = MovingPicturesPlugin.DatabaseManager;
+                DBManager = MovingPicturesCore.DatabaseManager;
 
             base.Commit();
         }
 
         public override void Delete() {
             if (DBManager == null)
-                DBManager = MovingPicturesPlugin.DatabaseManager;
+                DBManager = MovingPicturesCore.DatabaseManager;
 
             base.Delete();
         }

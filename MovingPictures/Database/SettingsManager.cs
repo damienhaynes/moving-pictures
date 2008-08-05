@@ -119,7 +119,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         ~SettingsManager() {
-            commit();
+            Shutdown();
+        }
+
+        public void Shutdown() {
+            if (DBManager != null) {
+                logger.Info("SettingsManager Shutting Down");
+                commit();
+                DBManager = null;
+            }
         }
 
         public void LoadSettingsFile(string settingsXML, bool overwriteExistingSettings) {
@@ -149,9 +157,28 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 this.Add(key, newSetting);
                 return true;
-            }
+            } else {
+                DBSetting existingSetting = this[key];
+                
+                // update name if neccisary
+                if (!existingSetting.Name.Equals(name))
+                    existingSetting.Name = name;
 
-            return false;
+                // update description if neccisary
+                if (!existingSetting.Description.Equals(description))
+                    existingSetting.Description = description;
+                
+                // update groups if neccisary
+                for(int i = 0; i < existingSetting.Grouping.Count; i++) {
+                    if (i >= groups.Count || !existingSetting.Grouping[i].Equals(groups[i])) {
+                        existingSetting.Grouping.Clear();
+                        existingSetting.Grouping.AddRange(groups);
+                        break;
+                    }
+                }
+
+                return false;
+            }
         }
     }
 }

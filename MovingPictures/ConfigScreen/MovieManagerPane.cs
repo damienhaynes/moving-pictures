@@ -49,10 +49,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (!DesignMode) {
                 ReloadList();
 
-                MovingPicturesPlugin.DatabaseManager.ObjectDeleted +=
+                MovingPicturesCore.DatabaseManager.ObjectDeleted +=
                     new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
 
-                MovingPicturesPlugin.DatabaseManager.ObjectInserted +=
+                MovingPicturesCore.DatabaseManager.ObjectInserted +=
                     new DatabaseManager.ObjectAffectedDelegate(movieInsertedListener);
             }
         }
@@ -403,7 +403,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (result == System.Windows.Forms.DialogResult.OK) {
                 foreach (ListViewItem currItem in movieListBox.SelectedItems) {
                     DBMovieInfo movie = (DBMovieInfo)currItem.Tag;
-                    MovingPicturesPlugin.MovieProvider.Update(movie);
+                    MovingPicturesCore.MovieProvider.Update(movie);
                 }
 
                 updateMoviePanel();
@@ -437,7 +437,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // the update process can take a little time, so spawn it off in another thread
             ThreadStart actions = delegate {
                 startArtProgressBar();
-                MovingPicturesPlugin.CoverProvider.GetArtwork(movie);
+                MovingPicturesCore.CoverProvider.GetArtwork(movie);
                 stopArtProgressBar();
                 updateMoviePanel();
             };

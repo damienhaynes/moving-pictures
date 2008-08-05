@@ -146,21 +146,21 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void scanButton_Click(object sender, EventArgs e) {
-            MovingPicturesPlugin.Importer.Start();
-            MovingPicturesPlugin.Importer.StartFullScan();
+            MovingPicturesCore.Importer.Start();
+            MovingPicturesCore.Importer.StartFullScan();
         }
 
         private void MovieImporterPane_Load(object sender, EventArgs e) {
             if (!DesignMode) {
-                MovingPicturesPlugin.Importer.Progress += new MovieImporter.ImportProgressHandler(progressListener);
-                MovingPicturesPlugin.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
+                MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(progressListener);
+                MovingPicturesCore.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
 
                 // fixes a bug in DataGridView. switching to tab it is on forces
                 // it to initialize, so adding stuff to the binding source works properly
                 tabControl.SelectedIndex = 1;
                 tabControl.SelectedIndex = 0;
 
-                MovingPicturesPlugin.Importer.Start();
+                MovingPicturesCore.Importer.Start();
                 
                 updateButtons();
             }
@@ -176,14 +176,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         // If this pane has been destroyed, that means the Config screen has shut down, so 
         // the importer also should be  stopped.
         void MovieImporterPane_HandleDestroyed(object sender, System.EventArgs e) {
-            MovingPicturesPlugin.Importer.Stop();
+            MovingPicturesCore.Importer.Stop();
         }
 
         // Handles when the user modifies data in the unapproved matches list
         private void unapprovedMatchesBindingSource_ListChanged(object sender, ListChangedEventArgs e) {
             if (e.ListChangedType == ListChangedType.ItemChanged) {
                 MediaMatch match = (MediaMatch)unapprovedGrid.Rows[e.NewIndex].DataBoundItem;
-                MovingPicturesPlugin.Importer.Approve(match);
+                MovingPicturesCore.Importer.Approve(match);
             }
         }
 
@@ -193,7 +193,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
                 MediaMatch selectedMatch = (MediaMatch)currRow.DataBoundItem;
                 selectedMatch.HighPriority = true;
-                MovingPicturesPlugin.Importer.Approve(selectedMatch);
+                MovingPicturesCore.Importer.Approve(selectedMatch);
             }
         }
 
@@ -202,7 +202,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
                 MediaMatch selectedMatch = (MediaMatch)currRow.DataBoundItem;
-                MovingPicturesPlugin.Importer.Ignore(selectedMatch);
+                MovingPicturesCore.Importer.Ignore(selectedMatch);
             }
         }
 
@@ -217,7 +217,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 if (popup.DialogResult == DialogResult.OK) {
                     selectedMatch.SearchString = popup.GetSearchString();
-                    MovingPicturesPlugin.Importer.Reprocess(selectedMatch);
+                    MovingPicturesCore.Importer.Reprocess(selectedMatch);
                 }
             }
         }
@@ -243,9 +243,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 // check if this row is either approved or commited
                 if (!approveButtonEnabled &&
-                    !MovingPicturesPlugin.Importer.ApprovedMatches.Contains(selectedMatch) &&
-                    !MovingPicturesPlugin.Importer.RetrievingDetailsMatches.Contains(selectedMatch) &&
-                    !MovingPicturesPlugin.Importer.CommitedMatches.Contains(selectedMatch) &&
+                    !MovingPicturesCore.Importer.ApprovedMatches.Contains(selectedMatch) &&
+                    !MovingPicturesCore.Importer.RetrievingDetailsMatches.Contains(selectedMatch) &&
+                    !MovingPicturesCore.Importer.CommitedMatches.Contains(selectedMatch) &&
                     selectedMatch.Selected != null) {
 
                     approveButtonEnabled = true;
@@ -306,13 +306,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void splitJoinButton_Click(object sender, EventArgs e) {
             if (splitMode) {
                 MediaMatch match = (MediaMatch)unapprovedGrid.SelectedRows[0].DataBoundItem;
-                MovingPicturesPlugin.Importer.Split(match);
+                MovingPicturesCore.Importer.Split(match);
             } else {
                 List<MediaMatch> mediaList = new List<MediaMatch>();
                 foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) 
                     mediaList.Add((MediaMatch)currRow.DataBoundItem);
 
-                MovingPicturesPlugin.Importer.Join(mediaList);
+                MovingPicturesCore.Importer.Join(mediaList);
             }
             
         }

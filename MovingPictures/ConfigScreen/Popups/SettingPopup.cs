@@ -74,7 +74,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         private void okButton_Click(object sender, EventArgs e) {
             if (valueIsValid()) {
                 Setting.Value = valueTextBox.Text;
-                MovingPicturesPlugin.DatabaseManager.Commit(Setting);
+                MovingPicturesCore.DatabaseManager.Commit(Setting);
             }
 
             Close();

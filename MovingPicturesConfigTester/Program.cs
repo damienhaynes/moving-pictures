@@ -11,7 +11,7 @@ namespace MovingPicturesConfigTester {
         static void Main(string[] args) {
             System.Windows.Forms.Application.EnableVisualStyles();
 
-            MovingPicturesPlugin plugin = new MovingPicturesPlugin();
+            MovingPicturesGUI plugin = new MovingPicturesGUI();
             plugin.ShowPlugin();
 
         }

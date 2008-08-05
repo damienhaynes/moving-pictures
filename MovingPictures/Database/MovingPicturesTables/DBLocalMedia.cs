@@ -121,7 +121,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         public static DBLocalMedia Get(string fullPath) {
             DBField pathField = DBField.GetField(typeof(DBLocalMedia), "FullPath");
             ICriteria criteria = new BaseCriteria(pathField, "=", fullPath);
-            List<DBLocalMedia> resultSet = MovingPicturesPlugin.DatabaseManager.Get<DBLocalMedia>(criteria);
+            List<DBLocalMedia> resultSet = MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(criteria);
 
             if (resultSet.Count > 0) {
                 return resultSet[0];

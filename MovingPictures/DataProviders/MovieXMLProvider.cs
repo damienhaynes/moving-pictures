@@ -79,8 +79,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return false;
 
             // grab coverart loading settings
-            int maxCovers = (int) MovingPicturesPlugin.SettingsManager["max_covers_per_movie"].Value;
-            int maxCoversInSession = (int) MovingPicturesPlugin.SettingsManager["max_covers_per_session"].Value;
+            int maxCovers = (int) MovingPicturesCore.SettingsManager["max_covers_per_movie"].Value;
+            int maxCoversInSession = (int) MovingPicturesCore.SettingsManager["max_covers_per_session"].Value;
 
             // if we have already hit our limit for the number of covers to load, quit
             if (movie.AlternateCovers.Count >= maxCovers)
@@ -127,9 +127,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             String sXmlData = string.Empty;
 
             int tryCount = 0;
-            int maxRetries       = (int) MovingPicturesPlugin.SettingsManager["xml_max_timeouts"].Value;
-            int timeout          = (int) MovingPicturesPlugin.SettingsManager["xml_timeout_length"].Value;
-            int timeoutIncrement = (int) MovingPicturesPlugin.SettingsManager["xml_timeout_increment"].Value; 
+            int maxRetries       = (int) MovingPicturesCore.SettingsManager["xml_max_timeouts"].Value;
+            int timeout          = (int) MovingPicturesCore.SettingsManager["xml_timeout_length"].Value;
+            int timeoutIncrement = (int) MovingPicturesCore.SettingsManager["xml_timeout_increment"].Value; 
 
             while (sXmlData == string.Empty) {
                 try {

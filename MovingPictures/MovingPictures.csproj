@@ -91,11 +91,11 @@
     <Compile Include="ConfigScreen\MovieManagerPane.Designer.cs">
       <DependentUpon>MovieManagerPane.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\MoviesPluginConfig.cs">
+    <Compile Include="ConfigScreen\MovingPicturesConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConfigScreen\MoviesPluginConfig.Designer.cs">
-      <DependentUpon>MoviesPluginConfig.cs</DependentUpon>
+    <Compile Include="ConfigScreen\MovingPicturesConfig.Designer.cs">
+      <DependentUpon>MovingPicturesConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\Popups\AttributeTypeEditor.cs">
       <SubType>Form</SubType>
@@ -164,7 +164,8 @@
     <Compile Include="DataProviders\MovieXMLProvider.cs" />
     <Compile Include="LocalMediaManagement\AdvancedStringComparer.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
-    <Compile Include="MovingPicturesPlugin.cs" />
+    <Compile Include="MainUI\MovingPicturesGUI.cs" />
+    <Compile Include="MovingPicturesCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -205,8 +206,8 @@
       <DependentUpon>MovieManagerPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\MoviesPluginConfig.resx">
-      <DependentUpon>MoviesPluginConfig.cs</DependentUpon>
+    <EmbeddedResource Include="ConfigScreen\MovingPicturesConfig.resx">
+      <DependentUpon>MovingPicturesConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\AttributeTypeEditor.resx">
@@ -271,6 +272,7 @@
     <Content Include="Images\tick.png" />
     <None Include="Images\zoom.png" />
     <None Include="Images\world_add.png" />
+    <Content Include="MainUI\movingpictures.xml" />
     <Content Include="Properties\InitialSettings.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -282,6 +284,10 @@
       <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
       <Name>Databases</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MediaPortal\Dialogs\Dialogs.csproj">
+      <Project>{396C5208-5D46-4A11-92C1-FD0F2F42D7DD}</Project>
+      <Name>Dialogs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MediaPortal\Utils\Utils.csproj">
       <Project>{6DA0E4DF-6230-4642-98B5-E690BB6942BB}</Project>
       <Name>Utils</Name>
@@ -292,7 +298,10 @@
     <VisualStudio AllowExistingFolder="true" />
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>cd $(TargetDir)
+copy "$(ProjectDir)..\External\merge.bat" "$(TargetDir)" /Y
+copy "$(ProjectDir)..\External\ilmerge.exe" "$(TargetDir)" /Y
+"$(TargetDir)merge.bat"
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
