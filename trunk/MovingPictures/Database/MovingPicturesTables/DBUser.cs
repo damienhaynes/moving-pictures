@@ -25,11 +25,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         #region Database Management Methods
 
         public static DBUser Get(int id) {
-            return MovingPicturesPlugin.DatabaseManager.Get<DBUser>(id);
+            return MovingPicturesCore.DatabaseManager.Get<DBUser>(id);
         }
 
         public static List<DBUser> GetAll() {
-            return MovingPicturesPlugin.DatabaseManager.Get<DBUser>(null);
+            return MovingPicturesCore.DatabaseManager.Get<DBUser>(null);
         }
 
         #endregion

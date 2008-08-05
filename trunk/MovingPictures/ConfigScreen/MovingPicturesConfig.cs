@@ -9,15 +9,15 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
-    public partial class MoviesPluginConfig : Form {
-        public MoviesPluginConfig() {
+    public partial class MovingPicturesConfig : Form {
+        public MovingPicturesConfig() {
             InitializeComponent();
 
             // if we are in designer, break to prevent errors with rendering, it cant access the DB...
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
-            advancedSettingsPane.populateTree(MovingPicturesPlugin.SettingsManager);
+            advancedSettingsPane.populateTree(MovingPicturesCore.SettingsManager);
         }
 
         private void MoviesPluginConfig_Load(object sender, EventArgs e) {

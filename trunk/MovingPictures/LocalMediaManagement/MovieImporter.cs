@@ -115,7 +115,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Public Methods
 
         public void Start() {
-            int maxThreadCount = (int)MovingPicturesPlugin.SettingsManager["importer_thread_count"].Value;
+            int maxThreadCount = (int)MovingPicturesCore.SettingsManager["importer_thread_count"].Value;
 
             if (mediaScannerThreads.Count == 0) {
                 for (int i = 0; i < maxThreadCount; i++) {
@@ -651,8 +651,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // update, associate, and commit the movie
-            MovingPicturesPlugin.MovieProvider.Update(movie);
-            MovingPicturesPlugin.CoverProvider.GetArtwork(movie);
+            MovingPicturesCore.MovieProvider.Update(movie);
+            MovingPicturesCore.CoverProvider.GetArtwork(movie);
             movie.LocalMedia.Clear();
             movie.LocalMedia.AddRange(localMedia);
             movie.UnloadArtwork(); 
@@ -745,9 +745,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // grab a list of movies from our dataProvider and rank each returned movie on 
             // how close a match it is
-            movieList = MovingPicturesPlugin.MovieProvider.Get(searchStr);
+            movieList = MovingPicturesCore.MovieProvider.Get(searchStr);
 
-            bool strictYear = (bool)MovingPicturesPlugin.SettingsManager["importer_strict_year"].Value;
+            bool strictYear = (bool)MovingPicturesCore.SettingsManager["importer_strict_year"].Value;
 
             foreach (DBMovieInfo currMovie in movieList) {
                 PossibleMatch currMatch = new PossibleMatch();
@@ -821,7 +821,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             
             // a lot of keywords that could poison the result so let's clean them according to our given exp.
             // regexParser = new Regex(@"((720p|1080p|DVDRip|DTS|AC3|Bluray|HDDVD|XviD|DiVX|x264)[-]?.*?$)", RegexOptions.IgnoreCase);
-            Regex regexParser = new Regex(MovingPicturesPlugin.SettingsManager["importer_filter"].Value.ToString(), RegexOptions.IgnoreCase);
+            Regex regexParser = new Regex(MovingPicturesCore.SettingsManager["importer_filter"].Value.ToString(), RegexOptions.IgnoreCase);
             rtn = regexParser.Replace(rtn, "");
 
             // if there is a four digit number that looks like a year, parse it out
@@ -919,7 +919,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public string SearchString {        
             get {
                 if (_searchString.Equals(string.Empty)) {
-                    bool preferFolder = (bool)MovingPicturesPlugin.SettingsManager["importer_prefer_foldername"].Value;
+                    bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
 
                     if (LocalMedia == null || LocalMedia.Count == 0)
                         _searchString = "";

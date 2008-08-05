@@ -54,11 +54,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         #region Database Management Methods
 
         public static DBUserMovieSettings Get(int id) {
-            return MovingPicturesPlugin.DatabaseManager.Get<DBUserMovieSettings>(id);
+            return MovingPicturesCore.DatabaseManager.Get<DBUserMovieSettings>(id);
         }
 
         public static List<DBUserMovieSettings> GetAll() {
-            return MovingPicturesPlugin.DatabaseManager.Get<DBUserMovieSettings>(null);
+            return MovingPicturesCore.DatabaseManager.Get<DBUserMovieSettings>(null);
         }
 
         #endregion

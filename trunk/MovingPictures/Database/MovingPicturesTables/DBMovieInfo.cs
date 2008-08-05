@@ -414,9 +414,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         }
 
         public bool AddCoverFromFile(string filename) {
-            int minWidth = (int)MovingPicturesPlugin.SettingsManager["min_cover_width"].Value;
-            int minHeight = (int)MovingPicturesPlugin.SettingsManager["min_cover_height"].Value;
-            string artFolder = (string)MovingPicturesPlugin.SettingsManager["cover_art_folder"].Value;
+            int minWidth = (int)MovingPicturesCore.SettingsManager["min_cover_width"].Value;
+            int minHeight = (int)MovingPicturesCore.SettingsManager["min_cover_height"].Value;
+            string artFolder = (string)MovingPicturesCore.SettingsManager["cover_art_folder"].Value;
             
             Image newCover = Image.FromFile(filename);
 
@@ -440,11 +440,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         // Attempts to load cover art for this movie from a given URL. Optionally
         // ignores minimum resolution restrictions
         public CoverArtLoadStatus AddCoverFromURL(string url, bool ignoreRestrictions) {
-            int minWidth = (int)MovingPicturesPlugin.SettingsManager["min_cover_width"].Value;
-            int minHeight = (int)MovingPicturesPlugin.SettingsManager["min_cover_height"].Value;
-            string artFolder = (string)MovingPicturesPlugin.SettingsManager["cover_art_folder"].Value;
-            string thumbsFolder = (String)MovingPicturesPlugin.SettingsManager["cover_thumbs_folder"].Value;
-            bool redownloadCovers = (bool)MovingPicturesPlugin.SettingsManager["redownload_coverart"].Value;
+            int minWidth = (int)MovingPicturesCore.SettingsManager["min_cover_width"].Value;
+            int minHeight = (int)MovingPicturesCore.SettingsManager["min_cover_height"].Value;
+            string artFolder = (string)MovingPicturesCore.SettingsManager["cover_art_folder"].Value;
+            string thumbsFolder = (String)MovingPicturesCore.SettingsManager["cover_thumbs_folder"].Value;
+            bool redownloadCovers = (bool)MovingPicturesCore.SettingsManager["redownload_coverart"].Value;
 
             // genrate a filename for a movie. should be unique based on the url hash
             string safeName = HttpUtility.UrlEncode(Name.Replace(' ', '.'));
@@ -510,9 +510,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
             // pull in timeout settings
             int tryCount = 0;
-            int maxRetries = (int)MovingPicturesPlugin.SettingsManager["xml_max_timeouts"].Value;
-            int timeout = (int)MovingPicturesPlugin.SettingsManager["xml_timeout_length"].Value;
-            int timeoutIncrement = (int)MovingPicturesPlugin.SettingsManager["xml_timeout_increment"].Value;
+            int maxRetries = (int)MovingPicturesCore.SettingsManager["xml_max_timeouts"].Value;
+            int timeout = (int)MovingPicturesCore.SettingsManager["xml_timeout_length"].Value;
+            int timeoutIncrement = (int)MovingPicturesCore.SettingsManager["xml_timeout_increment"].Value;
 
             while (rtn == null && tryCount < maxRetries) {
                 try {
@@ -555,7 +555,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             if (CoverFullPath.Trim().Length == 0)
                 return;
 
-            string thumbsFolder = (String)MovingPicturesPlugin.SettingsManager["cover_thumbs_folder"].Value;
+            string thumbsFolder = (String)MovingPicturesCore.SettingsManager["cover_thumbs_folder"].Value;
             string filename = new FileInfo(CoverFullPath).Name;
             string fullname = thumbsFolder + '\\' + filename;
 
@@ -585,11 +585,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         #region Database Management Methods
 
         public static DBMovieInfo Get(int id) {
-            return MovingPicturesPlugin.DatabaseManager.Get<DBMovieInfo>(id);
+            return MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(id);
         }
 
         public static List<DBMovieInfo> GetAll() {
-            return MovingPicturesPlugin.DatabaseManager.Get<DBMovieInfo>(null);
+            return MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(null);
         }
 
         #endregion

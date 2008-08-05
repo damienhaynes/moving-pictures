@@ -119,11 +119,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
         // Gets the cooresponding Setting based on the given record ID.
         public static DBImportPath Get(int id) {
-            return MovingPicturesPlugin.DatabaseManager.Get<DBImportPath>(id);
+            return MovingPicturesCore.DatabaseManager.Get<DBImportPath>(id);
         }
 
         public static List<DBImportPath> GetAll() {
-            return MovingPicturesPlugin.DatabaseManager.Get<DBImportPath>(null);
+            return MovingPicturesCore.DatabaseManager.Get<DBImportPath>(null);
         }
 
         #endregion

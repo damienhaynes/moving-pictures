@@ -32,8 +32,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         private void SingleMovieImporterPopup_Load(object sender, EventArgs e) {
             if (!DesignMode) {
                 // setup listener and start Importer if it's not already running
-                MovingPicturesPlugin.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
-                MovingPicturesPlugin.Importer.Start();
+                MovingPicturesCore.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
+                MovingPicturesCore.Importer.Start();
 
                 // populate onscreen list box with files to be processed
                 fileListBox.Items.Clear();
@@ -41,7 +41,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
                     fileListBox.Items.Add(currFile.File);
                 }
 
-                MovingPicturesPlugin.Importer.Import(localMedia, true);
+                MovingPicturesCore.Importer.Import(localMedia, true);
             }
         }
         
@@ -77,7 +77,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
                     // easily undo if the user picks another movie.
                     mediaMatch.Selected = (PossibleMatch)possibleMatchesCombo.SelectedItem;
                     mediaMatch.HighPriority = true;
-                    MovingPicturesPlugin.Importer.Approve(mediaMatch);
+                    MovingPicturesCore.Importer.Approve(mediaMatch);
 
                     break;
                 case MovieImporterAction.APPROVED:
@@ -107,7 +107,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
 
         private void rescanButton_Click(object sender, EventArgs e) {
             mediaMatch.SearchString = possibleMatchesCombo.Text;
-            MovingPicturesPlugin.Importer.Reprocess(mediaMatch);
+            MovingPicturesCore.Importer.Reprocess(mediaMatch);
         }
 
         private void okButton_Click(object sender, EventArgs e) {
@@ -122,7 +122,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
                 // set new selected movie and put it on the fast track for commital
                 mediaMatch.Selected = (PossibleMatch)possibleMatchesCombo.SelectedItem;
                 mediaMatch.HighPriority = true;
-                MovingPicturesPlugin.Importer.Approve(mediaMatch);
+                MovingPicturesCore.Importer.Approve(mediaMatch);
             }
         }
     }

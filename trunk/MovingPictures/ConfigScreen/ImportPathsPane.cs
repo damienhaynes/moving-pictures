@@ -50,7 +50,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 DBImportPath newPath = new DBImportPath();
                 newPath.FullPath = folderDialog.SelectedPath;
                 pathBindingSource.Add(newPath);
-                MovingPicturesPlugin.Importer.StartFullScan();
+                MovingPicturesCore.Importer.StartFullScan();
             }
             
         }

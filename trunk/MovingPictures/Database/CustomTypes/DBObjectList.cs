@@ -24,7 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
                 string token = strList.Substring(startIndex, len).Trim();
                 if (startIndex < strList.Length && token.Length > 0) {
                     try {
-                        Add(MovingPicturesPlugin.DatabaseManager.Get<T>(int.Parse(token)));
+                        Add(MovingPicturesCore.DatabaseManager.Get<T>(int.Parse(token)));
                     }
                     catch (Exception) { }
                 }
