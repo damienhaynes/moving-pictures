@@ -132,11 +132,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             fileTarget.FileName = Config.GetFile(Config.Dir.Log, logFileName);
             fileTarget.Layout = "${date:format=dd-MMM-yyyy HH\\:mm\\:ss} " +
                                 "${level:fixedLength=true:padding=5} " +
-                                "[${logger:fixedLength=true:padding=20:shortName=true}]: ${message}";
+                                "[${logger:fixedLength=true:padding=20:shortName=true}]: ${message} " +
+                                "${exception:format=tostring}";
 
             config.AddTarget("file", fileTarget);
 
-            LoggingRule rule = new LoggingRule("*", LogLevel.Debug, fileTarget);
+            LoggingRule rule = new LoggingRule("*", LogLevel.Info, fileTarget);
             config.LoggingRules.Add(rule);
 
             LogManager.Configuration = config; 
