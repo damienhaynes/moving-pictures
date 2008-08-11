@@ -197,7 +197,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                                 newMovie.MovieXmlID = tmpInt;
                             break;
                         case "SeriesName":
-                            newMovie.Name = currElement.InnerText;
+                            newMovie.Title = currElement.InnerText;
                             break;
                         case "SeriesID":
                             newMovie.ImdbID = currElement.InnerText;
@@ -257,7 +257,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 }
 
                 // if we at least got a moviename, store the results for return
-                if (newMovie.Name != string.Empty) {
+                if (newMovie.Title != string.Empty) {
                     movieList.Add(newMovie);
                 }
             }

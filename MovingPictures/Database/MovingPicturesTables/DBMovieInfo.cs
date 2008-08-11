@@ -38,32 +38,32 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         #region Database Fields
 
         [DBFieldAttribute]
-        public string Name {
-            get { return _name; }
+        public string Title {
+            get { return _title; }
 
             set {
-                _name = value;
-                populateSortName();
+                _title = value;
+                populateSortBy();
 
                 commitNeeded = true;
             }
-        } private string _name;
+        } private string _title;
 
 
         [DBFieldAttribute]
-        public string SortName {
+        public string SortBy {
             get {
-                if (_sortName.Trim().Length == 0)
-                    populateSortName();
+                if (_sortBy.Trim().Length == 0)
+                    populateSortBy();
 
-                return _sortName; 
+                return _sortBy; 
             }
 
             set {
-                _sortName = value;
+                _sortBy = value;
                 commitNeeded = true;
             }
-        } private string _sortName;
+        } private string _sortBy;
 
 
         [DBFieldAttribute]
@@ -421,12 +421,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             Image newCover = Image.FromFile(filename);
 
             if (newCover == null) {
-                logger.Error("Failed loading cover artwork for '" + Name + "' [" + ID + "] from " + filename + ".");
+                logger.Error("Failed loading cover artwork for '" + Title + "' [" + ID + "] from " + filename + ".");
                 return false;
             }
 
             // genrate a filename for the new cover. should be unique based on the file path hash
-            string safeName = HttpUtility.UrlEncode(Name.Replace(' ', '.'));
+            string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
             string newFileName = artFolder + "\\" + safeName + " [" + filename.GetHashCode() + "].jpg";
 
             // save the artwork
@@ -447,7 +447,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             bool redownloadCovers = (bool)MovingPicturesCore.SettingsManager["redownload_coverart"].Value;
 
             // genrate a filename for a movie. should be unique based on the url hash
-            string safeName = HttpUtility.UrlEncode(Name.Replace(' ', '.'));
+            string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
             string filename = artFolder + "\\" + safeName + " [" + url.GetHashCode() + "].jpg";
             
             // if we already have a file for this movie from this URL, move on
@@ -469,7 +469,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                     if (!AlternateCovers.Contains(filename))
                         AlternateCovers.Add(filename);
 
-                    logger.Info("Cover art for '" + Name + "' [" + ID + "] already exists from " + url + ".");
+                    logger.Info("Cover art for '" + Title + "' [" + ID + "] already exists from " + url + ".");
                     GenerateThumbnail();
                     return CoverArtLoadStatus.ALREADY_LOADED;
                 }
@@ -478,13 +478,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             // try to grab the image if failed, exit
             Image currImage = getImageFromUrl(url);
             if (currImage == null) {
-                logger.Error("Failed retrieving cover artwork for '" + Name + "' [" + ID + "] from " + url + ".");
+                logger.Error("Failed retrieving cover artwork for '" + Title + "' [" + ID + "] from " + url + ".");
                 return CoverArtLoadStatus.FAILED;
             }
 
             // check resolution
             if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
-                logger.Info("Cover art for '" + Name + "' [" + ID + "] failed minimum resolution requirements: " + url);
+                logger.Info("Cover art for '" + Title + "' [" + ID + "] failed minimum resolution requirements: " + url);
                 currImage.Dispose();
                 return CoverArtLoadStatus.FAILED_RES_REQUIREMENTS;
             }
@@ -596,28 +596,28 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
         public int CompareTo(object obj) {
             if (obj.GetType() == typeof(DBMovieInfo)) {
-                return SortName.CompareTo(((DBMovieInfo)obj).SortName);
+                return SortBy.CompareTo(((DBMovieInfo)obj).SortBy);
             }
             return 0;
         }
 
         public override string ToString() {
-            return Name;
+            return Title;
         }
 
-        private void populateSortName() {
+        private void populateSortBy() {
             // loop through and try to remove a preposition
             string[] prepositions = { "the", "a", "an" };
             foreach (string currWord in prepositions) {
                 string word = currWord + " ";
-                if (_name.ToLower().IndexOf(word) == 0) {
-                    SortName = _name.Substring(word.Length) + ", " + _name.Substring(0, currWord.Length);
+                if (_title.ToLower().IndexOf(word) == 0) {
+                    SortBy = _title.Substring(word.Length) + ", " + _title.Substring(0, currWord.Length);
                     return;
                 }
             }
 
             // if no preposition to remove, just use the name
-            SortName = _name;
+            SortBy = _title;
         }
     }
 }

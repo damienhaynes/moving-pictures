@@ -74,7 +74,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         // adds the given movie and it's related files to the tree view
         private void addMovie(DBMovieInfo movie) {
-            ListViewItem newItem = new ListViewItem(movie.Name);
+            ListViewItem newItem = new ListViewItem(movie.Title);
             newItem.Tag = movie;
             movieListBox.Items.Add(newItem);
             listItems[movie] = newItem;
@@ -475,7 +475,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 DBMovieInfo movieX = ((DBMovieInfo)((ListViewItem)x).Tag);
                 DBMovieInfo movieY = ((DBMovieInfo)((ListViewItem)y).Tag);
 
-                return movieX.SortName.CompareTo(movieY.SortName);
+                return movieX.SortBy.CompareTo(movieY.SortBy);
             }
             catch {
                 return 0;

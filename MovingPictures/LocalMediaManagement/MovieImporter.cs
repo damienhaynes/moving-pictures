@@ -79,7 +79,19 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         } private ArrayList commitedMatches;
 
 
-        
+        // Files that have recently been added to the filesystem, and need to be processed.
+        public ArrayList FilesAdded {
+            get { return ArrayList.ReadOnly(filesAdded); }
+        } private ArrayList filesAdded;
+
+        // Files that have recently been removed from the filesystem.
+        public ArrayList FilesDeleted {
+            get { return ArrayList.ReadOnly(filesDeleted); }
+        } private ArrayList filesDeleted;
+
+        // list of watcher objects that monitor the filesystem for changes
+        List<FileSystemWatcher> fileSystemWatchers;
+
         #endregion
         
         // sends progress update events to any available listeners
@@ -103,7 +115,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             retrievingDetailsMatches = ArrayList.Synchronized(new ArrayList());
             commitedMatches = ArrayList.Synchronized(new ArrayList());
 
+            filesAdded = ArrayList.Synchronized(new ArrayList());
+            filesDeleted = ArrayList.Synchronized(new ArrayList());
+
             matchesInSystem = new Dictionary<DBLocalMedia, MediaMatch>();
+
+            fileSystemWatchers = new List<FileSystemWatcher>();
 
             percentDone = 0;
         }
@@ -211,6 +228,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 approveList.Insert(0, match);
   
             // notify any listeners of the status change
+            logger.Info("User approved " + match.LocalMediaString + "as " + match.Selected.Movie.Title);
             if (MovieStatusChanged != null)
                 MovieStatusChanged(match, MovieImporterAction.APPROVED);
 
@@ -228,6 +246,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // notify any listeners of the status change
+            logger.Info("User ignored " + match.LocalMediaString);
             if (MovieStatusChanged != null)
                 MovieStatusChanged(match, MovieImporterAction.IGNORED);
         }
@@ -248,6 +267,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // notify any listeners of the status change
+            logger.Info("User reprocessing " + match.LocalMediaString);
             if (MovieStatusChanged != null)
                 MovieStatusChanged(match, MovieImporterAction.PENDING);
         }
@@ -263,6 +283,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             match.Deleted = true;
 
             // notify any listeners of the status change
+            logger.Info("User split pair " + match.LocalMediaString);
             if (MovieStatusChanged != null)
                 MovieStatusChanged(match, MovieImporterAction.REMOVED_FROM_SPLIT);
 
@@ -312,12 +333,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // notify any listeners of the status change
+            logger.Info("User joined " + newMatch.LocalMediaString);
             if (MovieStatusChanged != null)
                 MovieStatusChanged(newMatch, MovieImporterAction.ADDED_FROM_JOIN);
         }
 
         #endregion
-
+        
         #region File System Scanner
 
         // Does an initial scan of all DBImportPath objects then monitors for any folder changes
@@ -326,6 +348,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void ScanAndMonitorPaths() {
             try {
                 while (true) {
+                    logger.Info("Initiating full scan on watch folders.");
+                    SetupFileSystemWatchers();
+
                     // do an initial scan on all paths
                     // grab all the files in our import paths
                     int count = 0;
@@ -343,11 +368,88 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     // monitor existing paths for change
                     while (!fullScanNeeded) {
                         Thread.Sleep(1000);
+                        
+                        // if the filesystem scanner found any files, add them
+                        lock (filesAdded.SyncRoot) {
+                            if (filesAdded.Count > 0) {
+                                List<DBLocalMedia> fileList = new List<DBLocalMedia>();
+                                foreach (object currFile in filesAdded) 
+                                    fileList.Add((DBLocalMedia)currFile);
+                                
+                                ScanFiles(fileList, false);
+                                filesAdded.Clear();
+                            }
+                        }
                     }
+
                 }
             }
             catch (ThreadAbortException) {
             }
+        }
+
+        // Sets up the objects that will watch the file system for changes, specifically
+        // new files added to the import path, or old files removed.
+        private void SetupFileSystemWatchers() {
+            List<DBImportPath> paths = DBImportPath.GetAll();
+
+            // clear out old watchers, if any
+            foreach (FileSystemWatcher currWatcher in fileSystemWatchers) 
+                currWatcher.EnableRaisingEvents = false;
+            fileSystemWatchers.Clear();
+
+            // setup new file systems watchers
+            foreach (DBImportPath currPath in paths) {
+                FileSystemWatcher currWatcher = new FileSystemWatcher(currPath.FullPath);
+                currWatcher.IncludeSubdirectories = true;
+                currWatcher.Created += OnFileAdded;
+                currWatcher.Deleted += OnFileDeleted;
+                currWatcher.EnableRaisingEvents = true;
+                fileSystemWatchers.Add(currWatcher);
+            }
+
+        }
+
+        // When a FileSystemWatcher detects a new file, this method queues it up for processing.
+        private void OnFileAdded(Object source, FileSystemEventArgs e) {
+            DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath);
+
+            // if this file is already in the system, ignore (this should never really happen)
+            if (newFile.ID != null) {
+                logger.Warn("FileSystemWatcher tried to add a pre-existing file: " + newFile.File.Name);
+                return;
+            }
+
+            // if the extension is proper, add the file
+            foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions)
+                if (newFile.File.Extension == currExt) {
+
+                    lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
+                    logger.Info("FileSystemWatcher queued " + newFile.File.Name + " for processing.");
+                    break;
+                }
+        }
+
+        // When a FileSystemWatcher detects a file has been removed, delete it.
+        private void OnFileDeleted(Object source, FileSystemEventArgs e) {
+            DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath);
+            
+            // if the file is not in our system, there's nothing to do
+            if (removedFile.CommitNeeded) {
+                logger.Warn("FileSystemWatcher tried to delete a file not in our system.");
+                return;
+            }
+
+            // remove file, it's movie object it's attached to, and all other files
+            // owned by that movie if it's a multi-part movie.
+            foreach (DBMovieInfo currMovie in removedFile.AttachedMovies) {
+                foreach (DBLocalMedia currFile in currMovie.LocalMedia)
+                    currFile.Delete();
+                currMovie.Delete();
+            }
+
+            logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal.");
+
         }
 
         // Grabs the files from the DBImportPath and add them to the queue for use
@@ -449,51 +551,57 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Monitors the mediaQueue for files imported from the ScanAndMonitorPaths thread. When elements
         // exist, possble matches will be imported and subsequently written to the database.
         private void ScanMedia() {
-            while (true) {
-                // if there is nothing to process, then sleep
-                while (pendingMatches.Count == 0 && 
-                       approvedMatches.Count == 0 &&
-                       priorityPendingMatches.Count == 0 &&
-                       priorityApprovedMatches.Count == 0)
-                    Thread.Sleep(1000);
+            try {
+                while (true) {
+                    // if there is nothing to process, then sleep
+                    while (pendingMatches.Count == 0 &&
+                           approvedMatches.Count == 0 &&
+                           priorityPendingMatches.Count == 0 &&
+                           priorityApprovedMatches.Count == 0)
+                        Thread.Sleep(1000);
 
-                // so long as there is media to scan, we don't start processing the approved
-                // matches. The goal is to get as much for the user to approve, as fast as
-                // possible.
-                if (priorityPendingMatches.Count > 0)
-                    ProcessNextPendingMatch();
-                else if (priorityApprovedMatches.Count > 0)
-                    ProcessNextApprovedMatches();
-                else if (pendingMatches.Count > 0)
-                    ProcessNextPendingMatch();
-                else
-                    ProcessNextApprovedMatches();
+                    // so long as there is media to scan, we don't start processing the approved
+                    // matches. The goal is to get as much for the user to approve, as fast as
+                    // possible.
+                    if (priorityPendingMatches.Count > 0)
+                        ProcessNextPendingMatch();
+                    else if (priorityApprovedMatches.Count > 0)
+                        ProcessNextApprovedMatches();
+                    else if (pendingMatches.Count > 0)
+                        ProcessNextPendingMatch();
+                    else
+                        ProcessNextApprovedMatches();
 
-                UpdatePercentDone();
+                    UpdatePercentDone();
 
-                // if we are now just waiting on the user, say so
-                if (pendingMatches.Count == 0 && approvedMatches.Count == 0 &&
-                    priorityPendingMatches.Count == 0 && priorityApprovedMatches.Count == 0 && 
-                    matchesNeedingInput.Count > 0) {
-                    if (Progress != null)
-                        Progress(percentDone, 0, matchesNeedingInput.Count, "Waiting for Close Match Approvals...");
+                    // if we are now just waiting on the user, say so
+                    if (pendingMatches.Count == 0 && approvedMatches.Count == 0 &&
+                        priorityPendingMatches.Count == 0 && priorityApprovedMatches.Count == 0 &&
+                        matchesNeedingInput.Count > 0) {
+                        if (Progress != null)
+                            Progress(percentDone, 0, matchesNeedingInput.Count, "Waiting for Close Match Approvals...");
+                    }
+
+                    // if we are now just waiting on the user, say so
+                    if (pendingMatches.Count == 0 && approvedMatches.Count == 0 &&
+                        priorityPendingMatches.Count == 0 && priorityApprovedMatches.Count == 0 &&
+                        matchesNeedingInput.Count == 0) {
+
+                        //currentlyProccessing.Clear();
+                        percentDone = 0;
+
+                        if (Progress != null)
+                            Progress(100, 0, 0, "Complete!");
+                    }
+
+
                 }
 
-                // if we are now just waiting on the user, say so
-                if (pendingMatches.Count == 0 && approvedMatches.Count == 0 &&
-                    priorityPendingMatches.Count == 0 && priorityApprovedMatches.Count == 0 &&
-                    matchesNeedingInput.Count == 0) {
-
-                    //currentlyProccessing.Clear();
-                    percentDone = 0;
-
-                    if (Progress != null)
-                        Progress(100, 0, 0, "Complete!");
-                }
-
-
+            } catch (ThreadAbortException) {
+                // expected when threads shutdown. ignore.
+            } catch (Exception e) {
+                logger.FatalException("Unhandled error in MediaScanner.", e);
             }
-
         }
 
         // updates the local variables of the current progress
@@ -536,10 +644,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // notify the user we are processing
-            int processed = commitedMatches.Count;
-            int total = commitedMatches.Count + approvedMatches.Count + matchesNeedingInput.Count;
-            Progress(percentDone, processed, total, "Retrieving details for: " + currMatch.Selected.Movie.Name);
-
+            logger.Info("Retrieving details for \"" + currMatch.Selected.Movie.Title + "\"");
+            if (Progress != null) {
+                int processed = commitedMatches.Count;
+                int total = commitedMatches.Count + approvedMatches.Count + matchesNeedingInput.Count;
+                Progress(percentDone, processed, total, "Retrieving details for: " + currMatch.Selected.Movie.Title);
+            }
 
             // notify any listeners of the status change
             if (MovieStatusChanged != null)
@@ -563,6 +673,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return;
             
             // notify any listeners of the status change
+            logger.Info("Added \"" + currMatch.Selected.Movie.Title + "\".");
             if (MovieStatusChanged != null) 
                 MovieStatusChanged(currMatch, MovieImporterAction.COMMITED);
         }
@@ -570,7 +681,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // retrieves possible matches for the next item (or group of items) in the mediaQueue
         private void ProcessNextPendingMatch() {
             MediaMatch mediaMatch = null;
-            
+
             // check for a match needing reprocessing
             lock (priorityPendingMatches.SyncRoot) {
                 if (priorityPendingMatches.Count != 0) {
@@ -590,6 +701,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     pendingMatches.Remove(mediaMatch);
                 }
 
+
             // if we have any listeners, notify them of our status
             if (Progress != null) {
                 int processed = matchesInSystem.Count - pendingMatches.Count;
@@ -600,7 +712,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 else
                     Progress(percentDone, processed, total, "Retrieving possible matches: " + mediaMatch.LocalMedia[0].File.Directory.Name + "\\");
             }
-
 
             // get possible matches for this set of media files
             GetMatches(mediaMatch);
@@ -621,11 +732,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (mediaMatch.Selected != null && mediaMatch.Selected.MatchValue <= 3) {
                 if (mediaMatch.HighPriority) priorityApprovedMatches.Add(mediaMatch);
                 else approvedMatches.Add(mediaMatch);
-                
+
+                // notify any listeners
+                logger.Info("Auto-approved " + mediaMatch.LocalMediaString + "as " + mediaMatch.Selected.Movie.Title);
                 if (MovieStatusChanged != null)
                     MovieStatusChanged(mediaMatch, MovieImporterAction.APPROVED);
             } else {
                 matchesNeedingInput.Add(mediaMatch);
+                logger.Info("No exact match for " + mediaMatch.LocalMediaString);
                 if (MovieStatusChanged != null)
                     MovieStatusChanged(mediaMatch, MovieImporterAction.NEED_INPUT);
             }
@@ -756,7 +870,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // if we have 'year' data to compare add it to the string compare
                 // this should give the match a higher priority
                 
-                string sMovie = currMovie.Name.ToLower().Trim();
+                string sMovie = currMovie.Title.ToLower().Trim();
                 string sSearch = searchStr.ToLower().Trim();
                 
                 // if both have a year then add the year to the comparison variables
@@ -977,7 +1091,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         public override string ToString() {
             if (movie != null)
-                return movie.Name;
+                return movie.Title;
             return "";
         }
     }

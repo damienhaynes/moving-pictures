@@ -519,7 +519,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             string column = GetTableName(relation.PrimaryType) + "_id";
             string deleteQuery = "delete from " + relation.TableName + " where " + column + "=" + dbObject.ID;
-            logger.Debug("deleteQuery");
+            logger.Debug(deleteQuery);
             lock (dbClient) dbClient.Execute(deleteQuery);
         }
 
