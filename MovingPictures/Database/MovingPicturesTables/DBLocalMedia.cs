@@ -81,6 +81,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         }
         private bool ignored;
 
+        [DBFieldAttribute]
+        public DBImportPath ImportPath {
+            get { return importPath; }
+            set {
+                importPath = value;
+                commitNeeded = true;
+            }
+        } private DBImportPath importPath;
+
         [DBRelation(AutoRetrieve=true)]
         public RelationList<DBLocalMedia, DBMovieInfo> AttachedMovies {
             get {
@@ -131,6 +140,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             newFile.FullPath = fullPath;
 
             return newFile;
+        }
+
+        public static List<DBLocalMedia> GetAll() {
+            return MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(null);
         }
 
         #endregion

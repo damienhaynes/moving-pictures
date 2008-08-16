@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MediaPortal.Plugins.MovingPictures;
 using System.Windows.Forms;
+using MediaPortal.Plugins.MovingPictures.MainUI;
 
 namespace MovingPicturesConfigTester {
     class Program {
@@ -11,10 +12,11 @@ namespace MovingPicturesConfigTester {
         static void Main(string[] args) {
             System.Windows.Forms.Application.EnableVisualStyles();
 
-            MovingPicturesGUI plugin = new MovingPicturesGUI();
+            ConfigConnector plugin = new ConfigConnector();
             plugin.ShowPlugin();
 
         }
     }
 }
+
 
