@@ -164,6 +164,7 @@
     <Compile Include="DataProviders\MovieXMLProvider.cs" />
     <Compile Include="LocalMediaManagement\AdvancedStringComparer.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
+    <Compile Include="MainUI\ConfigConnector.cs" />
     <Compile Include="MainUI\MovingPicturesGUI.cs" />
     <Compile Include="MovingPicturesCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -301,7 +302,6 @@
     <PostBuildEvent>cd $(TargetDir)
 copy "$(ProjectDir)..\External\merge.bat" "$(TargetDir)" /Y
 copy "$(ProjectDir)..\External\ilmerge.exe" "$(TargetDir)" /Y
-"$(TargetDir)merge.bat"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

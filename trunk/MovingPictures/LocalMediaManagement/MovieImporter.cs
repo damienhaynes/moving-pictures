@@ -91,6 +91,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // list of watcher objects that monitor the filesystem for changes
         List<FileSystemWatcher> fileSystemWatchers;
+        Dictionary<FileSystemWatcher, DBImportPath> pathLookup;
 
         #endregion
         
@@ -121,6 +122,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             matchesInSystem = new Dictionary<DBLocalMedia, MediaMatch>();
 
             fileSystemWatchers = new List<FileSystemWatcher>();
+            pathLookup = new Dictionary<FileSystemWatcher, DBImportPath>();
 
             percentDone = 0;
         }
@@ -179,15 +181,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             fullScanNeeded = true;
         }
 
-        // will add all files to 
-        public void Import(List<DBLocalMedia> fileList, bool reloadIfExists) {
+        // This method is written weird and needs to be clarified. But I think it works, 
+        // reloading specified files.
+        public void Reprocess(List<DBLocalMedia> fileList) {
             List<DBLocalMedia> fileSet = new List<DBLocalMedia>();
             foreach (DBLocalMedia currFile in new List<DBLocalMedia>(fileList)) {
                 // if file is already in importer, reload if requested
                 if (matchesInSystem.ContainsKey(currFile)) {
-                    if (reloadIfExists)
-                        Reprocess(matchesInSystem[currFile]);
-
+                    Reprocess(matchesInSystem[currFile]);
                     ScanFiles(fileSet, true);
                     fileSet = new List<DBLocalMedia>();
                     continue;
@@ -195,7 +196,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                 // if file is already commited but not in importer, remove all relations
                 // and remove the file from the DB, then queue up for scanning
-                if (currFile.ID != null && reloadIfExists) {
+                if (currFile.ID != null ) {
                     RemoveCommitedRelations(currFile);
                     currFile.Delete();
                     fileSet.Add(currFile);
@@ -350,6 +351,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 while (true) {
                     logger.Info("Initiating full scan on watch folders.");
                     SetupFileSystemWatchers();
+                    RemoveMissingFiles();
 
                     // do an initial scan on all paths
                     // grab all the files in our import paths
@@ -400,12 +402,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // setup new file systems watchers
             foreach (DBImportPath currPath in paths) {
-                FileSystemWatcher currWatcher = new FileSystemWatcher(currPath.FullPath);
-                currWatcher.IncludeSubdirectories = true;
-                currWatcher.Created += OnFileAdded;
-                currWatcher.Deleted += OnFileDeleted;
-                currWatcher.EnableRaisingEvents = true;
-                fileSystemWatchers.Add(currWatcher);
+                try {
+                    FileSystemWatcher currWatcher = new FileSystemWatcher(currPath.FullPath);
+                    currWatcher.IncludeSubdirectories = true;
+                    currWatcher.Created += OnFileAdded;
+                    currWatcher.Deleted += OnFileDeleted;
+                    currWatcher.EnableRaisingEvents = true;
+                    fileSystemWatchers.Add(currWatcher);
+                    pathLookup[currWatcher] = currPath;
+                }
+                catch (ArgumentException e) {
+                    if (currPath.Removable)
+                        logger.Info("Removable import path " + currPath.Removable + " is offline.");
+                    else
+                        logger.Error("Failed accessing import path " + currPath.FullPath + ". Should be set to 'Removable'?");
+                }
             }
 
         }
@@ -414,16 +425,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void OnFileAdded(Object source, FileSystemEventArgs e) {
             DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath);
 
-            // if this file is already in the system, ignore (this should never really happen)
+            DBImportPath importPath = pathLookup[((FileSystemWatcher)source)];
+
+            // if this file is already in the system, ignore (this happens if it's a removable source)
             if (newFile.ID != null) {
-                logger.Warn("FileSystemWatcher tried to add a pre-existing file: " + newFile.File.Name);
+                if (!importPath.Removable) 
+                    logger.Warn("FileSystemWatcher tried to add a pre-existing file: " + newFile.File.Name);
+                else
+                    logger.Info("Removable file " + newFile.File.Name + " brought online.");
                 return;
             }
 
             // if the extension is proper, add the file
             foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions)
                 if (newFile.File.Extension == currExt) {
-
+                    newFile.ImportPath = importPath;
                     lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
                     logger.Info("FileSystemWatcher queued " + newFile.File.Name + " for processing.");
                     break;
@@ -433,10 +449,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // When a FileSystemWatcher detects a file has been removed, delete it.
         private void OnFileDeleted(Object source, FileSystemEventArgs e) {
             DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath);
-            
-            // if the file is not in our system, there's nothing to do
-            if (removedFile.CommitNeeded) {
+
+            // if the file is not in our system there's nothing to do
+            if (removedFile.ID == null) {
                 logger.Warn("FileSystemWatcher tried to delete a file not in our system.");
+                return;
+            }
+
+            // if this file is from a removable source, there is no action
+            if (removedFile.ImportPath.Removable) {
+                logger.Info("Removable file " + removedFile.File.Name + " taken offline.");
                 return;
             }
 
@@ -450,6 +472,24 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal.");
 
+        }
+
+        // loops through all local files in the system and removes anything that does not actually exist
+        // and is not a part of a removable import path
+        private void RemoveMissingFiles() {
+            logger.Info("Removing missing files from database.");
+            foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
+                if (!currFile.ImportPath.Removable && !currFile.File.Exists) {
+                    // remove file, it's movie object it's attached to, and all other files
+                    // owned by that movie if it's a multi-part movie.
+                    logger.Info("Removing " + currFile.FullPath + " and associated movie because file is missing and not flagged as removable.");
+                    foreach (DBMovieInfo currMovie in currFile.AttachedMovies) {
+                        foreach (DBLocalMedia otherFile in currMovie.LocalMedia)
+                            otherFile.Delete();
+                        currMovie.Delete();
+                    }
+                }
+            }
         }
 
         // Grabs the files from the DBImportPath and add them to the queue for use

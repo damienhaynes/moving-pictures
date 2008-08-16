@@ -41,7 +41,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
                     fileListBox.Items.Add(currFile.File);
                 }
 
-                MovingPicturesCore.Importer.Import(localMedia, true);
+                MovingPicturesCore.Importer.Reprocess(localMedia);
             }
         }
         

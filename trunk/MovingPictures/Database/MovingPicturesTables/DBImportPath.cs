@@ -7,7 +7,7 @@ using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("import_path")]
-    class DBImportPath: MovingPicturesDBTable  {
+    public class DBImportPath: MovingPicturesDBTable  {
         private static Logger logger = LogManager.GetCurrentClassLogger();
                 
         public DBImportPath()
@@ -89,6 +89,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                             if (newFile.ID != null && returnOnlyNew)
                                 continue;
 
+                            newFile.ImportPath = this;
+
                             rtn.Add(newFile);
                             break;
                         }
@@ -102,6 +104,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             return rtn;
         }
 
+        
         //public List<FileInfo> GetNewFiles() {
         //    List<FileInfo> fileOnDisk = GetAllFiles();
         //    List<DBLocalMedia> filesInDB = DBLocalMedia.GetAll();
