@@ -67,7 +67,16 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return coverProvider;
             }
         } private static ICoverArtProvider coverProvider = null;
-        
+
+        public static IBackdropProvider BackdropProvider {
+            get {
+                if (backdropProvider == null)
+                    backdropProvider = new MovieBackdropsProvider();
+
+                return backdropProvider;
+            }
+        } private static IBackdropProvider backdropProvider = null;
+
         #endregion
 
         #region Public Methods
@@ -145,18 +154,33 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private static void initAdditionalSettings() {
             if (((String)SettingsManager["cover_art_folder"].Value).Trim().Equals(""))
-                SettingsManager["cover_art_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Covers";
+                SettingsManager["cover_art_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Covers\\FullSize";
 
             // create the covers folder if it doesn't already exist
             if (!Directory.Exists((string)SettingsManager["cover_art_folder"].Value))
                 Directory.CreateDirectory((string)SettingsManager["cover_art_folder"].Value);
 
             if (((String)SettingsManager["cover_thumbs_folder"].Value).Trim().Equals(""))
-                SettingsManager["cover_thumbs_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Thumbs";
+                SettingsManager["cover_thumbs_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Covers\\Thumbs";
 
             // create the thumbs folder if it doesn't already exist
             if (!Directory.Exists((string)SettingsManager["cover_thumbs_folder"].Value))
                 Directory.CreateDirectory((string)SettingsManager["cover_thumbs_folder"].Value);
+
+            if (((String)SettingsManager["backdrop_folder"].Value).Trim().Equals(""))
+                SettingsManager["backdrop_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Backdrops\\FullSize";
+
+            // create the backdrop folder if it doesn't already exist
+            if (!Directory.Exists((string)SettingsManager["backdrop_folder"].Value))
+                Directory.CreateDirectory((string)SettingsManager["backdrop_folder"].Value);
+
+            if (((String)SettingsManager["backdrop_thumbs_folder"].Value).Trim().Equals(""))
+                SettingsManager["backdrop_thumbs_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Backdrops\\Thumbs";
+
+            // create the backdrop thumbs folder if it doesn't already exist
+            if (!Directory.Exists((string)SettingsManager["backdrop_thumbs_folder"].Value))
+                Directory.CreateDirectory((string)SettingsManager["backdrop_thumbs_folder"].Value);
+        
         }
 
         #endregion

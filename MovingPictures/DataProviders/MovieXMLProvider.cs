@@ -104,7 +104,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
                 // get url for cover and load it via the movie object
                 string coverPath = urlCoverRetrievePrefix + filenameElement.InnerText;
-                if (movie.AddCoverFromURL(coverPath) == CoverArtLoadStatus.SUCCESS) 
+                if (movie.AddCoverFromURL(coverPath) == ArtworkLoadStatus.SUCCESS) 
                     coversAdded++;
             }
             return true;

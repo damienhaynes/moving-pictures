@@ -217,17 +217,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
         [Browsable(false)]
         [ReadOnly(true)]
         public object EditingControlFormattedValue {
-            get { 
-                 switch (DBTypeOverride) {
-                    case DBField.DBDataType.BOOL:
-                        return bool.Parse(Text);
-                    case DBField.DBDataType.INTEGER:
-                        return int.Parse(Text);
-                    case DBField.DBDataType.REAL:
-                        return float.Parse(Text);
-                    default:
-                        return this.Text; 
-                 }
+            get {
+                return this.Text;
             }
             set {
                 if (value is String) {
