@@ -13,7 +13,7 @@ using System.Threading;
 using System.Collections;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
-    public enum CoverArtLoadStatus {
+    public enum ArtworkLoadStatus {
         SUCCESS,
         ALREADY_LOADED,
         FAILED,
@@ -326,6 +326,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             }
         } private String _coverThumbFullPath;
 
+        [DBFieldAttribute(AllowAutoUpdate = false)]
+        public String BackdropFullPath {
+            get {
+                return _backdropFullPath;
+            }
+
+            set {
+                _backdropFullPath = value;
+                commitNeeded = true;
+            }
+        } private string _backdropFullPath;
+
+
         #endregion
 
         #region General Management Methods
@@ -439,7 +452,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
         // Attempts to load cover art for this movie from a given URL. Optionally
         // ignores minimum resolution restrictions
-        public CoverArtLoadStatus AddCoverFromURL(string url, bool ignoreRestrictions) {
+        public ArtworkLoadStatus AddCoverFromURL(string url, bool ignoreRestrictions) {
             int minWidth = (int)MovingPicturesCore.SettingsManager["min_cover_width"].Value;
             int minHeight = (int)MovingPicturesCore.SettingsManager["min_cover_height"].Value;
             string artFolder = (string)MovingPicturesCore.SettingsManager["cover_art_folder"].Value;
@@ -471,7 +484,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
                     logger.Info("Cover art for '" + Title + "' [" + ID + "] already exists from " + url + ".");
                     GenerateThumbnail();
-                    return CoverArtLoadStatus.ALREADY_LOADED;
+                    return ArtworkLoadStatus.ALREADY_LOADED;
                 }
             }
 
@@ -479,14 +492,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             Image currImage = getImageFromUrl(url);
             if (currImage == null) {
                 logger.Error("Failed retrieving cover artwork for '" + Title + "' [" + ID + "] from " + url + ".");
-                return CoverArtLoadStatus.FAILED;
+                return ArtworkLoadStatus.FAILED;
             }
 
             // check resolution
             if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
                 logger.Info("Cover art for '" + Title + "' [" + ID + "] failed minimum resolution requirements: " + url);
                 currImage.Dispose();
-                return CoverArtLoadStatus.FAILED_RES_REQUIREMENTS;
+                return ArtworkLoadStatus.FAILED_RES_REQUIREMENTS;
             }
 
             // save the artwork
@@ -494,13 +507,72 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             AlternateCovers.Add(filename);
             _cover = currImage;
             GenerateThumbnail();
-            return CoverArtLoadStatus.SUCCESS;
+            return ArtworkLoadStatus.SUCCESS;
         }
 
         // Attempts to load cover art for this movie from a given URL. Honors 
         // minimum resolution restrictions
-        public CoverArtLoadStatus AddCoverFromURL(string url) {
+        public ArtworkLoadStatus AddCoverFromURL(string url) {
             return AddCoverFromURL(url, false);
+        }
+
+        public ArtworkLoadStatus AddBackdropFromURL(string url, bool ignoreRestrictions) {
+            int minWidth = (int)MovingPicturesCore.SettingsManager["min_backdrop_width"].Value;
+            int minHeight = (int)MovingPicturesCore.SettingsManager["min_backdrop_height"].Value;
+            string artFolder = (string)MovingPicturesCore.SettingsManager["backdrop_folder"].Value;
+            string thumbsFolder = (String)MovingPicturesCore.SettingsManager["backdrop_thumbs_folder"].Value;
+            bool redownloadBackdrops = (bool)MovingPicturesCore.SettingsManager["redownload_backdrops"].Value;
+
+            // genrate a filename for a movie. should be unique based on the url hash
+            string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
+            string filename = artFolder + "\\" + safeName + " [" + url.GetHashCode() + "].jpg";
+
+            // if we already have a file for this movie from this URL, move on
+            if (File.Exists(filename)) {
+                if (redownloadBackdrops) {
+                    FileInfo file = new FileInfo(filename);
+                    string thumbFileName = thumbsFolder + "\\" + file.Name;
+                    FileInfo thumbFile = new FileInfo(thumbFileName);
+                    try {
+                        file.Delete();
+                        thumbFile.Delete();
+                    }
+                    catch (Exception e) {
+                        if (e.GetType() == typeof(ThreadAbortException))
+                            throw e;
+                    }
+                }
+                else {
+                    // TODO: Add filename to alrternate backdrops string list here
+                    if (_backdropFullPath.Trim().Length == 0)
+                        BackdropFullPath = filename;
+                    logger.Info("Backdrop for '" + Title + "' [" + ID + "] already exists from " + url + ".");
+                    return ArtworkLoadStatus.ALREADY_LOADED;
+                }
+            }
+
+            // try to grab the image if failed, exit
+            Image currImage = getImageFromUrl(url);
+            if (currImage == null) {
+                logger.Error("Failed retrieving backdrop for '" + Title + "' [" + ID + "] from " + url + ".");
+                return ArtworkLoadStatus.FAILED;
+            }
+
+            // check resolution
+            if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
+                logger.Info("Backdrop for '" + Title + "' [" + ID + "] failed minimum resolution requirements: " + url);
+                currImage.Dispose();
+                return ArtworkLoadStatus.FAILED_RES_REQUIREMENTS;
+            }
+
+            // save the backdrop
+            currImage.Save(filename);
+            _backdropFullPath = filename;
+            return ArtworkLoadStatus.SUCCESS;
+        }
+
+        public ArtworkLoadStatus AddBackdropFromURL(string url) {
+            return AddBackdropFromURL(url, false);
         }
 
         // given a URL, returns an image stored at that URL. Returns null if not 

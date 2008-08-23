@@ -319,19 +319,19 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 // the retrieval process can take a little time, so spawn it off in another thread
                 ThreadStart actions = delegate {
                     startArtProgressBar();
-                    CoverArtLoadStatus result = movie.AddCoverFromURL(popup.GetURL(), true);
+                    ArtworkLoadStatus result = movie.AddCoverFromURL(popup.GetURL(), true);
                     stopArtProgressBar();
 
                     switch (result) {
-                        case CoverArtLoadStatus.SUCCESS:
+                        case ArtworkLoadStatus.SUCCESS:
                             // set new cover to current and update screen
                             movie.CoverFullPath = movie.AlternateCovers[movie.AlternateCovers.Count - 1];
                             updateMoviePanel();
                             break;
-                        case CoverArtLoadStatus.ALREADY_LOADED:
+                        case ArtworkLoadStatus.ALREADY_LOADED:
                             MessageBox.Show("Cover art from the specified URL has already been loaded.");
                             break;
-                        case CoverArtLoadStatus.FAILED:
+                        case ArtworkLoadStatus.FAILED:
                             MessageBox.Show("Failed loading cover art from specified URL.");
                             break;
                     }

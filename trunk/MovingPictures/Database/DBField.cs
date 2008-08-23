@@ -273,6 +273,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return null;
         }
 
+        // Returns the DBField with the specified name for the specified table.
+        public static DBField GetFieldByDBName(Type tableType, string fieldName) {
+            if (tableType == null) {
+                return null;
+            }
+
+            ReadOnlyCollection<DBField> fieldList = GetFieldList(tableType);
+            foreach (DBField currField in fieldList) {
+                if (currField.FieldName.Equals(fieldName))
+                    return currField;
+            }
+
+            return null;
+        }
+
         #endregion
     }
 

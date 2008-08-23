@@ -13,4 +13,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public interface ICoverArtProvider {
         bool GetArtwork(DBMovieInfo movie);
     }
+
+    public interface IBackdropProvider {
+        bool GetBackdrop(DBMovieInfo movie);
+    }
 }

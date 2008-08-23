@@ -1,0 +1,157 @@
+<window>
+  <id>96742</id>
+  <defaultcontrol>2</defaultcontrol>
+  <allowoverlay>yes</allowoverlay>
+  <controls>
+    <import>movingpictures.details.xml</import>
+    <import>movingpictures.filmstrip.xml</import>
+    <import>movingpictures.largeicons.xml</import>
+    <import>movingpictures.list.xml</import>
+    <import>movingpictures.smallicons.xml</import>
+  
+
+    <control>
+      <description>Background</description>
+      <type>image</type>
+      <id>1</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>1366</width>
+      <height>768</height>
+      <texture>background.png</texture>
+    </control>
+
+    <control>
+      <description>Cover Art</description>
+      <type>image</type>
+      <id>60</id>
+      <posX>440</posX>
+      <posY>20</posY>
+      <width>400</width>
+      <height>566</height>
+      <texture>#MovingPictures.SelectedMovie.CoverFullPath</texture>
+    </control>
+
+    <control>
+      <description>Title</description>
+      <type>label</type>
+      <id>0</id>
+      <posX>860</posX>
+      <posY>20</posY>
+      <width>486</width>
+      <font>font14</font>
+      <label>#MovingPictures.SelectedMovie.Title</label>
+      <align>left</align>
+      <visible>true</visible>
+    </control>
+
+    <control>
+      <description>Year</description>
+      <type>label</type>
+      <id>0</id>
+      <posX>860</posX>
+      <posY>60</posY>
+      <width>100</width>
+      <!--font>font14</font-->
+      <label>#MovingPictures.SelectedMovie.Year</label>
+      <align>left</align>
+      <visible>true</visible>
+    </control>
+
+    <control>
+      <description>composite control consisting of a list control and a thumbnail panel</description>
+      <type>facadeview</type>
+      <id>50</id>
+      <control>
+        <description>Movie List</description>
+        <type>listcontrol</type>
+        <id>50</id>
+        <posX>20</posX>
+        <posY>20</posY>
+        <width>400</width>
+        <height>748</height>
+        <spinPosX>1277</spinPosX>
+        <spinPosY>711</spinPosY>
+        <textureFocus>dialog_button_focus.png</textureFocus>
+        <textureNoFocus>dialog_button_nofocus.png</textureNoFocus>
+        <textXOff>-20</textXOff>
+        <textXOff2>510</textXOff2>
+        <IconXOff>1980</IconXOff>
+        <textcolor>fff8bc70</textcolor>
+      </control>
+      <control>
+        <description>Thumbnail Panel</description>
+        <type>thumbnailpanel</type>
+        <id>50</id>
+        <onleft>2</onleft>
+        <onright>2</onright>
+        <posX>20</posX>
+        <posY>20</posY>
+        <width>400</width>
+        <height>748</height>
+        <spinPosY>623</spinPosY>
+        <spinPosX>380</spinPosX>
+        <spinColor>ffcccccc</spinColor>
+        <textureUp>page_up_nofocus.png</textureUp>
+        <textureDown>page_down_nofocus.png</textureDown>
+        <textureUpFocus>page_up_focus.png</textureUpFocus>
+        <textureDownFocus>page_down_focus.png</textureDownFocus>
+        <itemWidth>76</itemWidth>
+        <itemHeight>103</itemHeight>
+        <textureWidth>76</textureWidth>
+        <textureHeight>103</textureHeight>
+        <thumbWidth>76</thumbWidth>
+        <thumbHeight>103</thumbHeight>
+        <thumbPosX>0</thumbPosX>
+        <thumbPosY>0</thumbPosY>
+        <!--imageFolder>movie_preview_thumb_background_nofocus.png</imageFolder>
+        <imageFolderFocus>movie_preview_thumb_background_focus.png</imageFolderFocus-->
+        <font>font12</font>
+        <suffix>|</suffix>
+        <textureWidthBig>152</textureWidthBig>
+        <textureHeightBig>205</textureHeightBig>
+        <itemWidthBig>152</itemWidthBig>
+        <itemHeightBig>205</itemHeightBig>
+        <thumbWidthBig>152</thumbWidthBig>
+        <thumbHeightBig>205</thumbHeightBig>
+        <thumbPosXBig>0</thumbPosXBig>
+        <thumbPosYBig>0</thumbPosYBig>
+        <thumbZoom>no</thumbZoom>
+        <enableFocusZoom>no</enableFocusZoom>
+        <unfocusedAlpha>150</unfocusedAlpha>
+      </control>
+      <control>
+        <description>Filmstrip view</description>
+        <type>filmstrip</type>
+        <id>50</id>
+        <posX>80</posX>
+        <posY>288</posY>
+        <width>671</width>
+        <onup>2</onup>
+        <spinPosY>623</spinPosY>
+        <spinPosX>380</spinPosX>
+        <spinWidth>24</spinWidth>
+        <spinHeight>24</spinHeight>
+        <spinColor>ffcccccc</spinColor>
+        <itemWidth>152</itemWidth>
+        <itemHeight>205</itemHeight>
+        <textureWidth>152</textureWidth>
+        <textureHeight>205</textureHeight>
+        <thumbWidth>110</thumbWidth>
+        <thumbHeight>164</thumbHeight>
+        <thumbPosX>21</thumbPosX>
+        <thumbPosY>20</thumbPosY>
+        <imageFolderFocus>Framefocus.png</imageFolderFocus>
+        <frame>video_filmstrip_frame.png</frame>
+        <frameFocus>video_filmstrip_frame.png</frameFocus>
+        <background>Coverbig.png</background>
+        <showFrame>yes</showFrame>
+        <showFolder>no</showFolder>
+        <showBackGround>no</showBackGround>
+        <showInfoImage>no</showInfoImage>
+        <thumbAnimation effect="zoom" start="100,100" end="200,200" time="250">focus</thumbAnimation>
+        <thumbAnimation effect="zoom" start="200,200" end="100,100" time="250">unfocus</thumbAnimation>
+      </control>
+    </control>
+  </controls>
+</window>

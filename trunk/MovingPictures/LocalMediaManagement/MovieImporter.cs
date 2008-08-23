@@ -807,6 +807,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // update, associate, and commit the movie
             MovingPicturesCore.MovieProvider.Update(movie);
             MovingPicturesCore.CoverProvider.GetArtwork(movie);
+
+            new LocalProvider().GetBackdrop(movie);
+            MovingPicturesCore.BackdropProvider.GetBackdrop(movie);
+            
             movie.LocalMedia.Clear();
             movie.LocalMedia.AddRange(localMedia);
             movie.UnloadArtwork(); 

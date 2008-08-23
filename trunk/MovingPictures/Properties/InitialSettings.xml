@@ -1,4 +1,17 @@
 <MoviesPluginSettings>
+
+  <group name="MediaPortal GUI">
+    <setting id="default_view" name="Default View" type="STRING">
+      <default>thumbs</default>
+      <description>The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are "list", "thumbs", "largethumbs", and "filmstrip".</description>
+    </setting>
+
+    <setting id="click_to_details" name="Click Shows Details" type="BOOL">
+      <default>true</default>
+      <description>Determines behavior when a movie in the movie browser is clicked. If true, the details view appears. If false the movie starts playback.</description>
+    </setting>    
+  </group>
+
   
   <group name="Movie Importer">
     <group name="General">
@@ -62,6 +75,32 @@
 
     </group>
 
+    <group name="Backdrops (Fan Art)">
+      <setting id="backdrop_folder" name="Backdrop Folder" type="STRING">
+        <description>The folder in which movie backdrops should be saved to disk.</description>
+      </setting>
+
+      <setting id="backdrop_thumbs_folder" name="Backdrop Thumbnails Folder" type="STRING">
+        <description>The folder in which movie backdrop thumbnails should be saved to disk.</description>
+      </setting>
+
+      <setting id="redownload_backdrops" name="Redownload Backdrop on Rescan" type="BOOL">
+        <default>false</default>
+        <description>When a full rescan is performed this setting determines if backdrops that have already been downloaded will be reretrieved and the local copy updated.</description>
+      </setting>
+
+      <setting id="min_backdrop_width" name="Minimum Backdrop Width" type="INT">
+        <default>1280</default>
+        <description>The minimum width in pixels for any given movie backdrop. If a backdrop from any data provider is smaller than this value it will not automatically be downloaded and saved.</description>
+      </setting>
+
+      <setting id="min_backdrop_height" name="Minimum Backdrop Height" type="INT">
+        <default>720</default>
+        <description>The minimum height in pixels for any given movie backdrop. If a cover from any data provider is smaller than this value it will not automatically be downloaded and saved.</description>
+      </setting>
+
+    </group>
+
     <!--group name="Config GUI">
       <setting id="gui_approve_on_select" name="Approve Match on Select" type="BOOL">
         <default>true</default>
@@ -87,6 +126,35 @@
       </setting> 
 
     </group>
+    
+    <group name="MovieBackdrops.com Provider">
+
+      <setting id="moviedb_max_timeouts" name="Max Timeouts" type="INT">
+        <default>10</default>
+        <description>The maximum number of timeouts received from the server before a thread returns an error condition.</description>
+      </setting>
+
+      <setting id="moviedb_timeout_length" name="Timeout Length" type="INT">
+        <default>5000</default>
+        <description>The base length of time (in milliseconds) for a timeout when connecting to the Movie-XML.com data service.</description>
+      </setting>
+
+      <setting id="moviedb_timeout_increment" name="Timeout Increment" type="INT">
+        <default>1000</default>
+        <description>The amount of time (in milliseconds) added to the timeout limit  after each timeout failure. A non-zero value will help when the server is experience a large amount of congestion.</description>
+      </setting>
+
+    </group>
+
+    <group name="Local Provider">
+
+      <setting id="local_backdrop_pattern" name="Backdrop Filename Pattern" type="STRING">
+        <default>%imdb_id%.jpg</default>
+        <description>The importer will look in your backdrop folder and try to find a file that matches this pattern. If one is found, it will be used as a backdrop. If none is found, an online data provider will be used to auto download artwork.</description>
+      </setting>
+
+    </group>
+    
   </group>
 
 </MoviesPluginSettings>

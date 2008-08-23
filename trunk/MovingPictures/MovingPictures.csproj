@@ -161,6 +161,8 @@
     <Compile Include="Database\MovingPicturesTables\MovingPicturesDBTable.cs" />
     <Compile Include="Database\SettingsManager.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
+    <Compile Include="DataProviders\LocalProvider.cs" />
+    <Compile Include="DataProviders\MovieBackdropsProvider.cs" />
     <Compile Include="DataProviders\MovieXMLProvider.cs" />
     <Compile Include="LocalMediaManagement\AdvancedStringComparer.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
