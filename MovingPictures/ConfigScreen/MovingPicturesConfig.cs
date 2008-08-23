@@ -21,10 +21,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void MoviesPluginConfig_Load(object sender, EventArgs e) {
+            // if we start on the first tab, we need to
             // manually flip to the second tab (media importer) very quickly 
             // to force it to load into memory
+            // mainTabControl.SelectedIndex = 1;
+            // mainTabControl.SelectedIndex = 0;
+
             mainTabControl.SelectedIndex = 1;
-            mainTabControl.SelectedIndex = 0;
         }
     }
 }

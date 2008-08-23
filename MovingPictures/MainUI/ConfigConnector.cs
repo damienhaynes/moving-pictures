@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class ConfigConnector: ISetupForm {
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         #region ISetupForm Members
 
         // Returns the name of the plugin which is shown in the plugin menu                                                                    
@@ -25,12 +29,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // show the setup dialog                                                                                                               
         public void ShowPlugin() {
-            MovingPicturesCore.Initialize();
+            try {
+                MovingPicturesCore.Initialize();
 
-            MovingPicturesConfig configScr = new MovingPicturesConfig();
-            configScr.ShowDialog();
+                MovingPicturesConfig configScr = new MovingPicturesConfig();
+                configScr.ShowDialog();
 
-            MovingPicturesCore.Shutdown();
+                MovingPicturesCore.Shutdown();
+            }
+            catch (Exception e) {
+                logger.ErrorException("Unexpected error from the Configuration Screen!", e);
+            }
 
         }
 

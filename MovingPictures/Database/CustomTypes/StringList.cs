@@ -46,5 +46,26 @@ namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
             
             return rtn;
         }
+
+        public string ToPrettyString() {
+            return ToPrettyString(this.Count);
+        }
+
+        public string ToPrettyString(int max) {
+            if (this.Count == 0)
+                return "";
+
+            StringBuilder prettyStr = new StringBuilder("");
+            
+            int limit = max;
+            if (limit > this.Count)
+                limit = this.Count;
+
+            foreach (string currValue in this) 
+                prettyStr.Append(currValue + ", ");
+            prettyStr.Remove(prettyStr.Length - 2, 2);
+
+            return prettyStr.ToString();
+        }
     }
 }

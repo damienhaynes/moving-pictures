@@ -599,6 +599,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                     rtn = Image.FromStream(response.GetResponseStream());
                 }
                 catch (WebException e) {
+                    // file doesnt exist
+                    if (e.Message.Contains("404")) {
+                        logger.Warn("Failed retrieving artwork from " + url + ". File does not exist. (404)");
+                        return null;
+                    }
+                    
                     // if we timed out past our try limit
                     if (tryCount == maxRetries) {
                         logger.ErrorException("Failed to retrieve artwork from " + url + ". Reached retry limit of " + maxRetries, e);
