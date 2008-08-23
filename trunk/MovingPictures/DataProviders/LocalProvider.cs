@@ -6,6 +6,7 @@ using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using System.Text.RegularExpressions;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
+using System.Net;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class LocalProvider : IBackdropProvider {
@@ -24,9 +25,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             string pattern = MovingPicturesCore.SettingsManager["local_backdrop_pattern"].StringValue;
             string backdropFolderPath = MovingPicturesCore.SettingsManager["backdrop_folder"].StringValue;
             
-            // try to create our filename
+            // try to create our filename(s)
             Regex parser = new Regex("%(.*?)%", RegexOptions.IgnoreCase);
-            string filename = parser.Replace(pattern, new MatchEvaluator(dbNameParser)).Trim().ToLower();
+            List<string> filenames = new List<string>();
+            foreach (string currPattern in pattern.Split('|')) {
+                filenames.Add(parser.Replace(currPattern, new MatchEvaluator(dbNameParser)).Trim().ToLower());
+            }
 
             // grab the list of files in the backdrop folder and see if any match
             DirectoryInfo backdropFolder = null;
@@ -34,10 +38,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 backdropFolder = new DirectoryInfo(backdropFolderPath);
                 FileInfo[] fileList = backdropFolder.GetFiles("*", SearchOption.TopDirectoryOnly);
                 foreach (FileInfo currFile in fileList) {
-                    if (currFile.Name.ToLower().Equals(filename)) {
-                        movie.BackdropFullPath = currFile.FullName;
-                        return true;
-                    }
+                    foreach (string currFileName in filenames)
+                        if (currFile.Name.ToLower().Equals(currFileName)) {
+                            movie.BackdropFullPath = currFile.FullName;
+                            return true;
+                        }
                 }
             }
             catch (Exception e) {

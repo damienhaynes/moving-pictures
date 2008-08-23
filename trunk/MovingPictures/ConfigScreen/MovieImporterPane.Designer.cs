@@ -49,7 +49,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.approvedCommitedMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unapprovedGrid = new System.Windows.Forms.DataGridView();
             this.statusColumn = new System.Windows.Forms.DataGridViewImageColumn();
-            this.unapprovedLocalMediaColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.unapprovedPossibleMatchesColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.settingsTabPage = new System.Windows.Forms.TabPage();
             this.forceFullScanButton = new System.Windows.Forms.Button();
@@ -58,6 +57,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.countProgressLabel = new System.Windows.Forms.Label();
             this.currentTaskDesc = new System.Windows.Forms.Label();
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.unapprovedLocalMediaColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.unapprovedMatchesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.importerGroupBox.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -157,7 +158,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.rescanButton.Name = "rescanButton";
             this.rescanButton.Size = new System.Drawing.Size(23, 22);
             this.rescanButton.Text = "toolStripButton1";
-            this.rescanButton.ToolTipText = "Rescan Selected File(s) for Possible Matches";
+            this.rescanButton.ToolTipText = "Rescan Selected File(s) with Custom Search String";
             this.rescanButton.Click += new System.EventHandler(this.rescanButton_Click);
             // 
             // splitJoinButton
@@ -274,6 +275,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.unapprovedGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.unapprovedGrid.Size = new System.Drawing.Size(621, 295);
             this.unapprovedGrid.TabIndex = 0;
+            this.unapprovedGrid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.unapprovedGrid_DataError);
             this.unapprovedGrid.SelectionChanged += new System.EventHandler(this.unapprovedGrid_SelectionChanged);
             // 
             // statusColumn
@@ -281,14 +283,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.statusColumn.HeaderText = "";
             this.statusColumn.Name = "statusColumn";
             this.statusColumn.Width = 20;
-            // 
-            // unapprovedLocalMediaColumn
-            // 
-            this.unapprovedLocalMediaColumn.DataPropertyName = "LocalMediaString";
-            this.unapprovedLocalMediaColumn.HeaderText = "File(s)";
-            this.unapprovedLocalMediaColumn.Name = "unapprovedLocalMediaColumn";
-            this.unapprovedLocalMediaColumn.ReadOnly = true;
-            this.unapprovedLocalMediaColumn.Width = 200;
             // 
             // unapprovedPossibleMatchesColumn
             // 
@@ -368,6 +362,22 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.dataGridViewComboBoxColumn1.HeaderText = "Possible Matches";
             this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
             // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "LocalMediaString";
+            this.dataGridViewTextBoxColumn1.HeaderText = "File(s)";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Width = 200;
+            // 
+            // unapprovedLocalMediaColumn
+            // 
+            this.unapprovedLocalMediaColumn.DataPropertyName = "LocalMediaString";
+            this.unapprovedLocalMediaColumn.HeaderText = "File(s)";
+            this.unapprovedLocalMediaColumn.Name = "unapprovedLocalMediaColumn";
+            this.unapprovedLocalMediaColumn.ReadOnly = true;
+            this.unapprovedLocalMediaColumn.Width = 200;
+            // 
             // unapprovedMatchesBindingSource
             // 
             this.unapprovedMatchesBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MediaMatch);
@@ -427,5 +437,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private Label countProgressLabel;
         private Label currentTaskDesc;
         private ProgressBar progressBar;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
     }
 }

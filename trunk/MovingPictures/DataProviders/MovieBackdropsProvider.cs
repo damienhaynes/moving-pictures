@@ -12,7 +12,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         
         private const string availableBackdropsURL = "http://moviebackdrops.com/backdrops/";
         
-        // alternative source. this needs to be split of finto another class
+        // alternative source. this needs to be split off into another class
         private const string alternateURL = "http://posters.consumeroo.com/movies/jpg/";
 
         public bool GetBackdrop(DBMovieInfo movie) {
@@ -33,6 +33,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 movie.AddBackdropFromURL(backdropList[0][0]);
             else
                 movie.AddBackdropFromURL(alternateURL + movie.ImdbID.Trim() + ".jpg");
+            
 
             return true;
         }
@@ -43,12 +44,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             int timeout = (int)MovingPicturesCore.SettingsManager["moviedb_timeout_length"].Value;
             int timeoutIncrement = (int)MovingPicturesCore.SettingsManager["moviedb_timeout_increment"].Value;
 
+            String url = availableBackdropsURL + movie.ImdbID + "/";
             String backdropURLResponse = string.Empty;
             while (backdropURLResponse == string.Empty) {
                 try {
                     // builds the request and retrieves the respones from moviebackdrops.com
                     tryCount++;
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(availableBackdropsURL + movie.ImdbID + "/");
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                     request.Timeout = timeout + (timeoutIncrement * tryCount);
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
@@ -62,8 +64,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     response.Close();
                 }
                 catch (WebException e) {
+                    if (e.Message.Contains("404")) {
+                        logger.Debug("MovieBackdrops.com returned 404 for " + url + ". Usually means no art available.");
+                        return null;
+                    }
                     if (tryCount == maxRetries) {
-                        logger.ErrorException("Error connecting to MovieBackdrops.com web service. Reached retry limit of " + maxRetries, e);
+                        logger.ErrorException("Error connecting to MovieBackdrops.com web service (" + url + "). Reached retry limit of " + maxRetries, e);
                         return null;
                     }
                 }

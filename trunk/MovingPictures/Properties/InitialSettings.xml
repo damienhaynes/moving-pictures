@@ -9,7 +9,12 @@
     <setting id="click_to_details" name="Click Shows Details" type="BOOL">
       <default>true</default>
       <description>Determines behavior when a movie in the movie browser is clicked. If true, the details view appears. If false the movie starts playback.</description>
-    </setting>    
+    </setting>
+
+    <setting id="max_string_list_items" name="Max Actors, Genres, etc. to Display" type="INT">
+      <default>5</default>
+      <description>This determines the number of actors, genres, directors, etc to display on the GUI. This applies to all string based list fields.</description>
+    </setting>
   </group>
 
   
@@ -149,7 +154,7 @@
     <group name="Local Provider">
 
       <setting id="local_backdrop_pattern" name="Backdrop Filename Pattern" type="STRING">
-        <default>%imdb_id%.jpg</default>
+        <default>%imdb_id%.jpg|%imdb_id%.png|%imdb_id%.bmp</default>
         <description>The importer will look in your backdrop folder and try to find a file that matches this pattern. If one is found, it will be used as a backdrop. If none is found, an online data provider will be used to auto download artwork.</description>
       </setting>
 

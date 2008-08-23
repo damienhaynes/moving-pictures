@@ -275,7 +275,18 @@
     <Content Include="Images\tick.png" />
     <None Include="Images\zoom.png" />
     <None Include="Images\world_add.png" />
-    <Content Include="MainUI\movingpictures.xml" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_filter.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_filter_focus.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_settings.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_settings_focus.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_view.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_view_focus.png" />
+    <Content Include="MainUI\Generic Skin\movingpictures.details.xml" />
+    <Content Include="MainUI\Generic Skin\movingpictures.filmstrip.xml" />
+    <Content Include="MainUI\Generic Skin\movingpictures.largeicons.xml" />
+    <Content Include="MainUI\Generic Skin\movingpictures.list.xml" />
+    <Content Include="MainUI\Generic Skin\movingpictures.smallicons.xml" />
+    <Content Include="MainUI\Generic Skin\movingpictures.xml" />
     <Content Include="Properties\InitialSettings.xml" />
   </ItemGroup>
   <ItemGroup>

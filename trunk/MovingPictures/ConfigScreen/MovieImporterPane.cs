@@ -11,10 +11,13 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using NLog;
 
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieImporterPane : UserControl {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private Bitmap blank;
         private bool splitMode;
         private int lastSplitJoinLocation;
@@ -157,8 +160,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 // fixes a bug in DataGridView. switching to tab it is on forces
                 // it to initialize, so adding stuff to the binding source works properly
+                // tabControl.SelectedIndex = 1;
+                // tabControl.SelectedIndex = 0;
+
+                // for now lets start on the second tab though
                 tabControl.SelectedIndex = 1;
-                tabControl.SelectedIndex = 0;
 
                 MovingPicturesCore.Importer.Start();
                 
@@ -268,7 +274,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 splitMode = false;
             }
 
-            // check if we have one row with multipel files we can split
+            // check if we have one row with multiple files we can split
             else if (unapprovedGrid.SelectedRows.Count == 1 && unapprovedGrid.SelectedRows[0] != null) {
                 MediaMatch match = (MediaMatch)unapprovedGrid.SelectedRows[0].DataBoundItem;
                 if (match.LocalMedia.Count > 1) {
@@ -283,24 +289,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // split join button cant be used now, so disable it.
             else splitJoinButton.Enabled = false;
 
-            /*
-            // set the display icon for starting or stopping the importer
-            if (MovingPicturesPlugin.Importer.IsScanning()) {
-                startStopButton.Image = Resources.noatunstop;
-                startStopButton.ToolTipText = "Stop the Media Importer";
-
-                filterSplitButton.Enabled = true;
-            } else {
-                startStopButton.Image = Resources.noatunplay;
-                startStopButton.ToolTipText = "Start the Media Importer";
-
-                splitJoinButton.Enabled = false;
-                approveButton.Enabled = false;
-                rescanButton.Enabled = false;
-                ignoreButton.Enabled = false;
-                filterSplitButton.Enabled = false;
-            }
-            */
         }
 
         private void splitJoinButton_Click(object sender, EventArgs e) {
@@ -316,15 +304,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
             
         }
-        /*
-        private void startStopButton_Click(object sender, EventArgs e) {
-            if (MovingPicturesPlugin.Importer.IsScanning())
-                MovingPicturesPlugin.Importer.Stop();
-            else
-                MovingPicturesPlugin.Importer.Start();
 
-            updateButtons();
+        private void unapprovedGrid_DataError(object sender, DataGridViewDataErrorEventArgs e) {
+            logger.WarnException("Error from Importer DataGrid.", e.Exception);
         }
-        */
     }
 }
