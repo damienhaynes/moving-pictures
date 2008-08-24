@@ -12,27 +12,22 @@ multiple view modes.
   This set of defines are read by the plug-in and used to determine aspects of it's behavior. These
   are parameters to give the skinner a tiny bit more control over the presentation.
   -->
-  <define>#largeicons.available:true</define>      <!-- true if this skin implements the largeicons view -->
+  
+  <define>#largeicons.available:false</define>     <!-- true if this skin implements the largeicons view -->
   <define>#largeicons.backdrop.used:true</define>  <!-- true if backdrop (fanart) should be displayed in this view -->
   
-  <define>#smallicons.available:true</define>      <!-- Set to true if this skin implements the smallicons view -->
+  <define>#smallicons.available:false</define>     <!-- Set to true if this skin implements the smallicons view -->
   <define>#smallicons.backdrop.used:true</define>  <!-- true if backdrop (fanart) should be displayed in this view -->
   
   <define>#list.available:true</define>            <!-- Set to true if this skin implements the list view -->
   <define>#list.backdrop.used:true</define>        <!-- true if backdrop (fanart) should be displayed in this view -->
   
-  <define>#filmstrip.available:true</define>       <!-- Set to true if this skin implements the filmstrip view -->
+  <define>#filmstrip.available:false</define>      <!-- Set to true if this skin implements the filmstrip view -->
   <define>#filmstrip.backdrop.used:true</define>   <!-- true if backdrop (fanart) should be displayed in this view -->
   
-  
-  <define>#smalltitle.color:ff484848</define>
-  
+  <define>#smalltitle.color:ff383838</define>
+  <define>#labelvalue.color:ff000000</define>
   <controls>
-    <import>movingpictures.filmstrip.xml</import>
-    <import>movingpictures.largeicons.xml</import>
-    <import>movingpictures.list.xml</import>
-    <import>movingpictures.smallicons.xml</import>
-    
     <control>
       <description>Movie Backdrop (Fan Art) - Plug-in sets to invisible, if no art.</description>
       <type>image</type>
@@ -42,13 +37,11 @@ multiple view modes.
       <width>1366</width>
       <height>768</height>
       <texture>#MovingPictures.SelectedMovie.backdropfullpath</texture>
-      <animation effect="fade" time="300" reversible="false">visiblechange</animation>
     </control>
-    
     <control>
       <description>Background to be displayed when there is no Movie Backdrop</description>
       <type>image</type>
-      <id>1</id>
+      <id>0</id>
       <posX>0</posX>
       <posY>0</posY>
       <width>1366</width>
@@ -56,7 +49,6 @@ multiple view modes.
       <texture>background.png</texture>
       <visible>!Control.IsVisible(1)</visible>
     </control>
-
     <control>
       <description>Cover Art</description>
       <type>image</type>
@@ -68,47 +60,85 @@ multiple view modes.
       <texture>#MovingPictures.SelectedMovie.coverfullpath</texture>
       <visible>!Control.IsVisible(1)+Control.IsVisible(50)</visible>
     </control>
-    
     <control>
-      <description>Title</description>
+      <description>Top overlay</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>1366</width>
+      <height>300</height>
+      <texture>overlay_top.png</texture>
+      <visible>Control.IsVisible(50)</visible>
+    </control>
+    <control>
+      <type>image</type>
+      <id>0</id>
+      <posX>133</posX>
+      <posY>120</posY>
+      <width>1100</width>
+      <height>1</height>
+      <texture>hbar1white.png</texture>
+      <visible>Control.IsVisible(50)</visible>
+    </control>
+    <control>
+      <description>Movie Title</description>
       <type>label</type>
       <id>0</id>
-      <posX>920</posX>
-      <posY>20</posY>
-      <width>486</width>
-      <font>font14</font>
+      <posX>0</posX>
+      <posY>40</posY>
+      <width>1366</width>
+      <font>font18</font>
       <label>#MovingPictures.SelectedMovie.title</label>
-      <align>left</align>
+      <align>center</align>
+      <textcolor>ffffff</textcolor>
       <visible>Control.IsVisible(50)</visible>
     </control>
-    
     <control>
-      <description>Year</description>
+      <description>Tagline</description>
       <type>label</type>
       <id>0</id>
-      <posX>920</posX>
-      <posY>60</posY>
-      <width>100</width>
-      <!--font>font14</font-->
-      <label>#MovingPictures.SelectedMovie.year</label>
-      <align>left</align>
+      <posX>0</posX>
+      <posY>100</posY>
+      <width>1366</width>
+      <textcolor>ffffff</textcolor>
+      <font>font14</font>
+      <label>#MovingPictures.SelectedMovie.tagline</label>
+      <align>center</align>
       <visible>Control.IsVisible(50)</visible>
     </control>
-    
+    <control>
+      <type>imagelist</type>
+      <id>101</id>
+      <posX>580</posX>
+      <posY>60</posY>
+      <width>310</width>
+      <height>30</height>
+      <textureWidth>30</textureWidth>
+      <textureHeight>30</textureHeight>
+      <subitems>
+        <subitem>greystar.png</subitem>
+        <subitem>starbest.png</subitem>
+      </subitems>
+      <orientation>horizontal</orientation>
+      <align>left</align>
+      <imagesToDraw>10</imagesToDraw>
+      <visible>Control.IsVisible(50)</visible>
+      <percentage>#MovingPictures.SelectedMovie.score</percentage>
+    </control>
     <control>
       <description>Cycle View Button</description>
       <type>button</type>
       <id>2</id>
-      <onright>50</onright>
-      <posX>0</posX>
-      <posY>0</posY>
+      <onleft>50</onleft>
+      <posX>1280</posX>
+      <posY>150</posY>
       <width>81</width>
       <height>81</height>
       <textureFocus>moving_pictures_view_focus.png</textureFocus>
       <textureNoFocus>moving_pictures_view.png</textureNoFocus>
       <visible>Control.IsVisible(50)</visible>
     </control>
-
     <!-- This is an alternate view button that brings up a menu for view 
          selection, rather than just cycling the view. You can use both
          if you want to. -->
@@ -125,36 +155,38 @@ multiple view modes.
       <textureNoFocus>moving_pictures_view.png</textureNoFocus>
       <visible>Control.IsVisible(50)</visible>
     </control-->
-
     <control>
       <description>Filters Button</description>
       <type>button</type>
       <id>4</id>
-      <onright>50</onright>
-      <posX>0</posX>
-      <posY>82</posY>
+      <onleft>50</onleft>
+      <posX>1280</posX>
+      <posY>232</posY>
       <width>81</width>
       <height>81</height>
       <textureFocus>moving_pictures_filter_focus.png</textureFocus>
       <textureNoFocus>moving_pictures_filter.png</textureNoFocus>
       <visible>Control.IsVisible(50)</visible>
     </control>
-
     <control>
       <description>Settings Button - Not sure what this will do...</description>
       <type>button</type>
       <id>5</id>
-      <onright>50</onright>
-      <posX>0</posX>
-      <posY>163</posY>
+      <onleft>50</onleft>
+      <posX>1280</posX>
+      <posY>313</posY>
       <width>81</width>
       <height>81</height>
       <textureFocus>moving_pictures_settings_focus.png</textureFocus>
       <textureNoFocus>moving_pictures_settings.png</textureNoFocus>
       <visible>Control.IsVisible(50)</visible>
     </control>
-
-
+    <!--Imported Facades-->
+    <import>movingpictures.details.xml</import>
+    <import>movingpictures.filmstrip.xml</import>
+    <import>movingpictures.largeicons.xml</import>
+    <import>movingpictures.list.xml</import>
+    <import>movingpictures.smallicons.xml</import>
     <control>
       <description>composite control consisting of a list control and a thumbnail panel</description>
       <type>facadeview</type>
@@ -163,25 +195,25 @@ multiple view modes.
         <description>Movie List</description>
         <type>listcontrol</type>
         <id>50</id>
-        <posX>82</posX>
-        <posY>20</posY>
-        <onleft>2</onleft>
+        <posX>10</posX>
+        <posY>125</posY>
+        <onright>2</onright>
         <width>400</width>
-        <height>748</height>
-        <spinPosX>1277</spinPosX>
-        <spinPosY>711</spinPosY>
-        <textureFocus>dialog_button_focus.png</textureFocus>
+        <height>500</height>
+        <spinPosX>1300</spinPosX>
+        <spinPosY>720</spinPosY>
+        <textureFocus>menu_focus.png</textureFocus>
         <textureNoFocus>dialog_button_nofocus.png</textureNoFocus>
         <textXOff>-20</textXOff>
         <textXOff2>510</textXOff2>
         <IconXOff>1980</IconXOff>
-        <textcolor>fff8bc70</textcolor>
+        <textcolor>ffffff</textcolor>
       </control>
       <control>
         <description>Thumbnail Panel</description>
         <type>thumbnailpanel</type>
         <id>50</id>
-        <onleft>2</onleft>
+        <onright>2</onright>
         <posX>82</posX>
         <posY>20</posY>
         <width>400</width>
@@ -221,35 +253,38 @@ multiple view modes.
         <description>Filmstrip view</description>
         <type>filmstrip</type>
         <id>50</id>
-        <posX>82</posX>
-        <posY>288</posY>
-        <width>671</width>
-        <onleft>2</onleft>
+        <posX>34</posX>
+        <posY>450</posY>
+        <width>1300</width>
+        <scrollOffset>4</scrollOffset>
+        <onright>2</onright>
+        <onup>2</onup>
         <spinPosY>623</spinPosY>
         <spinPosX>380</spinPosX>
         <spinWidth>24</spinWidth>
         <spinHeight>24</spinHeight>
         <spinColor>ffcccccc</spinColor>
-        <itemWidth>152</itemWidth>
+        <itemWidth>185</itemWidth>
         <itemHeight>205</itemHeight>
-        <textureWidth>152</textureWidth>
-        <textureHeight>205</textureHeight>
-        <thumbWidth>110</thumbWidth>
-        <thumbHeight>164</thumbHeight>
-        <thumbPosX>21</thumbPosX>
+        <textureWidth>220</textureWidth>
+        <textureHeight>290</textureHeight>
+        <thumbWidth>170</thumbWidth>
+        <thumbHeight>230</thumbHeight>
+        <thumbPosX>20</thumbPosX>
         <thumbPosY>20</thumbPosY>
-        <imageFolderFocus>Framefocus.png</imageFolderFocus>
+        <thumbs flipY="false" diffuse="Thumb_Mask.png">unfocus</thumbs>
+        <InfoImage flipY="false" diffuse="Thumb_Mask.png"></InfoImage>
+        <imageFolderFocus>dvd_frame.png</imageFolderFocus>
         <frame>video_filmstrip_frame.png</frame>
-        <frameFocus>video_filmstrip_frame.png</frameFocus>
+        <frameFocus>dvd_frame.png</frameFocus>
         <background>Coverbig.png</background>
-        <showFrame>yes</showFrame>
+        <showFrame>no</showFrame>
         <showFolder>no</showFolder>
         <showBackGround>no</showBackGround>
         <showInfoImage>no</showInfoImage>
-        <thumbAnimation effect="zoom" start="100,100" end="200,200" time="250">focus</thumbAnimation>
-        <thumbAnimation effect="zoom" start="200,200" end="100,100" time="250">unfocus</thumbAnimation>
+        <thumbAnimation effect="zoom" start="100,100" end="130,130" time="100">focus</thumbAnimation>
+        <thumbAnimation effect="zoom" start="130,130" end="100,100" time="100"></thumbAnimation>
       </control>
     </control>
-    <import>movingpictures.details.xml</import>
   </controls>
 </window>
