@@ -1,37 +1,141 @@
 #summary A general guide to help skinners get oriented with the how their skin should interact with the plug-in.
 = Introduction =
-Alright, thanks for checking out the skin designer's guide. The purpose of this document is to help you, the skinner, get up and running as quickly as possible. In this document you're going to find a general overview of how the plug-in is structured, the components that you, as a skinner should be interested in, and a list of available fields that you can use. If you are impatient, feel free to scroll down to get to the meat!
+Alright, thanks for checking out the skin designer's guide. The purpose of this document is to help you, the skinner, get up and running as quickly as possible. In this document you're going to find a general overview of how the plug-in is structured, the components that you, as a skinner should be interested in, and a list of available fields that you can use. If you are impatient, feel free to scroll down to get to the meat of the document.
 
 Now you are welcome to use whatever skin you like as a base, but just an FYI, each release of the plug-in is paired with a corresponding set of generic skin files. These serve two purposes, first they allow anyone to use the plug-in with any skin (if that skin didn't implement a custom skin for Moving Pictures), and second they serve as a template for you, the skinner to work from.
 
-And just to be clear, this is not a guide on how to create a !MediaPortal skin. This really goes without saying, but there are going to be a few assumptions made here. Specifically, if you are unfamiliar with XML, the basic structure of a !MediaPortal skin file, you might get a little lost. Fear not though! If you are really new to skinning, I would suggest you check out [http://www.team-mediaportal.com/manual/MediaPortal1_Development/SkinArchitecture the very decent skin designer's guide] over on the !MediaPortal wiki.
+And just to be clear, this is not a guide on how to create a !MediaPortal skin. This really goes without saying, but there are going to be a few assumptions made here. Specifically, if you are unfamiliar with XML or the basic structure of a !MediaPortal skin file, you might get a little lost. Fear not though! If you are really new to skinning, I would suggest you check out [http://www.team-mediaportal.com/manual/MediaPortal1_Development/SkinArchitecture the very decent skin designer's guide] over on the !MediaPortal wiki.
 
-= The Views and the Files=
+= The Views, the Files and Conditional Visibility =
 
-So to begin with, the plug-in is broken down into (at the time of writing) five views. Regardless of the _content_ that is being displayed, the presentation of what is displayed on the screen should generally be based on the current _view_. The default skin is broken out into a single main skin file and a separate file for each view. It is not necessary to use this template, but I have found it helpful to break things down in this way.
+So to begin with, the plug-in is broken down into (at the time of writing) five views. Regardless of the _content_ that is being displayed, the presentation of what is displayed on the screen should generally be based on the current _view_. The generic skin is broken out into a single main skin file and a separate file for each view. It is not necessary to use this template, but I have found it helpful to break things down in this way. I recognize there are situations where this just wont work though. In that case throw your controls in the main movingpictures.xml. And heck, if you don't like the break down, feel free to throw away the split file approach altogether, the plug-in will work just fine without it.
 
-Briefly the currently available views are (sorry more details coming soon):
-  * List View 
-  * Small Thumbnail View 
-  * Large Thumbnail View 
-  * Filmstrip View 
-  * Details View 
+The key thing to take away here though is conditional visibility. Each view mode on the screen is essentially managed by you the coder with the <visibility> tag. I know conditional visibility can get a little tricky sometimes, so I apologize for creating a reliance on this, but I felt like it was necessary to make a quality plug-in. If you follow the suggested visibility tags below though, everything should work out fine.
+
+If you have thoughts on the conditional visibility, or the breakdown of the skin into multiple files, please share them at the [http://groups.google.com/group/moving-pictures-developers Developers Discussion Group]. If you are not a member, apply and just say you are a skin designer, you will get approved.
+
+== List View ==
+This is the list view. You already knew that didn't you? I am not going to go too much into the details here and assume you understand the basic breakdown of a facade control. 
+
+{{{
+Default Filename:     movingpictures.list.xml
+Suggested Visibility: <visible>facadeview.list+Control.IsVisible(50)</visible>
+}}}
+
+== Small Thumbnail View == 
+This of course is the basic thumbnail view. Unfortunately, because of the way that it is implemented internally, positioning (among other things) for this and the large thumbnail view is shared. I plan on implementing a work around for this so that you, as the skinner, can place things where ever you please. For the time being though this works just like a regular facade thumbnail view.
+
+{{{
+Default Filename:     movingpictures.smallicons.xml
+Suggested Visibility: <visible>facadeview.smallicons+Control.IsVisible(50)</visible>
+}}}
+
+== Large Thumbnail View == 
+Are you getting bored yet? Same old thing here. Again in the future this will be split from the small thumbnail view.
+
+{{{
+Default Filename:     movingpictures.largeicons.xml
+Suggested Visibility: <visible>facadeview.largeicons+Control.IsVisible(50)</visible>
+}}}
+
+== Filmstrip View == 
+A very vanilla filmstrip view. And yes I know there seem to be some performance issues right now. Working on it. For the time being though...
+
+{{{
+Default Filename:     movingpictures.largeicons.xml
+Suggested Visibility: <visible>facadeview.largeicons+Control.IsVisible(50)</visible>
+}}}
+
+== Details View == 
+This view is a little different, it is not tied directly to the facade. When the user clicks a movie, by default the plug-in goes to this screen. Just as it sounds, it's the Movie Details screen.
+
+{{{
+Default Filename:     movingpictures.details.xml
+Suggested Visibility: <visible>facadeview.largeicons+Control.IsVisible(50)</visible>
+}}}
 
 = Available Labels / Strings =
 
-Pretty much everything for the current movie that is stored in the database is dumped to the skin. Here is a current list though:
+Pretty much everything for the current movie that is stored in the database is dumped to the skin. Here is a current list though, sorry for the bulk text dump:
+
+{{{
+#MovingPictures.SelectedMovie.title = "The Professional"                                                            
+#MovingPictures.SelectedMovie.sortby = "Professional, The"                                                          
+#MovingPictures.SelectedMovie.directors = "Luc Besson"                                                              
+
+
+#MovingPictures.SelectedMovie.extra.directors.1 = "Luc Besson"                                                      
+#MovingPictures.SelectedMovie.writers = "Luc Besson"                                                                
+#MovingPictures.SelectedMovie.extra.writers.1 = "Luc Besson"                                                        
+#MovingPictures.SelectedMovie.actors = "Jean Reno, Gary Oldman, ..."
+#MovingPictures.SelectedMovie.extra.actors.1 = "Jean Reno"                                                          
+#MovingPictures.SelectedMovie.extra.actors.2 = "Gary Oldman"                                                        
+#MovingPictures.SelectedMovie.extra.actors.3 = "Natalie Portman"                                                    
+#MovingPictures.SelectedMovie.extra.actors.4 = "Danny Aiello"                                                       
+#MovingPictures.SelectedMovie.extra.actors.5 = "Peter Appel"                                                        
+#MovingPictures.SelectedMovie.year = "1994"                                                                         
+#MovingPictures.SelectedMovie.genres = "Action, Crime, Drama, Thriller"                                             
+#MovingPictures.SelectedMovie.extra.genres.1 = "Action"                                                             
+#MovingPictures.SelectedMovie.extra.genres.2 = "Crime"                                                              
+#MovingPictures.SelectedMovie.extra.genres.3 = "Drama"                                                              
+#MovingPictures.SelectedMovie.extra.genres.4 = "Thriller"                                                           
+#MovingPictures.SelectedMovie.certification = "R"                                                                   
+#MovingPictures.SelectedMovie.language = "English"                                                                  
+#MovingPictures.SelectedMovie.tagline = "If you want a job done well hire a professional."                          
+#MovingPictures.SelectedMovie.summary = "As visually stylish as it is graphically ..."                                                                                                                
+#MovingPictures.SelectedMovie.score = "8.5"                                                                         
+#MovingPictures.SelectedMovie.user_score = "0"                                                                      
+#MovingPictures.SelectedMovie.watched = "False"                                                                     
+#MovingPictures.SelectedMovie.popularity = "47"                                                                     
+#MovingPictures.SelectedMovie.runtime = "110"              
+#MovingPictures.SelectedMovie.extra.runtime.minute = "50"                                                        
+#MovingPictures.SelectedMovie.movie_xml_id = "81530"                                                                
+#MovingPictures.SelectedMovie.imdb_id = "tt0110413"                                                                 
+#MovingPictures.SelectedMovie.alternatecovers = "C:\Documents and Settings\..."
+#MovingPictures.SelectedMovie.extra.alternatecovers.1 = "C:\Documents and Settings\..."
+#MovingPictures.SelectedMovie.extra.alternatecovers.2 = "C:\Documents and Settings\..."
+#MovingPictures.SelectedMovie.extra.alternatecovers.3 = "C:\Documents and Settings\..."
+#MovingPictures.SelectedMovie.coverfullpath = "C:\Documents and Settings\..."
+#MovingPictures.SelectedMovie.coverthumbfullpath = "C:\Documents and Settings\..."
+#MovingPictures.SelectedMovie.backdropfullpath = "C:\Documents and Settings\...
+#MovingPictures.SelectedMovie.extra.runtime.hour = "1"                                                                                                                     
+}}}
+
+==== Notes ====
+As you can see, if there is a list of strings, they are broken down into sub fields piped to the skin. The max number of fields to display is by default five, but that is configurable in the advanced settings of the control panel.
 
 
 = Relevant Controls =
-  * ID #50 *Facade / List View / Thumbnail View / Filmstrip View* - This is the primary control for the skin. Depending on the current view this is the primary visualization for the movies displayed on the screen.
+There are a few controls (and their corresponding IDs) that you as a skinner should know about. Get creative, they don't need to be used in the same way they are used by the generic skin. And if you come up with an idea that requires a new control and a little bit of logic, feel free to ask for it! Just head on over to the [http://groups.google.com/group/moving-pictures-developers Developers Discussion Group]. If you aren't a member, apply and say you're a skin designer, and you'll get approved.
 
-  * ID #1 *Toggle View Button* - ...
+  * *Facade / List View / Thumbnail View / Filmstrip View* (50) - This is the primary control for the skin. Depending on the current view this is the primary visualization for the movies displayed on the screen.
+
+  * *Backdrop (Fan-Art) Image* (1) - The plug-in will automatically hide this component when there is no backdrop available. If you setup conditional variability on this control, you can display a normal background when there is no backdrop. You can also set up different versions of each view, one for when there is a backdrop and one for when there is not.
+
+  * *Toggle View Button* (2) - When this button is clicked the current view will be cycled to the next available view.
+
+  * *Views Menu Button* (3) - When this button is clicked a menu will appear prompting the user to select a view from those that are available.
+
+  * *Filters Button* (4) - This is not actually implemented yet, but this will most likely reveal additional screen components to allow the user to specify filter/search settings to reduce the number of listed movies. More details coming soon.
+
+  * *Settings Button* (5) - This is not implemented yet either, and I am not sure if it will stay. The intention is for it to bring up some sort of settings menu, but I am not sure if I will implement this. If you have any ideas though, please share. I would avoid using this ID on other controls though, as this ID is reserved for this button, should it get implemented.
+
+  * *Play Button* (6) - You click the button and the movie starts playing. This button also by default has focus when you move to the details view. This probably should only be visible on the details screen, but it's available anywhere, so do what you like with it.
+
+  * *Cycle Text Button* (7) - Another, yet to be implemented feature. When clicked this will cycle the text in a yet to be named skin field. The idea is to have the movie summary, trivia, goofs, etc cycled through as the user clicks this button. When it is implemented more details will be posted here. Again though, don't use this ID for anything else.
 
 = Common Issues ===
 === My Components Aren't Being Displayed! ==
-Check your background images. The generic background and backdrop (fan-art) images should be created in the main XML file first. *Then* the other files should be imported. If you import the subfiles first, then create your background images, your background images will overwrite any images you create for specific views. Hence, no images.
+Check your background images. The generic background and backdrop (fan-art) images should be created in the main XML file first. *Then* the other files should be imported. If you import the sub-files first, then create your background images, your background images will overwrite any images you create for specific views. Hence, no images.
+
+=== I Hate this Multiple Skin Files Break Down! ===
+So don't use it. It is just a suggestion, it is not a hard and fast rule. The plug-in will work fine without the files split apart, the only one it really needs is movingpictures.xml.
+
+For what it's worth the main problem I have seen with the multiple file breakdown is when you want to have content layered behind and in front of the facade in a specific view. To do this the components need to be sequenced properly with the facade, which mean they need to be in the main file. This means that things start to get scattered around a bit.
+
+
 
 === It's Something Else, I Just Don't Know! ===
-No worries. Just head on over to the Developers Forum and ask a question. If you aren't a member, apply and just say you're a skin designer. You will be approved. in this Google Group you will be able to interact with other skin designers and the developers themselves. If you have a problem, odd's are someone there can help.
+No worries. Just head on over to the [http://groups.google.com/group/moving-pictures-developers Developers Discussion Group] and ask a question. If you aren't a member, apply and say you're a skin designer. You will be approved. In the Developer's Discussion Google Group you will be able to interact with other skin designers, and the developers of the plug-in themselves! If you have a problem, odds are someone there can help.
 
 There is also an IRC channel that is monitored sporadically. You can connect via #moving-pictures @ irc.freenode.net.
