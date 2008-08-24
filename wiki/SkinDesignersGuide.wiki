@@ -62,8 +62,6 @@ Pretty much everything for the current movie that is stored in the database is d
 #MovingPictures.SelectedMovie.title = "The Professional"                                                            
 #MovingPictures.SelectedMovie.sortby = "Professional, The"                                                          
 #MovingPictures.SelectedMovie.directors = "Luc Besson"                                                              
-
-
 #MovingPictures.SelectedMovie.extra.directors.1 = "Luc Besson"                                                      
 #MovingPictures.SelectedMovie.writers = "Luc Besson"                                                                
 #MovingPictures.SelectedMovie.extra.writers.1 = "Luc Besson"                                                        
