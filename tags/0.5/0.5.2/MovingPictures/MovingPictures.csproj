@@ -1,0 +1,320 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{443F8F2C-44D2-47FB-B552-636664C8EC53}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>MovingPictures</AssemblyName>
+    <RootNamespace>MediaPortal.Plugins.MovingPictures</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConfigScreen\AdvancedSettingsPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\AdvancedSettingsPane.Designer.cs">
+      <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Controls\AttributesEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Controls\AttributesEditor.Designer.cs">
+      <DependentUpon>AttributesEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Controls\DBComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Controls\IDBBackedControl.cs" />
+    <Compile Include="ConfigScreen\Controls\DBObjectList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Controls\DBTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Controls\IDBFieldBackedControl.cs" />
+    <Compile Include="ConfigScreen\DesignMode\DatabaseTableTypeConverter.cs" />
+    <Compile Include="ConfigScreen\DesignMode\DBFieldTypeConverter.cs" />
+    <Compile Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.Designer.cs">
+      <DependentUpon>DBObjectListFieldEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\ImportPathsPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\ImportPathsPane.Designer.cs">
+      <DependentUpon>ImportPathsPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\MovieImporterPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\MovieImporterPane.Designer.cs">
+      <DependentUpon>MovieImporterPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\MovieManagerPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\MovieManagerPane.Designer.cs">
+      <DependentUpon>MovieManagerPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\MovingPicturesConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\MovingPicturesConfig.Designer.cs">
+      <DependentUpon>MovingPicturesConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\AttributeTypeEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\AttributeTypeEditor.Designer.cs">
+      <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\CoverPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\CoverPopup.Designer.cs">
+      <DependentUpon>CoverPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\CoverURLPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\CoverURLPopup.Designer.cs">
+      <DependentUpon>CoverURLPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\SearchStringPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\SearchStringPopup.Designer.cs">
+      <DependentUpon>SearchStringPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\SettingPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\SettingPopup.Designer.cs">
+      <DependentUpon>SettingPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\SingleMovieImporterPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\SingleMovieImporterPopup.Designer.cs">
+      <DependentUpon>SingleMovieImporterPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\UserManagementPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\UserManagementPane.Designer.cs">
+      <DependentUpon>UserManagementPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Database\CustomTypes\DBObjectList.cs" />
+    <Compile Include="Database\CustomTypes\DynamicList.cs" />
+    <Compile Include="Database\CustomTypes\IDynamic.cs" />
+    <Compile Include="Database\CustomTypes\IStringSourcedObject.cs" />
+    <Compile Include="Database\CustomTypes\RelationList.cs" />
+    <Compile Include="Database\CustomTypes\StringList.cs" />
+    <Compile Include="Database\DatabaseCache.cs" />
+    <Compile Include="Database\DBField.cs" />
+    <Compile Include="Database\DatabaseManager.cs" />
+    <Compile Include="Database\DBRelation.cs" />
+    <Compile Include="Database\DatabaseTable.cs" />
+    <Compile Include="Database\MovingPicturesTables\DBAttribute.cs" />
+    <Compile Include="Database\MovingPicturesTables\DBImportPath.cs" />
+    <Compile Include="Database\MovingPicturesTables\DBLocalMedia.cs" />
+    <Compile Include="Database\MovingPicturesTables\DBMovieInfo.cs" />
+    <Compile Include="Database\MovingPicturesTables\DBSetting.cs" />
+    <Compile Include="Database\MovingPicturesTables\DBUser.cs" />
+    <Compile Include="Database\MovingPicturesTables\DBUserMovieSettings.cs" />
+    <Compile Include="Database\MovingPicturesTables\IAttributeOwner.cs" />
+    <Compile Include="Database\MovingPicturesTables\MovingPicturesDBTable.cs" />
+    <Compile Include="Database\SettingsManager.cs" />
+    <Compile Include="DataProviders\IMovieProvider.cs" />
+    <Compile Include="DataProviders\LocalProvider.cs" />
+    <Compile Include="DataProviders\MovieBackdropsProvider.cs" />
+    <Compile Include="DataProviders\MovieXMLProvider.cs" />
+    <Compile Include="LocalMediaManagement\AdvancedStringComparer.cs" />
+    <Compile Include="LocalMediaManagement\MovieImporter.cs" />
+    <Compile Include="MainUI\ConfigConnector.cs" />
+    <Compile Include="MainUI\MovingPicturesGUI.cs" />
+    <Compile Include="MovingPicturesCore.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.Database.MoviesPluginTables.DBUser.datasource" />
+    <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.LocalMediaManagement.MediaMatches.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ConfigScreen\AdvancedSettingsPane.resx">
+      <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Controls\AttributesEditor.resx">
+      <DependentUpon>AttributesEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Controls\DBObjectList.resx">
+      <DependentUpon>DBObjectList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.resx">
+      <DependentUpon>DBObjectListFieldEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\ImportPathsPane.resx">
+      <DependentUpon>ImportPathsPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\MovieImporterPane.resx">
+      <DependentUpon>MovieImporterPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\MovieManagerPane.resx">
+      <DependentUpon>MovieManagerPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\MovingPicturesConfig.resx">
+      <DependentUpon>MovingPicturesConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\AttributeTypeEditor.resx">
+      <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\CoverPopup.resx">
+      <DependentUpon>CoverPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\CoverURLPopup.resx">
+      <DependentUpon>CoverURLPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\SearchStringPopup.resx">
+      <DependentUpon>SearchStringPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\SettingPopup.resx">
+      <DependentUpon>SettingPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\SingleMovieImporterPopup.resx">
+      <DependentUpon>SingleMovieImporterPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\UserManagementPane.resx">
+      <DependentUpon>UserManagementPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\accept.png" />
+    <Content Include="Images\approved.png" />
+    <Content Include="Images\arrow_cross.png" />
+    <Content Include="Images\arrow_divide.png" />
+    <None Include="Images\arrow_down.png" />
+    <Content Include="Images\arrow_join.png" />
+    <Content Include="Images\arrow_rotate_clockwise.png" />
+    <Content Include="Images\arrow_switch.png" />
+    <Content Include="Images\bullet_arrow_down.png" />
+    <Content Include="Images\bullet_arrow_down_dark.png" />
+    <Content Include="Images\cross.png" />
+    <Content Include="Images\exclamation.png" />
+    <None Include="Images\folder_image.png" />
+    <Content Include="Images\ignored.png" />
+    <Content Include="Images\information.png" />
+    <Content Include="Images\list-add.png" />
+    <Content Include="Images\list-remove.png" />
+    <Content Include="Images\MediaPause.png" />
+    <Content Include="Images\MediaPlay.png" />
+    <None Include="Images\MediaStop.png" />
+    <None Include="Images\noatunplay.png" />
+    <None Include="Images\noatunstop.png" />
+    <None Include="Images\resultset_next.png" />
+    <None Include="Images\resultset_previous.png" />
+    <Content Include="Images\tick.png" />
+    <None Include="Images\zoom.png" />
+    <None Include="Images\world_add.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_filter.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_filter_focus.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_settings.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_settings_focus.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_view.png" />
+    <Content Include="MainUI\Generic Skin\Media\moving_pictures_view_focus.png" />
+    <Content Include="MainUI\Generic Skin\movingpictures.details.xml" />
+    <Content Include="MainUI\Generic Skin\movingpictures.filmstrip.xml" />
+    <Content Include="MainUI\Generic Skin\movingpictures.largeicons.xml" />
+    <Content Include="MainUI\Generic Skin\movingpictures.list.xml" />
+    <Content Include="MainUI\Generic Skin\movingpictures.smallicons.xml" />
+    <Content Include="MainUI\Generic Skin\movingpictures.xml" />
+    <Content Include="Properties\InitialSettings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MediaPortal\Core\Core.csproj">
+      <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
+      <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
+      <Name>Databases</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MediaPortal\Dialogs\Dialogs.csproj">
+      <Project>{396C5208-5D46-4A11-92C1-FD0F2F42D7DD}</Project>
+      <Name>Dialogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MediaPortal\Utils\Utils.csproj">
+      <Project>{6DA0E4DF-6230-4642-98B5-E690BB6942BB}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>cd $(TargetDir)
+copy "$(ProjectDir)..\External\merge.bat" "$(TargetDir)" /Y
+copy "$(ProjectDir)..\External\ilmerge.exe" "$(TargetDir)" /Y
+</PostBuildEvent>
+  </PropertyGroup>
+</Project>
