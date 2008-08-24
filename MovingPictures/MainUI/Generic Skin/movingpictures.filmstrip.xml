@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- 
 This file should contain all items visible when the plug-in
 is on the browser screen in the filmstrip view mode. All controls 
@@ -5,25 +6,21 @@ should use the following tag for proper visibility
     
 <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>     
 -->
-
-
 <window>
   <controls>
     <define>#filmstrip.available:true</define>
-
-  
     <control>
-      <description>View Info</description>
+      <description>Tagline</description>
       <type>label</type>
       <id>0</id>
-      <posX>920</posX>
-      <posY>100</posY>
-      <width>486</width>
+      <posX>0</posX>
+      <posY>70</posY>
+      <width>1366</width>
+      <textcolor>ffffff</textcolor>
       <font>font14</font>
-      <label>facadeview.filmstrip</label>
-      <align>left</align>
-      <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+      <label>#MovingPictures.SelectedMovie.tagline</label>
+      <align>center</align>
+      <visible>false</visible>
     </control>
-    
   </controls>
 </window>

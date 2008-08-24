@@ -22,13 +22,12 @@ following tag for proper visibility:
       <type>image</type>
       <id>0</id>
       <posX>0</posX>
-      <posY>368</posY>
-      <height>400</height>
+      <posY>300</posY>
+      <height>468</height>
       <width>1366</width>
       <texture>overlay_bottom.png</texture>
       <visible>!Control.IsVisible(50)</visible>
     </control>
-
     <control>
       <description>Play Button</description>
       <type>button</type>
@@ -42,7 +41,6 @@ following tag for proper visibility:
       <textureNoFocus>moving_pictures_play.png</textureNoFocus>
       <visible>!Control.IsVisible(50)</visible>
     </control>
-
     <control>
       <description>Cycle Details Button (not implemented yet)</description>
       <type>button</type>
@@ -56,7 +54,6 @@ following tag for proper visibility:
       <textureNoFocus>moving_pictures_details.png</textureNoFocus>
       <visible>!Control.IsVisible(50)</visible>
     </control>
-
     <control>
       <description>DVD Frame</description>
       <type>image</type>
