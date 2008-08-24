@@ -85,7 +85,8 @@ Pretty much everything for the current movie that is stored in the database is d
 #MovingPictures.SelectedMovie.user_score = "0"                                                                      
 #MovingPictures.SelectedMovie.watched = "False"                                                                     
 #MovingPictures.SelectedMovie.popularity = "47"                                                                     
-#MovingPictures.SelectedMovie.runtime = "110"              
+#MovingPictures.SelectedMovie.runtime = "110"     
+#MovingPictures.SelectedMovie.extra.runtime.hour = "1"           
 #MovingPictures.SelectedMovie.extra.runtime.minute = "50"                                                        
 #MovingPictures.SelectedMovie.movie_xml_id = "81530"                                                                
 #MovingPictures.SelectedMovie.imdb_id = "tt0110413"                                                                 
@@ -95,8 +96,7 @@ Pretty much everything for the current movie that is stored in the database is d
 #MovingPictures.SelectedMovie.extra.alternatecovers.3 = "C:\Documents and Settings\..."
 #MovingPictures.SelectedMovie.coverfullpath = "C:\Documents and Settings\..."
 #MovingPictures.SelectedMovie.coverthumbfullpath = "C:\Documents and Settings\..."
-#MovingPictures.SelectedMovie.backdropfullpath = "C:\Documents and Settings\...
-#MovingPictures.SelectedMovie.extra.runtime.hour = "1"                                                                                                                     
+#MovingPictures.SelectedMovie.backdropfullpath = "C:\Documents and Settings\..."                                    
 }}}
 
 ==== Notes ====
