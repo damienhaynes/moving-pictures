@@ -1,0 +1,37 @@
+#summary A general guide to help skinners get oriented with the how their skin should interact with the plug-in.
+= Introduction =
+Alright, thanks for checking out the skin designer's guide. The purpose of this document is to help you, the skinner, get up and running as quickly as possible. In this document you're going to find a general overview of how the plug-in is structured, the components that you, as a skinner should be interested in, and a list of available fields that you can use. If you are impatient, feel free to scroll down to get to the meat!
+
+Now you are welcome to use whatever skin you like as a base, but just an FYI, each release of the plug-in is paired with a corresponding set of generic skin files. These serve two purposes, first they allow anyone to use the plug-in with any skin (if that skin didn't implement a custom skin for Moving Pictures), and second they serve as a template for you, the skinner to work from.
+
+And just to be clear, this is not a guide on how to create a !MediaPortal skin. This really goes without saying, but there are going to be a few assumptions made here. Specifically, if you are unfamiliar with XML, the basic structure of a !MediaPortal skin file, you might get a little lost. Fear not though! If you are really new to skinning, I would suggest you check out [http://www.team-mediaportal.com/manual/MediaPortal1_Development/SkinArchitecture the very decent skin designer's guide] over on the !MediaPortal wiki.
+
+= The Views and the Files=
+
+So to begin with, the plug-in is broken down into (at the time of writing) five views. Regardless of the _content_ that is being displayed, the presentation of what is displayed on the screen should generally be based on the current _view_. The default skin is broken out into a single main skin file and a separate file for each view. It is not necessary to use this template, but I have found it helpful to break things down in this way.
+
+Briefly the currently available views are (sorry more details coming soon):
+  * List View 
+  * Small Thumbnail View 
+  * Large Thumbnail View 
+  * Filmstrip View 
+  * Details View 
+
+= Available Labels / Strings =
+
+Pretty much everything for the current movie that is stored in the database is dumped to the skin. Here is a current list though:
+
+
+= Relevant Controls =
+  * ID #50 *Facade / List View / Thumbnail View / Filmstrip View* - This is the primary control for the skin. Depending on the current view this is the primary visualization for the movies displayed on the screen.
+
+  * ID #1 *Toggle View Button* - ...
+
+= Common Issues ===
+=== My Components Aren't Being Displayed! ==
+Check your background images. The generic background and backdrop (fan-art) images should be created in the main XML file first. *Then* the other files should be imported. If you import the subfiles first, then create your background images, your background images will overwrite any images you create for specific views. Hence, no images.
+
+=== It's Something Else, I Just Don't Know! ===
+No worries. Just head on over to the Developers Forum and ask a question. If you aren't a member, apply and just say you're a skin designer. You will be approved. in this Google Group you will be able to interact with other skin designers and the developers themselves. If you have a problem, odd's are someone there can help.
+
+There is also an IRC channel that is monitored sporadically. You can connect via #moving-pictures @ irc.freenode.net.
