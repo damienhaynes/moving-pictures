@@ -38,7 +38,7 @@
       
       <!-- this should be a multi-entry setting much like the mp-tvseries filter options -->
       <setting id="importer_filter" name="Regular Expression Filter" type="STRING">
-        <default>((720p|1080p|1080i|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264)[-]?.*?$)</default>
+        <default>((720p|1080p|1080i|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264|dxva)[-]?.*?$)</default>
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
 
