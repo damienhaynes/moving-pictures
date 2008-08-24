@@ -1,4 +1,5 @@
 #summary A general guide to help skinners get oriented with the how their skin should interact with the plug-in.
+#labels Featured
 = Introduction =
 Alright, thanks for checking out the skin designer's guide. The purpose of this document is to help you, the skinner, get up and running as quickly as possible. In this document you're going to find a general overview of how the plug-in is structured, the components that you, as a skinner should be interested in, and a list of available fields that you can use. If you are impatient, feel free to scroll down to get to the meat of the document.
 
