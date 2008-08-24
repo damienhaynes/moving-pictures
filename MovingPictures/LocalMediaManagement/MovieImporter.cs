@@ -502,11 +502,22 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // and it's readded, it will be reprocessed.
         private void ScanFiles(List<DBLocalMedia> importFileList, bool highPriority) {
             List<DBLocalMedia> currFileSet = new List<DBLocalMedia>();
+            
+            // create the sample filter regular expression
+            Regex rxSampleFilter = new Regex(MovingPicturesCore.SettingsManager["importer_sample_keyword"].Value.ToString(), RegexOptions.IgnoreCase);  
+            long sampleMaxSize = long.Parse(MovingPicturesCore.SettingsManager["importer_sample_maxsize"].Value.ToString()) * 1024 * 1024;
+            
             foreach (DBLocalMedia currFile in importFileList) {
                 // if we have already loaded this file, move to the next
                 if (matchesInSystem.ContainsKey(currFile) || currFile.ID != null) 
                     continue;
                 
+                // exclude samplefiles
+                if ((currFile.File.Length < sampleMaxSize) && rxSampleFilter.Match(currFile.File.Name).Success)
+                {
+                  logger.Info("Sample detected. Skipping {0} ({1} bytes)", currFile.File.Name, currFile.File.Length);
+                  continue;
+                }
 
                 // if we have no previous files, move on so we can check if the next file
                 // is a pair to this one.
