@@ -41,6 +41,19 @@
         <default>((720p|1080p|1080i|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264|dxva)[-]?.*?$)</default>
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
+      
+      <!-- Sample Filter -->
+      <group name="Sample Filter">
+        <setting id="importer_sample_keyword" name="Regular Expression String" type="STRING">
+          <default>sample</default>
+          <description>a regular expression that matches keywords in the filename indicating that the file is possible sample.</description>
+        </setting>
+
+        <setting id="importer_sample_maxsize" name="Max Filesize (MB)" type="INT">
+          <default>100</default>
+          <description>If the filesize of the potential sample file is below this value it will be skipped.</description>
+        </setting>
+      </group>
 
     </group>
     
