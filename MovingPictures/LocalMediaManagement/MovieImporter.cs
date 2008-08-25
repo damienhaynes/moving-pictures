@@ -995,7 +995,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // if there is a four digit number that looks like a year, parse it out
             // Regex regexParser = new Regex(@"(^.*?)[\[\(]?([0-9]{4})[\]\)]?(.+)");
-            regexParser = new Regex(@"(^.+)[\[\(]?([0-9]{4})[\]\)]?(.+)");
+            regexParser = new Regex(@"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)");
             Match match = regexParser.Match(rtn);
             if (match.Success)
             {
