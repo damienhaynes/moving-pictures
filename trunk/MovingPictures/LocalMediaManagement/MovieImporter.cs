@@ -1002,7 +1002,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 int year = int.Parse(match.Groups[2].Value);
                 if (year > 1900 && year < DateTime.Now.Year + 2)
                     // Seperate year from the title and pass it along (using the pipe as marker)
-                    rtn = match.Groups[1].Value + "|" + match.Groups[2].Value;
+                    rtn = match.Groups[1].Value.TrimEnd('(','[') + "|" + match.Groups[2].Value;
             }
 
             return rtn;
