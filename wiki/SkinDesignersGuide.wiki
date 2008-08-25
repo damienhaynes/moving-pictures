@@ -109,7 +109,7 @@ There are a few controls (and their corresponding IDs) that you as a skinner sho
 
   * *Facade / List View / Thumbnail View / Filmstrip View* (50) - This is the primary control for the skin. Depending on the current view this is the primary visualization for the movies displayed on the screen.
 
-  * *Backdrop (Fan-Art) Image* (1) - The plug-in will automatically hide this component when there is no backdrop available. If you setup conditional variability on this control, you can display a normal background when there is no backdrop. You can also set up different versions of each view, one for when there is a backdrop and one for when there is not.
+  * *Backdrop (Fan-Art) Image* (1) - The plug-in will automatically hide this component when there is no backdrop available. If you setup conditional visibility for another image based on this control, you can display a normal background when there is no backdrop. You can also set up different versions of each view, one for when there is a backdrop and one for when there is not.
 
   * *Toggle View Button* (2) - When this button is clicked the current view will be cycled to the next available view.
 
@@ -135,6 +135,6 @@ For what it's worth the main problem I have seen with the multiple file breakdow
 
 
 === It's Something Else, I Just Don't Know! ===
-No worries. Just head on over to the [http://groups.google.com/group/moving-pictures-developers Developers Discussion Group] and ask a question. If you aren't a member, apply and say you're a skin designer. You will be approved. In the Developer's Discussion Google Group you will be able to interact with other skin designers, and the developers of the plug-in themselves! If you have a problem, odds are someone there can help.
+No worries. Just head on over to the [http://groups.google.com/group/moving-pictures-developers Developer's Discussion Group] and ask a question. If you aren't a member, apply and say you're a skin designer. You will be approved. In the Developer's Discussion Google Group you will be able to interact with other skin designers, and the developers of the plug-in themselves. If you have a problem, odds are someone there can help.
 
 There is also an IRC channel that is monitored sporadically. You can connect via #moving-pictures @ irc.freenode.net.
