@@ -985,7 +985,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             
             // if there are no spaces, but a period, assume the period is replacement for spaces.
             // lets clean that up.
-            if (!rtn.Contains(" "))
+            //if (!rtn.Contains(" "))
                 rtn = rtn.Replace('.', ' ');
             
             // a lot of keywords that could poison the result so let's clean them according to our given exp.
