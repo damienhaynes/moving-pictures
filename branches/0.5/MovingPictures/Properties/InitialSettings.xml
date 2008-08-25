@@ -1,0 +1,178 @@
+<MoviesPluginSettings>
+
+  <group name="MediaPortal GUI">
+    <setting id="default_view" name="Default View" type="STRING">
+      <default>list</default>
+      <description>The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are "list", "thumbs", "largethumbs", and "filmstrip".</description>
+    </setting>
+
+    <setting id="click_to_details" name="Click Shows Details" type="BOOL">
+      <default>true</default>
+      <description>Determines behavior when a movie in the movie browser is clicked. If true, the details view appears. If false the movie starts playback.</description>
+    </setting>
+
+    <setting id="max_string_list_items" name="Max Actors, Genres, etc. to Display" type="INT">
+      <default>5</default>
+      <description>This determines the number of actors, genres, directors, etc to display on the GUI. This applies to all string based list fields.</description>
+    </setting>
+  </group>
+
+  
+  <group name="Movie Importer">
+    <group name="General">
+      
+      <setting id="importer_thread_count" name="Thread Count" type="INT">
+        <default>5</default>
+        <description>The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.</description>
+      </setting>
+
+      <setting id="importer_prefer_foldername" name="Use Folders For Matching" type="BOOL">
+        <default>false</default>
+        <description>Enable this setting if each movie has it's own folder.</description>
+      </setting>
+
+      <setting id="importer_strict_year" name="Only Show Results From Same Year" type="BOOL">
+        <default>false</default>
+        <description>If a year keyword is detected and no exact match is found only show the results from the same year or blank year. (experimental)</description>
+      </setting>
+      
+      <!-- this should be a multi-entry setting much like the mp-tvseries filter options -->
+      <setting id="importer_filter" name="Regular Expression Filter" type="STRING">
+        <default>((720p|1080p|1080i|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264|dxva)[-]?.*?$)</default>
+        <description>A regular expression that removes common used keywords from the folder/filename.</description>
+      </setting>
+      
+      <!-- Sample Filter -->
+      <group name="Sample Filter">
+        <setting id="importer_sample_keyword" name="Regular Expression String" type="STRING">
+          <default>sample</default>
+          <description>a regular expression that matches keywords in the filename indicating that the file is possible sample.</description>
+        </setting>
+
+        <setting id="importer_sample_maxsize" name="Max Filesize (MB)" type="INT">
+          <default>100</default>
+          <description>If the filesize of the potential sample file is below this value it will be skipped.</description>
+        </setting>
+      </group>
+
+    </group>
+    
+    <group name="Cover Art">
+      <setting id="cover_art_folder" name="Cover Artwork Folder" type="STRING">
+        <description>The folder in which cover art should be saved to disk.</description>
+      </setting>
+
+      <setting id="cover_thumbs_folder" name="Cover Artwork Thumbnails Folder" type="STRING">
+        <description>The folder in which cover art thumbnails should be saved to disk.</description>
+      </setting>
+
+      <setting id="redownload_coverart" name="Redownload Coverart on Rescan" type="BOOL">
+        <default>false</default>
+        <description>When a full rescan is performed this setting determines if coverart that has already been downloaded will be reretrieved and the local copy updated.</description>
+      </setting>
+
+      <setting id="max_covers_per_movie" name="Max Covers per Movie" type="INT">
+        <default>9</default>
+        <description>When the movie importer automatically downloads cover art, it will not retrieve more than the given number of covers for a movie.</description>
+      </setting>
+
+      <setting id="max_covers_per_session" name="Max Covers per Movie per Session" type="INT">
+        <default>3</default>
+        <description>When the movie importer automatically downloads cover art it will not retrieve more than the given number of covers for a movie in a single update / import session. Next time a full update is done, if there are additional covers to download, it will grab those as well.</description>
+      </setting>
+
+      <setting id="min_cover_width" name="Minimum Cover Width" type="INT">
+        <default>175</default>
+        <description>The minimum width in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.</description>
+      </setting>
+
+      <setting id="min_cover_height" name="Minimum Cover Height" type="INT">
+        <default>260</default>
+        <description>The minimum height in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.</description>
+      </setting>
+
+    </group>
+
+    <group name="Backdrops (Fan Art)">
+      <setting id="backdrop_folder" name="Backdrop Folder" type="STRING">
+        <description>The folder in which movie backdrops should be saved to disk.</description>
+      </setting>
+
+      <setting id="backdrop_thumbs_folder" name="Backdrop Thumbnails Folder" type="STRING">
+        <description>The folder in which movie backdrop thumbnails should be saved to disk.</description>
+      </setting>
+
+      <setting id="redownload_backdrops" name="Redownload Backdrop on Rescan" type="BOOL">
+        <default>false</default>
+        <description>When a full rescan is performed this setting determines if backdrops that have already been downloaded will be reretrieved and the local copy updated.</description>
+      </setting>
+
+      <setting id="min_backdrop_width" name="Minimum Backdrop Width" type="INT">
+        <default>1280</default>
+        <description>The minimum width in pixels for any given movie backdrop. If a backdrop from any data provider is smaller than this value it will not automatically be downloaded and saved.</description>
+      </setting>
+
+      <setting id="min_backdrop_height" name="Minimum Backdrop Height" type="INT">
+        <default>720</default>
+        <description>The minimum height in pixels for any given movie backdrop. If a cover from any data provider is smaller than this value it will not automatically be downloaded and saved.</description>
+      </setting>
+
+    </group>
+
+    <!--group name="Config GUI">
+      <setting id="gui_approve_on_select" name="Approve Match on Select" type="BOOL">
+        <default>true</default>
+        <description>When a possible match is selected from the possible match dropdown list in the Media Importer, it will automatically be approved and queued for commiting. If this is set to false, a match must be manually approved even after an update.</description>
+      </setting>
+    </group-->
+
+    <group name="Movie-XML Provider">
+ 
+      <setting id="xml_max_timeouts" name="Max Timeouts" type="INT">
+        <default>10</default>
+        <description>The maximum number of timeouts received from the server before a thread returns an error condition.</description>        
+      </setting>
+
+      <setting id="xml_timeout_length" name="Timeout Length" type="INT">
+        <default>5000</default>
+        <description>The base length of time (in milliseconds) for a timeout when connecting to the Movie-XML.com data service.</description>
+      </setting>
+
+      <setting id="xml_timeout_increment" name="Timeout Increment" type="INT">
+        <default>1000</default>
+        <description>The amount of time (in milliseconds) added to the timeout limit  after each timeout failure. A non-zero value will help when the server is experience a large amount of congestion.</description>
+      </setting> 
+
+    </group>
+    
+    <group name="MovieBackdrops.com Provider">
+
+      <setting id="moviedb_max_timeouts" name="Max Timeouts" type="INT">
+        <default>10</default>
+        <description>The maximum number of timeouts received from the server before a thread returns an error condition.</description>
+      </setting>
+
+      <setting id="moviedb_timeout_length" name="Timeout Length" type="INT">
+        <default>5000</default>
+        <description>The base length of time (in milliseconds) for a timeout when connecting to the Movie-XML.com data service.</description>
+      </setting>
+
+      <setting id="moviedb_timeout_increment" name="Timeout Increment" type="INT">
+        <default>1000</default>
+        <description>The amount of time (in milliseconds) added to the timeout limit  after each timeout failure. A non-zero value will help when the server is experience a large amount of congestion.</description>
+      </setting>
+
+    </group>
+
+    <group name="Local Provider">
+
+      <setting id="local_backdrop_pattern" name="Backdrop Filename Pattern" type="STRING">
+        <default>%imdb_id%.jpg|%imdb_id%.png|%imdb_id%.bmp</default>
+        <description>The importer will look in your backdrop folder and try to find a file that matches this pattern. If one is found, it will be used as a backdrop. If none is found, an online data provider will be used to auto download artwork.</description>
+      </setting>
+
+    </group>
+    
+  </group>
+
+</MoviesPluginSettings>
