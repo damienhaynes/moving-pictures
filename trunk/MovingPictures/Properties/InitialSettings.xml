@@ -41,7 +41,13 @@
         <default>((720p|1080p|1080i|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264|dxva)[-]?.*?$)</default>
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
-      
+
+      <!-- Multi-Part Detection -->
+      <setting id="importer_multipart" name="Regular Expression Multi-Part Filename" type="STRING">
+        <default>((cd|disk)\s*([\d]{1}|a|b))|[^\s\d]([\d]{1})$</default>
+        <description>A regular expression used for confirming a multi-part filename (validated after Levenshtein)</description>
+      </setting>
+
       <!-- Sample Filter -->
       <group name="Sample Filter">
         <setting id="importer_sample_keyword" name="Regular Expression String" type="STRING">
