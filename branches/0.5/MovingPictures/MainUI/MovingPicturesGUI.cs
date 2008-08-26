@@ -12,6 +12,7 @@ using NLog;
 using System.Collections;
 using System.Xml;
 using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
+using System.Timers;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {
@@ -23,16 +24,39 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool currentlyPlaying = false;
         private int currentPart = 1;
 
+        private System.Timers.Timer backdropUpdateTimer;
+
+        #region GUI Controls
+
         [SkinControl(50)]
         protected GUIFacadeControl movieBrowser = null;
 
         [SkinControl(1)]
         protected GUIImage movieBackdrop = null;
 
+        [SkinControl(2)]
+        protected GUIButtonControl cycleViewButton = null;
+
+        [SkinControl(3)]
+        protected GUIButtonControl viewMenuButton = null;
+        
+        [SkinControl(4)]
+        protected GUIButtonControl filterButton = null;
+        
+        [SkinControl(5)]
+        protected GUIButtonControl settingsButton = null;
+
         [SkinControl(6)]
         protected GUIButtonControl playButton = null;
 
-        
+        [SkinControl(7)]
+        protected GUIButtonControl textToggleButton = null;
+
+        [SkinControl(101)]
+        protected GUIButtonControl coverArt = null;
+
+        #endregion
+
         // Defines the current view mode. Reassign to switch modes.        
         public ViewMode CurrentView {
             get {
@@ -45,33 +69,28 @@ namespace MediaPortal.Plugins.MovingPictures {
                     previousView = currentView;
                 currentView = value;
 
+                // if we are leaving details view, set focus back on the facade
+                if (previousView == ViewMode.DETAILS) {
+                    clearFocus();
+                    movieBrowser.Focus = true;
+                    movieBrowser.Visible = true;
+                }
+
                 switch (currentView) {
                     case ViewMode.LIST:
-                        movieBrowser.Focus = true;
                         movieBrowser.View = GUIFacadeControl.ViewMode.List;
-                        movieBrowser.Visible = true;
                         break;
                     case ViewMode.SMALLICON:
-                        movieBrowser.Focus = true;
                         movieBrowser.View = GUIFacadeControl.ViewMode.SmallIcons;
-                        movieBrowser.Visible = true;
                         break;
                     case ViewMode.LARGEICON:
-                        movieBrowser.Focus = true;
                         movieBrowser.View = GUIFacadeControl.ViewMode.LargeIcons;
-                        movieBrowser.Visible = true;
                         break;
                     case ViewMode.FILMSTRIP:
-                        movieBrowser.Focus = true;
                         movieBrowser.View = GUIFacadeControl.ViewMode.Filmstrip;
-                        movieBrowser.Visible = true;
                         break;
                     case ViewMode.DETAILS:
-                        this.GetFocusControlId();
-                        movieBrowser.Focus = false;
-                        movieBrowser.ListView.Focus = false;
-                        movieBrowser.ThumbnailView.Focus = false;
-                        movieBrowser.FilmstripView.Focus = false;
+                        clearFocus();
 
                         movieBrowser.Visible = false;
                         movieBrowser.ListView.Visible = false;
@@ -119,9 +138,42 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             g_Player.PlayBackStarted += new g_Player.StartedHandler(OnPlayBackStarted);
             g_Player.PlayBackEnded += new g_Player.EndedHandler(OnPlayBackEnded);
+
+            backdropUpdateTimer = new System.Timers.Timer();
+            backdropUpdateTimer.Elapsed += new ElapsedEventHandler(OnBackdropTimerElapsed);
+            backdropUpdateTimer.Interval = 400;
+            backdropUpdateTimer.AutoReset = false;
         }
 
         ~MovingPicturesGUI() {
+        }
+
+        // this timer creates a delay for loading background art. it waits a user defined
+        // period of time (usually something like 200ms, THEN updates the backdrop. If the
+        // user switches again *before* the timer expires, the timer is reset. THis allows
+        // quick traversal on the GUI
+        private void OnBackdropTimerElapsed(object sender, ElapsedEventArgs e) {
+            updateArtwork();
+        }
+
+        private void updateArtwork() {
+            if (SelectedMovie == null)
+                return;
+
+            // update backdrop
+            string property = "#MovingPictures.Backdrop";
+            string value = SelectedMovie.BackdropFullPath.Trim();
+            GUIPropertyManager.SetProperty(property, value);
+            logger.Debug(property + " = \"" + value + "\"");
+
+            // update cover art
+            property = "#MovingPictures.Coverart";
+            value = SelectedMovie.CoverFullPath.Trim();
+            GUIPropertyManager.SetProperty(property, value);
+            logger.Debug(property + " = \"" + value + "\"");
+
+            updateBackdropVisibility();
+            coverArt.Visible = true;
         }
 
         private bool isAvailable(ViewMode view) {
@@ -150,6 +202,22 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
 
+        private void clearFocus() {
+            if (movieBrowser != null) {
+                movieBrowser.Focus = false;
+                if (movieBrowser.ListView != null) movieBrowser.ListView.Focus = false;
+                if (movieBrowser.ThumbnailView != null) movieBrowser.ThumbnailView.Focus = false;
+                if (movieBrowser.FilmstripView != null) movieBrowser.FilmstripView.Focus = false;
+            }
+
+            if (cycleViewButton != null) cycleViewButton.Focus = false;
+            if (viewMenuButton != null) viewMenuButton.Focus = false;
+            if (filterButton != null) filterButton.Focus = false;
+            if (settingsButton != null) settingsButton.Focus = false;
+            if (playButton != null) playButton.Focus = false;
+            if (textToggleButton != null) textToggleButton.Focus = false;
+        }
+
         private void updateBackdropVisibility() {
             bool backdropActive = true;
             
@@ -169,8 +237,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                     break;
             }
 
+            if (backdropActive == false)
+                return;
+            
             // set backdrop visibility
-            if (backdropActive && SelectedMovie != null && SelectedMovie.BackdropFullPath.Trim().Length != 0)
+            if (SelectedMovie != null && SelectedMovie.BackdropFullPath.Trim().Length != 0)
                 movieBackdrop.Visible = true;
             else
                 movieBackdrop.Visible = false;
@@ -425,7 +496,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         public override void OnAction(Action action) {
-            logger.Debug(action.wID.ToString());
             switch (action.wID) {
                 case Action.ActionType.ACTION_PARENT_DIR:
                 case Action.ActionType.ACTION_HOME:
@@ -444,13 +514,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 case Action.ActionType.ACTION_MOVE_RIGHT:
                 case Action.ActionType.ACTION_MOVE_LEFT:
                 case Action.ActionType.ACTION_MOVE_UP:
-                case Action.ActionType.ACTION_MOVE_DOWN:
-                    /*
-                    if (CurrentView == ViewMode.FILMSTRIP && movieBrowser.FilmstripView.IsFocused)
-                        SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
-                     */
-                    base.OnAction(action);
-                    break;
                 default:
                     base.OnAction(action);
                     break;
@@ -458,24 +521,30 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         public override bool OnMessage(GUIMessage message) {
-            logger.Debug(message.Message.ToString());
-            /*
-            if (message.Message == GUIMessage.MessageType.GUI_MSG_ITEM_FOCUS_CHANGED) {
-                switch (message.SenderControlId) {
-                    case 50:
-                        SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
-                        break;
-                }
-            }
-            */
             return base.OnMessage(message);
         }
 
         private void OnItemSelected(GUIListItem item, GUIControl parent) {
-            logger.Debug("OnItemSelected"); 
+            bool justLoaded = SelectedMovie == null;
+
             if (parent == movieBrowser || parent == movieBrowser.FilmstripView || 
                 parent == movieBrowser.ThumbnailView || parent == movieBrowser.ListView)
                 SelectedMovie = item.TVTag as DBMovieInfo;
+
+            if (justLoaded)
+                updateArtwork();
+            else {
+                // make invisible the existing fan art
+                if (movieBackdrop != null) movieBackdrop.Visible = false;
+
+                // unload the coverart
+                GUIPropertyManager.SetProperty("#MovingPictures.Coverart", "");
+                if (coverArt != null) coverArt.Visible = false;
+
+                // start the timer for new backdrop loading
+                backdropUpdateTimer.Stop();
+                backdropUpdateTimer.Start();
+            }
         }
 
 
@@ -487,13 +556,15 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void OnPlayBackEnded(MediaPortal.Player.g_Player.MediaType type, string filename) {
-            if (SelectedMovie.LocalMedia.Count > 1 && SelectedMovie.LocalMedia.Count <= currentPart + 1) {
-                currentPart++;
-                playSelectedMovie(currentPart);
-            }
-            else {
-                currentPart = 0;
-                currentlyPlaying = false;
+            if (SelectedMovie != null && currentlyPlaying) {
+                if (SelectedMovie.LocalMedia.Count > 1 && SelectedMovie.LocalMedia.Count <= currentPart + 1) {
+                    currentPart++;
+                    playSelectedMovie(currentPart);
+                }
+                else {
+                    currentPart = 0;
+                    currentlyPlaying = false;
+                }
             }
         }
 
@@ -578,7 +649,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 valueStr = (movie.Runtime % 60).ToString();
                 GUIPropertyManager.SetProperty(propertyStr, valueStr);
                 logger.Debug(propertyStr + " = \"" + valueStr + "\"");
-
             }
         }
     

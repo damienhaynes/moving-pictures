@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5D751473-DCC5-4044-A6E3-403D97C5B9F9}</ProjectGuid>
+    <ProjectGuid>{37919A36-6E90-42DF-9CEF-7193AFA14C36}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
     <AssemblyName>MovingPicturesConfigTester</AssemblyName>
@@ -43,8 +43,8 @@
       <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\MovingPictures\MovingPictures.csproj">
-      <Project>{443F8F2C-44D2-47FB-B552-636664C8EC53}</Project>
-      <Name>MovingPictures</Name>
+      <Project>{75AA923C-BDAC-421E-BD70-1C79CE7BD6A4}</Project>
+      <Name>MovingPictures %28Moving Pictures 0.5\MovingPictures%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />

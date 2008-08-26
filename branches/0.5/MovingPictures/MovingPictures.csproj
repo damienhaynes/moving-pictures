@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{443F8F2C-44D2-47FB-B552-636664C8EC53}</ProjectGuid>
+    <ProjectGuid>{75AA923C-BDAC-421E-BD70-1C79CE7BD6A4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
     <AssemblyName>MovingPictures</AssemblyName>

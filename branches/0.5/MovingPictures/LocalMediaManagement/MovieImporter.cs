@@ -411,7 +411,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     fileSystemWatchers.Add(currWatcher);
                     pathLookup[currWatcher] = currPath;
                 }
-                catch (ArgumentException e) {
+                catch (ArgumentException) {
                     if (currPath.Removable)
                         logger.Info("Removable import path " + currPath.Removable + " is offline.");
                     else
