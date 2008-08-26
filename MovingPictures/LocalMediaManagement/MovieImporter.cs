@@ -503,8 +503,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void ScanFiles(List<DBLocalMedia> importFileList, bool highPriority) {
             List<DBLocalMedia> currFileSet = new List<DBLocalMedia>();
             
-            // create the sample filter regular expression
+            // Create the sample filter regular expression
             Regex rxSampleFilter = new Regex(MovingPicturesCore.SettingsManager["importer_sample_keyword"].Value.ToString(), RegexOptions.IgnoreCase);  
+            // Multi-Part regular expression
+            Regex rxMultiPart = new Regex(MovingPicturesCore.SettingsManager["importer_multipart"].Value.ToString(), RegexOptions.IgnoreCase);   
+ 
             long sampleMaxSize = long.Parse(MovingPicturesCore.SettingsManager["importer_sample_maxsize"].Value.ToString()) * 1024 * 1024;
             
             foreach (DBLocalMedia currFile in importFileList) {
@@ -537,13 +540,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         break;
                     }
 
-                    // if the file search strings differ by more than one character
+                    // if the filename differ by more than one character
                     // assume they are not a pair
-                    string otherSearchStr = GetSearchString(otherFile.File);
-                    if (AdvancedStringComparer.Levenshtein(currSearchStr, otherSearchStr) > 1) {
+                    if (AdvancedStringComparer.Levenshtein(currFile.File.Name, otherFile.File.Name) > 1) {
                         isAdditionalMatch = false;
                         break;
                     }
+                    
+                    // if the multi-part naming convention doesn't match up
+                    // assume they are not a pair
+                    if (!rxMultiPart.Match(RemoveFileExtension(otherFile.File)).Success)
+                    {
+                      isAdditionalMatch = false;
+                      break;
+                    }
+
                 }
 
                 // if it's a match store it and move onto the next file to see if
@@ -958,14 +969,17 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // Cleans up a filename for movie name matching. Removes extension, converts '.' to  ' ', etc.
         public static string GetSearchString(FileInfo file) {
-            string str;
+          string str = RemoveFileExtension(file);
+          return getSearchString(str);
+        }
 
-            // get rid of the file extension
-            int extIndex = file.Name.IndexOf(file.Extension);
-            int extLength = file.Extension.Length;
-            str = file.Name.Remove(extIndex);
-
-            return getSearchString(str);
+        // Removes the file extension from a filename
+        public static string RemoveFileExtension(FileInfo file)
+        {
+          // get rid of the file extension
+          int extIndex = file.Name.IndexOf(file.Extension);
+          //int extLength = file.Extension.Length;
+          return file.Name.Remove(extIndex);
         }
 
         // Cleans up a directory name for movie name matching. Converts '.' to ' ', etc.
