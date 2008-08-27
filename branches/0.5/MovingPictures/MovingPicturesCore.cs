@@ -139,6 +139,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             FileTarget fileTarget = new FileTarget();
             fileTarget.FileName = Config.GetFile(Config.Dir.Log, logFileName);
+            fileTarget.DeleteOldFileOnStartup = true;
             fileTarget.Layout = "${date:format=dd-MMM-yyyy HH\\:mm\\:ss} " +
                                 "${level:fixedLength=true:padding=5} " +
                                 "[${logger:fixedLength=true:padding=20:shortName=true}]: ${message} " +
