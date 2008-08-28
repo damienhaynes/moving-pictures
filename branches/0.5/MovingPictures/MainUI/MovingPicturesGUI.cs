@@ -24,7 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool currentlyPlaying = false;
         private int currentPart = 1;
 
-        private System.Timers.Timer backdropUpdateTimer;
+        private System.Timers.Timer updateArtworkTimer;
 
         #region GUI Controls
 
@@ -53,7 +53,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         protected GUIButtonControl textToggleButton = null;
 
         [SkinControl(101)]
-        protected GUIButtonControl coverArt = null;
+        protected GUIImage coverArt = null;
 
         #endregion
 
@@ -104,7 +104,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (movieBrowser.SelectedListItem != null)
                     SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
 
-                updateBackdropVisibility();
+                updateArtwork();
             }
         } 
         private ViewMode currentView = ViewMode.LIST;
@@ -117,18 +117,16 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             set {
-                DBMovieInfo previousMovie = selectedMovie;
+                if (selectedMovie == value)
+                    return;
 
                 // load new data
                 selectedMovie = value;
-                updateBackdropVisibility();
                 publishDetails(SelectedMovie, "SelectedMovie");
 
-                if (previousMovie != null) {
-                    // clear out old fanart and coverart
-                    GUITextureManager.ReleaseTexture(previousMovie.CoverFullPath);
-                    GUITextureManager.ReleaseTexture(previousMovie.BackdropFullPath);
-                }
+                // start the timer for new artwork loading
+                updateArtworkTimer.Stop();
+                updateArtworkTimer.Start();
             }
         }
         private DBMovieInfo selectedMovie;
@@ -139,10 +137,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             g_Player.PlayBackStarted += new g_Player.StartedHandler(OnPlayBackStarted);
             g_Player.PlayBackEnded += new g_Player.EndedHandler(OnPlayBackEnded);
 
-            backdropUpdateTimer = new System.Timers.Timer();
-            backdropUpdateTimer.Elapsed += new ElapsedEventHandler(OnBackdropTimerElapsed);
-            backdropUpdateTimer.Interval = 400;
-            backdropUpdateTimer.AutoReset = false;
+            // setup the timer for delayed artwork loading
+            int artworkDelay = (int)MovingPicturesCore.SettingsManager["gui_artwork_delay"].Value;
+            updateArtworkTimer = new System.Timers.Timer();
+            updateArtworkTimer.Elapsed += new ElapsedEventHandler(OnUpdateArtworkTimerElapsed);
+            updateArtworkTimer.Interval = artworkDelay;
+            updateArtworkTimer.AutoReset = false;
         }
 
         ~MovingPicturesGUI() {
@@ -152,13 +152,16 @@ namespace MediaPortal.Plugins.MovingPictures {
         // period of time (usually something like 200ms, THEN updates the backdrop. If the
         // user switches again *before* the timer expires, the timer is reset. THis allows
         // quick traversal on the GUI
-        private void OnBackdropTimerElapsed(object sender, ElapsedEventArgs e) {
+        private void OnUpdateArtworkTimerElapsed(object sender, ElapsedEventArgs e) {
             updateArtwork();
         }
 
         private void updateArtwork() {
             if (SelectedMovie == null)
                 return;
+
+            string oldBackdrop = GUIPropertyManager.GetProperty("#MovingPictures.Backdrop");
+            string oldCover = GUIPropertyManager.GetProperty("#MovingPictures.Coverart"); 
 
             // update backdrop
             string property = "#MovingPictures.Backdrop";
@@ -172,8 +175,41 @@ namespace MediaPortal.Plugins.MovingPictures {
             GUIPropertyManager.SetProperty(property, value);
             logger.Debug(property + " = \"" + value + "\"");
 
+            // clear out previous textures for backdrop and cover art
+            GUITextureManager.ReleaseTexture(oldBackdrop);
+            GUITextureManager.ReleaseTexture(oldCover);
+
+
             updateBackdropVisibility();
-            coverArt.Visible = true;
+        }
+
+        private void updateBackdropVisibility() {
+            bool backdropActive = true;
+
+            // grab the skin supplied setting for backdrop visibility
+            switch (movieBrowser.View) {
+                case GUIFacadeControl.ViewMode.Filmstrip:
+                    backdropActive = defines["#filmstrip.backdrop.used"].Equals("true");
+                    break;
+                case GUIFacadeControl.ViewMode.LargeIcons:
+                    backdropActive = defines["#largeicons.backdrop.used"].Equals("true");
+                    break;
+                case GUIFacadeControl.ViewMode.SmallIcons:
+                    backdropActive = defines["#smallicons.backdrop.used"].Equals("true");
+                    break;
+                case GUIFacadeControl.ViewMode.List:
+                    backdropActive = defines["#list.backdrop.used"].Equals("true");
+                    break;
+            }
+
+            if (backdropActive == false)
+                return;
+
+            // set backdrop visibility
+            if (SelectedMovie != null && SelectedMovie.BackdropFullPath.Trim().Length != 0)
+                movieBackdrop.Visible = true;
+            else
+                movieBackdrop.Visible = false;
         }
 
         private bool isAvailable(ViewMode view) {
@@ -218,35 +254,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (textToggleButton != null) textToggleButton.Focus = false;
         }
 
-        private void updateBackdropVisibility() {
-            bool backdropActive = true;
-            
-            // grab the skin supplied setting for backdrop visibility
-            switch (movieBrowser.View) {
-                case GUIFacadeControl.ViewMode.Filmstrip:
-                    backdropActive = defines["#filmstrip.backdrop.used"].Equals("true");
-                    break;
-                case GUIFacadeControl.ViewMode.LargeIcons:
-                    backdropActive = defines["#largeicons.backdrop.used"].Equals("true");
-                    break;
-                case GUIFacadeControl.ViewMode.SmallIcons:
-                    backdropActive = defines["#smallicons.backdrop.used"].Equals("true");
-                    break;
-                case GUIFacadeControl.ViewMode.List:
-                    backdropActive = defines["#list.backdrop.used"].Equals("true");
-                    break;
-            }
-
-            if (backdropActive == false)
-                return;
-            
-            // set backdrop visibility
-            if (SelectedMovie != null && SelectedMovie.BackdropFullPath.Trim().Length != 0)
-                movieBackdrop.Visible = true;
-            else
-                movieBackdrop.Visible = false;
-        }
-        
         #region GUIWindow Members
 
         private void showMessage(string message) {
@@ -286,7 +293,22 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (movieBrowser == null) {
                 GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
                 dialog.Reset();
-                dialog.SetHeading("Problem loading skin file...");
+                dialog.SetHeading("Sorry, there was a problem loading skin file...");
+                dialog.DoModal(GetID);
+                GUIWindowManager.ShowPreviousWindow();
+                return;
+            }
+
+            // if the user hasn't defined any import paths they need to goto the config screen
+            if (DBImportPath.GetAll().Count == 0) {
+                GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+                dialog.Reset();
+                dialog.SetHeading("No Import Paths!");
+                dialog.SetLine(1, "It doesn't look like you have defined any");
+                dialog.SetLine(2, "import paths in the configuration screen.");
+                dialog.SetLine(3, "You shold close MediaPortal and launch the");
+                dialog.SetLine(4, "MediaPortal Configuration Screen to configure");
+                dialog.SetLine(5, "Moving Pictures.");
                 dialog.DoModal(GetID);
                 GUIWindowManager.ShowPreviousWindow();
                 return;
@@ -330,6 +352,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                 CurrentView = ViewMode.LIST;
                 logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
             }
+
+            // load fanart and coverart
+            updateArtwork();
         }
 
         // Grabs the <define> tags from the skin for skin parameters from skinner.
@@ -525,26 +550,20 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void OnItemSelected(GUIListItem item, GUIControl parent) {
-            bool justLoaded = SelectedMovie == null;
+            logger.Info("OnItemSelected: " + ((DBMovieInfo)item.TVTag).Title + " (" + parent.ToString() + ")");
 
-            if (parent == movieBrowser || parent == movieBrowser.FilmstripView || 
-                parent == movieBrowser.ThumbnailView || parent == movieBrowser.ListView)
-                SelectedMovie = item.TVTag as DBMovieInfo;
+            
+            // if this is not a message from the facade, exit
+            if (parent != movieBrowser && parent != movieBrowser.FilmstripView &&
+                parent != movieBrowser.ThumbnailView && parent != movieBrowser.ListView)
+                return;
+            
 
-            if (justLoaded)
-                updateArtwork();
-            else {
-                // make invisible the existing fan art
-                if (movieBackdrop != null) movieBackdrop.Visible = false;
+            // if we already are on this movie, exit
+            if (SelectedMovie == item.TVTag)
+                return;
 
-                // unload the coverart
-                GUIPropertyManager.SetProperty("#MovingPictures.Coverart", "");
-                if (coverArt != null) coverArt.Visible = false;
-
-                // start the timer for new backdrop loading
-                backdropUpdateTimer.Stop();
-                backdropUpdateTimer.Start();
-            }
+            SelectedMovie = item.TVTag as DBMovieInfo;
         }
 
 
