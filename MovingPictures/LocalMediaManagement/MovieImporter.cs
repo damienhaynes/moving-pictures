@@ -40,8 +40,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private int percentDone;
         private bool fullScanNeeded;
 
+        private const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
         private const string rxMultiPartScan = @"((cd|disk)\s*([a-c0-9]))|[^\s\d]([a-c0-9])$";
         private const string rxMultiPartClean = @"((cd|disk)\s*([a-c0-9]))";
+        private const string rxPunctuation = @"[\.\:\,]";
         
         // a list of all files currently in the system
         private Dictionary<DBLocalMedia, MediaMatch> matchesInSystem;
@@ -812,7 +814,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // if the best match is exact or very close, place it in the accepted queue
             // otherwise place it in the pending queue for approval
-            if (mediaMatch.Selected != null && mediaMatch.Selected.MatchValue <= 3) {
+            int threshold = (int)MovingPicturesCore.SettingsManager["importer_autoapprove"].Value;
+            if (mediaMatch.Selected != null && mediaMatch.Selected.MatchValue <= threshold)
+            {
                 if (mediaMatch.HighPriority) priorityApprovedMatches.Add(mediaMatch);
                 else approvedMatches.Add(mediaMatch);
 
@@ -949,6 +953,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             movieList = MovingPicturesCore.MovieProvider.Get(searchStr);
 
             bool strictYear = (bool)MovingPicturesCore.SettingsManager["importer_strict_year"].Value;
+            Regex rxCleanPunctuation = new Regex(rxPunctuation, RegexOptions.IgnoreCase);
 
             foreach (DBMovieInfo currMovie in movieList) {
                 PossibleMatch currMatch = new PossibleMatch();
@@ -959,6 +964,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 
                 string sMovie = currMovie.Title.ToLower().Trim();
                 string sSearch = searchStr.ToLower().Trim();
+
+                //clean punctuation from the result
+                sMovie = rxCleanPunctuation.Replace(sMovie, ""); 
                 
                 // if both have a year then add the year to the comparison variables
                 if (searchYear > 0 && currMovie.Year > 0) {
@@ -966,6 +974,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     sSearch += ' ' + searchYear.ToString();
                 }
 
+                // get the Levenshtein distance between the two string and use them for the match value
                 currMatch.MatchValue = AdvancedStringComparer.Levenshtein(sMovie,sSearch);
 
                 if ((searchYear > 0) && strictYear)
@@ -1044,7 +1053,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // if there are no spaces, but a period, assume the period is replacement for spaces.
             // lets clean that up.
             //if (!rtn.Contains(" "))
-                rtn = rtn.Replace('.', ' ');
+            rtn = rtn.Replace('.', ' ');
             
             // a lot of keywords that could poison the result so let's clean them according to our given exp.
             // regexParser = new Regex(@"((720p|1080p|DVDRip|DTS|AC3|Bluray|HDDVD|XviD|DiVX|x264)[-]?.*?$)", RegexOptions.IgnoreCase);
@@ -1052,8 +1061,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             rtn = regexParser.Replace(rtn, "");
 
             // if there is a four digit number that looks like a year, parse it out
-            // Regex regexParser = new Regex(@"(^.*?)[\[\(]?([0-9]{4})[\]\)]?(.+)");
-            regexParser = new Regex(@"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)");
+            regexParser = new Regex(rxYearScan);
             Match match = regexParser.Match(rtn);
             if (match.Success)
             {
@@ -1216,7 +1224,17 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // see previous comment
         public String DisplayMember {
-            get { return ToString() + " (" + this.movie.Year.ToString() + ")"; }
+            get {
+              if (this.movie.Year > 0)
+              {
+                // if we have a year value for the possible match include it in the display member
+                return ToString() + " (" + this.movie.Year.ToString() + ")";
+              }
+              else
+              {
+                return ToString();
+              }
+            }
         }
 
         public int CompareTo(object o) {
