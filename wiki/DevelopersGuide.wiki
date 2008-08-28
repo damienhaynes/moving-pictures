@@ -7,6 +7,7 @@ These wiki pages are intended to get you up to speed on how to work with the Mov
 = [DevelopmentEnvironmentMain Development Environment Setup Guide] =
 The first thing you will want to check out is the [DevelopmentEnvironmentMain Development Environment Setup Guide]. This will help you get connected to subversion, get the source code pulled down to your computer, and get your IDE configured to properly build Moving Pictures. If you are having trouble getting things to compile or you are having dependency issues, this is probably the first place to go. If of course you are still having trouble after going through this, feel free to post in the [http://groups.google.com/group/moving-pictures-developers Developer's Discussion Google Group].
 
-
+= [DesignDocumentMain Design Document] =
+This document contains detailed descriptions of the different components of Moving Pictures. The descriptions, while making reference to specific classes, should be done at a functional level, rather than a technical level. This document should explain how Moving Pictures works. It should not describe the code itself, that is what code comments are for. 
 
 ,,... more content coming soon.,,
