@@ -43,6 +43,11 @@
         <default>((720p|1080p|1080i|DirCut|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264|dxva)[-]?.*?$)</default>
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
+    
+      <setting id="importer_autoapprove" name="Auto-Approve Threshold" type="INT">
+        <default>1</default>
+        <description>This is the maximum value for the levenshtein distance triggering auto-approval.</description>
+      </setting>
 
       <!-- Sample Filter -->
       <group name="Sample Filter">
