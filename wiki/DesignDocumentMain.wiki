@@ -12,3 +12,9 @@ The data provider subsystem is one of the integral parts of Moving Pictures. The
 
 = [DesignDocumentMovieImporter Movie Importer] =
 These components handle the process of turning a list of files into useful information in the database. These components read directly from the disk, they use the Data Provider components as a service and the output is a database full of meta-data relating to files on disk. If there is a heart to the plug-in, this is it. This is the component the creates all the magic.
+
+= Configuration Screen =
+This section covers the design of the Configuration screen and it's various components. This user interface layer sits on top of all above components to provide interaction with the user. There should be very little if any core logic in these classes, the only provide the _presentation_ of the underlying components.
+
+= Media Portal UI =
+This section of course covers the presentation layer in the !MediaPortal application itself. This covers how things are displayed, and what components are available to the skinner. This combined with the [SkinDesignersGuide Skin Designer's Guide] should give someone an intimate understanding of how the GUI functions and how it interacts with the skin layer.
