@@ -15,6 +15,11 @@
       <default>5</default>
       <description>This determines the number of actors, genres, directors, etc to display on the GUI. This applies to all string based list fields.</description>
     </setting>
+
+    <setting id="gui_artwork_delay" name="Artwork Loading Delay" type="INT">
+      <default>400</default>
+      <description>The number of milliseconds that Moving Pictures waits before it loads new artwork (backdrops and covers) when traversing movies in the GUI. Increasing this value can improve performance if you are experiencing slow down with rapid movements in the GUI.</description>
+    </setting>
   </group>
 
   

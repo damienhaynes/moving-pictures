@@ -57,7 +57,7 @@ should use the following tag for proper visibility:
       <posY>522</posY>
       <width>166</width>
       <height>228</height>
-      <texture>#MovingPictures.SelectedMovie.coverfullpath</texture>
+      <texture>#MovingPictures.Coverart</texture>
       <visible>facadeview.list+Control.IsVisible(1)+Control.IsVisible(50)</visible>
     </control>
     <control>

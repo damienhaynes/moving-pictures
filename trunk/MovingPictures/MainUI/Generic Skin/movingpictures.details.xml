@@ -63,7 +63,7 @@ following tag for proper visibility:
       <height>400</height>
       <width>200</width>
       <height>300</height>
-      <texture>#MovingPictures.SelectedMovie.coverfullpath</texture>
+      <texture>#MovingPictures.Coverart</texture>
       <visible>!Control.IsVisible(50)</visible>
     </control>
     <control>

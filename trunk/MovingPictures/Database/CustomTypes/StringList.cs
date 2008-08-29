@@ -61,8 +61,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
             if (limit > this.Count)
                 limit = this.Count;
 
-            foreach (string currValue in this) 
-                prettyStr.Append(currValue + ", ");
+            for (int i = 0; i < limit; i++) {
+                prettyStr.Append(this[i] + ", ");
+            }
             prettyStr.Remove(prettyStr.Length - 2, 2);
 
             return prettyStr.ToString();
