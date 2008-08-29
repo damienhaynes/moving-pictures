@@ -28,9 +28,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.pathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.removableColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.pathsGroupBox = new System.Windows.Forms.GroupBox();
-            this.notesLabel = new System.Windows.Forms.TextBox();
             this.removeSourceButton = new System.Windows.Forms.Button();
             this.addSourceButton = new System.Windows.Forms.Button();
+            this.notesLabel = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pathsGridView)).BeginInit();
             this.pathsGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -47,12 +47,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.pathsGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.pathColumn,
             this.removableColumn});
-            this.pathsGridView.Location = new System.Drawing.Point(6, 79);
+            this.pathsGridView.Location = new System.Drawing.Point(6, 97);
             this.pathsGridView.MultiSelect = false;
             this.pathsGridView.Name = "pathsGridView";
             this.pathsGridView.RowHeadersVisible = false;
             this.pathsGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.pathsGridView.Size = new System.Drawing.Size(480, 185);
+            this.pathsGridView.Size = new System.Drawing.Size(480, 167);
             this.pathsGridView.TabIndex = 0;
             // 
             // pathColumn
@@ -84,25 +84,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.pathsGroupBox.TabStop = false;
             this.pathsGroupBox.Text = "Media Sources";
             // 
-            // notesLabel
-            // 
-            this.notesLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.notesLabel.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.notesLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.notesLabel.Location = new System.Drawing.Point(7, 19);
-            this.notesLabel.Multiline = true;
-            this.notesLabel.Name = "notesLabel";
-            this.notesLabel.ReadOnly = true;
-            this.notesLabel.Size = new System.Drawing.Size(517, 54);
-            this.notesLabel.TabIndex = 1;
-            this.notesLabel.Text = resources.GetString("notesLabel.Text");
-            // 
             // removeSourceButton
             // 
             this.removeSourceButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.removeSourceButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_remove;
-            this.removeSourceButton.Location = new System.Drawing.Point(492, 114);
+            this.removeSourceButton.Location = new System.Drawing.Point(492, 132);
             this.removeSourceButton.Margin = new System.Windows.Forms.Padding(0);
             this.removeSourceButton.Name = "removeSourceButton";
             this.removeSourceButton.Size = new System.Drawing.Size(32, 32);
@@ -114,12 +100,26 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.addSourceButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addSourceButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_add;
-            this.addSourceButton.Location = new System.Drawing.Point(492, 79);
+            this.addSourceButton.Location = new System.Drawing.Point(492, 97);
             this.addSourceButton.Name = "addSourceButton";
             this.addSourceButton.Size = new System.Drawing.Size(32, 32);
             this.addSourceButton.TabIndex = 2;
             this.addSourceButton.UseVisualStyleBackColor = true;
             this.addSourceButton.Click += new System.EventHandler(this.addSourceButton_Click);
+            // 
+            // notesLabel
+            // 
+            this.notesLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.notesLabel.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.notesLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.notesLabel.Location = new System.Drawing.Point(7, 19);
+            this.notesLabel.Multiline = true;
+            this.notesLabel.Name = "notesLabel";
+            this.notesLabel.ReadOnly = true;
+            this.notesLabel.Size = new System.Drawing.Size(517, 72);
+            this.notesLabel.TabIndex = 1;
+            this.notesLabel.Text = resources.GetString("notesLabel.Text");
             // 
             // ImportPathsPane
             // 

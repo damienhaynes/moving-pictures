@@ -83,6 +83,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     foreach (SQLiteResultSet.Row row in resultSet.Rows) {
                         // create the new entry
                         DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
+                        newRecord.DBManager = this; 
                         newRecord.LoadByRow(row);
                         
                         // if it is already cached, just use the cached object
@@ -91,7 +92,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                         // otherwise use the new record and cache it
                         else {
-                            newRecord.DBManager = this;
                             newRecord = cache.Add(newRecord);
                             getAllRelationData(newRecord);
                             rtn.Add(newRecord);

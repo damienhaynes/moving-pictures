@@ -260,10 +260,14 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #region GUIWindow Members
 
-        private void showMessage(string message) {
+        private void showMessage(string heading, string line1, string line2, string line3, string line4) {
             GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
             dialog.Reset();
-            dialog.SetHeading(message);
+            dialog.SetHeading(heading);
+            if (line1 != null) dialog.SetLine(1, line1);
+            if (line2 != null) dialog.SetLine(2, line2);
+            if (line3 != null) dialog.SetLine(3, line3);
+            if (line4 != null) dialog.SetLine(4, line4);
             dialog.DoModal(GetID);
 
         }
@@ -358,9 +362,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (obj.GetType() != typeof(DBMovieInfo))
                 return;
 
+            logger.Info("Removing " + ((DBMovieInfo)obj).Title + " from facade.");
+
             // remove movie from list
             DBMovieInfo movie = (DBMovieInfo)obj;
             removeMovieFromBrowser(movie);
+            
+            // if our selection has changed, update it
+            if (SelectedMovie != movieBrowser.SelectedListItem.TVTag)
+                SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
         }
 
         private void OnMovieAdded(DatabaseTable obj) {
@@ -368,7 +378,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (obj.GetType() != typeof(DBMovieInfo))
                 return;
 
-            logger.Info("OnMovieAdded: " + ((DBMovieInfo)obj).Title);
+            logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to facade.");
 
             // add movie to the list
             addMovieToBrowser((DBMovieInfo)obj);
@@ -390,6 +400,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             // the same GUIListItem object
             if (listItemLookup.ContainsKey(newMovie)) {
                 movieBrowser.Add(listItemLookup[newMovie]);
+                movieBrowser.Sort(new GUIListItemMovieComparer());
                 return;
             }
             
@@ -403,14 +414,17 @@ namespace MediaPortal.Plugins.MovingPictures {
             
             // and add
             movieBrowser.Add(currItem);
+            movieBrowser.Sort(new GUIListItemMovieComparer());
             listItemLookup[newMovie] = currItem;
         }
 
         private void removeMovieFromBrowser(DBMovieInfo movie) {
             if (listItemLookup.ContainsKey(movie)) {
+
                 // sadly there is no current way to remove an item from the facade.
                 movieBrowser.Clear();
                 addAllMoviesToFacade();
+                movieBrowser.Sort(new GUIListItemMovieComparer());
             }
         }
 
@@ -562,6 +576,23 @@ namespace MediaPortal.Plugins.MovingPictures {
         private void playSelectedMovie(int part) {
             if (SelectedMovie == null)
                 SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
+
+            DBLocalMedia localMediaToPlay = SelectedMovie.LocalMedia[part - 1];
+
+            // check for removable
+            if (!localMediaToPlay.File.Exists && localMediaToPlay.ImportPath.Removable) {
+                showMessage("Removable Media Not Available",
+                            "The media for the Movie you have selected is not",
+                            "currently available. Please insert or connect this",
+                            "media source and try again.", null);
+                return;
+            }
+            else if (!localMediaToPlay.File.Exists) {
+                showMessage("Error",
+                            "The media for the Movie you have selected is missing!",
+                            "Very sorry but something has gone wrong...", null, null);
+                return;
+            }
 
             // play the movie! 
             GUIGraphicsContext.IsFullScreenVideo = true;

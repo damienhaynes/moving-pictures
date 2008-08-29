@@ -124,7 +124,7 @@
     <value>True</value>
   </metadata>
   <data name="notesLabel.Text" xml:space="preserve">
-    <value>Specify the location(s) of your media files. Any media that is placed in these folders will automatically be added to your Library, and any media removed from these folders will be automatically removed from your Library. 
+    <value>Specify the location(s) of your movie files. Any video that is placed in these folders will automatically be added to your Library, and any media removed from these folders will be automatically removed from your Library. These folders should contain movies only.
 
 Any media loaded from a Removable source will remain in your Library until manually removed.</value>
   </data>
