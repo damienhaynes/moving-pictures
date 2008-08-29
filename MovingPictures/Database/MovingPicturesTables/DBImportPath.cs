@@ -70,7 +70,23 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         public List<DBLocalMedia> GetNewLocalMedia() {
             return GetLocalMedia(true);
         }
-        
+
+        public static List<FileInfo> getFilesRecursive(DirectoryInfo di)
+        {
+          List<FileInfo> fileList = new List<FileInfo>();
+          fileList.AddRange(di.GetFiles("*"));
+          DirectoryInfo[] dirs = di.GetDirectories();
+          foreach (DirectoryInfo d in dirs)
+          {
+            if ((d.Attributes & FileAttributes.System) == 0)
+            {
+              fileList.AddRange(getFilesRecursive(d));
+            }
+          }
+          return fileList;
+        }    
+
+
         public List<DBLocalMedia> GetLocalMedia(bool returnOnlyNew) {
             if (Directory == null)
                 return null;
@@ -79,8 +95,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
             // grab the list of files and parse out appropriate ones based on extension
             try {
-                FileInfo[] fileList = Directory.GetFiles("*", SearchOption.AllDirectories);
-                foreach (FileInfo currFile in fileList) {
+              
+              //FileInfo[] fileList = Directory.GetFiles("*", SearchOption.AllDirectories);
+              List<FileInfo> fileList = getFilesRecursive(Directory);
+              foreach (FileInfo currFile in fileList) {
                     foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
                         if (currFile.Extension == currExt) {
                             DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName);
@@ -98,7 +116,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                 }
             }
             catch (Exception e) {
-                logger.Error("Error scanning " + Directory.FullName, e);
+               logger.Error("Error scanning " + Directory.FullName, e);
             }
 
             return rtn;
