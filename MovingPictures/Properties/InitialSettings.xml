@@ -54,21 +54,21 @@
         <description>This is the maximum value for the levenshtein distance triggering auto-approval.</description>
       </setting>
 
-      <!-- Sample Filter -->
-      <group name="Sample Filter">
-        <setting id="importer_sample_keyword" name="Regular Expression String" type="STRING">
-          <default>sample</default>
-          <description>a regular expression that matches keywords in the filename indicating that the file is possible sample.</description>
-        </setting>
-
-        <setting id="importer_sample_maxsize" name="Max Filesize (MB)" type="INT">
-          <default>100</default>
-          <description>If the filesize of the potential sample file is below this value it will be skipped.</description>
-        </setting>
-      </group>
-
     </group>
-    
+
+    <!-- Sample Filter -->
+    <group name="Sample Filter">
+      <setting id="importer_sample_keyword" name="Regular Expression String" type="STRING">
+        <default>sample</default>
+        <description>a regular expression that matches keywords in the filename indicating that the file is possible sample.</description>
+      </setting>
+
+      <setting id="importer_sample_maxsize" name="Max Filesize (MB)" type="INT">
+        <default>100</default>
+        <description>If the filesize of the potential sample file is below this value it will be skipped.</description>
+      </setting>
+    </group>
+
     <group name="Cover Art">
       <setting id="cover_art_folder" name="Cover Artwork Folder" type="STRING">
         <description>The folder in which cover art should be saved to disk.</description>
