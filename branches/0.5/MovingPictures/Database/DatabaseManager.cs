@@ -81,12 +81,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                     // store each one
                     foreach (SQLiteResultSet.Row row in resultSet.Rows) {
+                        // create the new entry
                         DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
-                        newRecord.DBManager = this;
                         newRecord.LoadByRow(row);
-                        newRecord = cache.Add(newRecord);
-                        getAllRelationData(newRecord);
-                        rtn.Add(newRecord);
+                        
+                        // if it is already cached, just use the cached object
+                        if (cache.Get(tableType, (int)newRecord.ID) != null)
+                            rtn.Add(cache.Get(tableType, (int)newRecord.ID));
+
+                        // otherwise use the new record and cache it
+                        else {
+                            newRecord.DBManager = this;
+                            newRecord = cache.Add(newRecord);
+                            getAllRelationData(newRecord);
+                            rtn.Add(newRecord);
+                        }
                     }
                 }
                 catch (SQLiteException e) {
@@ -170,10 +179,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         // Deletes a given object from the database, object in memory persists and could be recommited.
         public void Delete(DatabaseTable dbObject) {
             try {
-                if (ObjectDeleted != null)
-                    ObjectDeleted(dbObject);
-
                 if (dbObject.ID == null) {
+                    logger.Warn("Tried to delete an uncommited object...");
                     return;
                 }
 
@@ -189,6 +196,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 cache.Remove(dbObject);
                 dbObject.ID = null;
                 dbObject.AfterDelete();
+
+                if (ObjectDeleted != null) {
+                    logger.Debug("Calling listeners for " + dbObject.ToString());
+                    ObjectDeleted(dbObject);
+                }
             }
             catch (SQLiteException e) {
                 logger.ErrorException("Error deleting object from " + GetTableName(dbObject) + " table.", e);

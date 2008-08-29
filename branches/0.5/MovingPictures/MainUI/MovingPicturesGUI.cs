@@ -21,6 +21,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         public enum ViewMode { LIST, SMALLICON, LARGEICON, FILMSTRIP, FANART_FILMSTRIP, DETAILS }
 
         Dictionary<string, string> defines;
+        Dictionary<DBMovieInfo, GUIListItem> listItemLookup;
+
         private bool currentlyPlaying = false;
         private int currentPart = 1;
 
@@ -143,6 +145,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             updateArtworkTimer.Elapsed += new ElapsedEventHandler(OnUpdateArtworkTimerElapsed);
             updateArtworkTimer.Interval = artworkDelay;
             updateArtworkTimer.AutoReset = false;
+
+            listItemLookup = new Dictionary<DBMovieInfo, GUIListItem>();
         }
 
         ~MovingPicturesGUI() {
@@ -316,22 +320,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             LoadDefinesFromSkin();
 
-            // initialize the facade
-            movieBrowser.Clear();
+            addAllMoviesToFacade();
             movieBrowser.Focus = true;
-
-            // populate the facade
-            List<DBMovieInfo> movies = DBMovieInfo.GetAll();
-            foreach (DBMovieInfo currMovie in movies) {
-                GUIListItem currItem = new GUIListItem();
-                currItem.Label = currMovie.Title;
-                currItem.IconImage = currMovie.CoverThumbFullPath.Trim();
-                currItem.IconImageBig = currMovie.CoverThumbFullPath.Trim();
-                currItem.TVTag = currMovie;
-                currItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(OnItemSelected);
-                movieBrowser.Add(currItem);
-            }
-
             movieBrowser.Sort(new GUIListItemMovieComparer());
 
             // set the default view for the facade
@@ -353,8 +343,75 @@ namespace MediaPortal.Plugins.MovingPictures {
                 logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
             }
 
+            MovingPicturesCore.DatabaseManager.ObjectDeleted +=
+                new DatabaseManager.ObjectAffectedDelegate(OnMovieDeleted);
+
+            MovingPicturesCore.DatabaseManager.ObjectInserted +=
+                new DatabaseManager.ObjectAffectedDelegate(OnMovieAdded);
+
             // load fanart and coverart
             updateArtwork();
+        }
+
+        private void OnMovieDeleted(DatabaseTable obj) {
+            // if this is not a movie object, break
+            if (obj.GetType() != typeof(DBMovieInfo))
+                return;
+
+            // remove movie from list
+            DBMovieInfo movie = (DBMovieInfo)obj;
+            removeMovieFromBrowser(movie);
+        }
+
+        private void OnMovieAdded(DatabaseTable obj) {
+            // if this is not a movie object, break
+            if (obj.GetType() != typeof(DBMovieInfo))
+                return;
+
+            logger.Info("OnMovieAdded: " + ((DBMovieInfo)obj).Title);
+
+            // add movie to the list
+            addMovieToBrowser((DBMovieInfo)obj);
+        }
+
+        private void addAllMoviesToFacade() {
+            // initialize the facade
+            movieBrowser.Clear();
+
+            // populate the facade
+            List<DBMovieInfo> movies = DBMovieInfo.GetAll();
+            foreach (DBMovieInfo currMovie in movies) 
+                addMovieToBrowser(currMovie);
+            
+        }
+
+        private void addMovieToBrowser(DBMovieInfo newMovie) {
+            // if we already created this item, assume we did a clear first and reuse
+            // the same GUIListItem object
+            if (listItemLookup.ContainsKey(newMovie)) {
+                movieBrowser.Add(listItemLookup[newMovie]);
+                return;
+            }
+            
+            // create a new list object
+            GUIListItem currItem = new GUIListItem();
+            currItem.Label = newMovie.Title;
+            currItem.IconImage = newMovie.CoverThumbFullPath.Trim();
+            currItem.IconImageBig = newMovie.CoverThumbFullPath.Trim();
+            currItem.TVTag = newMovie;
+            currItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(OnItemSelected);
+            
+            // and add
+            movieBrowser.Add(currItem);
+            listItemLookup[newMovie] = currItem;
+        }
+
+        private void removeMovieFromBrowser(DBMovieInfo movie) {
+            if (listItemLookup.ContainsKey(movie)) {
+                // sadly there is no current way to remove an item from the facade.
+                movieBrowser.Clear();
+                addAllMoviesToFacade();
+            }
         }
 
         // Grabs the <define> tags from the skin for skin parameters from skinner.
