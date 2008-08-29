@@ -129,6 +129,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             fileSystemWatchers = new List<FileSystemWatcher>();
             pathLookup = new Dictionary<FileSystemWatcher, DBImportPath>();
 
+            MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectDeleted);
+
             percentDone = 0;
         }
 
@@ -416,7 +418,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     fileSystemWatchers.Add(currWatcher);
                     pathLookup[currWatcher] = currPath;
                 }
-                catch (ArgumentException e) {
+                catch (ArgumentException) {
                     if (currPath.Removable)
                         logger.Info("Removable import path " + currPath.Removable + " is offline.");
                     else
@@ -455,6 +457,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void OnFileDeleted(Object source, FileSystemEventArgs e) {
             DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath);
 
+            logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal.");
+
             // if the file is not in our system there's nothing to do
             if (removedFile.ID == null) {
                 logger.Warn("FileSystemWatcher tried to delete a file not in our system.");
@@ -474,9 +478,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     currFile.Delete();
                 currMovie.Delete();
             }
-
-            logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal.");
-
         }
 
         // loops through all local files in the system and removes anything that does not actually exist
@@ -493,6 +494,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             otherFile.Delete();
                         currMovie.Delete();
                     }
+
+                    // should have already been deleted, but if we for some reason have an
+                    // orphan file (no associated movie) then delete it too.
+                    currFile.Delete();
                 }
             }
         }
@@ -628,6 +633,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
         }
+
+        // When a process has removed a local file from the database, we should remove it from the matching system
+        private void DatabaseManager_ObjectDeleted(DatabaseTable obj) {
+            if (obj is DBLocalMedia)
+                if (matchesInSystem.ContainsKey((DBLocalMedia)obj))
+                    RemoveFromMatchLists(matchesInSystem[(DBLocalMedia)obj]);
+        }
+
 
         #endregion
 
@@ -821,7 +834,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 else approvedMatches.Add(mediaMatch);
 
                 // notify any listeners
-                logger.Info("Auto-approved " + mediaMatch.LocalMediaString + "as " + mediaMatch.Selected.Movie.Title);
+                logger.Info("Auto-approved " + mediaMatch.LocalMediaString + " as " + mediaMatch.Selected.Movie.Title);
                 if (MovieStatusChanged != null)
                     MovieStatusChanged(mediaMatch, MovieImporterAction.APPROVED);
             } else {
@@ -916,6 +929,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (retrievingDetailsMatches.Contains(match)) {
                     retrievingDetailsMatches.Remove(match);
                 }
+            }
+
+            foreach (DBLocalMedia currFile in match.LocalMedia) {
+                if (matchesInSystem.ContainsKey(currFile))
+                    matchesInSystem.Remove(currFile);
             }
         }
 

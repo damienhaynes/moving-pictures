@@ -36,7 +36,7 @@ multiple view modes.
       <posY>0</posY>
       <width>1366</width>
       <height>768</height>
-      <texture>#MovingPictures.SelectedMovie.backdropfullpath</texture>
+      <texture>#MovingPictures.Backdrop</texture>
     </control>
     <control>
       <description>Background to be displayed when there is no Movie Backdrop</description>
@@ -57,7 +57,7 @@ multiple view modes.
       <posY>20</posY>
       <width>400</width>
       <height>566</height>
-      <texture>#MovingPictures.SelectedMovie.coverfullpath</texture>
+      <texture>#MovingPictures.Coverart</texture>
       <visible>!Control.IsVisible(1)+Control.IsVisible(50)</visible>
     </control>
     <control>
