@@ -512,41 +512,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // and it's readded, it will be reprocessed.
         private void ScanFiles(List<DBLocalMedia> importFileList, bool highPriority) {
             List<DBLocalMedia> currFileSet = new List<DBLocalMedia>();
-            // Create the sample filter regular expression
-            Regex rxSampleFilter = new Regex(MovingPicturesCore.SettingsManager["importer_sample_keyword"].Value.ToString(), RegexOptions.IgnoreCase);  
             // Create the Multi-Part regular expression
             Regex rxMultiPart = new Regex(rxMultiPartScan, RegexOptions.IgnoreCase);   
-            // Set sample max size in bytes
-            long sampleMaxSize = long.Parse(MovingPicturesCore.SettingsManager["importer_sample_maxsize"].Value.ToString()) * 1024 * 1024;
-            // Folder Count
-            Dictionary<string, int> folderChk = new Dictionary<string, int>();
 
             foreach (DBLocalMedia currFile in importFileList) {
               string currFolder = currFile.File.DirectoryName;
                 // if we have already loaded this file, move to the next
               if (matchesInSystem.ContainsKey(currFile) || currFile.ID != null)
-              {
-                // Update Folder Count
-                if (folderChk.ContainsKey(currFolder))
-                  folderChk[currFolder]++;
-                else
-                  folderChk[currFolder] = 1;
                 continue;
-              }
                 
                 // exclude samplefiles
-                if ((currFile.File.Length < sampleMaxSize) && rxSampleFilter.Match(currFile.File.Name).Success)
-                {
+                if (isSampleFile(currFile.File)) {
                   logger.Info("Sample detected. Skipping {0} ({1} bytes)", currFile.File.Name, currFile.File.Length);
                   continue;
                 }
                 
-                // Update Folder Count
-                if (folderChk.ContainsKey(currFolder))
-                  folderChk[currFolder]++;
-                else
-                  folderChk[currFolder] = 1;
-
                 // if we have no previous files, move on so we can check if the next file
                 // is a pair to this one.
                 if (currFileSet.Count == 0) {
@@ -593,7 +573,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (!isAdditionalMatch) {
                     MediaMatch newMatch = new MediaMatch();
                     newMatch.LocalMedia = currFileSet;
-                    newMatch.FolderHint = (currFileSet.Count == folderChk[currFileSet[0].File.DirectoryName]);
+                    newMatch.FolderHint = (currFileSet.Count == folderCheck(currFileSet[0].File.Directory));
                                   
                     lock (pendingMatches.SyncRoot) {
                         pendingMatches.Add(newMatch);
@@ -617,7 +597,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (currFileSet.Count > 0) {
                 MediaMatch newMatch = new MediaMatch();
                 newMatch.LocalMedia = currFileSet;
-                newMatch.FolderHint = (currFileSet.Count == folderChk[currFileSet[0].File.DirectoryName]);
+                newMatch.FolderHint = (currFileSet.Count == folderCheck(currFileSet[0].File.Directory));
                 lock (pendingMatches.SyncRoot) {
                     pendingMatches.Add(newMatch);
                 }
@@ -642,6 +622,35 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
 
+        // Check if the supplied file is a Sample file
+        private bool isSampleFile(FileInfo file)
+        {
+          // Create the sample filter regular expression
+          Regex rxSampleFilter = new Regex(MovingPicturesCore.SettingsManager["importer_sample_keyword"].Value.ToString(), RegexOptions.IgnoreCase);  
+          // Set sample max size in bytes
+          long sampleMaxSize = long.Parse(MovingPicturesCore.SettingsManager["importer_sample_maxsize"].Value.ToString()) * 1024 * 1024;
+          return ((file.Length < sampleMaxSize) && rxSampleFilter.Match(file.Name).Success);
+        }
+
+        // Returns a movie count on the folder (excluding samples)
+        private int folderCheck(DirectoryInfo folder)
+        {
+          int rtn = 0;
+          FileInfo[] fileList = folder.GetFiles("*");
+          foreach (FileInfo currFile in fileList)
+          {
+            foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions)
+            {
+              if (currFile.Extension == currExt)
+              {
+                if (!isSampleFile(currFile))
+                  rtn++;
+              }
+            }
+          }
+          return rtn;
+        }
+        
         #endregion
 
         #region Media Matcher
