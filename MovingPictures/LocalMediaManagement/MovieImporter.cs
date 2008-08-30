@@ -163,21 +163,31 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         public void Stop() {
-            if (mediaScannerThreads.Count > 0) {
-                foreach(Thread currThread in mediaScannerThreads)
-                    currThread.Abort();
-                
-                mediaScannerThreads.Clear();
-                logger.Info("Stopped MovieImporter");
-            }
+            Thread newThread = new Thread(new ThreadStart(StopWorker));
+            newThread.Start();
+        }
+        
+        // This is spawned off in a seperate thread to give better responsiveness when shutting down
+        // the config screen. It can take a few seconds sometimes to kill HTTP processes in the
+        // media scanner threads.
+        private void StopWorker() {
+            lock (mediaScannerThreads) {
+                if (mediaScannerThreads.Count > 0) {
+                    foreach (Thread currThread in mediaScannerThreads)
+                        currThread.Abort();
 
-            if (pathScannerThread != null) {
-                pathScannerThread.Abort();
-                pathScannerThread = null;
-            }
+                    mediaScannerThreads.Clear();
+                    logger.Info("Stopped MovieImporter");
+                }
 
-            if (Progress != null)
-                Progress(100, 0, 0, "Stopped");
+                if (pathScannerThread != null) {
+                    pathScannerThread.Abort();
+                    pathScannerThread = null;
+                }
+
+                if (Progress != null)
+                    Progress(100, 0, 0, "Stopped");
+            }
         }
 
         public bool IsScanning() {
@@ -346,6 +356,29 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 MovieStatusChanged(newMatch, MovieImporterAction.ADDED_FROM_JOIN);
         }
 
+        // updates the artwork for any movies that are missing artwork
+        public void LookForMissingArtwork() {
+            Thread newThread = new Thread(new ThreadStart(LookForMissingArtworkWorker));
+            newThread.Start();
+        }
+
+        private void LookForMissingArtworkWorker() {
+            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
+                if (currMovie.CoverFullPath.Trim().Length == 0) {
+                    MovingPicturesCore.CoverProvider.GetArtwork(currMovie);
+                    currMovie.UnloadArtwork();
+                    currMovie.Commit();
+                }
+
+                if (currMovie.BackdropFullPath.Trim().Length == 0) {
+                    new LocalProvider().GetBackdrop(currMovie);
+                    MovingPicturesCore.BackdropProvider.GetBackdrop(currMovie);
+                    currMovie.Commit();
+
+                }
+            }
+        }
+
         #endregion
         
         #region File System Scanner
@@ -358,6 +391,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 while (true) {
                     logger.Info("Initiating full scan on watch folders.");
                     SetupFileSystemWatchers();
+                    LookForMissingArtwork();
+                    RemoveOrphanFiles();
                     RemoveMissingFiles();
 
                     // do an initial scan on all paths
@@ -495,8 +530,29 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         currMovie.Delete();
                     }
 
-                    // should have already been deleted, but if we for some reason have an
-                    // orphan file (no associated movie) then delete it too.
+                    // should have already been deleted, but if we for some reason have a
+                    // file with no associated movie then delete it too.
+                    currFile.Delete();
+                }
+            }
+        }
+
+        // Removes all files not belonging to an import path.
+        private void RemoveOrphanFiles() {
+            logger.Info("Removing orphan files from database.");
+            foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
+                if (currFile.ImportPath == null || currFile.ImportPath.ID == null) {
+                    // remove file, it's movie object it's attached to, and all other files
+                    // owned by that movie if it's a multi-part movie.
+                    logger.Info("Removing " + currFile.FullPath + " and associated movie because ImportPath has been removed.");
+                    foreach (DBMovieInfo currMovie in currFile.AttachedMovies) {
+                        foreach (DBLocalMedia otherFile in currMovie.LocalMedia)
+                            otherFile.Delete();
+                        currMovie.Delete();
+                    }
+
+                    // should have already been deleted, but if we for some reason have a
+                    // file with no associated movie then delete it too.
                     currFile.Delete();
                 }
             }

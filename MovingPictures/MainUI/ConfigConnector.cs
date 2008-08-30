@@ -24,7 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // Returns the author of the plugin which is shown in the plugin menu                                                                  
         public string Author() {
-            return "John Conrad (fforde), -- (armandp)";
+            return "John Conrad (fforde), Armand Pondman (armandp)";
         }
 
         // show the setup dialog                                                                                                               
