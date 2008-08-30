@@ -378,6 +378,10 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (obj.GetType() != typeof(DBMovieInfo))
                 return;
 
+            // if this item is already in the list exit. This should never really happen though...
+            if (listItemLookup.ContainsKey((DBMovieInfo)obj))
+                return;
+
             logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to facade.");
 
             // add movie to the list
