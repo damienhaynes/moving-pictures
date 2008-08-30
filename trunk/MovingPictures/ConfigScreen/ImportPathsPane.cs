@@ -32,6 +32,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // assign the bound list of paths to the control
             pathsGridView.AutoGenerateColumns = false;
             pathsGridView.DataSource = pathBindingSource;
+
+            this.HandleDestroyed += new EventHandler(ImportPathsPane_HandleDestroyed);
         }
 
         // Commits new and existing itmes on addition or modification.
@@ -41,6 +43,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 DBImportPath changedObj = (DBImportPath)pathBindingSource[e.NewIndex];
                 changedObj.Commit();
             }
+        }
+
+        // If this pane has been destroyed, that means the Config screen has shut down, so 
+        // the importer also should be  stopped.
+        void ImportPathsPane_HandleDestroyed(object sender, System.EventArgs e) {
+            pathsGridView.EndEdit();
         }
                 
         private void addSourceButton_Click(object sender, EventArgs e) {
@@ -57,8 +65,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void removeSourceButton_Click(object sender, EventArgs e) {
             if (pathBindingSource.Current != null) {
-                ((DBImportPath)pathBindingSource.Current).Delete();
-                pathBindingSource.RemoveCurrent();
+                DialogResult result = MessageBox.Show("This will remove from Moving Pictures all movies retrieved from this import path, are you sure?", "Warning!", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes) {
+                    ((DBImportPath)pathBindingSource.Current).Delete();
+                    pathBindingSource.RemoveCurrent();
+
+                    MovingPicturesCore.Importer.StartFullScan();
+                }
             }
         }
 

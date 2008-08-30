@@ -13,6 +13,7 @@ using System.Collections;
 using System.Xml;
 using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 using System.Timers;
+using MediaPortal.Plugins.MovingPictures.DataProviders;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {
@@ -22,6 +23,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         Dictionary<string, string> defines;
         Dictionary<DBMovieInfo, GUIListItem> listItemLookup;
+        Dictionary<string, bool> loggedProperties;
 
         private bool currentlyPlaying = false;
         private int currentPart = 1;
@@ -53,9 +55,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [SkinControl(7)]
         protected GUIButtonControl textToggleButton = null;
-
-        [SkinControl(101)]
-        protected GUIImage coverArt = null;
 
         #endregion
 
@@ -122,6 +121,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (selectedMovie == value)
                     return;
 
+                if (selectedMovie != null)
+                    logger.Debug("SelectedMovie changed: " + selectedMovie.Title);
+
                 // load new data
                 selectedMovie = value;
                 publishDetails(SelectedMovie, "SelectedMovie");
@@ -147,6 +149,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             updateArtworkTimer.AutoReset = false;
 
             listItemLookup = new Dictionary<DBMovieInfo, GUIListItem>();
+            loggedProperties = new Dictionary<string, bool>();
         }
 
         ~MovingPicturesGUI() {
@@ -167,22 +170,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             string oldBackdrop = GUIPropertyManager.GetProperty("#MovingPictures.Backdrop");
             string oldCover = GUIPropertyManager.GetProperty("#MovingPictures.Coverart"); 
 
-            // update backdrop
-            string property = "#MovingPictures.Backdrop";
-            string value = SelectedMovie.BackdropFullPath.Trim();
-            GUIPropertyManager.SetProperty(property, value);
-            logger.Debug(property + " = \"" + value + "\"");
-
-            // update cover art
-            property = "#MovingPictures.Coverart";
-            value = SelectedMovie.CoverFullPath.Trim();
-            GUIPropertyManager.SetProperty(property, value);
-            logger.Debug(property + " = \"" + value + "\"");
+            // update backdrop and cover art
+            setProperty("#MovingPictures.Backdrop", SelectedMovie.BackdropFullPath.Trim());
+            setProperty("#MovingPictures.Coverart", SelectedMovie.CoverFullPath.Trim());
 
             // clear out previous textures for backdrop and cover art
             GUITextureManager.ReleaseTexture(oldBackdrop);
             GUITextureManager.ReleaseTexture(oldCover);
-
 
             updateBackdropVisibility();
         }
@@ -379,8 +373,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
 
             // if this item is already in the list exit. This should never really happen though...
-            if (listItemLookup.ContainsKey((DBMovieInfo)obj))
+            if (listItemLookup.ContainsKey((DBMovieInfo)obj)) {
+                logger.Warn("Received two \"added\" messages for " + (DBMovieInfo)obj);
                 return;
+            }
 
             logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to facade.");
 
@@ -610,6 +606,111 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         protected override void OnShowContextMenu() {
             base.OnShowContextMenu();
+            switch (CurrentView) {
+                case ViewMode.DETAILS:
+                    showDetailsContext();
+                    break;
+                default:
+                    //showMainContext();
+                    break;
+            }
+
+            base.OnShowContextMenu();
+        }
+
+        private void showDetailsContext() {
+            IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+            dialog.Reset();
+            dialog.SetHeading("Moving Pictures");
+
+            GUIListItem detailsItem = new GUIListItem("Update Details from Online");
+            detailsItem.ItemId = 1;
+            dialog.Add(detailsItem);
+
+            if (SelectedMovie.AlternateCovers.Count > 1) {
+                GUIListItem cycleArtItem = new GUIListItem("Cycle Cover-Art");
+                cycleArtItem.ItemId = 2;
+                dialog.Add(cycleArtItem);
+            }
+
+            if (selectedMovie.CoverFullPath.Trim().Length == 0 ||
+                selectedMovie.BackdropFullPath.Trim().Length == 0) {
+                GUIListItem retrieveArtItem = new GUIListItem("Check for Missing Artwork Online");
+                retrieveArtItem.ItemId = 3;
+                dialog.Add(retrieveArtItem);
+            }
+
+            dialog.DoModal(GUIWindowManager.ActiveWindow);
+            switch (dialog.SelectedId) {
+                case 1:
+                    updateDetails();
+                    break;
+                case 2:
+                    SelectedMovie.NextCover();
+                    SelectedMovie.Commit();
+                    updateArtwork();
+                    break;
+                case 3:
+                    retrieveMissingArt();
+                    break;
+            }
+        }
+
+        private void retrieveMissingArt() {
+            if (SelectedMovie == null)
+                return;
+
+            if (SelectedMovie.CoverFullPath.Trim().Length == 0) {
+                MovingPicturesCore.CoverProvider.GetArtwork(SelectedMovie);
+                SelectedMovie.UnloadArtwork();
+                SelectedMovie.Commit();
+            }
+
+            if (SelectedMovie.BackdropFullPath.Trim().Length == 0) {
+                new LocalProvider().GetBackdrop(SelectedMovie);
+                MovingPicturesCore.BackdropProvider.GetBackdrop(SelectedMovie);
+                SelectedMovie.Commit();
+            }
+
+            updateArtwork();
+        }
+
+        private void updateDetails() {
+            GUIDialogYesNo dialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+            if (dialog == null)
+                return;
+
+            dialog.Title = "Update Movie Details";
+            dialog.SetLine(1, "You are about to refresh all movie metadata, overwriting");
+            dialog.SetLine(2, "any custom modifications to this film. Do you want");
+            dialog.SetLine(3, "to continue?");
+            dialog.SetDefaultToYes(false);
+            dialog.DoModal(GetID);
+
+            if (dialog.IsConfirmed && SelectedMovie != null) {
+                MovingPicturesCore.MovieProvider.Update(SelectedMovie);
+                SelectedMovie.Commit();
+                publishDetails(SelectedMovie, "SelectedMovie");
+            }
+            
+
+        }
+
+        private void showMainContext() {
+            IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+            dialog.Reset();
+            dialog.SetHeading("Moving Pictures");
+
+            GUIListItem listItem = new GUIListItem("Check for New Artwork");
+            listItem.ItemId = 1;
+            dialog.Add(listItem);
+
+            dialog.DoModal(GUIWindowManager.ActiveWindow);
+            switch (dialog.SelectedId) {
+                case 1:
+                    MovingPicturesCore.Importer.LookForMissingArtwork();
+                    break;
+            }        
         }
 
         public override void OnAction(Action action) {
@@ -642,9 +743,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void OnItemSelected(GUIListItem item, GUIControl parent) {
-            logger.Info("OnItemSelected: " + ((DBMovieInfo)item.TVTag).Title + " (" + parent.ToString() + ")");
-
-            
             // if this is not a message from the facade, exit
             if (parent != movieBrowser && parent != movieBrowser.FilmstripView &&
                 parent != movieBrowser.ThumbnailView && parent != movieBrowser.ListView)
@@ -685,11 +783,11 @@ namespace MediaPortal.Plugins.MovingPictures {
         private void UpdatePlaybackInfo() {
             Thread.Sleep(2000);
             if (SelectedMovie != null) {
-                MediaPortal.GUI.Library.GUIPropertyManager.SetProperty("#Play.Current.Title", SelectedMovie.Title);
-                MediaPortal.GUI.Library.GUIPropertyManager.SetProperty("#Play.Current.Genre", SelectedMovie.Genres[0]);
-                MediaPortal.GUI.Library.GUIPropertyManager.SetProperty("#Play.Current.Plot", SelectedMovie.Summary);
-                MediaPortal.GUI.Library.GUIPropertyManager.SetProperty("#Play.Current.Thumb", SelectedMovie.CoverThumbFullPath);
-                MediaPortal.GUI.Library.GUIPropertyManager.SetProperty("#Play.Current.Year", SelectedMovie.Year.ToString());
+                setProperty("#Play.Current.Title", SelectedMovie.Title);
+                setProperty("#Play.Current.Genre", SelectedMovie.Genres[0]);
+                setProperty("#Play.Current.Plot", SelectedMovie.Summary);
+                setProperty("#Play.Current.Thumb", SelectedMovie.CoverThumbFullPath);
+                setProperty("#Play.Current.Year", SelectedMovie.Year.ToString());
             }
         }
 
@@ -717,24 +815,21 @@ namespace MediaPortal.Plugins.MovingPictures {
                     // add the coma seperated string
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = valueStrList.ToPrettyString(max);
-                    GUIPropertyManager.SetProperty(propertyStr, valueStr);
-                    logger.Debug(propertyStr + " = \"" + valueStr + "\"");
+                    setProperty(propertyStr, valueStr);
 
                     // add each value individually
                     for (int i = 0; i < max; i++) {
                         // note, the "extra" in the middle is needed due to a bug in skin parser
                         propertyStr = "#MovingPictures." + prefix + ".extra." + currField.FieldName + "." + (i + 1);
                         valueStr = valueStrList[i];
-                        GUIPropertyManager.SetProperty(propertyStr, valueStr);
-                        logger.Debug(propertyStr + " = \"" + valueStr + "\"");
+                        setProperty(propertyStr, valueStr);
                     }
                 
                 // vanilla publication
                 } else {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = currField.GetValue(obj).ToString().Trim();
-                    GUIPropertyManager.SetProperty(propertyStr, valueStr);
-                    logger.Debug(propertyStr + " = \"" + valueStr + "\"");
+                    setProperty(propertyStr, valueStr);
                 }
             }
 
@@ -752,17 +847,23 @@ namespace MediaPortal.Plugins.MovingPictures {
                 // hour component of runtime
                 propertyStr = "#MovingPictures." + prefix + ".extra.runtime.hour";
                 valueStr = (movie.Runtime / 60).ToString();
-                GUIPropertyManager.SetProperty(propertyStr, valueStr);
-                logger.Debug(propertyStr + " = \"" + valueStr + "\"");
+                setProperty(propertyStr, valueStr);
 
                 // minute component of runtime
                 propertyStr = "#MovingPictures." + prefix + ".extra.runtime.minute";
                 valueStr = (movie.Runtime % 60).ToString();
-                GUIPropertyManager.SetProperty(propertyStr, valueStr);
-                logger.Debug(propertyStr + " = \"" + valueStr + "\"");
+                setProperty(propertyStr, valueStr);
             }
         }
-    
+
+        private void setProperty(string property, string value) {
+            if (!loggedProperties.ContainsKey(property)) {
+                logger.Debug(property + " = \"" + value + "\"");
+                loggedProperties[property] = true;
+            }
+            
+            GUIPropertyManager.SetProperty(property, value);
+        }
     }
 
 

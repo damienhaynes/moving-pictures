@@ -554,7 +554,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             // try to grab the image if failed, exit
             Image currImage = getImageFromUrl(url);
             if (currImage == null) {
-                logger.Error("Failed retrieving backdrop for '" + Title + "' [" + ID + "] from " + url + ".");
+                // needs to be uncommented when backdrop provider is fleshed out and doesnt ask
+                // for 404 urls to be loaded
+                //logger.Error("Failed retrieving backdrop for '" + Title + "' [" + ID + "] from " + url + ".");
                 return ArtworkLoadStatus.FAILED;
             }
 
@@ -601,7 +603,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                 catch (WebException e) {
                     // file doesnt exist
                     if (e.Message.Contains("404")) {
-                        logger.Warn("Failed retrieving artwork from " + url + ". File does not exist. (404)");
+                        // needs to be uncommented when backdrop provider is fleshed out and doesnt ask
+                        // for 404 urls to be loaded
+                        //logger.Warn("Failed retrieving artwork from " + url + ". File does not exist. (404)");
                         return null;
                     }
                     
