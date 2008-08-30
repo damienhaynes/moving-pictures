@@ -185,26 +185,28 @@ namespace MediaPortal.Plugins.MovingPictures {
             bool backdropActive = true;
 
             // grab the skin supplied setting for backdrop visibility
-            switch (movieBrowser.View) {
-                case GUIFacadeControl.ViewMode.Filmstrip:
+            switch (CurrentView) {
+                case ViewMode.FILMSTRIP:
                     backdropActive = defines["#filmstrip.backdrop.used"].Equals("true");
                     break;
-                case GUIFacadeControl.ViewMode.LargeIcons:
+                case ViewMode.LARGEICON:
                     backdropActive = defines["#largeicons.backdrop.used"].Equals("true");
                     break;
-                case GUIFacadeControl.ViewMode.SmallIcons:
+                case ViewMode.SMALLICON:
                     backdropActive = defines["#smallicons.backdrop.used"].Equals("true");
                     break;
-                case GUIFacadeControl.ViewMode.List:
+                case ViewMode.LIST:
                     backdropActive = defines["#list.backdrop.used"].Equals("true");
+                    break;
+                case ViewMode.DETAILS:
+                    backdropActive = defines["#details.backdrop.used"].Equals("true");
                     break;
             }
 
-            if (backdropActive == false)
-                return;
-
             // set backdrop visibility
-            if (SelectedMovie != null && SelectedMovie.BackdropFullPath.Trim().Length != 0)
+            if (backdropActive && SelectedMovie != null && 
+                SelectedMovie.BackdropFullPath.Trim().Length != 0)
+
                 movieBackdrop.Visible = true;
             else
                 movieBackdrop.Visible = false;
@@ -611,7 +613,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     showDetailsContext();
                     break;
                 default:
-                    //showMainContext();
+                    showMainContext();
                     break;
             }
 
@@ -701,16 +703,38 @@ namespace MediaPortal.Plugins.MovingPictures {
             dialog.Reset();
             dialog.SetHeading("Moving Pictures");
 
-            GUIListItem listItem = new GUIListItem("Check for New Artwork");
+            GUIListItem listItem = new GUIListItem("List View");
             listItem.ItemId = 1;
             dialog.Add(listItem);
+
+            GUIListItem thumbItem = new GUIListItem("Thumbnail View");
+            thumbItem.ItemId = 2;
+            dialog.Add(thumbItem);
+
+            GUIListItem largeThumbItem = new GUIListItem("Large Thumbnail View");
+            largeThumbItem.ItemId = 3;
+            dialog.Add(largeThumbItem);
+
+            GUIListItem filmItem = new GUIListItem("Filmstrip View");
+            filmItem.ItemId = 4;
+            dialog.Add(filmItem);
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             switch (dialog.SelectedId) {
                 case 1:
-                    MovingPicturesCore.Importer.LookForMissingArtwork();
+                    CurrentView = ViewMode.LIST;
                     break;
-            }        
+                case 2:
+                    CurrentView = ViewMode.SMALLICON;
+                    break;
+                case 3:
+                    CurrentView = ViewMode.LARGEICON;
+                    break;
+                case 4:
+                    CurrentView = ViewMode.FILMSTRIP;
+                    break;
+            }
+ 
         }
 
         public override void OnAction(Action action) {
