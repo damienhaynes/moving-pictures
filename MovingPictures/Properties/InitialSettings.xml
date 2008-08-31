@@ -17,7 +17,7 @@
     </setting>
 
     <setting id="gui_artwork_delay" name="Artwork Loading Delay" type="INT">
-      <default>400</default>
+      <default>250</default>
       <description>The number of milliseconds that Moving Pictures waits before it loads new artwork (backdrops and covers) when traversing movies in the GUI. Increasing this value can improve performance if you are experiencing slow down with rapid movements in the GUI.</description>
     </setting>
   </group>
