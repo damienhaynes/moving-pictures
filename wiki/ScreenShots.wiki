@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Screen shots of the latest version of Moving Pictures.
 = Screen shots =
 All of the following screen shots are taken with the Default Skin included with the 0.5.3 release of Moving Pictures. All pieces of promotional movie artwork are copyrighted by their respective owners.
 
