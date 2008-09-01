@@ -6,8 +6,8 @@
 This document will walk you through setting up your development environment to contribute to the Moving Pictures project. If you follow this guide, you should be able to retrieve the latest version of the source code, make bug fixes or enhancements, and submit your changes. This guide details a development environment utilizing Visual Studio 2008 Express and Tortoise SVN, both available for free. It is of course possible to use the full version of Visual Studio along with a source control plug-in such as VisualSVN, but this is not covered here.
 
 === Table of Contents ===
-  * [DevelopersGuide#About_This_Document About This Document] 
-  * [DevelopersGuide#Prerequisites Prerequisites]
+  * [DevelopmentEnvironmentMain#About_This_Document About This Document] 
+  * [DevelopmentEnvironmentMain#Prerequisites Prerequisites]
   * [DevelopmentEnvironmentSourceCode#Folder_Structure Folder Structure]
   * [DevelopmentEnvironmentSourceCode#Getting_the_MediaPortal_Source_Code Getting the MediaPortal Source Code]
   * [DevelopmentEnvironmentSourceCode#Getting_the_Moving_Pictures_Source_Code Getting the Moving Pictures Source Code]
