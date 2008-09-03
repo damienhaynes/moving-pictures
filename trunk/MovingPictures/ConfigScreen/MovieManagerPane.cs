@@ -167,7 +167,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             playMovieButton.Enabled = true;
             
             // setup coverart thumbnail panel
-            if (CurrentMovie.CoverThumb != null) {
+            if (CurrentMovie.CoverThumb != null && CurrentMovie.Cover != null) {
                 coverImage.Image = CurrentMovie.CoverThumb;
                 resolutionLabel.Text = CurrentMovie.Cover.Width + " x " + CurrentMovie.Cover.Height;
                 coverNumLabel.Text = (CurrentMovie.AlternateCovers.IndexOf(CurrentMovie.CoverFullPath) + 1) +

@@ -10,10 +10,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     class MovieBackdropsProvider: IBackdropProvider {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         
+        // this gives a url list of backdrops and their thumbs. not needed now since
+        // we only download the first backdrop
         private const string availableBackdropsURL = "http://moviebackdrops.com/backdrops/";
         
-        // alternative source. this needs to be split off into another class
-        private const string alternateURL = "http://posters.consumeroo.com/movies/jpg/";
+        // drect url access to a backdrop for a movie, given it's imdb id
+        private const string moviebackdropsURL = "http://moviebackdrops.com/backdrops/"; // %imdb%/1.jpg
+        private const string meligroveURL = "http://www.meligrove.com/images/posters/movies/jpg/"; // %imdb%.jpg
 
         public bool GetBackdrop(DBMovieInfo movie) {
             if (movie == null)
@@ -27,15 +30,23 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movie.ImdbID.Trim().Length == 0)
                 return false;
 
-            List<string[]> backdropList = getBackdropList(movie);
+            // This is needed for when expanded fanart support is added
+            // List<string[]> backdropList = getBackdropList(movie);
 
-            if (backdropList != null && backdropList.Count > 0)
-                movie.AddBackdropFromURL(backdropList[0][0]);
-            else
-                movie.AddBackdropFromURL(alternateURL + movie.ImdbID.Trim() + ".jpg");
+            // try to grab a backdrop from meligrove
+            ArtworkLoadStatus status = movie.AddBackdropFromURL(meligroveURL + movie.ImdbID.Trim() + ".jpg"); 
+
+            // if we didnt get one
+            if (movie.BackdropFullPath.Trim().Length > 0)
+                return true;
             
+            // try to grab a backdrop from moviebackdrops.com
+            movie.AddBackdropFromURL(moviebackdropsURL + movie.ImdbID.Trim() + "/1.jpg");
 
-            return true;
+            if (movie.BackdropFullPath.Trim().Length > 0)
+                return true;
+            
+            return false;
         }
 
         private List<string[]> getBackdropList(DBMovieInfo movie) {
