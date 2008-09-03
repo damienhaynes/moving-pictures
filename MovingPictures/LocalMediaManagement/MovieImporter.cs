@@ -141,6 +141,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Public Methods
 
         public void Start() {
+            RemoveOrphanFiles();
+            RemoveMissingFiles();
+            RemoveOrphanArtwork();
+
             int maxThreadCount = (int)MovingPicturesCore.SettingsManager["importer_thread_count"].Value;
 
             if (mediaScannerThreads.Count == 0) {
@@ -392,8 +396,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     logger.Info("Initiating full scan on watch folders.");
                     SetupFileSystemWatchers();
                     LookForMissingArtwork();
-                    RemoveOrphanFiles();
-                    RemoveMissingFiles();
 
                     // do an initial scan on all paths
                     // grab all the files in our import paths
@@ -519,6 +521,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // and is not a part of a removable import path
         private void RemoveMissingFiles() {
             logger.Info("Removing missing files from database.");
+            // take care of cover art
             foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
                 if (!currFile.ImportPath.Removable && !currFile.File.Exists) {
                     // remove file, it's movie object it's attached to, and all other files
@@ -534,6 +537,36 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     // file with no associated movie then delete it too.
                     currFile.Delete();
                 }
+            }
+        }
+
+        private void RemoveOrphanArtwork() {
+            logger.Info("Removing missing artwork attached to existing movies.");
+            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
+                // get the list of elements to remove
+                List<string> toRemove = new List<string>();
+                foreach (string currCoverPath in currMovie.AlternateCovers) {
+                    if (!new FileInfo(currCoverPath).Exists)
+                        toRemove.Add(currCoverPath);
+                }
+
+                // remove them
+                foreach (string currItem in toRemove) {
+                    currMovie.AlternateCovers.Remove(currItem);
+                }
+
+                // reset default cover is needed
+                if (!currMovie.AlternateCovers.Contains(currMovie.CoverFullPath))
+                    if (currMovie.AlternateCovers.Count == 0)
+                        currMovie.CoverFullPath = " ";
+                    else
+                        currMovie.CoverFullPath = currMovie.AlternateCovers[0];
+
+                // get rid of the backdrop link if it doesnt exist
+                if (currMovie.BackdropFullPath.Trim().Length > 0 && 
+                    !new FileInfo(currMovie.BackdropFullPath).Exists)
+                    currMovie.BackdropFullPath = " ";
+                
             }
         }
 
@@ -689,22 +722,29 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         // Returns a movie count on the folder (excluding samples)
-        private int folderCheck(DirectoryInfo folder)
-        {
-          int rtn = 0;
-          FileInfo[] fileList = folder.GetFiles("*");
-          foreach (FileInfo currFile in fileList)
-          {
-            foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions)
-            {
-              if (currFile.Extension == currExt)
-              {
-                if (!isSampleFile(currFile))
-                  rtn++;
-              }
+        private Dictionary<string, int> fileCount;
+        private int folderCheck(DirectoryInfo folder) {
+            if (fileCount == null)
+                fileCount = new Dictionary<string, int>();
+
+            // if we have already scanned this folder move on
+            if (fileCount.ContainsKey(folder.FullName))
+                return fileCount[folder.FullName];
+
+            // count the number of non-sample video files in the folder
+            int rtn = 0;
+            FileInfo[] fileList = folder.GetFiles("*");
+            foreach (FileInfo currFile in fileList) {
+                foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
+                    if (currFile.Extension == currExt) {
+                        if (!isSampleFile(currFile))
+                            rtn++;
+                    }
+                }
             }
-          }
-          return rtn;
+
+            fileCount[folder.FullName] = rtn;
+            return rtn;
         }
         
         #endregion
