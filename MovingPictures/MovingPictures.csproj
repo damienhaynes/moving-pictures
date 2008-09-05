@@ -12,6 +12,10 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -164,6 +168,7 @@
     <Compile Include="DataProviders\LocalProvider.cs" />
     <Compile Include="DataProviders\MovieBackdropsProvider.cs" />
     <Compile Include="DataProviders\MovieXMLProvider.cs" />
+    <Compile Include="DataProviders\ScriptableDataProvider.cs" />
     <Compile Include="LocalMediaManagement\AdvancedStringComparer.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
     <Compile Include="MainUI\ConfigConnector.cs" />
@@ -288,6 +293,7 @@
     <Content Include="MainUI\Generic Skin\movingpictures.smallicons.xml" />
     <Content Include="MainUI\Generic Skin\movingpictures.xml" />
     <Content Include="Properties\InitialSettings.xml" />
+    <None Include="Properties\imdb.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MediaPortal\Core\Core.csproj">

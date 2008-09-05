@@ -141,10 +141,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Public Methods
 
         public void Start() {
-            RemoveOrphanFiles();
-            RemoveMissingFiles();
-            RemoveOrphanArtwork();
-
             int maxThreadCount = (int)MovingPicturesCore.SettingsManager["importer_thread_count"].Value;
 
             if (mediaScannerThreads.Count == 0) {
@@ -395,6 +391,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 while (true) {
                     logger.Info("Initiating full scan on watch folders.");
                     SetupFileSystemWatchers();
+                    RemoveOrphanFiles();
+                    RemoveMissingFiles();
+                    RemoveOrphanArtwork();
                     LookForMissingArtwork();
 
                     // do an initial scan on all paths
@@ -494,11 +493,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void OnFileDeleted(Object source, FileSystemEventArgs e) {
             DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath);
 
-            logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal.");
+            logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal from the database.");
 
             // if the file is not in our system there's nothing to do
             if (removedFile.ID == null) {
-                logger.Warn("FileSystemWatcher tried to delete a file not in our system.");
+                logger.Warn("FileSystemWatcher tried to remove a file from the database that is not in our system.");
                 return;
             }
 
@@ -526,7 +525,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (!currFile.ImportPath.Removable && !currFile.File.Exists) {
                     // remove file, it's movie object it's attached to, and all other files
                     // owned by that movie if it's a multi-part movie.
-                    logger.Info("Removing " + currFile.FullPath + " and associated movie because file is missing and not flagged as removable.");
+                    logger.Info("Removing " + currFile.FullPath + " and associated movie from database because file is missing and not flagged as removable.");
                     foreach (DBMovieInfo currMovie in currFile.AttachedMovies) {
                         foreach (DBLocalMedia otherFile in currMovie.LocalMedia)
                             otherFile.Delete();
@@ -541,7 +540,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         private void RemoveOrphanArtwork() {
-            logger.Info("Removing missing artwork attached to existing movies.");
+            logger.Info("Removing missing artwork from database attached to existing movies.");
             foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
                 // get the list of elements to remove
                 List<string> toRemove = new List<string>();

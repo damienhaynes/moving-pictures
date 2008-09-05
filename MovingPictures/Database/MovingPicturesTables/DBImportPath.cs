@@ -100,7 +100,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
               List<FileInfo> fileList = getFilesRecursive(Directory);
               foreach (FileInfo currFile in fileList) {
                     foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
-                        if (currFile.Extension == currExt) {
+                        if (currFile.Extension.ToLower().Equals(currExt.ToLower())) {
                             DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName);
                             
                             // if this file is in the database continue if we only want new files
