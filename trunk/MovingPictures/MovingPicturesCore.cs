@@ -92,6 +92,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             initDB();
             initAdditionalSettings();
 
+
+            // testing
+            ScriptableDataProvider imdbProvider = new ScriptableDataProvider(Properties.Resources.imdb);
+            List<object> resultList = imdbProvider.Execute("search", "Back to the Future");
+            imdbProvider.Execute("details", resultList[0]);
+
             return true;
         }
 

@@ -158,6 +158,28 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;scraper name=&apos;IMDb&apos; langauge=&quot;English&quot;&gt;
+        ///  
+        ///  &lt;action name=&quot;search&quot;&gt;
+        ///    &lt;string value=&quot;{title}&quot;&gt;
+        ///      &lt;regex string=&quot;(\w).+&quot;&gt;
+        ///        &lt;variable name=&quot;first_letter&quot; value=&quot;{0}&quot;/&gt;
+        ///      &lt;/regex&gt;
+        ///    &lt;/string&gt;
+        ///    
+        ///    &lt;page url=&quot;http://akas.imdb.com/find?s=tt;q={title:safe}&quot;&gt; 
+        ///      &lt;regex name=&quot;info&quot; repeating=&quot;true&quot; string=&apos;&amp;lt;br&amp;gt;&amp;lt;a href=&quot;([^&quot;]+?)&quot;&amp;gt;([\w\s]+?)&amp;lt;/a&amp;gt; \((\d{4})\)&amp;lt;&apos; &gt;
+        ///        &lt;object type=&quot;movie_info&quot;&gt;
+        ///          &lt;field name=&quot;title&quot; value=&quot;{info:2}&quot;/&gt;
+        ///          &lt;f [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string imdb {
+            get {
+                return ResourceManager.GetString("imdb", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap information {
             get {
                 object obj = ResourceManager.GetObject("information", resourceCulture);
@@ -167,18 +189,16 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;MoviesPluginSettings&gt;
-        ///  
-        ///  &lt;group name=&quot;Movie Importer&quot;&gt;
-        ///    &lt;group name=&quot;General&quot;&gt;
-        ///      &lt;setting id=&quot;importer_thread_count&quot; name=&quot;Thread Count&quot; type=&quot;INT&quot;&gt;
-        ///        &lt;default&gt;5&lt;/default&gt;
-        ///        &lt;description&gt;The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.&lt;/description&gt;
-        ///      &lt;/setting&gt;
         ///
-        ///    &lt;/group&gt;
-        ///    
-        ///    &lt;group name=&quot;Cover Art&quot;&gt;
-        ///      &lt;setting id=&quot;c [rest of string was truncated]&quot;;.
+        ///  &lt;group name=&quot;MediaPortal GUI&quot;&gt;
+        ///    &lt;setting id=&quot;default_view&quot; name=&quot;Default View&quot; type=&quot;STRING&quot;&gt;
+        ///      &lt;default&gt;list&lt;/default&gt;
+        ///      &lt;description&gt;The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are &quot;list&quot;, &quot;thumbs&quot;, &quot;largethumbs&quot;, and &quot;filmstrip&quot;.&lt;/description&gt;
+        ///    &lt;/setting&gt;
+        ///
+        ///    &lt;setting id=&quot;click_to_details&quot; name=&quot;Click Shows Details&quot; type=&quot;BOOL&quot;&gt;
+        ///      &lt;default&gt;true&lt;/default&gt;
+        ///      &lt;description&gt;Determines behavior when a mo [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string InitialSettings {
             get {
