@@ -32,7 +32,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importPathsListView1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImportPathsPane();
             this.settingsTab = new System.Windows.Forms.TabPage();
             this.advancedSettingsPane = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AdvancedSettingsPane();
-            this.userManagementPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.UserManagementPane();
             this.mainTabControl.SuspendLayout();
             this.managerTab.SuspendLayout();
             this.importSettingsTab.SuspendLayout();
@@ -108,13 +107,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // settingsTab
             // 
             this.settingsTab.Controls.Add(this.advancedSettingsPane);
-            this.settingsTab.Controls.Add(this.userManagementPane1);
             this.settingsTab.Location = new System.Drawing.Point(4, 22);
             this.settingsTab.Name = "settingsTab";
             this.settingsTab.Padding = new System.Windows.Forms.Padding(3);
             this.settingsTab.Size = new System.Drawing.Size(597, 542);
             this.settingsTab.TabIndex = 1;
-            this.settingsTab.Text = "Additional Settings";
+            this.settingsTab.Text = "Advanced Settings";
             this.settingsTab.UseVisualStyleBackColor = true;
             // 
             // advancedSettingsPane
@@ -122,21 +120,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.advancedSettingsPane.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.advancedSettingsPane.Location = new System.Drawing.Point(0, 161);
+            this.advancedSettingsPane.Location = new System.Drawing.Point(0, 0);
             this.advancedSettingsPane.Name = "advancedSettingsPane";
-            this.advancedSettingsPane.Size = new System.Drawing.Size(597, 381);
+            this.advancedSettingsPane.Size = new System.Drawing.Size(597, 542);
             this.advancedSettingsPane.TabIndex = 1;
             this.advancedSettingsPane.Tag = "";
-            // 
-            // userManagementPane1
-            // 
-            this.userManagementPane1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.userManagementPane1.Enabled = false;
-            this.userManagementPane1.Location = new System.Drawing.Point(3, 3);
-            this.userManagementPane1.Name = "userManagementPane1";
-            this.userManagementPane1.Size = new System.Drawing.Size(591, 152);
-            this.userManagementPane1.TabIndex = 0;
             // 
             // MovingPicturesConfig
             // 
@@ -167,7 +155,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.TabPage settingsTab;
         private ImportPathsPane importPathsListView1;
         private MovieImporterPane movieImporterPane1;
-        private UserManagementPane userManagementPane1;
         private AdvancedSettingsPane advancedSettingsPane;
         private System.Windows.Forms.TabPage managerTab;
         private MovieManagerPane movieManagerPane1;

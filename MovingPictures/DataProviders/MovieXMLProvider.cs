@@ -241,8 +241,15 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                             break;
                         case "Score":
                             ok = float.TryParse(currElement.InnerText.Trim(), NumberStyles.Any, new CultureInfo("en-US", false), out tmpFloat);
-                            if (ok)
+                            if (ok) {
+                                // we want a value betweeen 1 and 10, so if the rating is outside that 
+                                // scale (between 1-100 maybe?), then scale it down
+                                if (tmpFloat > 10.0) {
+                                    tmpFloat = (float)Math.Round(tmpFloat / (Math.Pow(10, Convert.ToInt32(tmpFloat).ToString().Trim().Length - 1)), 1);
+                                    if (tmpFloat > 10.0) tmpFloat = 10.0F;
+                                }
                                 newMovie.Score = tmpFloat;
+                            }
                             break;
                         case "hits":
                             ok = int.TryParse(currElement.InnerText.Trim(), out tmpInt);
