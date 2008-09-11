@@ -15,11 +15,16 @@ using Cornerstone.Database.Tables;
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class AdvancedSettingsPane : UserControl {
         private SettingsManager settings;
+        private DBSetting selectedSetting;
+        private Color validColor;
+        private Color invalidColor;
         Dictionary<string, TreeNode> groups = new Dictionary<string, TreeNode>();
         
         public AdvancedSettingsPane() {
             InitializeComponent();
 
+            invalidColor = Color.Red;
+            validColor = setValueTextBox.ForeColor;
             // if we are in designer, break to prevent errors with rendering, it cant access the DB...
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
@@ -78,19 +83,60 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             
         }
 
-        private void advancedSettingsTreeView_DoubleClick(object sender, EventArgs e) {
-            TreeNode selectedNode = advancedSettingsTreeView.SelectedNode;
-            
+        // if the user single clicks on an item, show the value of that item
+        private void advancedSettingsTreeView_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e) {           
+            TreeNode selectedNode = advancedSettingsTreeView.SelectedNode;                        
             // if the user selected a settings node
-            if (selectedNode != null && 
-                selectedNode.Tag != null && 
-                selectedNode.Tag.GetType() == typeof(DBSetting) ) {
+            if (selectedNode != null &&
+                selectedNode.Tag != null &&
+                selectedNode.Tag.GetType() == typeof(DBSetting)) 
+            {
 
-                // launch the dialog to modify the selected setting
-                SettingPopup newPopup = new SettingPopup();
-                newPopup.Setting = (DBSetting) selectedNode.Tag;
-                newPopup.ShowDialog();
+                setValueTextBox.Enabled = true;
+                selectedSetting = (DBSetting)selectedNode.Tag;
+                setValueTextBox.Text = selectedSetting.StringValue;
+                setDescriptionLabel.Text = selectedSetting.Description;
+            } 
+            else {
+                setValueTextBox.Enabled = false;
+                setDescriptionLabel.Text = string.Empty;
+                setValueTextBox.Text = String.Empty;
             }
+
+            updateSettingButton.Enabled = false;
+        }
+
+        // if the value is valid and the user hits enter, go ahead and save the value.
+        void setValueTextBox_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e) {
+            if (e.KeyValue == 13 && valueIsValid()) 
+                commitSetting();
+        }
+
+        // returns true if the value in the text box is a valid value for the setting
+        // represented by this popup.
+        private bool valueIsValid() {
+            return selectedSetting.Validate(setValueTextBox.Text);
+        }
+
+        private void setValueTextBox_TextChanged(object sender, EventArgs e) {
+            if (valueIsValid()) {
+                setValueTextBox.ForeColor = validColor;
+                updateSettingButton.Enabled = true;
+            } else {
+                setValueTextBox.ForeColor = invalidColor;
+                updateSettingButton.Enabled = false;
+            }
+        }
+
+        private void updateSettingButton_Click(object sender, EventArgs e) {
+            if (valueIsValid()) 
+                commitSetting();
+        }
+
+        private void commitSetting() {
+            selectedSetting.Value = setValueTextBox.Text;
+            MovingPicturesCore.DatabaseManager.Commit(selectedSetting);
+            updateSettingButton.Enabled = false;
         }
     }
 }

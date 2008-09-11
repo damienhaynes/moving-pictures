@@ -1173,10 +1173,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // if we have a data provider that accepts extra parameters it could use
             // the extra keys for better search.
             
-            // if there are no spaces, but a period, assume the period is replacement for spaces.
+            // if there are periods, assume the period is replacement for spaces.
+            // the same thing will happen for underscores
             // lets clean that up.
-            //if (!rtn.Contains(" "))
             rtn = rtn.Replace('.', ' ');
+            rtn = rtn.Replace('_', ' ');
             
             // a lot of keywords that could poison the result so let's clean them according to our given exp.
             // regexParser = new Regex(@"((720p|1080p|DVDRip|DTS|AC3|Bluray|HDDVD|XviD|DiVX|x264)[-]?.*?$)", RegexOptions.IgnoreCase);

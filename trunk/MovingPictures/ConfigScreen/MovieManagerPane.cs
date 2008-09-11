@@ -293,9 +293,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (CurrentMovie == null)
                 return;
 
-            coverArtFileDialog.ShowDialog(this);
+            // get the result of the dialog box and only update if the user clicked OK
+            DialogResult answerCover = coverArtFileDialog.ShowDialog(this);
 
-            if (coverArtFileDialog.FileName.Length != 0) {
+            if (coverArtFileDialog.FileName.Length != 0 && answerCover == DialogResult.OK) {
                 bool success = CurrentMovie.AddCoverFromFile(coverArtFileDialog.FileName);
 
                 if (success) {
@@ -315,7 +316,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             CoverURLPopup popup = new CoverURLPopup();
             popup.ShowDialog(this);
 
-            if (popup.DialogResult == DialogResult.OK) {
+            // do not waste time processing any more if there is no length to the URL when the user clicks OK
+            if (popup.GetURL().Trim().Length > 0 && popup.DialogResult == DialogResult.OK) {
                 DBMovieInfo movie = CurrentMovie;
 
                 // the retrieval process can take a little time, so spawn it off in another thread
