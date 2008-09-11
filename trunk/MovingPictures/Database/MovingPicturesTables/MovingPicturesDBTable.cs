@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     public abstract class MovingPicturesDBTable: DatabaseTable {

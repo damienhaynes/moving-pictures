@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MediaPortal.Plugins.MovingPictures.Database;
+using Cornerstone.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
     interface IDBFieldBackedControl: IDBBackedControl {

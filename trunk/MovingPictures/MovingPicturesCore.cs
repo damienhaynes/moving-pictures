@@ -10,6 +10,8 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using Cornerstone.Database;
+using Cornerstone.ScraperEngine;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesCore {
@@ -84,6 +86,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         public static bool Initialize()
         {
             initLogger();
+            ScriptableScraper imdbProvider = new ScriptableScraper(Properties.Resources.imdb);
 
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
             logger.Info("Moving Pictures (" + ver.Major + "." + ver.Minor + "." + ver.Build + ":" + ver.Revision + ")");
@@ -94,9 +97,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
             // testing
-            ScriptableDataProvider imdbProvider = new ScriptableDataProvider(Properties.Resources.imdb);
-            List<object> resultList = imdbProvider.Execute("search", "Back to the Future");
-            imdbProvider.Execute("details", resultList[0]);
+
+            //List<object> resultList = imdbProvider.Execute("search", "Back to the Future");
+            //imdbProvider.Execute("details", resultList[0]);
 
             return true;
         }

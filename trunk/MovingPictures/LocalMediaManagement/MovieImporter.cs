@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MediaPortal.Plugins.MovingPictures.Database;
 using System.IO;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using System.Threading;
@@ -9,6 +8,8 @@ using System.Collections;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using System.Text.RegularExpressions;
 using NLog;
+using Cornerstone.Database.Tables;
+using Cornerstone.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public enum MovieImporterAction { 

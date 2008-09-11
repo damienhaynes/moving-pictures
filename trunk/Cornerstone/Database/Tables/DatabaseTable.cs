@@ -5,10 +5,10 @@ using SQLite.NET;
 using System.Windows.Forms;
 using System.Reflection;
 using System.ComponentModel;
-using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 using System.Collections.ObjectModel;
+using Cornerstone.Database.CustomTypes;
 
-namespace MediaPortal.Plugins.MovingPictures.Database {
+namespace Cornerstone.Database.Tables {
     public abstract class DatabaseTable {
         #region Properties
 

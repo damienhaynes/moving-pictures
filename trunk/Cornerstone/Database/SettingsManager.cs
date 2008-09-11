@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using System.Collections;
 using System.Xml;
 using System.Windows.Forms;
 using System.ComponentModel;
 using NLog;
+using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.Database {
+namespace Cornerstone.Database {
     public class SettingsManager: Dictionary<string, DBSetting> {
         #region Private Variables
 

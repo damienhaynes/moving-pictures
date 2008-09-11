@@ -1,3 +1,4 @@
+using Cornerstone.Database.Tables;
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     partial class AttributeTypeEditor {
         /// <summary>
@@ -67,7 +68,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             this.attrDescrList.Name = "attrDescrList";
             this.attrDescrList.Size = new System.Drawing.Size(311, 93);
             this.attrDescrList.TabIndex = 0;
-            this.attrDescrList.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables.DBAttrDescription);
+            this.attrDescrList.Table = typeof(DBAttrDescription);
             // 
             // AttributeTypeEditor
             // 

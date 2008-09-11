@@ -8,6 +8,8 @@ using System.ComponentModel;
 using System.Drawing;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode;
 using System.Drawing.Design;
+using Cornerstone.Database;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
     [Designer(typeof(DBObjectListDesigner))]

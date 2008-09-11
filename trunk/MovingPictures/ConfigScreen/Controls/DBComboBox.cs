@@ -7,6 +7,8 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode;
 using System.Collections;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using Cornerstone.Database;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
     public class DBComboBox : ComboBox, IDBFieldBackedControl, IDataGridViewEditingControl {

@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.Database {
+namespace Cornerstone.Database {
     // This class is primarily intended to ensure that when I database object is selected
     // multiple times from two different places in the code, both places will be working
     // with the same physical c# object. It also reduces retrieval time for get(id) type

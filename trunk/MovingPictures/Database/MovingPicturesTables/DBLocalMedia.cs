@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 using System.Collections.ObjectModel;
+using Cornerstone.Database;
+using Cornerstone.Database.CustomTypes;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("local_media")]

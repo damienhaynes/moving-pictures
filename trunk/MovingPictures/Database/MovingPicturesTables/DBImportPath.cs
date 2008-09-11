@@ -4,6 +4,8 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using NLog;
+using Cornerstone.Database;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     [DBTableAttribute("import_path")]

@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     public partial class AttributeTypeEditor : Form {

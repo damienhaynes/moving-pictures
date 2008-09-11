@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using NLog;
-using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 using System.Collections.ObjectModel;
+using Cornerstone.Database.Tables;
+using Cornerstone.Database.CustomTypes;
+using System.Globalization;
 
-namespace MediaPortal.Plugins.MovingPictures.Database {
+namespace Cornerstone.Database {
     public class DBField {
         public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, TYPE, ENUM, DB_OBJECT }
 
@@ -164,7 +166,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         propertyInfo.GetSetMethod().Invoke(owner, new object[] { int.Parse(value.ToString()) });
                         break;
                     case DBDataType.REAL:
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { float.Parse(value.ToString()) });
+                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { float.Parse(value.ToString(), new CultureInfo("en-US", false)) });
                         break;
                     case DBDataType.BOOL:
                         propertyInfo.GetSetMethod().Invoke(owner, new object[] { (value.ToString() == "true" || value.ToString() == "1") });

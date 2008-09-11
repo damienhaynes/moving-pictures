@@ -4,9 +4,10 @@ using System.Text;
 using System.Reflection;
 using System.Collections.ObjectModel;
 using System.Collections;
-using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
+using Cornerstone.Database.Tables;
+using Cornerstone.Database.CustomTypes;
 
-namespace MediaPortal.Plugins.MovingPictures.Database {
+namespace Cornerstone.Database {
     public class DBRelation {
         #region Private
 

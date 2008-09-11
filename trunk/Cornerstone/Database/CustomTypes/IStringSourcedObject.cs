@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
+namespace Cornerstone.Database.CustomTypes {
     interface IStringSourcedObject {
 
         // note, implementing classes MUST provide a parameterless constructor.

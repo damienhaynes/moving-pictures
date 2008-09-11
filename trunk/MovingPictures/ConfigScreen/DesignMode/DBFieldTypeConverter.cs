@@ -9,6 +9,7 @@ using System.Reflection;
 using MediaPortal.Plugins.MovingPictures.Database;
 using System.Globalization;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls;
+using Cornerstone.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
     internal class DBFieldTypeConverter : TypeConverter {

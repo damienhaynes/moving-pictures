@@ -11,9 +11,11 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using System.Collections;
 using System.Xml;
-using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 using System.Timers;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
+using Cornerstone.Database.Tables;
+using Cornerstone.Database;
+using Cornerstone.Database.CustomTypes;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {

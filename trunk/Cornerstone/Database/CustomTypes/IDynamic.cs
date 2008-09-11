@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
+namespace Cornerstone.Database.CustomTypes {
     // A delegate type for hooking up change notifications.
     public delegate void ChangedEventHandler(object sender, EventArgs e);
 

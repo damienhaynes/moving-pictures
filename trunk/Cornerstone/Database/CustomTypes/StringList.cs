@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
+namespace Cornerstone.Database.CustomTypes {
     public class StringList: DynamicList<string>, IStringSourcedObject {
 
         public StringList() {

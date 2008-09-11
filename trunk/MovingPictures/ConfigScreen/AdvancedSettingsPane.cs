@@ -9,6 +9,8 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using System.Collections;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using Cornerstone.Database;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class AdvancedSettingsPane : UserControl {

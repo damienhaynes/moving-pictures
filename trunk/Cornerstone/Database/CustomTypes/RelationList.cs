@@ -5,8 +5,9 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.Collections;
+using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
+namespace Cornerstone.Database.CustomTypes {
     public class RelationList<T1, T2>: DynamicList<T2>, IRelationList 
         where T1: DatabaseTable 
         where T2: DatabaseTable {

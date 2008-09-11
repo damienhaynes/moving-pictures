@@ -8,10 +8,11 @@ using System.IO;
 using System.Xml;
 using System.Web;
 using System.Threading;
-using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using NLog;
 using System.Drawing;
+using Cornerstone.Database.CustomTypes;
+using System.Globalization;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     class MovieXMLProvider : IMovieProvider, ICoverArtProvider {
@@ -239,7 +240,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                                 newMovie.Summary = currElement.InnerText;
                             break;
                         case "Score":
-                            ok = float.TryParse(currElement.InnerText.Trim(), out tmpFloat);
+                            ok = float.TryParse(currElement.InnerText.Trim(), NumberStyles.Any, new CultureInfo("en-US", false), out tmpFloat);
                             if (ok)
                                 newMovie.Score = tmpFloat;
                             break;

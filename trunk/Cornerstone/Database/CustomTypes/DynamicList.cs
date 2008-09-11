@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.CustomTypes {
+namespace Cornerstone.Database.CustomTypes {
    
     // A extended List<T> class that has a Changed event for notification when the 
     // contents of the list change.
