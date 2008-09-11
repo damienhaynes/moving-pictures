@@ -28,7 +28,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         STARTED,
         STOPPED
     }
-    
+
     public class MovieImporter {
         #region Private Variables
 
@@ -1181,7 +1181,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                       
             // a lot of keywords that could poison the result so let's clean them according to our given exp.
             // regexParser = new Regex(@"((720p|1080p|DVDRip|DTS|AC3|Bluray|HDDVD|XviD|DiVX|x264)[-]?.*?$)", RegexOptions.IgnoreCase);
-            regexParser = new Regex(MovingPicturesCore.SettingsManager["importer_filter"].Value.ToString(), RegexOptions.IgnoreCase);
+            Regex regexParser = new Regex(MovingPicturesCore.SettingsManager["importer_filter"].Value.ToString(), RegexOptions.IgnoreCase);
             rtn = regexParser.Replace(rtn, "");
 
             // if there is a four digit number that looks like a year, parse it out
@@ -1197,6 +1197,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             return rtn;
         }
+
+        //public static string getSignature(string inputStr)
+        //{
+        //  string rtn = inputStr;
+
+        //  //Phase #1: Spacing
+        //  // if there are periods or underscores, assume the period is replacement for spaces.
+        //  rtn = rtn.Replace('.', ' ');
+        //  rtn = rtn.Replace('_', ' ');
+          
+        //  //Phase #2: Cleaning
+
+        //  //Phase #3: 
+
+        //}
 
         #endregion
     }
