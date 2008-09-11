@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 using System.Windows.Forms;
 using NLog;
+using Cornerstone.Database.Tables;
+using Cornerstone.Database.CustomTypes;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
+namespace Cornerstone.Database.Tables {
     [DBTableAttribute("settings")]
-    public class DBSetting : MovingPicturesDBTable {
+    public class DBSetting : DatabaseTable {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public DBSetting():

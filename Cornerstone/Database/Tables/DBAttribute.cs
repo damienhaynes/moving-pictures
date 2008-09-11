@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
-using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
+using Cornerstone.Database.CustomTypes;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
+namespace Cornerstone.Database.Tables {
     [DBTable("attribute_values")]
-    public class DBAttribute: MovingPicturesDBTable {
+    public class DBAttribute: DatabaseTable {
         [DBField]
         public DBAttrDescription Description {
             get { return _description; }
@@ -27,7 +27,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     }
 
     [DBTable("attributes")]
-    public class DBAttrDescription : MovingPicturesDBTable {
+    public class DBAttrDescription : DatabaseTable {
         public enum ValueTypeEnum { INT, FLOAT, BOOL, STRING }
         
         // Denotes the methods that an attribute's value can be modified.
@@ -185,7 +185,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     }
 
     [DBTable("attribute_possible_values")]
-    public class DBAttrPossibleValues : MovingPicturesDBTable {
+    public class DBAttrPossibleValues : DatabaseTable {
         [DBField]
         public string Value {
             get { return _value; }

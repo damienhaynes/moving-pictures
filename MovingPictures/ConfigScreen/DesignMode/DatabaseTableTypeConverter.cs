@@ -8,6 +8,7 @@ using System.Windows.Forms.Design;
 using System.Reflection;
 using MediaPortal.Plugins.MovingPictures.Database;
 using System.Globalization;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
     internal class DatabaseTableTypeConverter : TypeConverter {

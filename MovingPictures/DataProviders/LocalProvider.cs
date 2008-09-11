@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using System.Net;
+using Cornerstone.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class LocalProvider : IBackdropProvider {

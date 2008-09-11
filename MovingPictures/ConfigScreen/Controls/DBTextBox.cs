@@ -6,6 +6,8 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using System.Drawing;
 using System.ComponentModel;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode;
+using Cornerstone.Database;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
     public class DBTextBox : TextBox, IDBFieldBackedControl, IDataGridViewEditingControl {

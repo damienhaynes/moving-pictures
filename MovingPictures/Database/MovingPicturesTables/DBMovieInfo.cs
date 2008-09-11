@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
-using MediaPortal.Plugins.MovingPictures.Database.CustomTypes;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
@@ -11,6 +10,9 @@ using System.Web;
 using System.Net;
 using System.Threading;
 using System.Collections;
+using Cornerstone.Database;
+using Cornerstone.Database.CustomTypes;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
     public enum ArtworkLoadStatus {
@@ -253,14 +255,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
 
 
         [DBRelation(AutoRetrieve = true)]
-        public RelationList<DBMovieInfo, DBAttribute> Attributes {
+        public RelationList<DatabaseTable, DBAttribute> Attributes {
             get {
                 if (_attributes == null) {
-                    _attributes = new RelationList<DBMovieInfo, DBAttribute>(this);
+                    _attributes = new RelationList<DatabaseTable, DBAttribute>(this);
                 }
                 return _attributes;
             }
-        } RelationList<DBMovieInfo, DBAttribute> _attributes;
+        } RelationList<DatabaseTable, DBAttribute> _attributes;
 
 
         [DBFieldAttribute(AllowAutoUpdate = false)]

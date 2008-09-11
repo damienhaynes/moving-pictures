@@ -12,6 +12,8 @@ using System.Diagnostics;
 using MediaPortal.Plugins.MovingPictures.Database;
 using System.Collections;
 using System.Threading;
+using Cornerstone.Database.Tables;
+using Cornerstone.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {

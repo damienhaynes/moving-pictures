@@ -12,10 +12,14 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <SccProjectName>Svn</SccProjectName>
-    <SccLocalPath>Svn</SccLocalPath>
-    <SccAuxPath>Svn</SccAuxPath>
-    <SccProvider>SubversionScc</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -143,32 +147,16 @@
     <Compile Include="ConfigScreen\UserManagementPane.Designer.cs">
       <DependentUpon>UserManagementPane.cs</DependentUpon>
     </Compile>
-    <Compile Include="Database\CustomTypes\DBObjectList.cs" />
-    <Compile Include="Database\CustomTypes\DynamicList.cs" />
-    <Compile Include="Database\CustomTypes\IDynamic.cs" />
-    <Compile Include="Database\CustomTypes\IStringSourcedObject.cs" />
-    <Compile Include="Database\CustomTypes\RelationList.cs" />
-    <Compile Include="Database\CustomTypes\StringList.cs" />
-    <Compile Include="Database\DatabaseCache.cs" />
-    <Compile Include="Database\DBField.cs" />
-    <Compile Include="Database\DatabaseManager.cs" />
-    <Compile Include="Database\DBRelation.cs" />
-    <Compile Include="Database\DatabaseTable.cs" />
-    <Compile Include="Database\MovingPicturesTables\DBAttribute.cs" />
     <Compile Include="Database\MovingPicturesTables\DBImportPath.cs" />
     <Compile Include="Database\MovingPicturesTables\DBLocalMedia.cs" />
     <Compile Include="Database\MovingPicturesTables\DBMovieInfo.cs" />
-    <Compile Include="Database\MovingPicturesTables\DBSetting.cs" />
     <Compile Include="Database\MovingPicturesTables\DBUser.cs" />
     <Compile Include="Database\MovingPicturesTables\DBUserMovieSettings.cs" />
-    <Compile Include="Database\MovingPicturesTables\IAttributeOwner.cs" />
     <Compile Include="Database\MovingPicturesTables\MovingPicturesDBTable.cs" />
-    <Compile Include="Database\SettingsManager.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
     <Compile Include="DataProviders\LocalProvider.cs" />
     <Compile Include="DataProviders\MovieBackdropsProvider.cs" />
     <Compile Include="DataProviders\MovieXMLProvider.cs" />
-    <Compile Include="DataProviders\ScriptableDataProvider.cs" />
     <Compile Include="LocalMediaManagement\AdvancedStringComparer.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
     <Compile Include="MainUI\ConfigConnector.cs" />
@@ -311,6 +299,10 @@
     <ProjectReference Include="..\..\MediaPortal\Utils\Utils.csproj">
       <Project>{6DA0E4DF-6230-4642-98B5-E690BB6942BB}</Project>
       <Name>Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cornerstone\Cornerstone.csproj">
+      <Project>{14201B8D-31C3-4FB5-9356-9485676C147B}</Project>
+      <Name>Cornerstone</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />

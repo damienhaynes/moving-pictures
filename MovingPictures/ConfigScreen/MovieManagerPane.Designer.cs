@@ -598,7 +598,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieTitleTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.movieTitleTextBox.DatabaseFieldName = "Name";
             this.movieTitleTextBox.DatabaseObject = null;
-            this.movieTitleTextBox.DBTypeOverride = MediaPortal.Plugins.MovingPictures.Database.DBField.DBDataType.INTEGER;
+            this.movieTitleTextBox.DBTypeOverride = Cornerstone.Database.DBField.DBDataType.INTEGER;
             this.movieTitleTextBox.EmulateLabel = true;
             this.movieTitleTextBox.Enabled = false;
             this.movieTitleTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

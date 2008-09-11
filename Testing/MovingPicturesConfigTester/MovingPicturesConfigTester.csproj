@@ -46,11 +46,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaPortal\Core\Core.csproj">
+    <ProjectReference Include="..\..\..\MediaPortal\Core\Core.csproj">
       <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MovingPictures\MovingPictures.csproj">
+    <ProjectReference Include="..\..\MovingPictures\MovingPictures.csproj">
       <Project>{443F8F2C-44D2-47FB-B552-636664C8EC53}</Project>
       <Name>MovingPictures</Name>
     </ProjectReference>
@@ -60,6 +60,6 @@
     <VisualStudio AllowExistingFolder="true" />
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)..\External\sqlite.dll" "$(TargetDir)" /y</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)..\..\External\sqlite.dll" "$(TargetDir)" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>
