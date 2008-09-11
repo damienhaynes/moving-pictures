@@ -42,9 +42,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private bool fullScanNeeded;
 
         private const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
-        private const string rxMultiPartScan = @"((cd|disk)[\s\-]*([a-c0-9]))|[^\s\d]([a-c0-9])$";
-        private const string rxMultiPartClean = @"((cd|disk)[\s\-]*([a-c0-9]))";
+        private const string rxMultiPartScan = @"((cd|disk|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
+        private const string rxMultiPartClean = @"((cd|disk|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$";
         private const string rxPunctuation = @"[\.\:\,]";
+        private const string rxReplaceWithSpace = @"[\._]";
         
         // a list of all files currently in the system
         private Dictionary<DBLocalMedia, MediaMatch> matchesInSystem;
@@ -1176,12 +1177,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // if there are periods, assume the period is replacement for spaces.
             // the same thing will happen for underscores
             // lets clean that up.
-            rtn = rtn.Replace('.', ' ');
-            rtn = rtn.Replace('_', ' ');
+            Regex regexParser = new Regex(rxReplaceWithSpace, RegexOptions.IgnoreCase);
+            rtn = regexParser.Replace(rtn, " ");
             
             // a lot of keywords that could poison the result so let's clean them according to our given exp.
             // regexParser = new Regex(@"((720p|1080p|DVDRip|DTS|AC3|Bluray|HDDVD|XviD|DiVX|x264)[-]?.*?$)", RegexOptions.IgnoreCase);
-            Regex regexParser = new Regex(MovingPicturesCore.SettingsManager["importer_filter"].Value.ToString(), RegexOptions.IgnoreCase);
+            regexParser = new Regex(MovingPicturesCore.SettingsManager["importer_filter"].Value.ToString(), RegexOptions.IgnoreCase);
             rtn = regexParser.Replace(rtn, "");
 
             // if there is a four digit number that looks like a year, parse it out
