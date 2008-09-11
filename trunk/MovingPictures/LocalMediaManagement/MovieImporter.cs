@@ -45,8 +45,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private const string rxMultiPartScan = @"((cd|disk|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
         private const string rxMultiPartClean = @"((cd|disk|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$";
         private const string rxPunctuation = @"[\.\:\,]";
-        private const string rxReplaceWithSpace = @"[\._]";
-        
+                
         // a list of all files currently in the system
         private Dictionary<DBLocalMedia, MediaMatch> matchesInSystem;
 
@@ -1177,9 +1176,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // if there are periods, assume the period is replacement for spaces.
             // the same thing will happen for underscores
             // lets clean that up.
-            Regex regexParser = new Regex(rxReplaceWithSpace, RegexOptions.IgnoreCase);
-            rtn = regexParser.Replace(rtn, " ");
-            
+            rtn = rtn.Replace('.', ' ');
+            rtn = rtn.Replace('_', ' ');
+                      
             // a lot of keywords that could poison the result so let's clean them according to our given exp.
             // regexParser = new Regex(@"((720p|1080p|DVDRip|DTS|AC3|Bluray|HDDVD|XviD|DiVX|x264)[-]?.*?$)", RegexOptions.IgnoreCase);
             regexParser = new Regex(MovingPicturesCore.SettingsManager["importer_filter"].Value.ToString(), RegexOptions.IgnoreCase);
