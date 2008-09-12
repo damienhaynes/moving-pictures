@@ -30,6 +30,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool currentlyPlaying = false;
         private int currentPart = 1;
 
+        private bool loaded = false;
+
         private System.Timers.Timer updateArtworkTimer;
 
         #region GUI Controls
@@ -110,8 +112,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                 updateArtwork();
             }
         } 
-        private ViewMode currentView = ViewMode.LIST;
-        private ViewMode previousView = ViewMode.LIST;
+        private ViewMode currentView;
+        private ViewMode previousView;
 
         // The currenty selected movie.
         public DBMovieInfo SelectedMovie {
@@ -128,6 +130,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 // load new data
                 selectedMovie = value;
+                selectedIndex = movieBrowser.SelectedListItemIndex;
                 publishDetails(SelectedMovie, "SelectedMovie");
 
                 // start the timer for new artwork loading
@@ -136,6 +139,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private DBMovieInfo selectedMovie;
+
+        public int SelectedIndex {
+            get {
+                return selectedIndex;
+            }
+        }
+        private int selectedIndex = 0;
+
 
         public MovingPicturesGUI() {
             selectedMovie = null;
@@ -286,6 +297,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             // start the background importer
             MovingPicturesCore.Importer.Start();
 
+            // grab any <define> tags from the skin for later use
+            LoadDefinesFromSkin();
+
+            // setup listeners for new or removed movies
+            MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(OnMovieDeleted);
+            MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(OnMovieAdded);
+
             return success;
         }
 
@@ -320,39 +338,63 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
-            LoadDefinesFromSkin();
-
+            // add movies to facade
             addAllMoviesToFacade();
             movieBrowser.Focus = true;
             movieBrowser.Sort(new GUIListItemMovieComparer());
 
-            // set the default view for the facade
-            string defaultView = ((string)MovingPicturesCore.SettingsManager["default_view"].Value).Trim().ToLower();
-            if (defaultView.Equals("list")) {
-                CurrentView = ViewMode.LIST;
+            
+            // if this is our first time loading, we need to setup our default view data
+            if (!loaded) {
+                loaded = true;
+
+                // set the default view for the facade
+                string defaultView = ((string)MovingPicturesCore.SettingsManager["default_view"].Value).Trim().ToLower();
+                if (defaultView.Equals("list")) {
+                    CurrentView = ViewMode.LIST;
+                }
+                else if (defaultView.Equals("thumbs")) {
+                    CurrentView = ViewMode.SMALLICON;
+                }
+                else if (defaultView.Equals("largethumbs")) {
+                    CurrentView = ViewMode.LARGEICON;
+                }
+                else if (defaultView.Equals("filmstrip")) {
+                    CurrentView = ViewMode.FILMSTRIP;
+                }
+                else {
+                    CurrentView = ViewMode.LIST;
+                    logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
+                }
             }
-            else if (defaultView.Equals("thumbs")) {
-                CurrentView = ViewMode.SMALLICON;
-            }
-            else if (defaultView.Equals("largethumbs")) {
-                CurrentView = ViewMode.LARGEICON;
-            }
-            else if (defaultView.Equals("filmstrip")) {
-                CurrentView = ViewMode.FILMSTRIP;
-            }
+
+            // if we have loaded before, lets update the facade selection to match our actual selection
             else {
-                CurrentView = ViewMode.LIST;
-                logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
+                reloadSelection();
             }
-
-            MovingPicturesCore.DatabaseManager.ObjectDeleted +=
-                new DatabaseManager.ObjectAffectedDelegate(OnMovieDeleted);
-
-            MovingPicturesCore.DatabaseManager.ObjectInserted +=
-                new DatabaseManager.ObjectAffectedDelegate(OnMovieAdded);
 
             // load fanart and coverart
             updateArtwork();
+        }
+
+        private void reloadSelection() {
+            //Choose old value depending on type of view
+            if (movieBrowser.PlayListView != null)
+                movieBrowser.PlayListView.SelectedListItemIndex = SelectedIndex;
+
+            if (movieBrowser.ListView != null)
+                movieBrowser.ListView.SelectedListItemIndex = SelectedIndex;
+
+            if (movieBrowser.AlbumListView != null)
+                movieBrowser.AlbumListView.SelectedListItemIndex = SelectedIndex;
+
+            if (movieBrowser.ThumbnailView != null)
+                movieBrowser.ThumbnailView.SelectedListItemIndex = SelectedIndex;
+
+            if (movieBrowser.FilmstripView != null) {
+                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_ITEM_SELECT, this.GetID, 0, movieBrowser.FilmstripView.GetID, SelectedIndex, 0, null);
+                OnMessage(msg);
+            }
         }
 
         private void OnMovieDeleted(DatabaseTable obj) {
