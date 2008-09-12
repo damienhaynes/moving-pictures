@@ -41,10 +41,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private int percentDone;
         private bool fullScanNeeded;
 
-        private const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
-        private const string rxMultiPartScan = @"((cd|disk|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
-        private const string rxMultiPartClean = @"((cd|disk|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$";
-        private const string rxPunctuation = @"[\.\:\,]";
+        public const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
+        public const string rxMultiPartScan = @"((cd|disk|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
+        public const string rxMultiPartClean = @"((cd|disk|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$";
+        public const string rxPunctuation = @"[\.\:\,]";
                 
         // a list of all files currently in the system
         private Dictionary<DBLocalMedia, MediaMatch> matchesInSystem;
@@ -746,7 +746,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             fileCount[folder.FullName] = rtn;
             return rtn;
         }
-        
+
+        // Removes the file extension from a filename
+        public static string RemoveFileExtension(FileInfo file)
+        {
+          // get rid of the file extension
+          int extIndex = file.Name.IndexOf(file.Extension);
+          //int extLength = file.Extension.Length;
+          return file.Name.Remove(extIndex);
+        }
+
         #endregion
 
         #region Media Matcher
@@ -1063,9 +1072,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             List<DBMovieInfo> movieList;
             List<PossibleMatch> rankedMovieList = new List<PossibleMatch>();
 
-            string[] searchArray = mediaMatch.SearchString.Split('|');
-            string searchStr = searchArray[0];
-            int searchYear = (searchArray.Length > 1) ? int.Parse(searchArray[1]) : 0;      
+            string searchStr = mediaMatch.Signature.Title;
+            int searchYear = mediaMatch.Signature.Year;      
 
             // notify any listeners we are checking for matches
             if (MovieStatusChanged != null)
@@ -1118,102 +1126,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         #endregion
 
-        #region Search String Processing
-
-        // Cleans up a filename (without stack markers)
-        public static string GetSearchString(FileInfo file)
-        {
-          return GetSearchString(file, false); 
-        }
-
-        // Cleans up a filename for movie name matching. Removes extension, converts '.' to  ' ', etc.
-        public static string GetSearchString(FileInfo file, bool filterStackMatch) {
-          string str = RemoveFileExtension(file);
-          
-          if (filterStackMatch) {
-            // Remove stack markers
-            Regex regexParser = new Regex(rxMultiPartClean, RegexOptions.IgnoreCase);
-            Match match = regexParser.Match(str);
-            if (match.Success)
-            {
-              // if we have a match on this regexp we can just replace the matches.
-              str = regexParser.Replace(str, "");  
-            }
-            else
-            {
-              // if we don't have match we should remove just one character.
-              str = str.Substring(0, (str.Length - 1));
-            }
-          }
-
-          return getSearchString(str);
-        }
-
-        // Removes the file extension from a filename
-        public static string RemoveFileExtension(FileInfo file)
-        {
-          // get rid of the file extension
-          int extIndex = file.Name.IndexOf(file.Extension);
-          //int extLength = file.Extension.Length;
-          return file.Name.Remove(extIndex);
-        }
-        
-        // Cleans up a directory name for movie name matching. Converts '.' to ' ', etc.
-        public static string getSearchString(DirectoryInfo dir) {
-            return getSearchString(dir.Name);
-        }
-
-        // cleans a string up for movie name matching.
-        private static string getSearchString(string inputStr) {
-            string rtn = inputStr;
-            
-            // @todo do not limit to search string only - we should probably make 
-            // this return a key/value pair with 'title' being the default key
-            // we could then include 'year', 'edition' etc as extra keys
-            // if we have a data provider that accepts extra parameters it could use
-            // the extra keys for better search.
-            
-            // if there are periods, assume the period is replacement for spaces.
-            // the same thing will happen for underscores
-            // lets clean that up.
-            rtn = rtn.Replace('.', ' ');
-            rtn = rtn.Replace('_', ' ');
-                      
-            // a lot of keywords that could poison the result so let's clean them according to our given exp.
-            // regexParser = new Regex(@"((720p|1080p|DVDRip|DTS|AC3|Bluray|HDDVD|XviD|DiVX|x264)[-]?.*?$)", RegexOptions.IgnoreCase);
-            Regex regexParser = new Regex(MovingPicturesCore.SettingsManager["importer_filter"].Value.ToString(), RegexOptions.IgnoreCase);
-            rtn = regexParser.Replace(rtn, "");
-
-            // if there is a four digit number that looks like a year, parse it out
-            regexParser = new Regex(rxYearScan);
-            Match match = regexParser.Match(rtn);
-            if (match.Success)
-            {
-              int year = int.Parse(match.Groups[2].Value);
-              if (year > 1900 && year < DateTime.Now.Year + 2)
-                // Seperate year from the title and pass it along (using the pipe as marker)
-                rtn = match.Groups[1].Value.TrimEnd('(', '[') + "|" + match.Groups[2].Value;
-            }
-
-            return rtn;
-        }
-
-        //public static string getSignature(string inputStr)
-        //{
-        //  string rtn = inputStr;
-
-        //  //Phase #1: Spacing
-        //  // if there are periods or underscores, assume the period is replacement for spaces.
-        //  rtn = rtn.Replace('.', ' ');
-        //  rtn = rtn.Replace('_', ' ');
-          
-        //  //Phase #2: Cleaning
-
-        //  //Phase #3: 
-
-        //}
-
-        #endregion
     }
 
     public class MediaMatch {
@@ -1299,47 +1211,33 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         public string SearchString {        
             get {
-                if (_searchString.Equals(string.Empty)) {
-                    bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
-                    if (LocalMedia == null || LocalMedia.Count == 0) {
-                        _searchString = "";
-                    }                   
-                    else if (FolderHint) 
-                    { // ## If FolderHint is true we -can- use the foldername to create the searchstring
-                      if (LocalMedia.Count > 1 || preferFolder)
-                      { // if it's multi-part media use the folder name
-                        // if the preferFolder value is true (one movie one folder) also use the folder name
-                        _searchString = MovieImporter.getSearchString(LocalMedia[0].File.Directory);
-                      }
-                      else
-                      {
-                        // If preferFolder is false we always use the filename for single part media
-                        _searchString = MovieImporter.GetSearchString(LocalMedia[0].File);
-                      }
-                    }
-                    // ## We can't use the foldername because it contains different movies 
-                    else {
-                      if (LocalMedia.Count > 1)
-                      { // if it's multi-part media  use filename with stack marker cleaning
-                        _searchString = MovieImporter.GetSearchString(LocalMedia[0].File, true);
-                      }
-                      else
-                      {
-                        // just use filename
-                        _searchString = MovieImporter.GetSearchString(LocalMedia[0].File);
-                      }
-                    }
-                        
-                }
-
-                return _searchString;
+              if (_searchString.Equals(string.Empty))
+              {
+                _searchString = Signature.Title + ((Signature.Year>0) ? " " + Signature.Year : "");
+              }                
+              return _searchString;
             }
-            
 
             set {
                 _searchString = value;
             }
         } private string _searchString = string.Empty;
+
+        public MovieSignature Signature
+        {
+          get
+          {
+            if (_signature == null)
+              _signature = new MovieSignature(this);
+            return _signature;
+          }
+          set
+          {
+            _signature = value;
+          }
+        }
+        private MovieSignature _signature;
+
     }
 
     public class PossibleMatch: IComparable {
