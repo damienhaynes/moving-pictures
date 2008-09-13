@@ -46,7 +46,7 @@
     <parse name="directors" input="${details_page}" regex='&lt;h5&gt;Director:&lt;/h5&gt;\s*&lt;a href="[^"]+?"&gt;([\w\s]+?)&lt;/a&gt;'/>
     <set name="movie.directors" value="${directors[0][0]}"/>
 
-    <parse name="writers_block" input="${details_page}" regex='&lt;div class="info"&gt;\n&lt;h5&gt;Writers:&lt;/h5&gt;.+?&lt;/div&gt;'/>
+    <parse name="writers_block" input="${details_page}" regex='&lt;div class="info"&gt;\s+&lt;h5&gt;Writers:&lt;/h5&gt;.+?&lt;/div&gt;'/>
     <parse name='writers' input="${writers_block[0]}" regex='&lt;a href="[^"]+?"&gt;(.+?)&lt;/a&gt; \(written by\)'/>
     <loop name='currWriter' on='writers'>
       <set name='movie.writers' value='${movie.writers}|${currWriter[0]}'/>

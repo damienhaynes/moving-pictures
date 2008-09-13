@@ -48,9 +48,12 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedInput = parseString(input);
 
             // try to find matches via regex pattern
-            Regex regEx = new Regex(pattern, RegexOptions.IgnoreCase);
+            Regex regEx = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
             MatchCollection matches = regEx.Matches(parsedInput);
 
+            if (matches.Count == 0)
+                logger.Debug("Parse node returned no results... " + xmlNode.OuterXml);
+            
             // write matches and groups to variables
             int matchNum = 0;
             foreach (Match currMatch in matches) {
