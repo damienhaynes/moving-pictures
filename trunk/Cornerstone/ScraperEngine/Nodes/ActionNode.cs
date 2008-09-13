@@ -8,38 +8,38 @@ namespace Cornerstone.ScraperEngine.Nodes {
     public class ActionNode: ScraperNode {
         #region Properties
 
-        public override string Name {
-            get { return name; }
-            set { name = value; }
-        } protected string name;
-
-        public override string Input {
-            get { return null; }
-            set { }  
-        }
-
-        public override string InputLabel {
-            get { return null; }
-        }
-
-        public override string Output {
-            get { return null; }
-        }
-
-        public override string OutputLabel {
-            get { return null; }
+        public override Dictionary<string, string> InputVariables {
+            get {
+                return base.InputVariables;
+            }
+            set {
+                // for the action node we want to create a new global variable
+                // object and we dont want to modify the dictionary passed in
+                // by the calling class, so we override here.
+                inputVariables.Clear();
+                globalVariables.Clear();
+                foreach (KeyValuePair<string, string> currPair in value) {
+                    inputVariables[currPair.Key] = currPair.Value;
+                    globalVariables[currPair.Key] = currPair.Value;
+                }
+            }
         }
 
         #endregion
 
         #region Methods
 
-        public ActionNode(XmlNode xmlNode)
-            : base(xmlNode) {
+        public ActionNode(XmlNode xmlNode, bool debugMode)
+            : base(xmlNode, debugMode) {
         
             
         }
-        
+
+        public override void Execute() {
+            base.Execute();
+            executeChildren();
+        }
+
         #endregion
 
     }

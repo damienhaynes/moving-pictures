@@ -159,24 +159,24 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;scraper name=&apos;IMDb&apos; langauge=&quot;English&quot;&gt;
-        ///  
-        ///  &lt;action name=&quot;search&quot;&gt;
-        ///    &lt;string value=&quot;{title}&quot;&gt;
-        ///      &lt;regex string=&quot;(\w).+&quot;&gt;
-        ///        &lt;variable name=&quot;first_letter&quot; value=&quot;{0}&quot;/&gt;
-        ///      &lt;/regex&gt;
-        ///    &lt;/string&gt;
-        ///    
-        ///    &lt;page url=&quot;http://akas.imdb.com/find?s=tt;q={title:safe}&quot;&gt; 
-        ///      &lt;regex name=&quot;info&quot; repeating=&quot;true&quot; string=&apos;&amp;lt;br&amp;gt;&amp;lt;a href=&quot;([^&quot;]+?)&quot;&amp;gt;([\w\s]+?)&amp;lt;/a&amp;gt; \((\d{4})\)&amp;lt;&apos; &gt;
-        ///        &lt;object type=&quot;movie_info&quot;&gt;
-        ///          &lt;field name=&quot;title&quot; value=&quot;{info:2}&quot;/&gt;
-        ///          &lt;f [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;IMDb&lt;/name&gt;
+        ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from IMDb.&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. 
+        ///    --&gt;
+        ///    &lt;id&gt;874902&lt;/id&gt;
+        ///    &lt;version major=&quot;0&quot; mino [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string imdb {
+        internal static string IMDb {
             get {
-                return ResourceManager.GetString("imdb", resourceCulture);
+                return ResourceManager.GetString("IMDb", resourceCulture);
             }
         }
         

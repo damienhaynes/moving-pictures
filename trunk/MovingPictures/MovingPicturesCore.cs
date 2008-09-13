@@ -55,7 +55,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         public static IMovieProvider MovieProvider {
             get {
                 if (dataProvider == null)
-                    dataProvider = new MovieXMLProvider();
+                    dataProvider = ScriptableProvider.Load(Properties.Resources.IMDb);
 
                 return dataProvider;
             }
@@ -64,7 +64,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         public static ICoverArtProvider CoverProvider {
             get {
                 if (coverProvider == null)
-                    coverProvider = new MovieXMLProvider();
+                    coverProvider = ScriptableProvider.Load(Properties.Resources.IMDb); ;
 
                 return coverProvider;
             }
@@ -73,7 +73,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         public static IBackdropProvider BackdropProvider {
             get {
                 if (backdropProvider == null)
-                    backdropProvider = new MovieBackdropsProvider();
+                    backdropProvider = new MeligroveProvider();
 
                 return backdropProvider;
             }
@@ -86,7 +86,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         public static bool Initialize()
         {
             initLogger();
-            ScriptableScraper imdbProvider = new ScriptableScraper(Properties.Resources.imdb);
 
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
             logger.Info("Moving Pictures (" + ver.Major + "." + ver.Minor + "." + ver.Build + ":" + ver.Revision + ")");
@@ -96,10 +95,10 @@ namespace MediaPortal.Plugins.MovingPictures {
             initAdditionalSettings();
 
 
-            // testing
-
-            //List<object> resultList = imdbProvider.Execute("search", "Back to the Future");
-            //imdbProvider.Execute("details", resultList[0]);
+            //Dictionary<string, string> param = new Dictionary<string, string>();
+            //param["search_string"] = "Back to the Future";
+            //Dictionary<string, string> resultList = imdbProvider.Execute("search", param);
+            ////imdbProvider.Execute("details", resultList[0]);
 
             return true;
         }
