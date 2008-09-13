@@ -1,0 +1,56 @@
+<ScriptableScraper>
+  <details>
+    <!-- These details are for display purposes only. -->
+    <name>IMDb</name>
+    <author>John Conrad (fforde)</author>
+    <description>This script pulls data from IMDb.</description>
+
+    <!-- 
+    These two fields uniquely identify the script. The ID should never 
+    change and should be unique (no other script should use this ID). With
+    new versions of the script the version numbers should change. 
+    -->
+    <id>874902</id>
+    <version major="0" minor="8" point="0"/>
+    
+    <!--
+    These fields are used for categorization purposes. Seperate multiple 
+    types with a pipe | character.
+    -->
+    <type>MovingPicturesMovieData|MovingPicturesCoverArt</type>
+    <language>English</language>
+
+    <!-- If set to true, additional logging will be displayed during script execution. -->
+    <debug>true</debug>
+   </details>
+  
+  
+  <action name="search">
+    <retrieve name="search_page" url="http://akas.imdb.com/find?s=tt;q=${search_string:safe}" /> 
+
+    <parse name="details" input="${search_page}" regex='&lt;br&gt;&lt;a href="([^"]+?(tt\d+?)/)"&gt;([\w\s]+?)&lt;/a&gt; \((\d{4})\)&lt;' />
+
+    <loop name='curr_details' on='details'>
+      <set name="movie[${count}].imdb_id" value="${curr_details[1]}"/>
+      <set name="movie[${count}].title" value="${curr_details[2]}"/>
+      <set name="movie[${count}].year" value="${curr_details[3]}"/>
+      <set name="movie[${count}].details_url" value="http://akas.imdb.com${currDetails[0]}"/>
+    </loop>
+  
+  </action>
+
+
+  <action name="get_details">
+    <retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+
+    <parse name="directors" input="${details_page}" regex='&lt;h5&gt;Director:&lt;/h5&gt;\s*&lt;a href="[^"]+?"&gt;([\w\s]+?)&lt;/a&gt;'/>
+    <set name="movie.directors" value="${directors[0][0]}"/>
+
+    <!--regex input="{var:details_page}" name="writerBlock" pattern='&lt;div class="info"&gt;\n&lt;h5&gt;Writers:&lt;/h5&gt;.+?&lt;/div&gt;'/>
+    <regex input="{var:writerBlock}" name="writer" pattern='&lt;a href="[^"]+?"&gt;(.+?)&lt;/a&gt; \(written by\)'>
+      <field name='Writers' value='{var:writer:1}'/>
+    </regex-->
+    
+  </action>
+  
+</ScriptableScraper>

@@ -340,6 +340,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
             }
         } private string _backdropFullPath;
 
+        [DBFieldAttribute(AllowAutoUpdate = false, FieldName="details_url")]
+        public String DetailsURL {
+            get {
+                return _detailsUrl;
+            }
+
+            set {
+                _detailsUrl = value;
+                commitNeeded = true;
+            }
+        } private string _detailsUrl;
 
         #endregion
 

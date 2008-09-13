@@ -206,7 +206,7 @@ namespace Cornerstone.Database {
             }
             catch (Exception e) {
                 logger.ErrorException("Error writing to " + owner.GetType().Name + "." + this.Name +
-                                " Property. Sometimes indicates an out of date DB.", e);
+                                " Property.", e);
             }
         }
 

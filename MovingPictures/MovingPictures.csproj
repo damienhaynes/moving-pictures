@@ -155,10 +155,12 @@
     <Compile Include="Database\MovingPicturesTables\MovingPicturesDBTable.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
     <Compile Include="DataProviders\LocalProvider.cs" />
-    <Compile Include="DataProviders\MovieBackdropsProvider.cs" />
+    <Compile Include="DataProviders\MeligroveProvider.cs" />
     <Compile Include="DataProviders\MovieXMLProvider.cs" />
+    <Compile Include="DataProviders\ScriptableProvider.cs" />
     <Compile Include="LocalMediaManagement\AdvancedStringComparer.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
+    <Compile Include="LocalMediaManagement\MovieSignature.cs" />
     <Compile Include="MainUI\ConfigConnector.cs" />
     <Compile Include="MainUI\MovingPicturesGUI.cs" />
     <Compile Include="MovingPicturesCore.cs" />
@@ -281,7 +283,7 @@
     <Content Include="MainUI\Generic Skin\movingpictures.smallicons.xml" />
     <Content Include="MainUI\Generic Skin\movingpictures.xml" />
     <Content Include="Properties\InitialSettings.xml" />
-    <None Include="Properties\imdb.xml" />
+    <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MediaPortal\Core\Core.csproj">

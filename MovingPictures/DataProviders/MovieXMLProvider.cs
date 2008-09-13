@@ -24,6 +24,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         private const string urlGetCoverByID = "http://www.movie-xml.com/interfaces/getmoviecovers.php?id=";
         private const string urlCoverRetrievePrefix = "http://www.movie-xml.com/banners/";
 
+        public bool ProvidesMoviesDetails { 
+            get { return true; } 
+        }
+
+        public bool ProvidesCoverArt {
+            get { return true; }
+        }
+
         // Returns a list of DBMovieInfo objects closely matching the given movie title, 
         // using http://www.movie-xml.com as a datasource.
         public List<DBMovieInfo> Get(string movieTitle) {

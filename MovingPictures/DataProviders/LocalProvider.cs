@@ -15,6 +15,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         private DBMovieInfo movie;
 
+        public bool ProvidesBackdrops {
+            get { return true; }
+        }
+
         public bool GetBackdrop(DBMovieInfo movie) {
             this.movie = movie;
 
