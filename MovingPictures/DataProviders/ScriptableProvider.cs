@@ -8,7 +8,7 @@ using Cornerstone.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class ScriptableProvider : IMovieProvider, ICoverArtProvider, IBackdropProvider {
-        private static Dictionary<string, ScriptableScraper> existingScrapers;
+        private static Dictionary<string, ScriptableProvider> existingScrapers;
 
         private ScriptableScraper scraper;
 
@@ -57,7 +57,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         #region Static Methods
         public static ScriptableProvider Load(string script) {
             if (existingScrapers == null)
-                existingScrapers = new Dictionary<string,ScriptableScraper>();
+                existingScrapers = new Dictionary<string,ScriptableProvider>();
 
             if (existingScrapers.ContainsKey(script))
                 return existingScrapers[script];
