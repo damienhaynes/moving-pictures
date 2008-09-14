@@ -164,9 +164,13 @@ namespace Cornerstone.ScraperEngine {
 
         public Dictionary<string, string> Execute(string action, Dictionary<string, string> input) {
             if (actionNodes.ContainsKey(action)) {
-                actionNodes[action].InputVariables = input;
-                actionNodes[action].Execute();
-                return actionNodes[action].OutputVariables;
+                // transcribe the dictionary because we dont want to modify the input
+                Dictionary<string, string> workingVariables = new Dictionary<string, string>();
+                foreach (KeyValuePair<string, string> currPair in input)
+                    workingVariables[currPair.Key] = currPair.Value;
+
+                actionNodes[action].Execute(workingVariables);
+                return workingVariables;
             }
             return null;
         }

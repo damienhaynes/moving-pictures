@@ -11,7 +11,6 @@ namespace Cornerstone.ScraperEngine {
         protected static Logger logger = LogManager.GetCurrentClassLogger();
         private static Dictionary<string, Type> nodeTypes;
 
-        protected Dictionary<string, string> globalVariables = new Dictionary<string, string>();
         protected XmlNode xmlNode;
         protected List<ScraperNode> children;
 
@@ -29,32 +28,6 @@ namespace Cornerstone.ScraperEngine {
             get { return name; }
         } 
         protected string name;
-
-        public string ParsedName {
-            get { return parsedName; }
-        }
-        protected string parsedName;
-
-
-        public virtual Dictionary<string, string> InputVariables {
-            get {
-                return inputVariables;
-            }
-            set {
-                inputVariables.Clear();
-                foreach (KeyValuePair<string, string> currPair in value) 
-                    inputVariables[currPair.Key] = currPair.Value;
-                
-
-                globalVariables = value;
-            }
-        }
-        protected Dictionary<string, string> inputVariables = new Dictionary<string, string>();
-
-        public virtual Dictionary<string, string> OutputVariables {
-            get { return outputVariables; }
-        }
-        protected Dictionary<string, string> outputVariables = new Dictionary<string, string>();
 
         public virtual bool LoadSuccess {
             get { return loadSuccess; }
@@ -91,27 +64,23 @@ namespace Cornerstone.ScraperEngine {
             }
         }
 
-        public virtual void Execute() {
-            parsedName = parseString(name);
-        }
+        public abstract void Execute(Dictionary<string, string> variables);
         
-        protected virtual void setVariable(string key, string value) {
-            globalVariables[key] = value;
-            outputVariables[key] = value;
+        protected virtual void setVariable(Dictionary<string, string> variables, string key, string value) {
+            variables[key] = value;
             if (DebugMode) logger.Debug("Assigned variable: " + key + " = " + value);
         }
 
-        protected virtual void removeVariable(string key) {
-            globalVariables.Remove(key);
-            outputVariables.Remove(key);
-            removeArrayValues(key);
+        protected virtual void removeVariable(Dictionary<string, string> variables, string key) {
+            variables.Remove(key);
+            removeArrayValues(variables, key);
             if (DebugMode) logger.Debug("Removed variable: " + key);
         }
 
-        private void removeArrayValues(string key) {
+        private void removeArrayValues(Dictionary<string, string> variables, string key) {
             int count = 0;
-            while (globalVariables.ContainsKey(key + "[" + count + "]")) {
-                removeVariable(key + "[" + count + "]");
+            while (variables.ContainsKey(key + "[" + count + "]")) {
+                removeVariable(variables, key + "[" + count + "]");
                 count++;
             }
         }
@@ -132,19 +101,15 @@ namespace Cornerstone.ScraperEngine {
             return success;
         }
 
-        protected void executeChildren() {
-            foreach (ScraperNode currChild in children) {
-                currChild.InputVariables = globalVariables;
-                currChild.Execute();
-                foreach (KeyValuePair<string, string> currPair in currChild.OutputVariables)
-                    outputVariables[currPair.Key] = currPair.Value;
-            }
+        protected void executeChildren(Dictionary<string, string> variables) {
+            foreach (ScraperNode currChild in children) 
+                currChild.Execute(variables);
         }
 
         // scans the given string and replaces any existing variables with their value
-        protected string parseString(string input) {
+        protected string parseString(Dictionary<string, string> variables, string input) {
             StringBuilder output = new StringBuilder(input);
-            foreach (KeyValuePair<string, string> currVar in globalVariables) {
+            foreach (KeyValuePair<string, string> currVar in variables) {
                 output.Replace("${" + currVar.Key + "}", currVar.Value);
                 output.Replace("${" + currVar.Key + ":safe}", HttpUtility.UrlEncode(currVar.Value));
             }

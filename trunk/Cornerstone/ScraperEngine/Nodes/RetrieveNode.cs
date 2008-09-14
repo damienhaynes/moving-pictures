@@ -58,11 +58,12 @@ namespace Cornerstone.ScraperEngine.Nodes {
             }
         }
 
-        public override void Execute() {
-            base.Execute();
-
-            string parsedUrl = parseString(url);
+        public override void Execute(Dictionary<string, string> variables) {
+            string parsedUrl = parseString(variables, url);
+            string parsedName = parseString(variables, name);
             string pageContents = string.Empty;
+
+            if (DebugMode) logger.Debug("Retrieving URL: " + parsedUrl);
 
             // start tryng to retrieve the document
             int tryCount = 0;
@@ -83,7 +84,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
                     reader.Close();
                     response.Close();
 
-                    setVariable(parsedName, pageContents);
+                    setVariable(variables, parsedName, pageContents);
                 }
                 catch (WebException e) {
                     if (tryCount == maxRetries) {

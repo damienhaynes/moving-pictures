@@ -29,10 +29,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
             
         }
 
-        public override void Execute() {
-            base.Execute();
-
-            setVariable(parsedName, parseString(value));
+        public override void Execute(Dictionary<string, string> variables) {
+            setVariable(variables, parseString(variables, Name), parseString(variables, value));
         }
 
         #endregion

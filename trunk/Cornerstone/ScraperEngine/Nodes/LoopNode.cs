@@ -28,31 +28,31 @@ namespace Cornerstone.ScraperEngine.Nodes {
             }
         }
 
-        public override void Execute() {
-            base.Execute();
-
+        public override void Execute(Dictionary<string, string> variables) {
+            string parsedName = parseString(variables, Name);
+            
             int count = 0;
-            while (globalVariables.ContainsKey(loopingVariable + "[" + count + "]")) {
+            while (variables.ContainsKey(loopingVariable + "[" + count + "]")) {
                 string oldName = loopingVariable + "[" + count + "]";
-                setVariable(parsedName, parseString("${" + oldName + "}"));
-                setVariable("count", count.ToString());
-                transcribeArrayValues(parsedName, oldName);
+                setVariable(variables, parsedName, parseString(variables, "${" + oldName + "}"));
+                setVariable(variables, "count", count.ToString());
+                transcribeArrayValues(variables, parsedName, oldName);
                 
-                executeChildren();
+                executeChildren(variables);
 
-                removeVariable(parsedName);
-                removeVariable("count");
+                removeVariable(variables, parsedName);
+                removeVariable(variables, "count");
                 count++;
             }
         }
 
         // if the variable we are looping on itself is an array, then propogate 
         // the array elements down as well
-        protected void transcribeArrayValues(string baseName, string oldName) {
+        protected void transcribeArrayValues(Dictionary<string, string> variables, string baseName, string oldName) {
             int count = 0;
-            while (globalVariables.ContainsKey(oldName + "[" + count + "]")) {
-                setVariable(baseName + "[" + count + "]", parseString("${" + oldName + "[" + count + "]}"));
-                transcribeArrayValues(baseName + "[" + count + "]", oldName + "[" + count + "]");
+            while (variables.ContainsKey(oldName + "[" + count + "]")) {
+                setVariable(variables, baseName + "[" + count + "]", parseString(variables, "${" + oldName + "[" + count + "]}"));
+                transcribeArrayValues(variables, baseName + "[" + count + "]", oldName + "[" + count + "]");
                 count++;
             }
         }

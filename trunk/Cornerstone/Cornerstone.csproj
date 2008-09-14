@@ -60,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScraperEngine\Nodes\ActionNode.cs" />
     <Compile Include="ScraperEngine\Nodes\LoopNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\MathNodes.cs" />
     <Compile Include="ScraperEngine\Nodes\ParseNode.cs" />
     <Compile Include="ScraperEngine\Nodes\RetrieveNode.cs" />
     <Compile Include="ScraperEngine\Nodes\ScraperNode.cs" />

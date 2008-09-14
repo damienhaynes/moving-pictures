@@ -163,7 +163,11 @@ namespace Cornerstone.Database {
 
                 switch (DBType) {
                     case DBDataType.INTEGER:
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { int.Parse(value.ToString()) });
+                        string valStr = value.ToString();
+                        while  (valStr.Contains(","))
+                            valStr = valStr.Remove(valStr.IndexOf(','), 1);
+
+                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { int.Parse(valStr) });
                         break;
                     case DBDataType.REAL:
                         propertyInfo.GetSetMethod().Invoke(owner, new object[] { float.Parse(value.ToString(), new CultureInfo("en-US", false)) });

@@ -41,29 +41,32 @@ namespace Cornerstone.ScraperEngine.Nodes {
             }    
         }
 
-        public override void Execute() {
-            base.Execute();
-
+        public override void Execute(Dictionary<string, string> variables) {
             // parse variables from the input string
-            string parsedInput = parseString(input);
+            string parsedInput = parseString(variables, input);
+            string parsedName = parseString(variables, Name);
 
             // try to find matches via regex pattern
             Regex regEx = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
             MatchCollection matches = regEx.Matches(parsedInput);
 
-            if (matches.Count == 0)
+            if (matches.Count == 0) {
                 logger.Debug("Parse node returned no results... " + xmlNode.OuterXml);
-            
+                return;
+            }
+
+            setVariable(variables, parsedName, matches[0].Value);
+
             // write matches and groups to variables
             int matchNum = 0;
             foreach (Match currMatch in matches) {
                 // store the match itself
                 string matchName = parsedName + "[" + matchNum + "]";
-                setVariable(matchName, currMatch.Value);
+                setVariable(variables, matchName, currMatch.Value);
 
                 // store the groups in the match
-                for (int i = 1; i < currMatch.Groups.Count; i++) 
-                    setVariable(matchName + "[" + (i - 1)+ "]", currMatch.Groups[i].Value);
+                for (int i = 1; i < currMatch.Groups.Count; i++)
+                    setVariable(variables, matchName + "[" + (i - 1) + "]", currMatch.Groups[i].Value);
 
                 matchNum++;
             }
