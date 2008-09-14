@@ -31,6 +31,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
       get { return _year; }
       set { _year = value; }
     } private int _year;
+
+    public string ImdbId
+    {
+      get { return _imdb; }
+      set { _imdb = value; }
+    } private string _imdb;
     
     private void parseMediaMatch (MediaMatch mm) {
       string sourceStr;
@@ -38,7 +44,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
       if (mm.LocalMedia == null || mm.LocalMedia.Count == 0)
         return;
-      else if (mm.FolderHint)
+      else 
+        if (mm.FolderHint)
       { // ## If FolderHint is true we -can- use the foldername to create the searchstring
         if (mm.LocalMedia.Count > 1 || preferFolder)
         { // if it's multi-part media use the folder name
@@ -50,6 +57,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
           // If preferFolder is false we always use the filename for single part media
           sourceStr = parseFileName(mm.LocalMedia[0].File);
         }
+
+        // Scan for NFO Files
+        string nfoPath = nfoScanner(mm.LocalMedia[0].File.Directory);
+        if (nfoPath != string.Empty)
+          this.ImdbId = parseNFO(nfoPath);
       }
       // ## We can't use the foldername because it contains different movies 
       else
@@ -159,6 +171,43 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
       // return the title
       return rtn;
+    }
+
+    // NFO filescanner
+    public static string nfoScanner(DirectoryInfo dir)
+    {
+      // Get all the nfo files from a directory
+      FileInfo[] nfoList = dir.GetFiles("*.nfo");
+      // If none found just return empty
+      if (nfoList.Length == 0)
+        return string.Empty;
+      
+      // if we found nfo files just return the path of 
+      // the first one, this should be tuned in the future
+      return nfoList[0].FullName;
+    }
+
+    // Imdb ID scanner
+    // Parses a NFO file and returns the IMDB ID (if any)
+    public static string parseNFO(string path)
+    {
+      // Read the nfo file content into a string
+      string s = File.ReadAllText(path);
+      // Check for the existance of a imdb id 
+      Regex rxIMDB = new Regex("tt[0-9]{7}", RegexOptions.IgnoreCase);
+      Match match = rxIMDB.Match(s);
+      // If success return the id, on failure return empty. 
+      if (match.Success)
+      {
+        s = match.Value;
+        //logger.Info("Found imdb id ({0}) in file: {1}", s, path);
+      }
+      else
+      {
+        s = string.Empty;
+      }
+
+      return s;
     }
 
   }
