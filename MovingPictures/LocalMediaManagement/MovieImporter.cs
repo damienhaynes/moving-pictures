@@ -1213,7 +1213,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             get {
               if (_searchString.Equals(string.Empty))
               {
-                _searchString = Signature.Title + ((Signature.Year>0) ? " " + Signature.Year : "");
+                _searchString = Signature.Title + ((Signature.Year > 0) ? " " + Signature.Year : "") + ((Signature.ImdbId.Length > 0) ? " " + Signature.ImdbId : "");
               }                
               return _searchString;
             }
