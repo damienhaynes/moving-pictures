@@ -41,6 +41,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     private void parseMediaMatch (MediaMatch mm) {
       string sourceStr;
       bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
+      bool scanNFO = (bool)MovingPicturesCore.SettingsManager["importer_nfoscan"].Value;
 
       if (mm.LocalMedia == null || mm.LocalMedia.Count == 0)
         return;
@@ -59,9 +60,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
         }
 
         // Scan for NFO Files
-        string nfoPath = nfoScanner(mm.LocalMedia[0].File.Directory);
-        if (nfoPath != string.Empty)
-          this.ImdbId = parseNFO(nfoPath);
+        if (scanNFO)
+        {
+          string nfoPath = nfoScanner(mm.LocalMedia[0].File.Directory);
+          if (nfoPath != string.Empty)
+            this.ImdbId = parseNFO(nfoPath);
+        }
       }
       // ## We can't use the foldername because it contains different movies 
       else

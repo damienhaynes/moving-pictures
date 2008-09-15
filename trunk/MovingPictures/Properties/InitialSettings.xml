@@ -31,30 +31,37 @@
         <description>The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.</description>
       </setting>
 
+      <setting id="importer_strict_year" name="Only Show Results From Same Year" type="BOOL">
+        <default>false</default>
+        <description>If a year keyword is detected and no exact match is found only show the results from the same year or blank year. (experimental)</description>
+      </setting>      
+ 
+      <setting id="importer_autoapprove" name="Auto-Approve Threshold" type="INT">
+        <default>1</default>
+        <description>This is the maximum value for the levenshtein distance triggering auto-approval.</description>
+      </setting>      
+
+    </group>
+    
+    <group name="Local Media Parser">
+
       <setting id="importer_prefer_foldername" name="Prefer Folder For Single Part Movies" type="BOOL">
         <default>true</default>
         <description>If a folder contains just one movie it will use the folder name for matching. If you are sure that the filenames are more accurate than the folder name disable this setting.</description>
       </setting>
-
-      <setting id="importer_strict_year" name="Only Show Results From Same Year" type="BOOL">
-        <default>false</default>
-        <description>If a year keyword is detected and no exact match is found only show the results from the same year or blank year. (experimental)</description>
-      </setting>
       
-      <!-- this should be a multi-entry setting much like the mp-tvseries filter options -->
       <setting id="importer_filter" name="Regular Expression Noise Filter" type="STRING">
         <default>((720p|1080p|1080i|DirCut|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264|dxva)[-]?.*?$)</default>
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
-    
-      <setting id="importer_autoapprove" name="Auto-Approve Threshold" type="INT">
-        <default>1</default>
-        <description>This is the maximum value for the levenshtein distance triggering auto-approval.</description>
+      
+      <setting id="importer_nfoscan" name="NFO Scanner" type="BOOL">
+        <default>true</default>
+        <description>Scan for NFO file and if available parse out the IMDB id.</description>
       </setting>
-
     </group>
 
-    <!-- Sample Filter -->
+      <!-- Sample Filter -->
     <group name="Sample Filter">
       <setting id="importer_sample_keyword" name="Regular Expression String" type="STRING">
         <default>sample</default>
@@ -65,6 +72,7 @@
         <default>150</default>
         <description>If the filesize of the potential sample file is below this value it will be skipped.</description>
       </setting>
+      
     </group>
 
     <group name="Cover Art">
