@@ -7,44 +7,33 @@ using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 {
-  public class LocalMediaParser
+  public struct MediaSignature
   {
-    
-    public LocalMediaParser(MediaMatch mm)
+    public string Title;
+    public int Year;
+    public string ImdbId;
+    public string Edition;
+
+    public MediaSignature(string title, int year, string imdb, string edition) 
     {
-      parseMediaMatch(mm);
+      this.Title = title;
+      this.Year = year;
+      this.ImdbId = imdb;
+      this.Edition = edition;
     }
 
-    public LocalMediaParser(string inputStr)
-    {
-      parseSignature(inputStr);
-    }
+  }
 
-    public string Title
-    {
-      get { return _title; }
-      set { _title = value; }
-    } private string _title;
-
-    public int Year
-    {
-      get { return _year; }
-      set { _year = value; }
-    } private int _year;
-
-    public string ImdbId
-    {
-      get { return _imdb; }
-      set { _imdb = value; }
-    } private string _imdb;
-    
-    private void parseMediaMatch (MediaMatch mm) {
+  public static class LocalMediaParser
+  {    
+    public static MediaSignature parseMediaMatch (MediaMatch mm) {
       string sourceStr;
+      MediaSignature signature = new MediaSignature();
       bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
       bool scanNFO = (bool)MovingPicturesCore.SettingsManager["importer_nfoscan"].Value;
 
       if (mm.LocalMedia == null || mm.LocalMedia.Count == 0)
-        return;
+        return signature;
       else 
         if (mm.FolderHint)
       { // ## If FolderHint is true we -can- use the foldername to create the searchstring
@@ -64,7 +53,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
         {
           string nfoPath = nfoScanner(mm.LocalMedia[0].File.Directory);
           if (nfoPath != string.Empty)
-            this.ImdbId = parseNFO(nfoPath);
+            signature.ImdbId = parseNFO(nfoPath);
         }
       }
       // ## We can't use the foldername because it contains different movies 
@@ -80,10 +69,35 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
           sourceStr = parseFileName(mm.LocalMedia[0].File);
         }
       }
-
-      parseSignature(sourceStr);
+      
+      return parseSignature(sourceStr, signature);
     }
     
+    public static MediaSignature parseSignature(string inputStr) {
+      MediaSignature signature = new MediaSignature();
+      return parseSignature(inputStr, signature);
+    }
+
+    // cleans a string up for movie name matching.
+    private static MediaSignature parseSignature(string inputStr, MediaSignature signature)
+    {
+      string sig = inputStr;
+      int year;
+
+      // Phase #1: Spacing
+      // if there are periods or underscores, assume the period is replacement for spaces.
+      sig = sig.Replace('.', ' ');
+      sig = sig.Replace('_', ' ');
+
+      // Phase #2: Cleaning (remove noise)
+      sig = filterNoise(sig);
+      
+      // Phase #3: Year detection
+      signature.Title = filterYearFromTitle(sig, out year);
+      signature.Year = year;
+      return signature;
+    }
+
     // Cleans up a filename (without stack markers)
     public static string parseFileName(FileInfo file)
     {
@@ -121,26 +135,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     {
       return dir.Name;
     }
-
-    // cleans a string up for movie name matching.
-    private void parseSignature(string inputStr)
-    {
-      string sig = inputStr;
-      int year;
-
-      // Phase #1: Spacing
-      // if there are periods or underscores, assume the period is replacement for spaces.
-      sig = sig.Replace('.', ' ');
-      sig = sig.Replace('_', ' ');
-
-      // Phase #2: Cleaning (remove noise)
-      sig = filterNoise(sig);
-      
-      // Phase #3: Year detection
-      this.Title = filterYearFromTitle(sig, out year);
-      this.Year = year;
-    }
-
+    
     // Filters "noise" from the input string
     public static string filterNoise(string input)
     {
@@ -178,6 +173,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     }
 
     // NFO filescanner
+    // Returns the full path of the first NFO file or empty
     public static string nfoScanner(DirectoryInfo dir)
     {
       // Get all the nfo files from a directory
