@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 using System.IO;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using System.Threading;
@@ -44,7 +45,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
         public const string rxMultiPartScan = @"((cd|disk|disc|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
         public const string rxMultiPartClean = @"((cd|disk|disc|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$";
-        public const string rxPunctuation = @"[\.\:\,]";
+        public const string rxPunctuationToSpace = @"[\.\:\,\;\""\+\*]";
+        public const string rxPunctuationFilter = @"[\'\`]";
+        public const string rxCompressSpaces = @"\s{2,}";
                 
         // a list of all files currently in the system
         private Dictionary<DBLocalMedia, MediaMatch> matchesInSystem;
@@ -1128,7 +1131,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             movieList = MovingPicturesCore.MovieProvider.Get(searchStr);
             
             bool strictYear = (bool)MovingPicturesCore.SettingsManager["importer_strict_year"].Value;
-            Regex rxCleanPunctuation = new Regex(rxPunctuation, RegexOptions.IgnoreCase);
+            Regex rxReplacePunctuation = new Regex(rxPunctuationToSpace, RegexOptions.IgnoreCase);
+            Regex rxCleanPunctuation = new Regex(rxPunctuationFilter, RegexOptions.IgnoreCase);
+            Regex rxReplaceDoubleSpace = new Regex(rxCompressSpaces, RegexOptions.IgnoreCase);
 
             // if we have an imdb id add another point to the following results 
             // (maybe not necessary but this is to lower the 
@@ -1144,10 +1149,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 
                 string sMovie = currMovie.Title.ToLower().Trim();
                 string sSearch = searchStr.ToLower().Trim();
-
-                //clean punctuation from the result
-                sMovie = rxCleanPunctuation.Replace(sMovie, ""); 
                 
+                //replace punctuation with spaces
+                sMovie = rxReplacePunctuation.Replace(sMovie, " ");
+                //filter other punctuation characters completely
+                sMovie = rxCleanPunctuation.Replace(sMovie, "");
+                //replace multiple spaces with just one space
+                sMovie = rxReplaceDoubleSpace.Replace(sMovie, " ");
+                                             
                 // if both have a year then add the year to the comparison variables
                 if (searchYear > 0 && currMovie.Year > 0) {
                     sMovie +=  ' ' + currMovie.Year.ToString();
@@ -1267,7 +1276,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             get {
               if (_searchString.Equals(string.Empty))
               {
-                _searchString = Signature.Title + ((Signature.Year > 0) ? " " + Signature.Year : "") + ((Signature.ImdbId != string.Empty) ? " " + Signature.ImdbId : "");
+                _searchString = Signature.Title + ((Signature.Year > 0) ? " " + Signature.Year : "") + ((Signature.ImdbId != null) ? " " + Signature.ImdbId : "");
               }                
               return _searchString;
             }
@@ -1277,12 +1286,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         } private string _searchString = string.Empty;
 
-        public LocalMediaParser Signature
+        public MediaSignature Signature
         {
           get
           {
-            if (_signature == null)
-              _signature = new LocalMediaParser(this);
+            if (_signature.Title == null)
+              _signature = LocalMediaParser.parseMediaMatch(this);
             return _signature;
           }
           set
@@ -1290,7 +1299,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             _signature = value;
           }
         }
-        private LocalMediaParser _signature;
+        private MediaSignature _signature;
 
     }
 
@@ -1342,7 +1351,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         public override string ToString() {
             if (movie != null)
-                return movie.Title;
+              return movie.Title;
             return "";
         }
     }
