@@ -7,15 +7,15 @@ using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 {
-  public class MovieSignature
+  public class LocalMediaParser
   {
     
-    public MovieSignature(MediaMatch mm)
+    public LocalMediaParser(MediaMatch mm)
     {
       parseMediaMatch(mm);
     }
 
-    public MovieSignature(string inputStr)
+    public LocalMediaParser(string inputStr)
     {
       parseSignature(inputStr);
     }

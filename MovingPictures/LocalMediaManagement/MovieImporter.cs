@@ -1223,12 +1223,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         } private string _searchString = string.Empty;
 
-        public MovieSignature Signature
+        public LocalMediaParser Signature
         {
           get
           {
             if (_signature == null)
-              _signature = new MovieSignature(this);
+              _signature = new LocalMediaParser(this);
             return _signature;
           }
           set
@@ -1236,7 +1236,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             _signature = value;
           }
         }
-        private MovieSignature _signature;
+        private LocalMediaParser _signature;
 
     }
 
