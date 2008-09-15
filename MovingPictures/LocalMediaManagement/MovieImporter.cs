@@ -42,8 +42,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private bool fullScanNeeded;
 
         public const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
-        public const string rxMultiPartScan = @"((cd|disk|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
-        public const string rxMultiPartClean = @"((cd|disk|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$";
+        public const string rxMultiPartScan = @"((cd|disk|disc|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
+        public const string rxMultiPartClean = @"((cd|disk|disc|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$";
         public const string rxPunctuation = @"[\.\:\,]";
                 
         // a list of all files currently in the system
@@ -1071,8 +1071,24 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void GetMatches(MediaMatch mediaMatch) {
             List<DBMovieInfo> movieList;
             List<PossibleMatch> rankedMovieList = new List<PossibleMatch>();
+            string searchStr;
 
-            string searchStr = mediaMatch.Signature.Title;
+            bool searchCustom = mediaMatch.Custom;        
+            if (searchCustom)
+            {
+              searchStr = mediaMatch.SearchString;
+              // Reset the custom search flag 
+              // (probably not needed because this object is recreated)
+              mediaMatch.Custom = false; 
+            }
+            else 
+            {
+              // We are using a system generated search string 
+              // The title is alrady parser so let's use that for the search.
+              searchStr = mediaMatch.Signature.Title;
+            }
+            
+            string searchIMDB = mediaMatch.Signature.ImdbId;
             int searchYear = mediaMatch.Signature.Year;      
 
             // notify any listeners we are checking for matches
@@ -1081,11 +1097,44 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // grab a list of movies from our dataProvider and rank each returned movie on 
             // how close a match it is
-            movieList = MovingPicturesCore.MovieProvider.Get(searchStr);
 
+            bool imdbFastMatch = (bool)MovingPicturesCore.SettingsManager["importer_fastmatch"].Value;
+            bool imdbHint = (!searchCustom && searchIMDB != string.Empty);
+            if (imdbHint) {
+              // if it's an automated search and we have an IMDB id 
+              // do a search for it.
+              movieList = MovingPicturesCore.MovieProvider.Get(searchIMDB);
+              foreach (DBMovieInfo currMovie in movieList)
+              {
+                PossibleMatch imdbMatch = new PossibleMatch();
+                imdbMatch.Movie = currMovie;
+                // if we have a match, and we will probably have it
+                // this should be an exact match in most cases so assign the lowest MatchValue
+                imdbMatch.MatchValue = 0;
+                // add it to the ranked movie list
+                rankedMovieList.Add(imdbMatch);
+                
+                if (imdbFastMatch)
+                {
+                  // If Fast Match is turned on quit the movie matcher
+                  // we probably have the exact match anyway
+                  mediaMatch.PossibleMatches = rankedMovieList;
+                  return;
+                }
+              }
+            }
+            
+            // Continue finding matches for a (parsed) title or custom search string.
+            movieList = MovingPicturesCore.MovieProvider.Get(searchStr);
+            
             bool strictYear = (bool)MovingPicturesCore.SettingsManager["importer_strict_year"].Value;
             Regex rxCleanPunctuation = new Regex(rxPunctuation, RegexOptions.IgnoreCase);
 
+            // if we have an imdb id add another point to the following results 
+            // (maybe not necessary but this is to lower the 
+            // priority of the second list of matches
+            int matchValue = (imdbHint) ? 1 : 0;
+            
             foreach (DBMovieInfo currMovie in movieList) {
                 PossibleMatch currMatch = new PossibleMatch();
                 currMatch.Movie = currMovie;
@@ -1106,8 +1155,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
 
                 // get the Levenshtein distance between the two string and use them for the match value
-                currMatch.MatchValue = AdvancedStringComparer.Levenshtein(sMovie,sSearch);
-
+                currMatch.MatchValue = matchValue + AdvancedStringComparer.Levenshtein(sMovie, sSearch);
                 if ((searchYear > 0) && strictYear)
                 {
                     // Strict year match (don't show results that don't match on year)
@@ -1135,6 +1183,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           get { return _folder; }
           set { _folder = value; }
         } private bool _folder = false;
+
+        public bool Custom
+        {
+          get { return _custom; }
+          set { _custom = value; }
+        } private bool _custom = false;
       
         public bool Deleted {
             get { return _deleted; }
@@ -1213,7 +1267,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             get {
               if (_searchString.Equals(string.Empty))
               {
-                _searchString = Signature.Title + ((Signature.Year > 0) ? " " + Signature.Year : "") + ((Signature.ImdbId.Length > 0) ? " " + Signature.ImdbId : "");
+                _searchString = Signature.Title + ((Signature.Year > 0) ? " " + Signature.Year : "") + ((Signature.ImdbId != string.Empty) ? " " + Signature.ImdbId : "");
               }                
               return _searchString;
             }

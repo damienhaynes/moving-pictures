@@ -59,6 +59,12 @@
         <default>true</default>
         <description>Scan for NFO file and if available parse out the IMDB id.</description>
       </setting>
+
+      <setting id="importer_fastmatch" name="Use Fast Match On IMDBid" type="BOOL">
+        <default>true</default>
+        <description>When an IMDB id is found with the NFO scanner don't bother getting extra results that are matched on the parsed title. This setting will speed up the scan process but will require more user input when the imdb id is not correct.</description>
+      </setting>
+      
     </group>
 
       <!-- Sample Filter -->

@@ -222,6 +222,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 popup.ShowDialog(this);
 
                 if (popup.DialogResult == DialogResult.OK) {
+                    selectedMatch.Custom = true; // this is a custom search
                     selectedMatch.SearchString = popup.GetSearchString();
                     MovingPicturesCore.Importer.Reprocess(selectedMatch);
                 }
