@@ -1155,9 +1155,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 
                 // if we have 'year' data to compare add it to the string compare
                 // this should give the match a higher priority
-                
-                string sMovie = currMovie.Title.ToLower().Trim();
+
+                string sMovie = currMovie.Title.ToLower();
                 string sSearch = searchStr.ToLower().Trim();
+                bool addMatch = true;
                 
                 //replace punctuation with spaces
                 sMovie = rxReplacePunctuation.Replace(sMovie, " ");
@@ -1165,6 +1166,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 sMovie = rxCleanPunctuation.Replace(sMovie, "");
                 //replace multiple spaces with just one space
                 sMovie = rxReplaceDoubleSpace.Replace(sMovie, " ");
+                //finally remove trailing spaces
+                sMovie = sMovie.Trim();
                                              
                 // if both have a year then add the year to the comparison variables
                 if (searchYear > 0 && currMovie.Year > 0) {
@@ -1174,16 +1177,17 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                 // get the Levenshtein distance between the two string and use them for the match value
                 currMatch.MatchValue = matchValue + AdvancedStringComparer.Levenshtein(sMovie, sSearch);
+                
                 if ((searchYear > 0) && strictYear)
                 {
                     // Strict year match (don't show results that don't match on year)
+                    addMatch = false;
                     if (currMovie.Year == searchYear || currMovie.Year == 0)
-                        rankedMovieList.Add(currMatch);
+                      addMatch = true;
                 }
-                else
-                {
-                    rankedMovieList.Add(currMatch);
-                }
+
+                if (addMatch)
+                  rankedMovieList.Add(currMatch);
               
             }
 
