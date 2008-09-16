@@ -13,13 +13,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     public int Year;
     public string ImdbId;
     public string Edition;
+    public string Source;
 
-    public MediaSignature(string title, int year, string imdb, string edition) 
+    public MediaSignature(string title, int year, string imdb, string edition, string source) 
     {
       this.Title = title;
       this.Year = year;
       this.ImdbId = imdb;
       this.Edition = edition;
+      this.Source = source;
     }
 
   }
@@ -76,7 +78,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
           sourceStr = parseFileName(mm.LocalMedia[0].File);
         }
       }
-      
       return parseSignature(sourceStr, signature);
     }
     
@@ -90,6 +91,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     {
       string sig = inputStr;
       int year;
+
+      // Add uncleaned source string
+      signature.Source = inputStr;
 
       // Phase #1: Spacing
       // if there are periods or underscores, assume the period is replacement for spaces.
@@ -201,7 +205,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
       // Read the nfo file content into a string
       string s = File.ReadAllText(path);
       // Check for the existance of a imdb id 
-      Regex rxIMDB = new Regex("tt[0-9]{7}", RegexOptions.IgnoreCase);
+      Regex rxIMDB = new Regex(@"tt\d{7}", RegexOptions.IgnoreCase);
       Match match = rxIMDB.Match(s);
       // If success return the id, on failure return empty. 
       if (match.Success)
