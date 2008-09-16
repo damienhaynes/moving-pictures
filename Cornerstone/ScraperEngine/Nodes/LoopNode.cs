@@ -12,12 +12,18 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return loopingVariable; }
         } protected String loopingVariable;
 
+        public int Limit {
+            get { return limit; }
+        } protected int limit;
+
         #endregion
 
         #region Methods
 
         public LoopNode(XmlNode xmlNode, bool debugMode)
             : base(xmlNode, debugMode) {
+
+            logger.Debug("executing loop: " + xmlNode.OuterXml);
 
             // try to grab the looping variable
             try { loopingVariable = xmlNode.Attributes["on"].Value; }
@@ -26,13 +32,23 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 loadSuccess = false;
                 return;
             }
+
+            // try to grab the limit variable
+            string limitStr;
+            try { 
+                limitStr = xmlNode.Attributes["limit"].Value;
+                limit = int.Parse(limitStr);
+            }
+            catch (Exception) {
+                limit = 10;
+            }
         }
 
         public override void Execute(Dictionary<string, string> variables) {
             string parsedName = parseString(variables, Name);
             
             int count = 0;
-            while (variables.ContainsKey(loopingVariable + "[" + count + "]")) {
+            while (variables.ContainsKey(loopingVariable + "[" + count + "]") & count < limit) {
                 string oldName = loopingVariable + "[" + count + "]";
                 setVariable(variables, parsedName, parseString(variables, "${" + oldName + "}"));
                 setVariable(variables, "count", count.ToString());

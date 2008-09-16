@@ -59,6 +59,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
+            logger.Debug("executing retrieve: " + xmlNode.OuterXml);
+
             string parsedUrl = parseString(variables, url);
             string parsedName = parseString(variables, name);
             string pageContents = string.Empty;

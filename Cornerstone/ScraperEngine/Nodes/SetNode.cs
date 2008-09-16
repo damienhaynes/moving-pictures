@@ -19,6 +19,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
         public SetNode(XmlNode xmlNode, bool debugMode)
             : base(xmlNode, debugMode) {
 
+            logger.Debug("executing set: " + xmlNode.OuterXml);
+            
             // try to grab the value
             try { value = xmlNode.Attributes["value"].Value; }
             catch (Exception) {

@@ -376,7 +376,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                 if (currMovie.BackdropFullPath.Trim().Length == 0) {
                     new LocalProvider().GetBackdrop(currMovie);
-                    //MovingPicturesCore.BackdropProvider.GetBackdrop(currMovie);
+                    MovingPicturesCore.BackdropProvider.GetBackdrop(currMovie);
                     currMovie.Commit();
 
                 }
@@ -995,7 +995,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             MovingPicturesCore.CoverProvider.GetArtwork(movie);
 
             new LocalProvider().GetBackdrop(movie);
-            //MovingPicturesCore.BackdropProvider.GetBackdrop(movie);
+            MovingPicturesCore.BackdropProvider.GetBackdrop(movie);
             
             movie.LocalMedia.Clear();
             movie.LocalMedia.AddRange(localMedia);
