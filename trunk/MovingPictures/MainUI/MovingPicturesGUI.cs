@@ -16,6 +16,7 @@ using MediaPortal.Plugins.MovingPictures.DataProviders;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
+using MediaPortal.Util;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {
@@ -26,7 +27,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         Dictionary<string, string> defines;
         Dictionary<DBMovieInfo, GUIListItem> listItemLookup;
         Dictionary<string, bool> loggedProperties;
-
+        
         private bool currentlyPlaying = false;
         private int currentPart = 1;
 
@@ -640,16 +641,72 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
+            // media information
+            string media = SelectedMovie.LocalMedia[part - 1].FullPath;
+            string ext = SelectedMovie.LocalMedia[part - 1].File.Extension;
+            
+            // check if the current media is an image file
+            if (DaemonTools.IsImageFile(ext))
+              // if so, prepare the dvd image
+              // and in turn change the path for the media.
+              if (!prepareDVDImage(ref media))
+                return; // if the preperation failed return         
+
             // play the movie! 
             GUIGraphicsContext.IsFullScreenVideo = true;
             GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
-            bool success = g_Player.Play(SelectedMovie.LocalMedia[part - 1].FullPath, g_Player.MediaType.Video);
+
+            bool success = g_Player.Play(media, g_Player.MediaType.Video);
             currentlyPlaying = success;
 
             if (currentlyPlaying)
                 currentPart = 1;
         }
 
+        // Prepare a DVD image
+        // TODO: mounting stills needs a seperate thread + waitcursor
+        private bool prepareDVDImage(ref string media)
+        {
+          string drive;
+          // Check if the current image is already mounted
+          if (!DaemonTools.IsMounted(media))
+          {
+            // if not try to mount the image
+            if (!DaemonTools.Mount(media, out drive))
+            {
+              // on failure return a message and return false
+              showMessage("Error",
+                       "IMAGE CAN NOT BE MOUNTED",
+                       null, null, null);
+              return false;
+            }
+          }
+          else
+          {
+            drive = DaemonTools.GetVirtualDrive();
+          }
+
+          // the correct image has been mounted but we 
+          // still need to check if it's a valid DVD image.
+          // here we change the media path to the expected value.
+          media = drive + @"\VIDEO_TS\VIDEO_TS.IFO";
+          // now check if this path exists
+          if (!System.IO.File.Exists(media))
+          {
+            // on failure show a message and return false
+            showMessage("Error",
+                     "IMAGE IS NOT A DVD IMAGE",
+                     null, null, null);
+            return false;
+          }
+
+          // if we made it this far a DVD image has been mounted
+          // and the media string has been set to start the dvd
+          // return true to let the caller know the preparation
+          // succeeded.
+          return true;
+        }
+        
         protected override void OnShowContextMenu() {
             base.OnShowContextMenu();
             switch (CurrentView) {
@@ -807,7 +864,13 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         public override bool OnMessage(GUIMessage message) {
-            return base.OnMessage(message);
+          logger.Info("M = {0}", message.Message.ToString());
+          switch (message.Message)
+          {
+            case GUIMessage.MessageType.GUI_MSG_VOLUME_INSERTED:
+            case GUIMessage.MessageType.GUI_MSG_CD_INSERTED:
+          }
+          return base.OnMessage(message);
         }
 
         private void OnItemSelected(GUIListItem item, GUIControl parent) {
