@@ -31,16 +31,23 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
       MediaSignature signature = new MediaSignature();
       bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
       bool scanNFO = (bool)MovingPicturesCore.SettingsManager["importer_nfoscan"].Value;
-
+      bool isDvdFS = (mm.LocalMedia[0].File.Extension.ToLower() == ".ifo");
+      
       if (mm.LocalMedia == null || mm.LocalMedia.Count == 0)
         return signature;
-      else 
-        if (mm.FolderHint)
+      else
+        if (mm.FolderHint || isDvdFS)
       { // ## If FolderHint is true we -can- use the foldername to create the searchstring
-        if (mm.LocalMedia.Count > 1 || preferFolder)
+        if (mm.LocalMedia.Count > 1 || preferFolder || isDvdFS)
         { // if it's multi-part media use the folder name
           // if the preferFolder value is true (one movie one folder) also use the folder name
-          sourceStr = parseFolderName(mm.LocalMedia[0].File.Directory);
+          
+          // if we are in a DVD VIDEO_TS directory make sure we go up one more
+          DirectoryInfo folder = mm.LocalMedia[0].File.Directory;
+          if (isDvdFS && folder.Name.ToLower() == "video_ts" )
+            folder = folder.Parent;
+
+          sourceStr = parseFolderName(folder);
         }
         else
         {
