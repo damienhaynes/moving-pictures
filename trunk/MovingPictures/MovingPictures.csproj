@@ -159,8 +159,8 @@
     <Compile Include="DataProviders\MovieXMLProvider.cs" />
     <Compile Include="DataProviders\ScriptableProvider.cs" />
     <Compile Include="LocalMediaManagement\AdvancedStringComparer.cs" />
+    <Compile Include="LocalMediaManagement\LocalMediaParser.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
-    <Compile Include="LocalMediaManagement\MovieSignature.cs" />
     <Compile Include="MainUI\ConfigConnector.cs" />
     <Compile Include="MainUI\MovingPicturesGUI.cs" />
     <Compile Include="MovingPicturesCore.cs" />

@@ -42,6 +42,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
+            logger.Debug("executing parse: " + xmlNode.OuterXml);
             // parse variables from the input string
             string parsedInput = parseString(variables, input);
             string parsedName = parseString(variables, Name);

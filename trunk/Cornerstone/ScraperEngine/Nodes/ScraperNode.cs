@@ -68,7 +68,7 @@ namespace Cornerstone.ScraperEngine {
         
         protected virtual void setVariable(Dictionary<string, string> variables, string key, string value) {
             variables[key] = value;
-            if (DebugMode) logger.Debug("Assigned variable: " + key + " = " + value);
+            if (value.Length < 500 || DebugMode) logger.Debug("Assigned variable: " + key + " = " + value);
         }
 
         protected virtual void removeVariable(Dictionary<string, string> variables, string key) {
@@ -112,6 +112,7 @@ namespace Cornerstone.ScraperEngine {
             foreach (KeyValuePair<string, string> currVar in variables) {
                 output.Replace("${" + currVar.Key + "}", currVar.Value);
                 output.Replace("${" + currVar.Key + ":safe}", HttpUtility.UrlEncode(currVar.Value));
+                output.Replace("${" + currVar.Key + ":htmldecode}", HttpUtility.HtmlDecode(currVar.Value));
             }
             return output.ToString();
         }
