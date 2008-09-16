@@ -762,10 +762,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Removes the file extension from a filename
         public static string RemoveFileExtension(FileInfo file)
         {
-          // get rid of the file extension
-          int extIndex = file.Name.IndexOf(file.Extension);
-          //int extLength = file.Extension.Length;
-          return file.Name.Remove(extIndex);
+          return Path.GetFileNameWithoutExtension(file.Name);
         }
 
         #endregion
