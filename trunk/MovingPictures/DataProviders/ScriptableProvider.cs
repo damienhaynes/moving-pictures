@@ -82,6 +82,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         public List<DBMovieInfo> Get(string movieTitle) {
             List<DBMovieInfo> rtn = new List<DBMovieInfo>();
 
+            Dictionary<string, DBMovieInfo> addedMovies = new Dictionary<string, DBMovieInfo>();
+
             Dictionary<string, string> paramList = new Dictionary<string, string>();
             Dictionary<string, string> results;
 
@@ -101,8 +103,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         currField.SetValue(newMovie, value);
                 }
 
-                rtn.Add(newMovie);
                 count++;
+
+                // check if the movie has already been added, if not, add it
+                if (!addedMovies.ContainsKey(newMovie.ImdbID)) {
+                    rtn.Add(newMovie);
+                    addedMovies[newMovie.ImdbID] = newMovie;
+                }
             }
 
 

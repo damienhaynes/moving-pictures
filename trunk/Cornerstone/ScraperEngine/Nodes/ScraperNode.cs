@@ -5,6 +5,7 @@ using System.Xml;
 using NLog;
 using System.Reflection;
 using System.Web;
+using System.Text.RegularExpressions;
 
 namespace Cornerstone.ScraperEngine {
     public abstract class ScraperNode {
@@ -109,11 +110,40 @@ namespace Cornerstone.ScraperEngine {
         // scans the given string and replaces any existing variables with their value
         protected string parseString(Dictionary<string, string> variables, string input) {
             StringBuilder output = new StringBuilder(input);
-            foreach (KeyValuePair<string, string> currVar in variables) {
-                output.Replace("${" + currVar.Key + "}", currVar.Value);
-                output.Replace("${" + currVar.Key + ":safe}", HttpUtility.UrlEncode(currVar.Value));
-                output.Replace("${" + currVar.Key + ":htmldecode}", HttpUtility.HtmlDecode(currVar.Value));
+            int offset = 0;
+
+            Regex variablePattern = new Regex("\\${([^}:]+)(?::([^}]+))?}");
+            MatchCollection matches = variablePattern.Matches(input);
+            foreach (Match currMatch in matches) {
+                string varName = "";
+                string modifier = string.Empty;
+                string value = string.Empty;
+
+                // get rid of the escaped variable string
+                output.Remove(currMatch.Index + offset, currMatch.Length);
+
+                // grab details for this parse
+                varName = currMatch.Groups[1].Value;
+                variables.TryGetValue(varName, out value);
+                if (currMatch.Groups.Count >= 3)
+                    modifier = currMatch.Groups[2].Value.ToLower();
+
+                // if there is no variable for what was passed in we are done
+                if (value == string.Empty || value == null) {
+                    offset -= currMatch.Length;
+                    continue;
+                }
+
+                // handle any modifiers
+                if (modifier.Equals("safe"))
+                    value = HttpUtility.UrlEncode(value);
+                if (modifier.Equals("htmldecode"))
+                    value = HttpUtility.HtmlDecode(value);
+
+                output.Insert(currMatch.Index + offset, value);
+                offset = offset - currMatch.Length + value.Length;
             }
+
             return output.ToString();
         }
 
