@@ -64,7 +64,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         public static ICoverArtProvider CoverProvider {
             get {
                 if (coverProvider == null)
-                    coverProvider = ScriptableProvider.Load(Properties.Resources.IMDb); ;
+                    coverProvider = ScriptableProvider.Load(Properties.Resources.IMPAwards); ;
 
                 return coverProvider;
             }

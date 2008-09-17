@@ -169,14 +169,32 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should change. 
-        ///    --&gt;
-        ///    &lt;id&gt;874902&lt;/id&gt;
-        ///    &lt;version major=&quot;0&quot; mino [rest of string was truncated]&quot;;.
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you should change the version [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string IMDb {
             get {
                 return ResourceManager.GetString("IMDb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;IMPAwards&lt;/name&gt;
+        ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
+        ///    &lt;description&gt;This script grabs cover-art from impawards.com.&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you should [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string IMPAwards {
+            get {
+                return ResourceManager.GetString("IMPAwards", resourceCulture);
             }
         }
         

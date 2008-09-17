@@ -243,6 +243,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DataProviders\ScraperScripts\IMPAwards.xml" />
     <Content Include="Images\accept.png" />
     <Content Include="Images\approved.png" />
     <Content Include="Images\arrow_cross.png" />

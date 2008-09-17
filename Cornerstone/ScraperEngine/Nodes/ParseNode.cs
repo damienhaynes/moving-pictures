@@ -46,9 +46,12 @@ namespace Cornerstone.ScraperEngine.Nodes {
             // parse variables from the input string
             string parsedInput = parseString(variables, input);
             string parsedName = parseString(variables, Name);
+            string parsedPattern = parseString(variables, pattern);
+
+            if (DebugMode) logger.Debug("name: " + parsedName + " ||| input: " + parsedInput);
 
             // try to find matches via regex pattern
-            Regex regEx = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            Regex regEx = new Regex(parsedPattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
             MatchCollection matches = regEx.Matches(parsedInput);
 
             if (matches.Count == 0) {
