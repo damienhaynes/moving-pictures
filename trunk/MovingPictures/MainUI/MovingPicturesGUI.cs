@@ -864,13 +864,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         public override bool OnMessage(GUIMessage message) {
-          logger.Info("M = {0}", message.Message.ToString());
-          switch (message.Message)
-          {
-            case GUIMessage.MessageType.GUI_MSG_VOLUME_INSERTED:
-            case GUIMessage.MessageType.GUI_MSG_CD_INSERTED:
-          }
-          return base.OnMessage(message);
+              return base.OnMessage(message);
         }
 
         private void OnItemSelected(GUIListItem item, GUIControl parent) {

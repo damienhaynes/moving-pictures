@@ -5,6 +5,7 @@ using Cornerstone.ScraperEngine;
 using System.IO;
 using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using Cornerstone.Database;
+using System.Windows.Forms;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class ScriptableProvider : IMovieProvider, ICoverArtProvider, IBackdropProvider {
@@ -142,6 +143,39 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool GetArtwork(DBMovieInfo movie) {
+            Dictionary<string, string> paramList = new Dictionary<string, string>();
+            Dictionary<string, string> results;
+
+            // grab coverart loading settings
+            int maxCovers = (int)MovingPicturesCore.SettingsManager["max_covers_per_movie"].Value;
+            int maxCoversInSession = (int)MovingPicturesCore.SettingsManager["max_covers_per_session"].Value;
+
+            // if we have already hit our limit for the number of covers to load, quit
+            if (movie.AlternateCovers.Count >= maxCovers)
+                return true;
+
+            // load params for scraper
+            foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo)))
+                paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString();
+
+            // rn the scraper
+            results = scraper.Execute("get_cover_art", paramList);
+
+            int coversAdded = 0;
+            int count = 0;
+            while (results.ContainsKey("cover_art[" + count + "].url")) {
+                // if we have hit our limit quit
+                if (movie.AlternateCovers.Count >= maxCovers || coversAdded > maxCoversInSession)
+                    return true;
+
+                // get url for cover and load it via the movie object
+                string coverPath = results["cover_art[" + count + "].url"];
+                if (movie.AddCoverFromURL(coverPath) == ArtworkLoadStatus.SUCCESS)
+                    coversAdded++;
+
+                count++;
+            }
+
             return false;
         }
 
