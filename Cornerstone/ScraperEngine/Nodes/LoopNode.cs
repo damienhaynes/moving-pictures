@@ -48,7 +48,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedName = parseString(variables, Name);
             
             int count = 0;
-            while (variables.ContainsKey(loopingVariable + "[" + count + "]") & count < limit) {
+            while (variables.ContainsKey(loopingVariable + "[" + count + "]") && count < limit) {
                 string oldName = loopingVariable + "[" + count + "]";
                 setVariable(variables, parsedName, parseString(variables, "${" + oldName + "}"));
                 setVariable(variables, "count", count.ToString());
