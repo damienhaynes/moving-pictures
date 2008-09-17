@@ -64,14 +64,9 @@
         <description>Scan for NFO file and if available parse out the IMDB id.</description>
       </setting>
 
-      <setting id="importer_nfomask" name="Scan Mask (Folder)" type="STRING">
-        <default>*.nfo;*.txt</default>
-        <description>The search patterns used to find NFO files for media that has it's own folder. Seperate multiple patterns with , or ;</description>
-      </setting>
-
-      <setting id="importer_nfoext" name="Scan Extension (File)" type="STRING">
+      <setting id="importer_nfoext" name="File Extensions" type="STRING">
         <default>nfo;txt</default>
-        <description>The extensions that are used when looking for matching nfo files when one folder contains different movies.</description>
+        <description>The extensions that are used when looking for matching nfo files when one folder contains different movies. Seperate multiple extensions with , or ;</description>
       </setting>
 
       <setting id="importer_autoimdb" name="Auto-Approve on IMDB Match" type="BOOL">

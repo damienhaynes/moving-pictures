@@ -191,36 +191,22 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     // Returns the full path of the first NFO file or empty
     public static string nfoScanner(DirectoryInfo dir)
     {
-      return nfoScanner(dir, null);
+      return nfoScanner(dir, "*");
     }
-
 
     public static string nfoScanner(DirectoryInfo dir, string filename)
     {
       // TODO: optimize    
-      string nfoMasks = MovingPicturesCore.SettingsManager["importer_nfomask"].Value.ToString();
       string nfoExt = MovingPicturesCore.SettingsManager["importer_nfoext"].Value.ToString();
-
       Char[] splitters = new Char[] { ',', ';' };
-      string[] mask;
+      string[] extensions = nfoExt.Split(splitters);
+      string[] mask = new string[extensions.Length];
 
-      if (filename != null)
-      {
-        // if we have a filename combine it
-        // with the extension list to create
-        // a list of files to look for
-        string[] extensions = nfoExt.Split(splitters);
-        mask = new string[extensions.Length];
-        for ( int i = 0;i<extensions.Length;i++ )
-        {
-          mask[i] = filename + "." + extensions[i];
-        }         
-      }
-      else
-      {
-        // just get the file masks
-        mask = nfoMasks.Split(splitters);
-      }
+      // combine the filename/mask
+      // with the extension list to create
+      // a list of files to look for
+      for (int i = 0; i < extensions.Length; i++)
+        mask[i] = filename + "." + extensions[i];
 
       // iterate through each pattern and get the corresponding files
       foreach (string pattern in mask)
