@@ -29,7 +29,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
   }
 
   public static class LocalMediaParser
-  {    
+  {
+    private static Logger logger = LogManager.GetCurrentClassLogger();
+    
     public static MediaSignature parseMediaMatch (MediaMatch mm) {
       string sourceStr;
       MediaSignature signature = new MediaSignature();
@@ -61,11 +63,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
         // Scan for NFO Files
         if (scanNFO)
-        {
           signature.ImdbId = nfoScanner(mm.LocalMedia[0].File.Directory);
-          //if (nfoPath != string.Empty)
-          //  signature.ImdbId = parseNFO(nfoPath);
-        }
       }
       // ## We can't use the foldername because it contains different movies 
       else
@@ -79,6 +77,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
           // just use filename
           sourceStr = parseFileName(mm.LocalMedia[0].File);
         }
+
+        // Scan for NFO File (with the same name)
+        if (scanNFO)
+          signature.ImdbId = nfoScanner(mm.LocalMedia[0].File.Directory, sourceStr);
       }
       return parseSignature(sourceStr, signature);
     }
@@ -189,10 +191,36 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     // Returns the full path of the first NFO file or empty
     public static string nfoScanner(DirectoryInfo dir)
     {
-      // todo: don't know if reading this settings for each call 
-      // is the best way to go
+      return nfoScanner(dir, null);
+    }
+
+
+    public static string nfoScanner(DirectoryInfo dir, string filename)
+    {
+      // TODO: optimize    
       string nfoMasks = MovingPicturesCore.SettingsManager["importer_nfomask"].Value.ToString();
-      string[] mask = nfoMasks.Split(new Char[] { ',', ';' });
+      string nfoExt = MovingPicturesCore.SettingsManager["importer_nfoext"].Value.ToString();
+
+      Char[] splitters = new Char[] { ',', ';' };
+      string[] mask;
+
+      if (filename != null)
+      {
+        // if we have a filename combine it
+        // with the extension list to create
+        // a list of files to look for
+        string[] extensions = nfoExt.Split(splitters);
+        mask = new string[extensions.Length];
+        for ( int i = 0;i<extensions.Length;i++ )
+        {
+          mask[i] = filename + "." + extensions[i];
+        }         
+      }
+      else
+      {
+        // just get the file masks
+        mask = nfoMasks.Split(splitters);
+      }
 
       // iterate through each pattern and get the corresponding files
       foreach (string pattern in mask)
@@ -221,10 +249,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
     // Imdb ID scanner
     // Parses a NFO file and returns the IMDB ID (if any)
-    public static string parseNFO(string path)
+    public static string parseNFO(string file)
     {
+      logger.Info("Scanning NFO file: {0}", file);
+      
       // Read the nfo file content into a string
-      string s = File.ReadAllText(path);
+      string s = File.ReadAllText(file);
       // Check for the existance of a imdb id 
       Regex rxIMDB = new Regex(@"tt\d{7}", RegexOptions.IgnoreCase);
       Match match = rxIMDB.Match(s);
@@ -232,7 +262,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
       if (match.Success)
       {
         s = match.Value;
-        //logger.Info("Found imdb id ({0}) in file: {1}", s, path);
       }
       else
       {
