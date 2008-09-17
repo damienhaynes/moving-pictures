@@ -48,7 +48,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedName = parseString(variables, Name);
             string parsedPattern = parseString(variables, pattern);
 
-            if (DebugMode) logger.Debug("name: " + parsedName + " ||| input: " + parsedInput);
+            if (DebugMode) logger.Debug("name: " + parsedName + " ||| pattern: " + parsedPattern + " ||| input: " + parsedInput);
+            else logger.Debug("name: " + parsedName + " ||| pattern: " + parsedPattern);
 
             // try to find matches via regex pattern
             Regex regEx = new Regex(parsedPattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);

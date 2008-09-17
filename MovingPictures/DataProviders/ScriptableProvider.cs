@@ -123,7 +123,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // load params
             foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo))) 
-                paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString();
+                paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
 
             // try to retrieve results
             results = scraper.Execute("get_details", paramList);
@@ -156,7 +156,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // load params for scraper
             foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo)))
-                paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString();
+                paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
 
             // rn the scraper
             results = scraper.Execute("get_cover_art", paramList);
