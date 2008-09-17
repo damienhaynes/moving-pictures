@@ -54,19 +54,28 @@
         <default>((720p|1080p|1080i|DirCut|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264|dxva)[-]?.*?$)</default>
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
+
+    </group>
+    
+    <group name="NFO Scanner">
       
-      <setting id="importer_nfoscan" name="NFO Scanner" type="BOOL">
+      <setting id="importer_nfoscan" name="Enable Scanner" type="BOOL">
         <default>true</default>
         <description>Scan for NFO file and if available parse out the IMDB id.</description>
       </setting>
 
-      <setting id="importer_fastmatch" name="Use Fast Match On IMDBid" type="BOOL">
+      <setting id="importer_nfomask" name="File Mask" type="STRING">
+        <default>*.nfo;*.txt</default>
+        <description>The search patterns to use for files that should be marked as NFO files. Seperate multiple patterns with , or ;</description>
+      </setting>
+
+      <setting id="importer_fastmatch" name="Fast Match" type="BOOL">
         <default>true</default>
         <description>When an IMDB id is found with the NFO scanner don't bother getting extra results that are matched on the parsed title. This setting will speed up the scan process but will require more user input when the imdb id is not correct.</description>
       </setting>
       
     </group>
-
+      
       <!-- Sample Filter -->
     <group name="Sample Filter">
       <setting id="importer_sample_keyword" name="Regular Expression String" type="STRING">

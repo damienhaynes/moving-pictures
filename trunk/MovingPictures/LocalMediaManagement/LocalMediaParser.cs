@@ -9,17 +9,19 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 {
   public struct MediaSignature
   {
-    public string Title;
-    public int Year;
-    public string ImdbId;
-    public string Edition;
-    public string Source;
+    public string Title; // Title
+    public int Year; // Year
+    public string ImdbId; // IMDB ID (tt*)
+    public string Edition; // Edition (unrated, director's cut etc..)
+    public string Source; // Original file/foldername
+    public string DvdId; // MCE's DVD Id
 
-    public MediaSignature(string title, int year, string imdb, string edition, string source) 
+    public MediaSignature(string title, int year, string imdb, string edition, string source, string dvdid) 
     {
       this.Title = title;
       this.Year = year;
       this.ImdbId = imdb;
+      this.DvdId = dvdid;
       this.Edition = edition;
       this.Source = source;
     }
@@ -60,9 +62,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
         // Scan for NFO Files
         if (scanNFO)
         {
-          string nfoPath = nfoScanner(mm.LocalMedia[0].File.Directory);
-          if (nfoPath != string.Empty)
-            signature.ImdbId = parseNFO(nfoPath);
+          signature.ImdbId = nfoScanner(mm.LocalMedia[0].File.Directory);
+          //if (nfoPath != string.Empty)
+          //  signature.ImdbId = parseNFO(nfoPath);
         }
       }
       // ## We can't use the foldername because it contains different movies 
@@ -187,15 +189,34 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     // Returns the full path of the first NFO file or empty
     public static string nfoScanner(DirectoryInfo dir)
     {
-      // Get all the nfo files from a directory
-      FileInfo[] nfoList = dir.GetFiles("*.nfo");
-      // If none found just return empty
-      if (nfoList.Length == 0)
-        return string.Empty;
-      
-      // if we found nfo files just return the path of 
-      // the first one, this should be tuned in the future
-      return nfoList[0].FullName;
+      // todo: don't know if reading this settings for each call 
+      // is the best way to go
+      string nfoMasks = MovingPicturesCore.SettingsManager["importer_nfomask"].Value.ToString();
+      string[] mask = nfoMasks.Split(new Char[] { ',', ';' });
+
+      // iterate through each pattern and get the corresponding files
+      foreach (string pattern in mask)
+      {
+        // Get all the files specfied by the current pattern from the directory
+        FileInfo[] nfoList = dir.GetFiles(pattern.Trim());
+        // If none continue to the next pattern
+        if (nfoList.Length == 0)
+          continue;
+        
+        // iterate through the list of files and scan them
+        foreach (FileInfo file in nfoList)
+        {
+          // scan file and retrieve result
+          string imdbid = parseNFO(file.FullName);
+          // if a match is found return the imdb id
+          if (imdbid != string.Empty)
+            return imdbid;
+        }
+        
+      }
+
+      // we found nothing so return empty
+      return string.Empty;
     }
 
     // Imdb ID scanner
