@@ -45,8 +45,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
         public const string rxMultiPartScan = @"((cd|disk|disc|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
         public const string rxMultiPartClean = @"((cd|disk|disc|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$";
-        public const string rxPunctuationToSpace = @"[\.\:\;\""\+\*]";
-        public const string rxPunctuationFilter = @"[\'\`\,]";
+        public const string rxPunctuationToSpace = @"[\.\:\;\+\*]";
+        public const string rxPunctuationFilter = @"[\'\`\,\""]";
         public const string rxCompressSpaces = @"\s{2,}";
                 
         // a list of all files currently in the system
