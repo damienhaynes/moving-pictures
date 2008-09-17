@@ -53,12 +53,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 
         private void addSourceButton_Click(object sender, EventArgs e) {
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            
             DialogResult result = folderDialog.ShowDialog();
             if (result == DialogResult.OK) {
                 DBImportPath newPath = new DBImportPath();
                 newPath.FullPath = folderDialog.SelectedPath;
                 pathBindingSource.Add(newPath);
-                MovingPicturesCore.Importer.StartFullScan();
+                MovingPicturesCore.Importer.RestartScanner();
             }
             
         }
@@ -70,7 +71,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     ((DBImportPath)pathBindingSource.Current).Delete();
                     pathBindingSource.RemoveCurrent();
 
-                    MovingPicturesCore.Importer.StartFullScan();
+                    MovingPicturesCore.Importer.RestartScanner();
                 }
             }
         }

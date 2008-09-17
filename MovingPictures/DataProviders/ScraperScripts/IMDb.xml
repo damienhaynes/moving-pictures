@@ -20,7 +20,7 @@
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
     -->
-    <type>MovingPicturesMovieData|MovingPicturesCoverArt</type>
+    <type>MovieDetailsFetcher</type>
     <language>English</language>
 
     <!-- If set to true, additional logging will be displayed during script execution. -->

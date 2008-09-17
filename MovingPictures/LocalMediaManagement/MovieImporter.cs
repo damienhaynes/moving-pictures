@@ -40,7 +40,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private Thread pathScannerThread;
 
         private int percentDone;
-        private bool fullScanNeeded;
 
         // commonly used regexp
         public const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
@@ -117,6 +116,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // Creates a MovieImporter object which will scan ImportPaths and import new media.
         public MovieImporter() {
+            initialize();
+
+            MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectDeleted);
+
+            percentDone = 0;
+        }
+
+        private void initialize() {
             mediaScannerThreads = new List<Thread>();
 
             pendingMatches = ArrayList.Synchronized(new ArrayList());
@@ -134,10 +141,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             fileSystemWatchers = new List<FileSystemWatcher>();
             pathLookup = new Dictionary<FileSystemWatcher, DBImportPath>();
-
-            MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectDeleted);
-
-            percentDone = 0;
         }
 
         ~MovieImporter() {
@@ -166,17 +169,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 pathScannerThread.Start();
                 pathScannerThread.Name = "PathScanner";
             }
+
+            if (MovieStatusChanged != null)
+                MovieStatusChanged(null, MovieImporterAction.STARTED);
         }
 
         public void Stop() {
-            Thread newThread = new Thread(new ThreadStart(StopWorker));
-            newThread.Start();
-        }
-        
-        // This is spawned off in a seperate thread to give better responsiveness when shutting down
-        // the config screen. It can take a few seconds sometimes to kill HTTP processes in the
-        // media scanner threads.
-        private void StopWorker() {
             lock (mediaScannerThreads) {
                 if (mediaScannerThreads.Count > 0) {
                     foreach (Thread currThread in mediaScannerThreads)
@@ -193,6 +191,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                 if (Progress != null)
                     Progress(100, 0, 0, "Stopped");
+
+                if (MovieStatusChanged != null)
+                    MovieStatusChanged(null, MovieImporterAction.STOPPED);
             }
         }
 
@@ -200,8 +201,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return (mediaScannerThreads.Count != 0);
         }
 
-        public void StartFullScan() {
-            fullScanNeeded = true;
+        public void RestartScanner() {
+            this.Stop();
+            this.initialize();
+            this.Start();
         }
 
         // This method is written weird and needs to be clarified. But I think it works, 
@@ -396,11 +399,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             try {
                 while (true) {
                     logger.Info("Initiating full scan on watch folders.");
-                    SetupFileSystemWatchers();
                     RemoveOrphanFiles();
                     RemoveMissingFiles();
                     RemoveOrphanArtwork();
                     LookForMissingArtwork();
+                    SetupFileSystemWatchers();
 
                     // do an initial scan on all paths
                     // grab all the files in our import paths
@@ -414,10 +417,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         ScanPath(currPath);
                     }
 
-                    fullScanNeeded = false;
 
                     // monitor existing paths for change
-                    while (!fullScanNeeded) {
+                    while (true) {
                         Thread.Sleep(1000);
                         
                         // if the filesystem scanner found any files, add them

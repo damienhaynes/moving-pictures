@@ -74,6 +74,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
             }
 
+            if (action == MovieImporterAction.STARTED)
+                return;
+
+            if (action == MovieImporterAction.STOPPED) {
+                unapprovedMatchesBindingSource.Clear();
+                return;
+            }
+
             if (action == MovieImporterAction.REMOVED_FROM_SPLIT ||
                 action == MovieImporterAction.REMOVED_FROM_JOIN) {
 
@@ -150,7 +158,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void scanButton_Click(object sender, EventArgs e) {
             MovingPicturesCore.Importer.Start();
-            MovingPicturesCore.Importer.StartFullScan();
+            MovingPicturesCore.Importer.RestartScanner();
         }
 
         private void MovieImporterPane_Load(object sender, EventArgs e) {
@@ -206,9 +214,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void ignoreButton_Click(object sender, EventArgs e) {
             unapprovedGrid.EndEdit();
 
-            foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
-                MediaMatch selectedMatch = (MediaMatch)currRow.DataBoundItem;
-                MovingPicturesCore.Importer.Ignore(selectedMatch);
+            DialogResult result = MessageBox.Show("This will permanently ignore the selected file(s). This action is currently IRREVERSABLE, are you sure?", "Warning!", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes) {
+
+                foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
+                    MediaMatch selectedMatch = (MediaMatch)currRow.DataBoundItem;
+                    MovingPicturesCore.Importer.Ignore(selectedMatch);
+                }
             }
         }
 

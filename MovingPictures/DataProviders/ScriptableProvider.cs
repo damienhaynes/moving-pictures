@@ -43,13 +43,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (!scraper.LoadSuccessful)
                 return;
 
-            if (scraper.ScriptType.Contains("MovingPicturesMovieData"))
+            if (scraper.ScriptType.Contains("MovieDetailsFetcher"))
                 providesMovieDetails = true;
 
-            if (scraper.ScriptType.Contains("MovingPicturesCoverArt"))
+            if (scraper.ScriptType.Contains("MovieCoverFetcher"))
                 providesCoverArt = true;
 
-            if (scraper.ScriptType.Contains("MovingPicturesBackdrops"))
+            if (scraper.ScriptType.Contains("MovieBackdropFetcher"))
                 providesBackdrops = true;
 
         }
