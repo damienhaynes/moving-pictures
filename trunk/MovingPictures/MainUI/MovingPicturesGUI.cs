@@ -647,10 +647,10 @@ namespace MediaPortal.Plugins.MovingPictures {
             
             // check if the current media is an image file
             if (DaemonTools.IsImageFile(ext))
-              // if so, prepare the dvd image
-              // and in turn change the path for the media.
-              if (!prepareDVDImage(ref media))
-                return; // if the preperation failed return         
+              // if so, prepare/mount the dvd image
+              // and pass control to Auto-Play
+              prepareDVDImage(ref media);
+              return; 
 
             // play the movie! 
             GUIGraphicsContext.IsFullScreenVideo = true;
