@@ -221,9 +221,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 SearchStringPopup popup = new SearchStringPopup(selectedMatch);
                 popup.ShowDialog(this);
 
-                if (popup.DialogResult == DialogResult.OK) {
-                    selectedMatch.Custom = true; // this is a custom search
-                    selectedMatch.SearchString = popup.GetSearchString();
+                if (popup.DialogResult == DialogResult.OK) {                
+                    // get the system generated signature
+                    MediaSignature sig = selectedMatch.Signature;
+                    // update it with the user supplied search string
+                    // TODO: make the user input box reflect the signature properties
+                    sig.Title = popup.GetSearchString();
+                    sig.Year = 0;
+                    sig.ImdbId = string.Empty;
+                    // add the user input based signature to the match
+                    selectedMatch.Signature = sig;
+                    // reprocess
                     MovingPicturesCore.Importer.Reprocess(selectedMatch);
                 }
             }

@@ -69,9 +69,9 @@
         <description>The search patterns to use for files that should be marked as NFO files. Seperate multiple patterns with , or ;</description>
       </setting>
 
-      <setting id="importer_fastmatch" name="Fast Match" type="BOOL">
+      <setting id="importer_autoimdb" name="Auto-Approve on IMDB Match" type="BOOL">
         <default>true</default>
-        <description>When an IMDB id is found with the NFO scanner don't bother getting extra results that are matched on the parsed title. This setting will speed up the scan process but will require more user input when the imdb id is not correct.</description>
+        <description>If we found a match on IMDB id always auto-approve this match even if the other criteria doesn't match closely enough. </description>
       </setting>
       
     </group>

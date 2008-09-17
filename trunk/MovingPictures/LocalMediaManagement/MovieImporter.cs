@@ -42,12 +42,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private int percentDone;
         private bool fullScanNeeded;
 
+        // commonly used regexp
         public const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
         public const string rxMultiPartScan = @"((cd|disk|disc|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
         public const string rxMultiPartClean = @"((cd|disk|disc|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$";
-        public const string rxPunctuationToSpace = @"[\.\:\;\+\*]";
-        public const string rxPunctuationFilter = @"[\'\`\,\""]";
-        public const string rxCompressSpaces = @"\s{2,}";
+        
+        public static Regex rxReplacePunctuation = new Regex(@"[\.\:\;\+\*]", RegexOptions.IgnoreCase);
+        public static Regex rxCleanPunctuation = new Regex(@"[\'\`\,\""]", RegexOptions.IgnoreCase);
+        public static Regex rxReplaceDoubleSpace = new Regex(@"\s{2,}", RegexOptions.IgnoreCase);
                 
         // a list of all files currently in the system
         private Dictionary<DBLocalMedia, MediaMatch> matchesInSystem;
@@ -1080,25 +1082,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void GetMatches(MediaMatch mediaMatch) {
             List<DBMovieInfo> movieList;
             List<PossibleMatch> rankedMovieList = new List<PossibleMatch>();
-            string searchStr;
-
-            bool searchCustom = mediaMatch.Custom;        
-            if (searchCustom)
-            {
-              searchStr = mediaMatch.SearchString;
-              // Reset the custom search flag 
-              // (probably not needed because this object is recreated)
-              mediaMatch.Custom = false; 
-            }
-            else 
-            {
-              // We are using a system generated search string 
-              // The title is alrady parser so let's use that for the search.
-              searchStr = mediaMatch.Signature.Title;
-            }
             
-            string searchIMDB = mediaMatch.Signature.ImdbId;
-            int searchYear = mediaMatch.Signature.Year;      
+            // Get the MediaSignature
+            MediaSignature signature = mediaMatch.Signature;
 
             // notify any listeners we are checking for matches
             if (MovieStatusChanged != null)
@@ -1106,91 +1092,89 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // grab a list of movies from our dataProvider and rank each returned movie on 
             // how close a match it is
-
-            bool imdbFastMatch = (bool)MovingPicturesCore.SettingsManager["importer_fastmatch"].Value;
-            bool imdbHint = (!searchCustom && searchIMDB != string.Empty);
-            if (imdbHint) {
-              // if it's an automated search and we have an IMDB id 
-              // do a search for it.
-              movieList = MovingPicturesCore.MovieProvider.Get(searchIMDB);
-              foreach (DBMovieInfo currMovie in movieList)
-              {
-                PossibleMatch imdbMatch = new PossibleMatch();
-                imdbMatch.Movie = currMovie;
-                // if we have a match, and we will probably have it
-                // this should be an exact match in most cases so assign the lowest MatchValue
-                imdbMatch.MatchValue = 0;
-                // add it to the ranked movie list
-                rankedMovieList.Add(imdbMatch);
-                
-                if (imdbFastMatch)
-                {
-                  // If Fast Match is turned on quit the movie matcher
-                  // we probably have the exact match anyway
-                  mediaMatch.PossibleMatches = rankedMovieList;
-                  return;
-                }
-              }
-            }
             
-            // Continue finding matches for a (parsed) title or custom search string.
+            // TODO: remove searchstring logic (when providers accept MediaSignature)
+            string searchStr = (signature.ImdbId == null || signature.ImdbId == string.Empty) ? signature.Title : signature.ImdbId;
+            // TODO: remove active line and uncomment the line below it (when providers accept MediaSignature)
             movieList = MovingPicturesCore.MovieProvider.Get(searchStr);
+            //movieList = MovingPicturesCore.MovieProvider.Get(signature);
             
             bool strictYear = (bool)MovingPicturesCore.SettingsManager["importer_strict_year"].Value;
-            Regex rxReplacePunctuation = new Regex(rxPunctuationToSpace, RegexOptions.IgnoreCase);
-            Regex rxCleanPunctuation = new Regex(rxPunctuationFilter, RegexOptions.IgnoreCase);
-            Regex rxReplaceDoubleSpace = new Regex(rxCompressSpaces, RegexOptions.IgnoreCase);
+            // TODO: this boolean will probably be removed on improvement of the matching system
+            bool imdbBoost = (bool)MovingPicturesCore.SettingsManager["importer_autoimdb"].Value;
 
-            // if we have an imdb id add another point to the following results 
-            // (maybe not necessary but this is to lower the 
-            // priority of the second list of matches
-            int matchValue = (imdbHint) ? 1 : 0;
-            
             foreach (DBMovieInfo currMovie in movieList) {
                 PossibleMatch currMatch = new PossibleMatch();
                 currMatch.Movie = currMovie;
-                
-                // if we have 'year' data to compare add it to the string compare
-                // this should give the match a higher priority
 
-                string sMovie = currMovie.Title.ToLower();
-                string sSearch = searchStr.ToLower().Trim();
-                bool addMatch = true;
+                // If strict year matching is enabled exclude match
+                // when it does not meet this criteria
+                if (strictYear)
+                  if (currMovie.Year == signature.Year || currMovie.Year == 0 || signature.Year == 0)
+                    continue; // move to next match in the list               
                 
-                //replace punctuation with spaces
-                sMovie = rxReplacePunctuation.Replace(sMovie, " ");
-                //filter other punctuation characters completely
-                sMovie = rxCleanPunctuation.Replace(sMovie, "");
-                //replace multiple spaces with just one space
-                sMovie = rxReplaceDoubleSpace.Replace(sMovie, " ");
-                //finally remove trailing spaces
-                sMovie = sMovie.Trim();
-                                             
-                // if both have a year then add the year to the comparison variables
-                if (searchYear > 0 && currMovie.Year > 0) {
-                    sMovie +=  ' ' + currMovie.Year.ToString();
-                    sSearch += ' ' + searchYear.ToString();
-                }
+                // #### TODO: this part is the part of the matching system that should change
 
-                // get the Levenshtein distance between the two string and use them for the match value
-                currMatch.MatchValue = matchValue + AdvancedStringComparer.Levenshtein(sMovie, sSearch);
-                
-                if ((searchYear > 0) && strictYear)
+                // Clean titles to improve matching 
+                string cleanSource = CleanMediaTitle(searchStr);
+                string cleanMatch = CleanMediaTitle(currMovie.Title);               
+
+                // Account for Year when criteria is met
+                // this should give the match a higher priority  
+                if (signature.Year > 0 && currMovie.Year > 0)
                 {
-                    // Strict year match (don't show results that don't match on year)
-                    addMatch = false;
-                    if (currMovie.Year == searchYear || currMovie.Year == 0)
-                      addMatch = true;
+                  cleanMatch += ' ' + currMovie.Year.ToString();
+                  cleanSource += ' ' + signature.Year.ToString();
                 }
 
-                if (addMatch)
-                  rankedMovieList.Add(currMatch);
-              
+                // Account for IMDB when criteria is met
+                if (!String.IsNullOrEmpty(signature.ImdbId) && !String.IsNullOrEmpty(currMovie.ImdbID)){
+                  if (imdbBoost && currMovie.ImdbID == signature.ImdbId)
+                  {
+                    // If IMDB Auto-Approval is active
+                    // and the we have an imdbids match,
+                    // cheat the current match system into
+                    // an auto-match (this is temporary!)
+                    cleanMatch = currMovie.ImdbID;
+                    cleanSource = signature.ImdbId; 
+                  } else {
+                    // add the imdb id tot the complete matching string
+                    // this should improve priority
+                    cleanMatch += ' ' + currMovie.ImdbID;
+                    cleanSource += ' ' + signature.ImdbId;
+                  }
+
+                }
+                
+                // get the Levenshtein distance between the two string and use them for the match value
+                currMatch.MatchValue = AdvancedStringComparer.Levenshtein(cleanMatch, cleanSource);
+
+                // #### END TODO
+
+                // Add the match to the ranked movie list
+                rankedMovieList.Add(currMatch);
             }
 
             mediaMatch.PossibleMatches = rankedMovieList;
         }
-
+      
+        // Clean media titles from punctuation marks
+        // This will improve matching
+        private static string CleanMediaTitle(string title)
+        {
+          string rtn = title.ToLower();       
+          // replace punctuation with spaces
+          rtn = rxReplacePunctuation.Replace(rtn, " ");
+          // filter other punctuation characters completely
+          rtn = rxCleanPunctuation.Replace(rtn, "");
+          // replace multiple spaces with just one space
+          rtn = rxReplaceDoubleSpace.Replace(rtn, " ");
+          // finally remove trailing spaces
+          rtn = rtn.Trim();
+          // return the cleaned title
+          return rtn;
+        }
+        
         #endregion
 
     }
@@ -1202,13 +1186,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           get { return _folder; }
           set { _folder = value; }
         } private bool _folder = false;
-
-        public bool Custom
-        {
-          get { return _custom; }
-          set { _custom = value; }
-        } private bool _custom = false;
-      
+     
         public bool Deleted {
             get { return _deleted; }
             set { _deleted = value; }
@@ -1300,7 +1278,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         {
           get
           {
-            if (_signature.Title == null)
+            if (String.IsNullOrEmpty(_signature.Title))
               _signature = LocalMediaParser.parseMediaMatch(this);
             return _signature;
           }
