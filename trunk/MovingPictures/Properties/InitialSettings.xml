@@ -36,9 +36,9 @@
         <description>If a year keyword is detected and no exact match is found only show the results from the same year or blank year. (experimental)</description>
       </setting>      
  
-      <setting id="importer_autoapprove" name="Auto-Approve Threshold" type="INT">
+      <setting id="importer_autoapprove" name="Title Auto-Approve Threshold" type="INT">
         <default>1</default>
-        <description>This is the maximum value for the levenshtein distance triggering auto-approval.</description>
+        <description>This is the maximum value for the levenshtein distance that is used for triggering auto-approval on close matching titles.</description>
       </setting>      
 
     </group>
@@ -66,7 +66,7 @@
 
       <setting id="importer_nfoext" name="File Extensions" type="STRING">
         <default>nfo;txt</default>
-        <description>The extensions that are used when looking for matching nfo files when one folder contains different movies. Seperate multiple extensions with , or ;</description>
+        <description>The extensions that are used when scanning for nfo files. Seperate multiple extensions with , or ;</description>
       </setting>
 
       <setting id="importer_autoimdb" name="Auto-Approve on IMDB Match" type="BOOL">
