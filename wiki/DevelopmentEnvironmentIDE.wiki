@@ -23,6 +23,8 @@ http://moving-pictures.googlecode.com/svn/wiki/Images/missing_assemblies.png htt
 
 So let's get these projects added. Right click the solution node in the Solution Explorer and click Add -> Existing Project. In the dialog you will need to navigate to one of the six project files listed below, select it and click OK. Then rinse and repeat, add each project in the list:
 
+*NOTE: The tester project has been moved and there is one additional Moving Pictures project required for a working development environment. This document will be updated with details, but in the meantime, just make sure you add all projects under the Moving Pictures folder. You should have everything you need, it is just organized slightly differently.*
+
 {{{
 PluginDev\MovingPictures\MovingPicturesConfigTester\MovingPicturesConfigTester.csproj
 
