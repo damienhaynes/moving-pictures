@@ -76,13 +76,34 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         public static List<FileInfo> getFilesRecursive(DirectoryInfo di)
         {
           List<FileInfo> fileList = new List<FileInfo>();
-          fileList.AddRange(di.GetFiles("*"));
-          DirectoryInfo[] dirs = di.GetDirectories();
+          DirectoryInfo[] dirs = new DirectoryInfo[]{};
+
+          try
+          {
+            logger.Debug("Getting file list for: {0}", di.FullName);
+            fileList.AddRange(di.GetFiles("*"));
+            logger.Debug("Getting directory list for: {0}", di.FullName);
+            dirs = di.GetDirectories();
+          }
+          catch (Exception e)
+          {
+            logger.Error("Error while retrieving files/directories for: " + di.FullName, e);
+          }
+
           foreach (DirectoryInfo d in dirs)
           {
-            if ((d.Attributes & FileAttributes.System) == 0)
+            try
             {
-              fileList.AddRange(getFilesRecursive(d));
+              logger.Debug("Checking attributes for: {0}", d.FullName);
+              if ((d.Attributes & FileAttributes.System) == 0)
+              {
+                logger.Debug("Adding: {0}", d.FullName);
+                fileList.AddRange(getFilesRecursive(d));
+              }
+            }
+            catch (Exception e)
+            {
+              logger.Error("Error during attribute check for: " + d.FullName, e);
             }
           }
           return fileList;
@@ -118,7 +139,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                 }
             }
             catch (Exception e) {
-               logger.Error("Error scanning " + Directory.FullName, e);
+               logger.Error("Error during scan for import path " + Directory.FullName, e);
             }
 
             return rtn;
