@@ -650,14 +650,25 @@ namespace MediaPortal.Plugins.MovingPictures {
             {
               // if so, prepare/mount the dvd image
               // and pass control to Auto-Play
-              prepareDVDImage(ref media);
+              if (prepareDVDImage(ref media))
+              {
+                // we only know it got mounted without error
+                // if it plays or not is up to the user
+                // but we need to set these variables anyway
+                // if we do not want to loose functionality
+                
+                // TODO: this should be handled differently.
+                // maybe check for the g_Player.Playing status or something
+                currentlyPlaying = true;
+                currentPart = 1;
+              }
               return;
             }
 
             // play the movie! 
             GUIGraphicsContext.IsFullScreenVideo = true;
             GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
-
+            
             bool success = g_Player.Play(media, g_Player.MediaType.Video);
             currentlyPlaying = success;
 
