@@ -1216,8 +1216,20 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     foreach (DBLocalMedia currFile in LocalMedia) {
                         if (_localMediaString.Length > 0)
                             _localMediaString += ", ";
+                        
+                        string displayname = currFile.File.Name;
+                        
+                       // logic for DVD folder display
+                        if (displayname.ToLower() == "video_ts.ifo") 
+                        {
+                          if (currFile.File.Directory.Name.ToLower() == "video_ts") {
+                            displayname = currFile.File.Directory.Parent.Name;
+                          } else {
+                            displayname = currFile.File.Directory.Name;
+                          }
+                        }
 
-                        _localMediaString += currFile.File.Name;
+                        _localMediaString += displayname;
                     }
                 }
 
