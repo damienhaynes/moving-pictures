@@ -14,7 +14,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
+namespace MediaPortal.Plugins.MovingPictures.Database {
     public enum ArtworkLoadStatus {
         SUCCESS,
         ALREADY_LOADED,

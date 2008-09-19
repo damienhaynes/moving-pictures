@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Collections;
 
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using NLog;

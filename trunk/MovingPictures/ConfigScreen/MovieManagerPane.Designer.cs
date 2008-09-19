@@ -339,7 +339,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.fileDetailsList.Name = "fileDetailsList";
             this.fileDetailsList.Size = new System.Drawing.Size(444, 520);
             this.fileDetailsList.TabIndex = 9;
-            this.fileDetailsList.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables.DBLocalMedia);
+            this.fileDetailsList.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBLocalMedia);
             // 
             // movieToolStrip
             // 
@@ -574,7 +574,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieDetailsList.Name = "movieDetailsList";
             this.movieDetailsList.Size = new System.Drawing.Size(444, 551);
             this.movieDetailsList.TabIndex = 8;
-            this.movieDetailsList.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables.DBMovieInfo);
+            this.movieDetailsList.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
             // 
             // defaultFieldsLabel
             // 
@@ -614,7 +614,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieTitleTextBox.Name = "movieTitleTextBox";
             this.movieTitleTextBox.Size = new System.Drawing.Size(338, 19);
             this.movieTitleTextBox.TabIndex = 16;
-            this.movieTitleTextBox.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables.DBMovieInfo);
+            this.movieTitleTextBox.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
             this.movieTitleTextBox.Text = "Title";
             // 
             // MovieManagerPane

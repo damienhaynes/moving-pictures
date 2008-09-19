@@ -147,12 +147,15 @@
     <Compile Include="ConfigScreen\UserManagementPane.Designer.cs">
       <DependentUpon>UserManagementPane.cs</DependentUpon>
     </Compile>
-    <Compile Include="Database\MovingPicturesTables\DBImportPath.cs" />
-    <Compile Include="Database\MovingPicturesTables\DBLocalMedia.cs" />
-    <Compile Include="Database\MovingPicturesTables\DBMovieInfo.cs" />
-    <Compile Include="Database\MovingPicturesTables\DBUser.cs" />
-    <Compile Include="Database\MovingPicturesTables\DBUserMovieSettings.cs" />
-    <Compile Include="Database\MovingPicturesTables\MovingPicturesDBTable.cs" />
+    <Compile Include="Database\DBScriptInfo.cs" />
+    <Compile Include="Database\DBSourceInfo.cs" />
+    <Compile Include="Database\DBImportPath.cs" />
+    <Compile Include="Database\DBLocalMedia.cs" />
+    <Compile Include="Database\DBMovieInfo.cs" />
+    <Compile Include="Database\DBUser.cs" />
+    <Compile Include="Database\DBUserMovieSettings.cs" />
+    <Compile Include="Database\MovingPicturesDBTable.cs" />
+    <Compile Include="DataProviders\DataProviderManager.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
     <Compile Include="DataProviders\LocalProvider.cs" />
     <Compile Include="DataProviders\MeligroveProvider.cs" />

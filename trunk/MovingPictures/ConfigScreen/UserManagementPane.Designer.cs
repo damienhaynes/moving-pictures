@@ -115,7 +115,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // userBindingSource
             // 
-            this.userBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables.DBUser);
+            this.userBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.Database.DBUser);
             this.userBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.usersBindingSource_ListChanged);
             // 
             // UserManagementPane

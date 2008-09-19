@@ -6,7 +6,7 @@ using System.IO;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using System.Threading;
 using System.Collections;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using MediaPortal.Plugins.MovingPictures.Database;
 using System.Text.RegularExpressions;
 using NLog;
 using Cornerstone.Database.Tables;
@@ -374,14 +374,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void LookForMissingArtworkWorker() {
             foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
                 if (currMovie.CoverFullPath.Trim().Length == 0) {
-                    MovingPicturesCore.CoverProvider.GetArtwork(currMovie);
+                    MovingPicturesCore.DataProviderManager.GetArtwork(currMovie);
                     currMovie.UnloadArtwork();
                     currMovie.Commit();
                 }
 
                 if (currMovie.BackdropFullPath.Trim().Length == 0) {
                     new LocalProvider().GetBackdrop(currMovie);
-                    MovingPicturesCore.BackdropProvider.GetBackdrop(currMovie);
+                    MovingPicturesCore.DataProviderManager.GetBackdrop(currMovie);
                     currMovie.Commit();
 
                 }
@@ -992,11 +992,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // update, associate, and commit the movie
-            MovingPicturesCore.MovieProvider.Update(movie);
-            MovingPicturesCore.CoverProvider.GetArtwork(movie);
-
-            new LocalProvider().GetBackdrop(movie);
-            MovingPicturesCore.BackdropProvider.GetBackdrop(movie);
+            MovingPicturesCore.DataProviderManager.Update(movie);
+            MovingPicturesCore.DataProviderManager.GetArtwork(movie);
+            MovingPicturesCore.DataProviderManager.GetBackdrop(movie);
             
             movie.LocalMedia.Clear();
             movie.LocalMedia.AddRange(localMedia);
@@ -1098,7 +1096,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // TODO: remove searchstring logic (when providers accept MediaSignature)
             string searchStr = (signature.ImdbId == null || signature.ImdbId == string.Empty) ? signature.Title : signature.ImdbId;
             // TODO: remove active line and uncomment the line below it (when providers accept MediaSignature)
-            movieList = MovingPicturesCore.MovieProvider.Get(searchStr);
+            movieList = MovingPicturesCore.DataProviderManager.Get(searchStr);
             //movieList = MovingPicturesCore.MovieProvider.Get(signature);
             
             bool strictYear = (bool)MovingPicturesCore.SettingsManager["importer_strict_year"].Value;

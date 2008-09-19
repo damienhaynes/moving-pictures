@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Text;
 using Cornerstone.ScraperEngine;
 using System.IO;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Database;
 using System.Windows.Forms;
+using MediaPortal.Plugins.MovingPictures.Properties;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
-    public class ScriptableProvider : IMovieProvider, ICoverArtProvider, IBackdropProvider {
-        private static Dictionary<string, ScriptableProvider> existingScrapers;
-
-        private ScriptableScraper scraper;
-
+    public class ScriptableProvider : IScriptableMovieProvider {
         #region Properties
+
+        public string Name {
+            get {
+                return scraper.Name;
+            }
+        }
 
         public bool ProvidesMoviesDetails {
             get { return providesMovieDetails; }
@@ -30,57 +33,45 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
         private bool providesBackdrops = false;
 
-        #endregion
-
-        #region Private Constructors
-        private ScriptableProvider(FileInfo scriptFile) {
-            throw new NotImplementedException();
+        public ScriptableScraper Scraper {
+            get { return scraper; }
         }
+        private ScriptableScraper scraper = null;
 
-        private ScriptableProvider(string script) {
-            scraper = new ScriptableScraper(script);
-
-            if (!scraper.LoadSuccessful)
-                return;
-
-            if (scraper.ScriptType.Contains("MovieDetailsFetcher"))
-                providesMovieDetails = true;
-
-            if (scraper.ScriptType.Contains("MovieCoverFetcher"))
-                providesCoverArt = true;
-
-            if (scraper.ScriptType.Contains("MovieBackdropFetcher"))
-                providesBackdrops = true;
-
-        }
-        #endregion
-
-        #region Static Methods
-        public static ScriptableProvider Load(string script) {
-            if (existingScrapers == null)
-                existingScrapers = new Dictionary<string,ScriptableProvider>();
-
-            if (existingScrapers.ContainsKey(script))
-                return existingScrapers[script];
-
-            ScriptableProvider newProvider = new ScriptableProvider(script);
-            if (newProvider.scraper.LoadSuccessful == false)
-                return null;
-
-            return newProvider;
-        }
-
-        public static ScriptableProvider Load(FileInfo scriptFile) {
-            ScriptableProvider newProvider = new ScriptableProvider(scriptFile);
-            if (newProvider.scraper.LoadSuccessful == false)
-                return null;
-
-            return newProvider;
-        }
         #endregion
 
         #region Public Methods
+
+        public ScriptableProvider() {
+        }
+
+        public bool Load(string script) {
+            scraper = new ScriptableScraper(script);
+
+            if (!scraper.LoadSuccessful) {
+                scraper = null;
+                return false;
+            }
+
+            providesMovieDetails = scraper.ScriptType.Contains("MovieDetailsFetcher");
+            providesCoverArt = scraper.ScriptType.Contains("MovieCoverFetcher");
+            providesBackdrops = scraper.ScriptType.Contains("MovieBackdropFetcher");
+
+            return true;
+        }
+
+        public List<string> GetDefaultScripts() {
+            List<string> rtn = new List<string>();
+            rtn.Add(Resources.IMDb);
+            rtn.Add(Resources.IMPAwards);
+
+            return rtn;
+        }
+
         public List<DBMovieInfo> Get(string movieTitle) {
+            if (scraper == null)
+                return null;
+
             List<DBMovieInfo> rtn = new List<DBMovieInfo>();
 
             Dictionary<string, DBMovieInfo> addedMovies = new Dictionary<string, DBMovieInfo>();
@@ -118,6 +109,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public void Update(DBMovieInfo movie) {
+            if (scraper == null)
+                return;
+
             Dictionary<string, string> paramList = new Dictionary<string, string>();
             Dictionary<string, string> results;
 
@@ -143,6 +137,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool GetArtwork(DBMovieInfo movie) {
+            if (scraper == null)
+                return false;
+
             Dictionary<string, string> paramList = new Dictionary<string, string>();
             Dictionary<string, string> results;
 
@@ -180,8 +177,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool GetBackdrop(DBMovieInfo movie) {
+            if (scraper == null)
+                return false;
+
             return false;
         }
+
         #endregion
     }
 }

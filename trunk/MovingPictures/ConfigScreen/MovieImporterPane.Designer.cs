@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using MediaPortal.Plugins.MovingPictures.Database;
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     partial class MovieImporterPane {
         /// <summary> 

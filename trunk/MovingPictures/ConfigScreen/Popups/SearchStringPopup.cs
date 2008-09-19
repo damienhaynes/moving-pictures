@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using MediaPortal.Plugins.MovingPictures.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     public partial class SearchStringPopup : Form {

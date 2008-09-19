@@ -4,7 +4,7 @@ using System.Text;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
+namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("users")]
     public class DBUser: MovingPicturesDBTable {
 

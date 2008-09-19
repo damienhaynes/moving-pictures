@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using MediaPortal.Configuration;
 using MediaPortal.Plugins.MovingPictures.Database;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
@@ -12,6 +11,7 @@ using NLog.Config;
 using NLog.Targets;
 using Cornerstone.Database;
 using Cornerstone.ScraperEngine;
+using MediaPortal.Plugins.MovingPictures.Properties;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesCore {
@@ -52,32 +52,11 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         } private static SettingsManager settingsManager;
 
-        public static IMovieProvider MovieProvider {
+        public static DataProviderManager DataProviderManager {
             get {
-                if (dataProvider == null)
-                    dataProvider = ScriptableProvider.Load(Properties.Resources.IMDb);
-
-                return dataProvider;
+                return DataProviderManager.GetInstance();
             }
-        } private static IMovieProvider dataProvider = null;
-
-        public static ICoverArtProvider CoverProvider {
-            get {
-                if (coverProvider == null)
-                    coverProvider = ScriptableProvider.Load(Properties.Resources.IMPAwards); ;
-
-                return coverProvider;
-            }
-        } private static ICoverArtProvider coverProvider = null;
-
-        public static IBackdropProvider BackdropProvider {
-            get {
-                if (backdropProvider == null)
-                    backdropProvider = new MeligroveProvider();
-
-                return backdropProvider;
-            }
-        } private static IBackdropProvider backdropProvider = null;
+        } 
 
         #endregion
 
@@ -94,12 +73,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             initDB();
             initAdditionalSettings();
 
-
-            //Dictionary<string, string> param = new Dictionary<string, string>();
-            //param["search_string"] = "Back to the Future";
-            //Dictionary<string, string> resultList = imdbProvider.Execute("search", param);
-            ////imdbProvider.Execute("details", resultList[0]);
-
             return true;
         }
 
@@ -108,8 +81,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             importer.Stop();
             settingsManager.Shutdown();
             
-            dataProvider = null;
-            coverProvider = null;
             importer = null;
             settingsManager = null;
             databaseManager = null;

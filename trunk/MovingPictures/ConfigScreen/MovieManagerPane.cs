@@ -5,11 +5,10 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using System.Diagnostics;
-using MediaPortal.Plugins.MovingPictures.Database;
 using System.Collections;
 using System.Threading;
 using Cornerstone.Database.Tables;
@@ -407,7 +406,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (result == System.Windows.Forms.DialogResult.OK) {
                 foreach (ListViewItem currItem in movieListBox.SelectedItems) {
                     DBMovieInfo movie = (DBMovieInfo)currItem.Tag;
-                    MovingPicturesCore.MovieProvider.Update(movie);
+                    MovingPicturesCore.DataProviderManager.Update(movie);
                 }
 
                 updateMoviePanel();
@@ -441,7 +440,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // the update process can take a little time, so spawn it off in another thread
             ThreadStart actions = delegate {
                 startArtProgressBar();
-                MovingPicturesCore.CoverProvider.GetArtwork(movie);
+                MovingPicturesCore.DataProviderManager.GetArtwork(movie);
                 stopArtProgressBar();
                 updateMoviePanel();
             };

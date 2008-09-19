@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using System.Text.RegularExpressions;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
@@ -10,10 +9,24 @@ using System.Net;
 using Cornerstone.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
-    public class LocalProvider : IBackdropProvider {
+    public class LocalProvider : IMovieProvider {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private DBMovieInfo movie;
+
+        public string Name {
+            get {
+                return "Local Data";
+            }
+        }
+
+        public bool ProvidesMoviesDetails {
+            get { return false; }
+        }
+
+        public bool ProvidesCoverArt {
+            get { return false; }
+        }
 
         public bool ProvidesBackdrops {
             get { return true; }
@@ -55,6 +68,18 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
 
             return false;
+        }
+
+        public List<DBMovieInfo> Get(string movieTitle) {
+            throw new NotImplementedException();
+        }
+
+        public void Update(DBMovieInfo movie) {
+            throw new NotImplementedException();
+        }
+
+        public bool GetArtwork(DBMovieInfo movie) {
+            throw new NotImplementedException();
         }
 
         private string dbNameParser(Match match) {

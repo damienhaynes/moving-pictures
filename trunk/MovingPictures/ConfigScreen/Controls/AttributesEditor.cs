@@ -7,7 +7,6 @@ using System.Text;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
