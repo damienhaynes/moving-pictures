@@ -46,6 +46,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         }
         
         private void movieStatusChangedListener(MediaMatch obj, MovieImporterAction action) {
+            // we dont care about any messages except those about media matches
+            if (obj == null)
+                return;
+            
             // This ensures we are thread safe. Makes sure this method is run by
             // the thread that created this panel.
             if (InvokeRequired) {
