@@ -6,7 +6,6 @@ using System.ComponentModel;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode;
 using System.Collections;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 

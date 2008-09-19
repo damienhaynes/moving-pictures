@@ -81,6 +81,10 @@ namespace Cornerstone.ScraperEngine {
             get { return loadSuccessful; }
         } protected bool loadSuccessful;
 
+        public string Script {
+            get { return xml.OuterXml; }
+        }
+
         #endregion
 
         private XmlDocument xml;

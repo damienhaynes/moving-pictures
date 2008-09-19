@@ -8,14 +8,13 @@ using System.IO;
 using System.Xml;
 using System.Web;
 using System.Threading;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using NLog;
 using System.Drawing;
 using Cornerstone.Database.CustomTypes;
 using System.Globalization;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
-    class MovieXMLProvider : IMovieProvider, ICoverArtProvider {
+    class MovieXMLProvider : IMovieProvider {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private const string urlGetByName = "http://www.movie-xml.com/interfaces/getmovie.php?moviename=";
@@ -24,13 +23,25 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         private const string urlGetCoverByID = "http://www.movie-xml.com/interfaces/getmoviecovers.php?id=";
         private const string urlCoverRetrievePrefix = "http://www.movie-xml.com/banners/";
 
+        public string Name {
+            get {
+                return "movie-xml.com";
+            }
+        }
+
+        // hard codeded to false to prevenet unneeded hits to the now dead movie-xml.com
         public bool ProvidesMoviesDetails { 
-            get { return true; } 
+            get { return false; } 
         }
 
         public bool ProvidesCoverArt {
-            get { return true; }
+            get { return false; }
         }
+
+        public bool ProvidesBackdrops {
+            get { return false; }
+        }
+
 
         // Returns a list of DBMovieInfo objects closely matching the given movie title, 
         // using http://www.movie-xml.com as a datasource.
@@ -118,6 +129,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
             return true;
 
+        }
+
+        public bool GetBackdrop(DBMovieInfo movie) {
+            throw new NotImplementedException();
         }
 
         #region Private Methods

@@ -7,7 +7,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
+namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("local_media")]
     public class DBLocalMedia: MovingPicturesDBTable {
 

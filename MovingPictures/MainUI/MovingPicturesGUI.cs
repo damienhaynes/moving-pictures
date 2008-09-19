@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using MediaPortal.Dialogs;
 using MediaPortal.Player;
 using System.Threading;
@@ -780,14 +779,14 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
 
             if (SelectedMovie.CoverFullPath.Trim().Length == 0) {
-                MovingPicturesCore.CoverProvider.GetArtwork(SelectedMovie);
+                MovingPicturesCore.DataProviderManager.GetArtwork(SelectedMovie);
                 SelectedMovie.UnloadArtwork();
                 SelectedMovie.Commit();
             }
 
             if (SelectedMovie.BackdropFullPath.Trim().Length == 0) {
                 new LocalProvider().GetBackdrop(SelectedMovie);
-                MovingPicturesCore.BackdropProvider.GetBackdrop(SelectedMovie);
+                MovingPicturesCore.DataProviderManager.GetBackdrop(SelectedMovie);
                 SelectedMovie.Commit();
             }
 
@@ -807,7 +806,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             dialog.DoModal(GetID);
 
             if (dialog.IsConfirmed && SelectedMovie != null) {
-                MovingPicturesCore.MovieProvider.Update(SelectedMovie);
+                MovingPicturesCore.DataProviderManager.Update(SelectedMovie);
                 SelectedMovie.Commit();
                 publishDetails(SelectedMovie, "SelectedMovie");
             }

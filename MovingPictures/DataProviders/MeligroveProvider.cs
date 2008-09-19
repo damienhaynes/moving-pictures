@@ -1,17 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using System.Net;
 using System.IO;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
-    class MeligroveProvider: IBackdropProvider {
+    class MeligroveProvider: IMovieProvider {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         
         // drect url access to a backdrop for a movie, given it's imdb id
         private const string meligroveURL = "http://www.meligrove.com/images/posters/movies/jpg/"; // %imdb%.jpg
+
+        public string Name {
+            get {
+                return "meligrove.com";
+            }
+        }
+        
+        public bool ProvidesMoviesDetails {
+            get { return false; }
+        }
+
+        public bool ProvidesCoverArt {
+            get { return false; }
+        }
 
         public bool ProvidesBackdrops {
             get { return true; }
@@ -37,5 +51,18 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             
             return false;
         }
+
+        public List<DBMovieInfo> Get(string movieTitle) {
+            throw new NotImplementedException();
+        }
+
+        public void Update(DBMovieInfo movie) {
+            throw new NotImplementedException();
+        }
+
+        public bool GetArtwork(DBMovieInfo movie) {
+            throw new NotImplementedException();
+        }
+
     }
 }

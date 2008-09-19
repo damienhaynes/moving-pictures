@@ -273,7 +273,7 @@
             this.movieDetails.Name = "movieDetails";
             this.movieDetails.Size = new System.Drawing.Size(340, 91);
             this.movieDetails.TabIndex = 16;
-            this.movieDetails.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables.DBMovieInfo);
+            this.movieDetails.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
             // 
             // SingleMovieImporterPopup
             // 

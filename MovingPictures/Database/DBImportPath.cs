@@ -7,7 +7,7 @@ using NLog;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
+namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("import_path")]
     public class DBImportPath: MovingPicturesDBTable  {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -76,34 +76,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
         public static List<FileInfo> getFilesRecursive(DirectoryInfo di)
         {
           List<FileInfo> fileList = new List<FileInfo>();
-          DirectoryInfo[] dirs = new DirectoryInfo[]{};
-
-          try
-          {
-            logger.Debug("Getting file list for: {0}", di.FullName);
-            fileList.AddRange(di.GetFiles("*"));
-            logger.Debug("Getting directory list for: {0}", di.FullName);
-            dirs = di.GetDirectories();
-          }
-          catch (Exception e)
-          {
-            logger.Error("Error while retrieving files/directories for: " + di.FullName, e);
-          }
-
+          fileList.AddRange(di.GetFiles("*"));
+          DirectoryInfo[] dirs = di.GetDirectories();
           foreach (DirectoryInfo d in dirs)
           {
-            try
+            if ((d.Attributes & FileAttributes.System) == 0)
             {
-              logger.Debug("Checking attributes for: {0}", d.FullName);
-              if ((d.Attributes & FileAttributes.System) == 0)
-              {
-                logger.Debug("Adding: {0}", d.FullName);
-                fileList.AddRange(getFilesRecursive(d));
-              }
-            }
-            catch (Exception e)
-            {
-              logger.Error("Error during attribute check for: " + d.FullName, e);
+              fileList.AddRange(getFilesRecursive(d));
             }
           }
           return fileList;
@@ -139,7 +118,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
                 }
             }
             catch (Exception e) {
-               logger.Error("Error during scan for import path " + Directory.FullName, e);
+               logger.Error("Error scanning " + Directory.FullName, e);
             }
 
             return rtn;

@@ -205,7 +205,16 @@
       </setting>
 
     </group>
-    
+
+    <group name="Data Provider Manager">
+
+      <setting id="internal_init_dp_manager_done" name="Data Provider Manager Initialized" type="BOOL">
+        <default>false</default>
+        <description>The data provider manager does a one time initialization of the default data stored internally. Reset this to false and restart Moving Pictures to remove all data providers and start fresh with only stock providers.</description>
+      </setting>
+
+    </group>
+   
   </group>
 
 </MoviesPluginSettings>

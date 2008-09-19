@@ -7,7 +7,6 @@ using System.Text;
 using System.Windows.Forms;
 
 using MediaPortal.Plugins.MovingPictures.Database;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class ImportPathsPane : UserControl {

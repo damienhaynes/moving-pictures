@@ -7,7 +7,6 @@ using System.Text;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Database;
 using System.Collections;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
@@ -44,7 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 TreeNode parentNode = null;
 
                 // loop through all parent groups of this setting and if no node has been made for any
-                // pof them yet, go ahead and make a node
+                // of them yet, go ahead and make a node
                 foreach (string currGroup in currSetting.Grouping) {
                     groupKey += currGroup + '|';
                     if (!groups.ContainsKey(groupKey)) {

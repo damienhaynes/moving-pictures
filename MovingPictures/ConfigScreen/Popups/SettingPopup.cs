@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {

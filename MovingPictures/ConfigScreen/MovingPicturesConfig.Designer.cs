@@ -1,4 +1,4 @@
-using MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables;
+using MediaPortal.Plugins.MovingPictures.Database;
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     partial class MovingPicturesConfig {
         /// <summary>

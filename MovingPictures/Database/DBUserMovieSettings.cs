@@ -4,7 +4,7 @@ using System.Text;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.Database.MovingPicturesTables {
+namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("user_movie_settings")]
     class DBUserMovieSettings: MovingPicturesDBTable {
 
