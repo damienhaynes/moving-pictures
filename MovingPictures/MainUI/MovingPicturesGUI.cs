@@ -372,6 +372,9 @@ namespace MediaPortal.Plugins.MovingPictures {
             // if we have loaded before, lets update the facade selection to match our actual selection
             else {
                 reloadSelection();
+                ViewMode tmp = previousView;
+                CurrentView = CurrentView;
+                previousView = tmp;
             }
 
             // load fanart and coverart
