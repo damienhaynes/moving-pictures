@@ -643,85 +643,72 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
-            // media information
+            // grab media info
             string media = SelectedMovie.LocalMedia[part - 1].FullPath;
             string ext = SelectedMovie.LocalMedia[part - 1].File.Extension;
             
             // check if the current media is an image file
             if (DaemonTools.IsImageFile(ext))
-            {
-              // if so, prepare/mount the dvd image
-              // and pass control to Auto-Play
-              if (prepareDVDImage(ref media))
-              {
-                // we only know it got mounted without error
-                // if it plays or not is up to the user
-                // but we need to set these variables anyway
-                // if we do not want to loose functionality
-                
-                // TODO: this should be handled differently.
-                // maybe check for the g_Player.Playing status or something
-                currentlyPlaying = true;
-                currentPart = 1;
-              }
-              return;
-            }
+                playImage(media);
+            else
+                playFile(media);
 
-            // play the movie! 
+            // set the currently playign part if playback was successful
+            if (currentlyPlaying)
+                currentPart = part;
+        }
+
+
+        // start playback of a regular file
+        private void playFile(string media) {
             GUIGraphicsContext.IsFullScreenVideo = true;
             GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
-            
+
             bool success = g_Player.Play(media, g_Player.MediaType.Video);
             currentlyPlaying = success;
-
-            if (currentlyPlaying)
-                currentPart = 1;
         }
 
-        // Prepare a DVD image
-        // TODO: mounting stills needs a seperate thread + waitcursor
-        private bool prepareDVDImage(ref string media)
-        {
-          string drive;
-          // Check if the current image is already mounted
-          if (!DaemonTools.IsMounted(media))
-          {
-            // if not try to mount the image
-            if (!DaemonTools.Mount(media, out drive))
-            {
-              // on failure return a message and return false
-              showMessage("Error",
-                       "IMAGE CAN NOT BE MOUNTED",
-                       null, null, null);
-              return false;
+
+        // start playback of an image file (ISO)
+        private void playImage(string media) {
+            string drive;
+            bool alreadyMounted;
+
+            // Check if the current image is already mounted
+            if (!DaemonTools.IsMounted(media)) {
+                // if not try to mount the image
+                logger.Info("Trying to mount image.");
+                alreadyMounted = false;
+                if (!DaemonTools.Mount(media, out drive)) {
+                    showMessage("Error", "Sorry, failed mounting DVD Image...", null, null, null);
+                    return;
+                }
             }
-          }
-          else
-          {
-            drive = DaemonTools.GetVirtualDrive();
-          }
+            else {
+                logger.Info("DVD Image already mounted.");
+                drive = DaemonTools.GetVirtualDrive();
+                alreadyMounted = true;
+            }
 
-          // the correct image has been mounted but we 
-          // still need to check if it's a valid DVD image.
-          // here we change the media path to the expected value.
-          media = drive + @"\VIDEO_TS\VIDEO_TS.IFO";
-          // now check if this path exists
-          if (!System.IO.File.Exists(media))
-          {
-            // on failure show a message and return false
-            showMessage("Error",
-                     "IMAGE IS NOT A DVD IMAGE",
-                     null, null, null);
-            return false;
-          }
+            // try to grab a DVD IFO file off the newly mounted drive, and check if it exists
+            string ifoPath = drive + @"\VIDEO_TS\VIDEO_TS.IFO";
+            if (!System.IO.File.Exists(media)) {
+                showMessage("Error", "The image file does not contain an DVD!", null, null, null);
+                return;
+            }
 
-          // if we made it this far a DVD image has been mounted
-          // and the media string has been set to start the dvd
-          // return true to let the caller know the preparation
-          // succeeded.
-          return true;
+            // if this image was already mounted, autoplay doesn't work, so manually launch the DVD
+            if (alreadyMounted)
+                playFile(ifoPath);
+
+            // if we have not already mounted and we let the auto play system start the movie
+            // this data could be wrong because the user could chose not to play via the prmpt.
+            // this should be handled in the future. possible bug.
+            currentlyPlaying = true;
+            return;
         }
-        
+
+       
         protected override void OnShowContextMenu() {
             base.OnShowContextMenu();
             switch (CurrentView) {
