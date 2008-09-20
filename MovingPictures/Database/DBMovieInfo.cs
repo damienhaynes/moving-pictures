@@ -451,15 +451,28 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return false;
             }
 
-            // genrate a filename for the new cover. should be unique based on the file path hash
-            string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
-            string newFileName = artFolder + "\\" + safeName + " [" + filename.GetHashCode() + "].jpg";
+            
+            // check if the image file is already in the cover folder
+            FileInfo newFile = new FileInfo(filename);
+            bool alreadyInFolder = newFile.Directory.FullName.Equals(new DirectoryInfo(artFolder).FullName);
 
-            // save the artwork
-            newCover.Save(newFileName);
-            AlternateCovers.Add(newFileName);
+            // if the file isnt in the cover folder, generate a name and save it there
+            if (!alreadyInFolder) {
+                string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
+                string newFileName = artFolder + "\\" + safeName + " [" + filename.GetHashCode() + "].jpg";
+                newCover.Save(newFileName);
+                AlternateCovers.Add(newFileName);
+            }
+
+            // if it's already in the folder, just store the filename in the db
+            else {
+                AlternateCovers.Add(filename);
+            }
+
+            // create a thumbnail for the cover
             _cover = newCover;
             GenerateThumbnail();
+            
             return true;
         }
 

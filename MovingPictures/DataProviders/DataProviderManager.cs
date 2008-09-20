@@ -90,7 +90,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         }
                     }
 
-                if (found) return;
+                if (found) continue;
 
                 // check if the found type is a regular movie provider
                 foreach (Type currInterface in currType.GetInterfaces())
@@ -130,13 +130,18 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool GetArtwork(DBMovieInfo movie) {
-            return coverSources[0].Provider.GetArtwork(movie);
+            foreach (DBSourceInfo currSource in coverSources) {
+                bool success = currSource.Provider.GetArtwork(movie);
+                if (success) return true;
+            }
+
+            return false;
         }
 
         public bool GetBackdrop(DBMovieInfo movie) {
             foreach (DBSourceInfo currSource in backdropSources) {
                 bool success = currSource.Provider.GetBackdrop(movie);
-                if (success) return true; ;
+                if (success) return true; 
             }
 
             return false;
