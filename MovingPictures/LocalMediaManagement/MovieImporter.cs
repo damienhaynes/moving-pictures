@@ -43,8 +43,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // commonly used regexp
         public const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
-        public const string rxMultiPartScan = @"((cd|disk|disc|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
-        public const string rxMultiPartClean = @"((cd|disk|disc|part)[\s\-]*([a-c0-9]|[i]+))|[\(\[]\dof\d[\)\]]$";
+        public const string rxMultiPartScan = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|[0-9]*|[i]+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
+        public const string rxMultiPartClean = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|[0-9]*|[i]+))|[\(\[]\dof\d[\)\]]$";
         
         public static Regex rxReplacePunctuation = new Regex(@"[\.\:\;\+\*]", RegexOptions.IgnoreCase);
         public static Regex rxCleanPunctuation = new Regex(@"[\'\`\,\""]", RegexOptions.IgnoreCase);
@@ -649,9 +649,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         break;
                     }
 
-                    // if the filename differ by more than one character
+                    // if the filename differ by more than two characters
                     // assume they are not a pair
-                    if (AdvancedStringComparer.Levenshtein(currFile.File.Name, otherFile.File.Name) > 1) {
+                    logger.Debug("MULTI-PART {0} Distance = {1}", currFile.File.Name, AdvancedStringComparer.Levenshtein(currFile.File.Name, otherFile.File.Name));
+                    if (AdvancedStringComparer.Levenshtein(currFile.File.Name, otherFile.File.Name) > 2) {
                         isAdditionalMatch = false;
                         break;
                     }
