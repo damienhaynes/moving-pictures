@@ -99,7 +99,7 @@
         <description>The folder in which cover art thumbnails should be saved to disk.</description>
       </setting>
 
-      <setting id="redownload_coverart" name="Redownload Coverart on Rescan" type="BOOL">
+      <setting id="redownload_coverart" name="Redownload Cover Artwork on Rescan" type="BOOL">
         <default>false</default>
         <description>When a full rescan is performed this setting determines if coverart that has already been downloaded will be reretrieved and the local copy updated.</description>
       </setting>
@@ -203,6 +203,17 @@
         <default>%imdb_id%.jpg|%imdb_id%.png|%imdb_id%.bmp</default>
         <description>The importer will look in your backdrop folder and try to find a file that matches this pattern. If one is found, it will be used as a backdrop. If none is found, an online data provider will be used to auto download artwork.</description>
       </setting>
+
+      <setting id="local_coverart_pattern" name="Cover Artwork Filename Pattern" type="STRING">
+        <default>%imdb_id%.jpg|%imdb_id%.png|%imdb_id%.bmp</default>
+        <description>The importer will look in your cover art folder and try to find a file that matches this pattern. If one is found, it will be used as a cover. If none is found, an online data provider will be used to auto download artwork.</description>
+      </setting>
+
+      <setting id="local_use_folder_jpg" name="Use 'folder.jpg' for Cover Artwork" type="BOOL">
+        <default>false</default>
+        <description>If set to true the local media data provider will use the folder.jpg file for cover artwork. This setting should only be used if you have all movies in their own folders. PNG and BMP file types are also supported automatically.</description>
+      </setting>
+
 
     </group>
 
