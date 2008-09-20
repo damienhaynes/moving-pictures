@@ -5,35 +5,27 @@ using System.Text;
 using System.Text.RegularExpressions;
 using NLog;
 
-namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
-{
-  public struct MediaSignature
-  {
+namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
+  public struct MediaSignature {
     public string Title; // Title
     public int Year; // Year
     public string ImdbId; // IMDB ID (tt*)
     public string Edition; // Edition (unrated, director's cut etc..)
-    public string Source; // Original file/foldername
+    public string Source; // Unparsed String
     public string DvdId; // MCE's DVD Id
+    public string Path; // Original path to the source of the media
 
-    public MediaSignature(string title, int year, string imdb, string edition, string source, string dvdid)
-    {
-      this.Title = title;
-      this.Year = year;
-      this.ImdbId = imdb;
-      this.DvdId = dvdid;
-      this.Edition = edition;
-      this.Source = source;
+    public override string ToString() {
+      return String.Format("Path= {0} || Source= {1} || Title= {2} || Year= {3} || Edition= {4} || DvdId= {5} || ImdbId= {6} || ",
+        this.Path, this.Source, this.Title, this.Year.ToString(), this.Edition, this.DvdId, this.ImdbId);
     }
 
   }
 
-  public static class LocalMediaParser
-  {
+  public static class LocalMediaParser {
     private static Logger logger = LogManager.GetCurrentClassLogger();
 
-    public static MediaSignature parseMediaMatch(MediaMatch mm)
-    {
+    public static MediaSignature parseMediaMatch(MediaMatch mm) {
       string sourceStr;
       MediaSignature signature = new MediaSignature();
       bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
@@ -41,33 +33,30 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
       bool isDvdFS = (mm.LocalMedia[0].File.Extension.ToLower() == ".ifo");
       bool isMultiPart = (mm.LocalMedia.Count > 1);
 
-      if (mm.LocalMedia == null || mm.LocalMedia.Count == 0)
-      {
+      if (mm.LocalMedia == null || mm.LocalMedia.Count == 0) {
         // nothing to see here move along
         return signature;
       }
-      else
-      {
+      else {
         FileInfo file = mm.LocalMedia[0].File;
         DirectoryInfo folder = file.Directory;
+        
+        signature.Path = file.FullName;
 
-        if (mm.FolderHint || isDvdFS)
-        {
+        if (mm.FolderHint || isDvdFS) {
           // If we have a folder hint or if we are looking at a DVD filesystem
           // we -can- use the foldername to create the searchstring
-          if (isMultiPart || preferFolder || isDvdFS)
-          { 
+          if (isMultiPart || preferFolder || isDvdFS) {
             // If we meet one of the criteria for foldername parsing
             // let's do it but if we are in a DVD VIDEO_TS directory make 
             // sure we get the parent directory and alter the folder variable
             if (isDvdFS && folder.Name.ToLower() == "video_ts")
-              folder = folder.Parent; 
-            
+              folder = folder.Parent;
+
             // prepare the string from the foldername
             sourceStr = parseFolderName(folder);
           }
-          else
-          {
+          else {
             // If preferFolder is false we always use the filename for single part media
             sourceStr = parseFileName(file);
           }
@@ -78,12 +67,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
             signature.ImdbId = nfoScanner(folder);
         }
         // ## We can't use the foldername because it contains different movies 
-        else
-        {
+        else {
           // if it's multi-part media use filename with stack marker cleaning
-          if (isMultiPart) 
+          if (isMultiPart)
             sourceStr = parseFileName(file, true);
-          else 
+          else
             sourceStr = parseFileName(file);
 
           // Scan for NFO File if enabled
@@ -97,15 +85,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
       return parseSignature(sourceStr, signature);
     }
 
-    public static MediaSignature parseSignature(string inputStr)
-    {
+    public static MediaSignature parseSignature(string inputStr) {
       MediaSignature signature = new MediaSignature();
       return parseSignature(inputStr, signature);
     }
 
     // cleans a string up for movie name matching and returns/adds to a MediaSignature
-    private static MediaSignature parseSignature(string inputStr, MediaSignature signature)
-    {
+    private static MediaSignature parseSignature(string inputStr, MediaSignature signature) {
       string sig = inputStr;
       int year;
 
@@ -127,21 +113,18 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     }
 
     // Cleans up a filename (without stack markers)
-    public static string parseFileName(FileInfo file)
-    {
+    public static string parseFileName(FileInfo file) {
       return parseFileName(file, false);
     }
 
     // Cleans up a filename for movie name matching. 
     // Removes extension and cleans stack markers.
-    private static string parseFileName(FileInfo file, bool filterStackMatch)
-    {
+    private static string parseFileName(FileInfo file, bool filterStackMatch) {
       // Remove the file extension from the filename
       string str = MovieImporter.RemoveFileExtension(file);
 
       // If specified also filter the stack markers from the remainder
-      if (filterStackMatch)
-      {
+      if (filterStackMatch) {
         // Remove stack markers using a regular expression
         Regex rxParser = new Regex(MovieImporter.rxMultiPartClean, RegexOptions.IgnoreCase);
         Match match = rxParser.Match(str);
@@ -159,40 +142,34 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     }
 
     // Cleans up a directory name for movie name matching. 
-    public static string parseFolderName(DirectoryInfo dir)
-    {
+    public static string parseFolderName(DirectoryInfo dir) {
       return dir.Name;
     }
 
     // Filters "noise" from the input string
-    public static string filterNoise(string input)
-    {
+    public static string filterNoise(string input) {
       string rxPattern = MovingPicturesCore.SettingsManager["importer_filter"].Value.ToString();
       Regex rxParser = new Regex(rxPattern, RegexOptions.IgnoreCase);
       return rxParser.Replace(input, "");
     }
 
     // Separates the year from the title string (if applicable)
-    public static string filterYearFromTitle(string input, out int year)
-    {
+    public static string filterYearFromTitle(string input, out int year) {
       string rtn = input;
       year = 0;
 
       // if there is a four digit number that looks like a year, parse it out
       Regex rxParser = new Regex(MovieImporter.rxYearScan);
       Match match = rxParser.Match(rtn);
-      if (match.Success)
-      {
+      if (match.Success) {
         // set the year
         year = int.Parse(match.Groups[2].Value);
         // check if it's really a year value
-        if (year > 1900 && year < DateTime.Now.Year + 2)
-        {
+        if (year > 1900 && year < DateTime.Now.Year + 2) {
           // clean the possible left overs from the title
           rtn = match.Groups[1].Value.TrimEnd('(', '[').Trim();
         }
-        else
-        {
+        else {
           // year check failed so reset it to 0
           year = 0;
         }
@@ -204,13 +181,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
     // NFO filescanner
     // Returns the full path of the first NFO file or empty
-    public static string nfoScanner(DirectoryInfo dir)
-    {
+    public static string nfoScanner(DirectoryInfo dir) {
       return nfoScanner(dir, "*");
     }
 
-    public static string nfoScanner(DirectoryInfo dir, string filename)
-    {
+    public static string nfoScanner(DirectoryInfo dir, string filename) {
       // TODO: optimize    
       string nfoExt = MovingPicturesCore.SettingsManager["importer_nfoext"].Value.ToString();
       Char[] splitters = new Char[] { ',', ';' };
@@ -220,16 +195,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
       // combine the filename/mask
       // with the extension list to create
       // a list of files to look for
-      for (int i = 0; i < extensions.Length; i++)
-      {
+      for (int i = 0; i < extensions.Length; i++) {
         string ext = extensions[i].Trim();
         if (ext.Length > 1)
           mask[i] = filename + "." + ext;
       }
 
       // iterate through each pattern and get the corresponding files
-      foreach (string pattern in mask)
-      {
+      foreach (string pattern in mask) {
         // if pattern is null or empty continue to next pattern
         if (string.IsNullOrEmpty(pattern))
           continue;
@@ -241,8 +214,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
           continue;
 
         // iterate through the list of files and scan them
-        foreach (FileInfo file in nfoList)
-        {
+        foreach (FileInfo file in nfoList) {
           // scan file and retrieve result
           string imdbid = parseNFO(file.FullName);
           // if a match is found return the imdb id
@@ -258,8 +230,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
     // Imdb ID scanner
     // Parses a NFO file and returns the IMDB ID (if any)
-    public static string parseNFO(string file)
-    {
+    public static string parseNFO(string file) {
       logger.Info("Scanning NFO file: {0}", file);
 
       // Read the nfo file content into a string
@@ -267,7 +238,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
       // Check for the existance of a imdb id 
       Regex rxIMDB = new Regex(@"tt\d{7}", RegexOptions.IgnoreCase);
       Match match = rxIMDB.Match(s);
-      
+
       // If success return the id, on failure return empty. 
       if (match.Success)
         s = match.Value;
