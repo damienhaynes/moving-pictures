@@ -64,7 +64,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
-        private void movieStatusChangedListener(MediaMatch obj, MovieImporterAction action) {
+        private void movieStatusChangedListener(MovieMatch obj, MovieImporterAction action) {
             // This ensures we are thread safe. Makes sure this method is run by
             // the thread that created this panel.
             if (InvokeRequired) {
@@ -196,7 +196,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         // Handles when the user modifies data in the unapproved matches list
         private void unapprovedMatchesBindingSource_ListChanged(object sender, ListChangedEventArgs e) {
             if (e.ListChangedType == ListChangedType.ItemChanged) {
-                MediaMatch match = (MediaMatch)unapprovedGrid.Rows[e.NewIndex].DataBoundItem;
+                MovieMatch match = (MovieMatch)unapprovedGrid.Rows[e.NewIndex].DataBoundItem;
                 MovingPicturesCore.Importer.Approve(match);
             }
         }
@@ -205,7 +205,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             unapprovedGrid.EndEdit();
 
             foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
-                MediaMatch selectedMatch = (MediaMatch)currRow.DataBoundItem;
+                MovieMatch selectedMatch = (MovieMatch)currRow.DataBoundItem;
                 selectedMatch.HighPriority = true;
                 MovingPicturesCore.Importer.Approve(selectedMatch);
             }
@@ -218,7 +218,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (result == DialogResult.Yes) {
 
                 foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
-                    MediaMatch selectedMatch = (MediaMatch)currRow.DataBoundItem;
+                    MovieMatch selectedMatch = (MovieMatch)currRow.DataBoundItem;
                     MovingPicturesCore.Importer.Ignore(selectedMatch);
                 }
             }
@@ -228,14 +228,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             unapprovedGrid.EndEdit();
 
             foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
-                MediaMatch selectedMatch = (MediaMatch)currRow.DataBoundItem;
+                MovieMatch selectedMatch = (MovieMatch)currRow.DataBoundItem;
 
                 SearchStringPopup popup = new SearchStringPopup(selectedMatch);
                 popup.ShowDialog(this);
 
                 if (popup.DialogResult == DialogResult.OK) {                
                     // get the system generated signature
-                    MediaSignature sig = selectedMatch.Signature;
+                    MovieSignature sig = selectedMatch.Signature;
                     // update it with the user supplied search string
                     // TODO: make the user input box reflect the signature properties
                     sig.Title = popup.GetSearchString();
@@ -261,7 +261,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             bool ignoreButtonEnabled = false;
 
             foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
-                MediaMatch selectedMatch = (MediaMatch)currRow.DataBoundItem;
+                MovieMatch selectedMatch = (MovieMatch)currRow.DataBoundItem;
 
                 if (selectedMatch == null)
                     break;
@@ -297,7 +297,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             // check if we have one row with multiple files we can split
             else if (unapprovedGrid.SelectedRows.Count == 1 && unapprovedGrid.SelectedRows[0] != null) {
-                MediaMatch match = (MediaMatch)unapprovedGrid.SelectedRows[0].DataBoundItem;
+                MovieMatch match = (MovieMatch)unapprovedGrid.SelectedRows[0].DataBoundItem;
                 if (match.LocalMedia.Count > 1) {
                     splitJoinButton.Image = Resources.arrow_divide;
                     splitJoinButton.ToolTipText = "Split Selected File Group";
@@ -314,12 +314,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void splitJoinButton_Click(object sender, EventArgs e) {
             if (splitMode) {
-                MediaMatch match = (MediaMatch)unapprovedGrid.SelectedRows[0].DataBoundItem;
+                MovieMatch match = (MovieMatch)unapprovedGrid.SelectedRows[0].DataBoundItem;
                 MovingPicturesCore.Importer.Split(match);
             } else {
-                List<MediaMatch> mediaList = new List<MediaMatch>();
+                List<MovieMatch> mediaList = new List<MovieMatch>();
                 foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) 
-                    mediaList.Add((MediaMatch)currRow.DataBoundItem);
+                    mediaList.Add((MovieMatch)currRow.DataBoundItem);
 
                 MovingPicturesCore.Importer.Join(mediaList);
             }

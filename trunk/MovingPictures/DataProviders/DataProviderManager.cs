@@ -6,6 +6,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using System.Reflection;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class DataProviderManager {
@@ -112,8 +113,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         #endregion
 
-        public List<DBMovieInfo> Get(string movieTitle) {
-            return detailSources[0].Provider.Get(movieTitle);
+        public List<DBMovieInfo> Get(MovieSignature movieSignature) {
+            return detailSources[0].Provider.Get(movieSignature);
         }
 
         public void Update(DBMovieInfo movie) {

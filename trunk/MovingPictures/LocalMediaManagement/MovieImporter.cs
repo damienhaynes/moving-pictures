@@ -51,7 +51,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public static Regex rxReplaceDoubleSpace = new Regex(@"\s{2,}", RegexOptions.IgnoreCase);
 
     // a list of all files currently in the system
-    private Dictionary<DBLocalMedia, MediaMatch> matchesInSystem;
+    private Dictionary<DBLocalMedia, MovieMatch> matchesInSystem;
 
     // Matches that have not yet been scanned.
     public ArrayList PendingMatches {
@@ -111,7 +111,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     // updates listeners of changes to the match lists. This will not provide info on when
     // pending matches are externally approved.
-    public delegate void MovieStatusChangedHandler(MediaMatch obj, MovieImporterAction action);
+    public delegate void MovieStatusChangedHandler(MovieMatch obj, MovieImporterAction action);
     public event MovieStatusChangedHandler MovieStatusChanged;
 
     // Creates a MovieImporter object which will scan ImportPaths and import new media.
@@ -137,7 +137,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       filesAdded = ArrayList.Synchronized(new ArrayList());
       filesDeleted = ArrayList.Synchronized(new ArrayList());
 
-      matchesInSystem = new Dictionary<DBLocalMedia, MediaMatch>();
+      matchesInSystem = new Dictionary<DBLocalMedia, MovieMatch>();
 
       fileSystemWatchers = new List<FileSystemWatcher>();
       pathLookup = new Dictionary<FileSystemWatcher, DBImportPath>();
@@ -232,10 +232,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       ScanFiles(fileSet, true);
     }
 
-    // Approves the MediaMatch for detail processing and commit. THis shold be
+    // Approves the MovieMatch for detail processing and commit. THis shold be
     // used in conjunction with the MatchListChanged event when a NEED_INPUT action 
     // is received. 
-    public void Approve(MediaMatch match) {
+    public void Approve(MovieMatch match) {
       if (match.Selected == null)
         return;
 
@@ -261,9 +261,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     }
 
-    // removes any association with the file(s) in the MediaMatch and flags the files
+    // removes any association with the file(s) in the MovieMatch and flags the files
     // to be ignored in the future.
-    public void Ignore(MediaMatch match) {
+    public void Ignore(MovieMatch match) {
       RemoveFromMatchLists(match);
       RemoveCommitedRelations(match.LocalMedia);
 
@@ -279,7 +279,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     }
 
     // rescans for possible movie matches using the specified search string
-    public void Reprocess(MediaMatch match) {
+    public void Reprocess(MovieMatch match) {
       RemoveFromMatchLists(match);
       RemoveCommitedRelations(match.LocalMedia);
 
@@ -301,7 +301,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     // takes the given match containing multiple files and splits it up into
     // individual matches for each file
-    public void Split(MediaMatch match) {
+    public void Split(MovieMatch match) {
       if (match == null || match.LocalMedia.Count < 2)
         return;
 
@@ -318,7 +318,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // clear the ignored flag in case these files were previously on the ignore list
         currFile.Ignored = false;
 
-        MediaMatch newMatch = new MediaMatch();
+        MovieMatch newMatch = new MovieMatch();
         newMatch.LocalMedia.Add(currFile);
         lock (priorityPendingMatches.SyncRoot) {
           newMatch.HighPriority = true;
@@ -333,14 +333,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     // given multiple matches, a new match is created that is the sum of the previous 
     // parts. In practice this means that two parts of the same movie were joined together
     // to be treated as one.
-    public void Join(List<MediaMatch> matchList) {
+    public void Join(List<MovieMatch> matchList) {
       if (matchList == null || matchList.Count < 2)
         return;
 
       List<DBLocalMedia> fileList = new List<DBLocalMedia>();
 
       // build the file list and clear out old matches
-      foreach (MediaMatch currMatch in matchList) {
+      foreach (MovieMatch currMatch in matchList) {
         RemoveFromMatchLists(currMatch);
         RemoveCommitedRelations(currMatch.LocalMedia);
         currMatch.Deleted = true;
@@ -352,7 +352,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
 
       // build the new match and add it for processing
-      MediaMatch newMatch = new MediaMatch();
+      MovieMatch newMatch = new MovieMatch();
       newMatch.LocalMedia = fileList;
       lock (priorityPendingMatches.SyncRoot) {
         newMatch.HighPriority = true;
@@ -672,7 +672,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // if it's not a match, add the previous file set and then start a new one
         // with the current file.
         if (!isAdditionalMatch) {
-          MediaMatch newMatch = new MediaMatch();
+          MovieMatch newMatch = new MovieMatch();
           newMatch.LocalMedia = currFileSet;
           newMatch.FolderHint = (currFileSet.Count == folderCheck(currFileSet[0].File.Directory));
 
@@ -696,7 +696,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
       // queue up the last set of files
       if (currFileSet.Count > 0) {
-        MediaMatch newMatch = new MediaMatch();
+        MovieMatch newMatch = new MovieMatch();
         newMatch.LocalMedia = currFileSet;
         newMatch.FolderHint = (currFileSet.Count == folderCheck(currFileSet[0].File.Directory));
         lock (pendingMatches.SyncRoot) {
@@ -854,12 +854,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         matchList = approvedMatches;
 
       // grab the next match
-      MediaMatch currMatch;
+      MovieMatch currMatch;
       lock (matchList.SyncRoot) {
         if (matchList.Count == 0)
           return;
 
-        currMatch = (MediaMatch)matchList[0];
+        currMatch = (MovieMatch)matchList[0];
         matchList.Remove(currMatch);
         retrievingDetailsMatches.Add(currMatch);
       }
@@ -901,13 +901,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     // retrieves possible matches for the next item (or group of items) in the mediaQueue
     private void ProcessNextPendingMatch() {
-      MediaMatch mediaMatch = null;
+      MovieMatch mediaMatch = null;
 
       // check for a match needing reprocessing
       lock (priorityPendingMatches.SyncRoot) {
         if (priorityPendingMatches.Count != 0) {
           // grab match
-          mediaMatch = (MediaMatch)priorityPendingMatches[0];
+          mediaMatch = (MovieMatch) priorityPendingMatches[0];
           priorityPendingMatches.Remove(mediaMatch);
         }
       }
@@ -918,7 +918,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           if (pendingMatches.Count == 0)
             return;
 
-          mediaMatch = (MediaMatch)pendingMatches[0];
+          mediaMatch = (MovieMatch) pendingMatches[0];
           pendingMatches.Remove(mediaMatch);
         }
 
@@ -1016,7 +1016,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     }
 
     // removes the given match from all pending process lists
-    private void RemoveFromMatchLists(MediaMatch match) {
+    private void RemoveFromMatchLists(MovieMatch match) {
       lock (pendingMatches.SyncRoot) {
         if (pendingMatches.Contains(match))
           pendingMatches.Remove(match);
@@ -1078,12 +1078,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     // Returns a possible match set for the given media file(s) 
     // using the given custom search string
-    private void GetMatches(MediaMatch mediaMatch) {
+    private void GetMatches(MovieMatch mediaMatch) {
       List<DBMovieInfo> movieList;
       List<PossibleMatch> rankedMovieList = new List<PossibleMatch>();
 
-      // Get the MediaSignature
-      MediaSignature signature = mediaMatch.Signature;
+      // Get the MovieSignature
+      MovieSignature signature = mediaMatch.Signature;
 
       // notify any listeners we are checking for matches
       if (MovieStatusChanged != null)
@@ -1092,11 +1092,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       // grab a list of movies from our dataProvider and rank each returned movie on 
       // how close a match it is
 
-      // TODO: remove searchstring logic (when providers accept MediaSignature)
-      string searchStr = (signature.ImdbId == null || signature.ImdbId == string.Empty) ? signature.Title : signature.ImdbId;
-      // TODO: remove active line and uncomment the line below it (when providers accept MediaSignature)
-      movieList = MovingPicturesCore.DataProviderManager.Get(searchStr);
-      //movieList = MovingPicturesCore.MovieProvider.Get(signature);
+      movieList = MovingPicturesCore.DataProviderManager.Get(signature);
 
       bool strictYear = (bool)MovingPicturesCore.SettingsManager["importer_strict_year"].Value;
       // TODO: this boolean will probably be removed on improvement of the matching system
@@ -1106,16 +1102,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         PossibleMatch currMatch = new PossibleMatch();
         currMatch.Movie = currMovie;
 
-        // If strict year matching is enabled exclude match
-        // when it does not meet this criteria
+        // If strict year matching is enabled exclude match when years don't match
         if (strictYear)
-          if (currMovie.Year == signature.Year || currMovie.Year == 0 || signature.Year == 0)
+        if (currMovie.Year != signature.Year || currMovie.Year == 0 || signature.Year == 0)
             continue; // move to next match in the list               
 
         // #### TODO: this part is the part of the matching system that should change
 
         // Clean titles to improve matching 
-        string cleanSource = CleanMediaTitle(searchStr);
+        string cleanSource = CleanMediaTitle(mediaMatch.Signature.Title);
         string cleanMatch = CleanMediaTitle(currMovie.Title);
 
         // Account for Year when criteria is met
@@ -1176,7 +1171,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
   }
 
-  public class MediaMatch {
+  public class MovieMatch {
 
     public bool FolderHint {
       get { return _folder; }
@@ -1281,9 +1276,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
     } private string _searchString = string.Empty;
 
-    public MediaSignature Signature {
+    public MovieSignature Signature {
       get {
-        if (String.IsNullOrEmpty(_signature.Title))
+        if (_signature == null)
           _signature = LocalMediaParser.parseMediaMatch(this);
         return _signature;
       }
@@ -1291,7 +1286,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         _signature = value;
       }
     }
-    private MediaSignature _signature;
+    private MovieSignature _signature;
 
   }
 

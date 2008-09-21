@@ -159,7 +159,6 @@
     <Compile Include="DataProviders\IMovieProvider.cs" />
     <Compile Include="DataProviders\LocalProvider.cs" />
     <Compile Include="DataProviders\MeligroveProvider.cs" />
-    <Compile Include="DataProviders\MovieXMLProvider.cs" />
     <Compile Include="DataProviders\ScriptableProvider.cs" />
     <Compile Include="LocalMediaManagement\AdvancedStringComparer.cs" />
     <Compile Include="LocalMediaManagement\LocalMediaParser.cs" />

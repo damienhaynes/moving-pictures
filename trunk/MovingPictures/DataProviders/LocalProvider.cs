@@ -8,6 +8,7 @@ using NLog;
 using System.Net;
 using Cornerstone.Database;
 using System.Web;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class LocalProvider : IMovieProvider {
@@ -110,7 +111,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 }
 
             }
-            catch (Exception e) {
+            catch (Exception) {
                 logger.Warn("Unexpected problem loading artwork via LocalProvider.");
             }
 
@@ -144,7 +145,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             return null;
         }
 
-        public List<DBMovieInfo> Get(string movieTitle) {
+        public List<DBMovieInfo> Get(MovieSignature movieSignature) {
             throw new NotImplementedException();
         }
 

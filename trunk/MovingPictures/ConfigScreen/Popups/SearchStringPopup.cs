@@ -14,7 +14,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             InitializeComponent();
         }
 
-        public SearchStringPopup(MediaMatch match) {
+        public SearchStringPopup(MovieMatch match) {
             InitializeComponent();
             foreach (DBLocalMedia currFile in match.LocalMedia) {
                 fileListBox.Items.Add(currFile.File);
