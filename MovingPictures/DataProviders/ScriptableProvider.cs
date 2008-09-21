@@ -7,6 +7,8 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Database;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Properties;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using System.Reflection;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class ScriptableProvider : IScriptableMovieProvider {
@@ -60,15 +62,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             return true;
         }
 
-        public List<string> GetDefaultScripts() {
-            List<string> rtn = new List<string>();
-            rtn.Add(Resources.IMDb);
-            rtn.Add(Resources.IMPAwards);
-
-            return rtn;
-        }
-
-        public List<DBMovieInfo> Get(string movieTitle) {
+        public List<DBMovieInfo> Get(MovieSignature movieSignature) {
             if (scraper == null)
                 return null;
 
@@ -79,7 +73,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             Dictionary<string, string> paramList = new Dictionary<string, string>();
             Dictionary<string, string> results;
 
-            paramList["search_string"] = movieTitle;
+            if (movieSignature.Title != null) paramList["search.title"] = movieSignature.Title;
+            if (movieSignature.Year != null) paramList["search.year"] = movieSignature.Year.ToString();
+            if (movieSignature.ImdbId != null) paramList["search.imdb_id"] = movieSignature.ImdbId;
+            if (movieSignature.Edition != null) paramList["search.edition"] = movieSignature.Edition;
+            if (movieSignature.DvdId != null) paramList["search.dvd_id"] = movieSignature.DvdId;
+            if (movieSignature.Source != null) paramList["search.source"] = movieSignature.Source;
+
             results = scraper.Execute("search", paramList);
 
             int count = 0;

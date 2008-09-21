@@ -377,7 +377,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // unapprovedMatchesBindingSource
             // 
-            this.unapprovedMatchesBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MediaMatch);
+            this.unapprovedMatchesBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieMatch);
             this.unapprovedMatchesBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.unapprovedMatchesBindingSource_ListChanged);
             // 
             // comingSoon1

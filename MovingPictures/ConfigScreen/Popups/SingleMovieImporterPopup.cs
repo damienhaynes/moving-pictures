@@ -11,7 +11,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     public partial class SingleMovieImporterPopup : Form {
         private List<DBLocalMedia> localMedia;
-        private MediaMatch mediaMatch;
+        private MovieMatch mediaMatch;
         private bool updating = false;
 
         public SingleMovieImporterPopup() {
@@ -45,7 +45,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             }
         }
         
-        private void movieStatusChangedListener(MediaMatch obj, MovieImporterAction action) {
+        private void movieStatusChangedListener(MovieMatch obj, MovieImporterAction action) {
             // we dont care about any messages except those about media matches
             if (obj == null)
                 return;

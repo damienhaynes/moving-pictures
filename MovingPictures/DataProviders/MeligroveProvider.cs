@@ -5,6 +5,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using System.Net;
 using System.IO;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     class MeligroveProvider: IMovieProvider {
@@ -52,7 +53,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             return false;
         }
 
-        public List<DBMovieInfo> Get(string movieTitle) {
+        public List<DBMovieInfo> Get(MovieSignature movieSignature) {
             throw new NotImplementedException();
         }
 

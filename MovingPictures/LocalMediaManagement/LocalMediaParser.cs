@@ -6,14 +6,14 @@ using System.Text.RegularExpressions;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
-  public struct MediaSignature {
-    public string Title; // Title
-    public int Year; // Year
-    public string ImdbId; // IMDB ID (tt*)
-    public string Edition; // Edition (unrated, director's cut etc..)
-    public string Source; // Unparsed String
-    public string DvdId; // MCE's DVD Id
-    public string Path; // Original path to the source of the media
+  public class MovieSignature {
+    public string Title   = null; 
+    public int?   Year    = null;
+    public string ImdbId  = null; // ex. "tt0168122"
+    public string Edition = null; // ex. unrated, director's cut etc.. Should maybe be an enum?
+    public string Source  = null; // Original file/foldername
+    public string DvdId   = null; // MCE's DVD Id
+    public string Path    = null; // Original path to the source of the media
 
     public override string ToString() {
       return String.Format("Path= {0} || Source= {1} || Title= {2} || Year= {3} || Edition= {4} || DvdId= {5} || ImdbId= {6} || ",
@@ -22,12 +22,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
   }
 
-  public static class LocalMediaParser {
+  public static class LocalMediaParser
+  {
     private static Logger logger = LogManager.GetCurrentClassLogger();
 
-    public static MediaSignature parseMediaMatch(MediaMatch mm) {
+    public static MovieSignature parseMediaMatch(MovieMatch mm)
+    {
       string sourceStr;
-      MediaSignature signature = new MediaSignature();
+      MovieSignature signature = new MovieSignature();
       bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
       bool scanNFO = (bool)MovingPicturesCore.SettingsManager["importer_nfoscan"].Value;
       bool isDvdFS = (mm.LocalMedia[0].File.Extension.ToLower() == ".ifo");
@@ -62,7 +64,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           }
 
           // Scan for NFO File if enabled
-          // Adds IMDB ID to the MediaSignature if found
+          // Adds IMDB ID to the MovieSignature if found
           if (scanNFO)
             signature.ImdbId = nfoScanner(folder);
         }
@@ -75,23 +77,25 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             sourceStr = parseFileName(file);
 
           // Scan for NFO File if enabled
-          // Adds IMDB ID to the MediaSignature if found
+          // Adds IMDB ID to the MovieSignature if found
           if (scanNFO)
             signature.ImdbId = nfoScanner(folder, sourceStr);
         }
       }
 
-      // Complete and return the MediaSignature using the source string
+      // Complete and return the MovieSignature using the source string
       return parseSignature(sourceStr, signature);
     }
 
-    public static MediaSignature parseSignature(string inputStr) {
-      MediaSignature signature = new MediaSignature();
+    public static MovieSignature parseSignature(string inputStr)
+    {
+      MovieSignature signature = new MovieSignature();
       return parseSignature(inputStr, signature);
     }
 
-    // cleans a string up for movie name matching and returns/adds to a MediaSignature
-    private static MediaSignature parseSignature(string inputStr, MediaSignature signature) {
+    // cleans a string up for movie name matching and returns/adds to a MovieSignature
+    private static MovieSignature parseSignature(string inputStr, MovieSignature signature)
+    {
       string sig = inputStr;
       int year;
 
