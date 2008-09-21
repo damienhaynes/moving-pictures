@@ -10,17 +10,20 @@ using System.Reflection;
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class DataProviderManager {
         private static DataProviderManager instance = null;
-        private DatabaseManager dbManager = null;
+        private static String lockObj = "";
         
+        private DatabaseManager dbManager = null;
+
         private List<DBSourceInfo> detailSources;
         private List<DBSourceInfo> coverSources;
         private List<DBSourceInfo> backdropSources;
         private List<DBSourceInfo> allSources;
 
         public static DataProviderManager GetInstance() {
-            if (instance == null)
-                instance = new DataProviderManager();
-
+            lock (lockObj) {
+                if (instance == null)
+                    instance = new DataProviderManager();
+            }
             return instance;
         }
 
@@ -46,70 +49,56 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         }
 
+        #region DataProvider Loading Logic
+
         private void loadProvidersFromDatabase() {
-            allSources = DBSourceInfo.GetAll();
-            foreach (DBSourceInfo currSource in allSources) 
-                add(currSource);
+            foreach (DBSourceInfo currSource in DBSourceInfo.GetAll()) 
+                addToLists(currSource);
         }
 
         private void loadMissingDefaultProviders() {
-            foreach (Type currType in Assembly.GetExecutingAssembly().GetTypes()) {
-                if (!currType.IsClass)
-                    continue;
+            addSource(typeof(ScriptableProvider), Resources.IMDb, 1);
+            // addSource(typeof(MovieXMLProvider), 2);
 
-                // check if the found type is a scriptable movie provider
-                bool found = false;
-                foreach (Type currInterface in currType.GetInterfaces())
-                    if (currInterface == typeof(IScriptableMovieProvider)) {
-                        found = true;
-
-                        IScriptableMovieProvider newProvider = (IScriptableMovieProvider) Activator.CreateInstance(currType);
-                        List<string> defaultScripts = newProvider.GetDefaultScripts();
-
-                        // TODO: build list of possible scraper engines here
-
-                        // load any default scripts if they are not already loaded.
-                        foreach (string script in defaultScripts) {
-                            DBScriptInfo scriptInfo = new DBScriptInfo();
-                            scriptInfo.Contents = script;
-                            
-                            bool alreadyLoaded = false;
-                            foreach (DBSourceInfo currSource in allSources)
-                                if (currSource.Scripts.Contains(scriptInfo)) {
-                                    alreadyLoaded = true; 
-                                    break;
-                                }
-
-                            if (!alreadyLoaded) {
-                                DBSourceInfo newSource = new DBSourceInfo();
-                                newSource.ProviderType = currType;
-                                newSource.Scripts.Add(scriptInfo);
-                                newSource.SelectedScript = scriptInfo;
-                                add(newSource);
-                            }
-                        }
-                    }
-
-                if (found) continue;
-
-                // check if the found type is a regular movie provider
-                foreach (Type currInterface in currType.GetInterfaces())
-                    if (currInterface == typeof(IMovieProvider)) {
-                        bool alreadyLoaded = false;
-                        foreach (DBSourceInfo currSource in allSources) 
-                            if (currSource.ProviderType == currType)
-                                alreadyLoaded = true;
-
-                        if (alreadyLoaded) break;
-
-                        DBSourceInfo newSource = new DBSourceInfo();
-                        newSource.ProviderType = currType;
-                        add(newSource);
-                    }
-            }
+            addSource(typeof(LocalProvider), 1);
+            addSource(typeof(ScriptableProvider), Resources.IMPAwards, 2);
         }
 
-        private void add(DBSourceInfo newSource) {
+        private void addSource(Type providerType, string script, int priority) {
+            IScriptableMovieProvider newProvider = (IScriptableMovieProvider)Activator.CreateInstance(providerType);
+
+            DBScriptInfo scriptInfo = new DBScriptInfo();
+            scriptInfo.Contents = script;
+
+            foreach (DBSourceInfo currSource in allSources)
+                if (currSource.Scripts.Contains(scriptInfo)) {
+                    return;
+                }
+
+            // build the source information
+            DBSourceInfo newSource = new DBSourceInfo();
+            newSource.ProviderType = providerType;
+            newSource.Scripts.Add(scriptInfo);
+            newSource.SelectedScript = scriptInfo;
+
+            // add and commit
+            addToLists(newSource);
+            scriptInfo.Commit();
+            newSource.Commit();
+        }
+
+        private void addSource(Type providerType, int priority) {
+            foreach (DBSourceInfo currSource in allSources)
+                if (currSource.ProviderType == providerType)
+                    return;
+
+            DBSourceInfo newSource = new DBSourceInfo();
+            newSource.ProviderType = providerType;
+            newSource.Commit();
+            addToLists(newSource);
+        }
+
+        private void addToLists(DBSourceInfo newSource) {
             allSources.Add(newSource);
             if (newSource.Provider.ProvidesBackdrops)
                 backdropSources.Add(newSource);
@@ -120,7 +109,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (newSource.Provider.ProvidesMoviesDetails)
                 detailSources.Add(newSource);
         }
-        
+
+        #endregion
+
         public List<DBMovieInfo> Get(string movieTitle) {
             return detailSources[0].Provider.Get(movieTitle);
         }

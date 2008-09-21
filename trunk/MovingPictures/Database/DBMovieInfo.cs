@@ -466,7 +466,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // if it's already in the folder, just store the filename in the db
             else {
-                AlternateCovers.Add(filename);
+                if (!AlternateCovers.Contains(filename))
+                    AlternateCovers.Add(filename);
             }
 
             // create a thumbnail for the cover

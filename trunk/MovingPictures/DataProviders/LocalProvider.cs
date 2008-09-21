@@ -7,6 +7,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using System.Net;
 using Cornerstone.Database;
+using System.Web;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class LocalProvider : IMovieProvider {
@@ -60,41 +61,57 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool GetArtwork(DBMovieInfo movie) {
-            // grab a list of possible filenames for the coverart based on the user pattern
-            string pattern = MovingPicturesCore.SettingsManager["local_coverart_pattern"].StringValue;
-            List<string> filenames = getPossibleNamesFromPattern(pattern, movie);
+            try {
+                // grab a list of possible filenames for the coverart based on the user pattern
+                string pattern = MovingPicturesCore.SettingsManager["local_coverart_pattern"].StringValue;
+                List<string> filenames = getPossibleNamesFromPattern(pattern, movie);
 
 
-            // check the coverart folder for the user patterned covers
-            string coverartFolderPath = MovingPicturesCore.SettingsManager["cover_art_folder"].StringValue;
-            FileInfo newCover = getFirstFileFromFolder(coverartFolderPath, filenames);
-            if (newCover != null && newCover.Exists) {
-                movie.AddCoverFromFile(newCover.FullName);
-                return true;
+                // check the coverart folder for the user patterned covers
+                string coverartFolderPath = MovingPicturesCore.SettingsManager["cover_art_folder"].StringValue;
+                FileInfo newCover = getFirstFileFromFolder(coverartFolderPath, filenames);
+                if (newCover != null && newCover.Exists) {
+                    movie.AddCoverFromFile(newCover.FullName);
+                    return true;
+                }
+
+                // check for folder.jpg if the setting is turned on
+                bool useFolderJpg = (bool)MovingPicturesCore.SettingsManager["local_use_folder_jpg"].Value;
+                if (useFolderJpg) {
+                    newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + "folder.jpg");
+                    if (newCover.Exists) {
+                        movie.AddCoverFromFile(newCover.FullName);
+                        return true;
+                    }
+
+                    newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + "folder.png");
+                    if (newCover.Exists) {
+                        movie.AddCoverFromFile(newCover.FullName);
+                        return true;
+                    }
+
+
+                    newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + "folder.bmp");
+                    if (newCover.Exists) {
+                        movie.AddCoverFromFile(newCover.FullName);
+                        return true;
+                    }
+                }
+
+                // check for coverart in the coverfolder loaded from previous installs
+                DirectoryInfo coverFolder = new DirectoryInfo(coverartFolderPath);
+                string safeName = HttpUtility.UrlEncode(movie.Title.Replace(' ', '.'));
+                Regex oldCoverRegex = new Regex(safeName + " \\[-\\d+\\].jpg");
+                foreach (FileInfo currFile in coverFolder.GetFiles()) {
+                    if (oldCoverRegex.IsMatch(currFile.Name)) {
+                        movie.AddCoverFromFile(currFile.FullName);
+                        logger.Info("Added old cover found in cover folder: " + currFile.Name); 
+                    }
+                }
+
             }
-
-            // check for folder.jpg if the setting is turned on
-            bool useFolderJpg = (bool) MovingPicturesCore.SettingsManager["local_use_folder_jpg"].Value;
-            if (useFolderJpg) {
-                newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + "folder.jpg");
-                if (newCover.Exists) {
-                    movie.AddCoverFromFile(newCover.FullName);
-                    return true;
-                }
-
-                newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + "folder.png");
-                if (newCover.Exists) {
-                    movie.AddCoverFromFile(newCover.FullName);
-                    return true;
-                }
-
-
-                newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + "folder.bmp");
-                if (newCover.Exists) {
-                    movie.AddCoverFromFile(newCover.FullName);
-                    return true;
-                }
-
+            catch (Exception e) {
+                logger.Warn("Unexpected problem loading artwork via LocalProvider.");
             }
 
             return false;
