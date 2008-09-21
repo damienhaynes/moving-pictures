@@ -389,6 +389,10 @@ namespace Cornerstone.Database {
             } else if (IsDatabaseTableType(value.GetType()))
                 strVal = ((DatabaseTable)value).ID.ToString();
 
+            // handle C# Types, Need full qualified name to load types from other aseemblies
+            else if (value is Type) 
+                strVal = ((Type)value).AssemblyQualifiedName;
+
             // everythign else just uses ToString()
             else
                 strVal = value.ToString();
