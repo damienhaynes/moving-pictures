@@ -20,7 +20,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
                 fileListBox.Items.Add(currFile.File);
             }
 
-            searchStrTextBox.Text = match.SearchString;
+          searchStrTextBox.Text = match.Signature.Title + ((match.Signature.Year > 0) ? " " + match.Signature.Year : "") + ((match.Signature.ImdbId != null) ? " " + match.Signature.ImdbId : "");  
         }
 
         public string GetSearchString() {

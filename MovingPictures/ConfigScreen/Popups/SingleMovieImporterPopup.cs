@@ -110,7 +110,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         }
 
         private void rescanButton_Click(object sender, EventArgs e) {
-            mediaMatch.SearchString = possibleMatchesCombo.Text;
+            MovieSignature signature = new MovieSignature();
+            signature.Title = possibleMatchesCombo.Text;
+            mediaMatch.Signature = signature;
             MovingPicturesCore.Importer.Reprocess(mediaMatch);
         }
 

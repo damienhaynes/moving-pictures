@@ -30,34 +30,18 @@
   
   <action name="search">
     <retrieve name="search_request" session="1" url="http://www.moviemeter.nl/film/search/${search.title:safe}"/>
-    <retrieve name="search_page" session="1" url="http://www.moviemeter.nl/film/searchresults#results" /> 
+    <retrieve name="search_page" session="1" url="http://www.moviemeter.nl/film/searchresults#results" />
     
-    <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop
-    <parse name="details_page_block" input="${search_page}" regex="&lt;title&gt;[^\(]+?\(\d{4}[\/IVX]*\).*?&lt;/title&gt;.+&lt;/body&gt;"/>
-    <loop name="details_page_verified" on="details_page_block">
-      <parse name="title_year" input="${details_page_verified}" regex="&lt;title&gt;([^\(]+?)\((\d{4})[\/IVX]*\).*?&lt;/title&gt;"/>
-      <set name="movie[0].title" value="${title_year[0][0]:htmldecode}"/>
-      <set name="movie[0].year" value="${title_year[0][1]:htmldecode}"/>
-
-      <parse name="imdb" input="${details_page_verified}" regex="(tt\d{7})/fullcredits"/>
-      <set name="movie[0].imdb_id" value="${imdb[0][0]}"/>
-    </loop>-->
-
-    <!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop. 
-    <parse name="search_results_block" input="${search_page}" regex='&lt;meta name="title" content="IMDb Title Search"&gt;.+&lt;/body&gt;'/>
+    <!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop.-->
+    <parse name="search_results_block" input="${search_page}" regex='&lt;h1&gt;Zoekresultaten&lt;/h1&gt;.+&lt;p&gt;Pas je zoekopdracht aan:&lt;/p&gt;'/>
     <loop name="search_results_verified" on="search_results_block">
-
-      <parse name="movie_details" input="${search_results_verified}" regex='&lt;a href="([^"]+?(tt\d+?)/)"&gt;([^&lt;]+)&lt;/a&gt; \((\d{4})[\/IVX]*\)(?! \(VG\))' />
-      <loop name='curr_details' on='movie_details'>
-        <set name="movie[${count}].imdb_id" value="${curr_details[1]:htmldecode}"/>
-        <set name="movie[${count}].title" value="${curr_details[2]:htmldecode}"/>
-        <set name="movie[${count}].year" value="${curr_details[3]:htmldecode}"/>
-        <set name="movie[${count}].details_url" value="http://www.imdb.com/title/${curr_details[1]}"/>
-
-        <subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
+      <parse name="movie_details" input="${search_results_verified}" regex='&lt;a\shref="http://www.moviemeter.nl/film/(\d+)"[\s]*&gt;(.+?)&lt;/a&gt;[\s]*\((\d{4})\)' />
+      <loop name="curr_details" on="movie_details">
+        <parse name="title" input="${curr_details[1]:htmldecode}" regex="(.+?)(?:, (The|A))?$"/>
+        <set name="movie[${count}].title" value="${title[0][1]} ${title[0][0]}"/>
+        <set name="movie[${count}].year" value="${curr_details[2]:htmldecode}"/>
+        <set name="movie[${count}].details_url" value="http://www.moviemeter.nl/film/${curr_details[0]}"/>
       </loop>
-
     </loop>
-    -->
 </action>
 </ScriptableScraper>
