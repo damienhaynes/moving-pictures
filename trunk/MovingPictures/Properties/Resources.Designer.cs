@@ -259,6 +259,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;MovieMeter (NL)&lt;/name&gt;
+        ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from moviemeter.nl&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should cha [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MovieMeter {
+            get {
+                return ResourceManager.GetString("MovieMeter", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap noatunplay {
             get {
                 object obj = ResourceManager.GetObject("noatunplay", resourceCulture);

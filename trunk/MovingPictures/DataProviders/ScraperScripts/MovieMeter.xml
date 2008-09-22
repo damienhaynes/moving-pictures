@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ScriptableScraper>
+  <details>
+    <!-- These details are for display purposes only. -->
+    <name>MovieMeter (NL)</name>
+    <author>Armand Pondman (armandp)</author>
+    <description>This script pulls data from moviemeter.nl</description>
+
+    <!-- 
+    These two fields uniquely identify the script. The ID should never 
+    change and should be unique (no other script should use this ID). With
+    new versions of the script the version numbers should change. EVEN FOR 
+    MINOR CHANGES, you should change the version number if you are going to
+    disribute it to anyone but internal testers. The point number 
+    is for minor bug fix releases. Use it.
+    -->
+    <id>874910</id>
+    <version major="0" minor="1" point="0"/>
+
+    <!--
+    These fields are used for categorization purposes. Seperate multiple 
+    types with a pipe | character.
+    -->
+    <type>MovieDetailsFetcher</type>
+    <language>Dutch</language>
+
+    <!-- If set to true, additional logging will be displayed during script execution. -->
+    <debug>true</debug>
+  </details>
+  
+  <action name="search">
+    <retrieve name="search_request" session="1" url="http://www.moviemeter.nl/film/search/${search.title:safe}"/>
+    <retrieve name="search_page" session="1" url="http://www.moviemeter.nl/film/searchresults#results" /> 
+    
+    <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop
+    <parse name="details_page_block" input="${search_page}" regex="&lt;title&gt;[^\(]+?\(\d{4}[\/IVX]*\).*?&lt;/title&gt;.+&lt;/body&gt;"/>
+    <loop name="details_page_verified" on="details_page_block">
+      <parse name="title_year" input="${details_page_verified}" regex="&lt;title&gt;([^\(]+?)\((\d{4})[\/IVX]*\).*?&lt;/title&gt;"/>
+      <set name="movie[0].title" value="${title_year[0][0]:htmldecode}"/>
+      <set name="movie[0].year" value="${title_year[0][1]:htmldecode}"/>
+
+      <parse name="imdb" input="${details_page_verified}" regex="(tt\d{7})/fullcredits"/>
+      <set name="movie[0].imdb_id" value="${imdb[0][0]}"/>
+    </loop>-->
+
+    <!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop. 
+    <parse name="search_results_block" input="${search_page}" regex='&lt;meta name="title" content="IMDb Title Search"&gt;.+&lt;/body&gt;'/>
+    <loop name="search_results_verified" on="search_results_block">
+
+      <parse name="movie_details" input="${search_results_verified}" regex='&lt;a href="([^"]+?(tt\d+?)/)"&gt;([^&lt;]+)&lt;/a&gt; \((\d{4})[\/IVX]*\)(?! \(VG\))' />
+      <loop name='curr_details' on='movie_details'>
+        <set name="movie[${count}].imdb_id" value="${curr_details[1]:htmldecode}"/>
+        <set name="movie[${count}].title" value="${curr_details[2]:htmldecode}"/>
+        <set name="movie[${count}].year" value="${curr_details[3]:htmldecode}"/>
+        <set name="movie[${count}].details_url" value="http://www.imdb.com/title/${curr_details[1]}"/>
+
+        <subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
+      </loop>
+
+    </loop>
+    -->
+</action>
+</ScriptableScraper>
