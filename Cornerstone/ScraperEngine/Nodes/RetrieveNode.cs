@@ -18,10 +18,6 @@ namespace Cornerstone.ScraperEngine.Nodes {
           get { return session; }
         } protected String session;
 
-        public string Method {
-          get { return method; }
-        } protected String method;
-
         public int MaxRetries {
             get { return maxRetries; }
         } protected int maxRetries;
@@ -47,12 +43,6 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 logger.Error("Missing URL attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
-            }
-
-            // grab method
-            try { method = xmlNode.Attributes["method"].Value; }
-            catch (Exception) {
-              method = "GET";
             }
 
             // grab method
@@ -85,7 +75,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedName = parseString(variables, name);
             string pageContents = string.Empty;
 
-            if (DebugMode) logger.Debug("Retrieving URL: {0} {1}", Method, parsedUrl);
+            if (DebugMode) logger.Debug("Retrieving URL: {0}", parsedUrl);
 
             // start trying to retrieve the document
             int tryCount = 0;
@@ -94,19 +84,20 @@ namespace Cornerstone.ScraperEngine.Nodes {
                     // builds the request and retrieves the responses from movie-xml.com
                     tryCount++;
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(parsedUrl);
-                    if (session!=null) {
-                      request.CookieContainer = new CookieContainer();
-                      if (variables.ContainsKey("session.cookieheader." + session)) {
-                        request.CookieContainer.SetCookies(request.RequestUri, variables["session.cookieheader." + session]); 
-                      }
-                    }
-                    request.Method = method;
-                    request.Timeout = timeout + (timeoutIncrement * tryCount);
+                    request.CookieContainer = new CookieContainer();
+                    request.Timeout = timeout + (timeoutIncrement * tryCount);  
+
+                    // if we already had a session for this host name persist it
+                    string sessionKey = "urn://scraper/header/" + request.RequestUri.Host;
+                    if (variables.ContainsKey(sessionKey))
+                      request.CookieContainer.SetCookies(request.RequestUri, variables[sessionKey]); 
+                    
+                    // get the response
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    if (session!=null) {
-                      if (DebugMode) logger.Debug("CookieHeader: {0}", request.CookieContainer.GetCookieHeader(request.RequestUri));
-                      setVariable(variables, "session.cookieheader." + session, request.CookieContainer.GetCookieHeader(request.RequestUri));
-                    }
+
+                    // save the current session to a variable using the hostname as an identifier
+                    if (DebugMode) logger.Debug("CookieHeader: {0}", request.CookieContainer.GetCookieHeader(request.RequestUri));
+                    setVariable(variables, sessionKey, request.CookieContainer.GetCookieHeader(request.RequestUri));
 
                     // converts the resulting stream to a string for easier use
                     Stream resultData = response.GetResponseStream();
