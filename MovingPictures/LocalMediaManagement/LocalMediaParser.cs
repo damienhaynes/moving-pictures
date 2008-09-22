@@ -16,7 +16,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public string Path    = null; // Original path to the source of the media
 
     public override string ToString() {
-      return String.Format("Path= {0} || Source= {1} || Title= {2} || Year= {3} || Edition= {4} || DvdId= {5} || ImdbId= {6} || ",
+      return String.Format("Path= {0} || Source= {1} || Title= \"{2}\" || Year= {3} || Edition= {4} || DvdId= {5} || ImdbId= {6} || ",
         this.Path, this.Source, this.Title, this.Year.ToString(), this.Edition, this.DvdId, this.ImdbId);
     }
 
@@ -154,7 +154,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public static string filterNoise(string input) {
       string rxPattern = MovingPicturesCore.SettingsManager["importer_filter"].Value.ToString();
       Regex rxParser = new Regex(rxPattern, RegexOptions.IgnoreCase);
-      return rxParser.Replace(input, "");
+      string rtn = rxParser.Replace(input, "");
+      rtn = MovieImporter.rxReplaceDoubleSpace.Replace(rtn, " ");
+      return rtn;
     }
 
     // Separates the year from the title string (if applicable)
@@ -171,7 +173,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // check if it's really a year value
         if (year > 1900 && year < DateTime.Now.Year + 2) {
           // clean the possible left overs from the title
-          rtn = match.Groups[1].Value.TrimEnd('(', '[').Trim();
+          rtn = match.Groups[1].Value;
+          rtn = rtn.TrimEnd('(', '[');
         }
         else {
           // year check failed so reset it to 0
@@ -179,8 +182,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
       }
 
-      // return the title
-      return rtn;
+      // trim and return the title
+      return rtn.Trim();
     }
 
     // NFO filescanner
