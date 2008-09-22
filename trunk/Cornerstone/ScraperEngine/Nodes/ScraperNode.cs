@@ -136,7 +136,7 @@ namespace Cornerstone.ScraperEngine {
 
                 // handle any modifiers
                 if (modifier.Equals("safe"))
-                    value = HttpUtility.UrlEncode(value);
+                  value = HttpUtility.UrlEncode(value).Replace("+","%20");
                 if (modifier.Equals("htmldecode"))
                     value = HttpUtility.HtmlDecode(value);
 
