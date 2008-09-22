@@ -14,6 +14,14 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return url; }
         } protected String url;
 
+        public string Session {
+          get { return session; }
+        } protected String session;
+
+        public string Method {
+          get { return method; }
+        } protected String method;
+
         public int MaxRetries {
             get { return maxRetries; }
         } protected int maxRetries;
@@ -41,6 +49,18 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 return;
             }
 
+            // grab method
+            try { method = xmlNode.Attributes["method"].Value; }
+            catch (Exception) {
+              method = "GET";
+            }
+
+            // grab method
+            try { session = xmlNode.Attributes["session"].Value; }
+            catch (Exception) {
+              session = null;
+            }
+
             // grab timeout and retry values. if none specified use defaults
             try { maxRetries = int.Parse(xmlNode.Attributes["retries"].Value); }
             catch (Exception) {
@@ -65,17 +85,28 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedName = parseString(variables, name);
             string pageContents = string.Empty;
 
-            if (DebugMode) logger.Debug("Retrieving URL: " + parsedUrl);
+            if (DebugMode) logger.Debug("Retrieving URL: {0} {1}", Method, parsedUrl);
 
-            // start tryng to retrieve the document
+            // start trying to retrieve the document
             int tryCount = 0;
             while (pageContents == string.Empty) {
                 try {
-                    // builds the request and retrieves the respones from movie-xml.com
+                    // builds the request and retrieves the responses from movie-xml.com
                     tryCount++;
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(parsedUrl);
+                    if (session!=null) {
+                      request.CookieContainer = new CookieContainer();
+                      if (variables.ContainsKey("session.cookieheader." + session)) {
+                        request.CookieContainer.SetCookies(request.RequestUri, variables["session.cookieheader." + session]); 
+                      }
+                    }
+                    request.Method = method;
                     request.Timeout = timeout + (timeoutIncrement * tryCount);
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    if (session!=null) {
+                      if (DebugMode) logger.Debug("CookieHeader: {0}", request.CookieContainer.GetCookieHeader(request.RequestUri));
+                      setVariable(variables, "session.cookieheader." + session, request.CookieContainer.GetCookieHeader(request.RequestUri));
+                    }
 
                     // converts the resulting stream to a string for easier use
                     Stream resultData = response.GetResponseStream();
@@ -88,6 +119,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
                     setVariable(variables, parsedName, pageContents);
                 }
+
                 catch (WebException e) {
                     if (tryCount == maxRetries) {
                         logger.ErrorException("Error connecting to URL. Reached retry limit of " + maxRetries + ". " + parsedUrl, e);
