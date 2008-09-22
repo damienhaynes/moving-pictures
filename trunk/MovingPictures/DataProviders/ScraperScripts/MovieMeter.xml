@@ -43,5 +43,28 @@
         <set name="movie[${count}].details_url" value="http://www.moviemeter.nl/film/${curr_details[0]}"/>
       </loop>
     </loop>
-</action>
+  </action>
+
+  <action name="get_details">
+    <retrieve name="details_page" url="${movie.details_url}"/>
+
+    <!-- IMDB ID -->
+    <parse name="imdb" input="${details_page}" regex="(tt[\d]+)"/>
+    <set name="movie.imdb_id" value="${imdb[0][0]}"/>
+    
+    <!-- Title and Year -->
+    <parse name="title_year" input="${details_page}" regex="&lt;title&gt;(.+?)(?:, (The|A))?\s\((\d{4})\).*&lt;/title&gt;"/>
+    <set name="movie.title" value="${title_year[0][1]} ${title_year[0][0]}"/>
+    <set name="movie.year" value="${title_year[0][2]}"/>
+    
+    <!-- Film info-->
+    <parse name="filminfo_block" input="${filminfo}" regex='&lt;div id="film_info"&gt;.*?&lt;/div&gt;'/>
+
+    <!-- Plot Summary -->
+    <retrieve name='summary_page' url='http://www.imdb.com/title/${movie.imdb_id}/plotsummary'/>
+    <parse name='plot' input ='${filminfo_block}' regex='&lt;br /&gt;met\s.+?&lt;br /&gt;&lt;br /&gt;(.*?)&lt;/div&gt;'/>
+    <set name='movie.summary' value='${plot[0][0]:htmldecode}'/>
+
+  </action>
+  
 </ScriptableScraper>
