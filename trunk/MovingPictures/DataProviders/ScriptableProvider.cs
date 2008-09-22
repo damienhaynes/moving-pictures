@@ -98,9 +98,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 count++;
 
                 // check if the movie has already been added, if not, add it
-                if (!addedMovies.ContainsKey(newMovie.ImdbID)) {
+                if (!addedMovies.ContainsKey(newMovie.DetailsURL)) {
                     rtn.Add(newMovie);
-                    addedMovies[newMovie.ImdbID] = newMovie;
+                    addedMovies[newMovie.DetailsURL] = newMovie;
                 }
             }
 

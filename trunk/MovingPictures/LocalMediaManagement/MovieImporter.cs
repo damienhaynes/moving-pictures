@@ -1104,7 +1104,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // If strict year matching is enabled exclude match when years don't match
         if (strictYear)
-        if (currMovie.Year != signature.Year || currMovie.Year == 0 || signature.Year == 0)
+          if (currMovie.Year != signature.Year || currMovie.Year == 0 || signature.Year == 0)
             continue; // move to next match in the list               
 
         // #### TODO: this part is the part of the matching system that should change
@@ -1262,19 +1262,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       get { return _selected; }
       set { _selected = value; }
     } private PossibleMatch _selected;
-
-    public string SearchString {
-      get {
-        if (_searchString.Equals(string.Empty)) {
-          _searchString = Signature.Title + ((Signature.Year > 0) ? " " + Signature.Year : "") + ((Signature.ImdbId != null) ? " " + Signature.ImdbId : "");
-        }
-        return _searchString;
-      }
-
-      set {
-        _searchString = value;
-      }
-    } private string _searchString = string.Empty;
 
     public MovieSignature Signature {
       get {
