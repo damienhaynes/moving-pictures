@@ -20,6 +20,11 @@
       <default>250</default>
       <description>The number of milliseconds that Moving Pictures waits before it loads new artwork (backdrops and covers) when traversing movies in the GUI. Increasing this value can improve performance if you are experiencing slow down with rapid movements in the GUI.</description>
     </setting>
+
+    <setting id="home_name" name="Name for Home Screen" type="STRING">
+      <default>Moving Pictures</default>
+      <description>The name that appears on the home screen for the plugin.</description>
+    </setting>    
   </group>
 
   
