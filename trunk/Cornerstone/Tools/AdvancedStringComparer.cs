@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
+namespace Cornerstone.Tools {
     public class AdvancedStringComparer {
 
         // Calculates the Levenshtein Distance between two strings. The least number of 

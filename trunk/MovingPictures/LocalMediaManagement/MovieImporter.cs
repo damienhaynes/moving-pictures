@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using NLog;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database;
+using Cornerstone.Tools;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
   public enum MovieImporterAction {

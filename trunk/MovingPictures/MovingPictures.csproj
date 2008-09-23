@@ -160,7 +160,6 @@
     <Compile Include="DataProviders\LocalProvider.cs" />
     <Compile Include="DataProviders\MeligroveProvider.cs" />
     <Compile Include="DataProviders\ScriptableProvider.cs" />
-    <Compile Include="LocalMediaManagement\AdvancedStringComparer.cs" />
     <Compile Include="LocalMediaManagement\LocalMediaParser.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
     <Compile Include="MainUI\ConfigConnector.cs" />
@@ -246,6 +245,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataProviders\ScraperScripts\IMPAwards.xml" />
+    <Content Include="DataProviders\ScraperScripts\MovieMeter.xml" />
     <Content Include="Images\accept.png" />
     <Content Include="Images\approved.png" />
     <Content Include="Images\arrow_cross.png" />
