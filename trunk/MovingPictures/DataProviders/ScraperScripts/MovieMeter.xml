@@ -29,11 +29,11 @@
   </details>
   
   <action name="search">
-    <retrieve name="search_request" session="1" url="http://www.moviemeter.nl/film/search/${search.title:safe}"/>
-    <retrieve name="search_page" session="1" url="http://www.moviemeter.nl/film/searchresults#results" />
+    <retrieve name="search_request" url="http://www.moviemeter.nl/film/search/${search.title:safe}"/>
+    <retrieve name="search_page" url="http://www.moviemeter.nl/film/searchresults#results" />
     
     <!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop.-->
-    <parse name="search_results_block" input="${search_page}" regex='&lt;h1&gt;Zoekresultaten&lt;/h1&gt;.+&lt;p&gt;Pas je zoekopdracht aan:&lt;/p&gt;'/>
+    <parse name="search_results_block" input="${search_page}" regex='&lt;h1&gt;Zoekresultaten&lt;/h1&gt;.+zoekresultaten in films:.+&lt;p&gt;Pas je zoekopdracht aan:&lt;/p&gt;'/>
     <loop name="search_results_verified" on="search_results_block">
       <parse name="movie_details" input="${search_results_verified}" regex='&lt;a\shref="http://www.moviemeter.nl/film/(\d+)"[\s]*&gt;(.+?)&lt;/a&gt;[\s]*\((\d{4})\)' />
       <loop name="curr_details" on="movie_details">
@@ -41,8 +41,10 @@
         <set name="movie[${count}].title" value="${title[0][1]} ${title[0][0]}"/>
         <set name="movie[${count}].year" value="${curr_details[2]:htmldecode}"/>
         <set name="movie[${count}].details_url" value="http://www.moviemeter.nl/film/${curr_details[0]}"/>
+        <subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
       </loop>
     </loop>
+    
   </action>
 
   <action name="get_details">

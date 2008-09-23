@@ -955,6 +955,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       // if the best match is exact or very close, place it in the accepted queue
       // otherwise place it in the pending queue for approval
       int threshold = (int)MovingPicturesCore.SettingsManager["importer_autoapprove"].Value;
+      logger.Debug("MatchValue ( {0} <= {1} ) for {2}", mediaMatch.Selected.MatchValue, threshold, mediaMatch.LocalMediaString);
       if (mediaMatch.Selected != null && mediaMatch.Selected.MatchValue <= threshold) {
         if (mediaMatch.HighPriority) priorityApprovedMatches.Add(mediaMatch);
         else approvedMatches.Add(mediaMatch);
@@ -1122,7 +1123,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         // Account for IMDB when criteria is met
-        if (!String.IsNullOrEmpty(signature.ImdbId) && !String.IsNullOrEmpty(currMovie.ImdbID)) {
+        if (!String.IsNullOrEmpty(signature.ImdbId.Trim()) && !String.IsNullOrEmpty(currMovie.ImdbID.Trim())) {
           if (imdbBoost && currMovie.ImdbID == signature.ImdbId) {
             // If IMDB Auto-Approval is active
             // and the we have an imdbids match,
@@ -1142,6 +1143,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // get the Levenshtein distance between the two string and use them for the match value
         currMatch.MatchValue = AdvancedStringComparer.Levenshtein(cleanMatch, cleanSource);
+
+        logger.Debug("Comparing '{0}' with '{1}'. Levenshtein= {2}", cleanMatch, cleanSource, currMatch.MatchValue);
 
         // #### END TODO
 
