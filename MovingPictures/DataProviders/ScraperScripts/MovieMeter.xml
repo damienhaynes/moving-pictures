@@ -2,7 +2,7 @@
 <ScriptableScraper>
   <details>
     <!-- These details are for display purposes only. -->
-    <name>MovieMeter (NL)</name>
+    <name>MovieMeter (Dutch/NL)</name>
     <author>Armand Pondman (armandp)</author>
     <description>This script pulls data from moviemeter.nl</description>
 
@@ -15,7 +15,7 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874910</id>
-    <version major="0" minor="1" point="0"/>
+    <version major="0" minor="9" point="0"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -94,10 +94,11 @@
 
     <!-- Votes block-->
     <parse name="votes_block" input="${details_page}" regex='&lt;div id="film_votes"&gt;.*?&lt;/div&gt;'/>
-    <parse name="votes" input="${votes_block}" reg='&lt;b&gt;([,\d]+)&lt;/b&gt;' />
-    
+    <parse name="votes" input="${votes_block}" regex='&lt;b&gt;([,\d]+)&lt;/b&gt;' />
+
     <!-- Score -->
-    <set name="movie.score" value="${votes[1][0]:htmldecode}"/>
+    <multiply name="score" value1="${votes[1][0]:htmldecode}" value2="2"/>
+    <set name="movie.score" value="${score}"/>-->
 
     <!-- Popularity -->
     <set name="movie.popularity" value="${votes[0][0]:htmldecode}"/>
