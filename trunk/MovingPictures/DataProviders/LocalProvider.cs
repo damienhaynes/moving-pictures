@@ -102,7 +102,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 // check for coverart in the coverfolder loaded from previous installs
                 DirectoryInfo coverFolder = new DirectoryInfo(coverartFolderPath);
                 string safeName = HttpUtility.UrlEncode(movie.Title.Replace(' ', '.'));
-                Regex oldCoverRegex = new Regex(safeName + " \\[-\\d+\\].jpg");
+                Regex oldCoverRegex = new Regex("{?" + safeName + "}? \\[-?\\d+\\].jpg");
                 foreach (FileInfo currFile in coverFolder.GetFiles()) {
                     if (oldCoverRegex.IsMatch(currFile.Name)) {
                         movie.AddCoverFromFile(currFile.FullName);
