@@ -459,7 +459,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // if the file isnt in the cover folder, generate a name and save it there
             if (!alreadyInFolder) {
                 string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
-                string newFileName = artFolder + "\\" + safeName + " [" + filename.GetHashCode() + "].jpg";
+                string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 newCover.Save(newFileName);
                 AlternateCovers.Add(newFileName);
             }
@@ -553,7 +553,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // genrate a filename for a movie. should be unique based on the url hash
             string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
-            string filename = artFolder + "\\" + safeName + " [" + url.GetHashCode() + "].jpg";
+            string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].jpg";
 
             // if we already have a file for this movie from this URL, move on
             if (File.Exists(filename)) {
