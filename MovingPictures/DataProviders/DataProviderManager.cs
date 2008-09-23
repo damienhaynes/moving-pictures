@@ -62,7 +62,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             // addSource(typeof(MovieXMLProvider), 2);
 
             addSource(typeof(LocalProvider), 1);
-            addSource(typeof(ScriptableProvider), Resources.IMPAwards, 2);
+            addSource(typeof(MeligroveProvider), 2);
+            addSource(typeof(ScriptableProvider), Resources.IMPAwards, 3);
         }
 
         private void addSource(Type providerType, string script, int priority) {
