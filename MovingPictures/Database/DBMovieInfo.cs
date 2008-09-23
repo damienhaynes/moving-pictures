@@ -488,7 +488,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // genrate a filename for a movie. should be unique based on the url hash
             string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
-            string filename = artFolder + "\\" + safeName + " [" + url.GetHashCode() + "].jpg";
+            string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].jpg";
             
             // if we already have a file for this movie from this URL, move on
             if (File.Exists(filename)) {
@@ -530,6 +530,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             // save the artwork
+            logger.Info(filename);
             currImage.Save(filename);
             AlternateCovers.Add(filename);
             _cover = currImage;
