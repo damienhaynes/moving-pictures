@@ -955,7 +955,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       // if the best match is exact or very close, place it in the accepted queue
       // otherwise place it in the pending queue for approval
       int threshold = (int)MovingPicturesCore.SettingsManager["importer_autoapprove"].Value;
-      logger.Debug("MatchValue ( {0} <= {1} ) for {2}", mediaMatch.Selected.MatchValue, threshold, mediaMatch.LocalMediaString);
       if (mediaMatch.Selected != null && mediaMatch.Selected.MatchValue <= threshold) {
         if (mediaMatch.HighPriority) priorityApprovedMatches.Add(mediaMatch);
         else approvedMatches.Add(mediaMatch);
