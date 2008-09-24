@@ -59,6 +59,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         private void loadMissingDefaultProviders() {
             addSource(typeof(ScriptableProvider), Resources.IMDb, 1);
+            addSource(typeof(ScriptableProvider), Resources.MovieMeter, 2);  
             // addSource(typeof(MovieXMLProvider), 2);
 
             addSource(typeof(LocalProvider), 1);
