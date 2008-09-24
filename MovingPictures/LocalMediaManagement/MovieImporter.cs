@@ -48,7 +48,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public const string rxMultiPartClean = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|[0-9]+|i+))|[\(\[]\dof\d[\)\]]$";
 
     public static Regex rxReplacePunctuation = new Regex(@"[\.\:\;\+\*]", RegexOptions.IgnoreCase);
-    public static Regex rxCleanPunctuation = new Regex(@"[\'\`\,\""]", RegexOptions.IgnoreCase);
+    public static Regex rxCleanPunctuation = new Regex(@"[\[\]\'\`\,\""]", RegexOptions.IgnoreCase);
     public static Regex rxReplaceDoubleSpace = new Regex(@"\s{2,}", RegexOptions.IgnoreCase);
 
     // a list of all files currently in the system
