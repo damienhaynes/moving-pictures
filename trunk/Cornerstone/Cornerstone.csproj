@@ -66,6 +66,7 @@
     <Compile Include="ScraperEngine\Nodes\RetrieveNode.cs" />
     <Compile Include="ScraperEngine\Nodes\ScraperNode.cs" />
     <Compile Include="ScraperEngine\Nodes\SetNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\SortNode.cs" />
     <Compile Include="ScraperEngine\ScriptableScraper.cs" />
     <Compile Include="Tools\AdvancedStringComparer.cs" />
   </ItemGroup>

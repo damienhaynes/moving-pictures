@@ -63,10 +63,13 @@
   <action name="get_details">
     <retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
 
-    <!-- Title and Year -->
-    <parse name="title_year" input="${details_page}" regex="&lt;title&gt;([^\(]+?)\((\d{4})[\/IVX]*\).*?&lt;/title&gt;"/>
-    <set name="movie.title" value="${title_year[0][0]:htmldecode}"/>
-    <set name="movie.year" value="${title_year[0][1]:htmldecode}"/>
+    <!-- Title -->
+    <parse name="title" input="${details_page}" regex="&lt;title&gt;([^\(]+?)\((\d{4})[\/IVX]*\).*?&lt;/title&gt;"/>
+    <set name="movie.title" value="${title[0][0]:htmldecode}"/>
+
+    <!-- Year -->
+    <parse name="year" input="${details_page}" regex="&lt;h5&gt;Release Date:&lt;/h5&gt;\s+[^&lt;]+(\d{4})"/>
+    <set name="movie.year" value="${year[0][0]:htmldecode}"/>
 
     <!-- Directors -->
     <parse name="directors_block" input="${details_page}" regex='&lt;h5&gt;Director[s]?:&lt;/h5&gt;.*?&lt;/div&gt;'/>

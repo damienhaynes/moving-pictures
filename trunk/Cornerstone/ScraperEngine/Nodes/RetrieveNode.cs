@@ -75,7 +75,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedName = parseString(variables, name);
             string pageContents = string.Empty;
 
-            if (DebugMode) logger.Debug("Retrieving URL: {0}", parsedUrl);
+            logger.Debug("Retrieving URL: {0}", parsedUrl);
 
             // start trying to retrieve the document
             int tryCount = 0;

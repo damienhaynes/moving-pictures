@@ -30,13 +30,25 @@
   
   <action name="get_cover_art">
     <retrieve name="year_page" url="http://www.impawards.com/${movie.year}/standard.html" />
-    <parse name="cover_list_section" input="${year_page}" regex="${movie.title}.+?&lt;/tr&gt;"/>
+    <parse name="movies" input="${year_page}" regex="&lt;td&gt;&lt;font size=\+1&gt;([^&lt;]+).+?&lt;/tr&gt;"/>
+    
+    <!-- loop through all movies of this year and create distance values from the title for each -->
+    <loop name="curr_movie" on="movies" limit="5000">
+      <distance name='movies[${count}].distance' string1='${movie.title}' string2='${curr_movie[0]}'/>
+    </loop>
 
-    <parse name="covers" input="${cover_list_section}" regex='&lt;A HREF = "([^"]+)"&gt;'/>
+    <!-- 
+    sort our possible covers by match then check if the first 5 closest matches to see if any
+    are the one we are looking for 
+    -->
+    <sort name='movies' by='distance'/>
+    
+    <!-- ok i lied, for now just use the first result. conditional logic is comining tomorrow. :P -->
+    <parse name="covers" input="${movies[0]}" regex='&lt;A HREF = "([^"]+)"&gt;'/>
     <loop name='cover_url' on='covers'>
-      <distance name='lev' string1='phone' string2='poon'/>
       <retrieve name='cover_page' url='http://www.impawards.com/${movie.year}/${cover_url[0]}'/>
-      <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="([^"]+)" ALT = "Movie Poster Image for ${movie.title}'/>
+      <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="([^"]+)" ALT = "Movie Poster Image for'/>
+      <!-- armand, you were up far too late last night... o.O -->
       <set name='cover_art[${count}].url' value='http://www.impawards.com/${movie.year}/${cover_img_url[0][0]}'/>
     </loop>
     
