@@ -155,14 +155,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo)))
                 paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
 
-            // rn the scraper
+            // run the scraper
             results = scraper.Execute("get_cover_art", paramList);
 
             int coversAdded = 0;
             int count = 0;
             while (results.ContainsKey("cover_art[" + count + "].url")) {
                 // if we have hit our limit quit
-                if (movie.AlternateCovers.Count >= maxCovers || coversAdded > maxCoversInSession)
+                if (movie.AlternateCovers.Count >= maxCovers || coversAdded >= maxCoversInSession)
                     return true;
 
                 // get url for cover and load it via the movie object

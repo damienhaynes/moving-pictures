@@ -112,7 +112,7 @@ namespace Cornerstone.ScraperEngine {
             StringBuilder output = new StringBuilder(input);
             int offset = 0;
 
-            Regex variablePattern = new Regex("\\${([^}:]+)(?::([^}]+))?}");
+            Regex variablePattern = new Regex("\\${([^\\$}:]+)(?::([^}]+))?}");
             MatchCollection matches = variablePattern.Matches(input);
             foreach (Match currMatch in matches) {
                 string varName = "";
@@ -144,7 +144,10 @@ namespace Cornerstone.ScraperEngine {
                 offset = offset - currMatch.Length + value.Length;
             }
 
-            return output.ToString();
+            // if we did some replacements search again to check forembeded variables
+            if (matches.Count > 0)
+                return parseString(variables, output.ToString());
+            else return output.ToString();
         }
 
         #endregion
