@@ -14,6 +14,7 @@ namespace Cornerstone.ScraperEngine {
 
         protected XmlNode xmlNode;
         protected List<ScraperNode> children;
+        protected ScraperNodeAttribute nodeSettings;
 
         #region Properties
         public string NodeType {
@@ -49,19 +50,28 @@ namespace Cornerstone.ScraperEngine {
             this.debugMode = debugMode;
             loadSuccess = loadChildren();
 
-            // try to grab the name of the node (variable name for results)
-            try { name = xmlNode.Attributes["name"].Value; }
-            catch (Exception) {
-                logger.Error("Missing NAME attribute on: " + xmlNode.OuterXml);
-                loadSuccess = false;
-                return;
-            }
+            // try to load our node attrbute
+            foreach(Attribute currAttr in this.GetType().GetCustomAttributes(true)) 
+                if (currAttr is ScraperNodeAttribute) {
+                    nodeSettings = (ScraperNodeAttribute) currAttr;
+                    continue;
+                }
 
-            // if it's a bad variable name we fail as well
-            if (Name.Contains(" ")) {
-                logger.Error("Invalid NAME attribute (no spaces allowed) \"" + Name + "\" for " + xmlNode.OuterXml);
-                loadSuccess = false;
-                return;
+            if (nodeSettings.LoadNameAttribute) {
+                // try to grab the name of the node (variable name for results)
+                try { name = xmlNode.Attributes["name"].Value; }
+                catch (Exception) {
+                    logger.Error("Missing NAME attribute on: " + xmlNode.OuterXml);
+                    loadSuccess = false;
+                    return;
+                }
+
+                // if it's a bad variable name we fail as well
+                if (Name.Contains(" ")) {
+                    logger.Error("Invalid NAME attribute (no spaces allowed) \"" + Name + "\" for " + xmlNode.OuterXml);
+                    loadSuccess = false;
+                    return;
+                }
             }
         }
 
@@ -211,12 +221,17 @@ namespace Cornerstone.ScraperEngine {
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class ScraperNodeAttribute : System.Attribute {
+    public class ScraperNodeAttribute : Attribute {
         private string nodeName;
 
         public string NodeName {
             get { return nodeName; }
         }
+
+        public bool LoadNameAttribute {
+            get { return loadNameAttribute; }
+            set { loadNameAttribute = value; }
+        } private bool loadNameAttribute = true;
 
         public ScraperNodeAttribute(string nodeName) {
             this.nodeName = nodeName;

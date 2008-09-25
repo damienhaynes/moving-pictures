@@ -413,8 +413,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             catch (Exception e) {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
-
-                logger.Warn("Failed to delete cover art '" + CoverFullPath + "' and/or '" + CoverThumbFullPath + "'");
             }
 
             AlternateCovers.Remove(CoverFullPath);

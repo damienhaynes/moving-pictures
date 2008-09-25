@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Net;
 using System.IO;
+using System.Threading;
 
 namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("retrieve")]
@@ -79,44 +80,52 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // start trying to retrieve the document
             int tryCount = 0;
-            while (pageContents == string.Empty) {
-                try {
-                    // builds the request and retrieves the responses from movie-xml.com
-                    tryCount++;
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(parsedUrl);
-                    request.CookieContainer = new CookieContainer();
-                    request.Timeout = timeout + (timeoutIncrement * tryCount);  
+            try {
+                while (pageContents == string.Empty) {
+                    try {
+                        // builds the request and retrieves the responses from movie-xml.com
+                        tryCount++;
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(parsedUrl);
+                        request.CookieContainer = new CookieContainer();
+                        request.Timeout = timeout + (timeoutIncrement * tryCount);
 
-                    // if we already had a session for this host name persist it
-                    string sessionKey = "urn://scraper/header/" + request.RequestUri.Host;
-                    if (variables.ContainsKey(sessionKey))
-                      request.CookieContainer.SetCookies(request.RequestUri, variables[sessionKey]); 
-                    
-                    // get the response
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        // if we already had a session for this host name persist it
+                        string sessionKey = "urn://scraper/header/" + request.RequestUri.Host;
+                        if (variables.ContainsKey(sessionKey))
+                            request.CookieContainer.SetCookies(request.RequestUri, variables[sessionKey]);
 
-                    // save the current session to a variable using the hostname as an identifier
-                    if (DebugMode) logger.Debug("CookieHeader: {0}", request.CookieContainer.GetCookieHeader(request.RequestUri));
-                    setVariable(variables, sessionKey, request.CookieContainer.GetCookieHeader(request.RequestUri));
+                        // get the response
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                    // converts the resulting stream to a string for easier use
-                    Stream resultData = response.GetResponseStream();
-                    StreamReader reader = new StreamReader(resultData, Encoding.Default, true);
-                    pageContents = reader.ReadToEnd().Replace('\0', ' ');
+                        // save the current session to a variable using the hostname as an identifier
+                        if (DebugMode) logger.Debug("CookieHeader: {0}", request.CookieContainer.GetCookieHeader(request.RequestUri));
+                        setVariable(variables, sessionKey, request.CookieContainer.GetCookieHeader(request.RequestUri));
 
-                    resultData.Close();
-                    reader.Close();
-                    response.Close();
+                        // converts the resulting stream to a string for easier use
+                        Stream resultData = response.GetResponseStream();
+                        StreamReader reader = new StreamReader(resultData, Encoding.Default, true);
+                        pageContents = reader.ReadToEnd().Replace('\0', ' ');
 
-                    setVariable(variables, parsedName, pageContents);
-                }
+                        resultData.Close();
+                        reader.Close();
+                        response.Close();
 
-                catch (WebException e) {
-                    if (tryCount == maxRetries) {
-                        logger.ErrorException("Error connecting to URL. Reached retry limit of " + maxRetries + ". " + parsedUrl, e);
-                        return;
+                        setVariable(variables, parsedName, pageContents);
+                    }
+
+                    catch (WebException e) {
+                        if (tryCount == maxRetries) {
+                            logger.ErrorException("Error connecting to URL. Reached retry limit of " + maxRetries + ". " + parsedUrl, e);
+                            return;
+                        }
                     }
                 }
+            }
+            catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
+                logger.Warn("Could not connect to " + parsedUrl, e);
             }
         }
 

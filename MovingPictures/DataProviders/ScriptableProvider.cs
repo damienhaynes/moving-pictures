@@ -173,6 +173,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 count++;
             }
 
+            if (coversAdded > 0)
+                return true;
+
             return false;
         }
 
