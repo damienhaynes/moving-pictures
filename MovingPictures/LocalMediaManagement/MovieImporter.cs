@@ -1112,13 +1112,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // If strict year matching is enabled exclude match when years don't match
         if (strictYear)
-          if (currSignature.Year != signature.Year || currSignature.Year == 0 || signature.Year == 0)
+          if ((currSignature.Year != signature.Year) && (currSignature.Year != 0) && (signature.Year != 0))
             continue; // move to next match in the list               
-       
-        int bestMatch = calculateMatchValue(mediaMatch.Signature, currSignature, imdbBoost);
-        foreach (string akaTitle in currMovie.Aka.ToArray()) {
-          currSignature.Title = akaTitle; 
-          int matchValue = calculateMatchValue(mediaMatch.Signature, currSignature, imdbBoost);
+
+        int bestMatch = calculateMatchValue(signature, currSignature, imdbBoost);
+        foreach (string akaTitle in currMovie.AlternateTitles.ToArray()) {
+          currSignature.Title = akaTitle;
+          int matchValue = calculateMatchValue(signature, currSignature, imdbBoost);
           if (matchValue < bestMatch)
             bestMatch = matchValue;
         }
