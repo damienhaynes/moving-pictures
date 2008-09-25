@@ -264,14 +264,14 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///&lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;MovieMeter (NL)&lt;/name&gt;
+        ///    &lt;name&gt;MovieMeter (Dutch/NL)&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from moviemeter.nl&lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should cha [rest of string was truncated]&quot;;.
+        ///    new versions of the script the version numbers shou [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MovieMeter {
             get {
@@ -290,6 +290,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             get {
                 object obj = ResourceManager.GetObject("noatunstop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;OFDb (German)&lt;/name&gt;
+        ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from ofdb.de&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVE [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string OFDb {
+            get {
+                return ResourceManager.GetString("OFDb", resourceCulture);
             }
         }
         
