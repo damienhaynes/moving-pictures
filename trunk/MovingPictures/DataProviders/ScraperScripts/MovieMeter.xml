@@ -100,7 +100,7 @@
 
     <!-- Score -->
     <multiply name="score" value1="${votes[1][0]:htmldecode}" value2="2"/>
-    <set name="movie.score" value="${score}"/>-->
+    <set name="movie.score" value="${score}"/>
 
     <!-- Popularity -->
     <set name="movie.popularity" value="${votes[0][0]:htmldecode}"/>
