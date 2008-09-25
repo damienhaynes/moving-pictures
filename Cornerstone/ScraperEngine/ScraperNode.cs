@@ -169,7 +169,7 @@ namespace Cornerstone.ScraperEngine {
         }
 
         public static ScraperNode Load(XmlNode xmlNode, bool debugMode) {
-            if (xmlNode == null || xmlNode.NodeType == XmlNodeType.Comment)
+          if (xmlNode == null || xmlNode.NodeType == XmlNodeType.Comment || xmlNode.NodeType == XmlNodeType.CDATA)
                 return null;
             
             Type nodeType = null;

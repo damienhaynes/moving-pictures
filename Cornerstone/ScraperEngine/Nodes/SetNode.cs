@@ -24,11 +24,31 @@ namespace Cornerstone.ScraperEngine.Nodes {
             // try to grab the value
             try { value = xmlNode.Attributes["value"].Value; }
             catch (Exception) {
-                logger.Error("Missing VALUE attribute on: " + xmlNode.OuterXml);
-                loadSuccess = false;
-                return;
+              loadSuccess = false;
             }
             
+            // get the innervalue
+            string innerValue = xmlNode.InnerText.Trim();
+            
+            // Display an error if two values are set 
+            if (loadSuccess && !innerValue.Equals(String.Empty)) {
+              logger.Error("Ambiguous assignment on: " + xmlNode.OuterXml);
+              loadSuccess = false;
+              return;
+            }
+
+            // Display an error if no values are set
+            if (!loadSuccess && innerValue.Equals(String.Empty)) {
+              logger.Error("Missing VALUE attribute on: " + xmlNode.OuterXml);
+              return;
+            }
+
+            // Use the innerValue if we don't have a VALUE attribute
+            if (!loadSuccess && !innerValue.Equals(String.Empty)) {
+              loadSuccess = true;
+              value = innerValue;              
+            }
+
         }
 
         public override void Execute(Dictionary<string, string> variables) {
