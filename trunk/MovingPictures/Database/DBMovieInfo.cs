@@ -51,6 +51,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _title;
 
+        [DBFieldAttribute]
+        public StringList Aka {
+          get { return _aka; }
+
+          set {
+            _aka = value;
+            commitNeeded = true;
+          }
+        } private StringList _aka;
 
         [DBFieldAttribute]
         public string SortBy {

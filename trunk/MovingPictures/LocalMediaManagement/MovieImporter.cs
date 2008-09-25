@@ -1103,47 +1103,27 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         PossibleMatch currMatch = new PossibleMatch();
         currMatch.Movie = currMovie;
 
-        // If strict year matching is enabled exclude match when years don't match
-        if (strictYear)
-          if (currMovie.Year != signature.Year || currMovie.Year == 0 || signature.Year == 0)
-            continue; // move to next match in the list               
-
         // #### TODO: this part is the part of the matching system that should change
 
-        // Clean titles to improve matching 
-        string cleanSource = CleanMediaTitle(mediaMatch.Signature.Title);
-        string cleanMatch = CleanMediaTitle(currMovie.Title);
+        MovieSignature currSignature = new MovieSignature();
+        currSignature.Title = currMovie.Title;
+        currSignature.Year = currMovie.Year;
+        currSignature.ImdbId = currMovie.ImdbID;
 
-        // Account for Year when criteria is met
-        // this should give the match a higher priority  
-        if (signature.Year > 0 && currMovie.Year > 0) {
-          cleanMatch += ' ' + currMovie.Year.ToString();
-          cleanSource += ' ' + signature.Year.ToString();
+        // If strict year matching is enabled exclude match when years don't match
+        if (strictYear)
+          if (currSignature.Year != signature.Year || currSignature.Year == 0 || signature.Year == 0)
+            continue; // move to next match in the list               
+       
+        int bestMatch = calculateMatchValue(mediaMatch.Signature, currSignature, imdbBoost);
+        foreach (string akaTitle in currMovie.Aka.ToArray()) {
+          currSignature.Title = akaTitle; 
+          int matchValue = calculateMatchValue(mediaMatch.Signature, currSignature, imdbBoost);
+          if (matchValue < bestMatch)
+            bestMatch = matchValue;
         }
-
-        // Account for IMDB when criteria is met
-        if (!String.IsNullOrEmpty(signature.ImdbId.Trim()) && !String.IsNullOrEmpty(currMovie.ImdbID.Trim())) {
-          if (imdbBoost && currMovie.ImdbID == signature.ImdbId) {
-            // If IMDB Auto-Approval is active
-            // and the we have an imdbids match,
-            // cheat the current match system into
-            // an auto-match (this is temporary!)
-            cleanMatch = currMovie.ImdbID;
-            cleanSource = signature.ImdbId;
-          }
-          else {
-            // add the imdb id tot the complete matching string
-            // this should improve priority
-            cleanMatch += ' ' + currMovie.ImdbID;
-            cleanSource += ' ' + signature.ImdbId;
-          }
-
-        }
-
-        // get the Levenshtein distance between the two string and use them for the match value
-        currMatch.MatchValue = AdvancedStringComparer.Levenshtein(cleanMatch, cleanSource);
-
-        logger.Debug("Comparing '{0}' with '{1}'. Levenshtein= {2}", cleanMatch, cleanSource, currMatch.MatchValue);
+        // Set the MatchValue to the best match found.
+        currMatch.MatchValue = bestMatch;
 
         // #### END TODO
 
@@ -1152,6 +1132,43 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
 
       mediaMatch.PossibleMatches = rankedMovieList;
+    }
+
+    private static int calculateMatchValue(MovieSignature sig1, MovieSignature sig2, bool imdbBoost) {
+      // Clean titles to improve matching 
+      string cleanSource = CleanMediaTitle(sig1.Title);
+      string cleanMatch = CleanMediaTitle(sig2.Title);
+
+      // Account for Year when criteria is met
+      // this should give the match a higher priority  
+      if (sig1.Year > 0 && sig2.Year > 0) {
+        cleanMatch += ' ' + sig2.Year.ToString();
+        cleanSource += ' ' + sig1.Year.ToString();
+      }
+
+      // Account for IMDB when criteria is met
+      if (!String.IsNullOrEmpty(sig1.ImdbId.Trim()) && !String.IsNullOrEmpty(sig2.ImdbId.Trim())) {
+        if (imdbBoost && sig2.ImdbId == sig1.ImdbId) {
+          // If IMDB Auto-Approval is active
+          // and the we have an imdbids match,
+          // cheat the current match system into
+          // an auto-match (this is temporary!)
+          cleanMatch = sig2.ImdbId;
+          cleanSource = sig1.ImdbId;
+        }
+        else {
+          // add the imdb id tot the complete matching string
+          // this should improve priority
+          cleanMatch += ' ' + sig2.ImdbId;
+          cleanSource += ' ' + sig1.ImdbId;
+        }
+
+      }
+
+      // get the Levenshtein distance between the two string and use them for the match value
+      int rtn = AdvancedStringComparer.Levenshtein(cleanMatch, cleanSource);
+      logger.Debug("Comparing '{0}' with '{1}'. Levenshtein= {2}", cleanMatch, cleanSource, rtn);
+      return rtn;
     }
 
     // Clean media titles from punctuation marks
