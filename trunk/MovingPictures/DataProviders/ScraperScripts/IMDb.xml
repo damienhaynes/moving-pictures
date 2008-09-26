@@ -30,13 +30,7 @@
   
   <action name="search">
     <retrieve name="search_page" url="http://akas.imdb.com/find?s=tt;q=${search.title:safe}" />
-
-    <set name="rx_details">
-      <![CDATA[
-      
-      ]]>
-    </set>
-    
+ 
     <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
     <parse name="details_page_block" input="${search_page}" regex="&lt;title&gt;[^\(]+?\(\d{4}[\/IVX]*\).*?&lt;/title&gt;.+&lt;/body&gt;"/>
     <loop name="details_page_verified" on="details_page_block">
