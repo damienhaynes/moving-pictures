@@ -844,13 +844,16 @@ namespace MediaPortal.Plugins.MovingPictures {
             switch (action.wID) {
                 case Action.ActionType.ACTION_PARENT_DIR:
                 case Action.ActionType.ACTION_HOME:
+                    currentlyPlaying = false;
                     GUIWindowManager.ShowPreviousWindow();
                     break;
                 case Action.ActionType.ACTION_PREVIOUS_MENU:
                     if (CurrentView == ViewMode.DETAILS)
                         CurrentView = previousView;
-                    else
+                    else {
+                        currentlyPlaying = false;
                         GUIWindowManager.ShowPreviousWindow();
+                    }
                     break;
                 case Action.ActionType.ACTION_MUSIC_PLAY:
                     // yes, the generic "play" action is called.... ACTION_MUSIC_PLAY...
@@ -967,18 +970,34 @@ namespace MediaPortal.Plugins.MovingPictures {
         private void publishBonusDetails(DatabaseTable obj, string prefix) {
             string propertyStr;
             string valueStr;
-            
+
             if (obj is DBMovieInfo) {
                 DBMovieInfo movie = (DBMovieInfo)obj;
+                int minValue;
+                int hourValue;
 
                 // hour component of runtime
                 propertyStr = "#MovingPictures." + prefix + ".extra.runtime.hour";
-                valueStr = (movie.Runtime / 60).ToString();
-                setProperty(propertyStr, valueStr);
+                hourValue = (movie.Runtime / 60);
+                setProperty(propertyStr, hourValue.ToString());
 
                 // minute component of runtime
                 propertyStr = "#MovingPictures." + prefix + ".extra.runtime.minute";
-                valueStr = (movie.Runtime % 60).ToString();
+                minValue = (movie.Runtime % 60);
+                setProperty(propertyStr, minValue.ToString());
+
+                // give short runtime string 0:00
+                propertyStr = "#MovingPictures." + prefix + ".extra.runtime.short";
+                valueStr = string.Format("{0}:{1:00}", hourValue, minValue);
+                setProperty(propertyStr, valueStr);
+
+                // give pretty runtime string
+                propertyStr = "#MovingPictures." + prefix + ".extra.runtime.en.pretty";
+                valueStr = string.Empty;
+                if (hourValue > 0) 
+                    valueStr = string.Format("{0} hour{1}", hourValue, hourValue != 1 ? "s" : string.Empty);
+                if (minValue > 0) 
+                    valueStr = valueStr + string.Format(", {0} minute{1}", minValue, minValue != 1 ? "s" : string.Empty);
                 setProperty(propertyStr, valueStr);
             }
         }
