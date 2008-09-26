@@ -129,7 +129,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 bool success = results.TryGetValue("movie." + currField.FieldName, out value);
 
                 if (success && value.Trim().Length > 0)
-                    currField.SetValue(newMovie, value);
+                    currField.SetValue(newMovie, value.Trim());
             }
 
             // and update as neccisary
