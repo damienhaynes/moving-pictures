@@ -105,7 +105,7 @@
     <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
 
     <!-- Runtime -->
-    <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;\s+(\d+) min\s+&lt;/div&gt;'/>
+    <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+&lt;/div&gt;'/>
     <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
 
     <!-- Tagline -->
