@@ -29,18 +29,35 @@
   </details>
   
   <action name="search">
-    <retrieve name="search_request" url="http://www.moviemeter.nl/film/search/${search.title:safe}"/>
-    <retrieve name="search_page" url="http://www.moviemeter.nl/film/searchresults#results" />
+    <!-- Variables -->
+    <set name="site" value="http://www.moviemeter.nl/film/" />
+
+    <!-- Regular Expressions -->
+    <set name="rx_results">
+      <![CDATA[
+      <h1>Zoekresultaten</h1>.+zoekresultaten in films:.+<p>Pas je zoekopdracht aan:</p>
+      ]]>
+    </set>
+    <set name="rx_verify">
+      <![CDATA[
+      <a\shref="${site}(\d+)"[\s]*>(.+?)</a>[\s]*\((\d{4})\)
+      ]]>
+    </set>
+  
+    <!-- Make the search request -->
+    <retrieve name="search_request" url="${site}search/${search.title:safe}"/>
+    <!-- Get the results from another url -->
+    <retrieve name="search_page" url="${site}searchresults#results" />    
     
     <!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop.-->
-    <parse name="search_results_block" input="${search_page}" regex='&lt;h1&gt;Zoekresultaten&lt;/h1&gt;.+zoekresultaten in films:.+&lt;p&gt;Pas je zoekopdracht aan:&lt;/p&gt;'/>
+    <parse name="search_results_block" input="${search_page}" regex="${rx_results}"/>
     <loop name="search_results_verified" on="search_results_block">
-      <parse name="movie_details" input="${search_results_verified}" regex='&lt;a\shref="http://www.moviemeter.nl/film/(\d+)"[\s]*&gt;(.+?)&lt;/a&gt;[\s]*\((\d{4})\)' />
+      <parse name="movie_details" input="${search_results_verified}" regex="${rx_verify}" />
       <loop name="curr_details" on="movie_details">
         <parse name="title" input="${curr_details[1]:htmldecode}" regex="(.+?)(?:, (The|A))?$"/>
         <set name="movie[${count}].title" value="${title[0][1]} ${title[0][0]}"/>
         <set name="movie[${count}].year" value="${curr_details[2]:htmldecode}"/>
-        <set name="movie[${count}].details_url" value="http://www.moviemeter.nl/film/${curr_details[0]}"/>
+        <set name="movie[${count}].details_url" value="${site}${curr_details[0]}"/>
         <subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
       </loop>
     </loop>
@@ -48,38 +65,99 @@
   </action>
 
   <action name="get_details">
-    <retrieve name="details_page" url="${movie.details_url}"/>
+    <!-- Regular Expressions -->
+    <set name="rx_title">
+      <![CDATA[
+      <title>(.+?)(?:, (The|A))?\s\((\d{4})\).*</title>
+      ]]>
+    </set>
 
+    <set name="rx_filminfo">
+      <![CDATA[
+      <div id="film_info">.*?</div>
+      ]]>
+    </set>
+
+    <set name="rx_directors_block">
+      <![CDATA[
+      <br />geregisseerd\sdoor\s(.*?)<br />met
+      ]]>
+    </set>
+
+    <set name="rx_directors">
+      <![CDATA[
+      http://www.moviemeter.nl/director/[\d]+">([^<]+)
+      ]]>
+    </set>
+
+    <set name="rx_filminfo_block">
+      <![CDATA[
+      <br\s/>met\s(.*?)<br\s/><br
+      ]]>
+    </set>
+
+    <set name="rx_genres">
+      <![CDATA[
+      <div\sid="film_info">.+?<br\s/>(.+?)<br
+      ]]>
+    </set>
+
+    <set name="runtime">
+      <![CDATA[
+      <div\sid="film_info">.+?<br\s/>.+?<br\s/>(.+?)\sminuten
+      ]]>
+    </set>
+
+    <set name="rx_plot">
+      <![CDATA[
+      <br />met\s.+?<br /><br />(.*?)</div>
+      ]]>
+    </set>
+
+    <set name="rx_votes_block">
+      <![CDATA[
+      <div id="film_votes">.*?</div>
+      ]]>
+    </set>
+    <set name="rx_votes">
+      <![CDATA[
+      <b>([,\d]+)</b>
+      ]]>
+    </set>
+    
+    <!-- Retrieve details -->
+    <retrieve name="details_page" url="${movie.details_url}"/>
+    
+    <!-- Film info-->
+    <parse name="filminfo_block" input="${details_page}" regex="${rx_filminfo}"/>
+    
     <!-- IMDB ID -->
     <parse name="imdb" input="${details_page}" regex="(tt[\d]+)"/>
     <set name="movie.imdb_id" value="${imdb[0][0]}"/>
     
     <!-- Title and Year -->
-    <parse name="title_year" input="${details_page}" regex="&lt;title&gt;(.+?)(?:, (The|A))?\s\((\d{4})\).*&lt;/title&gt;"/>
+    <parse name="title_year" input="${details_page}" regex="${rx_title}"/>
     <set name="movie.title" value="${title_year[0][1]} ${title_year[0][0]}"/>
-    <set name="movie.year" value="${title_year[0][2]}"/>
-    
-    <!-- Film info-->
-    <parse name="filminfo_block" input="${details_page}" regex='&lt;div id="film_info"&gt;.*?&lt;/div&gt;'/>
+    <set name="movie.year" value="${title_year[0][2]}"/>   
 
     <!-- Directors -->
-    <parse name="directors_block" input="${filminfo_block}" regex='&lt;br /&gt;geregisseerd\sdoor\s(.*?)&lt;br /&gt;met'/>
-    <parse name="directors" input="${directors_block}" regex='&lt;a\shref="http://www.moviemeter.nl/director/[\d]+">([^&lt;]+)'/>
+    <parse name="directors_block" input="${filminfo_block}" regex="${rx_directors_block}"/>
+    <parse name="directors" input="${directors_block}" regex="${rx_directors}"/>
     <set name='movie.directors' value=''/>
     <loop name='currDirector' on='directors'>
       <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
     </loop>
 
     <!-- Actors -->
-    <parse name="actors_block" input="${filminfo_block}" regex='&lt;br\s/&gt;met\s(.*?)&lt;br\s/&gt;&lt;br'/>
-    <parse name='actors' input='${actors_block[0][0]}' regex='(\sen\s)*(.+?)(\,\s|\sen\s|$)'/>
+    <parse name="actors_block" input="${filminfo_block}" regex="${rx_filminfo_block}"/>
+    <parse name='actors' input='${actors_block[0][0]}' regex="(\sen\s)*(.+?)(\,\s|\sen\s|$)"/>
     <set name='movie.actors' value=''/>
     <loop name='currActor' on='actors'>
       <set name='movie.actors' value='${movie.actors}|${currActor[1]:htmldecode}'/>
     </loop>
 
     <!-- Genres -->
-    <parse name="genres_block" input="${filminfo_block}" regex='&lt;div\sid="film_info"&gt;.+?&lt;br\s/&gt;(.+?)&lt;br'/>
+    <parse name="genres_block" input="${filminfo_block}" regex='${rx_genres}'/>
     <parse name='genres' input='${genres_block[0][0]}' regex='([^/]+)'/>
     <set name='movie.genres' value=''/>
     <loop name='currGenre' on='genres'>
@@ -87,16 +165,16 @@
     </loop>
 
     <!-- Runtime-->
-    <parse name="runtime" input="${filminfo_block}" regex='&lt;div\sid="film_info"&gt;.+?&lt;br\s/&gt;.+?&lt;br\s/&gt;(.+?)\sminuten'/>
+    <parse name="runtime" input="${filminfo_block}" regex="${runtime}"/>
     <set name="movie.runtime" value="${runtime[0][0]:htmldecode}"/>
     
     <!-- Plot Summary -->
-    <parse name="plot" input ="${filminfo_block}" regex='&lt;br /&gt;met\s.+?&lt;br /&gt;&lt;br /&gt;(.*?)&lt;/div&gt;'/>
+    <parse name="plot" input ="${filminfo_block}" regex="${rx_plot}"/>
     <set name="movie.summary" value="${plot[0][0]:htmldecode}"/>
 
     <!-- Votes block-->
-    <parse name="votes_block" input="${details_page}" regex='&lt;div id="film_votes"&gt;.*?&lt;/div&gt;'/>
-    <parse name="votes" input="${votes_block}" regex='&lt;b&gt;([,\d]+)&lt;/b&gt;' />
+    <parse name="votes_block" input="${details_page}" regex="${rx_votes_block}"/>
+    <parse name="votes" input="${votes_block}" regex="${rx_votes}" />
 
     <!-- Score -->
     <multiply name="score" value1="${votes[1][0]:htmldecode}" value2="2"/>
