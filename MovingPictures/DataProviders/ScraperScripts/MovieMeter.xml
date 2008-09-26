@@ -25,7 +25,7 @@
     <language>Dutch</language>
 
     <!-- If set to true, additional logging will be displayed during script execution. -->
-    <debug>true</debug>
+    <debug>false</debug>
   </details>
   
   <action name="search">
