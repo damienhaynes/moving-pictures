@@ -73,6 +73,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ConfigScreen\Controls\IDBFieldBackedControl.cs" />
+    <Compile Include="ConfigScreen\DataProviderPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\DataProviderPane.Designer.cs">
+      <DependentUpon>DataProviderPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\DesignMode\DatabaseTableTypeConverter.cs" />
     <Compile Include="ConfigScreen\DesignMode\DBFieldTypeConverter.cs" />
     <Compile Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.cs">
@@ -187,6 +193,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Controls\DBObjectList.resx">
       <DependentUpon>DBObjectList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\DataProviderPane.resx">
+      <DependentUpon>DataProviderPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.resx">
