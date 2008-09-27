@@ -5,13 +5,11 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using MediaPortal.Plugins.MovingPictures.Database;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using Cornerstone.GUI.Dialogs;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
+namespace Cornerstone.GUI.Controls {
     public partial class AttributesEditor : UserControl {
         public AttributesEditor() {
             InitializeComponent();

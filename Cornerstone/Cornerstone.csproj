@@ -37,6 +37,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -57,7 +59,49 @@
     <Compile Include="Database\Tables\DatabaseTable.cs" />
     <Compile Include="Database\Tables\DBAttribute.cs" />
     <Compile Include="Database\Tables\DBSetting.cs" />
+    <Compile Include="GUI\AdvancedSettingsPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\AdvancedSettingsPane.Designer.cs">
+      <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Controls\AttributesEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\AttributesEditor.Designer.cs">
+      <DependentUpon>AttributesEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Controls\DBComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\DBObjectEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\DBTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\DesignMode\DatabaseTableTypeConverter.cs" />
+    <Compile Include="GUI\DesignMode\DBFieldTypeConverter.cs" />
+    <Compile Include="GUI\DesignMode\DBObjectListFieldEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DesignMode\DBObjectListFieldEditor.Designer.cs">
+      <DependentUpon>DBObjectListFieldEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Controls\IDBBackedControl.cs" />
+    <Compile Include="GUI\Controls\IDBFieldBackedControl.cs" />
+    <Compile Include="GUI\Dialogs\AttributeTypeEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Dialogs\AttributeTypeEditor.Designer.cs">
+      <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ScraperEngine\Nodes\ActionNode.cs" />
     <Compile Include="ScraperEngine\Nodes\DistanceNode.cs" />
     <Compile Include="ScraperEngine\Nodes\IfNode.cs" />
@@ -76,6 +120,37 @@
       <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
       <Name>Databases</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GUI\AdvancedSettingsPane.resx">
+      <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Controls\AttributesEditor.resx">
+      <DependentUpon>AttributesEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Controls\DBObjectEditor.resx">
+      <DependentUpon>DBObjectEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DesignMode\DBObjectListFieldEditor.resx">
+      <DependentUpon>DBObjectListFieldEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Dialogs\AttributeTypeEditor.resx">
+      <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\list-add.png" />
+    <Content Include="Images\list-remove.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -23,17 +23,16 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
-            MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty2 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
-            MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty3 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
-            MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty4 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
-            MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty5 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty1 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty2 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty3 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty4 = new Cornerstone.GUI.Controls.FieldProperty();
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.detailsPage = new System.Windows.Forms.TabPage();
             this.coversPage = new System.Windows.Forms.TabPage();
             this.backdropsPage = new System.Windows.Forms.TabPage();
-            this.dbObjectList1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.DBObjectList();
+            this.dbObjectEditor = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.groupBox.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.detailsPage.SuspendLayout();
@@ -66,7 +65,7 @@
             // 
             // detailsPage
             // 
-            this.detailsPage.Controls.Add(this.dbObjectList1);
+            this.detailsPage.Controls.Add(this.dbObjectEditor);
             this.detailsPage.Location = new System.Drawing.Point(4, 25);
             this.detailsPage.Name = "detailsPage";
             this.detailsPage.Padding = new System.Windows.Forms.Padding(3);
@@ -95,29 +94,26 @@
             this.backdropsPage.Text = "Backdrops";
             this.backdropsPage.UseVisualStyleBackColor = true;
             // 
-            // dbObjectList1
+            // dbObjectEditor
             // 
-            this.dbObjectList1.DatabaseObject = null;
-            fieldProperty1.DisplayName = "Provider Type";
-            fieldProperty1.FieldName = "ProviderType";
-            fieldProperty2.DisplayName = "Selected Script";
-            fieldProperty2.FieldName = "SelectedScript";
-            fieldProperty3.DisplayName = "Details Priority";
-            fieldProperty3.FieldName = "DetailsPriority";
-            fieldProperty4.DisplayName = "Cover Priority";
-            fieldProperty4.FieldName = "CoverPriority";
-            fieldProperty5.DisplayName = "Backdrop Priority";
-            fieldProperty5.FieldName = "BackdropPriority";
-            this.dbObjectList1.FieldProperties.Add(fieldProperty1);
-            this.dbObjectList1.FieldProperties.Add(fieldProperty2);
-            this.dbObjectList1.FieldProperties.Add(fieldProperty3);
-            this.dbObjectList1.FieldProperties.Add(fieldProperty4);
-            this.dbObjectList1.FieldProperties.Add(fieldProperty5);
-            this.dbObjectList1.Location = new System.Drawing.Point(0, 0);
-            this.dbObjectList1.Name = "dbObjectList1";
-            this.dbObjectList1.Size = new System.Drawing.Size(423, 288);
-            this.dbObjectList1.TabIndex = 0;
-            this.dbObjectList1.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBSourceInfo);
+            this.dbObjectEditor.DatabaseObject = null;
+            fieldProperty1.DisplayName = "Full Path";
+            fieldProperty1.FieldName = "FullPath";
+            fieldProperty2.DisplayName = "Part";
+            fieldProperty2.FieldName = "Part";
+            fieldProperty3.DisplayName = "Ignored";
+            fieldProperty3.FieldName = "Ignored";
+            fieldProperty4.DisplayName = "Import Path";
+            fieldProperty4.FieldName = "ImportPath";
+            this.dbObjectEditor.FieldProperties.Add(fieldProperty1);
+            this.dbObjectEditor.FieldProperties.Add(fieldProperty2);
+            this.dbObjectEditor.FieldProperties.Add(fieldProperty3);
+            this.dbObjectEditor.FieldProperties.Add(fieldProperty4);
+            this.dbObjectEditor.Location = new System.Drawing.Point(7, 7);
+            this.dbObjectEditor.Name = "dbObjectEditor";
+            this.dbObjectEditor.Size = new System.Drawing.Size(410, 275);
+            this.dbObjectEditor.TabIndex = 0;
+            this.dbObjectEditor.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBLocalMedia);
             // 
             // DataProviderPane
             // 
@@ -140,6 +136,6 @@
         private System.Windows.Forms.TabPage detailsPage;
         private System.Windows.Forms.TabPage coversPage;
         private System.Windows.Forms.TabPage backdropsPage;
-        private MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.DBObjectList dbObjectList1;
+        private Cornerstone.GUI.Controls.DBObjectEditor dbObjectEditor;
     }
 }

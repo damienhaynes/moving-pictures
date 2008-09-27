@@ -50,42 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigScreen\AdvancedSettingsPane.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\AdvancedSettingsPane.Designer.cs">
-      <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ConfigScreen\Controls\AttributesEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\Controls\AttributesEditor.Designer.cs">
-      <DependentUpon>AttributesEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ConfigScreen\Controls\DBComboBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\Controls\IDBBackedControl.cs" />
-    <Compile Include="ConfigScreen\Controls\DBObjectList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\Controls\DBTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\Controls\IDBFieldBackedControl.cs" />
     <Compile Include="ConfigScreen\DataProviderPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ConfigScreen\DataProviderPane.Designer.cs">
       <DependentUpon>DataProviderPane.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ConfigScreen\DesignMode\DatabaseTableTypeConverter.cs" />
-    <Compile Include="ConfigScreen\DesignMode\DBFieldTypeConverter.cs" />
-    <Compile Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.Designer.cs">
-      <DependentUpon>DBObjectListFieldEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\ImportPathsPane.cs">
       <SubType>UserControl</SubType>
@@ -111,12 +80,6 @@
     <Compile Include="ConfigScreen\MovingPicturesConfig.Designer.cs">
       <DependentUpon>MovingPicturesConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\Popups\AttributeTypeEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\Popups\AttributeTypeEditor.Designer.cs">
-      <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="ConfigScreen\Popups\CoverPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,12 +97,6 @@
     </Compile>
     <Compile Include="ConfigScreen\Popups\SearchStringPopup.Designer.cs">
       <DependentUpon>SearchStringPopup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ConfigScreen\Popups\SettingPopup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\Popups\SettingPopup.Designer.cs">
-      <DependentUpon>SettingPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\Popups\SingleMovieImporterPopup.cs">
       <SubType>Form</SubType>
@@ -183,24 +140,8 @@
     <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.LocalMediaManagement.MediaMatches.datasource" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConfigScreen\AdvancedSettingsPane.resx">
-      <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\Controls\AttributesEditor.resx">
-      <DependentUpon>AttributesEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\Controls\DBObjectList.resx">
-      <DependentUpon>DBObjectList.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\DataProviderPane.resx">
       <DependentUpon>DataProviderPane.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\DesignMode\DBObjectListFieldEditor.resx">
-      <DependentUpon>DBObjectListFieldEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\ImportPathsPane.resx">
@@ -219,10 +160,6 @@
       <DependentUpon>MovingPicturesConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\Popups\AttributeTypeEditor.resx">
-      <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\CoverPopup.resx">
       <DependentUpon>CoverPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -233,10 +170,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\SearchStringPopup.resx">
       <DependentUpon>SearchStringPopup.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\Popups\SettingPopup.resx">
-      <DependentUpon>SettingPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\SingleMovieImporterPopup.resx">

@@ -1,5 +1,5 @@
 using Cornerstone.Database.Tables;
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
+namespace Cornerstone.GUI.Dialogs {
     partial class AttributeTypeEditor {
         /// <summary>
         /// Required designer variable.
@@ -24,13 +24,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
-            MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty2 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
-            MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty3 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
-            MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty4 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
-            MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty fieldProperty5 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty1 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty2 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty3 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty4 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty5 = new Cornerstone.GUI.Controls.FieldProperty();
             this.button1 = new System.Windows.Forms.Button();
-            this.attrDescrList = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.DBObjectList();
+            this.attrDescrList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.SuspendLayout();
             // 
             // button1
@@ -89,7 +89,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
 
         #endregion
 
-        private MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.DBObjectList attrDescrList;
+        private Cornerstone.GUI.Controls.DBObjectEditor attrDescrList;
         private System.Windows.Forms.Button button1;
     }
 }

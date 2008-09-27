@@ -1,4 +1,4 @@
-using MediaPortal.Plugins.MovingPictures.Database;
+using Cornerstone.GUI;
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     partial class MovingPicturesConfig {
         /// <summary>
@@ -31,7 +31,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieImporterPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieImporterPane();
             this.importPathsListView1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImportPathsPane();
             this.settingsTab = new System.Windows.Forms.TabPage();
-            this.advancedSettingsPane = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AdvancedSettingsPane();
+            this.advancedSettingsPane = new Cornerstone.GUI.AdvancedSettingsPane();
             this.mainTabControl.SuspendLayout();
             this.managerTab.SuspendLayout();
             this.importSettingsTab.SuspendLayout();

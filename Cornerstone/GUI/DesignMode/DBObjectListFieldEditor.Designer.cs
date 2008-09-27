@@ -1,4 +1,4 @@
-﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
+﻿namespace Cornerstone.GUI.DesignMode {
     partial class DBObjectListFieldEditorDialog {
         /// <summary>
         /// Required designer variable.

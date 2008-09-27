@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Cornerstone.Database;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
+namespace Cornerstone.GUI.Controls {
     interface IDBFieldBackedControl: IDBBackedControl {
 
         String DatabaseFieldName {

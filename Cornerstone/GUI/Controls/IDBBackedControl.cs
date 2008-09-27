@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
+namespace Cornerstone.GUI.Controls {
     public interface IDBBackedControl {
         // The database object type that the control displays data about.
         Type Table {

@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using MediaPortal.Plugins.MovingPictures.Database;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode;
 using System.Drawing.Design;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using Cornerstone.GUI.DesignMode;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
+namespace Cornerstone.GUI.Controls {
     [Designer(typeof(DBObjectListDesigner))]
-    public class DBObjectList: UserControl, IDBBackedControl {
+    public class DBObjectEditor: UserControl, IDBBackedControl {
+
         #region Private Variables
 
         DataGridView grid;
@@ -37,7 +37,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
                     // if we are SWITCHING table types, clear out the field properties
                     if (_table != null)
                         FieldProperties.Clear();
-                    
+
                     _table = value;
 
                     // populates the field list based on the new table
@@ -96,7 +96,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
 
         #endregion
 
-        public DBObjectList()
+        public DBObjectEditor()
             : base() {
             InitializeComponent();
 

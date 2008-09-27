@@ -6,12 +6,11 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Reflection;
-using MediaPortal.Plugins.MovingPictures.Database;
 using System.Globalization;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls;
 using Cornerstone.Database;
+using Cornerstone.GUI.Controls;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
+namespace Cornerstone.GUI.DesignMode {
     internal class DBFieldTypeConverter : TypeConverter {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
             if (sourceType == typeof(string) && context.Instance is IDBBackedControl) {

@@ -7,14 +7,14 @@ using System.Drawing.Design;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls;
 using System.ComponentModel.Design;
+using Cornerstone.GUI.Controls;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
+namespace Cornerstone.GUI.DesignMode {
     internal partial class DBObjectListFieldEditorDialog : Form {
         #region Private Variables
 
-        DBObjectList instance;
+        DBObjectEditor instance;
         
         #endregion
 
@@ -22,7 +22,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
             InitializeComponent();
         }
 
-        public DBObjectListFieldEditorDialog(DBObjectList instance) {
+        public DBObjectListFieldEditorDialog(DBObjectEditor instance) {
             InitializeComponent();
 
             this.instance = instance;
@@ -95,7 +95,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) {
             // Access the Property Browser's UI display service
             IWindowsFormsEditorService editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            DBObjectList instance = ((DBObjectList)context.Instance);
+            DBObjectEditor instance = ((DBObjectEditor)context.Instance);
 
             // display
             DBObjectListFieldEditorDialog dialog = new DBObjectListFieldEditorDialog(instance);
@@ -120,13 +120,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
         } private DesignerVerbCollection _verbs;
 
         void OnEditRowsSelected(object sender, EventArgs args) {
-            DBObjectList instance = ((DBObjectList)Control);
+            DBObjectEditor instance = ((DBObjectEditor)Control);
 
             DBObjectListFieldEditorDialog dialog = new DBObjectListFieldEditorDialog(instance);
             dialog.ShowDialog();
 
             // Change property value
-            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(DBObjectList))["FieldProperties"];
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(DBObjectEditor))["FieldProperties"];
             RaiseComponentChanging(property);
             instance.FieldProperties = dialog.GetFieldList();
             RaiseComponentChanged(property, null, instance.FieldProperties);

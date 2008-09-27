@@ -5,13 +5,11 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using MediaPortal.Plugins.MovingPictures.Database;
 using System.Collections;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
+namespace Cornerstone.GUI {
     public partial class AdvancedSettingsPane : UserControl {
         private SettingsManager settings;
         private DBSetting selectedSetting;
@@ -134,7 +132,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void commitSetting() {
             selectedSetting.Value = setValueTextBox.Text;
-            MovingPicturesCore.DatabaseManager.Commit(selectedSetting);
+            selectedSetting.Commit();
             updateSettingButton.Enabled = false;
         }
     }
