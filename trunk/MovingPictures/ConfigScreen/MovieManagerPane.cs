@@ -7,12 +7,13 @@ using System.Text;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using System.Diagnostics;
 using System.Collections;
 using System.Threading;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database;
+using Cornerstone.GUI.Controls;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {

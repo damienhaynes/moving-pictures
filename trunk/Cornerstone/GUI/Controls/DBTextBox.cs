@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using MediaPortal.Plugins.MovingPictures.Database;
 using System.Drawing;
 using System.ComponentModel;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using Cornerstone.GUI.DesignMode;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
+namespace Cornerstone.GUI.Controls {
     public class DBTextBox : TextBox, IDBFieldBackedControl, IDataGridViewEditingControl {
         #region Properties
 

@@ -6,12 +6,14 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Reflection;
-using MediaPortal.Plugins.MovingPictures.Database;
 using System.Globalization;
 using Cornerstone.Database.Tables;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
+namespace Cornerstone.GUI.DesignMode {
     internal class DatabaseTableTypeConverter : TypeConverter {
+        List<Type> validTypeList = new List<Type>();
+        List<Assembly> loadedAssemblies = new List<Assembly>();
+
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
             if (sourceType == typeof(string)) {
                 return true;
@@ -33,33 +35,40 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode {
 
         // Overrides the ConvertFrom method of TypeConverter.
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
-            if (value is string) 
-                foreach (Type currType in getTypeList()) 
-                    if (currType.Name.Equals((string)value))
+            if (value is string) {
+                List<Type> typeList = getTypeList();
+                foreach (Type currType in typeList) 
+                    if (currType.Name.Equals((string)value)) 
                         return currType;
-            
+            }
+
             return base.ConvertFrom(context, culture, value);
         }
 
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
             if (destinationType == typeof(string)) 
                 return ((Type)value).Name;
-            
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
         private List<Type> getTypeList() {
-            List<Type> validTypeList = new List<Type>();
+            // loop through all types in all loaded assemblies and see which have
+            // been tagged by our custom database attribute
+            Assembly[] assemblyList = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (Assembly currAssembly in assemblyList) {
+                if (!currAssembly.GlobalAssemblyCache)
+                    if (!loadedAssemblies.Contains(currAssembly)) {
+                        Type[] typeList = currAssembly.GetTypes();
+                        foreach (Type currType in typeList) {
+                            object[] customAttrArray = currType.GetCustomAttributes(true);
+                            foreach (object currAttr in customAttrArray) 
+                                if (currAttr.GetType() == typeof(DBTableAttribute)) 
+                                    validTypeList.Add(currType);
+                        }
+                    }
 
-            // loop through all types in the assembly and see which have been tagged by our 
-            // custom database attribute
-            Type[] typeList = Assembly.GetExecutingAssembly().GetTypes();
-            foreach (Type currType in typeList) {
-                object[] customAttrArray = currType.GetCustomAttributes(true);
-                foreach (object currAttr in customAttrArray)
-                    if (currAttr.GetType() == typeof(DBTableAttribute)) 
-                        validTypeList.Add(currType);
-                    
+                loadedAssemblies.Add(currAssembly);
             }
 
             return validTypeList;

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
-using MediaPortal.Plugins.MovingPictures.Database;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.DesignMode;
 using System.Collections;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using Cornerstone.GUI.DesignMode;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
+namespace Cornerstone.GUI.Controls {
     public class DBComboBox : ComboBox, IDBFieldBackedControl, IDataGridViewEditingControl {
         #region Private Variables
         private IEnumerable customChoices = null;

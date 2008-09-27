@@ -1,4 +1,4 @@
-﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
+﻿namespace Cornerstone.GUI {
     partial class AdvancedSettingsPane {
         /// <summary> 
         /// Required designer variable.

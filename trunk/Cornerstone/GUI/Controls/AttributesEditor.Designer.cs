@@ -1,4 +1,4 @@
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
+namespace Cornerstone.GUI.Controls {
     partial class AttributesEditor {
         /// <summary> 
         /// Required designer variable.
@@ -58,7 +58,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
             // 
             this.toolStripButton2.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_remove;
+            this.toolStripButton2.Image = global::Cornerstone.Properties.Resources.list_remove;
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
@@ -68,7 +68,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
             // 
             this.toolStripButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_add;
+            this.toolStripButton1.Image = global::Cornerstone.Properties.Resources.list_add;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
