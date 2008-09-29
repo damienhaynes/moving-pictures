@@ -7,18 +7,41 @@ using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using System.Reflection;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using System.Collections.ObjectModel;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class DataProviderManager {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         private static DataProviderManager instance = null;
         private static String lockObj = "";
         
         private DatabaseManager dbManager = null;
 
+        #region Properties
+        public ReadOnlyCollection<DBSourceInfo> MovieDetailSources {
+            get { return detailSources.AsReadOnly(); }
+        }
         private List<DBSourceInfo> detailSources;
+
+        public ReadOnlyCollection<DBSourceInfo> CoverSources {
+            get { return coverSources.AsReadOnly(); }
+        }
         private List<DBSourceInfo> coverSources;
+
+        public ReadOnlyCollection<DBSourceInfo> BackdropSources {
+            get { return backdropSources.AsReadOnly(); }
+        }
         private List<DBSourceInfo> backdropSources;
+
+        public ReadOnlyCollection<DBSourceInfo> AllSources {
+            get { return allSources.AsReadOnly(); }
+        }
         private List<DBSourceInfo> allSources;
+
+        #endregion
+
+        #region Constructors
 
         public static DataProviderManager GetInstance() {
             lock (lockObj) {
@@ -50,6 +73,67 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         }
 
+        #endregion
+
+        #region DataProvider Management Functionality
+
+        private void changePriority(DBSourceInfo source, DataType type, bool raise) {
+            // grab the correct list 
+            List<DBSourceInfo> sourceList;
+            switch (type) {
+                case DataType.DETAILS:
+                    sourceList = detailSources;
+                    break;
+                case DataType.COVERS:
+                    sourceList = coverSources;
+                    break;
+                case DataType.BACKDROPS:
+                    sourceList = backdropSources;
+                    break;
+                default:
+                    logger.Error("Unhandled datasource type: " + type.ToString());
+                    return;
+            }
+            
+            // make sure the specified source is in our list
+            if (!sourceList.Contains(source))
+                return;
+
+            if (source.GetPriority(type) == null) {
+                logger.Error("No priority set for " + type.ToString());
+                return;
+            }
+
+            // make sure our index is in sync
+            int index = sourceList.IndexOf(source);
+            int oldPriority = (int) source.GetPriority(type);
+            if (index != oldPriority)
+                logger.Warn("Priority and List.IndexOf out of sync...");
+
+            // raise priority 
+            if (raise) {
+                if (source.GetPriority(type) > 0) {
+                    source.SetPriority(type, oldPriority - 1);
+                    sourceList[index - 1].SetPriority(type, oldPriority);
+                }
+            }
+
+            // lower priority
+            else {
+                if (source.GetPriority(type) < sourceList.Count - 1) {
+                    source.SetPriority(type, oldPriority + 1);
+                    sourceList[index + 1].SetPriority(type, oldPriority);
+                }
+            }
+
+            // resort the list
+            sourceList.Sort();
+        }
+
+
+
+        #endregion
+
         #region DataProvider Loading Logic
 
         private void loadProvidersFromDatabase() {
@@ -72,7 +156,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             DBScriptInfo scriptInfo = new DBScriptInfo();
             scriptInfo.Contents = script;
-
+            
             foreach (DBSourceInfo currSource in allSources)
                 if (currSource.Scripts.Contains(scriptInfo)) {
                     return;
@@ -83,6 +167,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             newSource.ProviderType = providerType;
             newSource.Scripts.Add(scriptInfo);
             newSource.SelectedScript = scriptInfo;
+
+            //((IScriptableMovieProvider) newSource.Provider).
 
             // add and commit
             addToLists(newSource);
@@ -115,6 +201,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         #endregion
 
+        #region Data Loading Methods
+
         public List<DBMovieInfo> Get(MovieSignature movieSignature) {
             return detailSources[0].Provider.Get(movieSignature);
         }
@@ -140,5 +228,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             return false;
         }
+
+        #endregion
     }
 }

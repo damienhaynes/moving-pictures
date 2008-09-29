@@ -166,13 +166,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(progressListener);
                 MovingPicturesCore.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
 
-                // fixes a bug in DataGridView. switching to tab it is on forces
-                // it to initialize, so adding stuff to the binding source works properly
+                // the importer needs to be displayed on load, however briefly, to get things 
+                // initialized. It is currently the first tab so this is not needed right now.
                 // tabControl.SelectedIndex = 1;
                 // tabControl.SelectedIndex = 0;
-
-                // for now lets start on the second tab though
-                tabControl.SelectedIndex = 1;
 
                 MovingPicturesCore.Importer.Start();
                 
@@ -190,7 +187,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         // If this pane has been destroyed, that means the Config screen has shut down, so 
         // the importer also should be  stopped.
         void MovieImporterPane_HandleDestroyed(object sender, System.EventArgs e) {
-            MovingPicturesCore.Importer.Stop();
+            if (!DesignMode)
+                MovingPicturesCore.Importer.Stop();
         }
 
         // Handles when the user modifies data in the unapproved matches list

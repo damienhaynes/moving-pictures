@@ -27,10 +27,9 @@
     </setting>    
   </group>
 
-  
   <group name="Movie Importer">
     <group name="General">
-      
+
       <setting id="importer_thread_count" name="Thread Count" type="INT">
         <default>5</default>
         <description>The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.</description>
@@ -39,31 +38,31 @@
       <setting id="importer_strict_year" name="Only Show Results From Same Year" type="BOOL">
         <default>false</default>
         <description>If a year keyword is detected and no exact match is found only show the results from the same year or blank year. (experimental)</description>
-      </setting>      
- 
+      </setting>
+
       <setting id="importer_autoapprove" name="Title Auto-Approve Threshold" type="INT">
         <default>1</default>
         <description>This is the maximum value for the levenshtein distance that is used for triggering auto-approval on close matching titles.</description>
-      </setting>      
+      </setting>
 
     </group>
-    
+
     <group name="Local Media Parser">
 
       <setting id="importer_prefer_foldername" name="Prefer Folder For Single Part Movies" type="BOOL">
         <default>true</default>
         <description>If a folder contains just one movie it will use the folder name for matching. If you are sure that the filenames are more accurate than the folder name disable this setting.</description>
       </setting>
-      
+
       <setting id="importer_filter" name="Regular Expression Noise Filter" type="STRING">
         <default>((720p|1080p|1080i|DirCut|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264|dxva)[-]?.*?$)</default>
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
 
     </group>
-    
+
     <group name="NFO Scanner">
-      
+
       <setting id="importer_nfoscan" name="Enable Scanner" type="BOOL">
         <default>true</default>
         <description>Scan for NFO file and if available parse out the IMDB id.</description>
@@ -78,10 +77,10 @@
         <default>true</default>
         <description>If we found a match on IMDB id always auto-approve this match even if the other criteria doesn't match closely enough. </description>
       </setting>
-      
+
     </group>
-      
-      <!-- Sample Filter -->
+
+    <!-- Sample Filter -->
     <group name="Sample Filter">
       <setting id="importer_sample_keyword" name="Regular Expression String" type="STRING">
         <default>sample</default>
@@ -92,7 +91,7 @@
         <default>150</default>
         <description>If the filesize of the potential sample file is below this value it will be skipped.</description>
       </setting>
-      
+
     </group>
 
     <group name="Cover Art">
@@ -165,10 +164,10 @@
     </group-->
 
     <group name="Movie-XML Provider">
- 
+
       <setting id="xml_max_timeouts" name="Max Timeouts" type="INT">
         <default>10</default>
-        <description>The maximum number of timeouts received from the server before a thread returns an error condition.</description>        
+        <description>The maximum number of timeouts received from the server before a thread returns an error condition.</description>
       </setting>
 
       <setting id="xml_timeout_length" name="Timeout Length" type="INT">
@@ -179,10 +178,10 @@
       <setting id="xml_timeout_increment" name="Timeout Increment" type="INT">
         <default>1000</default>
         <description>The amount of time (in milliseconds) added to the timeout limit  after each timeout failure. A non-zero value will help when the server is experience a large amount of congestion.</description>
-      </setting> 
+      </setting>
 
     </group>
-    
+
     <group name="MovieBackdrops.com Provider">
 
       <setting id="moviedb_max_timeouts" name="Max Timeouts" type="INT">
@@ -230,7 +229,16 @@
       </setting>
 
     </group>
-   
+
   </group>
 
+  <group name="Configuration Screen">
+    
+    <setting id="config_advanced_nag" name="Show Advanced Settings Warning" type="BOOL">
+      <default>true</default>
+      <description>If set to false, the Advanced Settings warning screen will no longer be displayed when first clicking on the Advanced Settings tab.</description>
+    </setting>
+    
+  </group>
+  
 </MoviesPluginSettings>

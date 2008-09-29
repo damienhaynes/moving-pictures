@@ -117,7 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="infoLabel.Text" xml:space="preserve">
-    <value>Almost all configurable settings for Moving Pictures can be found here. Many of these settings are more easily modifiable in other places of the configuration screen. Some can only be changed here. Use caution when making modifications, it is possible to significantly degrade performance or render the plugin inoperable if a setting is incorrectly modified. If you are not sure what something is, do not modify it without first backing up your database. </value>
-  </data>
 </root>

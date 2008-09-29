@@ -130,6 +130,27 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap arrow_up {
+            get {
+                object obj = ResourceManager.GetObject("arrow_up", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap bug {
+            get {
+                object obj = ResourceManager.GetObject("bug", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap cog {
+            get {
+                object obj = ResourceManager.GetObject("cog", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap cross {
             get {
                 object obj = ResourceManager.GetObject("cross", resourceCulture);
@@ -298,14 +319,14 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///&lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;OFDb (German)&lt;/name&gt;
+        ///    &lt;name&gt;OFDb (German/DE)&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from ofdb.de&lt;/description&gt;
+        ///    &lt;description&gt;This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)&lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should change. EVE [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string OFDb {
             get {
@@ -323,6 +344,20 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         internal static System.Drawing.Bitmap resultset_previous {
             get {
                 object obj = ResourceManager.GetObject("resultset_previous", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap script_add {
+            get {
+                object obj = ResourceManager.GetObject("script_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap script_delete {
+            get {
+                object obj = ResourceManager.GetObject("script_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

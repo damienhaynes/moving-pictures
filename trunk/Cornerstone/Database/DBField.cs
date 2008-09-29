@@ -233,7 +233,7 @@ namespace Cornerstone.Database {
         // directly use the properties of the class, but this allows for iteration.
         public static ReadOnlyCollection<DBField> GetFieldList(Type tableType) {
             if (tableType == null || !DatabaseManager.IsDatabaseTableType(tableType))
-                return null;
+                return new List<DBField>().AsReadOnly();
 
             if (!fieldLists.ContainsKey(tableType)) {
 

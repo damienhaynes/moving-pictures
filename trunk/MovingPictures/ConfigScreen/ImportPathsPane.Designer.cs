@@ -111,7 +111,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.notesLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.notesLabel.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.notesLabel.BackColor = System.Drawing.SystemColors.Control;
             this.notesLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.notesLabel.Location = new System.Drawing.Point(7, 19);
             this.notesLabel.Multiline = true;
