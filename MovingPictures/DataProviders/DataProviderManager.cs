@@ -145,6 +145,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             addSource(typeof(ScriptableProvider), Resources.IMDb, 1);
             addSource(typeof(ScriptableProvider), Resources.MovieMeter, 2);
             addSource(typeof(ScriptableProvider), Resources.OFDb, 3);
+            addSource(typeof(ScriptableProvider), Resources.Allocine, 4);
             // addSource(typeof(MovieXMLProvider), 2);
             addSource(typeof(LocalProvider), 1);
             addSource(typeof(MeligroveProvider), 2);
