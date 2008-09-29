@@ -149,6 +149,8 @@ namespace Cornerstone.ScraperEngine {
                   value = HttpUtility.UrlEncode(value).Replace("+","%20");
                 if (modifier.Equals("htmldecode"))
                     value = HttpUtility.HtmlDecode(value);
+                 if (modifier.Equals("striptags"))
+                  value = Regex.Replace(value, @"<.+?>", string.Empty);
 
                 output.Insert(currMatch.Index + offset, value);
                 offset = offset - currMatch.Length + value.Length;
