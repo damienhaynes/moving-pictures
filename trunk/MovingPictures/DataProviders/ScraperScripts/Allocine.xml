@@ -15,7 +15,7 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874930</id>
-    <version major="0" minor="1" point="0"/>
+    <version major="0" minor="9" point="0"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -95,6 +95,12 @@
       ]]>
     </set>
 
+    <set name="rx_score">
+      <![CDATA[
+      Spectateurs</a></h5>.+?class="etoile_(\d)
+      ]]>
+    </set>    
+
     <retrieve name="details_page" url="${movie.details_url}"/>
     <parse name="details" input="${details_page}" regex="${rx_info}"/>
     
@@ -132,8 +138,13 @@
 
     <!-- Runtime -->
     <multiply name="minutes" value1="60" value2="${details[0][4]}"/>
-    <add name="movie.runtime" value1="${minutes}" value2="${details[0][5]}"/> 
-
+    <add name="movie.runtime" value1="${minutes}" value2="${details[0][5]}"/>
+    
+    <!-- Score -->
+    <parse name="score" input="${details_page}" regex="${rx_score}"/>
+    <multiply name="score" value1="${score[0][0]}" value2="25" />
+    <divide name="movie.score" value1="${score}" value2="10" />
+    
   </action>
 
 </ScriptableScraper>
