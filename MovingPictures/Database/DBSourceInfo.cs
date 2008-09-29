@@ -32,7 +32,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } protected DBScriptInfo selectedScript = null;
-
+        
         
         [DBRelation(AutoRetrieve = true)]
         public RelationList<DBSourceInfo, DBScriptInfo> Scripts {
@@ -70,6 +70,33 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } protected int? backdropPriority;
+
+        public void SetPriority(DataType type, int value) {
+            switch (type) {
+                case DataType.DETAILS:
+                    detailsPriority = value;
+                    break;
+                case DataType.COVERS:
+                    coverPriority = value; 
+                    break;
+                case DataType.BACKDROPS:
+                    backdropPriority = value;
+                    break;
+            }
+        }
+
+        public int? GetPriority(DataType type) {
+            switch (type) {
+                case DataType.DETAILS:
+                    return detailsPriority;
+                case DataType.COVERS:
+                    return coverPriority;
+                case DataType.BACKDROPS:
+                    return backdropPriority;
+                default:
+                    return null;
+            }
+        }
 
         #endregion
 

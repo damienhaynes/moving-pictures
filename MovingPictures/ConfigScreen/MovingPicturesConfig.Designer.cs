@@ -31,7 +31,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieImporterPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieImporterPane();
             this.importPathsListView1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImportPathsPane();
             this.settingsTab = new System.Windows.Forms.TabPage();
-            this.advancedSettingsPane = new Cornerstone.GUI.AdvancedSettingsPane();
+            this.aboutTabPage = new System.Windows.Forms.TabPage();
+            this.advancedSettingsWarningPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AdvancedSettingsWarningPane();
             this.mainTabControl.SuspendLayout();
             this.managerTab.SuspendLayout();
             this.importSettingsTab.SuspendLayout();
@@ -46,6 +47,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.mainTabControl.Controls.Add(this.managerTab);
             this.mainTabControl.Controls.Add(this.importSettingsTab);
             this.mainTabControl.Controls.Add(this.settingsTab);
+            this.mainTabControl.Controls.Add(this.aboutTabPage);
             this.mainTabControl.Location = new System.Drawing.Point(12, 12);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
@@ -106,7 +108,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // settingsTab
             // 
-            this.settingsTab.Controls.Add(this.advancedSettingsPane);
+            this.settingsTab.Controls.Add(this.advancedSettingsWarningPane1);
             this.settingsTab.Location = new System.Drawing.Point(4, 22);
             this.settingsTab.Name = "settingsTab";
             this.settingsTab.Padding = new System.Windows.Forms.Padding(3);
@@ -115,16 +117,23 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.settingsTab.Text = "Advanced Settings";
             this.settingsTab.UseVisualStyleBackColor = true;
             // 
-            // advancedSettingsPane
+            // aboutTabPage
             // 
-            this.advancedSettingsPane.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.advancedSettingsPane.Location = new System.Drawing.Point(0, 0);
-            this.advancedSettingsPane.Name = "advancedSettingsPane";
-            this.advancedSettingsPane.Size = new System.Drawing.Size(597, 542);
-            this.advancedSettingsPane.TabIndex = 1;
-            this.advancedSettingsPane.Tag = "";
+            this.aboutTabPage.Location = new System.Drawing.Point(4, 22);
+            this.aboutTabPage.Name = "aboutTabPage";
+            this.aboutTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.aboutTabPage.Size = new System.Drawing.Size(597, 542);
+            this.aboutTabPage.TabIndex = 3;
+            this.aboutTabPage.Text = "About";
+            this.aboutTabPage.UseVisualStyleBackColor = true;
+            // 
+            // advancedSettingsWarningPane1
+            // 
+            this.advancedSettingsWarningPane1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.advancedSettingsWarningPane1.Location = new System.Drawing.Point(3, 3);
+            this.advancedSettingsWarningPane1.Name = "advancedSettingsWarningPane1";
+            this.advancedSettingsWarningPane1.Size = new System.Drawing.Size(591, 536);
+            this.advancedSettingsWarningPane1.TabIndex = 0;
             // 
             // MovingPicturesConfig
             // 
@@ -155,8 +164,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.TabPage settingsTab;
         private ImportPathsPane importPathsListView1;
         private MovieImporterPane movieImporterPane1;
-        private AdvancedSettingsPane advancedSettingsPane;
         private System.Windows.Forms.TabPage managerTab;
         private MovieManagerPane movieManagerPane1;
+        private System.Windows.Forms.TabPage aboutTabPage;
+        private AdvancedSettingsWarningPane advancedSettingsWarningPane1;
     }
 }

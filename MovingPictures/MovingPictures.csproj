@@ -50,11 +50,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigScreen\DataProviderPane.cs">
+    <Compile Include="ConfigScreen\AdvancedSettingsWarningPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ConfigScreen\DataProviderPane.Designer.cs">
-      <DependentUpon>DataProviderPane.cs</DependentUpon>
+    <Compile Include="ConfigScreen\AdvancedSettingsWarningPane.Designer.cs">
+      <DependentUpon>AdvancedSettingsWarningPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\DataSourcePane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\DataSourcePane.Designer.cs">
+      <DependentUpon>DataSourcePane.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\ImportPathsPane.cs">
       <SubType>UserControl</SubType>
@@ -140,8 +146,12 @@
     <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.LocalMediaManagement.MediaMatches.datasource" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConfigScreen\DataProviderPane.resx">
-      <DependentUpon>DataProviderPane.cs</DependentUpon>
+    <EmbeddedResource Include="ConfigScreen\AdvancedSettingsWarningPane.resx">
+      <DependentUpon>AdvancedSettingsWarningPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\DataSourcePane.resx">
+      <DependentUpon>DataSourcePane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\ImportPathsPane.resx">
@@ -189,6 +199,7 @@
   <ItemGroup>
     <Content Include="DataProviders\ScraperScripts\IMPAwards.xml" />
     <Content Include="DataProviders\ScraperScripts\MovieMeter.xml" />
+    <Content Include="DataProviders\ScraperScripts\OFDb.xml" />
     <Content Include="Images\accept.png" />
     <Content Include="Images\approved.png" />
     <Content Include="Images\arrow_cross.png" />
@@ -197,8 +208,11 @@
     <Content Include="Images\arrow_join.png" />
     <Content Include="Images\arrow_rotate_clockwise.png" />
     <Content Include="Images\arrow_switch.png" />
+    <None Include="Images\arrow_up.png" />
+    <None Include="Images\bug.png" />
     <Content Include="Images\bullet_arrow_down.png" />
     <Content Include="Images\bullet_arrow_down_dark.png" />
+    <None Include="Images\cog.png" />
     <Content Include="Images\cross.png" />
     <Content Include="Images\exclamation.png" />
     <None Include="Images\folder_image.png" />
@@ -213,6 +227,8 @@
     <None Include="Images\noatunstop.png" />
     <None Include="Images\resultset_next.png" />
     <None Include="Images\resultset_previous.png" />
+    <Content Include="Images\script_add.png" />
+    <Content Include="Images\script_delete.png" />
     <Content Include="Images\tick.png" />
     <None Include="Images\zoom.png" />
     <None Include="Images\world_add.png" />

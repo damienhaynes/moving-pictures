@@ -17,7 +17,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
-            advancedSettingsPane.populateTree(MovingPicturesCore.SettingsManager);
+            advancedSettingsWarningPane1.SettingsPane.populateTree(MovingPicturesCore.SettingsManager);
         }
 
         private void MoviesPluginConfig_Load(object sender, EventArgs e) {
