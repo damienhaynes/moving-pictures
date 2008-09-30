@@ -57,7 +57,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
       logger.Debug("executing replace: " + xmlNode.OuterXml);
       string output = string.Empty;
       try { 
-        output = Regex.Replace(input, pattern, replacement);
+        output = Regex.Replace(parseString(variables, input), parseString(variables, pattern), parseString(variables, replacement));
       }
       catch (Exception) {
         logger.Error("An error occured while executing replace.");
