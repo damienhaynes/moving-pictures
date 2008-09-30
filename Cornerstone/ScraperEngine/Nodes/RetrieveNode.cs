@@ -15,13 +15,13 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return url; }
         } protected String url;
 
-        public string Session {
-          get { return session; }
-        } protected String session;
-
         public int MaxRetries {
             get { return maxRetries; }
         } protected int maxRetries;
+
+        public String UserAgent {
+          get { return userAgent; }
+        } protected String userAgent;
 
         public int Timeout {
             get { return timeout; }
@@ -46,16 +46,16 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 return;
             }
 
-            // grab method
-            try { session = xmlNode.Attributes["session"].Value; }
+            // grab user agent. if none specified use defaults
+            try { userAgent = xmlNode.Attributes["useragent"].Value; }
             catch (Exception) {
-              session = null;
+              userAgent = "Mozilla/5.0 (compatible; MSIE 7.0; Windows NT 5.1)";
             }
 
             // grab timeout and retry values. if none specified use defaults
             try { maxRetries = int.Parse(xmlNode.Attributes["retries"].Value); }
             catch (Exception) {
-                maxRetries = 5;
+              maxRetries = 5;
             }
 
             try { timeout = int.Parse(xmlNode.Attributes["timeout"].Value); }
@@ -86,6 +86,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
                         // builds the request and retrieves the responses from movie-xml.com
                         tryCount++;
                         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(parsedUrl);
+                        request.UserAgent = userAgent;
+                        if (DebugMode) logger.Debug("UserAgent: {0}", userAgent);  
                         request.CookieContainer = new CookieContainer();
                         request.Timeout = timeout + (timeoutIncrement * tryCount);
 
@@ -103,7 +105,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
                         // converts the resulting stream to a string for easier use
                         Stream resultData = response.GetResponseStream();
-                        StreamReader reader = new StreamReader(resultData, Encoding.Default, true);
+                        StreamReader reader = new StreamReader(resultData, Encoding.UTF8, true);
                         pageContents = reader.ReadToEnd().Replace('\0', ' ');
 
                         resultData.Close();
