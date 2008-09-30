@@ -1007,6 +1007,12 @@ namespace MediaPortal.Plugins.MovingPictures {
                 logger.Debug(property + " = \"" + value + "\"");
                 loggedProperties[property] = true;
             }
+
+            // If the value is empty always add a space
+            // otherwise the property will keep 
+            // displaying it's previous value
+            if (String.IsNullOrEmpty(value))
+              value = " ";
             
             GUIPropertyManager.SetProperty(property, value);
         }
