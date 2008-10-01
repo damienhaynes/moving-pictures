@@ -44,8 +44,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     // commonly used regexp
     public const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
-    public const string rxMultiPartScan = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|[0-9]+|i+))|[\(\[]\dof\d[\)\]]$|[^\s\d]([a-c0-9])$";
-    public const string rxMultiPartClean = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|[0-9]+|i+))|[\(\[]\dof\d[\)\]]$";
+    public const string rxMultiPartScan = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|\d+|i+))|[\(\[]\dof\d[\)\]]$|[^\s\d](\d+)$|([a-c])$";
+    public const string rxMultiPartClean = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|\d+|i+))|[\(\[]\dof\d[\)\]]$";
 
     public static Regex rxReplacePunctuation = new Regex(@"[\.\:\;\+\*]", RegexOptions.IgnoreCase);
     public static Regex rxCleanPunctuation = new Regex(@"[\[\]\'\`\,\""]", RegexOptions.IgnoreCase);
