@@ -611,6 +611,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       List<DBLocalMedia> currFileSet = new List<DBLocalMedia>();
       // Create the Multi-Part regular expression
       Regex rxMultiPart = new Regex(rxMultiPartScan, RegexOptions.IgnoreCase);
+      bool alwaysGroup = (bool)MovingPicturesCore.SettingsManager["importer_groupfolder"].Value;
 
       foreach (DBLocalMedia currFile in importFileList) {
         //string currFolder = currFile.File.DirectoryName;
@@ -646,6 +647,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             isAdditionalMatch = false;
             break;
           }
+
+          // if the setting always group files in the same folder is used just group them 
+          // without checking differences at all.
+          // @todo: maybe place this below the character differences count?
+          if (alwaysGroup)
+            break;
 
           // if the filename differ by more than two characters
           // assume they are not a pair
