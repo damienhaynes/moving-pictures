@@ -45,13 +45,18 @@
         <description>This is the maximum value for the levenshtein distance that is used for triggering auto-approval on close matching titles.</description>
       </setting>
 
+      <setting id="importer_groupfolder" name="Always Group Files In The Same Folder" type="BOOL">
+        <default>false</default>
+        <description>When enabled this option will ALWAYS group multiple files in one folder together (assuming a multi-part movie).</description>
+      </setting>
+
     </group>
 
     <group name="Local Media Parser">
 
       <setting id="importer_prefer_foldername" name="Prefer Folder For Single Part Movies" type="BOOL">
         <default>true</default>
-        <description>If a folder contains just one movie it will use the folder name for matching. If you are sure that the filenames are more accurate than the folder name disable this setting.</description>
+        <description>If a folder contains just one movie file it will use the folder name for matching. If you are sure that the filenames are more accurate than the folder name disable this setting.</description>
       </setting>
 
       <setting id="importer_filter" name="Regular Expression Noise Filter" type="STRING">
