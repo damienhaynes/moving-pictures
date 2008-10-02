@@ -1012,7 +1012,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             // otherwise the property will keep 
             // displaying it's previous value
             if (String.IsNullOrEmpty(value))
-              value = " ";
+              value = "";
             
             GUIPropertyManager.SetProperty(property, value);
         }
