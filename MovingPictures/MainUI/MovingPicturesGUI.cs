@@ -620,37 +620,57 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void playSelectedMovie() {
           if (SelectedMovie == null)
-                SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo; 
-   
-          playMovie(SelectedMovie, 1);
+                SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
+
+          int part = 1;
+          int parts = SelectedMovie.LocalMedia.Count;
+          int resumeTime = 0;
+          int resumePart = 0;
+
+          // Get User Settings for this movie
+          DBUserMovieSettings userSetting = SelectedMovie.UserSettings[0];
+          resumeTime = userSetting.ResumeTime;
+          resumePart = userSetting.ResumePart;
+
+          // If we have resume data ask the user if he wants to resume
+          // todo: customize the dialog
+          if ( resumeTime > 0 ) {
+            GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+            if (null == dlgYesNo) return;
+            dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); //resume movie?
+            dlgYesNo.SetLine(1, SelectedMovie.Title);
+            dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(resumeTime));
+            dlgYesNo.SetDefaultToYes(true);
+            dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
+
+            if (!dlgYesNo.IsConfirmed) resumeTime = 0; // reset resume time
+            if (resumeTime > 0) part = resumePart; // on resume set part also
+          }
+
+          // if we have a multi-part movie and we are not resuming
+          // ask which part the user wants to play
+          // todo: customize the dialog
+          if (parts > 1 && resumeTime == 0 ) {
+            GUIDialogFileStacking dlg = (GUIDialogFileStacking)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_FILESTACKING);
+            if (null != dlg) {
+              dlg.SetNumberOfFiles(parts);
+              dlg.DoModal(GUIWindowManager.ActiveWindow);
+              part = dlg.SelectedFile;
+              if (part < 1) return;
+            }
+          }
+
+          // Start playing the movie with defined parameters
+          playMovie(SelectedMovie, part, resumeTime);
         }
 
         private void playMovie(DBMovieInfo movie, int part) {
+          playMovie(movie, part, 0); 
+        }
+
+        private void playMovie(DBMovieInfo movie, int part, int resumeTime) {
             if (movie == null)
                 return;
-
-            int resumeTime = 0;
-            int resumePart = 0;
-
-            // Get User Settings for this movie
-            DBUserMovieSettings userSetting = movie.UserSettings[0];
-            resumeTime = userSetting.ResumeTime;
-            resumePart = userSetting.ResumePart;
-            
-            // If we have resume data ask the user if he wants to resume
-            // todo: customize
-            if ((resumePart >= part) && (resumeTime > 0)) {
-              GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
-              if (null == dlgYesNo) return;
-              dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); //resume movie?
-              dlgYesNo.SetLine(1, movie.Title);
-              dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(resumeTime));
-              dlgYesNo.SetDefaultToYes(true);
-              dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
-
-              if (!dlgYesNo.IsConfirmed) resumeTime = 0; // reset resume time
-              if (resumeTime > 0) part = resumePart; // on resume set part also
-            }
 
             DBLocalMedia localMediaToPlay = movie.LocalMedia[part - 1];
 
@@ -668,7 +688,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                             "Very sorry but something has gone wrong...", null, null);
                 return;
             }
-
 
             // grab media info
             string media = movie.LocalMedia[part - 1].FullPath;
