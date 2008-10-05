@@ -273,6 +273,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } RelationList<DatabaseTable, DBAttribute> _attributes;
 
+        [DBRelation(AutoRetrieve = true)]
+        public RelationList<DBMovieInfo, DBUserMovieSettings> UserSettings {
+          get {
+            if (_userSettings == null) {
+              _userSettings = new RelationList<DBMovieInfo, DBUserMovieSettings>(this);
+            }
+            return _userSettings;
+          }
+        } RelationList<DBMovieInfo, DBUserMovieSettings> _userSettings;
+
+
 
         [DBFieldAttribute(AllowAutoUpdate = false)]
         public StringList AlternateCovers {

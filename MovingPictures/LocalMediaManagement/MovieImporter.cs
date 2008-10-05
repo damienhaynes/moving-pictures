@@ -1006,15 +1006,19 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       movie.LocalMedia.Clear();
       movie.LocalMedia.AddRange(localMedia);
       movie.UnloadArtwork();
-      movie.Commit();
 
       // create user related data object for each user
+      movie.UserSettings.Clear();
       foreach (DBUser currUser in DBUser.GetAll()) {
         DBUserMovieSettings userSettings = new DBUserMovieSettings();
-        userSettings.Movie = movie;
         userSettings.User = currUser;
         userSettings.Commit();
+        movie.UserSettings.Add(userSettings);
       }
+
+      movie.Commit();
+      
+
     }
 
     // Associates the given file(s) to the given movie object. Also creates all

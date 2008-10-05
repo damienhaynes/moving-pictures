@@ -28,6 +28,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         Dictionary<string, bool> loggedProperties;
         
         private bool currentlyPlaying = false;
+        private DBMovieInfo currentMovie;
         private int currentPart = 1;
 
         private bool loaded = false;
@@ -153,6 +154,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             g_Player.PlayBackStarted += new g_Player.StartedHandler(OnPlayBackStarted);
             g_Player.PlayBackEnded += new g_Player.EndedHandler(OnPlayBackEnded);
+            g_Player.PlayBackStopped += new g_Player.StoppedHandler(OnPlayBackStopped);
 
             // setup the timer for delayed artwork loading
             int artworkDelay = (int)MovingPicturesCore.SettingsManager["gui_artwork_delay"].Value;
@@ -616,17 +618,41 @@ namespace MediaPortal.Plugins.MovingPictures {
             CurrentView = newView;
         }
 
-
-
         private void playSelectedMovie() {
-            playSelectedMovie(1);
+          if (SelectedMovie == null)
+                SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo; 
+   
+          playMovie(SelectedMovie, 1);
         }
 
-        private void playSelectedMovie(int part) {
-            if (SelectedMovie == null)
-                SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
+        private void playMovie(DBMovieInfo movie, int part) {
+            if (movie == null)
+                return;
 
-            DBLocalMedia localMediaToPlay = SelectedMovie.LocalMedia[part - 1];
+            int resumeTime = 0;
+            int resumePart = 0;
+
+            // Get User Settings for this movie
+            DBUserMovieSettings userSetting = movie.UserSettings[0];
+            resumeTime = userSetting.ResumeTime;
+            resumePart = userSetting.ResumePart;
+            
+            // If we have resume data ask the user if he wants to resume
+            // todo: customize
+            if ((resumePart >= part) && (resumeTime > 0)) {
+              GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+              if (null == dlgYesNo) return;
+              dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); //resume movie?
+              dlgYesNo.SetLine(1, movie.Title);
+              dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(resumeTime));
+              dlgYesNo.SetDefaultToYes(true);
+              dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
+
+              if (!dlgYesNo.IsConfirmed) resumeTime = 0; // reset resume time
+              if (resumeTime > 0) part = resumePart; // on resume set part also
+            }
+
+            DBLocalMedia localMediaToPlay = movie.LocalMedia[part - 1];
 
             // check for removable
             if (!localMediaToPlay.File.Exists && localMediaToPlay.ImportPath.Removable) {
@@ -643,9 +669,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
+
             // grab media info
-            string media = SelectedMovie.LocalMedia[part - 1].FullPath;
-            string ext = SelectedMovie.LocalMedia[part - 1].File.Extension;
+            string media = movie.LocalMedia[part - 1].FullPath;
+            string ext = movie.LocalMedia[part - 1].File.Extension;
             
             // check if the current media is an image file
             if (DaemonTools.IsImageFile(ext))
@@ -653,9 +680,19 @@ namespace MediaPortal.Plugins.MovingPictures {
             else
                 playFile(media);
 
-            // set the currently playign part if playback was successful
-            if (currentlyPlaying)
-                currentPart = part;
+            // set the currently playing part if playback was successful
+            if (currentlyPlaying) {
+              currentMovie = movie;
+              currentPart = part;
+
+              // use resume data if needed
+              if (resumeTime > 0 && g_Player.Playing) {
+                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SEEK_POSITION, 0, 0, 0, 0, 0, null);
+                msg.Param1 = (int)resumeTime;
+                GUIGraphicsContext.SendMessage(msg);
+              }
+
+            }
         }
 
 
@@ -887,24 +924,69 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
 
-        private void OnPlayBackStarted(MediaPortal.Player.g_Player.MediaType type, string filename) {
-            if (SelectedMovie != null && currentlyPlaying) {
-                Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
-                newThread.Start();
-            }
+        private void OnPlayBackStarted(g_Player.MediaType type, string filename) {
+          if (currentMovie != null && currentlyPlaying) {
+            logger.Info("OnPlayBackStarted filename={0} currentMovie={1}", filename, currentMovie.Title);
+            Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
+            newThread.Start();
+          }
         }
 
-        private void OnPlayBackEnded(MediaPortal.Player.g_Player.MediaType type, string filename) {
-            if (SelectedMovie != null && currentlyPlaying) {
-                if (SelectedMovie.LocalMedia.Count > 1 && SelectedMovie.LocalMedia.Count <= currentPart + 1) {
-                    currentPart++;
-                    playSelectedMovie(currentPart);
-                }
-                else {
-                    currentPart = 0;
-                    currentlyPlaying = false;
-                }
-            }
+        private void OnPlayBackEnded(g_Player.MediaType type, string filename) {
+          if (type != g_Player.MediaType.Video || currentMovie == null)
+            return;
+
+          logger.Info("OnPlayBackEnded filename={0} currentMovie={1} currentPart={2}", filename, currentMovie.Title, currentPart);
+          UpdateMovieResumeState(0);
+          if (currentMovie.LocalMedia.Count > 1 && currentMovie.LocalMedia.Count <= currentPart + 1) {
+            logger.Debug("Goto next part");
+            currentPart++;
+            playMovie(currentMovie, currentPart);
+          }
+          else {
+            currentPart = 0;
+            currentlyPlaying = false;
+            currentMovie = null;
+          }
+        }
+
+        private void OnPlayBackStopped(g_Player.MediaType type, int timeMovieStopped, string filename) {
+          if (type != g_Player.MediaType.Video || currentMovie == null )
+            return;
+
+          logger.Info("OnPlayBackStopped filename={0} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, currentMovie.Title, currentPart, timeMovieStopped);
+          UpdateMovieResumeState(timeMovieStopped);
+        }
+
+        
+        private void UpdateMovieResumeState(int timePlayed) {
+          UpdateMovieResumeState(currentMovie, currentPart, timePlayed);
+        }
+        
+        private void UpdateMovieResumeState(DBMovieInfo movie, int part, int timePlayed) {
+
+          // @TODO: DVD resume data
+          // @TODO: maybe this function should not be in the GUI code
+          // byte[] resumeData = null;
+          // g_Player.Player.GetResumeState(out resumeData);             
+          
+          // get the user settings for the default profile (for now)
+          DBUserMovieSettings userSetting = movie.UserSettings[0];
+
+          if (timePlayed > 0) {
+            // set part and time data 
+            userSetting.ResumePart = part;
+            userSetting.ResumeTime = timePlayed;
+            logger.Debug("Updating movie resume state.");
+          }
+          else {
+            // clear the resume settings
+            userSetting.ResumePart = 0;
+            userSetting.ResumeTime = 0;
+            logger.Debug("Clearing movie resume state.");
+          }
+          // save the changes to the user setting for this movie
+          userSetting.Commit();
         }
 
         // Updates the movie metadata on the playback screen (for when the user clicks info). 
@@ -912,12 +994,12 @@ namespace MediaPortal.Plugins.MovingPictures {
         // We want to update this after that happens so the correct info is there.
         private void UpdatePlaybackInfo() {
             Thread.Sleep(2000);
-            if (SelectedMovie != null) {
-                setProperty("#Play.Current.Title", SelectedMovie.Title);
-                setProperty("#Play.Current.Genre", SelectedMovie.Genres[0]);
-                setProperty("#Play.Current.Plot", SelectedMovie.Summary);
-                setProperty("#Play.Current.Thumb", SelectedMovie.CoverThumbFullPath);
-                setProperty("#Play.Current.Year", SelectedMovie.Year.ToString());
+            if (currentMovie != null) {
+              setProperty("#Play.Current.Title", currentMovie.Title);
+              setProperty("#Play.Current.Genre", currentMovie.Genres[0]);
+              setProperty("#Play.Current.Plot", currentMovie.Summary);
+              setProperty("#Play.Current.Thumb", currentMovie.CoverThumbFullPath);
+              setProperty("#Play.Current.Year", currentMovie.Year.ToString());
             }
         }
 
