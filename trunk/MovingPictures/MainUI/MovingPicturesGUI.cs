@@ -976,6 +976,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             playMovie(currentMovie, currentPart);
           }
           else {
+            updateMovieWatchedCounter(currentMovie);
             currentPart = 0;
             currentlyPlaying = false;
             currentMovie = null;
@@ -994,6 +995,16 @@ namespace MediaPortal.Plugins.MovingPictures {
           updateMovieResumeState(currentMovie, currentPart, timeMovieStopped, resumeData);
         }
 
+        private void updateMovieWatchedCounter(DBMovieInfo movie) {
+          if (movie == null) 
+            return;         
+          
+          // get the user settings for the default profile (for now)
+          DBUserMovieSettings userSetting = movie.UserSettings[0];
+          userSetting.Watched++; // increment watch counter
+          userSetting.Commit();
+        }
+      
         private void clearMovieResumeState(DBMovieInfo movie) {
           updateMovieResumeState(movie, 0, 0, null);
         }
