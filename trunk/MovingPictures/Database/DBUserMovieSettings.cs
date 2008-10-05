@@ -73,6 +73,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
         } private int _resumeTime;
 
+        [DBFieldAttribute(FieldName = "resume_data")]
+        public byte[] ResumeData {
+          get { return _resumeData; }
+
+          set {
+            _resumeData = value;
+            commitNeeded = true;
+          }
+        } private byte[] _resumeData;
+
         [DBRelation(AutoRetrieve = true)]
         public RelationList<DBUserMovieSettings, DBMovieInfo> AttachedMovies {
           get {

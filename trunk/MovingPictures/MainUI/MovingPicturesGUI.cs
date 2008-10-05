@@ -626,11 +626,13 @@ namespace MediaPortal.Plugins.MovingPictures {
           int parts = SelectedMovie.LocalMedia.Count;
           int resumeTime = 0;
           int resumePart = 0;
+          byte[] resumeData = null;
 
           // Get User Settings for this movie
           DBUserMovieSettings userSetting = SelectedMovie.UserSettings[0];
           resumeTime = userSetting.ResumeTime;
           resumePart = userSetting.ResumePart;
+          resumeData = userSetting.ResumeData;
 
           // If we have resume data ask the user if he wants to resume
           // todo: customize the dialog
@@ -661,14 +663,18 @@ namespace MediaPortal.Plugins.MovingPictures {
           }
 
           // Start playing the movie with defined parameters
-          playMovie(SelectedMovie, part, resumeTime);
+          playMovie(SelectedMovie, part, resumeTime, resumeData);
         }
 
         private void playMovie(DBMovieInfo movie, int part) {
-          playMovie(movie, part, 0); 
+          playMovie(movie, part, 0, null); 
         }
 
         private void playMovie(DBMovieInfo movie, int part, int resumeTime) {
+          playMovie(movie, part, resumeTime, null);
+        }
+
+        private void playMovie(DBMovieInfo movie, int part, int resumeTime, byte[] resumeData) {
             if (movie == null)
                 return;
 
@@ -706,9 +712,16 @@ namespace MediaPortal.Plugins.MovingPictures {
 
               // use resume data if needed
               if (resumeTime > 0 && g_Player.Playing) {
-                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SEEK_POSITION, 0, 0, 0, 0, 0, null);
-                msg.Param1 = (int)resumeTime;
-                GUIGraphicsContext.SendMessage(msg);
+                if (g_Player.IsDVD) {
+                  // Resume DVD 
+                  g_Player.Player.SetResumeState(resumeData);
+                }
+                else {
+                  // Resume Other
+                  GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SEEK_POSITION, 0, 0, 0, 0, 0, null);
+                  msg.Param1 = (int)resumeTime;
+                  GUIGraphicsContext.SendMessage(msg);
+                }
               }
 
             }
@@ -956,7 +969,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             return;
 
           logger.Info("OnPlayBackEnded filename={0} currentMovie={1} currentPart={2}", filename, currentMovie.Title, currentPart);
-          UpdateMovieResumeState(0);
+          clearMovieResumeState(currentMovie);
           if (currentMovie.LocalMedia.Count > 1 && currentMovie.LocalMedia.Count <= currentPart + 1) {
             logger.Debug("Goto next part");
             currentPart++;
@@ -974,20 +987,19 @@ namespace MediaPortal.Plugins.MovingPictures {
             return;
 
           logger.Info("OnPlayBackStopped filename={0} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, currentMovie.Title, currentPart, timeMovieStopped);
-          UpdateMovieResumeState(timeMovieStopped);
+
+          byte[] resumeData = null;
+          g_Player.Player.GetResumeState(out resumeData);
+
+          updateMovieResumeState(currentMovie, currentPart, timeMovieStopped, resumeData);
         }
 
-        
-        private void UpdateMovieResumeState(int timePlayed) {
-          UpdateMovieResumeState(currentMovie, currentPart, timePlayed);
+        private void clearMovieResumeState(DBMovieInfo movie) {
+          updateMovieResumeState(movie, 0, 0, null);
         }
         
-        private void UpdateMovieResumeState(DBMovieInfo movie, int part, int timePlayed) {
-
-          // @TODO: DVD resume data
-          // @TODO: maybe this function should not be in the GUI code
-          // byte[] resumeData = null;
-          // g_Player.Player.GetResumeState(out resumeData);             
+        private void updateMovieResumeState(DBMovieInfo movie, int part, int timePlayed, byte[] resumeData) {
+          // @TODO: maybe this function should not be in the GUI code  
           
           // get the user settings for the default profile (for now)
           DBUserMovieSettings userSetting = movie.UserSettings[0];
@@ -996,12 +1008,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             // set part and time data 
             userSetting.ResumePart = part;
             userSetting.ResumeTime = timePlayed;
+            userSetting.ResumeData = resumeData;
             logger.Debug("Updating movie resume state.");
           }
           else {
             // clear the resume settings
             userSetting.ResumePart = 0;
             userSetting.ResumeTime = 0;
+            userSetting.ResumeData = null;
             logger.Debug("Clearing movie resume state.");
           }
           // save the changes to the user setting for this movie
