@@ -197,17 +197,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private float _userScore;
 
-        [DBFieldAttribute(Default="false")]
-        public bool Watched {
-            get { return _watched; }
-
-            set {
-                _watched = value;
-                commitNeeded = true;
-            }
-        } private bool _watched;
-
-
         [DBFieldAttribute]
         public int Popularity {
             get { return _popularity; }

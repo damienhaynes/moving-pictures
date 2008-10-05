@@ -42,15 +42,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int? _userRating;
 
-
-        [DBFieldAttribute(Default = "false")]
-        public bool Watched {
+        [DBFieldAttribute(FieldName = "watched")]
+        public int Watched {
             get { return _watched; }
             set {
                 _watched = value;
                 commitNeeded = true;
             }
-        } private bool _watched;
+        } private int _watched;
         
         [DBFieldAttribute(FieldName = "resume_part")]
         public int ResumePart {
