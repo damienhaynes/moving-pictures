@@ -42,11 +42,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     private int percentDone;
 
-    // commonly used regexp
+    // common regular expression patterns
     public const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
-    public const string rxMultiPartScan = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|\d+|i+))|[\(\[]\dof\d[\)\]]$|[^\s\d](\d+)$|([a-c])$";
-    public const string rxMultiPartClean = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|\d+|i+))|[\(\[]\dof\d[\)\]]$";
-
+    public const string rxMultiPartClean = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|\d+|i+))|[\(\[]\d(of|-)\d[\)\]]$";
+    public const string rxMultiPartScan = rxMultiPartClean + @"|[^\s\d](\d+)$|([a-c])$";
+    
+    // common regular expressions
     public static Regex rxReplacePunctuation = new Regex(@"[\.\:\;\+\*]", RegexOptions.IgnoreCase);
     public static Regex rxCleanPunctuation = new Regex(@"[\[\]\'\`\,\""]", RegexOptions.IgnoreCase);
     public static Regex rxReplaceDoubleSpace = new Regex(@"\s{2,}", RegexOptions.IgnoreCase);
