@@ -410,7 +410,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
     private void OnMovieDeleted(DatabaseTable obj) {
       // if this is not a movie object, break
-      if (obj.GetType() != typeof(DBMovieInfo))
+        if (obj.GetType() != typeof(DBMovieInfo) || movieBrowser == null)
         return;
 
       logger.Info("Removing " + ((DBMovieInfo)obj).Title + " from list.");
@@ -424,7 +424,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
     private void OnMovieAdded(DatabaseTable obj) {
       // if this is not a movie object, break
-      if (obj.GetType() != typeof(DBMovieInfo))
+      if (obj.GetType() != typeof(DBMovieInfo) || movieBrowser == null)
         return;
 
       Predicate<GUIListItem> predicate = delegate(GUIListItem item) {

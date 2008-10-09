@@ -145,7 +145,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return rtn;
         }
 
-        
+        public override string ToString() {
+            return FullPath;
+        }        
+
+
         //public List<FileInfo> GetNewFiles() {
         //    List<FileInfo> fileOnDisk = GetAllFiles();
         //    List<DBLocalMedia> filesInDB = DBLocalMedia.GetAll();
