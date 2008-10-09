@@ -41,8 +41,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         ~MovieManagerPane() {
-            foreach (DBMovieInfo currMovie in listItems.Keys)
+            foreach (DBMovieInfo currMovie in listItems.Keys) {
                 currMovie.Commit();
+                foreach (DBLocalMedia currFile in currMovie.LocalMedia)
+                    currFile.Commit();
+            }
         }
 
         private void MovieManagerPane_Load(object sender, EventArgs e) {
@@ -209,27 +212,28 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void updateFilePanel() {
             // if no object selected (or multiple objects selected) clear details
             if (CurrentMovie == null) {
-                fileCombo.Items.Clear();
-                fileCombo.Enabled = false;
+                fileList.Items.Clear();
+                fileList.Enabled = false;
                 fileDetailsList.DatabaseObject = null;
                 return;
             }
 
             // populate file list combo
-            fileCombo.Items.Clear();
+            fileList.Items.Clear();
+            CurrentMovie.LocalMedia.Sort(new DBLocalMediaComparer());
             foreach (DBLocalMedia currFile in CurrentMovie.LocalMedia) 
-                fileCombo.Items.Add(currFile);
+                fileList.Items.Add(currFile);
 
             // select first file            
-            if (fileCombo.Items.Count > 0) {
-                fileCombo.SelectedIndex = 0;
+            if (fileList.Items.Count > 0) {
+                fileList.SelectedIndex = 0;
             }
 
             // only allow user to drop down if there is more than one movie file
-            if (fileCombo.Items.Count > 1)
-                fileCombo.Enabled = true;
+            if (fileList.Items.Count > 1)
+                fileList.Enabled = true;
             else
-                fileCombo.Enabled = false;
+                fileList.Enabled = false;
         }
 
         private void movieTree_AfterSelect(object sender, EventArgs e) {
@@ -360,9 +364,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
-        private void fileCombo_SelectedIndexChanged(object sender, EventArgs e) {
-            if (fileCombo.SelectedItem != null)
-                fileDetailsList.DatabaseObject = (DBLocalMedia) fileCombo.SelectedItem;
+        private void fileList_SelectedIndexChanged(object sender, EventArgs e) {
+            if (fileList.SelectedItem != null)
+                fileDetailsList.DatabaseObject = (DBLocalMedia)fileList.SelectedItem;
         }
 
         private void deleteMovieButton_Click(object sender, EventArgs e) {
@@ -388,10 +392,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void playMovieButton_Click(object sender, EventArgs e) {
-            if (fileCombo.SelectedItem == null)
+            if (fileList.SelectedItem == null)
                 return;
 
-            ProcessStartInfo processInfo = new ProcessStartInfo(((DBLocalMedia)fileCombo.SelectedItem).File.FullName);
+            ProcessStartInfo processInfo = new ProcessStartInfo(((DBLocalMedia)fileList.SelectedItem).File.FullName);
             Process.Start(processInfo);
         }
 
@@ -470,6 +474,36 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             artworkProgressBar.Visible = false;
         }
 
+        private void fileUpButton_Click(object sender, EventArgs e) {
+            int index = fileList.SelectedIndex;
+            if (index == 0)
+                return;
+
+            // swap the part# with the file above
+            int partA = ((DBLocalMedia)fileList.Items[index]).Part;
+            int partB = ((DBLocalMedia)fileList.Items[index - 1]).Part;
+            ((DBLocalMedia)fileList.Items[index]).Part = partB;
+            ((DBLocalMedia)fileList.Items[index - 1]).Part = partA;
+
+            updateFilePanel();
+            fileList.SelectedIndex = index - 1;
+        }
+
+        private void fileDownButton_Click(object sender, EventArgs e) {
+            int index = fileList.SelectedIndex;
+            if (index == fileList.Items.Count - 1)
+                return;
+
+            // swap the part# with the file above
+            int partA = ((DBLocalMedia)fileList.Items[index]).Part;
+            int partB = ((DBLocalMedia)fileList.Items[index + 1]).Part;
+            ((DBLocalMedia)fileList.Items[index]).Part = partB;
+            ((DBLocalMedia)fileList.Items[index + 1]).Part = partA;
+
+            updateFilePanel();
+            fileList.SelectedIndex = index + 1;
+        }
+
     }
 
 
@@ -484,6 +518,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             catch {
                 return 0;
             }
+        }
+    }
+
+    public class DBLocalMediaComparer : IComparer<DBLocalMedia> {
+        public int Compare(DBLocalMedia fileX, DBLocalMedia fileY) {
+            if (fileX.Part < fileY.Part)
+                return -1;
+            else
+                return 1;
         }
     }
 }
