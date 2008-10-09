@@ -54,14 +54,14 @@ namespace Cornerstone.Database.CustomTypes {
         }
 
         public bool RemoveIgnoreSisterList(DatabaseTable item) {
-            if (item.GetType() != typeof(T2))
+            if (item == null || item.GetType() != typeof(T2))
                 return false;
 
             return base.Remove((T2)item);
         }
 
         public void AddIgnoreSisterList(DatabaseTable item) {
-            if (item.GetType() != typeof(T2))
+            if (item == null || item.GetType() != typeof(T2))
                 return;
 
             base.Add((T2)item);

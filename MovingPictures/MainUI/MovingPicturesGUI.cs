@@ -1123,10 +1123,15 @@ namespace MediaPortal.Plugins.MovingPictures {
       Thread.Sleep(2000);
       if (currentMovie != null) {
         setProperty("#Play.Current.Title", currentMovie.Title);
-        setProperty("#Play.Current.Genre", currentMovie.Genres[0]);
         setProperty("#Play.Current.Plot", currentMovie.Summary);
         setProperty("#Play.Current.Thumb", currentMovie.CoverThumbFullPath);
         setProperty("#Play.Current.Year", currentMovie.Year.ToString());
+
+        if(currentMovie.Genres.Count > 0)
+          setProperty("#Play.Current.Genre", currentMovie.Genres[0]);
+        else
+          setProperty("#Play.Current.Genre", "");
+
       }
     }
 
