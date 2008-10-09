@@ -502,7 +502,7 @@ namespace MediaPortal.Plugins.MovingPictures {
       // If the listFilterString contains characters
       // filter the facade using the current filter string
       if (!String.IsNullOrEmpty(_listFilterString)) {
-        Log.Debug("List Filter Active: '{0}'", _listFilterString);
+        logger.Debug("List Filter Active: '{0}'", _listFilterString);
         
         // This is the "contains" predicate
         // @todo: StartsWith, EndsWith etc.. ?
@@ -511,12 +511,12 @@ namespace MediaPortal.Plugins.MovingPictures {
         };
         // Filter the list with the specified critera
         List<GUIListItem> filteredList = _listItems.FindAll(predicate);
-        // fill movieBrowser (facade) will the filtered list.
+        // fill movieBrowser (facade) with the filtered list.
         updateMovieBrowser(filteredList);
         
       }
       else {
-        // fill movieBrowser (facade) will all items.
+        // fill movieBrowser (facade) with all items.
         updateMovieBrowser(_listItems);
       }
     }
@@ -816,7 +816,7 @@ namespace MediaPortal.Plugins.MovingPictures {
       // try to grab a DVD IFO file off the newly mounted drive, and check if it exists
       string ifoPath = drive + @"\VIDEO_TS\VIDEO_TS.IFO";
       if (!System.IO.File.Exists(media)) {
-        showMessage("Error", "The image file does not contain an DVD!", null, null, null);
+        showMessage("Error", "The image file does not contain a DVD!", null, null, null);
         return;
       }
 
@@ -1074,7 +1074,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
       byte[] resumeData = null;
       g_Player.Player.GetResumeState(out resumeData);
-
+      
       updateMovieResumeState(currentMovie, currentPart, timeMovieStopped, resumeData);
     }
 
