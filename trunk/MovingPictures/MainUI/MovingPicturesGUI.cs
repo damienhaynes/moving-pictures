@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen;
 using MediaPortal.Dialogs;
@@ -419,10 +420,6 @@ namespace MediaPortal.Plugins.MovingPictures {
       removeMovieFromList(movie);
       // update the movie browser to reflect the changes
       updateMovieBrowser();
-
-      // if our selection has changed, update it
-      if (SelectedMovie != movieBrowser.SelectedListItem.TVTag)
-        SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
     }
 
     private void OnMovieAdded(DatabaseTable obj) {
@@ -501,7 +498,27 @@ namespace MediaPortal.Plugins.MovingPictures {
     
     // fills the movieBrowser (facade) with the current listitems
     private void updateMovieBrowser() {
-      updateMovieBrowser(_listItems);
+
+      // If the listFilterString contains characters
+      // filter the facade using the current filter string
+      if (!String.IsNullOrEmpty(_listFilterString)) {
+        Log.Debug("List Filter Active: '{0}'", _listFilterString);
+        
+        // This is the "contains" predicate
+        // @todo: StartsWith, EndsWith etc.. ?
+        Predicate<GUIListItem> predicate = delegate(GUIListItem item) {
+          return (NumPadEncode(item.Label).Contains(_listFilterString));
+        };
+        // Filter the list with the specified critera
+        List<GUIListItem> filteredList = _listItems.FindAll(predicate);
+        // fill movieBrowser (facade) will the filtered list.
+        updateMovieBrowser(filteredList);
+        
+      }
+      else {
+        // fill movieBrowser (facade) will all items.
+        updateMovieBrowser(_listItems);
+      }
     }
 
     // fills the movieBrowser (facade) with the given listitems
@@ -512,6 +529,10 @@ namespace MediaPortal.Plugins.MovingPictures {
       // Add the items
       foreach (GUIListItem item in items)
         movieBrowser.Add(item);
+
+      // if our selection has changed, update it
+      if (SelectedMovie != movieBrowser.SelectedListItem.TVTag)
+        SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
     }
 
     // Grabs the <define> tags from the skin for skin parameters from skinner.
@@ -539,11 +560,9 @@ namespace MediaPortal.Plugins.MovingPictures {
       }
     }
 
-
     protected override void OnPageDestroy(int new_windowId) {
       base.OnPageDestroy(new_windowId);
     }
-
 
     protected override void OnClicked(int controlId, GUIControl control, MediaPortal.GUI.Library.Action.ActionType actionType) {
       switch (controlId) {
@@ -954,13 +973,45 @@ namespace MediaPortal.Plugins.MovingPictures {
           if (CurrentView == ViewMode.DETAILS)
             CurrentView = previousView;
           else {
-            currentlyPlaying = false;
-            GUIWindowManager.ShowPreviousWindow();
+            // if a filter is active remove it
+            if (!String.IsNullOrEmpty(_listFilterString)) {
+              _listFilterString = string.Empty;
+              // update the movie browser
+              updateMovieBrowser();
+            }
+            else {
+              // show previous screen
+              currentlyPlaying = false;
+              GUIWindowManager.ShowPreviousWindow();
+            }
           }
           break;
         case Action.ActionType.ACTION_MUSIC_PLAY:
           // yes, the generic "play" action is called.... ACTION_MUSIC_PLAY...
           playSelectedMovie();
+          break;
+        case Action.ActionType.ACTION_KEY_PRESSED:
+          // List Filter
+          if ((action.m_key != null) && (CurrentView != ViewMode.DETAILS)) {
+            if (((action.m_key.KeyChar >= '0') && (action.m_key.KeyChar <= '9')) ||
+              action.m_key.KeyChar == '*' || action.m_key.KeyChar == '(' ||
+              action.m_key.KeyChar == '#' || action.m_key.KeyChar == '§') {
+
+              if (action.m_key.KeyChar == '*') {
+                // reset the list filter string
+                _listFilterString = string.Empty;
+              }
+              else {
+                // add the numeric code to the list filter string
+                Char key = (char)action.m_key.KeyChar;
+                _listFilterString += NumPadEncode(key.ToString());
+              }
+
+              // update the movie browser
+              updateMovieBrowser();
+              return;
+            }
+          }
           break;
         case Action.ActionType.ACTION_MOVE_RIGHT:
         case Action.ActionType.ACTION_MOVE_LEFT:
@@ -980,7 +1031,6 @@ namespace MediaPortal.Plugins.MovingPictures {
       if (parent != movieBrowser && parent != movieBrowser.FilmstripView &&
           parent != movieBrowser.ThumbnailView && parent != movieBrowser.ListView)
         return;
-
 
       // if we already are on this movie, exit
       if (SelectedMovie == item.TVTag)
@@ -1176,6 +1226,21 @@ namespace MediaPortal.Plugins.MovingPictures {
 
       GUIPropertyManager.SetProperty(property, value);
     }
+
+    public static string NumPadEncode(string input) {
+      string rtn = input.Trim();
+      rtn = Regex.Replace(rtn, @"[abc]", "2", RegexOptions.IgnoreCase);
+      rtn = Regex.Replace(rtn, @"[def]", "3", RegexOptions.IgnoreCase);
+      rtn = Regex.Replace(rtn, @"[ghi]", "4", RegexOptions.IgnoreCase);
+      rtn = Regex.Replace(rtn, @"[jkl]", "5", RegexOptions.IgnoreCase);
+      rtn = Regex.Replace(rtn, @"[mno]", "6", RegexOptions.IgnoreCase);
+      rtn = Regex.Replace(rtn, @"[pqrs]", "7", RegexOptions.IgnoreCase);
+      rtn = Regex.Replace(rtn, @"[tuv]", "8", RegexOptions.IgnoreCase);
+      rtn = Regex.Replace(rtn, @"[wxyz]", "9", RegexOptions.IgnoreCase);
+      rtn = Regex.Replace(rtn, @"[\s]", "0", RegexOptions.IgnoreCase);
+      return rtn;
+    }
+
   }
 
 
