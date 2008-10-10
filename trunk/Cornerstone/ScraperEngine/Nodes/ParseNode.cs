@@ -42,21 +42,20 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            logger.Debug("executing parse: " + xmlNode.OuterXml);
+            if (DebugMode) logger.Debug("executing parse: " + xmlNode.OuterXml);
             // parse variables from the input string
             string parsedInput = parseString(variables, input);
             string parsedName = parseString(variables, Name);
             string parsedPattern = parseString(variables, pattern);
 
             if (DebugMode) logger.Debug("name: " + parsedName + " ||| pattern: " + parsedPattern + " ||| input: " + parsedInput);
-            else logger.Debug("name: " + parsedName + " ||| pattern: " + parsedPattern);
 
             // try to find matches via regex pattern
             Regex regEx = new Regex(parsedPattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
             MatchCollection matches = regEx.Matches(parsedInput);
 
             if (matches.Count == 0) {
-                logger.Debug("Parse node returned no results... " + xmlNode.OuterXml);
+                if (DebugMode) logger.Debug("Parse node returned no results... " + xmlNode.OuterXml);
                 return;
             }
 

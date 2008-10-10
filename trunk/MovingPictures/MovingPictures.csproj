@@ -132,6 +132,10 @@
     <Compile Include="LocalMediaManagement\LocalMediaParser.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
     <Compile Include="MainUI\ConfigConnector.cs" />
+    <Compile Include="MainUI\MovieBrowser\IBrowserFilter.cs" />
+    <Compile Include="MainUI\MovieBrowser\MovieBrowser.cs" />
+    <Compile Include="MainUI\MovieBrowser\RemoteNumpadFilter.cs" />
+    <Compile Include="MainUI\MovieBrowser\WatchedFlagFilter.cs" />
     <Compile Include="MainUI\MovingPicturesGUI.cs" />
     <Compile Include="MovingPicturesCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

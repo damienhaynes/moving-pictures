@@ -25,10 +25,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            logger.Debug("executing if: " + xmlNode.OuterXml);
+            if (DebugMode) logger.Debug("executing if: " + xmlNode.OuterXml);
 
             string parsedTest = parseString(variables, test);
-            logger.Debug("executing if: " + parsedTest);
+            if (DebugMode) logger.Debug("executing if: " + parsedTest);
 
             // try to split the test on the operator, quit if we fail
             Regex splitter = new Regex("\\s*(.*?)\\s*(>=|<=|!=|=|<|>)\\s*(.*)$");

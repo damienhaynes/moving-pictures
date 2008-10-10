@@ -65,7 +65,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            logger.Debug("executing add: " + xmlNode.OuterXml);
+            if (DebugMode) logger.Debug("executing add: " + xmlNode.OuterXml);
 
             string parsedValue1 = parseString(variables, value1);
             string parsedValue2 = parseString(variables, value2);
@@ -93,7 +93,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            logger.Debug("executing subtract: " + xmlNode.OuterXml);
+            if (DebugMode) logger.Debug("executing subtract: " + xmlNode.OuterXml);
 
             string parsedValue1 = parseString(variables, value1);
             string parsedValue2 = parseString(variables, value2);
@@ -121,7 +121,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            logger.Debug("executing multiply: " + xmlNode.OuterXml);
+            if (DebugMode) logger.Debug("executing multiply: " + xmlNode.OuterXml);
             string parsedValue1 = parseString(variables, value1);
             string parsedValue2 = parseString(variables, value2);
 
@@ -148,7 +148,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            logger.Debug("executing divide: " + xmlNode.OuterXml);
+            if (DebugMode) logger.Debug("executing divide: " + xmlNode.OuterXml);
             string parsedValue1 = parseString(variables, value1);
             string parsedValue2 = parseString(variables, value2);
 
