@@ -709,6 +709,13 @@ namespace MediaPortal.Plugins.MovingPictures {
                 currentMovie = movie;
                 currentPart = part;
 
+                // store the duration of the file if it is not set
+                DBLocalMedia playingFile = currentMovie.LocalMedia[currentPart - 1];
+                if (playingFile.Duration == 0) {
+                    playingFile.Duration = (int)g_Player.Player.Duration;
+                    playingFile.Commit();
+                }
+
                 // use resume data if needed
                 if (resumeTime > 0 && g_Player.Playing) {
                     if (g_Player.IsDVD) {
@@ -775,18 +782,16 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void OnPlayBackStarted(g_Player.MediaType type, string filename) {
-            if (currentMovie != null && currentlyPlaying) {
-                logger.Info("OnPlayBackStarted filename={0} currentMovie={1}", filename, currentMovie.Title);
-                Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
-                newThread.Start();
-            }
+            // delay to possibly update the screen info
+            Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
+            newThread.Start();
         }
 
         private void OnPlayBackEnded(g_Player.MediaType type, string filename) {
             if (type != g_Player.MediaType.Video || currentMovie == null)
                 return;
 
-            logger.Info("OnPlayBackEnded filename={0} currentMovie={1} currentPart={2}", filename, currentMovie.Title, currentPart);
+            logger.Debug("OnPlayBackEnded filename={0} currentMovie={1} currentPart={2}", filename, currentMovie.Title, currentPart);
             clearMovieResumeState(currentMovie);
             if (currentMovie.LocalMedia.Count > 1 && currentMovie.LocalMedia.Count <= currentPart + 1) {
                 logger.Debug("Goto next part");
@@ -805,12 +810,26 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (type != g_Player.MediaType.Video || currentMovie == null)
                 return;
 
-            logger.Info("OnPlayBackStopped filename={0} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, currentMovie.Title, currentPart, timeMovieStopped);
+            int requiredWatchedPercent = (int) MovingPicturesCore.SettingsManager["gui_watch_percentage"].Value;
+            logger.Debug("OnPlayBackStopped filename={0} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, currentMovie.Title, currentPart, timeMovieStopped);
+            logger.Debug("Percentage: " + currentMovie.GetPercentage(currentPart, timeMovieStopped) + " Required: " + requiredWatchedPercent);
 
-            byte[] resumeData = null;
-            g_Player.Player.GetResumeState(out resumeData);
+            // if enough of the movie has been watched, hit the watched flag
+            if (currentMovie.GetPercentage(currentPart, timeMovieStopped) >= requiredWatchedPercent) {
+                updateMovieWatchedCounter(currentMovie);
+                clearMovieResumeState(currentMovie);
+            }
 
-            updateMovieResumeState(currentMovie, currentPart, timeMovieStopped, resumeData);
+            // otherwise, store resume data.
+            else {
+                byte[] resumeData = null;
+                g_Player.Player.GetResumeState(out resumeData);
+                updateMovieResumeState(currentMovie, currentPart, timeMovieStopped, resumeData);
+            }
+
+            currentPart = 0;
+            currentlyPlaying = false;
+            currentMovie = null;
         }
 
         private void updateMovieWatchedCounter(DBMovieInfo movie) {
@@ -890,7 +909,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         // We want to update this after that happens so the correct info is there.
         private void UpdatePlaybackInfo() {
             Thread.Sleep(2000);
-            if (currentMovie != null) {
+            if (currentMovie != null && currentlyPlaying) {
                 SetProperty("#Play.Current.Title", currentMovie.Title);
                 SetProperty("#Play.Current.Plot", currentMovie.Summary);
                 SetProperty("#Play.Current.Thumb", currentMovie.CoverThumbFullPath);

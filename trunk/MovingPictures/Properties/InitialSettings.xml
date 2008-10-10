@@ -24,7 +24,12 @@
     <setting id="home_name" name="Name for Home Screen" type="STRING">
       <default>Moving Pictures</default>
       <description>The name that appears on the home screen for the plugin.</description>
-    </setting>    
+    </setting>
+
+    <setting id="gui_watch_percentage" name="GUI Watch Percentage" type="INT">
+      <default>90</default>
+      <description>The percentage of a movie that must be watched before it will be flagged as watched. This also affects whether resume data is stored.</description>
+    </setting>
   </group>
 
   <group name="Movie Importer">

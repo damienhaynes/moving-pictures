@@ -375,6 +375,43 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             Delete();
         }
 
+        // the total runtime of all the files. returns 0 if the data has not yet been
+        // set in all of the dblocalmedia objects
+        public int ActualRuntime {
+            get {
+                if (actualRuntime == 0) {
+                    foreach (DBLocalMedia currFile in LocalMedia) {
+                        if (currFile.Duration == 0) {
+                            actualRuntime = 0;
+                            return 0;
+                        }
+
+                        actualRuntime += currFile.Duration;
+                    }
+
+                }
+                return actualRuntime;
+            }
+        } 
+        private int actualRuntime = 0;
+
+        // given a part number and the number of seconds into that part,
+        // returns the percentage 0.0-1.0 through the whole movie.
+        public int GetPercentage(int part, int time) {
+            if (part > LocalMedia.Count)
+                return 0;
+
+            float tally = time;
+            for (int i = 0; i < part; i++) {
+                if (LocalMedia[i].Duration == 0)
+                    return 0;
+
+                tally += LocalMedia[i].Duration;
+            }
+
+            return (int)(100 *(tally / (float) ActualRuntime));
+        }
+
         #endregion
 
         #region Coverart Management Methods
