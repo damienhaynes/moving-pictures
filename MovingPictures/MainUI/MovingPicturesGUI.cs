@@ -17,14 +17,19 @@ using Cornerstone.Database.Tables;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using MediaPortal.Util;
+using MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {
+        public enum ViewMode { LIST, SMALLICON, LARGEICON, FILMSTRIP, DETAILS }
+        
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public enum ViewMode { LIST, SMALLICON, LARGEICON, FILMSTRIP, FANART_FILMSTRIP, DETAILS }
-
         #region Private Variables
+
+        MovieBrowser browser;
+        RemoteNumpadFilter remoteFilter;
+        WatchedFlagFilter watchedFilter;
 
         Dictionary<string, string> defines;
         Dictionary<string, bool> loggedProperties;
@@ -37,15 +42,12 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private System.Timers.Timer updateArtworkTimer;
 
-        private List<GUIListItem> _listItems; // List Source
-        private string _listFilterString; // List Filter String
-
         #endregion
 
         #region GUI Controls
 
         [SkinControl(50)]
-        protected GUIFacadeControl movieBrowser = null;
+        protected GUIFacadeControl facade = null;
 
         [SkinControl(1)]
         protected GUIImage movieBackdrop = null;
@@ -85,37 +87,37 @@ namespace MediaPortal.Plugins.MovingPictures {
                 // if we are leaving details view, set focus back on the facade
                 if (previousView == ViewMode.DETAILS) {
                     ClearFocus();
-                    movieBrowser.Focus = true;
-                    movieBrowser.Visible = true;
+                    facade.Focus = true;
+                    facade.Visible = true;
                 }
 
                 switch (currentView) {
                     case ViewMode.LIST:
-                        movieBrowser.View = GUIFacadeControl.ViewMode.List;
+                        facade.View = GUIFacadeControl.ViewMode.List;
                         break;
                     case ViewMode.SMALLICON:
-                        movieBrowser.View = GUIFacadeControl.ViewMode.SmallIcons;
+                        facade.View = GUIFacadeControl.ViewMode.SmallIcons;
                         break;
                     case ViewMode.LARGEICON:
-                        movieBrowser.View = GUIFacadeControl.ViewMode.LargeIcons;
+                        facade.View = GUIFacadeControl.ViewMode.LargeIcons;
                         break;
                     case ViewMode.FILMSTRIP:
-                        movieBrowser.View = GUIFacadeControl.ViewMode.Filmstrip;
+                        facade.View = GUIFacadeControl.ViewMode.Filmstrip;
                         break;
                     case ViewMode.DETAILS:
                         ClearFocus();
 
-                        movieBrowser.Visible = false;
-                        movieBrowser.ListView.Visible = false;
-                        movieBrowser.ThumbnailView.Visible = false;
-                        movieBrowser.FilmstripView.Visible = false;
+                        facade.Visible = false;
+                        facade.ListView.Visible = false;
+                        facade.ThumbnailView.Visible = false;
+                        facade.FilmstripView.Visible = false;
 
                         playButton.Focus = true;
                         break;
                 }
 
-                if (movieBrowser.SelectedListItem != null)
-                    SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
+                if (facade.SelectedListItem != null)
+                    updateMovieDetails(facade.SelectedListItem.TVTag as DBMovieInfo);
 
                 UpdateArtwork();
             }
@@ -123,41 +125,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private ViewMode currentView;
         private ViewMode previousView;
 
-        // The currenty selected movie.
-        public DBMovieInfo SelectedMovie {
-            get {
-                return selectedMovie;
-            }
-
-            set {
-                if (selectedMovie == value)
-                    return;
-
-                if (selectedMovie != null)
-                    logger.Debug("SelectedMovie changed: " + selectedMovie.Title);
-
-                // load new data
-                selectedMovie = value;
-                //selectedIndex = movieBrowser.SelectedListItemIndex;
-                PublishDetails(SelectedMovie, "SelectedMovie");
-
-                // start the timer for new artwork loading
-                updateArtworkTimer.Stop();
-                updateArtworkTimer.Start();
-            }
-        }
-        private DBMovieInfo selectedMovie;
-
-        //public int SelectedIndex {
-        //    get {
-        //        return selectedIndex;
-        //    }
-        //}
-        //private int selectedIndex = 0;
-
         public MovingPicturesGUI() {
-            selectedMovie = null;
-
             g_Player.PlayBackStarted += new g_Player.StartedHandler(OnPlayBackStarted);
             g_Player.PlayBackEnded += new g_Player.EndedHandler(OnPlayBackEnded);
             g_Player.PlayBackStopped += new g_Player.StoppedHandler(OnPlayBackStopped);
@@ -169,8 +137,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             updateArtworkTimer.Interval = artworkDelay;
             updateArtworkTimer.AutoReset = false;
 
-            _listItems = new List<GUIListItem>();
-            _listFilterString = string.Empty;
             loggedProperties = new Dictionary<string, bool>();
         }
 
@@ -186,15 +152,15 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void UpdateArtwork() {
-            if (SelectedMovie == null)
+            if (browser.SelectedMovie == null)
                 return;
 
             string oldBackdrop = GUIPropertyManager.GetProperty("#MovingPictures.Backdrop");
             string oldCover = GUIPropertyManager.GetProperty("#MovingPictures.Coverart");
 
             // update backdrop and cover art
-            SetProperty("#MovingPictures.Backdrop", SelectedMovie.BackdropFullPath.Trim());
-            SetProperty("#MovingPictures.Coverart", SelectedMovie.CoverFullPath.Trim());
+            SetProperty("#MovingPictures.Backdrop", browser.SelectedMovie.BackdropFullPath.Trim());
+            SetProperty("#MovingPictures.Coverart", browser.SelectedMovie.CoverFullPath.Trim());
 
             // clear out previous textures for backdrop and cover art
             GUITextureManager.ReleaseTexture(oldBackdrop);
@@ -221,8 +187,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             // set backdrop visibility
-            if (backdropActive && SelectedMovie != null &&
-                SelectedMovie.BackdropFullPath.Trim().Length != 0)
+            if (backdropActive && browser.SelectedMovie != null &&
+                browser.SelectedMovie.BackdropFullPath.Trim().Length != 0)
 
                 movieBackdrop.Visible = true;
             else
@@ -243,9 +209,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 case ViewMode.LIST:
                     logger.Debug("LIST: " + defines["#list.available"].Equals("true"));
                     return defines["#list.available"].Equals("true");
-                case ViewMode.FANART_FILMSTRIP:
-                    logger.Debug("FANART_FILMSTRIP: false");
-                    return false;
                 case ViewMode.DETAILS:
                     logger.Debug("DETAILS: " + defines["#filmstrip.available"].Equals("true"));
                     return true;
@@ -256,11 +219,11 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void ClearFocus() {
-            if (movieBrowser != null) {
-                movieBrowser.Focus = false;
-                if (movieBrowser.ListView != null) movieBrowser.ListView.Focus = false;
-                if (movieBrowser.ThumbnailView != null) movieBrowser.ThumbnailView.Focus = false;
-                if (movieBrowser.FilmstripView != null) movieBrowser.FilmstripView.Focus = false;
+            if (facade != null) {
+                facade.Focus = false;
+                if (facade.ListView != null) facade.ListView.Focus = false;
+                if (facade.ThumbnailView != null) facade.ThumbnailView.Focus = false;
+                if (facade.FilmstripView != null) facade.FilmstripView.Focus = false;
             }
 
             if (cycleViewButton != null) cycleViewButton.Focus = false;
@@ -303,10 +266,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             // grab any <define> tags from the skin for later use
             LoadDefinesFromSkin();
 
-            // setup listeners for new or removed movies
-            MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(OnMovieDeleted);
-            MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(OnMovieAdded);
-
+            logger.Info("GUI Initialization Complete");
             return success;
         }
 
@@ -317,7 +277,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         protected override void OnPageLoad() {
             // if the component didn't load properly we probably have a bad skin file
-            if (movieBrowser == null) {
+            if (facade == null) {
                 GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
                 dialog.Reset();
                 dialog.SetHeading("Sorry, there was a problem loading skin file...");
@@ -331,23 +291,31 @@ namespace MediaPortal.Plugins.MovingPictures {
                 GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
                 dialog.Reset();
                 dialog.SetHeading("No Import Paths!");
-                dialog.SetLine(1, "It doesn't look like you have defined any");
-                dialog.SetLine(2, "import paths in the configuration screen.");
-                dialog.SetLine(3, "You shold close MediaPortal and launch the");
-                dialog.SetLine(4, "MediaPortal Configuration Screen to configure");
-                dialog.SetLine(5, "Moving Pictures.");
+                dialog.SetLine(1, "It doesn't look like you have");
+                dialog.SetLine(2, "defined any import paths. You");
+                dialog.SetLine(2, "should close MediaPortal and");
+                dialog.SetLine(4, "launch the MediaPortal");
+                dialog.SetLine(5, "Configuration Screen to");
+                dialog.SetLine(6, "configure Moving Pictures.");
                 dialog.DoModal(GetID);
                 GUIWindowManager.ShowPreviousWindow();
                 return;
             }
 
+            if (browser == null) {
+                browser = new MovieBrowser();
+                browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(updateMovieDetails);
+                
+                remoteFilter = new RemoteNumpadFilter();
+                browser.ActiveFilters.Add(remoteFilter);
 
-            // create our movie list
-            populateMovieListFromDatabase();
+                watchedFilter = new WatchedFlagFilter();
+                browser.ActiveFilters.Add(watchedFilter);
+            }
+            browser.Facade = facade;
 
             // add movies to facade
-            updateMovieBrowser();
-            movieBrowser.Focus = true;
+            facade.Focus = true;
 
             // if this is our first time loading, we need to setup our default view data
             if (!loaded) {
@@ -373,9 +341,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
             }
 
-            // if we have loaded before, lets update the facade selection to match our actual selection
+            // if we have loaded before, lets update the view to match our previous settings
             else {
-                selectMovieListItem(SelectedMovie);
                 ViewMode tmp = previousView;
                 CurrentView = CurrentView;
                 previousView = tmp;
@@ -400,7 +367,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                             playSelectedMovie();
                             break;
                         case Action.ActionType.ACTION_SELECT_ITEM:
-                            if (control == movieBrowser) {
+                            if (control == facade) {
                                 if (clickToDetails)
                                     CurrentView = ViewMode.DETAILS;
                                 else
@@ -438,45 +405,26 @@ namespace MediaPortal.Plugins.MovingPictures {
                     break;
                 case Action.ActionType.ACTION_PREVIOUS_MENU:
                     if (CurrentView == ViewMode.DETAILS)
+                        // return to the facade screen
                         CurrentView = previousView;
+                    else if (remoteFilter.Active)
+                        // if a remote filter is active remove it
+                        remoteFilter.Clear();
                     else {
-                        // if a filter is active remove it
-                        if (!String.IsNullOrEmpty(_listFilterString)) {
-                            _listFilterString = string.Empty;
-                            // update the movie browser
-                            updateMovieBrowser();
-                        }
-                        else {
-                            // show previous screen
-                            currentlyPlaying = false;
-                            GUIWindowManager.ShowPreviousWindow();
-                        }
+                        // show previous screen (exit the plug-in
+                        currentlyPlaying = false;
+                        GUIWindowManager.ShowPreviousWindow();
                     }
                     break;
                 case Action.ActionType.ACTION_MUSIC_PLAY:
-                    // yes, the generic "play" action is called.... ACTION_MUSIC_PLAY...
+                    // don't be confused, this is the generic PLAY action
                     playSelectedMovie();
                     break;
                 case Action.ActionType.ACTION_KEY_PRESSED:
                     // List Filter
                     if ((action.m_key != null) && (CurrentView != ViewMode.DETAILS)) {
-                        if (((action.m_key.KeyChar >= '0') && (action.m_key.KeyChar <= '9')) ||
-                          action.m_key.KeyChar == '*' || action.m_key.KeyChar == '(' ||
-                          action.m_key.KeyChar == '#' || action.m_key.KeyChar == '§') {
-
-                            if (action.m_key.KeyChar == '*') {
-                                // reset the list filter string
-                                _listFilterString = string.Empty;
-                            }
-                            else {
-                                // add the numeric code to the list filter string
-                                Char key = (char)action.m_key.KeyChar;
-                                _listFilterString += NumPadEncode(key.ToString());
-                            }
-
-                            // update the movie browser
-                            updateMovieBrowser();
-                        }
+                        if (!remoteFilter.KeyPress((char)action.m_key.KeyChar))
+                            base.OnAction(action);
                     }
                     else {
                         base.OnAction(action);
@@ -518,34 +466,41 @@ namespace MediaPortal.Plugins.MovingPictures {
             dialog.Reset();
             dialog.SetHeading("Moving Pictures");
 
+            GUIListItem watchItem = new GUIListItem(watchedFilter.Active ? "Show All Movies" : "Show Only Unwatched Movies");
+            watchItem.ItemId = 1;
+            dialog.Add(watchItem);
+
             GUIListItem listItem = new GUIListItem("List View");
-            listItem.ItemId = 1;
+            listItem.ItemId = 2;
             dialog.Add(listItem);
 
             GUIListItem thumbItem = new GUIListItem("Thumbnail View");
-            thumbItem.ItemId = 2;
+            thumbItem.ItemId = 3;
             dialog.Add(thumbItem);
 
             GUIListItem largeThumbItem = new GUIListItem("Large Thumbnail View");
-            largeThumbItem.ItemId = 3;
+            largeThumbItem.ItemId = 4;
             dialog.Add(largeThumbItem);
 
             GUIListItem filmItem = new GUIListItem("Filmstrip View");
-            filmItem.ItemId = 4;
+            filmItem.ItemId = 5;
             dialog.Add(filmItem);
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             switch (dialog.SelectedId) {
                 case 1:
-                    CurrentView = ViewMode.LIST;
+                    watchedFilter.Active = !watchedFilter.Active;
                     break;
                 case 2:
-                    CurrentView = ViewMode.SMALLICON;
+                    CurrentView = ViewMode.LIST;
                     break;
                 case 3:
-                    CurrentView = ViewMode.LARGEICON;
+                    CurrentView = ViewMode.SMALLICON;
                     break;
                 case 4:
+                    CurrentView = ViewMode.LARGEICON;
+                    break;
+                case 5:
                     CurrentView = ViewMode.FILMSTRIP;
                     break;
             }
@@ -561,14 +516,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             detailsItem.ItemId = 1;
             dialog.Add(detailsItem);
 
-            if (SelectedMovie.AlternateCovers.Count > 1) {
+            if (browser.SelectedMovie.AlternateCovers.Count > 1) {
                 GUIListItem cycleArtItem = new GUIListItem("Cycle Cover-Art");
                 cycleArtItem.ItemId = 2;
                 dialog.Add(cycleArtItem);
             }
 
-            if (selectedMovie.CoverFullPath.Trim().Length == 0 ||
-                selectedMovie.BackdropFullPath.Trim().Length == 0) {
+            if (browser.SelectedMovie.CoverFullPath.Trim().Length == 0 ||
+                browser.SelectedMovie.BackdropFullPath.Trim().Length == 0) {
                 GUIListItem retrieveArtItem = new GUIListItem("Check for Missing Artwork Online");
                 retrieveArtItem.ItemId = 3;
                 dialog.Add(retrieveArtItem);
@@ -580,8 +535,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                     updateDetails();
                     break;
                 case 2:
-                    SelectedMovie.NextCover();
-                    SelectedMovie.Commit();
+                    browser.SelectedMovie.NextCover();
+                    browser.SelectedMovie.Commit();
                     UpdateArtwork();
                     break;
                 case 3:
@@ -625,10 +580,10 @@ namespace MediaPortal.Plugins.MovingPictures {
             dialog.SetDefaultToYes(false);
             dialog.DoModal(GetID);
 
-            if (dialog.IsConfirmed && SelectedMovie != null) {
-                MovingPicturesCore.DataProviderManager.Update(SelectedMovie);
-                SelectedMovie.Commit();
-                PublishDetails(SelectedMovie, "SelectedMovie");
+            if (dialog.IsConfirmed && browser.SelectedMovie != null) {
+                MovingPicturesCore.DataProviderManager.Update(browser.SelectedMovie);
+                browser.SelectedMovie.Commit();
+                PublishDetails(browser.SelectedMovie, "SelectedMovie");
             }
 
 
@@ -637,19 +592,19 @@ namespace MediaPortal.Plugins.MovingPictures {
         // retrieves from online artwork for the currently selected movie
         // if and only if no artwork currently exists.
         private void retrieveMissingArt() {
-            if (SelectedMovie == null)
+            if (browser.SelectedMovie == null)
                 return;
 
-            if (SelectedMovie.CoverFullPath.Trim().Length == 0) {
-                MovingPicturesCore.DataProviderManager.GetArtwork(SelectedMovie);
-                SelectedMovie.UnloadArtwork();
-                SelectedMovie.Commit();
+            if (browser.SelectedMovie.CoverFullPath.Trim().Length == 0) {
+                MovingPicturesCore.DataProviderManager.GetArtwork(browser.SelectedMovie);
+                browser.SelectedMovie.UnloadArtwork();
+                browser.SelectedMovie.Commit();
             }
 
-            if (SelectedMovie.BackdropFullPath.Trim().Length == 0) {
-                new LocalProvider().GetBackdrop(SelectedMovie);
-                MovingPicturesCore.DataProviderManager.GetBackdrop(SelectedMovie);
-                SelectedMovie.Commit();
+            if (browser.SelectedMovie.BackdropFullPath.Trim().Length == 0) {
+                new LocalProvider().GetBackdrop(browser.SelectedMovie);
+                MovingPicturesCore.DataProviderManager.GetBackdrop(browser.SelectedMovie);
+                browser.SelectedMovie.Commit();
             }
 
             UpdateArtwork();
@@ -660,20 +615,22 @@ namespace MediaPortal.Plugins.MovingPictures {
         #region Playback Methods
 
         private void playSelectedMovie() {
-            if (SelectedMovie == null)
-                SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
+            if (browser.SelectedMovie == null) {
+                logger.Error("Tried to play when there is no selected movie!");
+                return;
+            }
 
             int part = 1;
-            int parts = SelectedMovie.LocalMedia.Count;
+            int parts = browser.SelectedMovie.LocalMedia.Count;
             int resumeTime = 0;
             int resumePart = 0;
             byte[] resumeData = null;
 
             // Get User Settings for this movie
-            if (SelectedMovie.UserSettings.Count > 0) {
-                resumeTime = SelectedMovie.UserSettings[0].ResumeTime;
-                resumePart = SelectedMovie.UserSettings[0].ResumePart;
-                resumeData = SelectedMovie.UserSettings[0].ResumeData;
+            if (browser.SelectedMovie.UserSettings.Count > 0) {
+                resumeTime = browser.SelectedMovie.UserSettings[0].ResumeTime;
+                resumePart = browser.SelectedMovie.UserSettings[0].ResumePart;
+                resumeData = browser.SelectedMovie.UserSettings[0].ResumeData;
             }
 
             // If we have resume data ask the user if he wants to resume
@@ -682,7 +639,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
                 if (null == dlgYesNo) return;
                 dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); //resume movie?
-                dlgYesNo.SetLine(1, SelectedMovie.Title);
+                dlgYesNo.SetLine(1, browser.SelectedMovie.Title);
                 dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(resumeTime));
                 dlgYesNo.SetDefaultToYes(true);
                 dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
@@ -705,7 +662,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             // Start playing the movie with defined parameters
-            playMovie(SelectedMovie, part, resumeTime, resumeData);
+            playMovie(browser.SelectedMovie, part, resumeTime, resumeData);
         }
 
         private void playMovie(DBMovieInfo movie, int part) {
@@ -900,184 +857,18 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
-        #region Facade / Movie Browser Management Methods
-
-        private void OnItemSelected(GUIListItem item, GUIControl parent) {
-            // if this is not a message from the facade, exit
-            if (parent != movieBrowser && parent != movieBrowser.FilmstripView &&
-                parent != movieBrowser.ThumbnailView && parent != movieBrowser.ListView)
-                return;
-
-            // if we already are on this movie, exit
-            if (SelectedMovie == item.TVTag)
-                return;
-
-            SelectedMovie = item.TVTag as DBMovieInfo;
-        }
-        
-        // selects the current GUIListItem in the movieBrowser based on a given DBMovieInfo object
-        private void selectMovieListItem(DBMovieInfo movie) {
-            selectMovieListItem(_listItems, movie);
-        }
-
-        // selects the current GUIListItem in the movieBrowser based on a DBMovieInfo ID
-        private void selectMovieListItem(int id) {
-            selectMovieListItem(_listItems, id);
-        }
-                
-        // selects the current GUIListItem in the movieBrowser based on a given DBMovieInfo object
-        private void selectMovieListItem(List<GUIListItem> activeList, DBMovieInfo movie) {
-            int id = 0;
-            if (movie != null)
-                id = movie.ID.GetValueOrDefault(0);
-            selectMovieListItem(activeList, id);
-        }
-
-        // selects the current GUIListItem in the movieBrowser based on a DBMovieInfo ID
-        // activeList is needed because the facade doesn't have FindIndex
-        private void selectMovieListItem(List<GUIListItem> activeList, int id) {
-            // if no valid id is given do nothing
-            if (id < 1)
-                return;
-            // this predicate returns the item that matches the movie id in the current list
-            Predicate<GUIListItem> predicate = delegate(GUIListItem item) {
-                return item.ItemId == id;
-            };
-            //select the movie from the list
-            movieBrowser.SelectedListItemIndex = activeList.FindIndex(predicate);
-        }
-
-        private void OnMovieAdded(DatabaseTable obj) {
-            // if this is not a movie object, break
-            if (obj.GetType() != typeof(DBMovieInfo) || movieBrowser == null)
-                return;
-
-            Predicate<GUIListItem> predicate = delegate(GUIListItem item) {
-                return item.ItemId == ((DBMovieInfo)obj).ID.Value;
-            };
-
-            // if this item is already in the list exit. This should never really happen though...  
-            if (_listItems.Exists(predicate)) {
-                logger.Warn("Received two \"added\" messages for " + (DBMovieInfo)obj);
-                return;
-            }
-
-            logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie list.");
-
-            // add movie to the list (and sort)
-            addMovieToList((DBMovieInfo)obj, true);
-            // update the movie browser to reflect the changes
-            updateMovieBrowser();
-        }
-
-        private void OnMovieDeleted(DatabaseTable obj) {
-            // if this is not a movie object, break
-            if (obj.GetType() != typeof(DBMovieInfo) || movieBrowser == null)
-                return;
-
-            logger.Info("Removing " + ((DBMovieInfo)obj).Title + " from list.");
-
-            // remove movie from list
-            DBMovieInfo movie = (DBMovieInfo)obj;
-            removeMovieFromList(movie);
-            // update the movie browser to reflect the changes
-            updateMovieBrowser();
-        }
-
-        private void populateMovieListFromDatabase() {
-            // clear the list
-            _listItems.Clear();
-
-            // populate the list
-            List<DBMovieInfo> movies = DBMovieInfo.GetAll();
-            foreach (DBMovieInfo currMovie in movies)
-                addMovieToList(currMovie);
-
-            // sort the list
-            _listItems.Sort(new GUIListItemMovieComparer());
-        }
-
-        private void addMovieToList(DBMovieInfo newMovie) {
-            addMovieToList(newMovie, false);
-        }
-
-        private void addMovieToList(DBMovieInfo newMovie, bool sortList) {
-            if (newMovie == null)
-                return;
-
-            // create a new list object
-            GUIListItem currItem = new GUIListItem();
-            currItem.ItemId = newMovie.ID.Value;
-            currItem.Label = newMovie.Title;
-            currItem.IconImage = newMovie.CoverThumbFullPath.Trim();
-            currItem.IconImageBig = newMovie.CoverThumbFullPath.Trim();
-            currItem.TVTag = newMovie;
-            currItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(OnItemSelected);
-
-            // add the listitem
-            _listItems.Add(currItem);
-
-            // sort list if requested
-            if (sortList)
-                _listItems.Sort(new GUIListItemMovieComparer());
-        }
-
-        private void removeMovieFromList(DBMovieInfo movie) {
-            if (movie == null)
-                return;
-
-            Predicate<GUIListItem> predicate = delegate(GUIListItem item) {
-                DBMovieInfo movieItem = (DBMovieInfo)item.TVTag;
-                return movieItem.ID == null;
-            };
-
-            // remove the item(s) from the list
-            _listItems.RemoveAll(predicate);
-        }
-
-        // fills the movieBrowser (facade) with the current listitems
-        private void updateMovieBrowser() {
-
-            // If the listFilterString contains characters
-            // filter the facade using the current filter string
-            if (!String.IsNullOrEmpty(_listFilterString)) {
-                logger.Debug("List Filter Active: '{0}'", _listFilterString);
-
-                // This is the "contains" predicate
-                // @todo: StartsWith, EndsWith etc.. ?
-                Predicate<GUIListItem> predicate = delegate(GUIListItem item) {
-                    return (NumPadEncode(item.Label).Contains(_listFilterString));
-                };
-                // Filter the list with the specified critera
-                List<GUIListItem> filteredList = _listItems.FindAll(predicate);
-                // fill movieBrowser (facade) with the filtered list.
-                updateMovieBrowser(filteredList);
-
-            }
-            else {
-                // fill movieBrowser (facade) with all items.
-                updateMovieBrowser(_listItems);
-            }
-        }
-
-        // fills the movieBrowser (facade) with the given listitems
-        private void updateMovieBrowser(List<GUIListItem> items) {
-            //
-            
-            // Clear the movie browser control (facade)
-            GUIControl.ClearControl(GetID, movieBrowser.GetID);
-
-            // Add the items
-            foreach (GUIListItem item in items)
-                movieBrowser.Add(item);
-
-            // keep selection
-            selectMovieListItem(items, SelectedMovie);
-        }
-        
-        #endregion
-
         #region Skin and Property Settings
+
+
+        private void updateMovieDetails(DBMovieInfo movie) {
+
+            PublishDetails(movie, "SelectedMovie");
+
+            // start the timer for new artwork loading
+            updateArtworkTimer.Stop();
+            updateArtworkTimer.Start();
+
+        }
 
         private void SetProperty(string property, string value) {
             if (!loggedProperties.ContainsKey(property)) {
@@ -1220,34 +1011,5 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
-        public static string NumPadEncode(string input) {
-            string rtn = input.Trim();
-            rtn = Regex.Replace(rtn, @"[abc]", "2", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[def]", "3", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[ghi]", "4", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[jkl]", "5", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[mno]", "6", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[pqrs]", "7", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[tuv]", "8", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[wxyz]", "9", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[\s]", "0", RegexOptions.IgnoreCase);
-            return rtn;
-        }
-
-    }
-
-
-    public class GUIListItemMovieComparer : IComparer<GUIListItem> {
-        public int Compare(GUIListItem x, GUIListItem y) {
-            try {
-                DBMovieInfo movieX = (DBMovieInfo)x.TVTag;
-                DBMovieInfo movieY = (DBMovieInfo)y.TVTag;
-
-                return movieX.SortBy.CompareTo(movieY.SortBy);
-            }
-            catch {
-                return 0;
-            }
-        }
     }
 }

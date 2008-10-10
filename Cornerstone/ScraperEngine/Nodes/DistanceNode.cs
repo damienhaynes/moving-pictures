@@ -36,11 +36,11 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            logger.Debug("executing distance: " + xmlNode.OuterXml);
+            if (DebugMode) logger.Debug("executing distance: " + xmlNode.OuterXml);
 
             string parsedString1 = parseString(variables, string1);
             string parsedString2 = parseString(variables, string2);
-            logger.Debug("executing distance: " + parsedString1 + " vs. " + parsedString2);
+            if (DebugMode) logger.Debug("executing distance: " + parsedString1 + " vs. " + parsedString2);
 
             int distance = AdvancedStringComparer.Levenshtein(parsedString1, parsedString2);
 

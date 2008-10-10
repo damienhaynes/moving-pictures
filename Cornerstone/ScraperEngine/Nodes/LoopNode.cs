@@ -23,7 +23,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         public LoopNode(XmlNode xmlNode, bool debugMode)
             : base(xmlNode, debugMode) {
 
-            logger.Debug("executing loop: " + xmlNode.OuterXml);
+            if (DebugMode) logger.Debug("executing loop: " + xmlNode.OuterXml);
 
             // try to grab the looping variable
             try { loopingVariable = xmlNode.Attributes["on"].Value; }

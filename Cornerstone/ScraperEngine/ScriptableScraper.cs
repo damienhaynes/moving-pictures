@@ -156,7 +156,7 @@ namespace Cornerstone.ScraperEngine {
         private void loadActionNodes() {
             actionNodes = new Dictionary<string, ScraperNode>();
             foreach (XmlNode currAction in xml.DocumentElement.SelectNodes("child::action")) {
-                ActionNode newNode = (ActionNode) ScraperNode.Load(currAction, debug);
+                ActionNode newNode = (ActionNode) ScraperNode.Load(currAction, false);
                 if (newNode != null && newNode.LoadSuccess)
                     actionNodes[newNode.Name] = newNode;
                 else {

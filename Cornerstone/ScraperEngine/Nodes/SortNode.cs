@@ -46,7 +46,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            logger.Debug("executing sort: " + xmlNode.OuterXml);
+            if (DebugMode) logger.Debug("executing sort: " + xmlNode.OuterXml);
 
             // get our initial parsed settings from the script
             string arrayName = parseString(variables, Name);

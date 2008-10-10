@@ -70,13 +70,13 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            logger.Debug("executing retrieve: " + xmlNode.OuterXml);
+            if (DebugMode) logger.Debug("executing retrieve: " + xmlNode.OuterXml);
 
             string parsedUrl = parseString(variables, url);
             string parsedName = parseString(variables, name);
             string pageContents = string.Empty;
 
-            logger.Debug("Retrieving URL: {0}", parsedUrl);
+            if (DebugMode) logger.Debug("Retrieving URL: {0}", parsedUrl);
 
             // start trying to retrieve the document
             int tryCount = 0;
