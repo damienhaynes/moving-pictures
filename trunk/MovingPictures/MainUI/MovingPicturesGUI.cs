@@ -138,7 +138,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 // load new data
                 selectedMovie = value;
-                selectedIndex = movieBrowser.SelectedListItemIndex;
+                //selectedIndex = movieBrowser.SelectedListItemIndex;
                 PublishDetails(SelectedMovie, "SelectedMovie");
 
                 // start the timer for new artwork loading
@@ -148,12 +148,12 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private DBMovieInfo selectedMovie;
 
-        public int SelectedIndex {
-            get {
-                return selectedIndex;
-            }
-        }
-        private int selectedIndex = 0;
+        //public int SelectedIndex {
+        //    get {
+        //        return selectedIndex;
+        //    }
+        //}
+        //private int selectedIndex = 0;
 
         public MovingPicturesGUI() {
             selectedMovie = null;
@@ -375,7 +375,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             // if we have loaded before, lets update the facade selection to match our actual selection
             else {
-                ReloadSelection();
+                selectMovieListItem(SelectedMovie);
                 ViewMode tmp = previousView;
                 CurrentView = CurrentView;
                 previousView = tmp;
@@ -458,8 +458,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                     playSelectedMovie();
                     break;
                 case Action.ActionType.ACTION_KEY_PRESSED:
-                    base.OnAction(action);
-                
                     // List Filter
                     if ((action.m_key != null) && (CurrentView != ViewMode.DETAILS)) {
                         if (((action.m_key.KeyChar >= '0') && (action.m_key.KeyChar <= '9')) ||
@@ -479,6 +477,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                             // update the movie browser
                             updateMovieBrowser();
                         }
+                    }
+                    else {
+                        base.OnAction(action);
                     }
                     break;
                 case Action.ActionType.ACTION_MOVE_RIGHT:
@@ -913,27 +914,37 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             SelectedMovie = item.TVTag as DBMovieInfo;
         }
+        
+        // selects the current GUIListItem in the movieBrowser based on a given DBMovieInfo object
+        private void selectMovieListItem(DBMovieInfo movie) {
+            selectMovieListItem(_listItems, movie);
+        }
 
-        // This will reselect the currently selected movie on the facade. Generally this
-        // is only neccisary when the plugin has been exited and reentered.
-        private void ReloadSelection() {
-            //Choose old value depending on type of view
-            if (movieBrowser.PlayListView != null)
-                movieBrowser.PlayListView.SelectedListItemIndex = SelectedIndex;
+        // selects the current GUIListItem in the movieBrowser based on a DBMovieInfo ID
+        private void selectMovieListItem(int id) {
+            selectMovieListItem(_listItems, id);
+        }
+                
+        // selects the current GUIListItem in the movieBrowser based on a given DBMovieInfo object
+        private void selectMovieListItem(List<GUIListItem> activeList, DBMovieInfo movie) {
+            int id = 0;
+            if (movie != null)
+                id = movie.ID.GetValueOrDefault(0);
+            selectMovieListItem(activeList, id);
+        }
 
-            if (movieBrowser.ListView != null)
-                movieBrowser.ListView.SelectedListItemIndex = SelectedIndex;
-
-            if (movieBrowser.AlbumListView != null)
-                movieBrowser.AlbumListView.SelectedListItemIndex = SelectedIndex;
-
-            if (movieBrowser.ThumbnailView != null)
-                movieBrowser.ThumbnailView.SelectedListItemIndex = SelectedIndex;
-
-            if (movieBrowser.FilmstripView != null) {
-                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_ITEM_SELECT, this.GetID, 0, movieBrowser.FilmstripView.GetID, SelectedIndex, 0, null);
-                OnMessage(msg);
-            }
+        // selects the current GUIListItem in the movieBrowser based on a DBMovieInfo ID
+        // activeList is needed because the facade doesn't have FindIndex
+        private void selectMovieListItem(List<GUIListItem> activeList, int id) {
+            // if no valid id is given do nothing
+            if (id < 1)
+                return;
+            // this predicate returns the item that matches the movie id in the current list
+            Predicate<GUIListItem> predicate = delegate(GUIListItem item) {
+                return item.ItemId == id;
+            };
+            //select the movie from the list
+            movieBrowser.SelectedListItemIndex = activeList.FindIndex(predicate);
         }
 
         private void OnMovieAdded(DatabaseTable obj) {
@@ -1051,6 +1062,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         // fills the movieBrowser (facade) with the given listitems
         private void updateMovieBrowser(List<GUIListItem> items) {
+            //
+            
             // Clear the movie browser control (facade)
             GUIControl.ClearControl(GetID, movieBrowser.GetID);
 
@@ -1058,9 +1071,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             foreach (GUIListItem item in items)
                 movieBrowser.Add(item);
 
-            // if our selection has changed, update it
-            if (SelectedMovie != movieBrowser.SelectedListItem.TVTag)
-                SelectedMovie = movieBrowser.SelectedListItem.TVTag as DBMovieInfo;
+            // keep selection
+            selectMovieListItem(items, SelectedMovie);
         }
         
         #endregion
