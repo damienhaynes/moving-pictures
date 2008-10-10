@@ -284,7 +284,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
                 DBMovieInfo movieX = (DBMovieInfo)x.TVTag;
                 DBMovieInfo movieY = (DBMovieInfo)y.TVTag;
 
-                return movieX.SortBy.CompareTo(movieY.SortBy);
+                int rtn = movieX.SortBy.CompareTo(movieY.SortBy);
+                if (rtn == 0)
+                    rtn = movieX.ID.GetValueOrDefault(0).CompareTo(movieY.ID.GetValueOrDefault(0));
+
+                return rtn;
             }
             catch {
                 return 0;
