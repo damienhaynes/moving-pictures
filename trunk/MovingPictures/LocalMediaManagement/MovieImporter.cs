@@ -401,9 +401,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       try {
         while (true) {
           logger.Info("Initiating full scan on watch folders.");
+          
+          // maintainence tasks
+          VerifyUserMovieSettings();
           RemoveOrphanFiles();
           RemoveMissingFiles();
           RemoveOrphanArtwork();
+
           LookForMissingArtwork();
           SetupFileSystemWatchers();
 
@@ -441,6 +445,30 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
       catch (ThreadAbortException) {
       }
+    }
+
+    // The DBUserMovieSettings system was revamped so we need to get 
+    // rid of any obsolete data and populate new objects as neccisary
+    private void VerifyUserMovieSettings() {
+        List<DBUserMovieSettings> allUserSettings = DBUserMovieSettings.GetAll();
+        foreach (DBUserMovieSettings currSetting in allUserSettings) {
+            if (currSetting.AttachedMovies.Count == 0)
+                currSetting.Delete();
+        }
+
+        List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
+        foreach(DBMovieInfo currMovie in allMovies)
+            if (currMovie.UserSettings.Count == 0) {
+                logger.Info(currMovie.Title + " was missing UserMovingSettings, adding now.");
+                foreach (DBUser currUser in DBUser.GetAll()) {
+                    DBUserMovieSettings userSettings = new DBUserMovieSettings();
+                    userSettings.User = currUser;
+                    userSettings.Commit();
+                    currMovie.UserSettings.Add(userSettings);
+                }
+                
+                currMovie.Commit();
+            }
     }
 
     // Sets up the objects that will watch the file system for changes, specifically
