@@ -73,6 +73,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private int part;
 
+        [DBFieldAttribute(Default = "0")]
+        public int Duration {
+            get { return duration; }
+            set {
+                duration = value;
+                commitNeeded = true;
+            }
+        }
+        private int duration;
+
+
+
         [DBFieldAttribute(Default = "false")]
         public bool Ignored {
             get { return ignored; }
