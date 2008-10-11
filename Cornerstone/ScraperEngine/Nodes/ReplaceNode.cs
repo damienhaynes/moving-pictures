@@ -54,7 +54,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
     }
 
     public override void Execute(Dictionary<string, string> variables) {
-      logger.Debug("executing replace: " + xmlNode.OuterXml);
+      if (DebugMode) logger.Debug("executing replace: " + xmlNode.OuterXml);
       string output = string.Empty;
       try { 
         output = Regex.Replace(parseString(variables, input), parseString(variables, pattern), parseString(variables, replacement));

@@ -231,11 +231,11 @@
 
     </group>
 
-    <group name="Data Provider Manager">
+    <group name="Data Source Manager">
 
-      <setting id="internal_init_dp_manager_done" name="Data Provider Manager Initialized" type="BOOL">
+      <setting id="source_manager_debug" name="Data Source Manager Enhanced Debug Mode" type="BOOL">
         <default>false</default>
-        <description>The data provider manager does a one time initialization of the default data stored internally. Reset this to false and restart Moving Pictures to remove all data providers and start fresh with only stock providers.</description>
+        <description>If set to true, additional logging will be written by the Scriptable Scraping Engine when the entire plug-in is in debug mode. Internal scripts stored in the DLL will also be reloaded on launch regardless of version number.</description>
       </setting>
 
     </group>

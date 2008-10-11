@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using MediaPortal.Plugins.MovingPictures.DataProviders;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("scripts")]
@@ -19,52 +20,32 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string contents;
 
-        // Friendly readable version number.
-        public string Version {
-            get { return versionMajor + "." + versionMinor + "." + versionPoint; }
-        }
-
-        // Major version number of script.
-        [DBFieldAttribute(FieldName="version_major")]
-        public int VersionMajor {
-            get { return versionMajor; }
-            set {
-                versionMajor = value;
-                commitNeeded = true;
-            }
-        } protected int versionMajor;
-
-        // Minor version number of script.
-        [DBFieldAttribute(FieldName = "version_minor")]
-        public int VersionMinor {
-            get { return versionMinor; }
-            set {
-                versionMinor = value;
-                commitNeeded = true;
-            }
-        } protected int versionMinor;
-
-        // Point version number of script.
-        [DBFieldAttribute(FieldName = "version_point")]
-        public int VersionPoint {
-            get { return versionPoint; }
-            set {
-                versionPoint = value;
-                commitNeeded = true;
-            }
-        } protected int versionPoint;
-
         #endregion
+
+        public IScriptableMovieProvider Provider {
+            get {
+                if (provider == null) {
+                    Reload();
+                }
+
+                return provider;
+            }
+        } ScriptableProvider provider = null;
+
+        public void Reload() {
+            provider = new ScriptableProvider();
+            provider.Load(Contents);
+        }
 
         public override bool Equals(object obj) {
             if (obj.GetType() != typeof(DBScriptInfo))
                 return base.Equals(obj);
 
-            return contents == ((DBScriptInfo)obj).contents;
+            return Provider.Equals(((DBScriptInfo)obj).Provider);
         }
 
         public override int GetHashCode() {
-            return contents.GetHashCode();
+            return Provider.GetHashCode();
         }
     }
 }

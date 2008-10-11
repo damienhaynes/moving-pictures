@@ -108,6 +108,7 @@
     <Compile Include="ScraperEngine\Nodes\LoopNode.cs" />
     <Compile Include="ScraperEngine\Nodes\MathNodes.cs" />
     <Compile Include="ScraperEngine\Nodes\ParseNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\ReplaceNode.cs" />
     <Compile Include="ScraperEngine\Nodes\RetrieveNode.cs" />
     <Compile Include="ScraperEngine\ScraperNode.cs" />
     <Compile Include="ScraperEngine\Nodes\SetNode.cs" />

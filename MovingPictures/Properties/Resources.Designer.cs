@@ -74,12 +74,12 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;Allocine (French/FR)&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from allocine.fr&lt;/description&gt;
+        ///    &lt;description&gt;This scriptContents pulls data from allocine.fr&lt;/description&gt;
         ///
         ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should  [rest of string was truncated]&quot;;.
+        ///    These two fields uniquely identify the scriptContents. The ID should never 
+        ///    change and should be unique (no other scriptContents should use this ID). With
+        ///    new versions of the scriptContents the version numbers should  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Allocine {
             get {
@@ -192,6 +192,13 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap grey_bug {
+            get {
+                object obj = ResourceManager.GetObject("grey_bug", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ignored {
             get {
                 object obj = ResourceManager.GetObject("ignored", resourceCulture);
@@ -205,12 +212,12 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;IMDb&lt;/name&gt;
         ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from IMDb.&lt;/description&gt;
+        ///    &lt;description&gt;This scriptContents pulls data from IMDb.&lt;/description&gt;
         ///
         ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    These two fields uniquely identify the scriptContents. The ID should never 
+        ///    change and should be unique (no other scriptContents should use this ID). With
+        ///    new versions of the scriptContents the version numbers should change. EVEN FOR 
         ///    MINOR CHANGES, you should change the version [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string IMDb {
@@ -225,12 +232,12 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;IMPAwards&lt;/name&gt;
         ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
-        ///    &lt;description&gt;This script grabs cover-art from impawards.com.&lt;/description&gt;
+        ///    &lt;description&gt;This scriptContents grabs cover-art from impawards.com.&lt;/description&gt;
         ///
         ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    These two fields uniquely identify the scriptContents. The ID should never 
+        ///    change and should be unique (no other scriptContents should use this ID). With
+        ///    new versions of the scriptContents the version numbers should change. EVEN FOR 
         ///    MINOR CHANGES, you should [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string IMPAwards {
@@ -307,12 +314,12 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;MovieMeter (Dutch/NL)&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from moviemeter.nl&lt;/description&gt;
+        ///    &lt;description&gt;This scriptContents pulls data from moviemeter.nl&lt;/description&gt;
         ///
         ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers shou [rest of string was truncated]&quot;;.
+        ///    These two fields uniquely identify the scriptContents. The ID should never 
+        ///    change and should be unique (no other scriptContents should use this ID). With
+        ///    new versions of the scriptContents the version numbers shou [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MovieMeter {
             get {
@@ -341,11 +348,11 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;OFDb (German/DE)&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)&lt;/description&gt;
+        ///    &lt;description&gt;This scriptContents pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)&lt;/description&gt;
         ///
         ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
+        ///    These two fields uniquely identify the scriptContents. The ID should never 
+        ///    change and should be unique (no other scriptContents should use this ID). With
         ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string OFDb {

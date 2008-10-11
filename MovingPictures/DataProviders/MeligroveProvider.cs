@@ -6,6 +6,7 @@ using NLog;
 using System.Net;
 using System.IO;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using System.Reflection;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     class MeligroveProvider: IMovieProvider {
@@ -18,6 +19,21 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             get {
                 return "meligrove.com";
             }
+        }
+
+        public string Version {
+            get {
+                Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+                return ver.Major + "." + ver.Minor + "." + ver.Build;
+            }
+        }
+
+        public string Author {
+            get { return "Moving Pictures Team"; }
+        }
+
+        public string Description {
+            get { return "Returns backdrops from meligrove.com."; }
         }
         
         public bool ProvidesMoviesDetails {
