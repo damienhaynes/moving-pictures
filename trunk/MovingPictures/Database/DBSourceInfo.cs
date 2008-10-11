@@ -74,13 +74,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public void SetPriority(DataType type, int value) {
             switch (type) {
                 case DataType.DETAILS:
-                    detailsPriority = value;
+                    DetailsPriority = value;
                     break;
                 case DataType.COVERS:
-                    coverPriority = value; 
+                    CoverPriority = value; 
                     break;
                 case DataType.BACKDROPS:
-                    backdropPriority = value;
+                    BackdropPriority = value;
                     break;
             }
         }
@@ -98,28 +98,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
+        public bool IsDisabled(DataType type) {
+            return GetPriority(type) == -1;
+        }
+
         #endregion
 
         #region Properties
 
-        // Friendly name for the script.
-        public string Name {
-            get { return Provider.Name; }
-        } 
-
         public IMovieProvider Provider {
             get {
-                if (provider == null) {
+                if (SelectedScript != null && !(SelectedScript.Contents.Trim().Length == 0))
+                    return SelectedScript.Provider;
+
+                if (provider == null) 
                     provider = (IMovieProvider) Activator.CreateInstance(providerType);
-                    if (selectedScript != null && selectedScript.Contents.Trim().Length != 0)
-                        try {
-                            ((IScriptableMovieProvider)provider).Load(selectedScript.Contents);
-                        }
-                        catch (Exception) {
-                            logger.Warn("DataProvider tried to load a script when it doesn't support scripts!");
-                            return null;
-                        }
-                }
 
                 return provider;
             }
@@ -136,4 +129,32 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         #endregion
 
     }
+
+    public class DBSourceInfoComparer : IComparer<DBSourceInfo> {
+        private DataType sortType;
+        
+        public DBSourceInfoComparer(DataType sortType) {
+            this.sortType = sortType;
+        }
+
+        public int Compare(DBSourceInfo x, DBSourceInfo y) {
+            if (x.GetPriority(sortType) == -1 && y.GetPriority(sortType) == -1)
+                return x.Provider.Name.CompareTo(y.Provider.Name);
+            
+            if (x.GetPriority(sortType) == -1)
+                return 1;
+
+            if (y.GetPriority(sortType) == -1)
+                return -1;
+            
+            if (x.GetPriority(sortType) < y.GetPriority(sortType))
+                return -1;
+
+            if (x.GetPriority(sortType) > y.GetPriority(sortType))
+                return 1;
+
+            return 0;
+        }
+    }
+
 }

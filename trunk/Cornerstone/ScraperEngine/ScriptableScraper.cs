@@ -73,7 +73,10 @@ namespace Cornerstone.ScraperEngine {
         // NOTE: This also requires NLog to be in Debug Mode.
         public bool DebugMode {
             get { return debug; }
-            set { DebugMode = value; }
+            set { 
+                debug = value;
+                loadActionNodes();
+            }
         } protected bool debug;
 
         // Returns true if the script loaded successfully.
@@ -95,8 +98,15 @@ namespace Cornerstone.ScraperEngine {
             throw new NotImplementedException();
         }
 
-        public ScriptableScraper(string xmlScript) {
+        public ScriptableScraper(string xmlScript)
+            : this(xmlScript, false) {
+            
+        }
+
+        public ScriptableScraper(string xmlScript, bool debug) {
             loadSuccessful = true;
+            
+            this.debug = debug;
 
             try {
                 xml = new XmlDocument();
@@ -141,8 +151,6 @@ namespace Cornerstone.ScraperEngine {
                         scriptType = new StringList(currNode.InnerText);
                     } else if (currNode.Name.Equals("language")) {
                         language = currNode.InnerText;
-                    } else if (currNode.Name.Equals("debug")) {
-                        debug = bool.Parse(currNode.InnerText);
                     }
                 }
             } catch (Exception) {
@@ -156,7 +164,7 @@ namespace Cornerstone.ScraperEngine {
         private void loadActionNodes() {
             actionNodes = new Dictionary<string, ScraperNode>();
             foreach (XmlNode currAction in xml.DocumentElement.SelectNodes("child::action")) {
-                ActionNode newNode = (ActionNode) ScraperNode.Load(currAction, false);
+                ActionNode newNode = (ActionNode) ScraperNode.Load(currAction, debug);
                 if (newNode != null && newNode.LoadSuccess)
                     actionNodes[newNode.Name] = newNode;
                 else {

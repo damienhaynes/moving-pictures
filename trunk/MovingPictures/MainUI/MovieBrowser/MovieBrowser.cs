@@ -213,7 +213,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
                 return;
 
             // clear and populate the facade
-            facade.Clear();
+            if (facade.ListView != null) facade.ListView.Clear();
+            if (facade.ThumbnailView != null) facade.ThumbnailView.Clear();
+            if (facade.FilmstripView != null) facade.FilmstripView.Clear();
+
             foreach (DBMovieInfo currMovie in FilteredMovies) 
                 addMovieToFacade(currMovie);
             

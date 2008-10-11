@@ -9,6 +9,7 @@ using System.Net;
 using Cornerstone.Database;
 using System.Web;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using System.Reflection;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class LocalProvider : IMovieProvider {
@@ -25,6 +26,21 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             get {
                 return "Local Data";
             }
+        }
+
+        public string Version {
+            get {
+                Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+                return ver.Major + "." + ver.Minor + "." + ver.Build;
+            }
+        }
+
+        public string Author {
+            get { return "Moving Pictures Team"; }
+        }
+
+        public string Description {
+            get { return "Returns artwork and backdrops already available on the local system."; }
         }
 
         public bool ProvidesMoviesDetails {

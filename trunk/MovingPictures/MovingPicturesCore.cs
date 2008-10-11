@@ -70,6 +70,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             logger.Info("Moving Pictures (" + ver.Major + "." + ver.Minor + "." + ver.Build + ":" + ver.Revision + ")");
             logger.Info("Plugin Launched");
 
+            logger.Info(DataProviderManager.ToString());
+
             initDB();
             initAdditionalSettings();
 

@@ -20,6 +20,27 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
         }
 
+        public string Version {
+            get { return scraper.Version; } 
+        }
+
+        public string Author {
+            get { return scraper.Author; } 
+        }
+
+        public bool DebugMode { 
+            get {
+                return scraper.DebugMode;
+            }
+            set {
+                scraper.DebugMode = value;
+            }
+        }
+
+        public string Description {
+            get { return scraper.Description; } 
+        }
+
         public bool ProvidesMoviesDetails {
             get { return providesMovieDetails; }
         }
@@ -48,7 +69,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool Load(string script) {
-            scraper = new ScriptableScraper(script);
+            bool debugMode = (bool)MovingPicturesCore.SettingsManager["source_manager_debug"].Value;
+            scraper = new ScriptableScraper(script, debugMode);
 
             if (!scraper.LoadSuccessful) {
                 scraper = null;
@@ -185,6 +207,15 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             return false;
         }
+
+        public override bool Equals(object obj) {
+            if (obj.GetType() != typeof(ScriptableProvider))
+                return base.Equals(obj);
+
+            return Version.Equals(((ScriptableProvider)obj).Version) &&
+                   Scraper.ID == ((ScriptableProvider)obj).Scraper.ID;
+        }
+
 
         #endregion
     }

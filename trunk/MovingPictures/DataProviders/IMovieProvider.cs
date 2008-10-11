@@ -7,9 +7,9 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public interface IMovieProvider {
         string Name { get; }
-        //string Version { get; }
-        //string Author { get; }
-        //string Description { get; }
+        string Version { get; }
+        string Author { get; }
+        string Description { get; }
 
         bool ProvidesMoviesDetails { get; }
         bool ProvidesCoverArt { get; }
@@ -23,6 +23,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
     public interface IScriptableMovieProvider : IMovieProvider {
         bool Load(string script);
+        bool DebugMode { get; set; }
     }
 
     public enum DataType { DETAILS, COVERS, BACKDROPS }

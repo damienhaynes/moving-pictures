@@ -243,7 +243,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
       RemoveFromMatchLists(match);
 
-      // clear the ignored flag in case these files were previously on the ignore list
+      // clear the ignored flag in case these files were previously on the disable list
       foreach (DBLocalMedia currFile in match.LocalMedia) {
         currFile.Ignored = false;
       }
@@ -285,7 +285,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       RemoveFromMatchLists(match);
       RemoveCommitedRelations(match.LocalMedia);
 
-      // clear the ignored flag in case these files were previously on the ignore list
+      // clear the ignored flag in case these files were previously on the disable list
       foreach (DBLocalMedia currFile in match.LocalMedia) {
         currFile.Ignored = false;
       }
@@ -317,7 +317,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         MovieStatusChanged(match, MovieImporterAction.REMOVED_FROM_SPLIT);
 
       foreach (DBLocalMedia currFile in match.LocalMedia) {
-        // clear the ignored flag in case these files were previously on the ignore list
+        // clear the ignored flag in case these files were previously on the disable list
         currFile.Ignored = false;
 
         MovieMatch newMatch = new MovieMatch();
@@ -508,7 +508,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
       DBImportPath importPath = pathLookup[((FileSystemWatcher)source)];
 
-      // if this file is already in the system, ignore (this happens if it's a removable source)
+      // if this file is already in the system, disable (this happens if it's a removable source)
       if (newFile.ID != null) {
         if (!importPath.Removable)
           logger.Warn("FileSystemWatcher tried to add a pre-existing file: " + newFile.File.Name);
@@ -855,7 +855,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
       }
       catch (ThreadAbortException) {
-        // expected when threads shutdown. ignore.
+        // expected when threads shutdown. disable.
       }
       catch (Exception e) {
         logger.FatalException("Unhandled error in MediaScanner.", e);
@@ -974,7 +974,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       // get possible matches for this set of media files
       GetMatches(mediaMatch);
 
-      // if the match has been set to ignore by the user while searching, cancel out
+      // if the match has been set to disable by the user while searching, cancel out
       if (mediaMatch.LocalMedia[0].Ignored) {
         Ignore(mediaMatch);
         return;
