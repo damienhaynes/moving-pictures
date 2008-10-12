@@ -59,7 +59,7 @@
     <if test='${search.imdb_id}!='>
       <retrieve name="search_imdb" url="${site}imdb2ofdb/${search.imdb_id}"/>
       <parse name="imdb_details" input="${search_imdb}" regex="${rx_imdb_results}" />
-      <if test='${imdb_details}!='>
+      <if test="${imdb_details}!=">
         <replace name="title" input="${imdb_details[0][0]:htmldecode}" pattern="${rx_title_clean}" with="" />
         <replace name="aka" input="${imdb_details[0][2]:htmldecode}" pattern="${rx_title_clean}" with="" />
         <parse name="title" input="${title}" regex="${rx_title}"/>
