@@ -238,6 +238,11 @@
         <description>If set to true, additional logging will be written by the Scriptable Scraping Engine when the entire plug-in is in debug mode. Internal scripts stored in the DLL will also be reloaded on launch regardless of version number.</description>
       </setting>
 
+      <setting id="source_manager_init_done" name="Data Provider Manager Initialized" type="BOOL">
+        <default>false</default>
+        <description>An internal flag to determine if an initial load of the Data Source Manager has been preformed.</description>
+      </setting>
+
     </group>
 
   </group>

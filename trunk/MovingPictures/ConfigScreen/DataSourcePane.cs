@@ -11,18 +11,24 @@ using MediaPortal.Plugins.MovingPictures.DataProviders;
 using System.Collections;
 using Cornerstone.Database.Tables;
 using System.Threading;
+using NLog;
+using System.IO;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class DataSourcePane : UserControl {
 
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private Dictionary<DBSourceInfo, ListViewItem> listItemLookup;
+
         public DataType DisplayType {
             set {
-                if ((listView != null && listView.Items != null && listView.Items.Count != 0) && displayMode == value)
+                if ((listView != null && listView.Items != null && listView.Items.Count != 0) && displayType == value)
                     return;
 
-                displayMode = value;
+                displayType = value;
 
-                switch (displayMode) {
+                switch (displayType) {
                     case DataType.DETAILS:
                         scriptTypeDropDown.Text = scriptTypeDropDown.DropDownItems[0].Text;
                         break;
@@ -34,16 +40,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                         break;
                 }
 
-                listView.ListViewItemSorter = new ListViewItemComparer(displayMode);
+                listView.ListViewItemSorter = new ListViewItemComparer(displayType);
                 reloadList();
             }
 
-            get { return displayMode; }
+            get { return displayType; }
         }
-        private DataType displayMode;
+        private DataType displayType;
 
         public DataSourcePane() {
             InitializeComponent();
+            listItemLookup = new Dictionary<DBSourceInfo, ListViewItem>();
         }
 
         private void DataSourcePane_Load(object sender, EventArgs e) {
@@ -65,9 +72,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 ListViewItem newItem = new ListViewItem();
                 newItem.ToolTipText = String.Format("{0}\nAuthor: {1}", currSource.Provider.Description, currSource.Provider.Author);
 
-                if (currSource.IsDisabled(DisplayType))
-                    newItem.ForeColor = Color.LightGray;
-
                 ListViewItem.ListViewSubItem nameItem = new ListViewItem.ListViewSubItem(newItem, currSource.Provider.Name);
                 ListViewItem.ListViewSubItem versionItem = new ListViewItem.ListViewSubItem(newItem, currSource.Provider.Version);
 
@@ -76,13 +80,42 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 newItem.Tag = currSource;
                 listView.Items.Add(newItem);
+                listItemLookup[currSource] = newItem;
             }
 
             // end list editing
             listView.Sort();
+            repaintListItems();
             listView.EndUpdate();
         }
 
+        private void repaintListItems() {
+            foreach (DBSourceInfo currSource in listItemLookup.Keys) {
+               
+                if (currSource.IsDisabled(DisplayType))
+                    listItemLookup[currSource].ForeColor = Color.LightGray;
+                else
+                    listItemLookup[currSource].ForeColor = Color.Black;
+
+            }
+
+        }
+
+        private void updateDebugModeMenuItem() {
+            bool debugActive = (bool)MovingPicturesCore.SettingsManager["source_manager_debug"].Value;
+            if (debugActive) {
+                debugIcon.Visible = true;
+                enableDebugModeToolStripMenuItem.Text = "Disable Debug Mode";
+                enableDebugModeToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.bug;
+            }
+            else {
+                debugIcon.Visible = false;
+                enableDebugModeToolStripMenuItem.Text = "Enable Debug Mode";
+                enableDebugModeToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.grey_bug;
+            }
+        }
+
+        
         private void raisePriorityButton_Click(object sender, EventArgs e) {
             foreach (ListViewItem currItem in listView.SelectedItems) {
                 DBSourceInfo source = (DBSourceInfo)currItem.Tag;
@@ -90,6 +123,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
 
             listView.Sort();
+            repaintListItems();
         }
 
         private void lowerPriorityButton_Click(object sender, EventArgs e) {
@@ -107,9 +141,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 MovingPicturesCore.DataProviderManager.SetDisabled(source, DisplayType, !source.IsDisabled(DisplayType));
             }
 
-            reloadList();
+            listView.Sort();
+            repaintListItems();
         }
-
 
         private void movieDetailsToolStripMenuItem_Click(object sender, EventArgs e) {
             DisplayType = DataType.DETAILS;
@@ -128,27 +162,51 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             setting.Value = !((bool)setting.Value);
             updateDebugModeMenuItem();
 
-            Thread newThread = new Thread(new ThreadStart(updateProviderManager));
+            Thread newThread = new Thread(new ThreadStart(reinitScrapers));
             newThread.Start();
         }
 
-        private void updateProviderManager() {
+        private void reinitScrapers() {
             DBSetting setting = MovingPicturesCore.SettingsManager["source_manager_debug"];
             MovingPicturesCore.DataProviderManager.DebugMode = (bool)setting.Value;
         }
 
-        private void updateDebugModeMenuItem() {
-            bool debugActive = (bool)MovingPicturesCore.SettingsManager["source_manager_debug"].Value;
-            if (debugActive) {
-                debugIcon.Visible = true;
-                enableDebugModeToolStripMenuItem.Text = "Disable Debug Mode";
-                enableDebugModeToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.bug;
+        private void addButton_Click(object sender, EventArgs e) {
+            DialogResult result = openFileDialog.ShowDialog();
+            if (result == DialogResult.OK) {
+                logger.Info("New script specified by user: " + openFileDialog.FileName);
+
+                // grab the contents of the file and try to add it to the manager
+                StreamReader reader = new StreamReader(openFileDialog.FileName);
+                string script = reader.ReadToEnd();
+                MovingPicturesCore.DataProviderManager.AddSource(typeof(ScriptableProvider), script);
+
+                reloadList();
             }
-            else {
-                debugIcon.Visible = false;
-                enableDebugModeToolStripMenuItem.Text = "Enable Debug Mode";
-                enableDebugModeToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.grey_bug;
-            }
+        }
+
+        private void removeButton_Click(object sender, EventArgs e) {
+            DialogResult result = MessageBox.Show(
+                "This will PERMANENTLY REMOVE the selected data source!\n" +
+                "This action is irreversable. Normally the best choice is\n" +
+                "to disable rather than remove a data source. Are you sure\n" +
+                "you want to continue?", "Warning!", MessageBoxButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+                foreach (ListViewItem currItem in listView.SelectedItems) {
+                    DBSourceInfo source = (DBSourceInfo)currItem.Tag;
+                    MovingPicturesCore.DataProviderManager.RemoveSource(source);
+                    listView.Items.Remove(currItem);
+                }
+        }
+
+        private void reloadDefaultSourcesToolStripMenuItem_Click(object sender, EventArgs e) {
+            ProgressPopup.WorkerDelegate worker = new ProgressPopup.WorkerDelegate(MovingPicturesCore.DataProviderManager.LoadInternalProviders);
+            ProgressPopup popup = new ProgressPopup(worker);
+            popup.Owner = this.ParentForm;
+            popup.ShowDialog();
+
+            reloadList();
         }
 
     }

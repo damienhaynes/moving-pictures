@@ -9,6 +9,7 @@ using System.Reflection;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Collections.ObjectModel;
 using NLog;
+using System.IO;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class DataProviderManager {
@@ -60,6 +61,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         } 
         private bool debugMode;
 
+        private bool updateOnly;
+
         #endregion
 
         #region Constructors
@@ -87,18 +90,21 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             debugMode = (bool) MovingPicturesCore.SettingsManager["source_manager_debug"].Value;
 
+            logger.Info("DataProviderManager Starting");
             loadProvidersFromDatabase();
-            loadMissingDefaultProviders();
-            normalizePriorities();
 
-            //DBSetting alreadyInitedSetting = MovingPicturesCore.SettingsManager["internal_init_dp_manager_done"];
-            //bool alreadyInited = (bool) alreadyInitedSetting.Value;
+            // if we have already done an initial load, set an internal flag to do updates only
+            // when loading internal scripts. We dont want to load in previously deleted scripts
+            // during the internal provider loading process.
+            DBSetting alreadyInitedSetting = MovingPicturesCore.SettingsManager["source_manager_init_done"];
+            updateOnly = (bool)alreadyInitedSetting.Value;
+            LoadInternalProviders();
+            updateOnly = false;
 
-            //if (!alreadyInited) {
-            //    restoreToDefaults();
-            //    alreadyInitedSetting.Value = "true";
-            //    alreadyInitedSetting.Commit();
-            //}
+            if (!(bool)alreadyInitedSetting.Value) {
+                alreadyInitedSetting.Value = true;
+                alreadyInitedSetting.Commit();
+            }
 
         }
 
@@ -107,8 +113,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         #region DataProvider Management Functionality
 
         public void ChangePriority(DBSourceInfo source, DataType type, bool raise) {
-            if (source.IsDisabled(type))
-                return;
+            if (source.IsDisabled(type) && raise) 
+                SetDisabled(source, type, false);
             
             // grab the correct list 
             List<DBSourceInfo> sourceList = getEditableList(type);
@@ -195,6 +201,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         #region DataProvider Loading Logic
 
         private void loadProvidersFromDatabase() {
+            logger.Info("Loading existing data sources...");
+
             foreach (DBSourceInfo currSource in DBSourceInfo.GetAll()) 
                 addToLists(currSource);
 
@@ -203,40 +211,65 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             backdropSources.Sort(sorters[DataType.BACKDROPS]);
         }
 
-        private void loadMissingDefaultProviders() {
-            addSource(typeof(LocalProvider));
-            
-            addSource(typeof(ScriptableProvider), Resources.IMDb);
-            addSource(typeof(ScriptableProvider), Resources.MovieMeter);
-            addSource(typeof(ScriptableProvider), Resources.OFDb);
-            addSource(typeof(ScriptableProvider), Resources.Allocine);
+        public void LoadInternalProviders() {
+            logger.Info("Checking internal scripts for updates...");
 
-            addSource(typeof(MeligroveProvider));
-            addSource(typeof(ScriptableProvider), Resources.IMPAwards);
+            AddSource(typeof(LocalProvider));
+            
+            AddSource(typeof(ScriptableProvider), Resources.IMDb);
+            AddSource(typeof(ScriptableProvider), Resources.MovieMeter);
+            AddSource(typeof(ScriptableProvider), Resources.OFDb);
+            AddSource(typeof(ScriptableProvider), Resources.Allocine);
+
+            AddSource(typeof(MeligroveProvider));
+            AddSource(typeof(ScriptableProvider), Resources.IMPAwards);
+
+            normalizePriorities();
         }
 
-        private void addSource(Type providerType, string scriptContents) {
+        public void AddSource(Type providerType, string scriptContents) {
             IScriptableMovieProvider newProvider = (IScriptableMovieProvider)Activator.CreateInstance(providerType);
 
             DBScriptInfo newScript = new DBScriptInfo();
             newScript.Contents = scriptContents;
             
-            // checkif we already have this script in memory. If we do, return,
-            // or if in debug mode, reload the contents
+            // if a provider can't be created based on this script we have a bad script file.
+            if (newScript.Provider == null)
+                return;
+            
+            // check if we already have this script in memory.
             foreach (DBSourceInfo currSource in allSources)
-                foreach (DBScriptInfo currScript in currSource.Scripts) {
-                    if (currScript.Equals(newScript)) {
-                        if (DebugMode) {
-                            currScript.Contents = scriptContents;
-                            currScript.Reload();
-                            return;
+                // if some version of the script is already in the database
+                if (currSource.IsScriptable() && ((IScriptableMovieProvider)currSource.Provider).ScriptID == newScript.Provider.ScriptID) {
+                    foreach (DBScriptInfo currScript in currSource.Scripts) {
+                        // check if the same version is already loaded
+                        if (currScript.Equals(newScript)) {
+                            if (DebugMode) {
+                                logger.Info("Script version number already loaded. Reloading because in Debug Mode.");
+                                currScript.Contents = scriptContents;
+                                currScript.Reload();
+                                return;
+                            }
+                            else {
+                                logger.Info("Script already loaded.");
+                                return;
+                            }
                         }
-                        else return;
                     }
+
+                    // this version is not loaded, so add it to the DBSourceInfo object.
+                    currSource.Scripts.Add(newScript);
+                    currSource.SelectedScript = newScript;
+                    newScript.Commit();
+                    currSource.Commit();
+                    return;
                 }
 
+            // if there was nothing to update, and we are not looking to add new data sources, quit
+            if (updateOnly)
+                return;
 
-            // build the source information
+            // build the new source information
             DBSourceInfo newSource = new DBSourceInfo();
             newSource.ProviderType = providerType;
             newSource.Scripts.Add(newScript);
@@ -248,7 +281,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             newSource.Commit();
         }
 
-        private void addSource(Type providerType) {
+        public void AddSource(Type providerType) {
+            // non-criptable sources cant be updated, so if we are only updating, just return
+            if (updateOnly)
+                return;
+
             foreach (DBSourceInfo currSource in allSources)
                 if (currSource.ProviderType == providerType)
                     return;
@@ -257,6 +294,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             newSource.ProviderType = providerType;
             newSource.Commit();
             addToLists(newSource);
+        }
+
+        public void RemoveSource(DBSourceInfo source) {
+            foreach (DataType currType in Enum.GetValues(typeof(DataType)))
+                getEditableList(currType).Remove(source);
+
+            allSources.Remove(source);
+            source.Delete();
         }
 
         private void addToLists(DBSourceInfo newSource) {

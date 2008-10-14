@@ -34,7 +34,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public void Reload() {
             provider = new ScriptableProvider();
-            provider.Load(Contents);
+            if (!provider.Load(Contents))
+                provider = null;
         }
 
         public override bool Equals(object obj) {
