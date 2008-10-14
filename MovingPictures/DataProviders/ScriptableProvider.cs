@@ -20,6 +20,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
         }
 
+        public int ScriptID {
+            get {
+                return scraper.ID;
+            }
+        }
+
+
         public string Version {
             get { return scraper.Version; } 
         }
@@ -214,6 +221,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             return Version.Equals(((ScriptableProvider)obj).Version) &&
                    Scraper.ID == ((ScriptableProvider)obj).Scraper.ID;
+        }
+
+        public override int GetHashCode() {
+            return (Version + Scraper.ID).GetHashCode();
         }
 
 

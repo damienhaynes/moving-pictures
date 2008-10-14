@@ -102,6 +102,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return GetPriority(type) == -1;
         }
 
+        public bool IsScriptable() {
+            return !(SelectedScript == null || SelectedScript.Contents.Trim().Length == 0);
+        }
+
         #endregion
 
         #region Properties

@@ -119,6 +119,7 @@ namespace Cornerstone.ScraperEngine {
             }
             catch (Exception) {
                 logger.Error("Error parsing scriptable scraper XML file!");
+                loadSuccessful = false;
                 return;
             }
 

@@ -31,14 +31,25 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public void ShowPlugin() {
             try {
                 MovingPicturesCore.Initialize();
-
+            }
+            catch (Exception e) {
+                logger.FatalException("Unexpected error from plug-in initialization!", e);
+                return;
+            }
+            
+            try {
                 MovingPicturesConfig configScr = new MovingPicturesConfig();
                 configScr.ShowDialog();
+            }
+            catch (Exception e) {
+                logger.FatalException("Unexpected error from the Configuration Screen!", e);
+            }
 
+            try {
                 MovingPicturesCore.Shutdown();
             }
             catch (Exception e) {
-                logger.ErrorException("Unexpected error from the Configuration Screen!", e);
+                logger.FatalException("Unexpected error from plug-in shutdown!", e);
             }
 
         }

@@ -32,8 +32,6 @@
             this.sideToolStrip = new System.Windows.Forms.ToolStrip();
             this.raisePriorityButton = new System.Windows.Forms.ToolStripButton();
             this.lowerPriorityButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.disableButton = new System.Windows.Forms.ToolStripButton();
             this.topToolStrip = new System.Windows.Forms.ToolStrip();
             this.scriptTypeDropDown = new System.Windows.Forms.ToolStripDropDownButton();
             this.movieDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,15 +39,18 @@
             this.backdropsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.addButton = new System.Windows.Forms.ToolStripButton();
-            this.removeButton = new System.Windows.Forms.ToolStripButton();
+            this.removeDropDown = new System.Windows.Forms.ToolStripSplitButton();
+            this.disableSelectedDataSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteSelectedDataSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSplitButton1 = new System.Windows.Forms.ToolStripSplitButton();
+            this.settingsButton = new System.Windows.Forms.ToolStripSplitButton();
             this.selectScriptVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadDefaultSourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.enableDebugModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugIcon = new System.Windows.Forms.ToolStripLabel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.sideToolStrip.SuspendLayout();
             this.topToolStrip.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -57,6 +58,7 @@
             // 
             // listView
             // 
+            this.listView.AllowDrop = true;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.iconColumnHeader,
             this.sourceColumnHeader,
@@ -102,9 +104,7 @@
             this.sideToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.sideToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.raisePriorityButton,
-            this.lowerPriorityButton,
-            this.toolStripSeparator2,
-            this.disableButton});
+            this.lowerPriorityButton});
             this.sideToolStrip.Location = new System.Drawing.Point(486, 0);
             this.sideToolStrip.Name = "sideToolStrip";
             this.sideToolStrip.Padding = new System.Windows.Forms.Padding(0, 45, 1, 0);
@@ -135,22 +135,6 @@
             this.lowerPriorityButton.ToolTipText = "Lower Script Priority";
             this.lowerPriorityButton.Click += new System.EventHandler(this.lowerPriorityButton_Click);
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(21, 6);
-            // 
-            // disableButton
-            // 
-            this.disableButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.disableButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.ignored;
-            this.disableButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.disableButton.Name = "disableButton";
-            this.disableButton.Size = new System.Drawing.Size(21, 20);
-            this.disableButton.Text = "toolStripButton3";
-            this.disableButton.ToolTipText = "Disable Selected Script";
-            this.disableButton.Click += new System.EventHandler(this.disableButton_Click);
-            // 
             // topToolStrip
             // 
             this.topToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -158,9 +142,9 @@
             this.scriptTypeDropDown,
             this.toolStripSeparator4,
             this.addButton,
-            this.removeButton,
+            this.removeDropDown,
             this.toolStripSeparator1,
-            this.toolStripSplitButton1,
+            this.settingsButton,
             this.debugIcon});
             this.topToolStrip.Location = new System.Drawing.Point(0, 0);
             this.topToolStrip.Name = "topToolStrip";
@@ -215,35 +199,55 @@
             this.addButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(23, 23);
-            this.addButton.Text = "toolStripButton1";
+            this.addButton.Text = "Add New Script";
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
-            // removeButton
+            // removeDropDown
             // 
-            this.removeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.removeButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_remove;
-            this.removeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(23, 23);
-            this.removeButton.Text = "removeButton";
+            this.removeDropDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.removeDropDown.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.disableSelectedDataSourceToolStripMenuItem,
+            this.deleteSelectedDataSourceToolStripMenuItem});
+            this.removeDropDown.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_remove;
+            this.removeDropDown.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.removeDropDown.Name = "removeDropDown";
+            this.removeDropDown.Size = new System.Drawing.Size(32, 23);
+            this.removeDropDown.Text = "Disable Selected Data Source";
+            this.removeDropDown.ButtonClick += new System.EventHandler(this.disableButton_Click);
+            // 
+            // disableSelectedDataSourceToolStripMenuItem
+            // 
+            this.disableSelectedDataSourceToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_remove;
+            this.disableSelectedDataSourceToolStripMenuItem.Name = "disableSelectedDataSourceToolStripMenuItem";
+            this.disableSelectedDataSourceToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.disableSelectedDataSourceToolStripMenuItem.Text = "Disable Selected Data Source";
+            this.disableSelectedDataSourceToolStripMenuItem.Click += new System.EventHandler(this.disableButton_Click);
+            // 
+            // deleteSelectedDataSourceToolStripMenuItem
+            // 
+            this.deleteSelectedDataSourceToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cross;
+            this.deleteSelectedDataSourceToolStripMenuItem.Name = "deleteSelectedDataSourceToolStripMenuItem";
+            this.deleteSelectedDataSourceToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.deleteSelectedDataSourceToolStripMenuItem.Text = "Delete Selected Data Source";
+            this.deleteSelectedDataSourceToolStripMenuItem.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 26);
             // 
-            // toolStripSplitButton1
+            // settingsButton
             // 
-            this.toolStripSplitButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripSplitButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.settingsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.settingsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectScriptVersionToolStripMenuItem,
             this.reloadDefaultSourcesToolStripMenuItem,
             this.toolStripSeparator3,
             this.enableDebugModeToolStripMenuItem});
-            this.toolStripSplitButton1.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cog;
-            this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-            this.toolStripSplitButton1.Size = new System.Drawing.Size(32, 23);
-            this.toolStripSplitButton1.Text = "toolStripSplitButton1";
+            this.settingsButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cog;
+            this.settingsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Size = new System.Drawing.Size(32, 23);
             // 
             // selectScriptVersionToolStripMenuItem
             // 
@@ -254,10 +258,10 @@
             // 
             // reloadDefaultSourcesToolStripMenuItem
             // 
-            this.reloadDefaultSourcesToolStripMenuItem.Enabled = false;
             this.reloadDefaultSourcesToolStripMenuItem.Name = "reloadDefaultSourcesToolStripMenuItem";
             this.reloadDefaultSourcesToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
             this.reloadDefaultSourcesToolStripMenuItem.Text = "Reload Default Sources";
+            this.reloadDefaultSourcesToolStripMenuItem.Click += new System.EventHandler(this.reloadDefaultSourcesToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -291,6 +295,11 @@
             this.panel1.Size = new System.Drawing.Size(486, 299);
             this.panel1.TabIndex = 6;
             // 
+            // openFileDialog
+            // 
+            this.openFileDialog.DefaultExt = "xml";
+            this.openFileDialog.Filter = "Moving Pictures Script Files|*.xml|All Files|*.*";
+            // 
             // DataSourcePane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -321,13 +330,10 @@
         private System.Windows.Forms.ToolStrip sideToolStrip;
         private System.Windows.Forms.ToolStripButton raisePriorityButton;
         private System.Windows.Forms.ToolStripButton lowerPriorityButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton disableButton;
         private System.Windows.Forms.ToolStrip topToolStrip;
         private System.Windows.Forms.ToolStripButton addButton;
-        private System.Windows.Forms.ToolStripButton removeButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton1;
+        private System.Windows.Forms.ToolStripSplitButton settingsButton;
         private System.Windows.Forms.ToolStripMenuItem selectScriptVersionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enableDebugModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reloadDefaultSourcesToolStripMenuItem;
@@ -339,5 +345,9 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripLabel debugIcon;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.ToolStripSplitButton removeDropDown;
+        private System.Windows.Forms.ToolStripMenuItem disableSelectedDataSourceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteSelectedDataSourceToolStripMenuItem;
     }
 }
