@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Cornerstone.Tools;
 using System.Xml;
+using System.Threading;
 
 namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("distance")]
@@ -20,7 +21,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // try to grab the first value
             try { string1 = xmlNode.Attributes["string1"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Missing STRING1 attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
@@ -28,7 +32,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // try to grab the second value
             try { string2 = xmlNode.Attributes["string2"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Missing STRING2 attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;

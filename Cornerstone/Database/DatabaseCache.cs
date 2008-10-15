@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Cornerstone.Database.Tables;
+using System.Threading;
 
 namespace Cornerstone.Database {
     // This class is primarily intended to ensure that when I database object is selected
@@ -19,7 +20,9 @@ namespace Cornerstone.Database {
             try {
                 return cache[type][id];
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
                 return null;
             }
         }
@@ -58,7 +61,9 @@ namespace Cornerstone.Database {
                 try {
                     list[i] = (DatabaseTable)cache[currObj.GetType()][(int)currObj.ID];
                 }
-                catch (Exception) {
+                catch (Exception e) {
+                    if (e.GetType() == typeof(ThreadAbortException))
+                        throw e;
                     Add(currObj);
                 }
             }

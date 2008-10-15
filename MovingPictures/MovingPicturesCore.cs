@@ -62,10 +62,12 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #region Public Methods
 
+        static MovingPicturesCore() {
+            initLogger();
+        }
+
         public static bool Initialize()
         {
-            initLogger();
-
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
             logger.Info("Moving Pictures (" + ver.Major + "." + ver.Minor + "." + ver.Build + ":" + ver.Revision + ")");
             logger.Info("Plugin Launched");
@@ -118,9 +120,16 @@ namespace MediaPortal.Plugins.MovingPictures {
         private static void initLogger() {
             LoggingConfiguration config = new LoggingConfiguration();
 
+            try {
+                FileInfo logFile = new FileInfo(Config.GetFile(Config.Dir.Log, logFileName));
+                if (logFile.Exists)
+                    logFile.Delete();
+            }
+            catch (Exception) { }
+
+
             FileTarget fileTarget = new FileTarget();
             fileTarget.FileName = Config.GetFile(Config.Dir.Log, logFileName);
-            fileTarget.DeleteOldFileOnStartup = true;
             fileTarget.Layout = "${date:format=dd-MMM-yyyy HH\\:mm\\:ss} " +
                                 "${level:fixedLength=true:padding=5} " +
                                 "[${logger:fixedLength=true:padding=20:shortName=true}]: ${message} " +

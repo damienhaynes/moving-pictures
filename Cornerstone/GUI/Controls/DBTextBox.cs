@@ -7,6 +7,7 @@ using System.ComponentModel;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using Cornerstone.GUI.DesignMode;
+using System.Threading;
 
 namespace Cornerstone.GUI.Controls {
     public class DBTextBox : TextBox, IDBFieldBackedControl, IDataGridViewEditingControl {
@@ -130,7 +131,9 @@ namespace Cornerstone.GUI.Controls {
 
                 return true;
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
                 return false;
             }
         }

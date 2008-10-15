@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database.CustomTypes;
 using System.Globalization;
+using System.Threading;
 
 namespace Cornerstone.Database {
     public class DBField {
@@ -209,6 +210,8 @@ namespace Cornerstone.Database {
                 }
             }
             catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
                 logger.ErrorException("Error writing to " + owner.GetType().Name + "." + this.Name +
                                 " Property.", e);
             }

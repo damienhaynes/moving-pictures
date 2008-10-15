@@ -43,6 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             catch (Exception e) {
                 logger.FatalException("Unexpected error from the Configuration Screen!", e);
+                return;
             }
 
             try {

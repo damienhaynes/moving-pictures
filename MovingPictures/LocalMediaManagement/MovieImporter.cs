@@ -39,6 +39,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     // threads that do actual processing
     private List<Thread> mediaScannerThreads;
     private Thread pathScannerThread;
+    private Thread artworkUpdaterThread;
 
     private int percentDone;
 
@@ -172,31 +173,75 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         pathScannerThread.Name = "PathScanner";
       }
 
+      if (artworkUpdaterThread == null) {
+          artworkUpdaterThread = new Thread(new ThreadStart(LookForMissingArtworkWorker));
+          artworkUpdaterThread.Name = "Artwork Updater";
+          artworkUpdaterThread.Start();
+      }
+
       if (MovieStatusChanged != null)
         MovieStatusChanged(null, MovieImporterAction.STARTED);
     }
 
     public void Stop() {
-      lock (mediaScannerThreads) {
-        if (mediaScannerThreads.Count > 0) {
-          foreach (Thread currThread in mediaScannerThreads)
-            currThread.Abort();
+        lock (mediaScannerThreads) {
+            bool stoppedSomething = false;
 
-          mediaScannerThreads.Clear();
-          logger.Info("Stopped MovieImporter");
+            if (mediaScannerThreads.Count > 0) {
+                logger.Info("Shutting Down Media Scanner Threads...");
+                foreach (Thread currThread in mediaScannerThreads)
+                    currThread.Abort();
+
+                // wait for all threads to shut down
+                bool waiting = true;
+                while (waiting) {
+                    waiting = false;
+                    foreach (Thread currThread in mediaScannerThreads)
+                        waiting = waiting || currThread.IsAlive;
+                    Thread.Sleep(100);
+                }
+
+                mediaScannerThreads.Clear();
+                stoppedSomething = true;
+            }
+
+            if (pathScannerThread != null) {
+                logger.Info("Shutting Down Path Scanner Thread...");
+                pathScannerThread.Abort();
+
+                // wait for the path scanner to shut down
+                while (pathScannerThread.IsAlive)
+                    Thread.Sleep(100);
+
+                pathScannerThread = null;
+                stoppedSomething = true;
+            }
+
+            if (artworkUpdaterThread != null) {
+                if (artworkUpdaterThread.IsAlive) {
+                    logger.Info("Shutting Down Artwork Updater Thread...");
+                    artworkUpdaterThread.Abort();
+
+                    // wait for the path scanner to shut down
+                    while (artworkUpdaterThread.IsAlive)
+                        Thread.Sleep(100);
+
+                    stoppedSomething = true;
+                }
+
+                artworkUpdaterThread = null;
+            }
+
+            if (stoppedSomething) {
+                if (Progress != null)
+                    Progress(100, 0, 0, "Stopped");
+
+                if (MovieStatusChanged != null)
+                    MovieStatusChanged(null, MovieImporterAction.STOPPED);
+
+                logger.Info("Stopped MovieImporter");
+            }
         }
-
-        if (pathScannerThread != null) {
-          pathScannerThread.Abort();
-          pathScannerThread = null;
-        }
-
-        if (Progress != null)
-          Progress(100, 0, 0, "Stopped");
-
-        if (MovieStatusChanged != null)
-          MovieStatusChanged(null, MovieImporterAction.STOPPED);
-      }
     }
 
     public bool IsScanning() {
@@ -367,27 +412,25 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         MovieStatusChanged(newMatch, MovieImporterAction.ADDED_FROM_JOIN);
     }
 
-    // updates the artwork for any movies that are missing artwork
-    public void LookForMissingArtwork() {
-      Thread newThread = new Thread(new ThreadStart(LookForMissingArtworkWorker));
-      newThread.Start();
-    }
-
     private void LookForMissingArtworkWorker() {
-      foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
-        if (currMovie.CoverFullPath.Trim().Length == 0) {
-          MovingPicturesCore.DataProviderManager.GetArtwork(currMovie);
-          currMovie.UnloadArtwork();
-          currMovie.Commit();
-        }
+        try {
+            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
+                if (currMovie.CoverFullPath.Trim().Length == 0) {
+                    MovingPicturesCore.DataProviderManager.GetArtwork(currMovie);
+                    currMovie.UnloadArtwork();
+                    currMovie.Commit();
+                }
 
-        if (currMovie.BackdropFullPath.Trim().Length == 0) {
-          new LocalProvider().GetBackdrop(currMovie);
-          MovingPicturesCore.DataProviderManager.GetBackdrop(currMovie);
-          currMovie.Commit();
+                if (currMovie.BackdropFullPath.Trim().Length == 0) {
+                    new LocalProvider().GetBackdrop(currMovie);
+                    MovingPicturesCore.DataProviderManager.GetBackdrop(currMovie);
+                    currMovie.Commit();
 
+                }
+            }
         }
-      }
+        catch (ThreadAbortException) {
+        }
     }
 
     #endregion
@@ -408,7 +451,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           RemoveMissingFiles();
           RemoveOrphanArtwork();
 
-          LookForMissingArtwork();
           SetupFileSystemWatchers();
 
           // do an initial scan on all paths

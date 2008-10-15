@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using System.Threading;
 
 namespace Cornerstone.ScraperEngine.Nodes {
 
@@ -27,7 +28,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // try to grab the first value
             try { value1 = xmlNode.Attributes["value1"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Missing VALUE1 attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
@@ -35,7 +39,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // try to grab the second value
             try { value2 = xmlNode.Attributes["value2"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Missing VALUE2 attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
@@ -44,7 +51,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
             // try to grab the desired result type
             string resultTypeStr;
             try { resultTypeStr = xmlNode.Attributes["result_type"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 resultTypeStr = "INT";
             }
 
@@ -79,7 +89,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 if (ResultType == ResultTypeEnum.FLOAT)
                     setVariable(variables, parseString(variables, Name), (val1 + val2).ToString());
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Error parsing numbers: " + xmlNode.OuterXml);
             }
         }
@@ -107,7 +120,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 if (ResultType == ResultTypeEnum.FLOAT)
                     setVariable(variables, parseString(variables, Name), (val1 - val2).ToString());
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Error parsing numbers: " + xmlNode.OuterXml);
             }
         }
@@ -134,7 +150,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 if (ResultType == ResultTypeEnum.FLOAT)
                     setVariable(variables, parseString(variables, Name), (val1 * val2).ToString());
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Error parsing numbers: " + xmlNode.OuterXml);
             }
         }
@@ -161,7 +180,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 if (ResultType == ResultTypeEnum.FLOAT)
                     setVariable(variables, parseString(variables, Name), (val1 / val2).ToString());
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Error parsing numbers: " + xmlNode.OuterXml);
             }
         }

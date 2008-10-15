@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.ScraperEngine.Nodes;
+using System.Threading;
 
 namespace Cornerstone.ScraperEngine {
     public class ScriptableScraper {
@@ -117,7 +118,10 @@ namespace Cornerstone.ScraperEngine {
                     return;
                 }
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Error parsing scriptable scraper XML file!");
                 loadSuccessful = false;
                 return;
@@ -154,7 +158,10 @@ namespace Cornerstone.ScraperEngine {
                         language = currNode.InnerText;
                     }
                 }
-            } catch (Exception) {
+            } catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Info("Error parsing <details> node for scriptable scraper.");
                 loadSuccessful = false;
             }

@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using NLog;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database.CustomTypes;
+using System.Threading;
 
 namespace Cornerstone.Database.Tables {
     [DBTableAttribute("settings")]
@@ -108,6 +109,8 @@ namespace Cornerstone.Database.Tables {
                         return StringValue;
                 }
                 catch (Exception e) {
+                    if (e.GetType() == typeof(ThreadAbortException))
+                        throw e;
                     logger.ErrorException("Error parsing Settings Value: ", e);
                 }
 
@@ -139,7 +142,9 @@ namespace Cornerstone.Database.Tables {
                 if (Type == "STRING")
                     return true;
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
                 return false;
             }
 

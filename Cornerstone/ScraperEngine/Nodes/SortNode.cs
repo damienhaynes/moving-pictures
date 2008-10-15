@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Cornerstone.Tools;
 using System.Xml;
+using System.Threading;
 
 namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("sort")]
@@ -32,13 +33,19 @@ namespace Cornerstone.ScraperEngine.Nodes {
                     logger.Error("Invalid sort direction on: " + xmlNode.OuterXml);
                 }
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 direction = DirectionType.ASCENDING;
             }
 
             // try to grab the sortby member
             try { sortBy = xmlNode.Attributes["by"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Missing BY attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
@@ -144,7 +151,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
                 return thisFloat == otherFloat ? 0 : thisFloat < otherFloat ? -1 : 1;
             }
-            catch (Exception) { }
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+            }
 
             // otherwise resort to string based sorting
             return SortValue.CompareTo(other.SortValue);

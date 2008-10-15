@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Cornerstone.Database.Tables;
+using System.Threading;
 
 namespace Cornerstone.Database.CustomTypes {
     public class DBObjectList<T>: DynamicList<T>, IStringSourcedObject 
@@ -33,7 +34,10 @@ namespace Cornerstone.Database.CustomTypes {
                     try {
                         Add(dbManager.Get<T>(int.Parse(token)));
                     }
-                    catch (Exception) { }
+                    catch (Exception e) {
+                        if (e.GetType() == typeof(ThreadAbortException))
+                            throw e;
+                    }
                 }
 
                 startIndex += len;
