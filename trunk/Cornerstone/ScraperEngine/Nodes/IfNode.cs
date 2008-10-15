@@ -4,6 +4,7 @@ using System.Text;
 using Cornerstone.Tools;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("if", LoadNameAttribute=false)]
@@ -17,7 +18,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // try to grab the test string
             try { test = xmlNode.Attributes["test"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Missing TEST attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;

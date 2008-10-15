@@ -40,7 +40,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // try to grab the url
             try { url = xmlNode.Attributes["url"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Missing URL attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
@@ -48,23 +51,35 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // grab user agent. if none specified use defaults
             try { userAgent = xmlNode.Attributes["useragent"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+              if (e.GetType() == typeof(ThreadAbortException))
+                throw e;
+
               userAgent = "Mozilla/5.0 (compatible; MSIE 7.0; Windows NT 5.1)";
             }
 
             // grab timeout and retry values. if none specified use defaults
             try { maxRetries = int.Parse(xmlNode.Attributes["retries"].Value); }
-            catch (Exception) {
+            catch (Exception e) {
+              if (e.GetType() == typeof(ThreadAbortException))
+                throw e;
+
               maxRetries = 5;
             }
 
             try { timeout = int.Parse(xmlNode.Attributes["timeout"].Value); }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 timeout = 5000;
             }
 
             try { timeoutIncrement = int.Parse(xmlNode.Attributes["timeout_increment"].Value); }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 timeoutIncrement = 2000;
             }
         }

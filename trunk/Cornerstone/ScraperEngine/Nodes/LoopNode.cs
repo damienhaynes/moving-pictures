@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using System.Threading;
 
 namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("loop")]
@@ -27,7 +28,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // try to grab the looping variable
             try { loopingVariable = xmlNode.Attributes["on"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Missing ON attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
@@ -39,7 +43,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 limitStr = xmlNode.Attributes["limit"].Value;
                 limit = int.Parse(limitStr);
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+                
                 limit = 10;
             }
         }

@@ -10,6 +10,7 @@ using Cornerstone.Database;
 using System.Web;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Reflection;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class LocalProvider : IMovieProvider {
@@ -127,7 +128,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 }
 
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
                 logger.Warn("Unexpected problem loading artwork via LocalProvider.");
             }
 

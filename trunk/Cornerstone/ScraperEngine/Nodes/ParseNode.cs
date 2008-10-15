@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("parse")]
@@ -26,7 +27,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // try to grab the input string
             try { input = xmlNode.Attributes["input"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Missing INPUT attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
@@ -34,7 +38,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             // try to grab the regex pattern
             try { pattern = xmlNode.Attributes["regex"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Missing REGEX attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;

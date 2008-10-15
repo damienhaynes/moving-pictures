@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using NLog;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("import_path")]
@@ -87,6 +88,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
           catch (Exception e)
           {
+            if (e.GetType() == typeof(ThreadAbortException))
+              throw e;
             logger.Error("Error while retrieving files/directories for: " + di.FullName, e);
           }
 
@@ -103,6 +106,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
             catch (Exception e)
             {
+              if (e.GetType() == typeof(ThreadAbortException))
+                throw e;
               logger.Error("Error during attribute check for: " + d.FullName, e);
             }
           }
@@ -139,6 +144,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 }
             }
             catch (Exception e) {
+               if (e.GetType() == typeof(ThreadAbortException))
+                   throw e;
                logger.Error("Error scanning " + Directory.FullName, e);
             }
 

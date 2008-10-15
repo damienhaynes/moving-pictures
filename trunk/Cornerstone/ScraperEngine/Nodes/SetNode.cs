@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using System.Threading;
 
 namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("set")]
@@ -23,7 +24,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
             
             // try to grab the value
             try { value = xmlNode.Attributes["value"].Value; }
-            catch (Exception) {
+            catch (Exception e) {
+              if (e.GetType() == typeof(ThreadAbortException))
+                throw e;
+
               loadSuccess = false;
             }
             

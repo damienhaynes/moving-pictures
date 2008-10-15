@@ -6,6 +6,7 @@ using NLog;
 using System.Reflection;
 using System.Web;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Cornerstone.ScraperEngine {
     public abstract class ScraperNode {
@@ -60,7 +61,10 @@ namespace Cornerstone.ScraperEngine {
             if (nodeSettings.LoadNameAttribute) {
                 // try to grab the name of the node (variable name for results)
                 try { name = xmlNode.Attributes["name"].Value; }
-                catch (Exception) {
+                catch (Exception e) {
+                    if (e.GetType() == typeof(ThreadAbortException))
+                        throw e;
+
                     logger.Error("Missing NAME attribute on: " + xmlNode.OuterXml);
                     loadSuccess = false;
                     return;
@@ -212,6 +216,9 @@ namespace Cornerstone.ScraperEngine {
                 return newNode;
             }
             catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Error instantiating ScraperNode based on: " + xmlNode.OuterXml, e);
                 return null;
             }

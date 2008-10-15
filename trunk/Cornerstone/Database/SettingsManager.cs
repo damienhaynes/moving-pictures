@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using NLog;
 using Cornerstone.Database.Tables;
+using System.Threading;
 
 namespace Cornerstone.Database {
     public class SettingsManager: Dictionary<string, DBSetting> {
@@ -94,7 +95,10 @@ namespace Cornerstone.Database {
                             newSettingCount++;
                     }
                 }
-                catch (Exception) {
+                catch (Exception e) {
+                    if (e.GetType() == typeof(ThreadAbortException))
+                        throw e;
+
                     string settingName = "???";
                     if (currNode != null && currNode.Attributes != null && currNode.Attributes["name"] != null)
                         settingName = currNode.Attributes["name"].Value;
