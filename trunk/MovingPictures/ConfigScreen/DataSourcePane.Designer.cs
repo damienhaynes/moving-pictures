@@ -248,6 +248,7 @@
             this.settingsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.settingsButton.Name = "settingsButton";
             this.settingsButton.Size = new System.Drawing.Size(32, 23);
+            this.settingsButton.ToolTipText = "Advanced Actions";
             // 
             // selectScriptVersionToolStripMenuItem
             // 
