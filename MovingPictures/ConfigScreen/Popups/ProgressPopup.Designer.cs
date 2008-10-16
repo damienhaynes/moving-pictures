@@ -48,6 +48,7 @@
             this.ControlBox = false;
             this.Controls.Add(this.progressBar);
             this.Name = "ProgressPopup";
+            this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Working...";
             this.Load += new System.EventHandler(this.ProgressPopup_Load);

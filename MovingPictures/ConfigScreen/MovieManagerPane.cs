@@ -19,7 +19,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {
 
         private Dictionary<DBMovieInfo, ListViewItem> listItems;
-        private List<DBLocalMedia> reassigningFiles;
+        private List<DBLocalMedia> processingFiles;
+        private List<DBMovieInfo> processingMovies;
         
         private delegate void InvokeDelegate();
         private delegate DBMovieInfo DBMovieInfoDelegate();
@@ -37,7 +38,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             InitializeComponent();
             
             listItems = new Dictionary<DBMovieInfo, ListViewItem>();
-            reassigningFiles = new List<DBLocalMedia>();
+            processingFiles = new List<DBLocalMedia>();
         }
 
         ~MovieManagerPane() {
@@ -130,7 +131,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             addMovie((DBMovieInfo)obj);
 
             bool reassigning = false;
-            foreach (DBLocalMedia currFile in reassigningFiles) {
+            foreach (DBLocalMedia currFile in processingFiles) {
                 if (((DBMovieInfo)obj).LocalMedia.Contains(currFile))
                     reassigning = true;
                 else {
@@ -404,17 +405,40 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
 
             DialogResult result =
-                MessageBox.Show("You are about to refresh all movie metadata, overwriting\n" +
-                                "any custom modifications to this film.",
+                MessageBox.Show("You are about to refresh metadata for the selected movie, overwriting\n" +
+                                "any custom modifications. If operating on a large number of\n" +
+                                "movies this can be time consuming. Are you sure you want to\n" +
+                                "continue?",
                                 "Refresh Movie", MessageBoxButtons.OKCancel);
 
             if (result == System.Windows.Forms.DialogResult.OK) {
-                foreach (ListViewItem currItem in movieListBox.SelectedItems) {
-                    DBMovieInfo movie = (DBMovieInfo)currItem.Tag;
-                    MovingPicturesCore.DataProviderManager.Update(movie);
+                processingMovies = new List<DBMovieInfo>();
+                foreach (ListViewItem currItem in movieListBox.SelectedItems)
+                    processingMovies.Add((DBMovieInfo)currItem.Tag);
+
+                if (movieListBox.SelectedItems.Count <= 1)
+                    refreshMovies(null);
+                else {
+                    ProgressPopup popup = new ProgressPopup(new ProgressPopup.TrackableWorkerDelegate(refreshMovies));
+                    popup.Owner = this.ParentForm;
+                    popup.ShowDialog();
                 }
 
                 updateMoviePanel();
+                processingMovies.Clear();
+            }
+        }
+
+        private void refreshMovies(ProgressPopup.ProgressDelegate progress) {
+            int count = 0;
+            int total = processingMovies.Count;
+
+            foreach (DBMovieInfo currItem in processingMovies) {
+                MovingPicturesCore.DataProviderManager.Update(currItem);
+
+                count++;
+                if (progress != null)
+                    progress(count, total);
             }
         }
 
@@ -429,10 +453,32 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     "Reassign Movie", MessageBoxButtons.YesNo);
 
             if (result == System.Windows.Forms.DialogResult.Yes) {
-                reassigningFiles.AddRange(CurrentMovie.LocalMedia);
+                processingFiles.AddRange(CurrentMovie.LocalMedia);
                 SingleMovieImporterPopup popup = new SingleMovieImporterPopup(CurrentMovie);
                 popup.ShowDialog();
-                reassigningFiles.Clear();
+                processingFiles.Clear();
+            }
+        }
+
+        private void refreshAllMoviesToolStripMenuItem_Click(object sender, EventArgs e) {
+            DialogResult result =
+                MessageBox.Show("You are about to refresh all movie metadata, overwriting\n" +
+                                "any custom modifications. This operation will be performed\n" +
+                                "on ALL MOVIES IN YOUR DATABASE, and can be very time\n" +
+                                "consuming. Are you sure you want to continue?",
+                                "Refresh All Movies", MessageBoxButtons.OKCancel);
+
+            if (result == System.Windows.Forms.DialogResult.OK) {
+                processingMovies = new List<DBMovieInfo>();
+                foreach (DBMovieInfo currItem in listItems.Keys)
+                    processingMovies.Add(currItem);
+
+                ProgressPopup popup = new ProgressPopup(new ProgressPopup.TrackableWorkerDelegate(refreshMovies));
+                popup.Owner = this.ParentForm;
+                popup.ShowDialog();
+
+                updateMoviePanel();
+                processingMovies.Clear();
             }
         }
 

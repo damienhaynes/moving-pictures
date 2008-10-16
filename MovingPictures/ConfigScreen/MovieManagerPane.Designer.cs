@@ -24,11 +24,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            Cornerstone.GUI.Controls.FieldProperty fieldProperty1 = new Cornerstone.GUI.Controls.FieldProperty();
-            Cornerstone.GUI.Controls.FieldProperty fieldProperty2 = new Cornerstone.GUI.Controls.FieldProperty();
-            Cornerstone.GUI.Controls.FieldProperty fieldProperty3 = new Cornerstone.GUI.Controls.FieldProperty();
-            Cornerstone.GUI.Controls.FieldProperty fieldProperty4 = new Cornerstone.GUI.Controls.FieldProperty();
-            Cornerstone.GUI.Controls.FieldProperty fieldProperty5 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty6 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty7 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty8 = new Cornerstone.GUI.Controls.FieldProperty();
@@ -58,6 +53,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             Cornerstone.GUI.Controls.FieldProperty fieldProperty32 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty33 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty34 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty1 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty2 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty3 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty4 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty5 = new Cornerstone.GUI.Controls.FieldProperty();
             this.coverPanel = new System.Windows.Forms.Panel();
             this.artworkProgressBar = new System.Windows.Forms.ProgressBar();
             this.coverImage = new System.Windows.Forms.PictureBox();
@@ -78,7 +78,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.coverArtFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.fileLabel = new System.Windows.Forms.Label();
             this.filePanel = new System.Windows.Forms.Panel();
-            this.fileDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.fileList = new System.Windows.Forms.ListBox();
@@ -89,15 +88,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.deleteMovieButton = new System.Windows.Forms.ToolStripButton();
             this.reassignMovieButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.refreshMovieButton = new System.Windows.Forms.ToolStripButton();
             this.playMovieButton = new System.Windows.Forms.ToolStripButton();
             this.movieListBox = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.movieDetailsTabPage = new System.Windows.Forms.TabPage();
-            this.movieDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.fileDetailsTabPage = new System.Windows.Forms.TabPage();
+            this.refreshMovieButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.refreshSelectedMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshAllMoviesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.movieTitleTextBox = new Cornerstone.GUI.Controls.DBTextBox();
+            this.movieDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
+            this.fileDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.coverPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.coverImage)).BeginInit();
             this.coverToolStrip.SuspendLayout();
@@ -311,38 +313,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.filePanel.Size = new System.Drawing.Size(444, 572);
             this.filePanel.TabIndex = 13;
             // 
-            // fileDetailsList
-            // 
-            this.fileDetailsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileDetailsList.DatabaseObject = null;
-            fieldProperty1.DisplayName = "Full Path";
-            fieldProperty1.FieldName = "FullPath";
-            fieldProperty1.ReadOnly = true;
-            fieldProperty2.DisplayName = "Part";
-            fieldProperty2.FieldName = "Part";
-            fieldProperty2.Visible = false;
-            fieldProperty3.DisplayName = "Ignored";
-            fieldProperty3.FieldName = "Ignored";
-            fieldProperty3.Visible = false;
-            fieldProperty4.DisplayName = "Import Path";
-            fieldProperty4.FieldName = "ImportPath";
-            fieldProperty4.ReadOnly = true;
-            fieldProperty5.DisplayName = "Duration";
-            fieldProperty5.FieldName = "Duration";
-            fieldProperty5.ReadOnly = true;
-            this.fileDetailsList.FieldProperties.Add(fieldProperty1);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty2);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty3);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty4);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty5);
-            this.fileDetailsList.Location = new System.Drawing.Point(0, 95);
-            this.fileDetailsList.Name = "fileDetailsList";
-            this.fileDetailsList.Size = new System.Drawing.Size(444, 476);
-            this.fileDetailsList.TabIndex = 9;
-            this.fileDetailsList.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBLocalMedia);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -463,18 +433,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
-            // refreshMovieButton
-            // 
-            this.refreshMovieButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.refreshMovieButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.refreshMovieButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_rotate_clockwise;
-            this.refreshMovieButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.refreshMovieButton.Name = "refreshMovieButton";
-            this.refreshMovieButton.Size = new System.Drawing.Size(23, 22);
-            this.refreshMovieButton.Text = "toolStripButton1";
-            this.refreshMovieButton.ToolTipText = "Refresh Movie Info From Internet";
-            this.refreshMovieButton.Click += new System.EventHandler(this.refreshMovieButton_Click);
-            // 
             // playMovieButton
             // 
             this.playMovieButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -537,6 +495,66 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieDetailsTabPage.TabIndex = 0;
             this.movieDetailsTabPage.Text = "Movie Details";
             this.movieDetailsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // fileDetailsTabPage
+            // 
+            this.fileDetailsTabPage.Controls.Add(this.filePanel);
+            this.fileDetailsTabPage.Location = new System.Drawing.Point(4, 25);
+            this.fileDetailsTabPage.Name = "fileDetailsTabPage";
+            this.fileDetailsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.fileDetailsTabPage.Size = new System.Drawing.Size(444, 573);
+            this.fileDetailsTabPage.TabIndex = 1;
+            this.fileDetailsTabPage.Text = "File Details";
+            this.fileDetailsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // refreshMovieButton
+            // 
+            this.refreshMovieButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.refreshMovieButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.refreshMovieButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refreshSelectedMoviesToolStripMenuItem,
+            this.refreshAllMoviesToolStripMenuItem});
+            this.refreshMovieButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_rotate_clockwise;
+            this.refreshMovieButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.refreshMovieButton.Name = "refreshMovieButton";
+            this.refreshMovieButton.Size = new System.Drawing.Size(32, 22);
+            this.refreshMovieButton.Text = " Selec";
+            this.refreshMovieButton.ToolTipText = "Refresh Movie Info From Internet";
+            this.refreshMovieButton.ButtonClick += new System.EventHandler(this.refreshMovieButton_Click);
+            // 
+            // refreshSelectedMoviesToolStripMenuItem
+            // 
+            this.refreshSelectedMoviesToolStripMenuItem.Name = "refreshSelectedMoviesToolStripMenuItem";
+            this.refreshSelectedMoviesToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.refreshSelectedMoviesToolStripMenuItem.Text = "Refresh Selected Movies";
+            this.refreshSelectedMoviesToolStripMenuItem.Click += new System.EventHandler(this.refreshMovieButton_Click);
+            // 
+            // refreshAllMoviesToolStripMenuItem
+            // 
+            this.refreshAllMoviesToolStripMenuItem.Name = "refreshAllMoviesToolStripMenuItem";
+            this.refreshAllMoviesToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.refreshAllMoviesToolStripMenuItem.Text = "Refresh All Movies";
+            this.refreshAllMoviesToolStripMenuItem.Click += new System.EventHandler(this.refreshAllMoviesToolStripMenuItem_Click);
+            // 
+            // movieTitleTextBox
+            // 
+            this.movieTitleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.movieTitleTextBox.BackColor = System.Drawing.SystemColors.Control;
+            this.movieTitleTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.movieTitleTextBox.DatabaseFieldName = "Title";
+            this.movieTitleTextBox.DatabaseObject = null;
+            this.movieTitleTextBox.DBTypeOverride = Cornerstone.Database.DBField.DBDataType.TEXT;
+            this.movieTitleTextBox.EmulateLabel = true;
+            this.movieTitleTextBox.Enabled = false;
+            this.movieTitleTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.movieTitleTextBox.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.movieTitleTextBox.Location = new System.Drawing.Point(197, 14);
+            this.movieTitleTextBox.Name = "movieTitleTextBox";
+            this.movieTitleTextBox.Size = new System.Drawing.Size(331, 19);
+            this.movieTitleTextBox.TabIndex = 16;
+            this.movieTitleTextBox.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
+            this.movieTitleTextBox.Text = "Title";
             // 
             // movieDetailsList
             // 
@@ -650,36 +668,37 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieDetailsList.TabIndex = 8;
             this.movieDetailsList.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
             // 
-            // fileDetailsTabPage
+            // fileDetailsList
             // 
-            this.fileDetailsTabPage.Controls.Add(this.filePanel);
-            this.fileDetailsTabPage.Location = new System.Drawing.Point(4, 25);
-            this.fileDetailsTabPage.Name = "fileDetailsTabPage";
-            this.fileDetailsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.fileDetailsTabPage.Size = new System.Drawing.Size(444, 573);
-            this.fileDetailsTabPage.TabIndex = 1;
-            this.fileDetailsTabPage.Text = "File Details";
-            this.fileDetailsTabPage.UseVisualStyleBackColor = true;
-            // 
-            // movieTitleTextBox
-            // 
-            this.movieTitleTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.fileDetailsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.movieTitleTextBox.BackColor = System.Drawing.SystemColors.Control;
-            this.movieTitleTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.movieTitleTextBox.DatabaseFieldName = "Title";
-            this.movieTitleTextBox.DatabaseObject = null;
-            this.movieTitleTextBox.DBTypeOverride = Cornerstone.Database.DBField.DBDataType.TEXT;
-            this.movieTitleTextBox.EmulateLabel = true;
-            this.movieTitleTextBox.Enabled = false;
-            this.movieTitleTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.movieTitleTextBox.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.movieTitleTextBox.Location = new System.Drawing.Point(197, 14);
-            this.movieTitleTextBox.Name = "movieTitleTextBox";
-            this.movieTitleTextBox.Size = new System.Drawing.Size(338, 19);
-            this.movieTitleTextBox.TabIndex = 16;
-            this.movieTitleTextBox.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
-            this.movieTitleTextBox.Text = "Title";
+            this.fileDetailsList.DatabaseObject = null;
+            fieldProperty1.DisplayName = "Full Path";
+            fieldProperty1.FieldName = "FullPath";
+            fieldProperty1.ReadOnly = true;
+            fieldProperty2.DisplayName = "Part";
+            fieldProperty2.FieldName = "Part";
+            fieldProperty2.Visible = false;
+            fieldProperty3.DisplayName = "Ignored";
+            fieldProperty3.FieldName = "Ignored";
+            fieldProperty3.Visible = false;
+            fieldProperty4.DisplayName = "Import Path";
+            fieldProperty4.FieldName = "ImportPath";
+            fieldProperty4.ReadOnly = true;
+            fieldProperty5.DisplayName = "Duration";
+            fieldProperty5.FieldName = "Duration";
+            fieldProperty5.ReadOnly = true;
+            this.fileDetailsList.FieldProperties.Add(fieldProperty1);
+            this.fileDetailsList.FieldProperties.Add(fieldProperty2);
+            this.fileDetailsList.FieldProperties.Add(fieldProperty3);
+            this.fileDetailsList.FieldProperties.Add(fieldProperty4);
+            this.fileDetailsList.FieldProperties.Add(fieldProperty5);
+            this.fileDetailsList.Location = new System.Drawing.Point(0, 95);
+            this.fileDetailsList.Name = "fileDetailsList";
+            this.fileDetailsList.Size = new System.Drawing.Size(444, 476);
+            this.fileDetailsList.TabIndex = 9;
+            this.fileDetailsList.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBLocalMedia);
             // 
             // MovieManagerPane
             // 
@@ -739,7 +758,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.Label fileLabel;
         private System.Windows.Forms.Panel filePanel;
         private System.Windows.Forms.ToolStrip movieToolStrip;
-        private System.Windows.Forms.ToolStripButton refreshMovieButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton reassignMovieButton;
         private System.Windows.Forms.ToolStripButton playMovieButton;
@@ -756,5 +774,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private ToolStripButton fileDownButton;
         private ListBox fileList;
         private Label label1;
+        private ToolStripSplitButton refreshMovieButton;
+        private ToolStripMenuItem refreshSelectedMoviesToolStripMenuItem;
+        private ToolStripMenuItem refreshAllMoviesToolStripMenuItem;
     }
 }

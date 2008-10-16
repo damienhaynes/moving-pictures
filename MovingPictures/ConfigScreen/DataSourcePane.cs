@@ -21,8 +21,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private Dictionary<DBSourceInfo, ListViewItem> listItemLookup;
 
+        [ReadOnly(true)]
         public DataType DisplayType {
             set {
+                if (DesignMode) {
+                    displayType = DataType.DETAILS;
+                    return;
+                }
+
                 if ((listView != null && listView.Items != null && listView.Items.Count != 0) && displayType == value)
                     return;
 

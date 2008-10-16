@@ -30,23 +30,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MovieImporterPane));
             this.importerGroupBox = new System.Windows.Forms.GroupBox();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.countProgressLabel = new System.Windows.Forms.Label();
-            this.currentTaskDesc = new System.Windows.Forms.Label();
-            this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.unapprovedMatchesBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.settingsTabPage = new System.Windows.Forms.TabPage();
-            this.comingSoon1 = new System.Windows.Forms.Label();
-            this.sourcesTabPage = new System.Windows.Forms.TabPage();
-            this.dataSourceList1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.DataSourcePane();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.matchesTabPage = new System.Windows.Forms.TabPage();
-            this.unapprovedGrid = new System.Windows.Forms.DataGridView();
-            this.unapprovedPossibleMatchesColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.unapprovedLocalMediaColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.statusColumn = new System.Windows.Forms.DataGridViewImageColumn();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.approveButton = new System.Windows.Forms.ToolStripButton();
             this.rescanButton = new System.Windows.Forms.ToolStripButton();
@@ -59,15 +45,31 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.processingMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unapprovedMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.approvedCommitedMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabControl = new System.Windows.Forms.TabControl();
+            this.unapprovedGrid = new System.Windows.Forms.DataGridView();
+            this.statusColumn = new System.Windows.Forms.DataGridViewImageColumn();
+            this.unapprovedLocalMediaColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.unapprovedPossibleMatchesColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.sourcesTabPage = new System.Windows.Forms.TabPage();
+            this.settingsTabPage = new System.Windows.Forms.TabPage();
+            this.comingSoon1 = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.countProgressLabel = new System.Windows.Forms.Label();
+            this.currentTaskDesc = new System.Windows.Forms.Label();
+            this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.settingsButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.unignoreAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataSourceList1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.DataSourcePane();
+            this.unapprovedMatchesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.importerGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.unapprovedMatchesBindingSource)).BeginInit();
-            this.settingsTabPage.SuspendLayout();
-            this.sourcesTabPage.SuspendLayout();
-            this.matchesTabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).BeginInit();
-            this.toolStrip1.SuspendLayout();
             this.tabControl.SuspendLayout();
+            this.matchesTabPage.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).BeginInit();
+            this.sourcesTabPage.SuspendLayout();
+            this.settingsTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.unapprovedMatchesBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // importerGroupBox
@@ -83,6 +85,245 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importerGroupBox.TabIndex = 0;
             this.importerGroupBox.TabStop = false;
             this.importerGroupBox.Text = "Media Importer";
+            // 
+            // tabControl
+            // 
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabControl.Controls.Add(this.matchesTabPage);
+            this.tabControl.Controls.Add(this.sourcesTabPage);
+            this.tabControl.Controls.Add(this.settingsTabPage);
+            this.tabControl.Location = new System.Drawing.Point(6, 20);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(630, 355);
+            this.tabControl.TabIndex = 4;
+            // 
+            // matchesTabPage
+            // 
+            this.matchesTabPage.Controls.Add(this.toolStrip1);
+            this.matchesTabPage.Controls.Add(this.unapprovedGrid);
+            this.matchesTabPage.Location = new System.Drawing.Point(4, 25);
+            this.matchesTabPage.Name = "matchesTabPage";
+            this.matchesTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.matchesTabPage.Size = new System.Drawing.Size(622, 326);
+            this.matchesTabPage.TabIndex = 0;
+            this.matchesTabPage.Text = "Matches";
+            this.matchesTabPage.UseVisualStyleBackColor = true;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.filterSplitButton,
+            this.approveButton,
+            this.rescanButton,
+            this.splitJoinButton,
+            this.toolStripSeparator1,
+            this.ignoreButton,
+            this.toolStripSeparator2,
+            this.settingsButton});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolStrip1.Size = new System.Drawing.Size(616, 26);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // approveButton
+            // 
+            this.approveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.approveButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.tick;
+            this.approveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.approveButton.Name = "approveButton";
+            this.approveButton.Size = new System.Drawing.Size(23, 23);
+            this.approveButton.Text = "toolStripButton1";
+            this.approveButton.ToolTipText = "Approve Selected File(s)";
+            this.approveButton.Click += new System.EventHandler(this.approveButton_Click);
+            // 
+            // rescanButton
+            // 
+            this.rescanButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.rescanButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_rotate_clockwise;
+            this.rescanButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rescanButton.Name = "rescanButton";
+            this.rescanButton.Size = new System.Drawing.Size(23, 23);
+            this.rescanButton.Text = "toolStripButton1";
+            this.rescanButton.ToolTipText = "Rescan Selected File(s) with Custom Search String";
+            this.rescanButton.Click += new System.EventHandler(this.rescanButton_Click);
+            // 
+            // splitJoinButton
+            // 
+            this.splitJoinButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.splitJoinButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_divide;
+            this.splitJoinButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.splitJoinButton.Name = "splitJoinButton";
+            this.splitJoinButton.Size = new System.Drawing.Size(23, 23);
+            this.splitJoinButton.Text = "toolStripButton1";
+            this.splitJoinButton.ToolTipText = "Split Selected File Group";
+            this.splitJoinButton.Click += new System.EventHandler(this.splitJoinButton_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 26);
+            // 
+            // ignoreButton
+            // 
+            this.ignoreButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ignoreButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cross;
+            this.ignoreButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ignoreButton.Name = "ignoreButton";
+            this.ignoreButton.Size = new System.Drawing.Size(23, 23);
+            this.ignoreButton.Text = "toolStripButton2";
+            this.ignoreButton.ToolTipText = "Ignore Selected File(s)";
+            this.ignoreButton.Click += new System.EventHandler(this.ignoreButton_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
+            // 
+            // filterSplitButton
+            // 
+            this.filterSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.filterSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.allMatchesToolStripMenuItem,
+            this.processingMatchesToolStripMenuItem,
+            this.unapprovedMatchesToolStripMenuItem,
+            this.approvedCommitedMatchesToolStripMenuItem});
+            this.filterSplitButton.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filterSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.filterSplitButton.Name = "filterSplitButton";
+            this.filterSplitButton.Size = new System.Drawing.Size(119, 23);
+            this.filterSplitButton.Text = "All Matches";
+            this.filterSplitButton.ToolTipText = "Filter Match List";
+            this.filterSplitButton.Visible = false;
+            // 
+            // allMatchesToolStripMenuItem
+            // 
+            this.allMatchesToolStripMenuItem.Name = "allMatchesToolStripMenuItem";
+            this.allMatchesToolStripMenuItem.Size = new System.Drawing.Size(336, 24);
+            this.allMatchesToolStripMenuItem.Text = "All Matches";
+            // 
+            // processingMatchesToolStripMenuItem
+            // 
+            this.processingMatchesToolStripMenuItem.Name = "processingMatchesToolStripMenuItem";
+            this.processingMatchesToolStripMenuItem.Size = new System.Drawing.Size(336, 24);
+            this.processingMatchesToolStripMenuItem.Text = "Processing Matches";
+            // 
+            // unapprovedMatchesToolStripMenuItem
+            // 
+            this.unapprovedMatchesToolStripMenuItem.Name = "unapprovedMatchesToolStripMenuItem";
+            this.unapprovedMatchesToolStripMenuItem.Size = new System.Drawing.Size(336, 24);
+            this.unapprovedMatchesToolStripMenuItem.Text = "Unapproved Matches";
+            // 
+            // approvedCommitedMatchesToolStripMenuItem
+            // 
+            this.approvedCommitedMatchesToolStripMenuItem.Name = "approvedCommitedMatchesToolStripMenuItem";
+            this.approvedCommitedMatchesToolStripMenuItem.Size = new System.Drawing.Size(336, 24);
+            this.approvedCommitedMatchesToolStripMenuItem.Text = "Approved/Commited Matches";
+            // 
+            // unapprovedGrid
+            // 
+            this.unapprovedGrid.AllowUserToAddRows = false;
+            this.unapprovedGrid.AllowUserToDeleteRows = false;
+            this.unapprovedGrid.AllowUserToResizeRows = false;
+            this.unapprovedGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.unapprovedGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.unapprovedGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.unapprovedGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.statusColumn,
+            this.unapprovedLocalMediaColumn,
+            this.unapprovedPossibleMatchesColumn});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.unapprovedGrid.DefaultCellStyle = dataGridViewCellStyle2;
+            this.unapprovedGrid.Location = new System.Drawing.Point(0, 31);
+            this.unapprovedGrid.Name = "unapprovedGrid";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.unapprovedGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.unapprovedGrid.RowHeadersVisible = false;
+            this.unapprovedGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.unapprovedGrid.Size = new System.Drawing.Size(621, 295);
+            this.unapprovedGrid.TabIndex = 0;
+            this.unapprovedGrid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.unapprovedGrid_DataError);
+            this.unapprovedGrid.SelectionChanged += new System.EventHandler(this.unapprovedGrid_SelectionChanged);
+            // 
+            // statusColumn
+            // 
+            this.statusColumn.HeaderText = "";
+            this.statusColumn.Name = "statusColumn";
+            this.statusColumn.Width = 20;
+            // 
+            // unapprovedLocalMediaColumn
+            // 
+            this.unapprovedLocalMediaColumn.DataPropertyName = "LocalMediaString";
+            this.unapprovedLocalMediaColumn.HeaderText = "File(s)";
+            this.unapprovedLocalMediaColumn.Name = "unapprovedLocalMediaColumn";
+            this.unapprovedLocalMediaColumn.ReadOnly = true;
+            this.unapprovedLocalMediaColumn.Width = 200;
+            // 
+            // unapprovedPossibleMatchesColumn
+            // 
+            this.unapprovedPossibleMatchesColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.unapprovedPossibleMatchesColumn.DataPropertyName = "Selected";
+            this.unapprovedPossibleMatchesColumn.HeaderText = "Possible Matches";
+            this.unapprovedPossibleMatchesColumn.Name = "unapprovedPossibleMatchesColumn";
+            // 
+            // sourcesTabPage
+            // 
+            this.sourcesTabPage.Controls.Add(this.dataSourceList1);
+            this.sourcesTabPage.Location = new System.Drawing.Point(4, 25);
+            this.sourcesTabPage.Name = "sourcesTabPage";
+            this.sourcesTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.sourcesTabPage.Size = new System.Drawing.Size(622, 326);
+            this.sourcesTabPage.TabIndex = 5;
+            this.sourcesTabPage.Text = "Data Sources";
+            this.sourcesTabPage.UseVisualStyleBackColor = true;
+            // 
+            // settingsTabPage
+            // 
+            this.settingsTabPage.Controls.Add(this.comingSoon1);
+            this.settingsTabPage.Location = new System.Drawing.Point(4, 25);
+            this.settingsTabPage.Name = "settingsTabPage";
+            this.settingsTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.settingsTabPage.Size = new System.Drawing.Size(622, 326);
+            this.settingsTabPage.TabIndex = 3;
+            this.settingsTabPage.Text = "Settings";
+            this.settingsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // comingSoon1
+            // 
+            this.comingSoon1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.comingSoon1.AutoSize = true;
+            this.comingSoon1.Location = new System.Drawing.Point(273, 157);
+            this.comingSoon1.Name = "comingSoon1";
+            this.comingSoon1.Size = new System.Drawing.Size(77, 13);
+            this.comingSoon1.TabIndex = 0;
+            this.comingSoon1.Text = "Coming soon...";
             // 
             // progressBar
             // 
@@ -132,42 +373,31 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
             this.dataGridViewTextBoxColumn1.Width = 200;
             // 
-            // unapprovedMatchesBindingSource
+            // settingsButton
             // 
-            this.unapprovedMatchesBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieMatch);
-            this.unapprovedMatchesBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.unapprovedMatchesBindingSource_ListChanged);
+            this.settingsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.settingsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.unignoreAllFilesToolStripMenuItem,
+            this.restartImporterToolStripMenuItem});
+            this.settingsButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cog;
+            this.settingsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Size = new System.Drawing.Size(32, 23);
+            this.settingsButton.ToolTipText = "Advanced Actions";
             // 
-            // settingsTabPage
+            // unignoreAllFilesToolStripMenuItem
             // 
-            this.settingsTabPage.Controls.Add(this.comingSoon1);
-            this.settingsTabPage.Location = new System.Drawing.Point(4, 25);
-            this.settingsTabPage.Name = "settingsTabPage";
-            this.settingsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.settingsTabPage.Size = new System.Drawing.Size(622, 326);
-            this.settingsTabPage.TabIndex = 3;
-            this.settingsTabPage.Text = "Settings";
-            this.settingsTabPage.UseVisualStyleBackColor = true;
+            this.unignoreAllFilesToolStripMenuItem.Name = "unignoreAllFilesToolStripMenuItem";
+            this.unignoreAllFilesToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.unignoreAllFilesToolStripMenuItem.Text = "Unignore All Files";
+            this.unignoreAllFilesToolStripMenuItem.Click += new System.EventHandler(this.unignoreAllFilesToolStripMenuItem_Click);
             // 
-            // comingSoon1
+            // restartImporterToolStripMenuItem
             // 
-            this.comingSoon1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.comingSoon1.AutoSize = true;
-            this.comingSoon1.Location = new System.Drawing.Point(273, 157);
-            this.comingSoon1.Name = "comingSoon1";
-            this.comingSoon1.Size = new System.Drawing.Size(77, 13);
-            this.comingSoon1.TabIndex = 0;
-            this.comingSoon1.Text = "Coming soon...";
-            // 
-            // sourcesTabPage
-            // 
-            this.sourcesTabPage.Controls.Add(this.dataSourceList1);
-            this.sourcesTabPage.Location = new System.Drawing.Point(4, 25);
-            this.sourcesTabPage.Name = "sourcesTabPage";
-            this.sourcesTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.sourcesTabPage.Size = new System.Drawing.Size(622, 326);
-            this.sourcesTabPage.TabIndex = 5;
-            this.sourcesTabPage.Text = "Data Sources";
-            this.sourcesTabPage.UseVisualStyleBackColor = true;
+            this.restartImporterToolStripMenuItem.Name = "restartImporterToolStripMenuItem";
+            this.restartImporterToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.restartImporterToolStripMenuItem.Text = "Restart Importer";
+            this.restartImporterToolStripMenuItem.Click += new System.EventHandler(this.restartImporterToolStripMenuItem_Click);
             // 
             // dataSourceList1
             // 
@@ -177,211 +407,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.dataSourceList1.Size = new System.Drawing.Size(616, 320);
             this.dataSourceList1.TabIndex = 0;
             // 
-            // matchesTabPage
+            // unapprovedMatchesBindingSource
             // 
-            this.matchesTabPage.Controls.Add(this.toolStrip1);
-            this.matchesTabPage.Controls.Add(this.unapprovedGrid);
-            this.matchesTabPage.Location = new System.Drawing.Point(4, 25);
-            this.matchesTabPage.Name = "matchesTabPage";
-            this.matchesTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.matchesTabPage.Size = new System.Drawing.Size(622, 326);
-            this.matchesTabPage.TabIndex = 0;
-            this.matchesTabPage.Text = "Matches";
-            this.matchesTabPage.UseVisualStyleBackColor = true;
-            // 
-            // unapprovedGrid
-            // 
-            this.unapprovedGrid.AllowUserToAddRows = false;
-            this.unapprovedGrid.AllowUserToDeleteRows = false;
-            this.unapprovedGrid.AllowUserToResizeRows = false;
-            this.unapprovedGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.unapprovedGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.unapprovedGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.unapprovedGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.statusColumn,
-            this.unapprovedLocalMediaColumn,
-            this.unapprovedPossibleMatchesColumn});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.unapprovedGrid.DefaultCellStyle = dataGridViewCellStyle2;
-            this.unapprovedGrid.Location = new System.Drawing.Point(0, 31);
-            this.unapprovedGrid.Name = "unapprovedGrid";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.unapprovedGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.unapprovedGrid.RowHeadersVisible = false;
-            this.unapprovedGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.unapprovedGrid.Size = new System.Drawing.Size(621, 295);
-            this.unapprovedGrid.TabIndex = 0;
-            this.unapprovedGrid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.unapprovedGrid_DataError);
-            this.unapprovedGrid.SelectionChanged += new System.EventHandler(this.unapprovedGrid_SelectionChanged);
-            // 
-            // unapprovedPossibleMatchesColumn
-            // 
-            this.unapprovedPossibleMatchesColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.unapprovedPossibleMatchesColumn.DataPropertyName = "Selected";
-            this.unapprovedPossibleMatchesColumn.HeaderText = "Possible Matches";
-            this.unapprovedPossibleMatchesColumn.Name = "unapprovedPossibleMatchesColumn";
-            // 
-            // unapprovedLocalMediaColumn
-            // 
-            this.unapprovedLocalMediaColumn.DataPropertyName = "LocalMediaString";
-            this.unapprovedLocalMediaColumn.HeaderText = "File(s)";
-            this.unapprovedLocalMediaColumn.Name = "unapprovedLocalMediaColumn";
-            this.unapprovedLocalMediaColumn.ReadOnly = true;
-            this.unapprovedLocalMediaColumn.Width = 200;
-            // 
-            // statusColumn
-            // 
-            this.statusColumn.HeaderText = "";
-            this.statusColumn.Name = "statusColumn";
-            this.statusColumn.Width = 20;
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.approveButton,
-            this.rescanButton,
-            this.splitJoinButton,
-            this.toolStripSeparator1,
-            this.ignoreButton,
-            this.toolStripSeparator2,
-            this.filterSplitButton});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(616, 25);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // approveButton
-            // 
-            this.approveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.approveButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.tick;
-            this.approveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.approveButton.Name = "approveButton";
-            this.approveButton.Size = new System.Drawing.Size(23, 22);
-            this.approveButton.Text = "toolStripButton1";
-            this.approveButton.ToolTipText = "Approve Selected File(s)";
-            this.approveButton.Click += new System.EventHandler(this.approveButton_Click);
-            // 
-            // rescanButton
-            // 
-            this.rescanButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.rescanButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_rotate_clockwise;
-            this.rescanButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.rescanButton.Name = "rescanButton";
-            this.rescanButton.Size = new System.Drawing.Size(23, 22);
-            this.rescanButton.Text = "toolStripButton1";
-            this.rescanButton.ToolTipText = "Rescan Selected File(s) with Custom Search String";
-            this.rescanButton.Click += new System.EventHandler(this.rescanButton_Click);
-            // 
-            // splitJoinButton
-            // 
-            this.splitJoinButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.splitJoinButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_divide;
-            this.splitJoinButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.splitJoinButton.Name = "splitJoinButton";
-            this.splitJoinButton.Size = new System.Drawing.Size(23, 22);
-            this.splitJoinButton.Text = "toolStripButton1";
-            this.splitJoinButton.ToolTipText = "Split Selected File Group";
-            this.splitJoinButton.Click += new System.EventHandler(this.splitJoinButton_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // ignoreButton
-            // 
-            this.ignoreButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.ignoreButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cross;
-            this.ignoreButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ignoreButton.Name = "ignoreButton";
-            this.ignoreButton.Size = new System.Drawing.Size(23, 22);
-            this.ignoreButton.Text = "toolStripButton2";
-            this.ignoreButton.ToolTipText = "Ignore Selected File(s)";
-            this.ignoreButton.Click += new System.EventHandler(this.ignoreButton_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // filterSplitButton
-            // 
-            this.filterSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.filterSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.allMatchesToolStripMenuItem,
-            this.processingMatchesToolStripMenuItem,
-            this.unapprovedMatchesToolStripMenuItem,
-            this.approvedCommitedMatchesToolStripMenuItem});
-            this.filterSplitButton.Image = ((System.Drawing.Image)(resources.GetObject("filterSplitButton.Image")));
-            this.filterSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.filterSplitButton.Name = "filterSplitButton";
-            this.filterSplitButton.Size = new System.Drawing.Size(32, 22);
-            this.filterSplitButton.Text = "toolStripSplitButton1";
-            this.filterSplitButton.ToolTipText = "Filter Match List";
-            this.filterSplitButton.Visible = false;
-            // 
-            // allMatchesToolStripMenuItem
-            // 
-            this.allMatchesToolStripMenuItem.Name = "allMatchesToolStripMenuItem";
-            this.allMatchesToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.allMatchesToolStripMenuItem.Text = "All Matches";
-            // 
-            // processingMatchesToolStripMenuItem
-            // 
-            this.processingMatchesToolStripMenuItem.Name = "processingMatchesToolStripMenuItem";
-            this.processingMatchesToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.processingMatchesToolStripMenuItem.Text = "Processing Matches";
-            // 
-            // unapprovedMatchesToolStripMenuItem
-            // 
-            this.unapprovedMatchesToolStripMenuItem.Name = "unapprovedMatchesToolStripMenuItem";
-            this.unapprovedMatchesToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.unapprovedMatchesToolStripMenuItem.Text = "Unapproved Matches";
-            // 
-            // approvedCommitedMatchesToolStripMenuItem
-            // 
-            this.approvedCommitedMatchesToolStripMenuItem.Name = "approvedCommitedMatchesToolStripMenuItem";
-            this.approvedCommitedMatchesToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
-            this.approvedCommitedMatchesToolStripMenuItem.Text = "Approved/Commited Matches";
-            // 
-            // tabControl
-            // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabControl.Controls.Add(this.matchesTabPage);
-            this.tabControl.Controls.Add(this.sourcesTabPage);
-            this.tabControl.Controls.Add(this.settingsTabPage);
-            this.tabControl.Location = new System.Drawing.Point(6, 20);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(630, 355);
-            this.tabControl.TabIndex = 4;
+            this.unapprovedMatchesBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieMatch);
+            this.unapprovedMatchesBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.unapprovedMatchesBindingSource_ListChanged);
             // 
             // MovieImporterPane
             // 
@@ -395,16 +424,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.HandleDestroyed += new System.EventHandler(this.MovieImporterPane_HandleDestroyed);
             this.importerGroupBox.ResumeLayout(false);
             this.importerGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.unapprovedMatchesBindingSource)).EndInit();
-            this.settingsTabPage.ResumeLayout(false);
-            this.settingsTabPage.PerformLayout();
-            this.sourcesTabPage.ResumeLayout(false);
+            this.tabControl.ResumeLayout(false);
             this.matchesTabPage.ResumeLayout(false);
             this.matchesTabPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.tabControl.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).EndInit();
+            this.sourcesTabPage.ResumeLayout(false);
+            this.settingsTabPage.ResumeLayout(false);
+            this.settingsTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.unapprovedMatchesBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -440,5 +469,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private DataSourcePane dataSourceList1;
         private TabPage settingsTabPage;
         private Label comingSoon1;
+        private ToolStripSplitButton settingsButton;
+        private ToolStripMenuItem unignoreAllFilesToolStripMenuItem;
+        private ToolStripMenuItem restartImporterToolStripMenuItem;
     }
 }
