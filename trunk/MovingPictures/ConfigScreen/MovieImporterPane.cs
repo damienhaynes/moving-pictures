@@ -362,5 +362,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         }
 
+        private void settingsButton_ButtonClick(object sender, EventArgs e) {
+            settingsButton.ShowDropDown();
+        }
+
     }
 }

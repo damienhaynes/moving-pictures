@@ -7,6 +7,7 @@ using System.Net;
 using System.IO;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Reflection;
+using System.Globalization;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     class MeligroveProvider: IMovieProvider {
@@ -23,8 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         public string Version {
             get {
-                Version ver = Assembly.GetExecutingAssembly().GetName().Version;
-                return ver.Major + "." + ver.Minor + "." + ver.Build;
+                return "Internal";
             }
         }
 
@@ -34,6 +34,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         public string Description {
             get { return "Returns backdrops from meligrove.com."; }
+        }
+
+        public string Language {
+            get { return new CultureInfo("en").DisplayName; }
         }
         
         public bool ProvidesMoviesDetails {

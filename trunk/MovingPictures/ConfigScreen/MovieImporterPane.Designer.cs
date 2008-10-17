@@ -384,6 +384,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.settingsButton.Name = "settingsButton";
             this.settingsButton.Size = new System.Drawing.Size(32, 23);
             this.settingsButton.ToolTipText = "Advanced Actions";
+            this.settingsButton.ButtonClick += new System.EventHandler(this.settingsButton_ButtonClick);
             // 
             // unignoreAllFilesToolStripMenuItem
             // 

@@ -113,8 +113,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         #region DataProvider Management Functionality
 
         public void ChangePriority(DBSourceInfo source, DataType type, bool raise) {
-            if (source.IsDisabled(type) && raise) 
-                SetDisabled(source, type, false);
+            if (source.IsDisabled(type)) {
+                if (raise)
+                    SetDisabled(source, type, false);
+                else return;
+            }
             
             // grab the correct list 
             List<DBSourceInfo> sourceList = getEditableList(type);

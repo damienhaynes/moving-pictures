@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Reflection;
+using System.Globalization;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class ScriptableProvider : IScriptableMovieProvider {
@@ -33,6 +34,17 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         public string Author {
             get { return scraper.Author; } 
+        }
+
+        public string Language {
+            get {
+                try {
+                    return new CultureInfo(scraper.Language).DisplayName;
+                }
+                catch (ArgumentException e) {
+                    return "";
+                }
+            }
         }
 
         public bool DebugMode { 
