@@ -41,9 +41,15 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 try {
                     return new CultureInfo(scraper.Language).DisplayName;
                 }
-                catch (ArgumentException e) {
+                catch (ArgumentException) {
                     return "";
                 }
+            }
+        }
+
+        public DateTime? Published {
+            get {
+                return scraper.Published;
             }
         }
 

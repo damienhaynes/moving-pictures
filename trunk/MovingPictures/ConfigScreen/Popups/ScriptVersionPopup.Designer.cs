@@ -29,6 +29,7 @@
             this.versionHeader = new System.Windows.Forms.ColumnHeader();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.publishedHeader = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // label1
@@ -54,7 +55,8 @@
             this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.versionHeader});
+            this.versionHeader,
+            this.publishedHeader});
             this.listView.FullRowSelect = true;
             this.listView.GridLines = true;
             this.listView.Location = new System.Drawing.Point(12, 60);
@@ -89,6 +91,11 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
+            // publishedHeader
+            // 
+            this.publishedHeader.Text = "Published";
+            this.publishedHeader.Width = 87;
+            // 
             // ScriptVersionPopup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -119,5 +126,6 @@
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.ColumnHeader versionHeader;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.ColumnHeader publishedHeader;
     }
 }

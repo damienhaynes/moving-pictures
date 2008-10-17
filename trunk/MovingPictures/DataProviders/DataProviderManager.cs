@@ -13,6 +13,14 @@ using System.IO;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class DataProviderManager {
+        public enum AddSourceResult { 
+            SUCCESS,          // successfully added the source
+            FAILED,           // general failure, usually a parsing error or duplicate unscripted source
+            SUCCESS_REPLACED, // success, but replaced existing version, this will fail when not in debug mode
+            FAILED_VERSION,   // version conflict
+            FAILED_DATE       // published date conflict
+        }     
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private static DataProviderManager instance = null;
         private static String lockObj = "";
@@ -230,7 +238,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             normalizePriorities();
         }
 
-        public void AddSource(Type providerType, string scriptContents) {
+        public AddSourceResult AddSource(Type providerType, string scriptContents) {
             IScriptableMovieProvider newProvider = (IScriptableMovieProvider)Activator.CreateInstance(providerType);
 
             DBScriptInfo newScript = new DBScriptInfo();
@@ -238,39 +246,52 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             
             // if a provider can't be created based on this script we have a bad script file.
             if (newScript.Provider == null)
-                return;
+                return AddSourceResult.FAILED;
             
             // check if we already have this script in memory.
             foreach (DBSourceInfo currSource in allSources)
                 // if some version of the script is already in the database
                 if (currSource.IsScriptable() && ((IScriptableMovieProvider)currSource.Provider).ScriptID == newScript.Provider.ScriptID) {
+                    bool uniqueDate = newScript.Provider.Published != null;
                     foreach (DBScriptInfo currScript in currSource.Scripts) {
+                        if (uniqueDate && 
+                            currScript.Provider.Published != null &&
+                            currScript.Provider.Published.Value.Equals(newScript.Provider.Published.Value))
+
+                            uniqueDate = false;
+                        
                         // check if the same version is already loaded
                         if (currScript.Equals(newScript)) {
                             if (DebugMode) {
-                                logger.Info("Script version number already loaded. Reloading because in Debug Mode.");
+                                logger.Warn("Script version number already loaded. Reloading because in Debug Mode.");
                                 currScript.Contents = scriptContents;
                                 currScript.Reload();
-                                return;
+                                return AddSourceResult.SUCCESS_REPLACED;
                             }
                             else {
-                                logger.Info("Script already loaded.");
-                                return;
+                                logger.Error("Script already loaded.");
+                                return AddSourceResult.FAILED_VERSION;
                             }
                         }
                     }
 
-                    // this version is not loaded, so add it to the DBSourceInfo object.
-                    currSource.Scripts.Add(newScript);
-                    currSource.SelectedScript = newScript;
-                    newScript.Commit();
-                    currSource.Commit();
-                    return;
+                    // if the date is unique, go ahead and add the new script
+                    if (uniqueDate) {
+                        currSource.Scripts.Add(newScript);
+                        currSource.SelectedScript = newScript;
+                        newScript.Commit();
+                        currSource.Commit();
+                        return AddSourceResult.SUCCESS;
+                    }
+                    else {
+                        logger.Error("Script failed to load, publish date is not unique.");
+                        return AddSourceResult.FAILED_DATE;
+                    }
                 }
 
             // if there was nothing to update, and we are not looking to add new data sources, quit
             if (updateOnly)
-                return;
+                return AddSourceResult.SUCCESS;
 
             // build the new source information
             DBSourceInfo newSource = new DBSourceInfo();
@@ -282,21 +303,25 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             addToLists(newSource);
             newScript.Commit();
             newSource.Commit();
+
+            return AddSourceResult.SUCCESS;
         }
 
-        public void AddSource(Type providerType) {
+        public AddSourceResult AddSource(Type providerType) {
             // non-criptable sources cant be updated, so if we are only updating, just return
             if (updateOnly)
-                return;
+                return AddSourceResult.SUCCESS;
 
             foreach (DBSourceInfo currSource in allSources)
                 if (currSource.ProviderType == providerType)
-                    return;
+                    return AddSourceResult.FAILED;
 
             DBSourceInfo newSource = new DBSourceInfo();
             newSource.ProviderType = providerType;
             newSource.Commit();
             addToLists(newSource);
+
+            return AddSourceResult.SUCCESS;
         }
 
         public void RemoveSource(DBSourceInfo source) {

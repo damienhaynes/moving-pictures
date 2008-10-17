@@ -53,6 +53,40 @@ namespace Cornerstone.ScraperEngine {
             get { return versionPoint; }
         } protected int versionPoint;
 
+        // Friendly readable version number.
+        public DateTime? Published {
+            get {
+                try {
+                    if (published == null)
+                        published = new DateTime(publishedYear, publishedMonth, publishedDay);
+                } 
+                catch (Exception e) {
+                    if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
+                    published = null;
+                }
+
+                return published; 
+            }
+        } DateTime? published = null;
+
+        // Major version number of script.
+        public int PublishedDay {
+            get { return publishedDay; }
+        } protected int publishedDay;
+
+        // Minor version number of script.
+        public int PublishedMonth {
+            get { return publishedMonth; }
+        } protected int publishedMonth;
+
+        // Point version number of script.
+        public int PublishedYear {
+            get { return publishedYear; }
+        } protected int publishedYear;
+
+
         // Unique ID number for the script.
         public int ID {
             get { return id; }
@@ -156,6 +190,10 @@ namespace Cornerstone.ScraperEngine {
                         scriptType = new StringList(currNode.InnerText);
                     } else if (currNode.Name.Equals("language")) {
                         language = currNode.InnerText;
+                    } else if (currNode.Name.Equals("published")) {
+                        publishedDay = int.Parse(currNode.Attributes["day"].Value);
+                        publishedMonth = int.Parse(currNode.Attributes["month"].Value);
+                        publishedYear = int.Parse(currNode.Attributes["year"].Value);
                     }
                 }
             } catch (Exception e) {

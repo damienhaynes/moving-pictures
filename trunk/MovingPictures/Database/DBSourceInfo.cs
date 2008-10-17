@@ -124,6 +124,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #endregion
 
+        public override void Delete() {
+            foreach (DBScriptInfo currScript in Scripts)
+                currScript.Delete();
+
+            base.Delete();
+        }
+
         #region Static Methods
 
         public static List<DBSourceInfo> GetAll() {

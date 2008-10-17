@@ -80,12 +80,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 ListViewItem.ListViewSubItem versionItem = new ListViewItem.ListViewSubItem(newItem, currSource.Provider.Version);
                 ListViewItem.ListViewSubItem languageItem = new ListViewItem.ListViewSubItem(newItem, currSource.Provider.Language);
-                //ListViewItem.ListViewSubItem publishedItem = new ListViewItem.ListViewSubItem(newItem, DateTime.Now.ToShortDateString());
 
+                ListViewItem.ListViewSubItem publishedItem;
+                if (currSource.IsScriptable() && currSource.SelectedScript.Provider.Published != null) 
+                    publishedItem = new ListViewItem.ListViewSubItem(newItem, currSource.SelectedScript.Provider.Published.Value.ToShortDateString());
+                else
+                    publishedItem = new ListViewItem.ListViewSubItem(newItem, "");
 
                 newItem.SubItems.Add(versionItem);
                 newItem.SubItems.Add(languageItem);
-                //newItem.SubItems.Add(publishedItem);
+                newItem.SubItems.Add(publishedItem);
                 newItem.Tag = currSource;
 
                 listView.Items.Add(newItem);
@@ -192,9 +196,27 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 // grab the contents of the file and try to add it to the manager
                 StreamReader reader = new StreamReader(openFileDialog.FileName);
                 string script = reader.ReadToEnd();
-                MovingPicturesCore.DataProviderManager.AddSource(typeof(ScriptableProvider), script);
+                DataProviderManager.AddSourceResult addResult = MovingPicturesCore.DataProviderManager.AddSource(typeof(ScriptableProvider), script);
 
+                if (addResult == DataProviderManager.AddSourceResult.FAILED_VERSION) {
+                    MessageBox.Show("A script with this Version and ID is already loaded.", "Load Script Failed");
+                }
+                else if (addResult == DataProviderManager.AddSourceResult.FAILED_DATE) {
+                    MessageBox.Show("This script does not have a unique 'published' date.", "Load Script Failed");
+                }
+                else if (addResult == DataProviderManager.AddSourceResult.FAILED) {
+                    MessageBox.Show("The script is malformed or not a Moving Pictures script.", "Load Script Failed");
+                }
+                else if (addResult == DataProviderManager.AddSourceResult.SUCCESS_REPLACED) {
+                    MessageBox.Show(
+                        "Because you are in debug mode, this script has replaced\n" +
+                        "an existing script with the same version. If you are a\n" +
+                        "developer, please be sure to increment your version number\n" +
+                        "before distribution.", "Warning");
+                }
                 reloadList();
+
+
             }
         }
 
