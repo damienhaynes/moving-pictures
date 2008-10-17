@@ -402,7 +402,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return 0;
 
             float tally = time;
-            for (int i = 0; i < part; i++) {
+            for (int i = 0; i < part-1; i++) {
                 if (LocalMedia[i].Duration == 0)
                     return 0;
 
