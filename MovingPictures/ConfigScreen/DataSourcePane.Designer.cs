@@ -50,6 +50,7 @@
             this.debugIcon = new System.Windows.Forms.ToolStripLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.publishedHeader = new System.Windows.Forms.ColumnHeader();
             this.topToolStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -60,7 +61,8 @@
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.sourceColumnHeader,
             this.versionColumnHeader,
-            this.languageColumnHeader});
+            this.languageColumnHeader,
+            this.publishedHeader});
             this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView.FullRowSelect = true;
             this.listView.GridLines = true;
@@ -288,6 +290,11 @@
             this.openFileDialog.DefaultExt = "xml";
             this.openFileDialog.Filter = "Moving Pictures Script Files|*.xml|All Files|*.*";
             // 
+            // publishedHeader
+            // 
+            this.publishedHeader.Text = "Published";
+            this.publishedHeader.Width = 82;
+            // 
             // DataSourcePane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -332,5 +339,6 @@
         private System.Windows.Forms.ToolStripButton raisePriorityButton;
         private System.Windows.Forms.ToolStripButton lowerPriorityButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ColumnHeader publishedHeader;
     }
 }

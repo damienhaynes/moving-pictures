@@ -24,6 +24,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
     public interface IScriptableMovieProvider : IMovieProvider {
         int ScriptID { get; }
+        DateTime? Published { get; }
+
         bool Load(string script);
         bool DebugMode { get; set; }
     }

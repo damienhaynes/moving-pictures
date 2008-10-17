@@ -6,7 +6,7 @@
     <description>This script pulls data from IMDb.</description>
     
     <!-- 
-    These two fields uniquely identify the script. The ID should never 
+    These fields uniquely identify the script. The ID should never 
     change and should be unique (no other script should use this ID). With
     new versions of the script the version numbers should change. EVEN FOR 
     MINOR CHANGES, you should change the version number if you are going to
@@ -15,6 +15,7 @@
     -->
     <id>874902</id>
     <version major="1" minor="0" point="0"/>
+    <published month="10" day="17" year="2008"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 

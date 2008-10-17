@@ -39,8 +39,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
                 // populate the list
                 foreach (DBScriptInfo currScript in source.Scripts) {
                     ListViewItem currItem = new ListViewItem(currScript.Provider.Version);
-                    //ListViewItem.ListViewSubItem publishItem = new ListViewItem.ListViewSubItem(currItem, DateTime.Now.ToShortDateString());
-                    //currItem.SubItems.Add(publishItem);
+                    ListViewItem.ListViewSubItem publishedItem;
+                    if (currScript.Provider.Published != null)
+                        publishedItem = new ListViewItem.ListViewSubItem(currItem, currScript.Provider.Published.Value.ToShortDateString());
+                    else
+                        publishedItem = new ListViewItem.ListViewSubItem(currItem, "");
+
+                    currItem.SubItems.Add(publishedItem);
 
                     currItem.Tag = currScript;
                     this.listView.Items.Add(currItem);
