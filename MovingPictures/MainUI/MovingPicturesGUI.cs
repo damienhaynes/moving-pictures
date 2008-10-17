@@ -636,11 +636,19 @@ namespace MediaPortal.Plugins.MovingPictures {
             // If we have resume data ask the user if he wants to resume
             // todo: customize the dialog
             if (resumeTime > 0) {
+                int displayTime = resumeTime;
+                if (browser.SelectedMovie.LocalMedia.Count > 1) {
+                    for (int i = 0; i < resumePart - 1; i++) {
+                        if (browser.SelectedMovie.LocalMedia[i].Duration > 0)
+                            displayTime += browser.SelectedMovie.LocalMedia[i].Duration;
+                    }
+                }
+                
                 GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
                 if (null == dlgYesNo) return;
                 dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); //resume movie?
                 dlgYesNo.SetLine(1, browser.SelectedMovie.Title);
-                dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(resumeTime));
+                dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(displayTime));
                 dlgYesNo.SetDefaultToYes(true);
                 dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
 
