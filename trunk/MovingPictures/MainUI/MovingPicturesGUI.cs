@@ -620,34 +620,35 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
+            DBMovieInfo selectedMovie = browser.SelectedMovie;
             int part = 1;
-            int parts = browser.SelectedMovie.LocalMedia.Count;
+            int parts = selectedMovie.LocalMedia.Count;
             int resumeTime = 0;
             int resumePart = 0;
             byte[] resumeData = null;
 
             // Get User Settings for this movie
-            if (browser.SelectedMovie.UserSettings.Count > 0) {
-                resumeTime = browser.SelectedMovie.UserSettings[0].ResumeTime;
-                resumePart = browser.SelectedMovie.UserSettings[0].ResumePart;
-                resumeData = browser.SelectedMovie.UserSettings[0].ResumeData;
+            if (selectedMovie.UserSettings.Count > 0) {
+                resumeTime = selectedMovie.UserSettings[0].ResumeTime;
+                resumePart = selectedMovie.UserSettings[0].ResumePart;
+                resumeData = selectedMovie.UserSettings[0].ResumeData;
             }
 
             // If we have resume data ask the user if he wants to resume
             // todo: customize the dialog
             if (resumeTime > 0) {
                 int displayTime = resumeTime;
-                if (browser.SelectedMovie.LocalMedia.Count > 1) {
+                if (parts > 1) {
                     for (int i = 0; i < resumePart - 1; i++) {
-                        if (browser.SelectedMovie.LocalMedia[i].Duration > 0)
-                            displayTime += browser.SelectedMovie.LocalMedia[i].Duration;
+                        if (selectedMovie.LocalMedia[i].Duration > 0)
+                            displayTime += selectedMovie.LocalMedia[i].Duration;
                     }
                 }
                 
                 GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
                 if (null == dlgYesNo) return;
                 dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); //resume movie?
-                dlgYesNo.SetLine(1, browser.SelectedMovie.Title);
+                dlgYesNo.SetLine(1, selectedMovie.Title);
                 dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(displayTime));
                 dlgYesNo.SetDefaultToYes(true);
                 dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
@@ -656,10 +657,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (resumeTime > 0) part = resumePart; // on resume set part also
             }
 
-            // if we have a multi-part movie and we are not resuming
+            // if we have a multi-part DVD/IMAGE and we are not resuming
             // ask which part the user wants to play
             // todo: customize the dialog
-            if (parts > 1 && resumeTime == 0) {
+            string ext = selectedMovie.LocalMedia[0].File.Extension;
+            if (parts > 1 && resumeTime == 0 && (DaemonTools.IsImageFile(ext) || ext == ".ifo" )) {
                 GUIDialogFileStacking dlg = (GUIDialogFileStacking)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_FILESTACKING);
                 if (null != dlg) {
                     dlg.SetNumberOfFiles(parts);
@@ -670,7 +672,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             // Start playing the movie with defined parameters
-            playMovie(browser.SelectedMovie, part, resumeTime, resumeData);
+            playMovie(selectedMovie, part, resumeTime, resumeData);
         }
 
         private void playMovie(DBMovieInfo movie, int part) {
