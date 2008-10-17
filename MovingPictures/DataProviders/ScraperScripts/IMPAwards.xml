@@ -1,7 +1,7 @@
 <ScriptableScraper>
   <details>
     <!-- These details are for display purposes only. -->
-    <name>IMPAwards</name>
+    <name>impawards.com</name>
     <author>John Conrad (fforde)</author>
     <description>This script grabs cover-art from impawards.com.</description>
 
@@ -14,17 +14,15 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874903</id>
-    <version major="0" minor="9" point="0"/>
+    <version major="1" minor="0" point="0"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
     -->
     <type>MovieCoverFetcher</type>
-    <language>English</language>
+    <language>various</language>
 
-    <!-- If set to true, additional logging will be displayed during script execution. -->
-    <debug>false</debug>
    </details>
 
 

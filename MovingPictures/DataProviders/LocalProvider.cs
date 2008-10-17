@@ -11,6 +11,7 @@ using System.Web;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Reflection;
 using System.Threading;
+using System.Globalization;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class LocalProvider : IMovieProvider {
@@ -31,8 +32,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         public string Version {
             get {
-                Version ver = Assembly.GetExecutingAssembly().GetName().Version;
-                return ver.Major + "." + ver.Minor + "." + ver.Build;
+                return "Internal";
             }
         }
 
@@ -42,6 +42,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         public string Description {
             get { return "Returns artwork and backdrops already available on the local system."; }
+        }
+
+        public string Language {
+            get { return ""; }
         }
 
         public bool ProvidesMoviesDetails {

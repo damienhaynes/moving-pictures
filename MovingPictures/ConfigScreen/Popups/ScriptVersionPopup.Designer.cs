@@ -25,11 +25,10 @@
         private void InitializeComponent() {
             this.label1 = new System.Windows.Forms.Label();
             this.sourceNameLabel = new System.Windows.Forms.Label();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listView = new System.Windows.Forms.ListView();
             this.versionHeader = new System.Windows.Forms.ColumnHeader();
-            this.publishedHeader = new System.Windows.Forms.ColumnHeader();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.okButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -50,46 +49,45 @@
             this.sourceNameLabel.TabIndex = 1;
             this.sourceNameLabel.Text = "IMDb";
             // 
-            // listView1
+            // listView
             // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.versionHeader,
-            this.publishedHeader});
-            this.listView1.Location = new System.Drawing.Point(12, 60);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(170, 126);
-            this.listView1.TabIndex = 2;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.versionHeader});
+            this.listView.FullRowSelect = true;
+            this.listView.GridLines = true;
+            this.listView.Location = new System.Drawing.Point(12, 60);
+            this.listView.MultiSelect = false;
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size(170, 126);
+            this.listView.TabIndex = 2;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
             // 
             // versionHeader
             // 
             this.versionHeader.Text = "Version";
             // 
-            // publishedHeader
+            // okButton
             // 
-            this.publishedHeader.Text = "Publish Date";
-            this.publishedHeader.Width = 96;
+            this.okButton.Location = new System.Drawing.Point(48, 193);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(52, 23);
+            this.okButton.TabIndex = 3;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
-            // button1
+            // cancelButton
             // 
-            this.button1.Location = new System.Drawing.Point(48, 193);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(52, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(106, 193);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Cancel";
-            this.button2.UseVisualStyleBackColor = true;
+            this.cancelButton.Location = new System.Drawing.Point(106, 193);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 4;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // ScriptVersionPopup
             // 
@@ -97,11 +95,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(194, 226);
             this.ControlBox = false;
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.listView1);
-            this.Controls.Add(this.sourceNameLabel);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.listView);
+            this.Controls.Add(this.sourceNameLabel);
             this.Name = "ScriptVersionPopup";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -117,10 +115,9 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label sourceNameLabel;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListView listView;
+        private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.ColumnHeader versionHeader;
-        private System.Windows.Forms.ColumnHeader publishedHeader;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button cancelButton;
     }
 }

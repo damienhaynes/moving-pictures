@@ -5,11 +5,16 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using MediaPortal.Plugins.MovingPictures.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     public partial class ScriptVersionPopup : Form {
-        public ScriptVersionPopup() {
+        private DBSourceInfo source;
+        
+        public ScriptVersionPopup(DBSourceInfo source) {
             InitializeComponent();
+
+            this.source = source;
         }
 
         private void center() {
@@ -29,9 +34,33 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
 
         private void ScriptVersionPopup_Load(object sender, EventArgs e) {
             if (!DesignMode) {
+                sourceNameLabel.Text = source.Provider.Name;
+
+                // populate the list
+                foreach (DBScriptInfo currScript in source.Scripts) {
+                    ListViewItem currItem = new ListViewItem(currScript.Provider.Version);
+                    //ListViewItem.ListViewSubItem publishItem = new ListViewItem.ListViewSubItem(currItem, DateTime.Now.ToShortDateString());
+                    //currItem.SubItems.Add(publishItem);
+
+                    currItem.Tag = currScript;
+                    this.listView.Items.Add(currItem);
+
+                    // select the currently active version
+                    if (currItem.Tag == source.SelectedScript)
+                        currItem.Selected = true;
+                }
             }
 
             center();
+        }
+
+        private void okButton_Click(object sender, EventArgs e) {
+            source.SelectedScript = (DBScriptInfo) listView.SelectedItems[0].Tag;
+            this.Close();
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e) {
+            this.Close();
         }
     }
 }

@@ -221,6 +221,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DataProviders\ScraperScripts\Allocine.xml" />
     <Content Include="DataProviders\ScraperScripts\IMPAwards.xml" />
     <Content Include="DataProviders\ScraperScripts\MovieMeter.xml" />
     <Content Include="DataProviders\ScraperScripts\OFDb.xml" />

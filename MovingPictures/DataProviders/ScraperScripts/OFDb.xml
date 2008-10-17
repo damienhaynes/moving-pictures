@@ -2,7 +2,7 @@
 <ScriptableScraper>
   <details>
     <!-- These details are for display purposes only. -->
-    <name>OFDb (German/DE)</name>
+    <name>ofdb.de</name>
     <author>Armand Pondman (armandp)</author>
     <description>This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)</description>
 
@@ -15,17 +15,15 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="0" minor="9" point="0"/>
+    <version major="1" minor="0" point="0"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
     -->
     <type>MovieDetailsFetcher</type>
-    <language>German</language>
+    <language>de</language>
 
-    <!-- If set to true, additional logging will be displayed during script execution. -->
-    <debug>false</debug>
   </details>
   
   <action name="search">

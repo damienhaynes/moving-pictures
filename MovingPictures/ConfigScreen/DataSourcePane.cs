@@ -75,16 +75,19 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // add all items
             ReadOnlyCollection<DBSourceInfo> sources = MovingPicturesCore.DataProviderManager.GetList(DisplayType);
             foreach (DBSourceInfo currSource in sources) {
-                ListViewItem newItem = new ListViewItem();
+                ListViewItem newItem = new ListViewItem(currSource.Provider.Name);
                 newItem.ToolTipText = String.Format("{0}\nAuthor: {1}", currSource.Provider.Description, currSource.Provider.Author);
 
-                ListViewItem.ListViewSubItem nameItem = new ListViewItem.ListViewSubItem(newItem, currSource.Provider.Name);
                 ListViewItem.ListViewSubItem versionItem = new ListViewItem.ListViewSubItem(newItem, currSource.Provider.Version);
+                ListViewItem.ListViewSubItem languageItem = new ListViewItem.ListViewSubItem(newItem, currSource.Provider.Language);
+                //ListViewItem.ListViewSubItem publishedItem = new ListViewItem.ListViewSubItem(newItem, DateTime.Now.ToShortDateString());
 
-                newItem.SubItems.Add(nameItem);
+
                 newItem.SubItems.Add(versionItem);
-
+                newItem.SubItems.Add(languageItem);
+                //newItem.SubItems.Add(publishedItem);
                 newItem.Tag = currSource;
+
                 listView.Items.Add(newItem);
                 listItemLookup[currSource] = newItem;
             }
@@ -144,11 +147,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void disableButton_Click(object sender, EventArgs e) {
             foreach (ListViewItem currItem in listView.SelectedItems) {
                 DBSourceInfo source = (DBSourceInfo)currItem.Tag;
-                MovingPicturesCore.DataProviderManager.SetDisabled(source, DisplayType, !source.IsDisabled(DisplayType));
+                if (!source.IsDisabled(DisplayType)) 
+                    MovingPicturesCore.DataProviderManager.SetDisabled(source, DisplayType, true);
             }
 
             listView.Sort();
+            listView.SelectedItems.Clear();
+            if (listView.Items.Count > 0) listView.Items[0].Selected = true;
             repaintListItems();
+
         }
 
         private void movieDetailsToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -213,6 +220,22 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             popup.ShowDialog();
 
             reloadList();
+        }
+
+        private void selectScriptVersionToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (listView.SelectedItems.Count != 0) 
+                foreach (ListViewItem currItem in listView.SelectedItems) 
+                    if (((DBSourceInfo)currItem.Tag).IsScriptable()) {
+                        ScriptVersionPopup popup = new ScriptVersionPopup((DBSourceInfo)currItem.Tag);
+                        popup.Owner = this.ParentForm;
+                        popup.ShowDialog();
+                    }
+
+            reloadList();
+        }
+
+        private void settingsButton_ButtonClick(object sender, EventArgs e) {
+            settingsButton.ShowDropDown();
         }
 
     }
