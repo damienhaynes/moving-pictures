@@ -426,6 +426,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 index = 0;
 
             CoverFullPath = AlternateCovers[index];
+            commitNeeded = true;
         }
 
         // rotates the selected cover art to the previous available cover
@@ -438,6 +439,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 index = AlternateCovers.Count - 1;
 
             CoverFullPath = AlternateCovers[index];
+            commitNeeded = true;
         }
 
         // removes the current cover from the selection list and deletes it and it's thumbnail 
@@ -463,6 +465,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             AlternateCovers.Remove(CoverFullPath);
             CoverFullPath = "";
+            commitNeeded = true;
         }
 
         // Loads existing cover art and thumbnail into memory. This only 
@@ -510,12 +513,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // if it's already in the folder, just store the filename in the db
             else {
-                if (!AlternateCovers.Contains(filename))
+                if (!AlternateCovers.Contains(filename)) {
                     AlternateCovers.Add(filename);
+                    commitNeeded = true;
+                }
             }
 
             // create a thumbnail for the cover
             _cover = newCover;
+            commitNeeded = true;
             GenerateThumbnail();
             
             return true;
@@ -550,8 +556,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     }
                 }
                 else {
-                    if (!AlternateCovers.Contains(filename))
+                    if (!AlternateCovers.Contains(filename)) {
                         AlternateCovers.Add(filename);
+                        commitNeeded = true;
+                    }
 
                     logger.Info("Cover art for '" + Title + "' [" + ID + "] already exists from " + url + ".");
                     GenerateThumbnail();
@@ -579,6 +587,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             AlternateCovers.Add(filename);
             _cover = currImage;
             GenerateThumbnail();
+            commitNeeded = true;
             return ArtworkLoadStatus.SUCCESS;
         }
 
@@ -616,8 +625,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 }
                 else {
                     // TODO: Add filename to alrternate backdrops string list here
-                    if (_backdropFullPath.Trim().Length == 0)
+                    if (_backdropFullPath.Trim().Length == 0) {
                         BackdropFullPath = filename;
+                        commitNeeded = true;
+                    }
                     logger.Info("Backdrop for '" + Title + "' [" + ID + "] already exists from " + url + ".");
                     return ArtworkLoadStatus.ALREADY_LOADED;
                 }
@@ -642,11 +653,52 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // save the backdrop
             currImage.Save(filename);
             _backdropFullPath = filename;
+            commitNeeded = true;
             return ArtworkLoadStatus.SUCCESS;
         }
 
         public ArtworkLoadStatus AddBackdropFromURL(string url) {
             return AddBackdropFromURL(url, false);
+        }
+
+        public bool AddBackdropFromFile(string filename) {
+            int minWidth = (int)MovingPicturesCore.SettingsManager["min_backdrop_width"].Value;
+            int minHeight = (int)MovingPicturesCore.SettingsManager["min_backdrop_height"].Value;
+            string artFolder = (string)MovingPicturesCore.SettingsManager["backdrop_folder"].Value;
+
+            Image newBackdrop = Image.FromFile(filename);
+
+            if (newBackdrop == null) {
+                logger.Error("Failed loading backdrop for '" + Title + "' [" + ID + "] from " + filename + ".");
+                return false;
+            }
+
+
+            // check if the image file is already in the backdrop folder
+            FileInfo newFile = new FileInfo(filename);
+            bool alreadyInFolder = newFile.Directory.FullName.Equals(new DirectoryInfo(artFolder).FullName);
+
+            // if the file isnt in the backdrop folder, generate a name and save it there
+            if (!alreadyInFolder) {
+                string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
+                string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
+                
+                // save the backdrop
+                newBackdrop.Save(newFileName);
+                _backdropFullPath = filename;
+                commitNeeded = true;
+                return true;
+            }
+
+            // if it's already in the folder, just store the filename in the db
+            else {
+                _backdropFullPath = filename;
+                commitNeeded = true;
+                return true;
+
+            }
+
+            return false;
         }
 
         // given a URL, returns an image stored at that URL. Returns null if not 
@@ -728,6 +780,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             _coverThumb = Cover.GetThumbnailImage(width, height, myCallback, IntPtr.Zero);
             _coverThumb.Save(fullname);
             _coverThumbFullPath = fullname;
+            commitNeeded = true;
         }
 
         public bool ThumbnailCallback() {

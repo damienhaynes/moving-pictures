@@ -218,16 +218,30 @@
         <description>The importer will look in your backdrop folder and try to find a file that matches this pattern. If one is found, it will be used as a backdrop. If none is found, an online data provider will be used to auto download artwork.</description>
       </setting>
 
+      <setting id="local_backdrop_from_movie_folder" name="Search Movie Folder for Backdrops" type="BOOL">
+        <default>false</default>
+        <description>If set to true the local media data provider will use files matching a specified pattern for backdrops. This setting should only be used if you have all movies in their own folders.</description>
+      </setting>
+
+      <setting id="local_moviefolder_backdrop_pattern" name="Movie Folder Backdrop Filename Pattern" type="STRING">
+        <default>backdrop.jpg|backdrop.png|backdrop.bmp</default>
+        <description>The importer will look in the folder the given movie was found in, and try to find a file that matches this pattern. If one is found, it will be used as a cover. DB field names can be used, surrounded by % symbols. e.g. %imdb_id%.jpg</description>
+      </setting>
+      
       <setting id="local_coverart_pattern" name="Cover Artwork Filename Pattern" type="STRING">
         <default>%imdb_id%.jpg|%imdb_id%.png|%imdb_id%.bmp</default>
         <description>The importer will look in your cover art folder and try to find a file that matches this pattern. If one is found, it will be used as a cover. If none is found, an online data provider will be used to auto download artwork.</description>
       </setting>
 
-      <setting id="local_use_folder_jpg" name="Use 'folder.jpg' for Cover Artwork" type="BOOL">
+      <setting id="local_cover_from_movie_folder" name="Search Movie Folder for Cover Art" type="BOOL">
         <default>false</default>
-        <description>If set to true the local media data provider will use the folder.jpg file for cover artwork. This setting should only be used if you have all movies in their own folders. PNG and BMP file types are also supported automatically.</description>
+        <description>If set to true the local media data provider will use files matching a specified pattern for cover artwork. This setting should only be used if you have all movies in their own folders.</description>
       </setting>
 
+      <setting id="local_moviefolder_coverart_pattern" name="Movie Folder Cover Artwork Filename Pattern" type="STRING">
+        <default>folder.jpg|folder.png|folder.bmp</default>
+        <description>The importer will look in the folder the given movie was found in, and try to find a file that matches this pattern. If one is found, it will be used as a cover. DB field names can be used, surrounded by % symbols. e.g. %imdb_id%.jpg</description>
+      </setting>
 
     </group>
 
