@@ -128,6 +128,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(483, 211);
+            this.ControlBox = false;
             this.Controls.Add(this.fileListBox);
             this.Controls.Add(this.lblYear);
             this.Controls.Add(this.uxYear);
@@ -137,6 +138,7 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.descriptionLabel);
             this.Name = "ManualAssignPopup";
+            this.ShowInTaskbar = false;
             this.Text = "Manual Movie Import";
             this.ResumeLayout(false);
             this.PerformLayout();
