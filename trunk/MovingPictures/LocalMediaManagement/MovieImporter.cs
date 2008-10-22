@@ -642,10 +642,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             currMovie.CoverFullPath = currMovie.AlternateCovers[0];
 
         // get rid of the backdrop link if it doesnt exist
-        if (currMovie.BackdropFullPath.Trim().Length > 0 &&
-            !new FileInfo(currMovie.BackdropFullPath).Exists)
+        if (currMovie.BackdropFullPath.Trim().Length > 0 && !new FileInfo(currMovie.BackdropFullPath).Exists)
           currMovie.BackdropFullPath = " ";
 
+        currMovie.Commit();
       }
     }
 

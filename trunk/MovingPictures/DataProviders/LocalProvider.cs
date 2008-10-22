@@ -65,10 +65,19 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movie.BackdropFullPath.Trim().Length > 0)
                 return false;
 
+            bool found = false;
+            
+            found &= getBackdropsFromBackdropFolder(movie);
+            found &= getBackdropsFromMovieFolder(movie);
+            found &= getOldBackdrops(movie);
+
+            return found;
+        }
+
+        private bool getBackdropsFromBackdropFolder(DBMovieInfo movie) {
             // grab a list of possible filenames for the backdrop based on the user pattern
             string pattern = MovingPicturesCore.SettingsManager["local_backdrop_pattern"].StringValue;
             List<string> filenames = getPossibleNamesFromPattern(pattern, movie);
-
 
             // check the backdrop folder for the user patterned backdrops
             string backdropFolderPath = MovingPicturesCore.SettingsManager["backdrop_folder"].StringValue;
@@ -82,55 +91,53 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             return false;
         }
 
+        // if flagged, check for backdrops in the movie folder based on the user defined pattern
+        private bool getBackdropsFromMovieFolder(DBMovieInfo movie) {
+            bool found = false;
+
+            bool useMovieFolderBackdrops = (bool)MovingPicturesCore.SettingsManager["local_backdrop_from_movie_folder"].Value;
+            string pattern = MovingPicturesCore.SettingsManager["local_moviefolder_backdrop_pattern"].StringValue;
+
+            if (useMovieFolderBackdrops) {
+                List<string> movieFolderFilenames = getPossibleNamesFromPattern(pattern, movie);
+                foreach (string currFile in movieFolderFilenames) {
+                    FileInfo newBackdrop = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + currFile);
+                    if (newBackdrop.Exists)
+                        found &= movie.AddBackdropFromFile(newBackdrop.FullName);
+                }
+            }
+
+            return found;
+        }
+
+        
+        // check for backdrops in the backdrop folder loaded from previous installs
+        private bool getOldBackdrops(DBMovieInfo movie) {
+            bool found = false;
+            
+            string backdropFolderPath = MovingPicturesCore.SettingsManager["backdrop_folder"].StringValue;
+            DirectoryInfo backdropFolder = new DirectoryInfo(backdropFolderPath);
+            string safeName = HttpUtility.UrlEncode(movie.Title.Replace(' ', '.'));
+            Regex oldBackdropRegex = new Regex("{?" + safeName + "}? \\[-?\\d+\\].jpg");
+            foreach (FileInfo currFile in backdropFolder.GetFiles()) {
+                if (oldBackdropRegex.IsMatch(currFile.Name)) {
+                    found &= movie.AddBackdropFromFile(currFile.FullName);
+                    logger.Info("Added old backdrop found in cover folder: " + currFile.Name);
+                }
+            }
+
+            return found;
+        }
+
         public bool GetArtwork(DBMovieInfo movie) {
             try {
-                // grab a list of possible filenames for the coverart based on the user pattern
-                string pattern = MovingPicturesCore.SettingsManager["local_coverart_pattern"].StringValue;
-                List<string> filenames = getPossibleNamesFromPattern(pattern, movie);
+                bool found = false;
 
+                found &= getCoversFromCoverFolder(movie);
+                found &= getCoversFromMovieFolder(movie);
+                found &= getOldCovers(movie);
 
-                // check the coverart folder for the user patterned covers
-                string coverartFolderPath = MovingPicturesCore.SettingsManager["cover_art_folder"].StringValue;
-                FileInfo newCover = getFirstFileFromFolder(coverartFolderPath, filenames);
-                if (newCover != null && newCover.Exists) {
-                    movie.AddCoverFromFile(newCover.FullName);
-                    return true;
-                }
-
-                // check for folder.jpg if the setting is turned on
-                bool useFolderJpg = (bool)MovingPicturesCore.SettingsManager["local_use_folder_jpg"].Value;
-                if (useFolderJpg) {
-                    newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + "folder.jpg");
-                    if (newCover.Exists) {
-                        movie.AddCoverFromFile(newCover.FullName);
-                        return true;
-                    }
-
-                    newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + "folder.png");
-                    if (newCover.Exists) {
-                        movie.AddCoverFromFile(newCover.FullName);
-                        return true;
-                    }
-
-
-                    newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + "folder.bmp");
-                    if (newCover.Exists) {
-                        movie.AddCoverFromFile(newCover.FullName);
-                        return true;
-                    }
-                }
-
-                // check for coverart in the coverfolder loaded from previous installs
-                DirectoryInfo coverFolder = new DirectoryInfo(coverartFolderPath);
-                string safeName = HttpUtility.UrlEncode(movie.Title.Replace(' ', '.'));
-                Regex oldCoverRegex = new Regex("{?" + safeName + "}? \\[-?\\d+\\].jpg");
-                foreach (FileInfo currFile in coverFolder.GetFiles()) {
-                    if (oldCoverRegex.IsMatch(currFile.Name)) {
-                        movie.AddCoverFromFile(currFile.FullName);
-                        logger.Info("Added old cover found in cover folder: " + currFile.Name); 
-                    }
-                }
-
+                return found;
             }
             catch (Exception e) {
                 if (e.GetType() == typeof(ThreadAbortException))
@@ -141,6 +148,58 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             return false;
         }
 
+        private bool getCoversFromCoverFolder(DBMovieInfo movie) {
+            // grab a list of possible filenames for the coverart based on the user pattern
+            string pattern = MovingPicturesCore.SettingsManager["local_coverart_pattern"].StringValue;
+            List<string> coverFolderFilenames = getPossibleNamesFromPattern(pattern, movie);
+
+
+            // check the coverart folder for the user patterned covers
+            string coverartFolderPath = MovingPicturesCore.SettingsManager["cover_art_folder"].StringValue;
+            FileInfo newCover = getFirstFileFromFolder(coverartFolderPath, coverFolderFilenames);
+            if (newCover != null && newCover.Exists) {
+                return movie.AddCoverFromFile(newCover.FullName);
+            }
+
+            return false;
+        }
+
+        // if flagged, check for covers in the movie folder based on the user defined pattern
+        private bool getCoversFromMovieFolder(DBMovieInfo movie) {
+            bool found = false;
+
+            bool useMovieFolderCovers = (bool)MovingPicturesCore.SettingsManager["local_cover_from_movie_folder"].Value;
+            string pattern = MovingPicturesCore.SettingsManager["local_moviefolder_coverart_pattern"].StringValue;
+
+            if (useMovieFolderCovers) {
+                List<string> movieFolderFilenames = getPossibleNamesFromPattern(pattern, movie);
+                foreach (string currFile in movieFolderFilenames) {
+                    FileInfo newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + currFile);
+                    if (newCover.Exists)
+                        found &= movie.AddCoverFromFile(newCover.FullName);
+                }
+            }
+
+            return found;
+        }
+
+        // check for coverart in the coverfolder loaded from previous installs
+        private bool getOldCovers(DBMovieInfo movie) {
+            bool found = false;
+            
+            string coverartFolderPath = MovingPicturesCore.SettingsManager["cover_art_folder"].StringValue;
+            DirectoryInfo coverFolder = new DirectoryInfo(coverartFolderPath);
+            string safeName = HttpUtility.UrlEncode(movie.Title.Replace(' ', '.'));
+            Regex oldCoverRegex = new Regex("{?" + safeName + "}? \\[-?\\d+\\].jpg");
+            foreach (FileInfo currFile in coverFolder.GetFiles()) {
+                if (oldCoverRegex.IsMatch(currFile.Name)) {
+                    found &= movie.AddCoverFromFile(currFile.FullName);
+                    logger.Info("Added old cover found in cover folder: " + currFile.Name);
+                }
+            }
+
+            return found;
+        }
 
         // parses and replaces variables from a filename based on the pattern supplied
         // returning a list of possible file matches
@@ -155,6 +214,20 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 }
                 return filenames;
             }
+        }
+
+        private string dbNameParser(Match match) {
+            // try to grab the field object
+            string fieldName = match.Value.Substring(1, match.Length - 2);
+            DBField field = DBField.GetFieldByDBName(typeof(DBMovieInfo), fieldName);
+
+            // if no dice, the user probably entered an invalid string.
+            if (field == null) {
+                logger.Error("Error parsing \"" + match.Value + "\" from local_backdrop_pattern advanced setting. Not a database field name.");
+                return match.Value;
+            }
+
+            return field.GetValue(movie).ToString();
         }
 
         // based on the filename list, returns the first file in the folder, otherwise null
@@ -174,21 +247,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         public void Update(DBMovieInfo movie) {
             throw new NotImplementedException();
-        }
-
-
-        private string dbNameParser(Match match) {
-            // try to grab the field object
-            string fieldName = match.Value.Substring(1, match.Length - 2);
-            DBField field = DBField.GetFieldByDBName(typeof(DBMovieInfo), fieldName);
-            
-            // if no dice, the user probably entered an invalid string.
-            if (field == null) {
-                logger.Error("Error parsing \"" + match.Value + "\" from local_backdrop_pattern advanced setting. Not a database field name.");
-                return match.Value;
-            }
-
-            return field.GetValue(movie).ToString();
         }
 
     }
