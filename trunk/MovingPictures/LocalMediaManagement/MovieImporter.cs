@@ -206,6 +206,17 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 stoppedSomething = true;
             }
 
+            if (fileSystemWatchers != null && fileSystemWatchers.Count > 0) {
+                foreach (FileSystemWatcher currWatcher in fileSystemWatchers) {
+                    currWatcher.EnableRaisingEvents = false;
+                    currWatcher.Created -= OnFileAdded;
+                    currWatcher.Deleted -= OnFileDeleted;
+                }
+
+                fileSystemWatchers.Clear();
+                pathLookup.Clear();
+            }
+
             if (pathScannerThread != null) {
                 logger.Info("Shutting Down Path Scanner Thread...");
                 pathScannerThread.Abort();
@@ -575,15 +586,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     // When a FileSystemWatcher detects a new file, this method queues it up for processing.
     private void OnFileAdded(Object source, FileSystemEventArgs e) {
       DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath);
-
-      FileSystemWatcher watcher = (FileSystemWatcher)source;
-      
-      // if for some weird reason the FileSystemWatcher object isn't found 
-      // as key in the pathLookup dictionary, do nothing.
-      if (!pathLookup.ContainsKey(watcher))
-        return;
-        
-      DBImportPath importPath = pathLookup[watcher];
+      DBImportPath importPath = pathLookup[(FileSystemWatcher)source];
 
       // if this file is already in the system, disable (this happens if it's a removable source)
       if (newFile.ID != null) {

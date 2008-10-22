@@ -697,8 +697,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return true;
 
             }
-
-            return false;
         }
 
         // given a URL, returns an image stored at that URL. Returns null if not 
