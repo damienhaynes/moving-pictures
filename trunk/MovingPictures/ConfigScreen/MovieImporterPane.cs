@@ -151,6 +151,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 case MovieImporterAction.IGNORED:
                     imageCell.Value = Resources.ignored;
                     break;
+                case MovieImporterAction.MANUAL:
+                    imageCell.Value = Resources.accept; // @TODO change icon
+                    break;
             }
 
             updateButtons();
@@ -364,6 +367,29 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void settingsButton_ButtonClick(object sender, EventArgs e) {
             settingsButton.ShowDropDown();
+        }
+
+        private void manualAssignButton_Click(object sender, EventArgs e) {
+            unapprovedGrid.EndEdit();
+
+            foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
+                MovieMatch selectedMatch = (MovieMatch)currRow.DataBoundItem;
+                ManualAssignPopup popup = new ManualAssignPopup(selectedMatch);
+                popup.ShowDialog(this);
+
+                if (popup.DialogResult == DialogResult.OK) {
+
+                    // create a movie with the user supplied information
+                    DBMovieInfo movie = new DBMovieInfo();
+                    movie.Title = popup.Title;
+                    movie.Year = popup.Year.GetValueOrDefault(0);
+
+                    // update the match
+                    selectedMatch.Selected.Movie = movie;                 
+                    // Manually Assign Movie
+                    MovingPicturesCore.Importer.ManualAssign(selectedMatch);
+                }
+            }
         }
 
     }

@@ -34,22 +34,28 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.matchesTabPage = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.approveButton = new System.Windows.Forms.ToolStripButton();
-            this.rescanButton = new System.Windows.Forms.ToolStripButton();
-            this.splitJoinButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.ignoreButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.filterSplitButton = new System.Windows.Forms.ToolStripSplitButton();
             this.allMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.processingMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unapprovedMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.approvedCommitedMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.approveButton = new System.Windows.Forms.ToolStripButton();
+            this.rescanButton = new System.Windows.Forms.ToolStripButton();
+            this.splitJoinButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.manualAssignButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.ignoreButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.settingsButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.unignoreAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unapprovedGrid = new System.Windows.Forms.DataGridView();
             this.statusColumn = new System.Windows.Forms.DataGridViewImageColumn();
             this.unapprovedLocalMediaColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.unapprovedPossibleMatchesColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.sourcesTabPage = new System.Windows.Forms.TabPage();
+            this.dataSourceList1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.DataSourcePane();
             this.settingsTabPage = new System.Windows.Forms.TabPage();
             this.comingSoon1 = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
@@ -57,10 +63,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.currentTaskDesc = new System.Windows.Forms.Label();
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.settingsButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.unignoreAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.restartImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataSourceList1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.DataSourcePane();
             this.unapprovedMatchesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.importerGroupBox.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -122,6 +124,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.rescanButton,
             this.splitJoinButton,
             this.toolStripSeparator1,
+            this.manualAssignButton,
+            this.toolStripSeparator3,
             this.ignoreButton,
             this.toolStripSeparator2,
             this.settingsButton});
@@ -131,60 +135,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.toolStrip1.Size = new System.Drawing.Size(616, 26);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // approveButton
-            // 
-            this.approveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.approveButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.tick;
-            this.approveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.approveButton.Name = "approveButton";
-            this.approveButton.Size = new System.Drawing.Size(23, 23);
-            this.approveButton.Text = "toolStripButton1";
-            this.approveButton.ToolTipText = "Approve Selected File(s)";
-            this.approveButton.Click += new System.EventHandler(this.approveButton_Click);
-            // 
-            // rescanButton
-            // 
-            this.rescanButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.rescanButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_rotate_clockwise;
-            this.rescanButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.rescanButton.Name = "rescanButton";
-            this.rescanButton.Size = new System.Drawing.Size(23, 23);
-            this.rescanButton.Text = "toolStripButton1";
-            this.rescanButton.ToolTipText = "Rescan Selected File(s) with Custom Search String";
-            this.rescanButton.Click += new System.EventHandler(this.rescanButton_Click);
-            // 
-            // splitJoinButton
-            // 
-            this.splitJoinButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.splitJoinButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_divide;
-            this.splitJoinButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.splitJoinButton.Name = "splitJoinButton";
-            this.splitJoinButton.Size = new System.Drawing.Size(23, 23);
-            this.splitJoinButton.Text = "toolStripButton1";
-            this.splitJoinButton.ToolTipText = "Split Selected File Group";
-            this.splitJoinButton.Click += new System.EventHandler(this.splitJoinButton_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 26);
-            // 
-            // ignoreButton
-            // 
-            this.ignoreButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.ignoreButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cross;
-            this.ignoreButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ignoreButton.Name = "ignoreButton";
-            this.ignoreButton.Size = new System.Drawing.Size(23, 23);
-            this.ignoreButton.Text = "toolStripButton2";
-            this.ignoreButton.ToolTipText = "Ignore Selected File(s)";
-            this.ignoreButton.Click += new System.EventHandler(this.ignoreButton_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
             // 
             // filterSplitButton
             // 
@@ -225,6 +175,103 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.approvedCommitedMatchesToolStripMenuItem.Name = "approvedCommitedMatchesToolStripMenuItem";
             this.approvedCommitedMatchesToolStripMenuItem.Size = new System.Drawing.Size(336, 24);
             this.approvedCommitedMatchesToolStripMenuItem.Text = "Approved/Commited Matches";
+            // 
+            // approveButton
+            // 
+            this.approveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.approveButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.tick;
+            this.approveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.approveButton.Name = "approveButton";
+            this.approveButton.Size = new System.Drawing.Size(23, 23);
+            this.approveButton.Text = "toolStripButton1";
+            this.approveButton.ToolTipText = "Approve Selected File(s)";
+            this.approveButton.Click += new System.EventHandler(this.approveButton_Click);
+            // 
+            // rescanButton
+            // 
+            this.rescanButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.rescanButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_rotate_clockwise;
+            this.rescanButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rescanButton.Name = "rescanButton";
+            this.rescanButton.Size = new System.Drawing.Size(23, 23);
+            this.rescanButton.Text = "toolStripButton1";
+            this.rescanButton.ToolTipText = "Rescan Selected File(s) with Custom Search String";
+            this.rescanButton.Click += new System.EventHandler(this.rescanButton_Click);
+            // 
+            // splitJoinButton
+            // 
+            this.splitJoinButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.splitJoinButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_divide;
+            this.splitJoinButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.splitJoinButton.Name = "splitJoinButton";
+            this.splitJoinButton.Size = new System.Drawing.Size(23, 23);
+            this.splitJoinButton.Text = "toolStripButton1";
+            this.splitJoinButton.ToolTipText = "Split Selected File Group";
+            this.splitJoinButton.Click += new System.EventHandler(this.splitJoinButton_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 26);
+            // 
+            // manualAssignButton
+            // 
+            this.manualAssignButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.manualAssignButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_add;
+            this.manualAssignButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.manualAssignButton.Name = "manualAssignButton";
+            this.manualAssignButton.Size = new System.Drawing.Size(23, 23);
+            this.manualAssignButton.Text = "manualAssignButton";
+            this.manualAssignButton.ToolTipText = "Manually Assign Selected File(s)";
+            this.manualAssignButton.Click += new System.EventHandler(this.manualAssignButton_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 26);
+            // 
+            // ignoreButton
+            // 
+            this.ignoreButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ignoreButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cross;
+            this.ignoreButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ignoreButton.Name = "ignoreButton";
+            this.ignoreButton.Size = new System.Drawing.Size(23, 23);
+            this.ignoreButton.Text = "toolStripButton2";
+            this.ignoreButton.ToolTipText = "Ignore Selected File(s)";
+            this.ignoreButton.Click += new System.EventHandler(this.ignoreButton_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
+            // 
+            // settingsButton
+            // 
+            this.settingsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.settingsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.unignoreAllFilesToolStripMenuItem,
+            this.restartImporterToolStripMenuItem});
+            this.settingsButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cog;
+            this.settingsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Size = new System.Drawing.Size(32, 23);
+            this.settingsButton.ToolTipText = "Advanced Actions";
+            this.settingsButton.ButtonClick += new System.EventHandler(this.settingsButton_ButtonClick);
+            // 
+            // unignoreAllFilesToolStripMenuItem
+            // 
+            this.unignoreAllFilesToolStripMenuItem.Name = "unignoreAllFilesToolStripMenuItem";
+            this.unignoreAllFilesToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.unignoreAllFilesToolStripMenuItem.Text = "Unignore All Files";
+            this.unignoreAllFilesToolStripMenuItem.Click += new System.EventHandler(this.unignoreAllFilesToolStripMenuItem_Click);
+            // 
+            // restartImporterToolStripMenuItem
+            // 
+            this.restartImporterToolStripMenuItem.Name = "restartImporterToolStripMenuItem";
+            this.restartImporterToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.restartImporterToolStripMenuItem.Text = "Restart Importer";
+            this.restartImporterToolStripMenuItem.Click += new System.EventHandler(this.restartImporterToolStripMenuItem_Click);
             // 
             // unapprovedGrid
             // 
@@ -304,6 +351,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.sourcesTabPage.Text = "Data Sources";
             this.sourcesTabPage.UseVisualStyleBackColor = true;
             // 
+            // dataSourceList1
+            // 
+            this.dataSourceList1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataSourceList1.Location = new System.Drawing.Point(3, 3);
+            this.dataSourceList1.Name = "dataSourceList1";
+            this.dataSourceList1.Size = new System.Drawing.Size(616, 320);
+            this.dataSourceList1.TabIndex = 0;
+            // 
             // settingsTabPage
             // 
             this.settingsTabPage.Controls.Add(this.comingSoon1);
@@ -373,41 +428,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
             this.dataGridViewTextBoxColumn1.Width = 200;
             // 
-            // settingsButton
-            // 
-            this.settingsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.settingsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.unignoreAllFilesToolStripMenuItem,
-            this.restartImporterToolStripMenuItem});
-            this.settingsButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cog;
-            this.settingsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.settingsButton.Name = "settingsButton";
-            this.settingsButton.Size = new System.Drawing.Size(32, 23);
-            this.settingsButton.ToolTipText = "Advanced Actions";
-            this.settingsButton.ButtonClick += new System.EventHandler(this.settingsButton_ButtonClick);
-            // 
-            // unignoreAllFilesToolStripMenuItem
-            // 
-            this.unignoreAllFilesToolStripMenuItem.Name = "unignoreAllFilesToolStripMenuItem";
-            this.unignoreAllFilesToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.unignoreAllFilesToolStripMenuItem.Text = "Unignore All Files";
-            this.unignoreAllFilesToolStripMenuItem.Click += new System.EventHandler(this.unignoreAllFilesToolStripMenuItem_Click);
-            // 
-            // restartImporterToolStripMenuItem
-            // 
-            this.restartImporterToolStripMenuItem.Name = "restartImporterToolStripMenuItem";
-            this.restartImporterToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.restartImporterToolStripMenuItem.Text = "Restart Importer";
-            this.restartImporterToolStripMenuItem.Click += new System.EventHandler(this.restartImporterToolStripMenuItem_Click);
-            // 
-            // dataSourceList1
-            // 
-            this.dataSourceList1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataSourceList1.Location = new System.Drawing.Point(3, 3);
-            this.dataSourceList1.Name = "dataSourceList1";
-            this.dataSourceList1.Size = new System.Drawing.Size(616, 320);
-            this.dataSourceList1.TabIndex = 0;
-            // 
             // unapprovedMatchesBindingSource
             // 
             this.unapprovedMatchesBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieMatch);
@@ -473,5 +493,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private ToolStripSplitButton settingsButton;
         private ToolStripMenuItem unignoreAllFilesToolStripMenuItem;
         private ToolStripMenuItem restartImporterToolStripMenuItem;
+        private ToolStripButton manualAssignButton;
+        private ToolStripSeparator toolStripSeparator3;
     }
 }
