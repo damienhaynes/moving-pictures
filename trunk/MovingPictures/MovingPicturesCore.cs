@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using MediaPortal.Profile;
+using MediaPortal.Services;
 using MediaPortal.Configuration;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
@@ -139,13 +139,25 @@ namespace MediaPortal.Plugins.MovingPictures {
             config.AddTarget("file", fileTarget);
 
             // Get current Log Level from MediaPortal 
-            int mpLogLevel;
-            using (MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"))) {
-                // the level enumeration is reversed for NLOG
-                mpLogLevel = 4 - xmlreader.GetValueAsInt("general", "loglevel", 0);
+            LogLevel logLevel;
+            MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"));
+            switch ((Level)xmlreader.GetValueAsInt("general", "loglevel", 0)) {
+                case Level.Error:
+                    logLevel = LogLevel.Error;
+                    break;
+                case Level.Warning:
+                    logLevel = LogLevel.Warn;
+                    break;
+                case Level.Information:
+                    logLevel = LogLevel.Info;
+                    break;
+                case Level.Debug:
+                default:
+                    logLevel = LogLevel.Debug;
+                    break;
             }
 
-            LoggingRule rule = new LoggingRule("*", LogLevel.FromOrdinal(mpLogLevel), fileTarget);
+            LoggingRule rule = new LoggingRule("*", logLevel, fileTarget);
             config.LoggingRules.Add(rule);
 
             LogManager.Configuration = config; 
