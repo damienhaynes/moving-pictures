@@ -24,6 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     NEED_INPUT,
     APPROVED,
     COMMITED,
+    MANUAL,
     IGNORED,
     REMOVED_FROM_SPLIT,
     REMOVED_FROM_JOIN,
@@ -86,7 +87,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       get { return ArrayList.ReadOnly(priorityApprovedMatches); }
     } private ArrayList priorityApprovedMatches;
 
-    // Matches that have been committed and saved to the database. 
+    // Matches that have been ignored/committed and saved to the database. 
     public ArrayList CommitedMatches {
       get { return ArrayList.ReadOnly(commitedMatches); }
     } private ArrayList commitedMatches;
@@ -319,6 +320,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         currFile.Commit();
       }
 
+      // add match to the committed list
+      commitedMatches.Add(match);
+
       // notify any listeners of the status change
       logger.Info("User ignored " + match.LocalMediaString);
       if (MovieStatusChanged != null)
@@ -410,6 +414,30 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       logger.Info("User joined " + newMatch.LocalMediaString);
       if (MovieStatusChanged != null)
         MovieStatusChanged(newMatch, MovieImporterAction.ADDED_FROM_JOIN);
+    }
+
+    public void ManualAssign(MovieMatch match) {
+        if (match.Selected == null)
+            return;
+
+        // remove match from all lists
+        RemoveFromMatchLists(match);
+
+        // clear the ignored flag in case these files were previously on the disable list
+        foreach (DBLocalMedia currFile in match.LocalMedia) {
+            currFile.Ignored = false;
+        }
+
+        // assign files to movie
+        lock (match) AssignFileToMovie(match.LocalMedia, match.Selected.Movie, false);
+        
+        // add match to the committed list
+        commitedMatches.Add(match);
+
+        // notify any listeners of the status change
+        logger.Info("User manually assigned " + match.LocalMediaString + "as " + match.Selected.Movie.Title);
+        if (MovieStatusChanged != null)
+            MovieStatusChanged(match, MovieImporterAction.MANUAL);
     }
 
     private void LookForMissingArtworkWorker() {
@@ -548,7 +576,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     private void OnFileAdded(Object source, FileSystemEventArgs e) {
       DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath);
 
-      DBImportPath importPath = pathLookup[((FileSystemWatcher)source)];
+      FileSystemWatcher watcher = (FileSystemWatcher)source;
+      
+      // if for some weird reason the FileSystemWatcher object isn't found 
+      // as key in the pathLookup dictionary, do nothing.
+      if (!pathLookup.ContainsKey(watcher))
+        return;
+        
+      DBImportPath importPath = pathLookup[watcher];
 
       // if this file is already in the system, disable (this happens if it's a removable source)
       if (newFile.ID != null) {
@@ -851,12 +886,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     private void ScanMedia() {
       try {
         while (true) {
+          int previousCommittedCount = commitedMatches.Count;
+            
           // if there is nothing to process, then sleep
           while (pendingMatches.Count == 0 &&
                  approvedMatches.Count == 0 &&
                  priorityPendingMatches.Count == 0 &&
-                 priorityApprovedMatches.Count == 0)
+                 priorityApprovedMatches.Count == 0 &&
+                 commitedMatches.Count == previousCommittedCount)
             Thread.Sleep(1000);
+            
 
           // so long as there is media to scan, we don't start processing the approved
           // matches. The goal is to get as much for the user to approve, as fast as
@@ -867,7 +906,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             ProcessNextApprovedMatches();
           else if (pendingMatches.Count > 0)
             ProcessNextPendingMatch();
-          else
+          else if (approvedMatches.Count > 0)
             ProcessNextApprovedMatches();
 
           UpdatePercentDone();
@@ -1052,7 +1091,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     // Associates the given file(s) to the given movie object. Also creates all
     // relevent user related data.
-    private void AssignFileToMovie(IList<DBLocalMedia> localMedia, DBMovieInfo movie) {
+    private void AssignFileToMovie(IList<DBLocalMedia> localMedia, DBMovieInfo movie, bool update) {
       if (localMedia == null || movie == null || localMedia.Count == 0)
         return;
 
@@ -1070,9 +1109,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
 
       // update, associate, and commit the movie
-      MovingPicturesCore.DataProviderManager.Update(movie);
-      MovingPicturesCore.DataProviderManager.GetArtwork(movie);
-      MovingPicturesCore.DataProviderManager.GetBackdrop(movie);
+      if (update) {
+          MovingPicturesCore.DataProviderManager.Update(movie);
+          MovingPicturesCore.DataProviderManager.GetArtwork(movie);
+          MovingPicturesCore.DataProviderManager.GetBackdrop(movie);
+      }
 
       movie.LocalMedia.Clear();
       movie.LocalMedia.AddRange(localMedia);
@@ -1095,8 +1136,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     // Associates the given file(s) to the given movie object. Also creates all
     // relevent user related data.
     private void AssignFileToMovie(DBLocalMedia file, DBMovieInfo movie) {
-      AssignFileToMovie(new DBLocalMedia[] { file }, movie);
+        AssignFileToMovie(new DBLocalMedia[] { file }, movie, true);
     }
+
+    private void AssignFileToMovie(IList<DBLocalMedia> localMedia, DBMovieInfo movie) {
+        AssignFileToMovie(localMedia, movie, true);
+    }    
 
     // removes the given match from all pending process lists
     private void RemoveFromMatchLists(MovieMatch match) {
