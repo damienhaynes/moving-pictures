@@ -146,6 +146,7 @@
     <Compile Include="DataProviders\IMovieProvider.cs" />
     <Compile Include="DataProviders\LocalProvider.cs" />
     <Compile Include="DataProviders\MeligroveProvider.cs" />
+    <Compile Include="DataProviders\MyVideosProvider.cs" />
     <Compile Include="DataProviders\ScriptableProvider.cs" />
     <Compile Include="LocalMediaManagement\LocalMediaParser.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />

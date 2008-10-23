@@ -234,6 +234,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             AddSource(typeof(MeligroveProvider));
             AddSource(typeof(ScriptableProvider), Resources.IMPAwards);
+            
+            AddSource(typeof(MyVideosProvider));
 
             normalizePriorities();
         }
@@ -308,10 +310,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public AddSourceResult AddSource(Type providerType) {
-            // non-criptable sources cant be updated, so if we are only updating, just return
-            if (updateOnly)
-                return AddSourceResult.SUCCESS;
-
             foreach (DBSourceInfo currSource in allSources)
                 if (currSource.ProviderType == providerType)
                     return AddSourceResult.FAILED;
