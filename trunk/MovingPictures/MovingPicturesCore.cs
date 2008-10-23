@@ -2,17 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using MediaPortal.Services;
+using Cornerstone.Database;
 using MediaPortal.Configuration;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Profile;
+using MediaPortal.Services;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using Cornerstone.Database;
-using Cornerstone.ScraperEngine;
-using MediaPortal.Plugins.MovingPictures.Properties;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesCore {
@@ -140,7 +139,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             // Get current Log Level from MediaPortal 
             LogLevel logLevel;
-            MediaPortal.Profile.Settings xmlreader = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"));
+            Settings xmlreader = new Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"));
             switch ((Level)xmlreader.GetValueAsInt("general", "loglevel", 0)) {
                 case Level.Error:
                     logLevel = LogLevel.Error;
