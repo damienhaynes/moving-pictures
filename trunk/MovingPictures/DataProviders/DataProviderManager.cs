@@ -234,6 +234,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             AddSource(typeof(MeligroveProvider));
             AddSource(typeof(ScriptableProvider), Resources.IMPAwards);
+            AddSource(typeof(ScriptableProvider), Resources.MoTechPosters);
             
             AddSource(typeof(MyVideosProvider));
 
