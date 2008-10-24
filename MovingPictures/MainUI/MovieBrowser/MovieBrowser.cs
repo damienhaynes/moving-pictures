@@ -29,7 +29,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
         public ReadOnlyCollection<DBMovieInfo> FilteredMovies {
             get {
                 if (filteredMovies == null)
-                    reapplyFilters();
+                    ReapplyFilters();
                 return filteredMovies.AsReadOnly(); 
             }
         }
@@ -143,7 +143,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             // that the new item should be filtered out by the ActiveFilters
             logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie browser.");
             allMovies.Add((DBMovieInfo)obj);
-            reapplyFilters();
+            ReapplyFilters();
             ReloadFacade();
         }
 
@@ -180,17 +180,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             watchedFilters = new DynamicList<IBrowserFilter>();
             watchedFilters.AddRange(activeFilters);
             
-            reapplyFilters();
+            ReapplyFilters();
             ReloadFacade();
         }
 
         private void onFilterUpdated(IBrowserFilter obj) {
             logger.Debug("OnFilterUpdated: " + obj);
-            reapplyFilters();
+            ReapplyFilters();
             ReloadFacade();
         }
 
-        private void reapplyFilters() {
+        public void ReapplyFilters() {
             // (re)initialize the filtered movie list
             filteredMovies = new List<DBMovieInfo>();
             filteredMovies.Clear();

@@ -32,7 +32,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         //    }
         //} private DBMovieInfo movie;
 
-        // Value between 0 and 4. As in 4 stars.
+        // Value between 0 and 10
         [DBFieldAttribute(FieldName = "user_rating", Default = null)]
         public int? UserRating {
             get { return _userRating; }
@@ -46,8 +46,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public int Watched {
             get { return _watched; }
             set {
-                _watched = value;
-                commitNeeded = true;
+                if (_watched != value) {
+                    _watched = value;
+                    commitNeeded = true;
+                }
             }
         } private int _watched;
         

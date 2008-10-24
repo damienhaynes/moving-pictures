@@ -462,6 +462,11 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void showMainContext() {
+            // WARNING/TODO
+            // If any items are added to this menu conditionally, the current setup will break.
+            // the method structure needs to be changed to mimic the showDetailsContext() method
+            // if ANY conditional items are added.
+
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
             dialog.SetHeading("Moving Pictures");
@@ -512,37 +517,77 @@ namespace MediaPortal.Plugins.MovingPictures {
             dialog.Reset();
             dialog.SetHeading("Moving Pictures");
 
-            GUIListItem detailsItem = new GUIListItem("Update Details from Online");
-            detailsItem.ItemId = 1;
+            // initialize list items
+            GUIListItem detailsItem = new GUIListItem();
+            GUIListItem cycleArtItem = new GUIListItem();
+            GUIListItem retrieveArtItem = new GUIListItem();
+            GUIListItem unwatchedItem = new GUIListItem();
+            GUIListItem watchedItem = new GUIListItem();
+
+            int currID = 1;
+
+            detailsItem = new GUIListItem("Update Details from Online");
+            detailsItem.ItemId = currID;
             dialog.Add(detailsItem);
+            currID++;
 
             if (browser.SelectedMovie.AlternateCovers.Count > 1) {
-                GUIListItem cycleArtItem = new GUIListItem("Cycle Cover-Art");
-                cycleArtItem.ItemId = 2;
+                cycleArtItem = new GUIListItem("Cycle Cover-Art");
+                cycleArtItem.ItemId = currID;
                 dialog.Add(cycleArtItem);
+                currID++;
             }
 
             if (browser.SelectedMovie.CoverFullPath.Trim().Length == 0 ||
                 browser.SelectedMovie.BackdropFullPath.Trim().Length == 0) {
-                GUIListItem retrieveArtItem = new GUIListItem("Check for Missing Artwork Online");
-                retrieveArtItem.ItemId = 3;
+
+                retrieveArtItem = new GUIListItem("Check for Missing Artwork Online");
+                retrieveArtItem.ItemId = currID;
                 dialog.Add(retrieveArtItem);
+                currID++;
             }
 
-            dialog.DoModal(GUIWindowManager.ActiveWindow);
-            switch (dialog.SelectedId) {
-                case 1:
-                    updateDetails();
-                    break;
-                case 2:
-                    browser.SelectedMovie.NextCover();
-                    browser.SelectedMovie.Commit();
-                    UpdateArtwork();
-                    break;
-                case 3:
-                    retrieveMissingArt();
-                    break;
+            if (browser.SelectedMovie.UserSettings[0].Watched > 0) {
+                unwatchedItem = new GUIListItem("Mark as Unwatched");
+                unwatchedItem.ItemId = currID;
+                dialog.Add(unwatchedItem);
+                currID++;
+            } else {
+                watchedItem = new GUIListItem("Mark as Watched");
+                watchedItem.ItemId = currID;
+                dialog.Add(watchedItem);
+                currID++;
             }
+
+
+            dialog.DoModal(GUIWindowManager.ActiveWindow);
+            if (dialog.SelectedId == detailsItem.ItemId) {
+                updateDetails();
+            }
+            else if (dialog.SelectedId == cycleArtItem.ItemId) {
+                browser.SelectedMovie.NextCover();
+                browser.SelectedMovie.Commit();
+                UpdateArtwork();
+            }
+            else if (dialog.SelectedId == retrieveArtItem.ItemId) {
+                logger.Info("Updating artwork for " + browser.SelectedMovie.Title);
+                retrieveMissingArt();
+            }
+            else if (dialog.SelectedId == unwatchedItem.ItemId) {
+                browser.SelectedMovie.UserSettings[0].Watched = 0;
+
+                browser.SelectedMovie.UserSettings[0].Commit();
+                browser.ReapplyFilters();
+                browser.ReloadFacade();
+            }
+            else if (dialog.SelectedId == watchedItem.ItemId) {
+                browser.SelectedMovie.UserSettings[0].Watched = 1;
+
+                browser.SelectedMovie.UserSettings[0].Commit();
+                browser.ReapplyFilters();
+                browser.ReloadFacade();
+            }
+
         }
 
         // rotates the current view to the next available

@@ -40,11 +40,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.unapprovedMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.approvedCommitedMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.approveButton = new System.Windows.Forms.ToolStripButton();
+            this.manualAssignButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.rescanButton = new System.Windows.Forms.ToolStripButton();
             this.splitJoinButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.manualAssignButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ignoreButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsButton = new System.Windows.Forms.ToolStripSplitButton();
@@ -121,11 +121,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.filterSplitButton,
             this.approveButton,
+            this.manualAssignButton,
+            this.toolStripSeparator3,
             this.rescanButton,
             this.splitJoinButton,
             this.toolStripSeparator1,
-            this.manualAssignButton,
-            this.toolStripSeparator3,
             this.ignoreButton,
             this.toolStripSeparator2,
             this.settingsButton});
@@ -187,6 +187,22 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.approveButton.ToolTipText = "Approve Selected File(s)";
             this.approveButton.Click += new System.EventHandler(this.approveButton_Click);
             // 
+            // manualAssignButton
+            // 
+            this.manualAssignButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.manualAssignButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.pencil_add;
+            this.manualAssignButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.manualAssignButton.Name = "manualAssignButton";
+            this.manualAssignButton.Size = new System.Drawing.Size(23, 23);
+            this.manualAssignButton.Text = "manualAssignButton";
+            this.manualAssignButton.ToolTipText = "Manually Assign Selected File(s)";
+            this.manualAssignButton.Click += new System.EventHandler(this.manualAssignButton_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 26);
+            // 
             // rescanButton
             // 
             this.rescanButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -213,22 +229,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 26);
-            // 
-            // manualAssignButton
-            // 
-            this.manualAssignButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.manualAssignButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_add;
-            this.manualAssignButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.manualAssignButton.Name = "manualAssignButton";
-            this.manualAssignButton.Size = new System.Drawing.Size(23, 23);
-            this.manualAssignButton.Text = "manualAssignButton";
-            this.manualAssignButton.ToolTipText = "Manually Assign Selected File(s)";
-            this.manualAssignButton.Click += new System.EventHandler(this.manualAssignButton_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 26);
             // 
             // ignoreButton
             // 

@@ -14,9 +14,11 @@ using Cornerstone.Database.Tables;
 using Cornerstone.Database;
 using Cornerstone.GUI.Controls;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private Dictionary<DBMovieInfo, ListViewItem> listItems;
         private List<DBLocalMedia> processingFiles;
@@ -41,11 +43,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             processingFiles = new List<DBLocalMedia>();
         }
 
-        ~MovieManagerPane() {
-            foreach (DBMovieInfo currMovie in listItems.Keys) {
-                currMovie.Commit();
-                foreach (DBLocalMedia currFile in currMovie.LocalMedia)
-                    currFile.Commit();
+        public void Commit() {
+            try {
+                foreach (DBMovieInfo currMovie in listItems.Keys) {
+                    currMovie.Commit();
+                    foreach (DBLocalMedia currFile in currMovie.LocalMedia)
+                        currFile.Commit();
+                    foreach (DBUserMovieSettings currSetting in currMovie.UserSettings)
+                        currSetting.Commit();
+                }
+            }
+            catch (Exception e) {
+                logger.Error(e);
             }
         }
 
@@ -156,6 +165,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 movieTitleTextBox.DatabaseObject = null;
                 movieDetailsList.DatabaseObject = null;
                 movieDetailsList.Enabled = false;
+                
+                userMovieDetailsList.DatabaseObject = null;
+                userMovieDetailsList.Enabled = false;
+                
                 coverImage.Image = null;
                 resolutionLabel.Text = "";
                 coverNumLabel.Text = "";
@@ -168,6 +181,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
             }
             movieDetailsList.Enabled = true;
+            userMovieDetailsList.Enabled = true;
 
             reassignMovieButton.Enabled = true;
             playMovieButton.Enabled = true;
@@ -208,6 +222,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // populate movie details fields
             movieTitleTextBox.DatabaseObject = CurrentMovie;
             movieDetailsList.DatabaseObject = CurrentMovie;
+            userMovieDetailsList.DatabaseObject = CurrentMovie.UserSettings[0];
         }
 
         private void updateFilePanel() {
@@ -548,6 +563,21 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             updateFilePanel();
             fileList.SelectedIndex = index + 1;
+        }
+
+        private void markAsUnwatchedToolStripMenuItem_Click(object sender, EventArgs e) {
+            foreach (ListViewItem currItem in movieListBox.SelectedItems)
+                ((DBMovieInfo)currItem.Tag).UserSettings[0].Watched = 0;
+
+            updateMoviePanel();
+        }
+
+        private void watchedToolStripMenuItem_Click(object sender, EventArgs e) {
+            foreach (ListViewItem currItem in movieListBox.SelectedItems)
+                if (((DBMovieInfo)currItem.Tag).UserSettings[0].Watched == 0)
+                    ((DBMovieInfo)currItem.Tag).UserSettings[0].Watched = 1;
+
+            updateMoviePanel();
         }
 
     }
