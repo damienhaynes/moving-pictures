@@ -152,7 +152,6 @@
     <Compile Include="LocalMediaManagement\LocalMediaParser.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
     <Compile Include="MainUI\ConfigConnector.cs" />
-    <Compile Include="MainUI\MovieBrowser\KeyboardFilter.cs" />
     <Compile Include="MainUI\MovieBrowser\IBrowserFilter.cs" />
     <Compile Include="MainUI\MovieBrowser\MovieBrowser.cs" />
     <Compile Include="MainUI\MovieBrowser\RemoteNumpadFilter.cs" />
