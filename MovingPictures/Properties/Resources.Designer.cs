@@ -315,6 +315,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;impawards.com&lt;/name&gt;
+        ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
+        ///    &lt;description&gt;This script grabs cover-art from impawards.com.&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you sh [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MoTechPosters {
+            get {
+                return ResourceManager.GetString("MoTechPosters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
