@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovingPicturesConfig : Form {
@@ -28,6 +29,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // mainTabControl.SelectedIndex = 0;
 
             mainTabControl.SelectedIndex = 1;
+        }
+
+        private void MovingPicturesConfig_FormClosing(object sender, FormClosedEventArgs e) {
+            if (!DesignMode) {
+                ProgressPopup popup = new ProgressPopup(new ProgressPopup.WorkerDelegate(movieManagerPane1.Commit));
+                popup.Owner = this;
+                popup.ShowDialog();
+            }
         }
     }
 }

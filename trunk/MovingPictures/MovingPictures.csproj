@@ -265,8 +265,10 @@
     <None Include="Images\noatunstop.png" />
     <None Include="Images\resultset_next.png" />
     <None Include="Images\resultset_previous.png" />
+    <None Include="Images\pencil_add.png" />
     <Content Include="Images\script_add.png" />
     <Content Include="Images\script_delete.png" />
+    <None Include="Images\television.png" />
     <Content Include="Images\tick.png" />
     <None Include="Images\zoom.png" />
     <None Include="Images\world_add.png" />

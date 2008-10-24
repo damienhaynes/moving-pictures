@@ -31,8 +31,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieImporterPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieImporterPane();
             this.importPathsListView1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImportPathsPane();
             this.settingsTab = new System.Windows.Forms.TabPage();
-            this.aboutTabPage = new System.Windows.Forms.TabPage();
             this.advancedSettingsWarningPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AdvancedSettingsWarningPane();
+            this.aboutTabPage = new System.Windows.Forms.TabPage();
             this.mainTabControl.SuspendLayout();
             this.managerTab.SuspendLayout();
             this.importSettingsTab.SuspendLayout();
@@ -117,6 +117,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.settingsTab.Text = "Advanced Settings";
             this.settingsTab.UseVisualStyleBackColor = true;
             // 
+            // advancedSettingsWarningPane1
+            // 
+            this.advancedSettingsWarningPane1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.advancedSettingsWarningPane1.Location = new System.Drawing.Point(3, 3);
+            this.advancedSettingsWarningPane1.Name = "advancedSettingsWarningPane1";
+            this.advancedSettingsWarningPane1.Size = new System.Drawing.Size(591, 536);
+            this.advancedSettingsWarningPane1.TabIndex = 0;
+            // 
             // aboutTabPage
             // 
             this.aboutTabPage.Location = new System.Drawing.Point(4, 22);
@@ -126,14 +134,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.aboutTabPage.TabIndex = 3;
             this.aboutTabPage.Text = "About";
             this.aboutTabPage.UseVisualStyleBackColor = true;
-            // 
-            // advancedSettingsWarningPane1
-            // 
-            this.advancedSettingsWarningPane1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.advancedSettingsWarningPane1.Location = new System.Drawing.Point(3, 3);
-            this.advancedSettingsWarningPane1.Name = "advancedSettingsWarningPane1";
-            this.advancedSettingsWarningPane1.Size = new System.Drawing.Size(591, 536);
-            this.advancedSettingsWarningPane1.TabIndex = 0;
             // 
             // MovingPicturesConfig
             // 
@@ -149,6 +149,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.ShowInTaskbar = false;
             this.Text = "Moving Pictures Configuration";
             this.Load += new System.EventHandler(this.MoviesPluginConfig_Load);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MovingPicturesConfig_FormClosing);
             this.mainTabControl.ResumeLayout(false);
             this.managerTab.ResumeLayout(false);
             this.importSettingsTab.ResumeLayout(false);

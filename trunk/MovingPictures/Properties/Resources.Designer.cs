@@ -72,14 +72,14 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///&lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;Allocine (French/FR)&lt;/name&gt;
+        ///    &lt;name&gt;allocine.fr&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from allocine.fr&lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should  [rest of string was truncated]&quot;;.
+        ///    new versions of the script the version numbers should change. E [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Allocine {
             get {
@@ -217,15 +217,15 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;IMDb&lt;/name&gt;
+        ///    &lt;name&gt;imdb.com&lt;/name&gt;
         ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from IMDb.&lt;/description&gt;
-        ///
+        ///    
         ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
+        ///    These fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
         ///    new versions of the script the version numbers should change. EVEN FOR 
-        ///    MINOR CHANGES, you should change the version [rest of string was truncated]&quot;;.
+        ///    MINOR CHANGES, you should change the ver [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string IMDb {
             get {
@@ -237,7 +237,7 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;IMPAwards&lt;/name&gt;
+        ///    &lt;name&gt;impawards.com&lt;/name&gt;
         ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
         ///    &lt;description&gt;This script grabs cover-art from impawards.com.&lt;/description&gt;
         ///
@@ -245,7 +245,7 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    These two fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
         ///    new versions of the script the version numbers should change. EVEN FOR 
-        ///    MINOR CHANGES, you should [rest of string was truncated]&quot;;.
+        ///    MINOR CHANGES, you sh [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string IMPAwards {
             get {
@@ -319,14 +319,14 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///&lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;MovieMeter (Dutch/NL)&lt;/name&gt;
+        ///    &lt;name&gt;moviemeter.nl&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from moviemeter.nl&lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers shou [rest of string was truncated]&quot;;.
+        ///    new versions of the script the version numbers should chang [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MovieMeter {
             get {
@@ -353,18 +353,25 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///&lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;OFDb (German/DE)&lt;/name&gt;
+        ///    &lt;name&gt;ofdb.de&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)&lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
-        ///  [rest of string was truncated]&quot;;.
+        ///    new ve [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string OFDb {
             get {
                 return ResourceManager.GetString("OFDb", resourceCulture);
+            }
+        }
+        
+        internal static System.Drawing.Bitmap pencil_add {
+            get {
+                object obj = ResourceManager.GetObject("pencil_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -392,6 +399,13 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         internal static System.Drawing.Bitmap script_delete {
             get {
                 object obj = ResourceManager.GetObject("script_delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap television {
+            get {
+                object obj = ResourceManager.GetObject("television", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

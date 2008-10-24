@@ -163,7 +163,11 @@ namespace Cornerstone.GUI.Controls {
                 return;
             }
 
-            Text = DatabaseField.GetValue(DatabaseObject).ToString();
+            if (DatabaseField.GetValue(DatabaseObject) == null)
+                Text = "";
+            else 
+                Text = DatabaseField.GetValue(DatabaseObject).ToString();
+
             UpdateValidationColor();
         }
 
