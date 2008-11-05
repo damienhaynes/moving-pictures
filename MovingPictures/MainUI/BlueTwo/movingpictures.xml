@@ -710,9 +710,6 @@ multiple view modes.
       <align>center</align>
     </control>    
     
-<!--	<control>
-	<type>group</type>
-	<description>group the function icons together</description> -->
     <!-- ******************** Side Bar Buttons, Not Used. The Cycle Button is the only one currently Functional *******************-->
    	<control>
     	  <description>Cycle View Button</description>
@@ -776,7 +773,6 @@ multiple view modes.
         <textureNoFocus>MovingPictures\moving_pictures_settings.png</textureNoFocus>
         <visible>Control.IsVisible(50)</visible>
     </control>
-</control>
 
 </controls>
 </window>
