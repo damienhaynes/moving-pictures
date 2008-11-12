@@ -733,6 +733,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         if (currFile.File.Extension.ToLower() == ".ifo")
           if (currFile.File.Name.ToLower() != "video_ts.ifo")
             continue;
+        
+        // don't add vob files that are part of a DVD disc/folder
+        if (currFile.File.Extension.ToLower() == ".vob")
+            if (isDVDFolder(currFile.File.Directory))
+                continue;
 
         // exclude samplefiles
         if (isSampleFile(currFile.File)) {
@@ -839,6 +844,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           RemoveFromMatchLists(matchesInSystem[(DBLocalMedia)obj]);
     }
 
+    private bool isDVDFolder(DirectoryInfo folder) {
+        FileInfo[] files = folder.GetFiles("video_ts.ifo");
+        return (files.Length == 1);
+    }
 
     // Check if the supplied file is a Sample file
     private bool isSampleFile(FileInfo file) {

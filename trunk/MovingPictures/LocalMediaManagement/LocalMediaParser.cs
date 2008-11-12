@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using DirectShowLib;
+using DirectShowLib.Dvd;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
@@ -12,12 +14,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public string ImdbId  = null; // ex. "tt0168122"
     public string Edition = null; // ex. unrated, director's cut etc.. Should maybe be an enum?
     public string Source  = null; // Original file/foldername
-    public string DvdId   = null; // MCE's DVD Id
+    public string DiscId = null; //  WMP/MC Disc Id (DirectShowLib)
     public string Path    = null; // Original path to the source of the media
 
     public override string ToString() {
-      return String.Format("Path= {0} || Source= {1} || Title= \"{2}\" || Year= {3} || Edition= {4} || DvdId= {5} || ImdbId= {6} || ",
-        this.Path, this.Source, this.Title, this.Year.ToString(), this.Edition, this.DvdId, this.ImdbId);
+      return String.Format("Path= {0} || Source= {1} || Title= \"{2}\" || Year= {3} || Edition= {4} || DiscId= {5} || ImdbId= {6} || ",
+        this.Path, this.Source, this.Title, this.Year.ToString(), this.Edition, this.DiscId, this.ImdbId);
     }
 
   }
@@ -32,6 +34,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       MovieSignature signature = new MovieSignature();
       bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
       bool scanNFO = (bool)MovingPicturesCore.SettingsManager["importer_nfoscan"].Value;
+      bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
       bool isDvdFS = (mm.LocalMedia[0].File.Extension.ToLower() == ".ifo");
       bool isMultiPart = (mm.LocalMedia.Count > 1);
 
@@ -44,6 +47,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         DirectoryInfo folder = file.Directory;
         
         signature.Path = file.FullName;
+        
+        // If this is a DVD then calculate the discid and add it to the signature
+        // @todo Only real DVD's? How to handle ISO's?
+        if (isDvdFS && getDiscId) signature.DiscId = GetDiscID(folder.FullName);  
 
         if (mm.FolderHint || isDvdFS) {
           // If we have a folder hint or if we are looking at a DVD filesystem
@@ -52,9 +59,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // If we meet one of the criteria for foldername parsing
             // let's do it but if we are in a DVD VIDEO_TS directory make 
             // sure we get the parent directory and alter the folder variable
-            if (isDvdFS && folder.Name.ToLower() == "video_ts")
-              folder = folder.Parent;
-
+              if (isDvdFS && folder.Name.ToLower() == "video_ts")
+                  folder = folder.Parent;
+              
             // prepare the string from the foldername
             sourceStr = parseFolderName(folder);
           }
@@ -254,6 +261,23 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
       // return the string
       return s;
+    }
+
+    // Get DiscID from DVD
+    // api: http://movie.metaservices.microsoft.com/pas_movie_B/template/GetMDRDVDByCRC.xml?CRC="
+    public static string GetDiscID(string path) {
+        string rtn = null;
+        try {
+            IDvdInfo2 dvdInfo = (IDvdInfo2)new DVDNavigator();
+            long id = 0;
+            dvdInfo.GetDiscID(path, out id);
+            rtn = Convert.ToString(id, 16); // HEX
+        }
+        catch (Exception e) {
+            logger.Error("Error while retrieving disc id for: " + path, e);
+        }
+
+        return rtn;
     }
 
   }

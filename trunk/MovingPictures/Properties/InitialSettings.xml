@@ -69,6 +69,11 @@
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
 
+      <setting id="importer_discid" name="Enable Disc ID" type="BOOL">
+        <default>true</default>
+        <description>Calculate Disc ID for DVD media</description>
+      </setting>
+
     </group>
 
     <group name="NFO Scanner">

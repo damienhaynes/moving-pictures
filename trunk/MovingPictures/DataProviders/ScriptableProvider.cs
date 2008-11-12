@@ -124,7 +124,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movieSignature.Year != null) paramList["search.year"] = movieSignature.Year.ToString();
             if (movieSignature.ImdbId != null) paramList["search.imdb_id"] = movieSignature.ImdbId;
             if (movieSignature.Edition != null) paramList["search.edition"] = movieSignature.Edition;
-            if (movieSignature.DvdId != null) paramList["search.dvd_id"] = movieSignature.DvdId;
+            if (movieSignature.DiscId != null) paramList["search.disc_id"] = movieSignature.DiscId;
             if (movieSignature.Source != null) paramList["search.source"] = movieSignature.Source;
 
             results = scraper.Execute("search", paramList);
