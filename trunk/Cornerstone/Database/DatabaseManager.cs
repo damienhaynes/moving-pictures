@@ -133,7 +133,7 @@ namespace Cornerstone.Database {
                     // if the given id doesn't exist, create a new uncommited record 
                     if (resultSet.Rows.Count == 0) {
                         newRecord.Clear();
-                        return newRecord;
+                        return null;
                     }
 
                     // otherwise load it into the object

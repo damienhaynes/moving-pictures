@@ -54,6 +54,7 @@
         <set name="movie[0].year" value="${title_year[0][1]:htmldecode}"/>
         <parse name="imdb" input="${imdb_page}" regex="(tt\d{7})/fullcredits"/>
         <set name="movie[0].imdb_id" value="${imdb[0][0]}"/>
+        <set name="movie[0].site_id" value="${imdb[0][0]}"/>
         <set name="movie[${counter}].details_url" value="http://www.imdb.com/title/${imdb[0][0]}"/>
         <set name="movie[0].popularity" value="100"/>
         <set name="offset" value="1" />
@@ -73,6 +74,7 @@
       <set name="movie[${counter}].year" value="${title_year[0][1]:htmldecode}"/>
       <parse name="imdb" input="${details_page_verified}" regex="(tt\d{7})/fullcredits"/>
       <set name="movie[${counter}].imdb_id" value="${imdb[0][0]}"/>
+      <set name="movie[${counter}].site_id" value="${imdb[0][0]}"/>
       <set name="movie[${counter}].details_url" value="http://www.imdb.com/title/${imdb[0][0]}"/>
       <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
     </loop>
@@ -85,6 +87,7 @@
       <loop name='curr_details' on='movie_details'>
         <add name="counter" value1="${count}" value2="${offset}" />
         <set name="movie[${counter}].imdb_id" value="${curr_details[1]:htmldecode}"/>
+        <set name="movie[${counter}].site_id" value="${curr_details[1]:htmldecode}"/>
         <set name="movie[${counter}].title" value="${curr_details[2]:htmldecode}"/>
         <set name="movie[${counter}].year" value="${curr_details[3]:htmldecode}"/>
         <set name="movie[${counter}].details_url" value="http://www.imdb.com/title/${curr_details[1]}"/>

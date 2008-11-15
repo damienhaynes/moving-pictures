@@ -48,7 +48,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             throw new NotImplementedException();
         }
 
-        public void Update(DBMovieInfo movie) {
+        public UpdateResults Update(DBMovieInfo movie) {
             throw new NotImplementedException();
         }
 

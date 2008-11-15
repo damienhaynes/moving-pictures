@@ -90,6 +90,7 @@
         <set name="movie[${counter}].alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
         <set name="movie[${counter}].year" value="${curr_details[4]:htmldecode}"/>
         <set name="movie[${counter}].details_url" value="${site}movie/${curr_details[0]}"/>
+        <set name="movie[${counter}].site_id" value="${curr_details[0]}"/>
         <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
       </loop>
     </loop>
@@ -97,7 +98,9 @@
   </action>
 
   <action name="get_details">
-    
+
+    <set name="site" value="http://xml.n4rf.net/ofdbgw/movie/" />
+
     <!-- Regular Expressions -->
     <set name="rx_title_clean" value="\[(TV-Mini-Serie|Kurzfilm)\]" />
     <set name="rx_title" value="(.+?)(?:, (The|A|Ein|Das|Die|Der|Les|Une))?\s*$" />
@@ -118,7 +121,7 @@
     </set>    
     
     <!-- Details -->
-    <retrieve name="details_page" url="${movie.details_url}"/>
+    <retrieve name="details_page" url="${site}${movie.site_id}"/>
     <parse name="details" input="${details_page}" regex="${rx_details}"/>
 
     <!-- Titles -->

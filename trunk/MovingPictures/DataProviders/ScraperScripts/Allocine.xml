@@ -57,12 +57,16 @@
         <set name="movie[${count}].alternate_titles" value="|${aka:striptags}|"/>
         <set name="movie[${count}].year" value="${curr_details[4]:htmldecode}"/>
         <set name="movie[${count}].details_url" value="${site}film/fichefilm_gen_cfilm=${curr_details[0]}.html"/>
+        <set name="movie[${count}].site_id" value="${curr_details[0]}"/>
         <subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
       </loop>
     </loop>
   </action>
 
   <action name="get_details">
+    <!-- Variables -->
+    <set name="site" value="http://www.allocine.fr/" />
+
     <!-- Regular Expressions -->
     <set name="rx_details">
       <![CDATA[
@@ -98,51 +102,56 @@
       <![CDATA[
       Spectateurs</a></h5>.+?class="etoile_(\d)
       ]]>
-    </set>    
+    </set>
 
-    <retrieve name="details_page" url="${movie.details_url}"/>
-    <parse name="details" input="${details_page}" regex="${rx_info}"/>
-    
-    <!-- Title -->
-    <parse name="title" input="${details_page}" regex="${rx_title}"/>
-    <set name="movie.title" value="${title[0][0]:htmldecode}"/>
+    <set name="success" value="false"/>
+    <if test="${movie.site_id}!=">
+      <retrieve name="details_page" url="${site}film/fichefilm_gen_cfilm=${movie.site_id}.html"/>
+      <parse name="details" input="${details_page}" regex="${rx_info}"/>
 
-    <!-- Plot/Summary -->
-    <parse name="plot" input="${details_page}" regex="${rx_plot}"/>
-    <set name="movie.summary" value="${plot[0][0]:htmldecode}"/>
-    
-    <!-- Year -->
-    <set name="movie.year" value="${details[0][0]}"/>
+      <!-- Title -->
+      <parse name="title" input="${details_page}" regex="${rx_title}"/>
+      <set name="movie.title" value="${title[0][0]:htmldecode}"/>
 
-    <!-- Directors -->
-    <parse name="directors" input="${details[0][1]}" regex="${rx_geta}"/>
-    <set name='movie.directors' value=''/>
-    <loop name='currDirector' on='directors'>
-      <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
-    </loop>
-    
-    <!-- Actors -->
-    <parse name="actors" input="${details[0][2]}" regex="${rx_geta}"/>
-    <set name='movie.actors' value=''/>
-    <loop name='currActor' on='actors'>
-      <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
-    </loop>
+      <!-- Plot/Summary -->
+      <parse name="plot" input="${details_page}" regex="${rx_plot}"/>
+      <set name="movie.summary" value="${plot[0][0]:htmldecode}"/>
 
-    <!-- Genres -->
-    <parse name="genres" input="${details[0][3]}" regex="${rx_geta}"/>
-    <set name='movie.genres' value=''/>
-    <loop name='currGenre' on='genres'>
-      <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
-    </loop>
+      <!-- Year -->
+      <set name="movie.year" value="${details[0][0]}"/>
 
-    <!-- Runtime -->
-    <multiply name="minutes" value1="60" value2="${details[0][4]}"/>
-    <add name="movie.runtime" value1="${minutes}" value2="${details[0][5]}"/>
-    
-    <!-- Score -->
-    <parse name="score" input="${details_page}" regex="${rx_score}"/>
-    <multiply name="score" value1="${score[0][0]}" value2="25" />
-    <divide name="movie.score" value1="${score}" value2="10" />
+      <!-- Directors -->
+      <parse name="directors" input="${details[0][1]}" regex="${rx_geta}"/>
+      <set name='movie.directors' value=''/>
+      <loop name='currDirector' on='directors'>
+        <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
+      </loop>
+
+      <!-- Actors -->
+      <parse name="actors" input="${details[0][2]}" regex="${rx_geta}"/>
+      <set name='movie.actors' value=''/>
+      <loop name='currActor' on='actors'>
+        <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
+      </loop>
+
+      <!-- Genres -->
+      <parse name="genres" input="${details[0][3]}" regex="${rx_geta}"/>
+      <set name='movie.genres' value=''/>
+      <loop name='currGenre' on='genres'>
+        <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
+      </loop>
+
+      <!-- Runtime -->
+      <multiply name="minutes" value1="60" value2="${details[0][4]}"/>
+      <add name="movie.runtime" value1="${minutes}" value2="${details[0][5]}"/>
+
+      <!-- Score -->
+      <parse name="score" input="${details_page}" regex="${rx_score}"/>
+      <multiply name="score" value1="${score[0][0]}" value2="25" />
+      <divide name="movie.score" value1="${score}" value2="10" />
+
+      <set name="success" value="true"/>
+    </if>
     
   </action>
 

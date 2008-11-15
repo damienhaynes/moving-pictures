@@ -272,7 +272,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                                 return AddSourceResult.SUCCESS_REPLACED;
                             }
                             else {
-                                logger.Error("Script already loaded.");
+                                logger.Info("Script already loaded.");
                                 return AddSourceResult.FAILED_VERSION;
                             }
                         }

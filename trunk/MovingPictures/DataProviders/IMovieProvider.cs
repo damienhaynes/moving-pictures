@@ -17,7 +17,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         bool ProvidesBackdrops { get; }
 
         List<DBMovieInfo> Get(MovieSignature movieSignature);
-        void Update(DBMovieInfo movie);
+        UpdateResults Update(DBMovieInfo movie);
         bool GetArtwork(DBMovieInfo movie);
         bool GetBackdrop(DBMovieInfo movie);
     }
@@ -31,4 +31,5 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     }
 
     public enum DataType { DETAILS, COVERS, BACKDROPS }
+    public enum UpdateResults { SUCCESS, FAILED_NEED_ID, FAILED }
 }
