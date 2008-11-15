@@ -272,7 +272,23 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
         } RelationList<DBMovieInfo, DBUserMovieSettings> _userSettings;
 
+        [DBRelation(AutoRetrieve = true)]
+        public RelationList<DBMovieInfo, DBSourceMovieInfo> SourceMovieInfo {
+          get {
+            if (_sourceIDs == null) {
+                _sourceIDs = new RelationList<DBMovieInfo, DBSourceMovieInfo>(this);
+            }
+            return _sourceIDs;
+          }
+        } RelationList<DBMovieInfo, DBSourceMovieInfo> _sourceIDs;
 
+        public DBSourceMovieInfo GetSourceMovieInfo(int scriptID) {
+            return DBSourceMovieInfo.GetOrCreate(this, scriptID);
+        }
+
+        public DBSourceMovieInfo GetSourceMovieInfo(DBSourceInfo source) {
+            return DBSourceMovieInfo.GetOrCreate(this, source);
+        }
 
         [DBFieldAttribute(AllowAutoUpdate = false)]
         public StringList AlternateCovers {
@@ -795,6 +811,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public static List<DBMovieInfo> GetAll() {
             return MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(null);
+        }
+
+        // this should be changed to reflectively commit all sub objects and relation lists
+        // and moved down to the DatabaseTable class.
+        public override void Commit() {
+            if (this.ID == null) {
+                base.Commit();
+                commitNeeded = true;
+            }
+
+            foreach (DBSourceMovieInfo currInfo in SourceMovieInfo) {
+                currInfo.Commit();
+            }
+        
+            base.Commit();
         }
 
         #endregion

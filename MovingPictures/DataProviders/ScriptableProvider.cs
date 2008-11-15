@@ -142,6 +142,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         currField.SetValue(newMovie, value.Trim());
                 }
 
+                // try to store the site id
+                string siteId;
+                bool success2 = results.TryGetValue(prefix + "site_id", out siteId);
+                if (success2) newMovie.GetSourceMovieInfo(ScriptID).Identifier = siteId;
+
                 count++;
 
                 // check if the movie has already been added, if not, add it
@@ -155,9 +160,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             return rtn;
         }
 
-        public void Update(DBMovieInfo movie) {
+        public UpdateResults Update(DBMovieInfo movie) {
             if (scraper == null)
-                return;
+                return UpdateResults.FAILED;
 
             Dictionary<string, string> paramList = new Dictionary<string, string>();
             Dictionary<string, string> results;
@@ -165,6 +170,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             // load params
             foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo))) 
                 paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
+
+            // try to load the id for the movie for this script
+            DBSourceMovieInfo idObj = movie.GetSourceMovieInfo(ScriptID);
+            if (idObj != null && idObj.Identifier != null)
+                paramList["movie.site_id"] = idObj.Identifier;
 
             // try to retrieve results
             results = scraper.Execute("get_details", paramList);
@@ -181,6 +191,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // and update as neccisary
             movie.CopyUpdatableValues(newMovie);
+            return UpdateResults.SUCCESS;
         }
 
         public bool GetArtwork(DBMovieInfo movie) {

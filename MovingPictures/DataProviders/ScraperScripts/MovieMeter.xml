@@ -56,6 +56,7 @@
         <set name="movie[${count}].title" value="${title[0][1]} ${title[0][0]}"/>
         <set name="movie[${count}].year" value="${curr_details[2]:htmldecode}"/>
         <set name="movie[${count}].details_url" value="${site}${curr_details[0]}"/>
+        <set name="movie[${count}].site_id" value="${curr_details[0]}"/>
         <subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
       </loop>
     </loop>
@@ -63,6 +64,9 @@
   </action>
 
   <action name="get_details">
+    <!-- Variables -->
+    <set name="site" value="http://www.moviemeter.nl/film/" />
+
     <!-- Regular Expressions -->
     <set name="rx_title">
       <![CDATA[
@@ -124,7 +128,7 @@
     </set>
     
     <!-- Retrieve details -->
-    <retrieve name="details_page" url="${movie.details_url}"/>
+    <retrieve name="details_page" url="${site}${movie.site_id}"/>
     
     <!-- Film info-->
     <parse name="filminfo_block" input="${details_page}" regex="${rx_filminfo}"/>
