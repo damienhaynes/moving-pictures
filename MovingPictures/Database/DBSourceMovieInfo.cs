@@ -84,7 +84,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             rtn.Source = source;
 
             // if this is the IMDb data source, populate the id with the imdb_id field
-            if (rtn.ScriptID == 874902 && movie.ImdbID.Length == 9)
+            if (rtn.ScriptID == 874902 && movie.ImdbID.Trim().Length == 9)
                 rtn.Identifier = movie.ImdbID;
 
             movie.SourceMovieInfo.Add(rtn);

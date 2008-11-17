@@ -440,7 +440,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         // assign files to movie
-        lock (match) AssignFileToMovie(match.LocalMedia, match.Selected.Movie, false);
+        AssignAndCommit(match, false);
         
         // add match to the committed list
         commitedMatches.Add(match);
@@ -449,6 +449,29 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         logger.Info("User manually assigned " + match.LocalMediaString + "as " + match.Selected.Movie.Title);
         if (MovieStatusChanged != null)
             MovieStatusChanged(match, MovieImporterAction.MANUAL);
+    }
+
+    // This will add the specified movie to the importer for reprocessing, using the 
+    // specified data source. 
+    public void Update(DBMovieInfo movie, DBSourceInfo source) {
+        MovieMatch newMatch = new MovieMatch();
+        newMatch.ExistingMovieInfo = movie;
+        newMatch.PreferedDataSource = source;
+        newMatch.LocalMedia = movie.LocalMedia;
+        newMatch.FolderHint = false;
+
+        if (matchesInSystem.ContainsKey(movie.LocalMedia[0]))
+            RemoveFromMatchLists(matchesInSystem[movie.LocalMedia[0]]);
+
+        lock (priorityPendingMatches.SyncRoot) {
+            priorityPendingMatches.Add(newMatch);
+        }
+
+        foreach (DBLocalMedia subFile in movie.LocalMedia)
+            matchesInSystem.Add(subFile, newMatch);
+
+        if (MovieStatusChanged != null)
+            MovieStatusChanged(newMatch, MovieImporterAction.ADDED);
     }
 
     private void LookForMissingArtworkWorker() {
@@ -1007,7 +1030,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         MovieStatusChanged(currMatch, MovieImporterAction.GETTING_DETAILS);
 
       // commit the match and move it to the commited array
-      lock (currMatch) AssignFileToMovie(currMatch.LocalMedia, currMatch.Selected.Movie);
+      AssignAndCommit(currMatch, true);
       retrievingDetailsMatches.Remove(currMatch);
       commitedMatches.Add(currMatch);
 
@@ -1141,19 +1164,30 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
 
       movie.Commit();
-      
-
     }
 
-    // Associates the given file(s) to the given movie object. Also creates all
-    // relevent user related data.
-    private void AssignFileToMovie(DBLocalMedia file, DBMovieInfo movie) {
-        AssignFileToMovie(new DBLocalMedia[] { file }, movie, true);
-    }
+    private void AssignAndCommit(MovieMatch match, bool update) {
+        lock (match) {
+            // if we already have a movie object with assigned files, just update
+            if (match.ExistingMovieInfo != null && update) {
+                DBMovieInfo movie = match.ExistingMovieInfo;
 
-    private void AssignFileToMovie(IList<DBLocalMedia> localMedia, DBMovieInfo movie) {
-        AssignFileToMovie(localMedia, movie, true);
-    }    
+                // pass on the site_id from the selected match
+                int scriptID = match.PreferedDataSource.SelectedScript.Provider.ScriptID;
+                string siteID = match.Selected.Movie.GetSourceMovieInfo(scriptID).Identifier;
+                movie.GetSourceMovieInfo(scriptID).Identifier = siteID;
+
+                // and update from that
+                match.PreferedDataSource.Provider.Update(movie);
+                movie.Commit();
+            }
+
+            // no movie object exists so go ahead and assign our retrieved details.
+            else {
+                AssignFileToMovie(match.LocalMedia, match.Selected.Movie, update);
+            }
+        }
+    }
 
     // removes the given match from all pending process lists
     private void RemoveFromMatchLists(MovieMatch match) {
@@ -1231,8 +1265,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
       // grab a list of movies from our dataProvider and rank each returned movie on 
       // how close a match it is
-
-      movieList = MovingPicturesCore.DataProviderManager.Get(signature);
+      if (mediaMatch.PreferedDataSource != null)
+        movieList = mediaMatch.PreferedDataSource.Provider.Get(signature);
+      else 
+        movieList = MovingPicturesCore.DataProviderManager.Get(signature);
 
       bool strictYear = (bool)MovingPicturesCore.SettingsManager["importer_strict_year"].Value;
       // TODO: this boolean will probably be removed on improvement of the matching system
@@ -1331,6 +1367,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
   }
 
   public class MovieMatch {
+
+    public DBMovieInfo ExistingMovieInfo {
+      get { return _existingMovieInfo; }
+      set { _existingMovieInfo = value; }
+    } private DBMovieInfo _existingMovieInfo = null;
+
+    public DBSourceInfo PreferedDataSource {
+        get { return _preferedDataSource; }
+        set { _preferedDataSource = value; }
+    } private DBSourceInfo _preferedDataSource = null;
 
     public bool FolderHint {
       get { return _folder; }

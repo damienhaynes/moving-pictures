@@ -15,6 +15,8 @@ using Cornerstone.Database;
 using Cornerstone.GUI.Controls;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using NLog;
+using System.Collections.ObjectModel;
+using MediaPortal.Plugins.MovingPictures.DataProviders;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {
@@ -23,6 +25,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private Dictionary<DBMovieInfo, ListViewItem> listItems;
         private List<DBLocalMedia> processingFiles;
         private List<DBMovieInfo> processingMovies;
+        private DBSourceInfo selectedSource;
+
         
         private delegate void InvokeDelegate();
         private delegate DBMovieInfo DBMovieInfoDelegate();
@@ -69,6 +73,20 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 MovingPicturesCore.DatabaseManager.ObjectInserted +=
                     new DatabaseManager.ObjectAffectedDelegate(movieInsertedListener);
+
+                addMovieRefreshMenuItems();
+            }
+        }
+
+        private void addMovieRefreshMenuItems() {
+            ReadOnlyCollection<DBSourceInfo> sources = MovingPicturesCore.DataProviderManager.MovieDetailSources;
+            foreach (DBSourceInfo currSource in sources) {
+                ToolStripMenuItem newItem = new ToolStripMenuItem();
+                newItem.Name = currSource.Provider.Name + "ToolStripMenuItem";
+                newItem.Text = "Refresh from " + currSource.Provider.Name + " (" + currSource.Provider.Language + ")";
+                newItem.Click += new System.EventHandler(this.refreshMovieButton_Click);
+                newItem.Tag = currSource;
+                refreshMovieButton.DropDownItems.Add(newItem);
             }
         }
 
@@ -419,11 +437,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (movieListBox.SelectedItems.Count == 0)
                 return;
 
+            if (sender is ToolStripMenuItem)
+                selectedSource = (DBSourceInfo)((ToolStripMenuItem)sender).Tag;
+            else
+                selectedSource = null;
+
             DialogResult result =
-                MessageBox.Show("You are about to refresh metadata for the selected movie, overwriting\n" +
-                                "any custom modifications. If operating on a large number of\n" +
-                                "movies this can be time consuming. Are you sure you want to\n" +
-                                "continue?",
+                MessageBox.Show("This action will overwrite existing movie details, including any custom modifications.",
                                 "Refresh Movie", MessageBoxButtons.OKCancel);
 
             if (result == System.Windows.Forms.DialogResult.OK) {
@@ -447,14 +467,35 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void refreshMovies(ProgressPopup.ProgressDelegate progress) {
             int count = 0;
             int total = processingMovies.Count;
+            int sentToImporter = 0;
 
             foreach (DBMovieInfo currItem in processingMovies) {
-                MovingPicturesCore.DataProviderManager.Update(currItem);
+                // if the user specified a specific source, try to update, and if failed
+                // send to the importer
+                if (selectedSource != null) {
+                    UpdateResults result =  selectedSource.Provider.Update(currItem);
+                    if (result == UpdateResults.FAILED_NEED_ID) {
+                        MovingPicturesCore.Importer.Update(currItem, selectedSource);
+                        sentToImporter++;
+                    }
+                }
+
+                // just use the regular update logic
+                else {
+                    MovingPicturesCore.DataProviderManager.Update(currItem);
+                }
 
                 count++;
                 if (progress != null)
                     progress(count, total);
             }
+
+            if (sentToImporter > 0) 
+                MessageBox.Show(this.ParentForm,
+                "There were " + sentToImporter + " movie(s) that needed to be sent to the importer to\n"+
+                "search for possible matches from the " + selectedSource.Provider.Name + " data source.\n" +
+                "You should go to the Movie Importer tab to check for any matches requiring approval.", "Movies Sent to Importer", MessageBoxButtons.OK);
+
         }
 
         private void reassignMovieButton_Click(object sender, EventArgs e) {

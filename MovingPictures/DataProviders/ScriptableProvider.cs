@@ -167,14 +167,16 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             Dictionary<string, string> paramList = new Dictionary<string, string>();
             Dictionary<string, string> results;
 
-            // load params
-            foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo))) 
-                paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
-
             // try to load the id for the movie for this script
             DBSourceMovieInfo idObj = movie.GetSourceMovieInfo(ScriptID);
             if (idObj != null && idObj.Identifier != null)
                 paramList["movie.site_id"] = idObj.Identifier;
+            else
+                return UpdateResults.FAILED_NEED_ID;
+
+            // load params
+            foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo))) 
+                paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
 
             // try to retrieve results
             results = scraper.Execute("get_details", paramList);
