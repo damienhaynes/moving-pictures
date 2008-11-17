@@ -99,7 +99,7 @@
 
 
   <action name="get_details">
-    <retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+    <retrieve name="details_page" url="http://www.imdb.com/title/${movie.site_id}"/>
 
     <!-- Title and Year -->
     <parse name="title_year" input="${details_page}" regex="&lt;title&gt;([^\(]+?)\((\d{4})[\/IVX]*\).*?&lt;/title&gt;"/>
@@ -163,7 +163,7 @@
     <set name='movie.language' value='${language[0][0]:htmldecode}'/>
     
     <!-- Plot Summary -->
-    <retrieve name='summary_page' url='http://www.imdb.com/title/${movie.imdb_id}/plotsummary'/>
+    <retrieve name='summary_page' url='http://www.imdb.com/title/${movie.site_id}/plotsummary'/>
     <parse name='summary' input ='${summary_page}' regex='&lt;p class="plotpar"&gt;\s(.+?)&lt;i&gt;'/>
     <set name='movie.summary' value='${summary[0][0]:htmldecode}'/>
     

@@ -369,7 +369,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public void Update(DBMovieInfo movie) {
-            detailSources[0].Provider.Update(movie);            
+            foreach(DBSourceInfo currSource in detailSources) {
+                UpdateResults result = currSource.Provider.Update(movie);
+                if (result == UpdateResults.SUCCESS)
+                    break;
+            }
         }
 
         public bool GetArtwork(DBMovieInfo movie) {
