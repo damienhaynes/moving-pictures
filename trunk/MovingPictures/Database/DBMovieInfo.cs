@@ -13,6 +13,7 @@ using System.Collections;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public enum ArtworkLoadStatus {
@@ -553,7 +554,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             bool redownloadCovers = (bool)MovingPicturesCore.SettingsManager["redownload_coverart"].Value;
 
             // genrate a filename for a movie. should be unique based on the url hash
-            string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
+            string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
             string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].jpg";
             
             // if we already have a file for this movie from this URL, move on
@@ -620,8 +621,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             string thumbsFolder = (String)MovingPicturesCore.SettingsManager["backdrop_thumbs_folder"].Value;
             bool redownloadBackdrops = (bool)MovingPicturesCore.SettingsManager["redownload_backdrops"].Value;
 
-            // genrate a filename for a movie. should be unique based on the url hash
-            string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
+            // generate a filename for a movie. should be unique based on the url hash
+            string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
             string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].jpg";
 
             // if we already have a file for this movie from this URL, move on
@@ -696,7 +697,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // if the file isnt in the backdrop folder, generate a name and save it there
             if (!alreadyInFolder) {
-                string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
+                string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 
                 // save the backdrop
