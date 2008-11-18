@@ -33,6 +33,36 @@ multiple view modes.
   
   <controls>
   
+    <!-- Dummy Controls-->
+    <control>
+      <description>Visibile when filtering by watched flag. Only unwatched movies are listed.</description>
+      <type>label</type>
+      <id>8</id>
+      <posX>-50</posX>
+      <posY>-50</posY>
+      <width>0</width>
+    </control>
+
+    <control>
+      <description>Visibile when the currently selected movie has been watched</description>
+      <type>label</type>
+      <id>9</id>
+      <posX>-50</posX>
+      <posY>-50</posY>
+      <width>0</width>
+    </control>
+
+    <control>
+      <description>Visibile when filtering by remote control searching.</description>
+      <type>label</type>
+      <id>10</id>
+      <posX>-50</posX>
+      <posY>-50</posY>
+      <width>0</width>
+    </control>
+
+
+
     <!-- ********************* Background /  Movie Backdrop (Fan-art) *************************** -->
     <control>
       <description>Background to be displayed when there is no Movie Backdrop</description>
@@ -507,7 +537,7 @@ multiple view modes.
       <label>#MovingPictures.SelectedMovie.tagline</label>
       <align>center</align>
     </control>
-    
+
     <control>
       <description>10 star rating? 10 is a lot...</description>
       <type>imagelist</type>
@@ -526,6 +556,71 @@ multiple view modes.
       <align>left</align>
       <imagesToDraw>10</imagesToDraw>
       <percentage>#MovingPictures.SelectedMovie.score</percentage>
+    </control>
+
+    <!-- ***************************** Filtering Indicator ******************************* -->
+    
+    <control>
+      <description>filtering background</description>
+      <type>image</type>
+      <posX>0</posX>
+      <posY>15</posY>
+      <height>45</height>
+      <width>300</width>
+      <texture>MovingPictures\filters_bg.png</texture>
+      <visible>Control.IsVisible(50)</visible>
+    </control>
+
+    <control>
+      <description>Watched Filtering Indicator</description>
+      <type>label</type>
+      <id>0</id>
+      <posX>10</posX>
+      <posY>25</posY>
+      <width>250</width>
+      <textcolor>000000</textcolor>
+      <font>font10</font>
+      <label>All Movies</label>
+      <visible>Control.IsVisible(50)+!Control.IsVisible(8)+!Control.IsVisible(10)</visible>
+    </control>
+
+    <control>
+      <description>Watched Filtering Indicator</description>
+      <type>label</type>
+      <id>0</id>
+      <posX>10</posX>
+      <posY>25</posY>
+      <width>250</width>
+      <textcolor>000000</textcolor>
+      <font>font10</font>
+      <label>Unwatched Movies</label>
+      <visible>Control.IsVisible(50)+Control.IsVisible(8)+!Control.IsVisible(10)</visible>
+    </control>
+
+    <control>
+      <description>Watched Filtering Indicator</description>
+      <type>label</type>
+      <id>0</id>
+      <posX>10</posX>
+      <posY>25</posY>
+      <width>250</width>
+      <textcolor>000000</textcolor>
+      <font>font10</font>
+      <label>Filtered Movies</label>
+      <visible>Control.IsVisible(50)+!Control.IsVisible(8)+Control.IsVisible(10)</visible>
+    </control>
+
+    <control>
+      <description>Watched Filtering Indicator</description>
+      <type>label</type>
+      <id>0</id>
+      <posX>10</posX>
+      <posY>25</posY>
+      <width>250</width>
+      <textcolor>000000</textcolor>
+      <font>font10</font>
+      <label>Unwatched and Filtered Movies</label>
+      <visible>Control.IsVisible(50)+Control.IsVisible(8)+Control.IsVisible(10)</visible>
     </control>
     
     <!-- ******************** Side Bar Buttons, Not Used. The Cycle Button is the only one currently Functional *******************-->

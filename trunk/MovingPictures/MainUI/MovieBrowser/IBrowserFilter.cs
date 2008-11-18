@@ -7,6 +7,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
     public interface IBrowserFilter {
         event FilterUpdatedDelegate Updated;
         List<DBMovieInfo> Filter(List<DBMovieInfo> input);
+        bool Active { get; }
     }
 
     public delegate void FilterUpdatedDelegate(IBrowserFilter obj);

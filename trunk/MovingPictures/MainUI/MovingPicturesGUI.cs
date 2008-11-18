@@ -70,6 +70,17 @@ namespace MediaPortal.Plugins.MovingPictures {
         [SkinControl(7)]
         protected GUIButtonControl textToggleButton = null;
 
+        [SkinControl(8)]
+        protected GUILabelControl watchedFilteringIndicator = null;
+
+        [SkinControl(9)]
+        protected GUILabelControl selectedMovieWatchedIndicator = null;
+
+        [SkinControl(10)]
+        protected GUILabelControl remoteFilteringIndicator = null;
+
+
+
         #endregion
 
         // Defines the current view mode. Reassign to switch modes.        
@@ -245,6 +256,22 @@ namespace MediaPortal.Plugins.MovingPictures {
             dialog.DoModal(GetID);
         }
 
+        private void OnFilterChanged(IBrowserFilter filter) {
+            // set the global watched indicator
+            if (watchedFilteringIndicator != null && filter == watchedFilter)
+                if (filter.Active)
+                    watchedFilteringIndicator.Visible = true;
+                else
+                    watchedFilteringIndicator.Visible = false;
+
+            // set the global watched indicator
+            if (remoteFilteringIndicator != null && filter == remoteFilter)
+                if (filter.Active)
+                    remoteFilteringIndicator.Visible = true;
+                else
+                    remoteFilteringIndicator.Visible = false;
+        }
+
         #region GUIWindow Methods
 
         public override int GetID {
@@ -307,14 +334,17 @@ namespace MediaPortal.Plugins.MovingPictures {
                 browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(updateMovieDetails);
                 
                 remoteFilter = new RemoteNumpadFilter();
+                remoteFilter.Updated += new FilterUpdatedDelegate(OnFilterChanged);
                 browser.ActiveFilters.Add(remoteFilter);
+                OnFilterChanged(remoteFilter);
 
                 watchedFilter = new WatchedFlagFilter();
+                watchedFilter.Updated += new FilterUpdatedDelegate(OnFilterChanged);
                 browser.ActiveFilters.Add(watchedFilter);
+                OnFilterChanged(watchedFilter);
             }
-            browser.Facade = facade;
 
-            // add movies to facade
+            browser.Facade = facade;
             facade.Focus = true;
 
             // if this is our first time loading, we need to setup our default view data
@@ -935,8 +965,13 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         private void updateMovieDetails(DBMovieInfo movie) {
-
             PublishDetails(movie, "SelectedMovie");
+
+            if (selectedMovieWatchedIndicator != null)
+                if (movie.UserSettings[0].Watched > 0)
+                    selectedMovieWatchedIndicator.Visible = true;
+                else
+                    selectedMovieWatchedIndicator.Visible = false;
 
             // start the timer for new artwork loading
             updateArtworkTimer.Stop();
