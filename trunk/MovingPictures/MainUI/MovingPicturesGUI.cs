@@ -18,6 +18,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using MediaPortal.Util;
 using MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser;
+using System.Globalization;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {
@@ -962,7 +963,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         #endregion
 
         #region Skin and Property Settings
-
+        
 
         private void updateMovieDetails(DBMovieInfo movie) {
             PublishDetails(movie, "SelectedMovie");
@@ -1045,9 +1046,15 @@ namespace MediaPortal.Plugins.MovingPictures {
                         SetProperty(propertyStr, valueStr);
                     }
 
-                    // vanilla publication
-                }
-                else {
+                // for floats we need to make sure we use english style printing or imagelist controls
+                // will break. 
+                } else if (value.GetType() == typeof(float)) {
+                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
+                    valueStr = ((float)currField.GetValue(obj)).ToString(CultureInfo.CreateSpecificCulture("en-US"));
+                    SetProperty(propertyStr, valueStr);
+                
+                // vanilla publication
+                } else {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = currField.GetValue(obj).ToString().Trim();
                     SetProperty(propertyStr, valueStr);
