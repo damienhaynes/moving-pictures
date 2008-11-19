@@ -162,7 +162,7 @@
     
     <!-- IMDB id lookup -->
     <retrieve name="imdblookup" url="http://www.ofdb.de/view.php?page=film&amp;fid=${movie.site_id}"/>
-    <parse name="imdbid" input="${imdblookup}" regex="http\:\/\/german.imdb.com\/Title\?(\d+)"/>
+    <parse name="imdbid" input="${imdblookup}" regex="imdb.com\/Title\?(\d+)"/>
     <set name="movie.imdb_id" value="tt${imdbid[0][0]}" />
     
   </action>
