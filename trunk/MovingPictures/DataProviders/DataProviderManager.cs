@@ -370,6 +370,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         public void Update(DBMovieInfo movie) {
             foreach(DBSourceInfo currSource in detailSources) {
+                if (currSource.IsDisabled(DataType.DETAILS))
+                    continue;
+
                 UpdateResults result = currSource.Provider.Update(movie);
                 if (result == UpdateResults.SUCCESS)
                     break;
