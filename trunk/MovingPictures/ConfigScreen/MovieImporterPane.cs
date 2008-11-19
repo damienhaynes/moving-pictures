@@ -385,7 +385,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     movie.Year = popup.Year.GetValueOrDefault(0);
 
                     // update the match
-                    selectedMatch.Selected.Movie = movie;                 
+                    PossibleMatch selectedMovie = new PossibleMatch();
+                    selectedMovie.Movie = movie;
+                    selectedMovie.MatchValue = 0;
+                    
+                    selectedMatch.PossibleMatches.Add(selectedMovie);
+                    selectedMatch.Selected = selectedMovie;
+
+             
                     // Manually Assign Movie
                     MovingPicturesCore.Importer.ManualAssign(selectedMatch);
                 }
