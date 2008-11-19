@@ -178,38 +178,19 @@
       </setting>
     </group-->
 
-    <group name="Movie-XML Provider">
+    <group name="themoviedb.org Provider">
 
-      <setting id="xml_max_timeouts" name="Max Timeouts" type="INT">
+      <setting id="tmdb_max_timeouts" name="Max Timeouts" type="INT">
         <default>10</default>
         <description>The maximum number of timeouts received from the server before a thread returns an error condition.</description>
       </setting>
 
-      <setting id="xml_timeout_length" name="Timeout Length" type="INT">
+      <setting id="tmdb_timeout_length" name="Timeout Length" type="INT">
         <default>5000</default>
-        <description>The base length of time (in milliseconds) for a timeout when connecting to the Movie-XML.com data service.</description>
+        <description>The base length of time (in milliseconds) for a timeout when connecting to themoviedb.org data service.</description>
       </setting>
 
-      <setting id="xml_timeout_increment" name="Timeout Increment" type="INT">
-        <default>1000</default>
-        <description>The amount of time (in milliseconds) added to the timeout limit  after each timeout failure. A non-zero value will help when the server is experience a large amount of congestion.</description>
-      </setting>
-
-    </group>
-
-    <group name="MovieBackdrops.com Provider">
-
-      <setting id="moviedb_max_timeouts" name="Max Timeouts" type="INT">
-        <default>10</default>
-        <description>The maximum number of timeouts received from the server before a thread returns an error condition.</description>
-      </setting>
-
-      <setting id="moviedb_timeout_length" name="Timeout Length" type="INT">
-        <default>5000</default>
-        <description>The base length of time (in milliseconds) for a timeout when connecting to the Movie-XML.com data service.</description>
-      </setting>
-
-      <setting id="moviedb_timeout_increment" name="Timeout Increment" type="INT">
+      <setting id="tmdb_timeout_increment" name="Timeout Increment" type="INT">
         <default>1000</default>
         <description>The amount of time (in milliseconds) added to the timeout limit  after each timeout failure. A non-zero value will help when the server is experience a large amount of congestion.</description>
       </setting>

@@ -522,9 +522,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // if the file isnt in the cover folder, generate a name and save it there
             if (!alreadyInFolder) {
-                string safeName = HttpUtility.UrlEncode(Title.Replace(' ', '.'));
+                string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
-                newCover.Save(newFileName);
+                if (!File.Exists(newFileName))
+                    newCover.Save(newFileName);
                 AlternateCovers.Add(newFileName);
             }
 
@@ -723,9 +724,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // pull in timeout settings
             int tryCount = 0;
-            int maxRetries = (int)MovingPicturesCore.SettingsManager["xml_max_timeouts"].Value;
-            int timeout = (int)MovingPicturesCore.SettingsManager["xml_timeout_length"].Value;
-            int timeoutIncrement = (int)MovingPicturesCore.SettingsManager["xml_timeout_increment"].Value;
+            int maxRetries = (int)MovingPicturesCore.SettingsManager["tmdb_max_timeouts"].Value;
+            int timeout = (int)MovingPicturesCore.SettingsManager["tmdb_timeout_length"].Value;
+            int timeoutIncrement = (int)MovingPicturesCore.SettingsManager["tmdb_timeout_increment"].Value;
 
             while (rtn == null && tryCount < maxRetries) {
                 try {

@@ -508,7 +508,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           logger.Info("Initiating full scan on watch folders.");
           
           // maintainence tasks
-          VerifyUserMovieSettings();
           RemoveOrphanFiles();
           RemoveMissingFiles();
           RemoveOrphanArtwork();
@@ -553,7 +552,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     // The DBUserMovieSettings system was revamped so we need to get 
     // rid of any obsolete data and populate new objects as neccisary
-    private void VerifyUserMovieSettings() {
+    public void VerifyUserMovieSettings() {
         List<DBUserMovieSettings> allUserSettings = DBUserMovieSettings.GetAll();
         foreach (DBUserMovieSettings currSetting in allUserSettings) {
             if (currSetting.AttachedMovies.Count == 0)
@@ -569,6 +568,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     userSettings.User = currUser;
                     userSettings.Commit();
                     currMovie.UserSettings.Add(userSettings);
+                    userSettings.CommitNeeded = false;
                 }
                 
                 currMovie.Commit();
@@ -1154,6 +1154,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       movie.LocalMedia.AddRange(localMedia);
       movie.UnloadArtwork();
 
+      foreach (DBLocalMedia currFile in localMedia) 
+        currFile.CommitNeeded = false;
+      
+
       // create user related data object for each user
       movie.UserSettings.Clear();
       foreach (DBUser currUser in DBUser.GetAll()) {
@@ -1161,6 +1165,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         userSettings.User = currUser;
         userSettings.Commit();
         movie.UserSettings.Add(userSettings);
+        userSettings.CommitNeeded = false;
       }
 
       movie.Commit();
