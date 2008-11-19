@@ -561,33 +561,34 @@ multiple view modes.
     <!-- ***************************** Filtering Indicator ******************************* -->
     
     <control>
-      <description>filtering background</description>
+      <description>short filtering background</description>
+      <type>image</type>
+      <posX>0</posX>
+      <posY>15</posY>
+      <height>45</height>
+      <width>160</width>
+      <texture>MovingPictures\filters_bg.png</texture>
+      <visible>Control.IsVisible(50)+[[Control.IsVisible(8)+!Control.IsVisible(10)]|[!Control.IsVisible(8)+Control.IsVisible(10)]]</visible>
+      <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
+      <animation effect="slide" end="-300,0" time="500">Hidden</animation>
+    </control>
+
+    <control>
+      <description>long filtering background</description>
       <type>image</type>
       <posX>0</posX>
       <posY>15</posY>
       <height>45</height>
       <width>300</width>
       <texture>MovingPictures\filters_bg.png</texture>
-      <visible>Control.IsVisible(50)</visible>
+      <visible>Control.IsVisible(50)+[Control.IsVisible(8)+Control.IsVisible(10)]</visible>
+      <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
+      <animation effect="slide" end="-300,0" time="500">Hidden</animation>
     </control>
 
     <control>
       <description>Watched Filtering Indicator</description>
       <type>label</type>
-      <id>0</id>
-      <posX>10</posX>
-      <posY>25</posY>
-      <width>250</width>
-      <textcolor>000000</textcolor>
-      <font>font10</font>
-      <label>All Movies</label>
-      <visible>Control.IsVisible(50)+!Control.IsVisible(8)+!Control.IsVisible(10)</visible>
-    </control>
-
-    <control>
-      <description>Watched Filtering Indicator</description>
-      <type>label</type>
-      <id>0</id>
       <posX>10</posX>
       <posY>25</posY>
       <width>250</width>
@@ -595,12 +596,13 @@ multiple view modes.
       <font>font10</font>
       <label>Unwatched Movies</label>
       <visible>Control.IsVisible(50)+Control.IsVisible(8)+!Control.IsVisible(10)</visible>
+      <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
+      <animation effect="slide" end="-300,0" time="500">Hidden</animation>
     </control>
 
     <control>
       <description>Watched Filtering Indicator</description>
       <type>label</type>
-      <id>0</id>
       <posX>10</posX>
       <posY>25</posY>
       <width>250</width>
@@ -608,12 +610,13 @@ multiple view modes.
       <font>font10</font>
       <label>Filtered Movies</label>
       <visible>Control.IsVisible(50)+!Control.IsVisible(8)+Control.IsVisible(10)</visible>
+      <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
+      <animation effect="slide" end="-300,0" time="500">Hidden</animation>
     </control>
 
     <control>
       <description>Watched Filtering Indicator</description>
       <type>label</type>
-      <id>0</id>
       <posX>10</posX>
       <posY>25</posY>
       <width>250</width>
@@ -621,6 +624,8 @@ multiple view modes.
       <font>font10</font>
       <label>Unwatched and Filtered Movies</label>
       <visible>Control.IsVisible(50)+Control.IsVisible(8)+Control.IsVisible(10)</visible>
+      <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
+      <animation effect="slide" end="-300,0" time="500">Hidden</animation>
     </control>
     
     <!-- ******************** Side Bar Buttons, Not Used. The Cycle Button is the only one currently Functional *******************-->
