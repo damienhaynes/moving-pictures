@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="1" minor="0" point="1"/>
-    <published month="11" day="18" year="2008"/>
+    <version major="1" minor="0" point="2"/>
+    <published month="11" day="19" year="2008"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -68,6 +68,7 @@
         <set name="movie[0].year" value="${imdb_details[0][3]:htmldecode}"/>
         <set name="movie[0].imdb_id" value="${imdb_details[0][4]}" />
         <set name="movie[0].details_url" value="${site}movie/${imdb_details[0][5]}"/>
+        <set name="movie[0].site_id" value="${imdb_details[0][5]}"/>
         <set name="movie[0].popularity" value="100"/>
         <set name="offset" value="1" />
       </if>
@@ -160,8 +161,7 @@
     </loop>
     
     <!-- IMDB id lookup -->
-    <parse name="ofdbid" input="${movie.details_url}" regex="movie/(\d+)$"/>
-    <retrieve name="imdblookup" url="http://www.ofdb.de/view.php?page=film&amp;fid=${ofdbid[0][0]}"/>
+    <retrieve name="imdblookup" url="http://www.ofdb.de/view.php?page=film&amp;fid=${movie.site_id}"/>
     <parse name="imdbid" input="${imdblookup}" regex="http\:\/\/german.imdb.com\/Title\?(\d+)"/>
     <set name="movie.imdb_id" value="tt${imdbid[0][0]}" />
     
