@@ -1327,14 +1327,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
 
       // Account for IMDB when criteria is met
-      if (!String.IsNullOrEmpty(sig1.ImdbId.Trim()) && !String.IsNullOrEmpty(sig2.ImdbId.Trim())) {
+      if (!String.IsNullOrEmpty(sig1.ImdbId) && !String.IsNullOrEmpty(sig2.ImdbId)) {
         if (imdbBoost && sig2.ImdbId == sig1.ImdbId) {
           // If IMDB Auto-Approval is active
           // and the we have an imdbids match,
           // cheat the current match system into
           // an auto-match (this is temporary!)
-          cleanMatch = sig2.ImdbId;
-          cleanSource = sig1.ImdbId;
+            cleanMatch = sig2.ImdbId.Trim();
+            cleanSource = sig1.ImdbId.Trim();
         }
         else {
           // add the imdb id tot the complete matching string
