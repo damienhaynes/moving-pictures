@@ -32,7 +32,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importPathsListView1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImportPathsPane();
             this.settingsTab = new System.Windows.Forms.TabPage();
             this.advancedSettingsWarningPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AdvancedSettingsWarningPane();
-            this.aboutTabPage = new System.Windows.Forms.TabPage();
             this.mainTabControl.SuspendLayout();
             this.managerTab.SuspendLayout();
             this.importSettingsTab.SuspendLayout();
@@ -47,7 +46,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.mainTabControl.Controls.Add(this.managerTab);
             this.mainTabControl.Controls.Add(this.importSettingsTab);
             this.mainTabControl.Controls.Add(this.settingsTab);
-            this.mainTabControl.Controls.Add(this.aboutTabPage);
             this.mainTabControl.Location = new System.Drawing.Point(12, 12);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
@@ -125,16 +123,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.advancedSettingsWarningPane1.Size = new System.Drawing.Size(591, 536);
             this.advancedSettingsWarningPane1.TabIndex = 0;
             // 
-            // aboutTabPage
-            // 
-            this.aboutTabPage.Location = new System.Drawing.Point(4, 22);
-            this.aboutTabPage.Name = "aboutTabPage";
-            this.aboutTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.aboutTabPage.Size = new System.Drawing.Size(597, 542);
-            this.aboutTabPage.TabIndex = 3;
-            this.aboutTabPage.Text = "About";
-            this.aboutTabPage.UseVisualStyleBackColor = true;
-            // 
             // MovingPicturesConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -167,7 +155,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private MovieImporterPane movieImporterPane1;
         private System.Windows.Forms.TabPage managerTab;
         private MovieManagerPane movieManagerPane1;
-        private System.Windows.Forms.TabPage aboutTabPage;
         private AdvancedSettingsWarningPane advancedSettingsWarningPane1;
     }
 }
