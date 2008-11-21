@@ -7,6 +7,9 @@ For skinning Moving Pictures, you are welcome to use whatever skin you like as a
 
 If you are new to skinning, I would suggest you check out [http://www.team-mediaportal.com/manual/MediaPortal1_Development/SkinArchitecture the skin designer's guide] on the !MediaPortal wiki.
 
+= Changes in 0.6.0 =
+  *  Three dummy labels have been added to provide visibility indicators to the skin. For example it is possible to have an image visible only when the currently selected movie has already been watched. See the Dummy Controls section below for more details.
+
 = Changes in 0.5.3 =
   *  New delayed artwork strings have been added. You should use these strings for your backdrop (fan-art) and coverart images for *very significant performance boosts*. Please pay attention to this, it is important.
 
@@ -83,7 +86,7 @@ Please also take note of the list elements like Actor and Genre. They are broken
 = Relevant Controls =
 There are a few controls (and their corresponding IDs) that you as a skinner should know about. Get creative, they don't need to be used in the same way they are used by the generic skin. And if you come up with an idea that requires a new control and a little bit of logic, feel free to ask for it! Just head on over to the [http://groups.google.com/group/moving-pictures-developers Developers Discussion Group]. If you aren't a member, apply and say you're a skin designer, and you'll get approved.
 
-=== Currently Available Controls ===
+=== Normal Available Controls ===
   * *Facade / List View / Thumbnail View / Filmstrip View* (50) - This is the primary control for the skin. Depending on the current view this is the primary visualization for the movies displayed on the screen.
 
   * *Backdrop (Fan-Art) Image* (1) - The plug-in will automatically hide this component when there is no backdrop available. If you setup conditional visibility for another image based on this control, you can display a normal background when there is no backdrop. You can also set up different versions of each view, one for when there is a backdrop and one for when there is not. You should not modify the visibility of this control directly.
@@ -95,8 +98,17 @@ There are a few controls (and their corresponding IDs) that you as a skinner sho
   * *Play Button* (6) - You click the button and the movie starts playing. This button also by default has focus when you move to the details view. This probably should only be visible on the details screen, but it's available anywhere, so do what you like with it.
 
 
+=== Dummy Controls ===
+These controls serve no direct purpose but their visibility is modified based on the conditions described. You should use the controls to handle conditional visibility of other screen elements. These are all "label" type controls. See the Generic Skin for an implementation example.
+
+  * *Watched Flag Filtering* (8) - Visible when the facade is currently filtered by the watched flag. This indicates that only unwatched movies are visible.
+
+  * *Selected Movie is Watched* (9) - Visible when the currently selected movie (highlighted in the facade or displayed on the details screen) has already been watched.
+
+  * *Remote Control Filtering* (10) - Visible when the facade is currently being filtered by remote control filtering. (If the user types a partial movie title with the number pad of his or her remote, the movie list will be filtered by what is typed).
+
 === Possible Future Controls ===
-These controls are not currently implemented but their IDs are reserved. Do no use these IDs or your skin might experience incompatibility with future versions of the plug-in. 
+These controls are not currently implemented but their IDs are reserved. Do no use these IDs or your skin might experience incompatibility with future versions of the plug-in. You should probably steer clear of ever putting ID tags on controls that are not directly tied to an existing control listed in this document.
 
   * *Filters Button* (4) - This is not actually implemented yet, but this will most likely reveal additional screen components to allow the user to specify filter/search settings to reduce the number of listed movies. More details coming soon.
 
