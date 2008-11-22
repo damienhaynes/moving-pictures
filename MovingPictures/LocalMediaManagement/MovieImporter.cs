@@ -1338,22 +1338,28 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
 
       // Account for IMDB when criteria is met
-      if (!String.IsNullOrEmpty(sig1.ImdbId) && !String.IsNullOrEmpty(sig2.ImdbId)) {
-        if (imdbBoost && sig2.ImdbId == sig1.ImdbId) {
-          // If IMDB Auto-Approval is active
-          // and the we have an imdbids match,
-          // cheat the current match system into
-          // an auto-match (this is temporary!)
-            cleanMatch = sig2.ImdbId.Trim();
-            cleanSource = sig1.ImdbId.Trim();
-        }
-        else {
-          // add the imdb id tot the complete matching string
-          // this should improve priority
-          cleanMatch += ' ' + sig2.ImdbId;
-          cleanSource += ' ' + sig1.ImdbId;
-        }
+      if (sig1.ImdbId != null && sig2.ImdbId != null) {
 
+          string s1Imdb = sig1.ImdbId.Trim();
+          string s2Imdb = sig2.ImdbId.Trim();
+
+          // only proceed if both are not empty
+          if (s1Imdb != string.Empty && s2Imdb != string.Empty) {
+              if (imdbBoost && s2Imdb == s1Imdb) {
+                  // If IMDB Auto-Approval is active
+                  // and the we have an ImdbId match,
+                  // cheat the current match system into
+                  // an auto-match
+                  cleanMatch = s2Imdb;
+                  cleanSource = s1Imdb;
+              }
+              else {
+                  // add the imdb id tot the complete matching string
+                  // this should improve priority
+                  cleanMatch += ' ' + s2Imdb;
+                  cleanSource += ' ' + s1Imdb;
+              }
+          }
       }
 
       // get the Levenshtein distance between the two string and use them for the match value

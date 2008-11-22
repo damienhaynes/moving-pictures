@@ -892,7 +892,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             logger.Debug("OnPlayBackEnded filename={0} currentMovie={1} currentPart={2}", filename, currentMovie.Title, currentPart);
             clearMovieResumeState(currentMovie);
-            if (currentMovie.LocalMedia.Count > 1 && currentMovie.LocalMedia.Count <= currentPart + 1) {
+            if (currentMovie.LocalMedia.Count >= (currentPart + 1)) {
                 logger.Debug("Goto next part");
                 currentPart++;
                 playMovie(currentMovie, currentPart);
