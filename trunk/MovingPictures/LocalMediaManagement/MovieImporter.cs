@@ -660,7 +660,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     // loops through all local files in the system and removes anything that does not actually exist
     // and is not a part of a removable import path
     private void RemoveMissingFiles() {
-      logger.Info("Removing missing files from database.");
+      logger.Info("Removing missing video files from database.");
       // take care of cover art
       foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
         if (!currFile.ImportPath.Removable && !currFile.File.Exists) {
@@ -1112,7 +1112,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         return;
 
       // Extra logging to debug movie matching
-      logger.Debug("MediaSignature: {0}", mediaMatch.Signature.ToString());
+      logger.Debug("Built MediaSignature: {0}", mediaMatch.Signature.ToString());
 
       // if the best match is exact or very close, place it in the accepted queue
       // otherwise place it in the pending queue for approval
@@ -1363,9 +1363,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
 
       // get the Levenshtein distance between the two string and use them for the match value
-      int rtn = AdvancedStringComparer.Levenshtein(cleanMatch, cleanSource);
-      logger.Debug("Comparing '{0}' with '{1}'. Levenshtein= {2}", cleanMatch, cleanSource, rtn);
-      return rtn;
+      int dist = AdvancedStringComparer.Levenshtein(cleanMatch, cleanSource);
+      return dist;
     }
 
     // Clean media titles from punctuation marks

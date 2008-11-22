@@ -118,27 +118,20 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 List<FileInfo> fileList = getFilesRecursive(Directory);
                 foreach (FileInfo currFile in fileList) {
                     DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName);
-                    bool resolved = false;
                     foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
                         if (currFile.Extension.ToLower().Equals(currExt.ToLower())) {
 
                             // if this file is in the database continue if we only want new files
-                            if (newFile.ID != null && returnOnlyNew) {
-                                logger.Debug("Rejecting file " + currFile.Name + " because it is already in the database.");
-                                resolved = true;
+                            if (newFile.ID != null && returnOnlyNew) 
                                 break;
-                            }
-
+                            
                             // good extension for new file, so add it
+                            logger.Debug("Pulling new file " + currFile.Name + " from import path.");
                             newFile.ImportPath = this;
                             rtn.Add(newFile);
-                            resolved = true;
                             break;
                         }
                     }
-
-                    if (!resolved)
-                        logger.Debug("Rejecting file " + currFile.Name + " because the extension is not accepted as a video file by MediaPortal.");
                 }
             }
             catch (Exception e) {

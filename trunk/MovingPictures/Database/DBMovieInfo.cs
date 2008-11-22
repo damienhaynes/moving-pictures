@@ -184,6 +184,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             set {
                 _score = value;
+                while (_score > 10)
+                    _score /= 10;
+
+                _score = (float) Math.Round(_score);
+
                 commitNeeded = true;
             }
         } private float _score;
@@ -524,9 +529,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (!alreadyInFolder) {
                 string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
-                if (!File.Exists(newFileName))
+                if (!File.Exists(newFileName)) {
                     newCover.Save(newFileName);
-                AlternateCovers.Add(newFileName);
+                    AlternateCovers.Add(newFileName);
+                }
+                else return false;
             }
 
             // if it's already in the folder, just store the filename in the db
@@ -535,9 +542,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     AlternateCovers.Add(filename);
                     commitNeeded = true;
                 }
+                else
+                    return false;
             }
 
             // create a thumbnail for the cover
+            logger.Info("Added cover art for '" + Title + "' [" + ID + "] from " + filename + ".");
             _cover = newCover;
             commitNeeded = true;
             GenerateThumbnail();
@@ -600,7 +610,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             // save the artwork
-            logger.Info(filename);
+            logger.Info("Added cover art for '" + Title + "' [" + ID + "] from " + url + ".");
             currImage.Save(filename);
             AlternateCovers.Add(filename);
             _cover = currImage;
