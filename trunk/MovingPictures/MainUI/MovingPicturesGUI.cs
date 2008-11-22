@@ -170,9 +170,17 @@ namespace MediaPortal.Plugins.MovingPictures {
             string oldBackdrop = GUIPropertyManager.GetProperty("#MovingPictures.Backdrop");
             string oldCover = GUIPropertyManager.GetProperty("#MovingPictures.Coverart");
 
+            string newBackdrop = browser.SelectedMovie.BackdropFullPath.Trim();
+            if (newBackdrop.Length == 0)
+                newBackdrop = "-";
+            
+            string newCover = browser.SelectedMovie.CoverFullPath.Trim();
+            if (newCover.Length == 0)
+                newCover = "-";
+            
             // update backdrop and cover art
-            SetProperty("#MovingPictures.Backdrop", browser.SelectedMovie.BackdropFullPath.Trim());
-            SetProperty("#MovingPictures.Coverart", browser.SelectedMovie.CoverFullPath.Trim());
+            SetProperty("#MovingPictures.Backdrop", newBackdrop);
+            SetProperty("#MovingPictures.Coverart", newCover);
 
             // clear out previous textures for backdrop and cover art
             GUITextureManager.ReleaseTexture(oldBackdrop);
@@ -180,22 +188,27 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             // grab the skin supplied setting for backdrop visibility
             bool backdropActive = true;
-            switch (CurrentView) {
-                case ViewMode.FILMSTRIP:
-                    backdropActive = defines["#filmstrip.backdrop.used"].Equals("true");
-                    break;
-                case ViewMode.LARGEICON:
-                    backdropActive = defines["#largeicons.backdrop.used"].Equals("true");
-                    break;
-                case ViewMode.SMALLICON:
-                    backdropActive = defines["#smallicons.backdrop.used"].Equals("true");
-                    break;
-                case ViewMode.LIST:
-                    backdropActive = defines["#list.backdrop.used"].Equals("true");
-                    break;
-                case ViewMode.DETAILS:
-                    backdropActive = defines["#details.backdrop.used"].Equals("true");
-                    break;
+            try {
+                switch (CurrentView) {
+                    case ViewMode.FILMSTRIP:
+                        backdropActive = defines["#filmstrip.backdrop.used"].Equals("true");
+                        break;
+                    case ViewMode.LARGEICON:
+                        backdropActive = defines["#largeicons.backdrop.used"].Equals("true");
+                        break;
+                    case ViewMode.SMALLICON:
+                        backdropActive = defines["#smallicons.backdrop.used"].Equals("true");
+                        break;
+                    case ViewMode.LIST:
+                        backdropActive = defines["#list.backdrop.used"].Equals("true");
+                        break;
+                    case ViewMode.DETAILS:
+                        backdropActive = defines["#details.backdrop.used"].Equals("true");
+                        break;
+                }
+            }
+            catch (KeyNotFoundException) {
+                backdropActive = true;
             }
 
             // set backdrop visibility
@@ -990,7 +1003,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             // otherwise the property will keep 
             // displaying it's previous value
             if (String.IsNullOrEmpty(value))
-                value = "";
+                value = " ";
 
             GUIPropertyManager.SetProperty(property, value);
         }

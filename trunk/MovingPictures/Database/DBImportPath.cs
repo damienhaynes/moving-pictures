@@ -74,44 +74,36 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return GetLocalMedia(true);
         }
 
-        public static List<FileInfo> getFilesRecursive(DirectoryInfo di)
-        {
-          List<FileInfo> fileList = new List<FileInfo>();
-          DirectoryInfo[] dirs = new DirectoryInfo[]{};
+        public static List<FileInfo> getFilesRecursive(DirectoryInfo inputDir) {
+            List<FileInfo> fileList = new List<FileInfo>();
+            DirectoryInfo[] childDirs = new DirectoryInfo[] { };
 
-          try
-          {
-            logger.Debug("Getting file list for: {0}", di.FullName);
-            fileList.AddRange(di.GetFiles("*"));
-            logger.Debug("Getting directory list for: {0}", di.FullName);
-            dirs = di.GetDirectories();
-          }
-          catch (Exception e)
-          {
-            if (e.GetType() == typeof(ThreadAbortException))
-              throw e;
-            logger.Error("Error while retrieving files/directories for: " + di.FullName, e);
-          }
+            try {
+                fileList.AddRange(inputDir.GetFiles("*"));
+                childDirs = inputDir.GetDirectories();
+            }
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
 
-          foreach (DirectoryInfo d in dirs)
-          {
-            try
-            {
-              logger.Debug("Checking attributes for: {0}", d.FullName);
-              if ((d.Attributes & FileAttributes.System) == 0)
-              {
-                logger.Debug("Adding: {0}", d.FullName);
-                fileList.AddRange(getFilesRecursive(d));
-              }
+                logger.Error("Error while retrieving files/directories for: " + inputDir.FullName, e);
             }
-            catch (Exception e)
-            {
-              if (e.GetType() == typeof(ThreadAbortException))
-                throw e;
-              logger.Error("Error during attribute check for: " + d.FullName, e);
+
+            foreach (DirectoryInfo currChildDir in childDirs) {
+                try {
+                    if ((currChildDir.Attributes & FileAttributes.System) == 0) 
+                        fileList.AddRange(getFilesRecursive(currChildDir));
+                    else 
+                        logger.Debug("Rejecting directory " + currChildDir.FullName + " because it is flagged as a System folder.");
+                }
+                catch (Exception e) {
+                    if (e.GetType() == typeof(ThreadAbortException))
+                        throw e;
+                    logger.Error("Error during attribute check for: " + currChildDir.FullName, e);
+                }
             }
-          }
-          return fileList;
+
+            return fileList;
         }    
 
 
@@ -123,30 +115,36 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // grab the list of files and parse out appropriate ones based on extension
             try {
-              
-              //FileInfo[] fileList = Directory.GetFiles("*", SearchOption.AllDirectories);
-              List<FileInfo> fileList = getFilesRecursive(Directory);
-              foreach (FileInfo currFile in fileList) {
+                List<FileInfo> fileList = getFilesRecursive(Directory);
+                foreach (FileInfo currFile in fileList) {
+                    DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName);
+                    bool resolved = false;
                     foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
                         if (currFile.Extension.ToLower().Equals(currExt.ToLower())) {
-                            DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName);
-                            
+
                             // if this file is in the database continue if we only want new files
-                            if (newFile.ID != null && returnOnlyNew)
-                                continue;
+                            if (newFile.ID != null && returnOnlyNew) {
+                                logger.Debug("Rejecting file " + currFile.Name + " because it is already in the database.");
+                                resolved = true;
+                                break;
+                            }
 
+                            // good extension for new file, so add it
                             newFile.ImportPath = this;
-
                             rtn.Add(newFile);
+                            resolved = true;
                             break;
                         }
                     }
+
+                    if (!resolved)
+                        logger.Debug("Rejecting file " + currFile.Name + " because the extension is not accepted as a video file by MediaPortal.");
                 }
             }
             catch (Exception e) {
-               if (e.GetType() == typeof(ThreadAbortException))
-                   throw e;
-               logger.Error("Error scanning " + Directory.FullName, e);
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+                logger.Error("Error scanning " + Directory.FullName, e);
             }
 
             return rtn;
@@ -156,13 +154,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return FullPath;
         }        
 
-
-        //public List<FileInfo> GetNewFiles() {
-        //    List<FileInfo> fileOnDisk = GetAllFiles();
-        //    List<DBLocalMedia> filesInDB = DBLocalMedia.GetAll();
-
-        //    foreach(DBMed
-        //}
 
         #endregion
 
