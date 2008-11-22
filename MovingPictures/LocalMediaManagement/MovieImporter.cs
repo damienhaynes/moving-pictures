@@ -712,7 +712,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     // Removes all files not belonging to an import path.
     private void RemoveOrphanFiles() {
-      logger.Info("Removing orphan files from database.");
+      logger.Info("Removing files from database not attached to movies.");
+      foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
+        if (currFile.AttachedMovies.Count == 0 && !currFile.Ignored)
+          currFile.Delete();
+      }
+
+        
+      logger.Info("Removing files from database belonging to deleted Import Paths.");
       foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
         if (currFile.ImportPath == null || currFile.ImportPath.ID == null) {
           // remove file, it's movie object it's attached to, and all other files
@@ -731,6 +738,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
     }
 
+
     // Grabs the files from the DBImportPath and add them to the queue for use
     // by the ScanMedia thread.
     private void ScanPath(DBImportPath importPath) {
@@ -748,8 +756,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       foreach (DBLocalMedia currFile in importFileList) {
         //string currFolder = currFile.File.DirectoryName;
         // if we have already loaded this file, move to the next
-        if (matchesInSystem.ContainsKey(currFile) || currFile.ID != null)
+        if (matchesInSystem.ContainsKey(currFile) || currFile.ID != null) {
+          logger.Debug("Skipping " + currFile.File.Name + " because it is already in the system.");
           continue;
+        }
 
         // only grab the video_ts.ifo when extension is ifo
         // to prevent unnecessary stacking
@@ -1143,6 +1153,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         count++;
       }
 
+      movie.LocalMedia.Clear();
+      movie.LocalMedia.AddRange(localMedia);
+
       // update, associate, and commit the movie
       if (update) {
           MovingPicturesCore.DataProviderManager.Update(movie);
@@ -1150,8 +1163,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           MovingPicturesCore.DataProviderManager.GetBackdrop(movie);
       }
 
-      movie.LocalMedia.Clear();
-      movie.LocalMedia.AddRange(localMedia);
       movie.UnloadArtwork();
 
       foreach (DBLocalMedia currFile in localMedia) 
