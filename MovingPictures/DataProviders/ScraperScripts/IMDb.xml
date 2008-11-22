@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="0" point="1"/>
-    <published month="11" day="18" year="2008"/>
+    <version major="1" minor="0" point="2"/>
+    <published month="11" day="22" year="2008"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -143,7 +143,7 @@
     <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
 
     <!-- Runtime -->
-    <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+&lt;/div&gt;'/>
+    <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+'/>
     <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
 
     <!-- Tagline -->
