@@ -562,7 +562,7 @@ namespace Cornerstone.Database {
                        relation.TableName + " where " + GetTableName(relation.PrimaryType) + "_id=" + dbObject.ID;
 
             // and retireve relations
-            logger.Debug("Getting Relation Data for " + dbObject.GetType().Name + "[" + dbObject.ID + "]" + relation.SecondaryType.Name + "::: " + selectQuery);
+            //logger.Debug("Getting Relation Data for " + dbObject.GetType().Name + "[" + dbObject.ID + "]" + relation.SecondaryType.Name + "::: " + selectQuery);
             SQLiteResultSet resultSet;
             lock (dbClient) resultSet = dbClient.Execute(selectQuery);
 

@@ -193,8 +193,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             Regex oldCoverRegex = new Regex("{?" + safeName + "}? \\[-?\\d+\\].jpg");
             foreach (FileInfo currFile in coverFolder.GetFiles()) {
                 if (oldCoverRegex.IsMatch(currFile.Name)) {
-                    found &= movie.AddCoverFromFile(currFile.FullName);
-                    logger.Info("Added old cover found in cover folder: " + currFile.Name);
+                    bool success = movie.AddCoverFromFile(currFile.FullName);
+                    found = found || success;
+                    
+                    if (success)
+                        logger.Info("Added old cover found in cover folder: " + currFile.Name);
                 }
             }
 

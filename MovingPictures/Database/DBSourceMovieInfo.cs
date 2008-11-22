@@ -77,8 +77,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (rtn != null)
                 return rtn;
 
-            logger.Info(movie.Title + " was missing SourceMovieInfo for " + source.Provider.Name + ", adding now.");
-
             rtn = new DBSourceMovieInfo();
             rtn.Movie = movie;
             rtn.Source = source;
