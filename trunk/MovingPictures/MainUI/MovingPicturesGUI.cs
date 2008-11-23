@@ -611,6 +611,11 @@ namespace MediaPortal.Plugins.MovingPictures {
             else if (dialog.SelectedId == cycleArtItem.ItemId) {
                 browser.SelectedMovie.NextCover();
                 browser.SelectedMovie.Commit();
+                
+                // update the new cover art in the facade
+                browser.facade.SelectedListItem.IconImage = browser.SelectedMovie.CoverThumbFullPath.Trim();
+                browser.facade.SelectedListItem.IconImageBig = browser.SelectedMovie.CoverThumbFullPath.Trim();
+
                 UpdateArtwork();
             }
             else if (dialog.SelectedId == retrieveArtItem.ItemId) {
