@@ -343,7 +343,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     // rescans for possible movie matches using the specified search string
     public void Reprocess(MovieMatch match) {
       RemoveFromMatchLists(match);
-      RemoveCommitedRelations(match.LocalMedia);
+      
+      if (match.ExistingMovieInfo == null)  
+        RemoveCommitedRelations(match.LocalMedia);
 
       // clear the ignored flag in case these files were previously on the disable list
       foreach (DBLocalMedia currFile in match.LocalMedia) {
