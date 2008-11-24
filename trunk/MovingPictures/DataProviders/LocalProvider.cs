@@ -213,7 +213,16 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 Regex parser = new Regex("%(.*?)%", RegexOptions.IgnoreCase);
                 List<string> filenames = new List<string>();
                 foreach (string currPattern in pattern.Split('|')) {
-                    filenames.Add(parser.Replace(currPattern, new MatchEvaluator(dbNameParser)).Trim().ToLower());
+                    // replace db field patterns
+                    string filename = parser.Replace(currPattern, new MatchEvaluator(dbNameParser)).Trim().ToLower();
+
+                    // replace %filename% pattern
+                    if (movie.LocalMedia.Count > 0) {
+                        string videoFileName = Path.GetFileNameWithoutExtension(movie.LocalMedia[0].File.Name);
+                        filename = filename.Replace("%filename%", videoFileName);
+                    }
+
+                    filenames.Add(filename);
                 }
                 return filenames;
             }
