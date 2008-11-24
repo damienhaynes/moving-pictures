@@ -350,13 +350,14 @@ namespace MediaPortal.Plugins.MovingPictures {
                 remoteFilter = new RemoteNumpadFilter();
                 remoteFilter.Updated += new FilterUpdatedDelegate(OnFilterChanged);
                 browser.ActiveFilters.Add(remoteFilter);
-                OnFilterChanged(remoteFilter);
 
                 watchedFilter = new WatchedFlagFilter();
                 watchedFilter.Updated += new FilterUpdatedDelegate(OnFilterChanged);
                 browser.ActiveFilters.Add(watchedFilter);
-                OnFilterChanged(watchedFilter);
             }
+
+            OnFilterChanged(remoteFilter);
+            OnFilterChanged(watchedFilter);
 
             browser.Facade = facade;
             facade.Focus = true;
@@ -944,6 +945,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             DBUserMovieSettings userSetting = movie.UserSettings[0];
             userSetting.Watched++; // increment watch counter
             userSetting.Commit();
+
+            browser.ReapplyFilters();
+            
+            // if we are on the details page for the movie just marked as watched and we are filtering
+            // go back to facade since this movie is no longer selectable. later need to tweak to allow 
+            // movies filtered out to be displayed in details anyway.
+            if (movie == browser.SelectedMovie && CurrentView == ViewMode.DETAILS && watchedFilter.Active) 
+                CurrentView = previousView;
         }
 
         private void clearMovieResumeState(DBMovieInfo movie) {
