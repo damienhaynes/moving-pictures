@@ -234,23 +234,11 @@ multiple view modes.
 		<posY>243</posY>
 		<width>430</width>
 		<height>300</height>
-		<texture>MovingPictures\background.png</texture>
+		<texture>MovingPictures\grey.png</texture>
         <colordiffuse>ccbbbbbb</colordiffuse> 
 		<visible>!Control.IsVisible(50)</visible>
     </control>
-	
-	<!--control>
-		<description>Overlay image for better reading of detailed information</description>
-		<type>image</type>
-		<id>0</id>
-		<posX>240</posX>
-		<posY>205</posY>
-		<width>420</width>
-		<height>370</height>
-		<texture>osd_dialog_big.png</texture>
-		<visible>!Control.IsVisible(50)</visible>
-    </control-->
-	
+		
     <control>
       <description>Summary</description>
       <type>textboxscrollup</type>
@@ -708,8 +696,8 @@ multiple view modes.
       <description>10 star rating? 10 is a lot...</description>
       <type>imagelist</type>
       <id>0</id>
-      <posX>280</posX>
-      <posY>39</posY>
+      <posX>250</posX>
+      <posY>38</posY>
       <width>200</width>
       <height>20</height>
       <textureWidth>20</textureWidth>
@@ -810,19 +798,20 @@ multiple view modes.
     
     <!-- ******************** Side Bar Buttons, Not Used. The Cycle Button is the only one currently Functional *******************-->
    	<control>
-    	  <description>Cycle View Button</description>
-     	  <type>button</type>
-	  <id>2</id>
-	  <onleft>50</onleft>
-	  <ondown>4</ondown>
-	  <posX>665</posX>
-	  <posY>80</posY>
-          <width>50</width>
-	  <height>50</height>
-	  <textureFocus>MovingPictures\moving_pictures_view_focus.png</textureFocus>
-	  <textureNoFocus>MovingPictures\moving_pictures_view.png</textureNoFocus>
-	  <visible>Control.IsVisible(50)</visible>
-    	</control>
+    	<description>Cycle View Button</description>
+     	<type>button</type>
+      <!-- change id to 2 to cycle through the views in stead of bring up the view selection dialog -->
+      <id>3</id>
+      <onleft>50</onleft>
+      <ondown>4</ondown>
+      <posX>665</posX>
+      <posY>80</posY>
+      <width>50</width>
+      <height>50</height>
+      <textureFocus>MovingPictures\moving_pictures_view_focus.png</textureFocus>
+      <textureNoFocus>MovingPictures\moving_pictures_view.png</textureNoFocus>
+      <visible>Control.IsVisible(50)</visible>
+    </control>
     
     <!-- This is an alternate view button that brings up a menu for view 
          selection, rather than just cycling the view. You can use both
@@ -836,41 +825,41 @@ multiple view modes.
       <posY>160</posY>
       <width>81</width>
       <height>81</height>
-      <textureFocus>moving_pictures_view_focus.png</textureFocus>
-      <textureNoFocus>moving_pictures_view.png</textureNoFocus>
+      <textureFocus>MovingPictures\moving_pictures_view_focus.png</textureFocus>
+      <textureNoFocus>MovingPictures\moving_pictures_view.png</textureNoFocus>
       <visible>Control.IsVisible(50)</visible>
     </control> -->
 
     <control>
-	<description>Filters Button</description>
-	<type>button</type>
-	<id>4</id>
-	<onup>2</onup>
-	<onleft>50</onleft>
-	<ondown>5</ondown>
-	<posX>665</posX>
-	<posY>130</posY>
-	<width>50</width>
-	<height>50</height>
-	<textureFocus>MovingPictures\moving_pictures_filter_focus.png</textureFocus>
-	<textureNoFocus>MovingPictures\moving_pictures_filter.png</textureNoFocus>
-	<visible>Control.IsVisible(50)</visible>
+      <description>Filters Button</description>
+      <type>button</type>
+      <id>4</id>
+      <!-- onup>2</onup-->
+      <onleft>50</onleft>
+      <ondown>5</ondown>
+      <posX>665</posX>
+      <posY>130</posY>
+      <width>50</width>
+      <height>50</height>
+      <textureFocus>MovingPictures\moving_pictures_filter_focus.png</textureFocus>
+      <textureNoFocus>MovingPictures\moving_pictures_filter.png</textureNoFocus>
+      <visible>Control.IsVisible(50)</visible>
     </control>
     
     <control>
-        <description>Settings Button - Not sure what this will do...</description>
-        <type>button</type>
-        <id>5</id>
-        <onup>4</onup>
-        <onleft>50</onleft>
-        <posX>665</posX>
-        <posY>180</posY>
-        <width>50</width>
-        <height>50</height>
-        <textureFocus>MovingPictures\moving_pictures_settings_focus.png</textureFocus>
-        <textureNoFocus>MovingPictures\moving_pictures_settings.png</textureNoFocus>
-        <visible>Control.IsVisible(50)</visible>
+      <description>Settings Button - Not sure what this will do...</description>
+      <type>button</type>
+      <id>5</id>
+      <onup>4</onup>
+      <ondown>50</ondown>
+      <onleft>50</onleft>
+      <posX>665</posX>
+      <posY>180</posY>
+      <width>50</width>
+      <height>50</height>
+      <textureFocus>MovingPictures\moving_pictures_settings_focus.png</textureFocus>
+      <textureNoFocus>MovingPictures\moving_pictures_settings.png</textureNoFocus>
+      <visible>Control.IsVisible(50)</visible>
     </control>
-
 </controls>
 </window>
