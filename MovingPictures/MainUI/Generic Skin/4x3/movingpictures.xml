@@ -670,7 +670,7 @@ multiple view modes.
       <textureHeight>20</textureHeight>
       <subitems>
         <subitem>MovingPictures\greystar.png</subitem>
-        <subitem>MovingPictures\goldstar.png</subitem>
+        <subitem>MovingPictures\starbest.png</subitem>
       </subitems>
       <orientation>horizontal</orientation>
       <align>left</align>
@@ -716,7 +716,7 @@ multiple view modes.
       <textureHeight>20</textureHeight>
       <subitems>
         <subitem>MovingPictures\greystar.png</subitem>
-        <subitem>MovingPictures\goldstar.png</subitem>
+        <subitem>MovingPictures\starbest.png</subitem>
       </subitems>
       <orientation>horizontal</orientation>
       <align>left</align>
