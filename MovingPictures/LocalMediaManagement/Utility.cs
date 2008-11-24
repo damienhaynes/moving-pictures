@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     class Utility {
@@ -18,6 +17,5 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             return rtFilename;
         }
-
     }
 }

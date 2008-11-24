@@ -56,7 +56,17 @@ namespace MediaPortal.Plugins.MovingPictures {
             get {
                 return DataProviderManager.GetInstance();
             }
-        } 
+        }
+
+        // Settings from Media Portal
+        // Instead of calling this line whenever we need some MP setting we only define it once
+        // There isn't really a central MePo settings manager (or is there?)
+        public static Settings MediaPortalSettings {
+            get {
+                Settings mpSettings = new Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"));
+                return mpSettings;
+            }
+        }
 
         #endregion
 
@@ -140,7 +150,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             // Get current Log Level from MediaPortal 
             LogLevel logLevel;
-            Settings xmlreader = new Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"));
+            Settings xmlreader = MediaPortalSettings;
             switch ((Level)xmlreader.GetValueAsInt("general", "loglevel", 0)) {
                 case Level.Error:
                     logLevel = LogLevel.Error;
