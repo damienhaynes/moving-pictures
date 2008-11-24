@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using MediaPortal.Profile;
+using MediaPortal.Configuration;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen;
 using MediaPortal.Dialogs;
@@ -875,8 +877,13 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
-            // if this image was already mounted, autoplay doesn't work, so manually launch the DVD
-            if (alreadyMounted)
+            // Lookup the MediaPortal settings reponsable for Auto-Play
+            Settings mpSettings = MovingPicturesCore.MediaPortalSettings;
+            bool dtAutoPlay = ( mpSettings.GetValueAsString("daemon", "askbeforeplaying", "no") != "no");
+            bool dvdAutoPlay = ( mpSettings.GetValueAsString("dvdplayer", "autoplay", "ask") != "no");
+
+            // if this image was already mounted or mediaportal will not take action, launch the DVD ourselve.
+            if (alreadyMounted || (!dtAutoPlay && !dvdAutoPlay) )
                 playFile(ifoPath);
 
             // if we have not already mounted and we let the auto play system start the movie
