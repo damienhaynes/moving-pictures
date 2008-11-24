@@ -100,8 +100,8 @@ multiple view modes.
       <width>1366</width>
       <height>768</height>
       <colordiffuse>aaffffff</colordiffuse> 
-      <texture>MovingPictures\background.png</texture>
-      <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)+Control.IsVisible(1)</visible>
+      <texture>MovingPictures\grey.png</texture>
+      <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
     </control>
 
    
