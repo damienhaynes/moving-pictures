@@ -810,9 +810,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 playImage(media);
             else
                 playFile(media);
-
+            
             // set the currently playing part if playback was successful
             if (currentlyPlaying) {
+               
                 currentMovie = movie;
                 currentPart = part;
 
@@ -844,7 +845,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         private void playFile(string media) {
             GUIGraphicsContext.IsFullScreenVideo = true;
             GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
-
             bool success = g_Player.Play(media, g_Player.MediaType.Video);
             currentlyPlaying = success;
         }
@@ -863,6 +863,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                     ShowMessage("Error", "Sorry, failed mounting DVD Image...", null, null, null);
                     return;
                 }
+                // We call this method to let the (un)mount events be handled by mediaportal
+                // before we start playback. Not doing so would result in 
+                // the DVD being stopped right after we start it.
+                GUIWindowManager.Process();
             }
             else {
                 logger.Info("DVD Image already mounted.");
@@ -879,12 +883,13 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             // Lookup the MediaPortal settings reponsable for Auto-Play
             Settings mpSettings = MovingPicturesCore.MediaPortalSettings;
-            bool dtAutoPlay = ( mpSettings.GetValueAsString("daemon", "askbeforeplaying", "no") != "no");
-            bool dvdAutoPlay = ( mpSettings.GetValueAsString("dvdplayer", "autoplay", "ask") != "no");
+            bool dtAutoPlay = (mpSettings.GetValueAsString("daemon", "askbeforeplaying", "no").ToLower() != "no");
+            bool dvdAutoPlay = ( mpSettings.GetValueAsString("dvdplayer", "autoplay", "ask").ToLower() != "no");
 
             // if this image was already mounted or mediaportal will not take action, launch the DVD ourselve.
-            if (alreadyMounted || (!dtAutoPlay && !dvdAutoPlay) )
+            if (alreadyMounted || (!dtAutoPlay && !dvdAutoPlay)) {             
                 playFile(ifoPath);
+            }
 
             // if we have not already mounted and we let the auto play system start the movie
             // this data could be wrong because the user could chose not to play via the prmpt.
