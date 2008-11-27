@@ -817,12 +817,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                 currentMovie = movie;
                 currentPart = part;
 
-                // store the duration of the file if it is not set
+                // update duration
                 DBLocalMedia playingFile = currentMovie.LocalMedia[currentPart - 1];
-                if (playingFile.Duration == 0) {
-                    playingFile.Duration = (int)g_Player.Player.Duration;
-                    playingFile.Commit();
-                }
+                updateMediaDuration(playingFile);
 
                 // use resume data if needed
                 if (resumeTime > 0 && g_Player.Playing) {
@@ -898,6 +895,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             return;
         }
 
+        // store the duration of the file if it is not set
+        private void updateMediaDuration(DBLocalMedia localMedia) {
+            if (localMedia.Duration == 0) {
+                localMedia.Duration = (int)g_Player.Player.Duration;
+                localMedia.Commit();
+            }
+        }
+
         private void OnPlayBackStarted(g_Player.MediaType type, string filename) {
             // delay to possibly update the screen info
             Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
@@ -927,16 +932,24 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (type != g_Player.MediaType.Video || currentMovie == null)
                 return;
 
+            // Because we can't get duration for DVD's at start like with normal files
+            // we are getting the duration when the DVD is stopped. If the duration of 
+            // feature is an hour or more it's probably the main feature and we will update
+            // the database. 
+            if (g_Player.IsDVD && (g_Player.Player.Duration >= 3600 )) {
+                DBLocalMedia playingFile = currentMovie.LocalMedia[currentPart - 1];
+                updateMediaDuration(playingFile);
+            }
+
             int requiredWatchedPercent = (int) MovingPicturesCore.SettingsManager["gui_watch_percentage"].Value;
             logger.Debug("OnPlayBackStopped filename={0} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, currentMovie.Title, currentPart, timeMovieStopped);
             logger.Debug("Percentage: " + currentMovie.GetPercentage(currentPart, timeMovieStopped) + " Required: " + requiredWatchedPercent);
-
+          
             // if enough of the movie has been watched, hit the watched flag
             if (currentMovie.GetPercentage(currentPart, timeMovieStopped) >= requiredWatchedPercent) {
                 updateMovieWatchedCounter(currentMovie);
                 clearMovieResumeState(currentMovie);
             }
-
             // otherwise, store resume data.
             else {
                 byte[] resumeData = null;
