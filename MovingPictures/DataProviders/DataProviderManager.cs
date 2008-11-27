@@ -233,8 +233,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Allocine);
 
             AddSource(typeof(MeligroveProvider));
-            AddSource(typeof(ScriptableProvider), Resources.IMPAwards);
             AddSource(typeof(ScriptableProvider), Resources.MoTechPosters);
+            AddSource(typeof(ScriptableProvider), Resources.IMPAwards);          
             
             AddSource(typeof(MyVideosProvider));
 
