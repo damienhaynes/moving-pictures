@@ -469,7 +469,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                     break;
                 case Action.ActionType.ACTION_KEY_PRESSED:
                     // List Filter
-                    if ((action.m_key != null) && (CurrentView != ViewMode.DETAILS)) {
+                    bool remoteFilterEnabled = (bool)MovingPicturesCore.SettingsManager["enable_rc_filter"].Value;
+                    if ((action.m_key != null) && (CurrentView != ViewMode.DETAILS) && remoteFilterEnabled) {
                         if (!remoteFilter.KeyPress((char)action.m_key.KeyChar))
                             base.OnAction(action);
                     }
