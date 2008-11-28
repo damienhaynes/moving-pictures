@@ -650,6 +650,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         return;
       }
 
+      // if this file's root is unavailable, there is no action
+      if (!removedFile.File.Directory.Root.Exists) {
+          logger.Info("File " + removedFile.File.Name + " taken offline. (root unavailable)");
+          return;
+      }
+
       // remove file, it's movie object it's attached to, and all other files
       // owned by that movie if it's a multi-part movie.
       foreach (DBMovieInfo currMovie in removedFile.AttachedMovies) {
@@ -665,7 +671,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       logger.Info("Removing missing video files from database.");
       // take care of cover art
       foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
-        if (!currFile.ImportPath.Removable && !currFile.File.Exists) {
+          if (!currFile.ImportPath.Removable && !currFile.File.Exists && currFile.File.Directory.Root.Exists) {         
           // remove file, it's movie object it's attached to, and all other files
           // owned by that movie if it's a multi-part movie.
           logger.Info("Removing " + currFile.FullPath + " and associated movie from database because file is missing and not flagged as removable.");
@@ -1266,7 +1272,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
       file.AttachedMovies.Clear();
     }
-
 
     // Returns a possible match set for the given media file(s) 
     // using the given custom search string
