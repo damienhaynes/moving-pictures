@@ -280,10 +280,12 @@ namespace MediaPortal.Plugins.MovingPictures {
                 else
                     watchedFilteringIndicator.Visible = false;
 
-            // set the global watched indicator
+            // set the label for the remoteFiltering indicator
             if (remoteFilteringIndicator != null && filter == remoteFilter)
-                if (filter.Active)
+                if (filter.Active) {
+                    SetProperty("#MovingPictures.Filter.Label", filter.Text);
                     remoteFilteringIndicator.Visible = true;
+                }
                 else
                     remoteFilteringIndicator.Visible = false;
         }
