@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="0" point="2"/>
-    <published month="11" day="22" year="2008"/>
+    <version major="1" minor="0" point="3"/>
+    <published month="11" day="28" year="2008"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -99,6 +99,18 @@
 
 
   <action name="get_details">
+    
+    <set name="rx_aka">
+      <![CDATA[
+      <tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
+       ]]>
+    </set>
+    <set name="rx_plot">
+      <![CDATA[
+      <p class="plotpar">\s*(.+?)<i>.*?</i>.*?</p>
+      ]]>
+    </set>
+    
     <retrieve name="details_page" url="http://www.imdb.com/title/${movie.site_id}"/>
 
     <!-- Title and Year -->
@@ -164,9 +176,17 @@
     
     <!-- Plot Summary -->
     <retrieve name='summary_page' url='http://www.imdb.com/title/${movie.site_id}/plotsummary'/>
-    <parse name='summary' input ='${summary_page}' regex='&lt;p class="plotpar"&gt;\s(.+?)&lt;i&gt;'/>
-    <set name='movie.summary' value='${summary[0][0]:htmldecode}'/>
+    <parse name="summary" input="${summary_page}" regex="${rx_plot}"/>
+    <set name="summary_clean" value="${summary[0][0]:striptags}" />
+    <set name="movie.summary" value="${summary_clean:htmldecode}" />
     
+    <!-- AKA page -->
+    <retrieve name='aka_page' url='http://www.imdb.com/title/${movie.site_id}/releaseinfo'/>
+    <parse name='akas' input='"${aka_page}' regex="${rx_aka}"/>
+    <set name="movie.alternate_titles" value=""/>
+    <loop name='currAka' on='akas'>
+      <set name="movie.alternate_titles" value="${movie.alternate_titles}|${currAka[0]:htmldecode}"/>
+    </loop>
     
   </action>
   
