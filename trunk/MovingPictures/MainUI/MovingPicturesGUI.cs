@@ -272,7 +272,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             dialog.DoModal(GetID);
         }
 
-        private void OnFilterChanged(IBrowserFilter filter) {
+        private void OnFilterChanged(IBrowserFilter filter) {        
             // set the global watched indicator
             if (watchedFilteringIndicator != null && filter == watchedFilter)
                 if (filter.Active)

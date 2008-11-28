@@ -109,7 +109,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
                 // Use StartsWith Filter
                 else if (_listFilterAction == FilterAction.StartsWith) {
                     _listFilterString = NumPadNext(_listFilterString, key.ToString());
-                    _text = "Starting with: " + _listFilterString;
+                    _text = "Starting with: " + _listFilterString.ToUpper();
                 }
                 // Add the numeric code to the list filter string   
                 else {
@@ -119,7 +119,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
                     _listFilterString += key.ToString();
                     _text = "Filtered";
 
-                    // If his looks like a year or start of a decade, adapt.
+                    // If this looks like (3 digit part) of a year, try year filters.
                     int year;                    
                     if ((_listFilterString.Length > 2) && int.TryParse(_listFilterString, out year)) {
                         // exact year
