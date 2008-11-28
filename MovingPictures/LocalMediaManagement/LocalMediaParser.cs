@@ -35,33 +35,38 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
       bool scanNFO = (bool)MovingPicturesCore.SettingsManager["importer_nfoscan"].Value;
       bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
+      bool useFolder = mm.FolderHint;
       bool isDvdFS = (mm.LocalMedia[0].File.Extension.ToLower() == ".ifo");
       bool isMultiPart = (mm.LocalMedia.Count > 1);
-
+      Regex rxMultiPartFolder = new Regex(@"CD\d", RegexOptions.IgnoreCase);
+      bool isMultiPartFolder = (!useFolder && isMultiPart && rxMultiPartFolder.Match(mm.LocalMedia[0].File.Directory.Name).Success);
+    
       if (mm.LocalMedia == null || mm.LocalMedia.Count == 0) {
         // nothing to see here move along
         return signature;
       }
-      else {
+      else {        
         FileInfo file = mm.LocalMedia[0].File;
         DirectoryInfo folder = file.Directory;
-        
+       
         signature.Path = file.FullName;
         
         // If this is a DVD then calculate the discid and add it to the signature
         // @todo Only real DVD's? How to handle ISO's?
-        if (isDvdFS && getDiscId) signature.DiscId = GetDiscID(folder.FullName);  
+        if (isDvdFS && getDiscId) 
+            signature.DiscId = GetDiscID(folder.FullName);
 
-        if (mm.FolderHint || isDvdFS) {
+        if (useFolder || isDvdFS || isMultiPartFolder) {
           // If we have a folder hint or if we are looking at a DVD filesystem
           // we -can- use the foldername to create the searchstring
-          if (isMultiPart || preferFolder || isDvdFS) {
+            if (isMultiPart || preferFolder || isDvdFS) {
             // If we meet one of the criteria for foldername parsing
             // let's do it but if we are in a DVD VIDEO_TS directory make 
-            // sure we get the parent directory and alter the folder variable
-              if (isDvdFS && folder.Name.ToLower() == "video_ts")
+            // sure we get the parent directory and alter the folder variable.
+            // The same applies to the multi-part folder structure
+                if ((isDvdFS && folder.Name.ToLower() == "video_ts") || isMultiPartFolder)
                   folder = folder.Parent;
-              
+
             // prepare the string from the foldername
             sourceStr = parseFolderName(folder);
           }
