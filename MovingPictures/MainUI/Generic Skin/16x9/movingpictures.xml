@@ -622,7 +622,7 @@ multiple view modes.
       <width>250</width>
       <textcolor>000000</textcolor>
       <font>font10</font>
-      <label>Unwatched and Filtered Movies</label>
+      <label>Unwatched + #MovingPictures.Filter.Label</label>
       <visible>Control.IsVisible(50)+Control.IsVisible(8)+Control.IsVisible(10)</visible>
       <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
       <animation effect="slide" end="-300,0" time="500">Hidden</animation>
