@@ -759,8 +759,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       List<DBLocalMedia> currFileSet = new List<DBLocalMedia>();
       // Create the Multi-Part regular expression
       Regex rxMultiPart = new Regex(rxMultiPartScan, RegexOptions.IgnoreCase);
-      bool alwaysGroup = (bool)MovingPicturesCore.SettingsManager["importer_groupfolder"].Value;
+      // Multi-Part Folder regular expression
+      Regex rxMultiPartFolder = new Regex(@"CD\d", RegexOptions.IgnoreCase);
 
+      bool alwaysGroup = (bool)MovingPicturesCore.SettingsManager["importer_groupfolder"].Value;
+        
       foreach (DBLocalMedia currFile in importFileList) {
         //string currFolder = currFile.File.DirectoryName;
         // if we have already loaded this file, move to the next
@@ -797,11 +800,25 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // file(s)
         bool isAdditionalMatch = true;
         foreach (DBLocalMedia otherFile in currFileSet) {
-          // if files are not in the same folder we assume they are not a pair
-          if (!currFile.File.DirectoryName.Equals(otherFile.File.DirectoryName)) {
-            isAdditionalMatch = false;
-            break;
-          }
+          
+            DirectoryInfo currentDir = currFile.File.Directory;
+            DirectoryInfo otherDir = otherFile.File.Directory;
+            
+            // if both files are located in folders marked as multi-part folders
+            if (rxMultiPartFolder.Match(currentDir.Name).Success && rxMultiPartFolder.Match(otherDir.Name).Success) {
+                // check if they share the same parent folder, if not then they are not a pair
+                if (!currentDir.Parent.FullName.Equals(otherDir.Parent.FullName)) {
+                    isAdditionalMatch = false;
+                    break;
+                }
+            }
+            else {
+                // if files are not in the same folder we assume they are not a pair
+                if (!currFile.File.DirectoryName.Equals(otherFile.File.DirectoryName)) {
+                    isAdditionalMatch = false;
+                    break;
+                }
+            }
 
           // if the setting always group files in the same folder is used just group them 
           // without checking differences at all.
