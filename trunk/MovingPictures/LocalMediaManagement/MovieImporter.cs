@@ -1500,6 +1500,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       get {
         if (_signature == null)
           _signature = LocalMediaParser.parseMediaMatch(this);
+        if (_existingMovieInfo != null) {
+            _signature.Title = _existingMovieInfo.Title;
+            _signature.Year = _existingMovieInfo.Year;
+            _signature.ImdbId = _existingMovieInfo.ImdbID;
+        }
         return _signature;
       }
       set {
