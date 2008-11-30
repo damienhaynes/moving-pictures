@@ -73,7 +73,6 @@ multiple view modes.
       <width>1366</width>
       <height>768</height>
       <texture>MovingPictures\background.png</texture>
-      <visible>!Control.IsVisible(1)</visible>
     </control>
     
     <control>
@@ -85,11 +84,28 @@ multiple view modes.
       <width>1366</width>
       <height>768</height>
       <texture>#MovingPictures.Backdrop</texture>
-      <animation effect="fade" time="1000">VisibleChange</animation>
+      <animation effect="fade" start="0" end="100" time="3000">WindowOpen</animation>
+      <animation effect="fade" start="0" end="100" time="200">Visible</animation>
+      <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
       <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above 
            defines for conditional visibility if you dont want to use fan-art only specific views. -->
     </control>
-   
+
+    <control>
+      <description>Alternate Movie Backdrop - Toggles Load with Component 1 for animations on visibiltiy</description>
+      <type>image</type>
+      <id>11</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>1366</width>
+      <height>768</height>
+      <texture>#MovingPictures.Backdrop2</texture>
+      <animation effect="fade" start="0" end="100" time="200">Visible</animation>
+      <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
+      <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above 
+           defines for conditional visibility if you dont want to use fan-art only specific views. -->
+    </control>
+
     <!--  ********************** Both Thumbnail Views  special background overlay ***************** -->
     <control>
       <description>Background to be displayed when there is no Movie Backdrop</description>

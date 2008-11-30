@@ -21,6 +21,7 @@ using Cornerstone.Database.CustomTypes;
 using MediaPortal.Util;
 using MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser;
 using System.Globalization;
+using Cornerstone.MP;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {
@@ -42,8 +43,10 @@ namespace MediaPortal.Plugins.MovingPictures {
         private int currentPart = 1;
 
         private bool loaded = false;
+        private bool imagesNeedSwapping = true;
 
-        private System.Timers.Timer updateArtworkTimer;
+        private AsyncImageResource backdropResource = null;
+        private AsyncImageResource coverResource = null;
 
         #endregion
 
@@ -54,6 +57,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [SkinControl(1)]
         protected GUIImage movieBackdrop = null;
+
+        [SkinControl(11)]
+        protected GUIImage movieBackdrop2 = null;
 
         [SkinControl(2)]
         protected GUIButtonControl cycleViewButton = null;
@@ -81,7 +87,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [SkinControl(10)]
         protected GUILabelControl remoteFilteringIndicator = null;
-
+       
 
 
         #endregion
@@ -150,52 +156,53 @@ namespace MediaPortal.Plugins.MovingPictures {
                 g_Player.PlayBackChanged += new g_Player.ChangedHandler(OnPlayBackChanged);
             }
             catch (Exception e) {
-                logger.Error("Cannot add PlayBackChanged handler (running <RC4).");
+                logger.Error("Cannot add PlayBackChanged handler (running < RC4).");
             }
 
-            // setup the timer for delayed artwork loading
-            int artworkDelay = (int)MovingPicturesCore.SettingsManager["gui_artwork_delay"].Value;
-            updateArtworkTimer = new System.Timers.Timer();
-            updateArtworkTimer.Elapsed += new ElapsedEventHandler(OnUpdateArtworkTimerElapsed);
-            updateArtworkTimer.Interval = artworkDelay;
-            updateArtworkTimer.AutoReset = false;
 
+            // setup the image resources for cover and backdrop display
+            int artworkDelay = (int)MovingPicturesCore.SettingsManager["gui_artwork_delay"].Value;
+
+            backdropResource = new AsyncImageResource();
+            backdropResource.Property = "#MovingPictures.Backdrop";
+            backdropResource.Delay = artworkDelay;
+            backdropResource.ImageLoadingComplete += new AsyncImageLoadComplete(backdropResource_ImageLoadingComplete);
+
+            coverResource = new AsyncImageResource();
+            coverResource.Property = "#MovingPictures.Coverart";
+            coverResource.Delay = artworkDelay;
+
+            
+            // used to prevent overzelous logging of skin properties
             loggedProperties = new Dictionary<string, bool>();
         }
 
         ~MovingPicturesGUI() {
         }
 
-        // this timer creates a delay for loading background art. it waits a user defined
-        // period of time (usually something like 200ms, THEN updates the backdrop. If the
-        // user switches again *before* the timer expires, the timer is reset. THis allows
-        // quick traversal on the GUI
-        private void OnUpdateArtworkTimerElapsed(object sender, ElapsedEventArgs e) {
-            UpdateArtwork();
-        }
-
         private void UpdateArtwork() {
             if (browser.SelectedMovie == null)
                 return;
 
-            string oldBackdrop = GUIPropertyManager.GetProperty("#MovingPictures.Backdrop");
-            string oldCover = GUIPropertyManager.GetProperty("#MovingPictures.Coverart");
+            // if we have a second backdrop image object, alternate between the two
+            if (movieBackdrop2 != null && imagesNeedSwapping) {
+                if (backdropResource.Property.Equals("#MovingPictures.Backdrop"))
+                    backdropResource.Property = "#MovingPictures.Backdrop2";
+                else
+                    backdropResource.Property = "#MovingPictures.Backdrop";
 
-            string newBackdrop = browser.SelectedMovie.BackdropFullPath.Trim();
-            if (newBackdrop.Length == 0)
-                newBackdrop = "-";
-            
-            string newCover = browser.SelectedMovie.CoverFullPath.Trim();
-            if (newCover.Length == 0)
-                newCover = "-";
-            
-            // update backdrop and cover art
-            SetProperty("#MovingPictures.Backdrop", newBackdrop);
-            SetProperty("#MovingPictures.Coverart", newCover);
+                imagesNeedSwapping = false;
+            }
 
-            // clear out previous textures for backdrop and cover art
-            GUITextureManager.ReleaseTexture(oldBackdrop);
-            GUITextureManager.ReleaseTexture(oldCover);
+            // update resources with new files
+            coverResource.Filename = browser.SelectedMovie.CoverFullPath;
+            backdropResource.Filename = browser.SelectedMovie.BackdropFullPath;
+
+        }
+
+        private void backdropResource_ImageLoadingComplete(AsyncImageResource resource) {
+            if (movieBackdrop == null)
+                return;
 
             // grab the skin supplied setting for backdrop visibility
             bool backdropActive = true;
@@ -223,12 +230,29 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             // set backdrop visibility
-            if (backdropActive && browser.SelectedMovie != null &&
+            bool visible;
+            if (backdropActive && browser.SelectedMovie != null && movieBackdrop != null &&
                 browser.SelectedMovie.BackdropFullPath.Trim().Length != 0)
-
-                movieBackdrop.Visible = true;
+                visible = true;
             else
-                movieBackdrop.Visible = false;
+                visible = false;
+
+            // if we have a second backdrop image object, alternate between the two
+            if (movieBackdrop2 != null) {
+                if (backdropResource.Property.Equals("#MovingPictures.Backdrop")) {
+                    movieBackdrop2.Visible = false;
+                    movieBackdrop.Visible = visible;
+                }
+                else {
+                    movieBackdrop2.Visible = visible;
+                    movieBackdrop.Visible = false;
+                }
+
+                imagesNeedSwapping = true;
+            }
+
+            // if no 2nd backdrop control, just update normally
+            else movieBackdrop.Visible = visible;
         }
 
         private bool IsViewAvailable(ViewMode view) {
@@ -1046,10 +1070,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 else
                     selectedMovieWatchedIndicator.Visible = false;
 
-            // start the timer for new artwork loading
-            updateArtworkTimer.Stop();
-            updateArtworkTimer.Start();
-
+            UpdateArtwork();
         }
 
         private void SetProperty(string property, string value) {

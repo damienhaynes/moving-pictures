@@ -67,23 +67,6 @@ multiple view modes.
   
   
     <!-- ********************* Background /  Movie Backdrop (Fan-art) *************************** -->
-<!-- when no default backdrop is enabled, just copy some favorites to "<skinpath>\animations\MovingPictures" and enable following code... 
-    <control>
-      <type>multiimage</type>
-      <id>0</id>
-      <posX>0</posX>
-      <posY>0</posY>
-      <width>768</width>
-      <height>576</height>
-      <imagepath>Moving Pictures</imagepath>
-      <timeperimage>3000</timeperimage>
-      <fadetime>3000</fadetime>
-      <loop>yes</loop>
-      <randomize>true</randomize>
-      <visible>!Control.IsVisible(1)</visible>
-      <animation effect="fade" time="200">VisibleChange</animation>
-    </control>
--->
     <control>
       <description>Background to be displayed when there is no Movie Backdrop</description>
       <type>image</type>
@@ -92,11 +75,9 @@ multiple view modes.
       <posY>0</posY>
       <width>768</width>
       <height>576</height>
-      <colordiffuse>bbffffff</colordiffuse> 
       <texture>MovingPictures\background.png</texture>
-      <visible>!Control.IsVisible(1)</visible>
     </control>
-    
+
     <control>
       <description>Movie Backdrop (Fan Art) - Plug-in sets to invisible, if no art.</description>
       <type>image</type>
@@ -106,7 +87,24 @@ multiple view modes.
       <width>768</width>
       <height>576</height>
       <texture>#MovingPictures.Backdrop</texture>
-      <animation effect="fade" time="1000">VisibleChange</animation>
+      <animation effect="fade" start="0" end="100" time="3000">WindowOpen</animation>
+      <animation effect="fade" start="0" end="100" time="200">Visible</animation>
+      <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
+      <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above 
+           defines for conditional visibility if you dont want to use fan-art only specific views. -->
+    </control>
+
+    <control>
+      <description>Alternate Movie Backdrop - Toggles Load with Component 1 for animations on visibiltiy</description>
+      <type>image</type>
+      <id>11</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>768</width>
+      <height>576</height>
+      <texture>#MovingPictures.Backdrop2</texture>
+      <animation effect="fade" start="0" end="100" time="200">Visible</animation>
+      <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
       <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above 
            defines for conditional visibility if you dont want to use fan-art only specific views. -->
     </control>
