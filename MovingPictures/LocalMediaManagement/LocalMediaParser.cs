@@ -5,7 +5,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using DirectShowLib;
 using DirectShowLib.Dvd;
+using MediaPortal.Plugins.MovingPictures.SignatureProviders;
 using NLog;
+using System.Xml;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
   public class MovieSignature {
@@ -14,7 +16,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public string ImdbId  = null; // ex. "tt0168122"
     public string Edition = null; // ex. unrated, director's cut etc.. Should maybe be an enum?
     public string Source  = null; // Original file/foldername
-    public string DiscId = null; //  WMP/MC Disc Id (DirectShowLib)
+    public string DiscId  = null; //  WMP/MC Disc Id (DirectShowLib)
     public string Path    = null; // Original path to the source of the media
 
     public override string ToString() {
@@ -53,9 +55,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         
         // If this is a DVD then calculate the discid and add it to the signature
         // @todo Only real DVD's? How to handle ISO's?
-        if (isDvdFS && getDiscId) 
+        if (isDvdFS && getDiscId) {
             signature.DiscId = GetDiscID(folder.FullName);
-
+        }
+         
         if (useFolder || isDvdFS || isMultiPartFolder) {
           // If we have a folder hint or if we are looking at a DVD filesystem
           // we -can- use the foldername to create the searchstring
@@ -96,7 +99,23 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
 
       // Complete and return the MovieSignature using the source string
-      return parseSignature(sourceStr, signature);
+      MovieSignature rtnSignature = parseSignature(sourceStr, signature);
+      
+      // If we have a DiscId overwrite some properties
+      if (rtnSignature.DiscId != null) {
+        XmlNodeList mdrDVD = WindowsMetaServices.GetMDRDVDByCRC(rtnSignature.DiscId);
+        if (mdrDVD != null) {
+            try {
+                string dvdTitle = mdrDVD.Item(0).SelectSingleNode("dvdTitle").InnerText;
+                Regex cleanSuffix = new Regex(@"\[.+?\]");
+                rtnSignature.Title = cleanSuffix.Replace(dvdTitle, "");
+            }
+            catch (Exception e) {
+                logger.Error("Error or no data available from webservice for DiscId: " + rtnSignature.DiscId, e);
+            }
+        }
+      }
+      return rtnSignature;
     }
 
     public static MovieSignature parseSignature(string inputStr)
