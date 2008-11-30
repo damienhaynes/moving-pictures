@@ -20,9 +20,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
         }
         private bool active;
 
-        public string Text { get { return _text; } }
-        private string _text = string.Empty;
-
         public List<DBMovieInfo> Filter(List<DBMovieInfo> input) {
             if (active) {
 
