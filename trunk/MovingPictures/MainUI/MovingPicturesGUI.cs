@@ -144,6 +144,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             g_Player.PlayBackEnded += new g_Player.EndedHandler(OnPlayBackEnded);
             g_Player.PlayBackStopped += new g_Player.StoppedHandler(OnPlayBackStopped);
 
+            // This is a handler added in RC4 - if we are using an older mediaportal version
+            // this would throw an exception.
+            try {
+                g_Player.PlayBackChanged += new g_Player.ChangedHandler(OnPlayBackChanged);
+            }
+            catch (Exception e) {
+                logger.Error("Cannot add PlayBackChanged handler (running <RC4).");
+            }
+
             // setup the timer for delayed artwork loading
             int artworkDelay = (int)MovingPicturesCore.SettingsManager["gui_artwork_delay"].Value;
             updateArtworkTimer = new System.Timers.Timer();
@@ -931,7 +940,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
 
-        private void OnPlayBackStopped(g_Player.MediaType type, int timeMovieStopped, string filename) {
+        private void OnPlayBackStoppedOrChanged(g_Player.MediaType type, int timeMovieStopped, string filename, string caller) {
             if (type != g_Player.MediaType.Video || currentMovie == null)
                 return;
 
@@ -945,7 +954,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             int requiredWatchedPercent = (int) MovingPicturesCore.SettingsManager["gui_watch_percentage"].Value;
-            logger.Debug("OnPlayBackStopped filename={0} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, currentMovie.Title, currentPart, timeMovieStopped);
+            logger.Debug("{0}: filename={1} currentMovie={2} currentPart={3} timeMovieStopped={4} ", caller, filename, currentMovie.Title, currentPart, timeMovieStopped);
             logger.Debug("Percentage: " + currentMovie.GetPercentage(currentPart, timeMovieStopped) + " Required: " + requiredWatchedPercent);
           
             // if enough of the movie has been watched, hit the watched flag
@@ -963,6 +972,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             currentPart = 0;
             currentlyPlaying = false;
             currentMovie = null;
+        }
+
+        private void OnPlayBackChanged(g_Player.MediaType type, int timeMovieStopped, string filename) {
+            OnPlayBackStoppedOrChanged(type, timeMovieStopped, filename, "OnPlayBackChanged");
+        }
+
+        private void OnPlayBackStopped(g_Player.MediaType type, int timeMovieStopped, string filename) {
+            OnPlayBackStoppedOrChanged(type, timeMovieStopped, filename, "OnPlayBackStopped");
         }
 
         private void updateMovieWatchedCounter(DBMovieInfo movie) {
