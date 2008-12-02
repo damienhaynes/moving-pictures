@@ -27,9 +27,9 @@ namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {
         public enum ViewMode { LIST, SMALLICON, LARGEICON, FILMSTRIP, DETAILS }
         
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
         #region Private Variables
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         MovieBrowser browser;
         RemoteNumpadFilter remoteFilter;
@@ -43,10 +43,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         private int currentPart = 1;
 
         private bool loaded = false;
-        private bool imagesNeedSwapping = true;
 
-        private AsyncImageResource backdropResource = null;
-        private AsyncImageResource coverResource = null;
+        private ImageSwapper backdrop;
+        private AsyncImageResource cover = null;
 
         #endregion
 
@@ -56,10 +55,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         protected GUIFacadeControl facade = null;
 
         [SkinControl(1)]
-        protected GUIImage movieBackdrop = null;
-
-        [SkinControl(11)]
-        protected GUIImage movieBackdrop2 = null;
+        protected GUIImage movieBackdropControl = null;
 
         [SkinControl(2)]
         protected GUIButtonControl cycleViewButton = null;
@@ -87,8 +83,12 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [SkinControl(10)]
         protected GUILabelControl remoteFilteringIndicator = null;
-       
 
+        [SkinControl(11)]
+        protected GUIImage movieBackdropControl2 = null;
+
+        [SkinControl(12)]
+        protected GUIImage loadingImage = null;
 
         #endregion
 
@@ -139,6 +139,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (facade.SelectedListItem != null)
                     updateMovieDetails(facade.SelectedListItem.TVTag as DBMovieInfo);
 
+                SetBackdropVisibility();
                 UpdateArtwork();
             }
         }
@@ -155,7 +156,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             try {
                 g_Player.PlayBackChanged += new g_Player.ChangedHandler(OnPlayBackStoppedOrChanged);
             }
-            catch (Exception e) {
+            catch (Exception) {
                 logger.Error("Cannot add PlayBackChanged handler (running < RC4).");
             }
 
@@ -163,14 +164,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             // setup the image resources for cover and backdrop display
             int artworkDelay = (int)MovingPicturesCore.SettingsManager["gui_artwork_delay"].Value;
 
-            backdropResource = new AsyncImageResource();
-            backdropResource.Property = "#MovingPictures.Backdrop";
-            backdropResource.Delay = artworkDelay;
-            backdropResource.ImageLoadingComplete += new AsyncImageLoadComplete(backdropResource_ImageLoadingComplete);
+            backdrop = new ImageSwapper();
+            backdrop.ImageResource.Delay = artworkDelay;
+            backdrop.PropertyOne = "#MovingPictures.Backdrop";
 
-            coverResource = new AsyncImageResource();
-            coverResource.Property = "#MovingPictures.Coverart";
-            coverResource.Delay = artworkDelay;
+            cover = new AsyncImageResource();
+            cover.Property = "#MovingPictures.Coverart";
+            cover.Delay = artworkDelay;
 
             
             // used to prevent overzelous logging of skin properties
@@ -184,24 +184,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (browser.SelectedMovie == null)
                 return;
 
-            // if we have a second backdrop image object, alternate between the two
-            if (movieBackdrop2 != null && imagesNeedSwapping) {
-                if (backdropResource.Property.Equals("#MovingPictures.Backdrop"))
-                    backdropResource.Property = "#MovingPictures.Backdrop2";
-                else
-                    backdropResource.Property = "#MovingPictures.Backdrop";
-
-                imagesNeedSwapping = false;
-            }
-
             // update resources with new files
-            coverResource.Filename = browser.SelectedMovie.CoverFullPath;
-            backdropResource.Filename = browser.SelectedMovie.BackdropFullPath;
-
+            cover.Filename = browser.SelectedMovie.CoverFullPath;
+            backdrop.Filename = browser.SelectedMovie.BackdropFullPath;
         }
 
-        private void backdropResource_ImageLoadingComplete(AsyncImageResource resource) {
-            if (movieBackdrop == null)
+        private void SetBackdropVisibility() {
+            if (movieBackdropControl == null)
                 return;
 
             // grab the skin supplied setting for backdrop visibility
@@ -230,29 +219,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             // set backdrop visibility
-            bool visible;
-            if (backdropActive && browser.SelectedMovie != null && movieBackdrop != null &&
-                browser.SelectedMovie.BackdropFullPath.Trim().Length != 0)
-                visible = true;
-            else
-                visible = false;
-
-            // if we have a second backdrop image object, alternate between the two
-            if (movieBackdrop2 != null) {
-                if (backdropResource.Property.Equals("#MovingPictures.Backdrop")) {
-                    movieBackdrop2.Visible = false;
-                    movieBackdrop.Visible = visible;
-                }
-                else {
-                    movieBackdrop2.Visible = visible;
-                    movieBackdrop.Visible = false;
-                }
-
-                imagesNeedSwapping = true;
-            }
-
-            // if no 2nd backdrop control, just update normally
-            else movieBackdrop.Visible = visible;
+            backdrop.Active = backdropActive;
         }
 
         private bool IsViewAvailable(ViewMode view) {
@@ -429,6 +396,12 @@ namespace MediaPortal.Plugins.MovingPictures {
                 CurrentView = CurrentView;
                 previousView = tmp;
             }
+
+            // (re)link our backdrio image controls to the backdrop image swapper
+            backdrop.GUIImageOne = movieBackdropControl;
+            backdrop.GUIImageTwo = movieBackdropControl2;
+            backdrop.LoadingImage = loadingImage;
+
 
             // load fanart and coverart
             UpdateArtwork();
