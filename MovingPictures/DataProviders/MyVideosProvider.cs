@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Configuration;
 using System.Text.RegularExpressions;

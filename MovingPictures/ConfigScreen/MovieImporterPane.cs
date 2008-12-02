@@ -6,8 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
-
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;

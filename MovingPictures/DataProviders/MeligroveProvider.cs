@@ -5,7 +5,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using System.Net;
 using System.IO;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using System.Reflection;
 using System.Globalization;
 using System.Xml;
