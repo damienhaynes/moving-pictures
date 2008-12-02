@@ -51,7 +51,7 @@ namespace Cornerstone.MP {
         public int Delay {
             get { return _delay; }
             set { _delay = value; }
-        } private int _delay = 0;
+        } private int _delay = 250;
 
         private void activeWorker() {
             lock (loadingLock) {
@@ -127,12 +127,13 @@ namespace Cornerstone.MP {
         // Unloads the previous file and sets a new filename. 
         private void setFilenameWorker(object newFilenameObj) {
             int localToken = ++pendingToken;
-            
+            string oldFilename = _filename;
+
             // check if another thread has locked for loading
             bool loading = Monitor.TryEnter(loadingLock);
             if (loading) Monitor.Exit(loadingLock);
 
-            // if a loading action is in progress or another thread is threadsWaiting, we wait too
+            // if a loading action is in progress or another thread is waiting, we wait too
             if (loading || threadsWaiting > 0) {
                 threadsWaiting++;
                 for (int i = 0; i < 5; i++) {
@@ -169,17 +170,20 @@ namespace Cornerstone.MP {
 
                 // update MediaPortal about the image change
                 _identifier = newIdentifier;
+                _filename = newFilename;
                 writeProperty();
 
                 // notify any listeners a resource has been loaded
                 if (ImageLoadingComplete != null)
                     ImageLoadingComplete(this);
+            }
 
-                // unload old resource
-                Thread.Sleep(1000);
-                unloadResource(_filename);
-                _filename = newFilename;
-
+            // wait a few seconds in case we want to quickly reload the previous resource
+            // if it's not reassigned, unload from memory.
+            Thread.Sleep(5000);
+            lock (loadingLock) {
+                if (_filename != oldFilename)
+                    unloadResource(oldFilename);
             }
         }
 
@@ -230,7 +234,7 @@ namespace Cornerstone.MP {
 
         // Loads an Image from a File by invoking GDI Plus instead of using build-in 
         // .NET methods, or falls back to Image.FromFile. GDI Plus should be faster.
-        private static Image LoadImageFastFromFile(string filename) {
+        public static Image LoadImageFastFromFile(string filename) {
             IntPtr imagePtr = IntPtr.Zero;
             Image image = null;
 
