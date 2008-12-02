@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using MediaPortal.Plugins.MovingPictures.Database;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public interface IMovieProvider {

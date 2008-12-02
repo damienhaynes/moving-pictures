@@ -9,6 +9,7 @@ using System.Net;
 using Cornerstone.Database;
 using System.Web;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using System.Reflection;
 using System.Threading;
 using System.Globalization;

@@ -12,6 +12,7 @@ using NLog;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database;
 using Cornerstone.Tools;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
   public enum MovieImporterAction {
@@ -43,17 +44,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     private Thread artworkUpdaterThread;
 
     private int percentDone;
-
-    // common regular expression patterns
-    public const string rxYearScan = @"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)";
-    public const string rxMultiPartClean = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|\d+|i+))|[\(\[]\d(of|-)\d[\)\]]$";
-    public const string rxMultiPartScan = rxMultiPartClean + @"|[^\s\d](\d+)$|([a-c])$";
-    
-    // common regular expressions
-    public static Regex rxReplacePunctuation = new Regex(@"[\.\:\;\+\*]", RegexOptions.IgnoreCase);
-    public static Regex rxCleanPunctuation = new Regex(@"[\[\]\'\`\,\""]", RegexOptions.IgnoreCase);
-    public static Regex rxReplaceDoubleSpace = new Regex(@"\s{2,}", RegexOptions.IgnoreCase);
-
+ 
     // a list of all files currently in the system
     private Dictionary<DBLocalMedia, MovieMatch> matchesInSystem;
 
@@ -460,7 +451,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         newMatch.ExistingMovieInfo = movie;
         newMatch.PreferedDataSource = source;
         newMatch.LocalMedia = movie.LocalMedia;
-        newMatch.FolderHint = false;
 
         if (matchesInSystem.ContainsKey(movie.LocalMedia[0]))
             RemoveFromMatchLists(matchesInSystem[movie.LocalMedia[0]]);
@@ -757,11 +747,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     // and it's readded, it will be reprocessed.
     private void ScanFiles(List<DBLocalMedia> importFileList, bool highPriority) {
       List<DBLocalMedia> currFileSet = new List<DBLocalMedia>();
-      // Create the Multi-Part regular expression
-      Regex rxMultiPart = new Regex(rxMultiPartScan, RegexOptions.IgnoreCase);
-      // Multi-Part Folder regular expression
-      Regex rxMultiPartFolder = new Regex(@"CD\d", RegexOptions.IgnoreCase);
-
       bool alwaysGroup = (bool)MovingPicturesCore.SettingsManager["importer_groupfolder"].Value;
         
       foreach (DBLocalMedia currFile in importFileList) {
@@ -780,11 +765,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         
         // don't add vob files that are part of a DVD disc/folder
         if (currFile.File.Extension.ToLower() == ".vob")
-            if (isDVDFolder(currFile.File.Directory))
+            if (Utility.isDvdContainer(currFile.File.Directory))
                 continue;
 
         // exclude samplefiles
-        if (isSampleFile(currFile.File)) {
+        if (Utility.isSampleFile(currFile.File)) {
           logger.Info("Sample detected. Skipping {0} ({1} bytes)", currFile.File.Name, currFile.File.Length);
           continue;
         }
@@ -805,7 +790,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             DirectoryInfo otherDir = otherFile.File.Directory;
             
             // if both files are located in folders marked as multi-part folders
-            if (rxMultiPartFolder.Match(currentDir.Name).Success && rxMultiPartFolder.Match(otherDir.Name).Success) {
+            if (Utility.isFolderMultipart(currentDir.Name) && Utility.isFolderMultipart(otherDir.Name)) {
                 // check if they share the same parent folder, if not then they are not a pair
                 if (!currentDir.Parent.FullName.Equals(otherDir.Parent.FullName)) {
                     isAdditionalMatch = false;
@@ -835,7 +820,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
           // if the multi-part naming convention doesn't match up
           // assume they are not a pair
-          if (!rxMultiPart.Match(RemoveFileExtension(currFile.File)).Success) {
+          if (!Utility.isFileMultiPart(currFile.File)) {
             isAdditionalMatch = false;
             break;
           }
@@ -854,7 +839,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         if (!isAdditionalMatch) {
           MovieMatch newMatch = new MovieMatch();
           newMatch.LocalMedia = currFileSet;
-          newMatch.FolderHint = (currFileSet.Count == folderCheck(currFileSet[0].File.Directory));
 
           lock (pendingMatches.SyncRoot) {
             pendingMatches.Add(newMatch);
@@ -878,7 +862,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       if (currFileSet.Count > 0) {
         MovieMatch newMatch = new MovieMatch();
         newMatch.LocalMedia = currFileSet;
-        newMatch.FolderHint = (currFileSet.Count == folderCheck(currFileSet[0].File.Directory));
         lock (pendingMatches.SyncRoot) {
           pendingMatches.Add(newMatch);
         }
@@ -900,51 +883,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       if (obj is DBLocalMedia)
         if (matchesInSystem.ContainsKey((DBLocalMedia)obj))
           RemoveFromMatchLists(matchesInSystem[(DBLocalMedia)obj]);
-    }
-
-    private bool isDVDFolder(DirectoryInfo folder) {
-        FileInfo[] files = folder.GetFiles("video_ts.ifo");
-        return (files.Length == 1);
-    }
-
-    // Check if the supplied file is a Sample file
-    private bool isSampleFile(FileInfo file) {
-      // Create the sample filter regular expression
-      Regex rxSampleFilter = new Regex(MovingPicturesCore.SettingsManager["importer_sample_keyword"].Value.ToString(), RegexOptions.IgnoreCase);
-      // Set sample max size in bytes
-      long sampleMaxSize = long.Parse(MovingPicturesCore.SettingsManager["importer_sample_maxsize"].Value.ToString()) * 1024 * 1024;
-      return ((file.Length < sampleMaxSize) && rxSampleFilter.Match(file.Name).Success);
-    }
-
-    // Returns a movie count on the folder (excluding samples)
-    private Dictionary<string, int> fileCount;
-    private int folderCheck(DirectoryInfo folder) {
-      if (fileCount == null)
-        fileCount = new Dictionary<string, int>();
-
-      // if we have already scanned this folder move on
-      if (fileCount.ContainsKey(folder.FullName))
-        return fileCount[folder.FullName];
-
-      // count the number of non-sample video files in the folder
-      int rtn = 0;
-      FileInfo[] fileList = folder.GetFiles("*");
-      foreach (FileInfo currFile in fileList) {
-        foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
-          if (currFile.Extension == currExt) {
-            if (!isSampleFile(currFile))
-              rtn++;
-          }
-        }
-      }
-
-      fileCount[folder.FullName] = rtn;
-      return rtn;
-    }
-
-    // Removes the file extension from a filename
-    public static string RemoveFileExtension(FileInfo file) {
-      return Path.GetFileNameWithoutExtension(file.Name);
     }
 
     #endregion
@@ -1318,10 +1256,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         PossibleMatch currMatch = new PossibleMatch();
         currMatch.Movie = currMovie;
 
-        // #### TODO: this part is the part of the matching system that should change
+        // TODO: code below is the part of the matching system that should change
 
-        MovieSignature currSignature = new MovieSignature();
-        currSignature.Title = currMovie.Title;
+        MovieSignature currSignature = new MovieSignature(currMovie.Title);
         currSignature.Year = currMovie.Year;
         currSignature.ImdbId = currMovie.ImdbID;
 
@@ -1340,8 +1277,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Set the MatchValue to the best match found.
         currMatch.MatchValue = bestMatch;
 
-        // #### END TODO
-
         // Add the match to the ranked movie list
         rankedMovieList.Add(currMatch);
       }
@@ -1351,8 +1286,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     private static int calculateMatchValue(MovieSignature sig1, MovieSignature sig2, bool imdbBoost) {
       // Clean titles to improve matching 
-      string cleanSource = CleanMediaTitle(sig1.Title);
-      string cleanMatch = CleanMediaTitle(sig2.Title);
+      string cleanSource = Utility.normalizeTitle(sig1.Title);
+      string cleanMatch = Utility.normalizeTitle(sig2.Title);
 
       // Account for Year when criteria is met
       // this should give the match a higher priority  
@@ -1387,24 +1322,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
 
       // get the Levenshtein distance between the two string and use them for the match value
+      
       int dist = AdvancedStringComparer.Levenshtein(cleanMatch, cleanSource);
+      logger.Debug("Compare: '{0}', With: '{1}, Result: {2}", cleanSource, cleanMatch, dist);
       return dist;
-    }
-
-    // Clean media titles from punctuation marks
-    // This will improve matching
-    private static string CleanMediaTitle(string title) {
-      string rtn = title.ToLower();
-      // replace punctuation with spaces
-      rtn = rxReplacePunctuation.Replace(rtn, " ");
-      // filter other punctuation characters completely
-      rtn = rxCleanPunctuation.Replace(rtn, "");
-      // replace multiple spaces with just one space
-      rtn = rxReplaceDoubleSpace.Replace(rtn, " ");
-      // finally remove trailing spaces
-      rtn = rtn.Trim();
-      // return the cleaned title
-      return rtn;
     }
 
     #endregion
@@ -1422,11 +1343,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         get { return _preferedDataSource; }
         set { _preferedDataSource = value; }
     } private DBSourceInfo _preferedDataSource = null;
-
-    public bool FolderHint {
-      get { return _folder; }
-      set { _folder = value; }
-    } private bool _folder = false;
 
     public bool Deleted {
       get { return _deleted; }
@@ -1521,6 +1437,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             _signature.Title = _existingMovieInfo.Title;
             _signature.Year = _existingMovieInfo.Year;
             _signature.ImdbId = _existingMovieInfo.ImdbID;
+            if (_existingMovieInfo.LocalMedia != null && _existingMovieInfo.LocalMedia.Count > 0)
+                _signature.DiscId = _existingMovieInfo.LocalMedia[0].DiscId;
         }
         return _signature;
       }

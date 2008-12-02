@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("local_media")]
@@ -27,6 +28,25 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
          
         #region Database Fields
 
+        [DBFieldAttribute(Default = "0")]
+        public string DiscId {
+            get {
+                // Calculate DiscId
+                // todo: handle iso?
+                bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
+                if ((discid == "0") && (fileInfo != null) && getDiscId) 
+                    if (fileInfo.Name.ToLower() == "video_ts.ifo") 
+                        discid = Utility.GetDiscIdString(fileInfo.DirectoryName);
+
+                return discid;
+            }
+            set {
+                discid = value;
+                commitNeeded = true;
+            }
+        }
+        private string discid;
+        
         [DBFieldAttribute]
         public string FullPath {
             get {

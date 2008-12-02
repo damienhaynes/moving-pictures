@@ -7,6 +7,7 @@ using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using System.Reflection;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using System.Collections.ObjectModel;
 using NLog;
 using System.IO;

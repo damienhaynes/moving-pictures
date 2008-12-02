@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using MediaPortal.Plugins.MovingPictures.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
