@@ -14,7 +14,7 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="0" point="7"/>
+    <version major="1" minor="0" point="8"/>
     <published month="12" day="4" year="2008"/>
     
     <!--
@@ -117,7 +117,7 @@
         <set name="movie[${counter}].site_id" value="${curr_details[1]:htmldecode}"/>
         <set name="movie[${counter}].title" value="${curr_details[2]:htmldecode}"/>
 
-        <parse name="akas" input="${curr_details[5]:htmldecode}" regex="${rx_aka}"/>
+        <parse name="akas" input="${curr_details[4]:htmldecode}" regex="${rx_aka}"/>
         <set name="movie[${counter}].alternate_titles" value=""/>
         <loop name="currAka" on="akas">
           <set name="movie[${counter}].alternate_titles" value="${movie[${counter}].alternate_titles}|${currAka[0]}"/>
