@@ -93,25 +93,32 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return expr.Match(filename).Success;
         }
 
-        // Regular expression pattern that matches the words that need to be swapped for title conversions
-        private const string rxTitleSortPrefix = "(The|A|Ein|Das|Die|Der|Les|Une)";
+        // Regular expression pattern that matches an "article" that need to be moved for title conversions
+        // todo: the articles should really be a user definable setting in the future
+        private const string rxTitleSortPrefix = "(the|a|an|ein|das|die|der|les|une)";
 
         /// <summary>
-        /// Converts the sortable title to the actual title
+        /// Converts a movie title to the display name.
         /// </summary>
-        /// <param name="title">sortable title</param>
-        /// <returns>actual title</returns>
-        public static string SortableToActualTitle(string title) {
+        /// <example>
+        /// Changes "Movie, The" into "The Movie"
+        /// </example>
+        /// <param name="title"></param>
+        /// <returns>display name</returns>
+        public static string TitleToDisplayName(string title) {
             Regex expr = new Regex(@"(.+?)(?:, " + rxTitleSortPrefix + @")?\s*$", RegexOptions.IgnoreCase);
             return expr.Replace(title, "$2 $1").Trim();
         }
 
         /// <summary>
-        /// Converts a title to the sortable title
+        /// Converts a title to the archive name (sortable title)
         /// </summary>
-        /// <param name="title">a title</param>
-        /// <returns>the sortable title</returns>
-        public static string TitleToSortable(string title) {
+        /// <example>
+        /// Changes "The Movie" into "Movie, The"
+        /// </example>
+        /// <param name="title"></param>
+        /// <returns>archive name</returns>
+        public static string TitleToArchiveName(string title) {
             Regex expr = new Regex(@"^" + rxTitleSortPrefix + @"\s(.+)", RegexOptions.IgnoreCase);
             return expr.Replace(title, "$2, $1").Trim();
         }
@@ -128,7 +135,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             string newTitle = title.ToLower();
 
             // Swap article
-            newTitle = SortableToActualTitle(newTitle);
+            newTitle = TitleToDisplayName(newTitle);
 
             // Replace non-descriptive characters with spaces
             newTitle = Regex.Replace(newTitle, @"[\.:;\+\-\*]", @" ");
@@ -140,6 +147,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = newTitle.Replace(" & ", " and ");
 
             // Equalize: Roman Numbers To Numeric
+            // todo: create or look for special method that does this
             newTitle = Regex.Replace(newTitle, @"\sII($|\s)", @" 2$1", RegexOptions.IgnoreCase);
             newTitle = Regex.Replace(newTitle, @"\sIII($|\s)", @" 3$1", RegexOptions.IgnoreCase);
             newTitle = Regex.Replace(newTitle, @"\sIV($|\s)", @" 4$1", RegexOptions.IgnoreCase);
@@ -251,6 +259,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 folderCountCache = new Dictionary<string, int>();
 
             // if we have already scanned this folder move on
+            // todo: remove the cache or let it expire when the directory is changed
             if (folderCountCache.ContainsKey(folder.FullName) && cached)
                 return folderCountCache[folder.FullName];
 
