@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.Collections.Generic;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using NLog;
-using System.Xml;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
   /// <summary>

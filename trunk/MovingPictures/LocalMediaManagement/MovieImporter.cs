@@ -1,18 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Web;
-using System.IO;
-using MediaPortal.Plugins.MovingPictures.DataProviders;
-using System.Threading;
 using System.Collections;
-using MediaPortal.Plugins.MovingPictures.Database;
-using System.Text.RegularExpressions;
-using NLog;
-using Cornerstone.Database.Tables;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 using Cornerstone.Database;
+using Cornerstone.Database.Tables;
 using Cornerstone.Tools;
+using MediaPortal.Plugins.MovingPictures.Database;
+using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
   public enum MovieImporterAction {
