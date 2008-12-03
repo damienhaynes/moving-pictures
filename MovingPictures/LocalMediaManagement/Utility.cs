@@ -140,15 +140,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = newTitle.Replace(" & ", " and ");
 
             // Equalize: Roman Numbers To Numeric
-            newTitle = Regex.Replace(newTitle, @"\sII($|\s)", @" 2$1");
-            newTitle = Regex.Replace(newTitle, @"\sIII($|\s)", @" 3$1");
-            newTitle = Regex.Replace(newTitle, @"\sIV($|\s)", @" 4$1");
-            newTitle = Regex.Replace(newTitle, @"\sV($|\s)", @" 5$1");
-            newTitle = Regex.Replace(newTitle, @"\sVI($|\s)", @" 6$1");
-            newTitle = Regex.Replace(newTitle, @"\sVI($|\s)", @" 6$1");
-            newTitle = Regex.Replace(newTitle, @"\sVII($|\s)", @" 7$1");
-            newTitle = Regex.Replace(newTitle, @"\sVIII($|\s)", @" 8$1");
-            newTitle = Regex.Replace(newTitle, @"\sIX($|\s)", @" 9$1");
+            newTitle = Regex.Replace(newTitle, @"\sII($|\s)", @" 2$1", RegexOptions.IgnoreCase);
+            newTitle = Regex.Replace(newTitle, @"\sIII($|\s)", @" 3$1", RegexOptions.IgnoreCase);
+            newTitle = Regex.Replace(newTitle, @"\sIV($|\s)", @" 4$1", RegexOptions.IgnoreCase);
+            newTitle = Regex.Replace(newTitle, @"\sV($|\s)", @" 5$1", RegexOptions.IgnoreCase);
+            newTitle = Regex.Replace(newTitle, @"\sVI($|\s)", @" 6$1", RegexOptions.IgnoreCase);
+            newTitle = Regex.Replace(newTitle, @"\sVI($|\s)", @" 6$1", RegexOptions.IgnoreCase);
+            newTitle = Regex.Replace(newTitle, @"\sVII($|\s)", @" 7$1", RegexOptions.IgnoreCase);
+            newTitle = Regex.Replace(newTitle, @"\sVIII($|\s)", @" 8$1", RegexOptions.IgnoreCase);
+            newTitle = Regex.Replace(newTitle, @"\sIX($|\s)", @" 9$1", RegexOptions.IgnoreCase);
 
             // Remove double spaces and trim
             newTitle = trimSpaces(newTitle);
