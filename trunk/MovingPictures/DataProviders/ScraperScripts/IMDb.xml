@@ -14,7 +14,7 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="0" point="6"/>
+    <version major="1" minor="0" point="7"/>
     <published month="12" day="4" year="2008"/>
     
     <!--
@@ -56,6 +56,12 @@
       ]]>
     </set>
 
+    <set name="rx_aka_details">
+      <![CDATA[
+      <tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
+       ]]>
+    </set>
+
     <!-- Retrieve result using IMDB id (if provided) -->
     <if test='${search.imdb_id}!='>
       <retrieve name="imdb_page" url="http://akas.imdb.com/find?s=tt;q=${search.imdb_id}" />
@@ -88,6 +94,15 @@
       <set name="movie[${counter}].imdb_id" value="${imdb[0][0]}"/>
       <set name="movie[${counter}].site_id" value="${imdb[0][0]}"/>
       <set name="movie[${counter}].details_url" value="http://www.imdb.com/title/${imdb[0][0]}"/>
+
+      <!-- AKA page -->
+      <retrieve name="aka_page" url='http://www.imdb.com/title/${imdb[0][0]}/releaseinfo'/>
+      <parse name="akas" input="${aka_page}" regex="${rx_aka_details}"/>
+      <set name="movie[${counter}].alternate_titles" value=""/>
+      <loop name="currAka" on="akas" limit="50">
+        <set name="movie[${counter}].alternate_titles" value="${movie[${counter}].alternate_titles}|${currAka[0]:htmldecode}"/>
+      </loop>
+
       <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
     </loop>
     
@@ -203,7 +218,7 @@
     <retrieve name="aka_page" url='http://www.imdb.com/title/${movie.site_id}/releaseinfo'/>
     <parse name="akas" input="${aka_page}" regex="${rx_aka}"/>
     <set name="movie.alternate_titles" value=""/>
-    <loop name="currAka" on="akas">
+    <loop name="currAka" on="akas" limit="50">
       <set name="movie.alternate_titles" value="${movie.alternate_titles}|${currAka[0]:htmldecode}"/>
     </loop>
     
