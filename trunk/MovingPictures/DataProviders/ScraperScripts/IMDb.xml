@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="0" point="3"/>
-    <published month="11" day="28" year="2008"/>
+    <version major="1" minor="0" point="4"/>
+    <published month="12" day="3" year="2008"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -41,6 +41,18 @@
     <set name="rx_title_year">
       <![CDATA[
       <title>(.+?)\((\d{4})[\/IVX]*\).*?</title>
+      ]]>
+    </set>
+
+    <set name="rx_search_results">
+      <![CDATA[
+      <a href="([^"]+?(tt\d+?)/)">(?!&#34;)([^<]+)</a> \((\d{4})[\/IVX]*\)(?! \(VG\))(.*?<br>.*?aka\s(<em>.+?</em>)</td>)?
+      ]]>
+    </set>
+
+    <set name="rx_aka">
+      <![CDATA[
+      <em>"(.+?)"</em>
       ]]>
     </set>
 
@@ -83,12 +95,19 @@
     <parse name="search_results_block" input="${search_page}" regex='&lt;meta name="title" content="IMDb Title Search"&gt;.+&lt;/body&gt;'/>
     <loop name="search_results_verified" on="search_results_block">
 
-      <parse name="movie_details" input="${search_results_verified}" regex='&lt;a href="([^"]+?(tt\d+?)/)"&gt;(?!&amp;#34;)([^&lt;]+)&lt;/a&gt; \((\d{4})[\/IVX]*\)(?! \(VG\))' />
+      <parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
       <loop name='curr_details' on='movie_details'>
         <add name="counter" value1="${count}" value2="${offset}" />
         <set name="movie[${counter}].imdb_id" value="${curr_details[1]:htmldecode}"/>
         <set name="movie[${counter}].site_id" value="${curr_details[1]:htmldecode}"/>
         <set name="movie[${counter}].title" value="${curr_details[2]:htmldecode}"/>
+
+        <parse name="akas" input="${curr_details[5]:htmldecode}" regex="${rx_aka}"/>
+        <set name="movie[${counter}].alternate_titles" value=""/>
+        <loop name="currAka" on="akas">
+          <set name="movie[${counter}].alternate_titles" value="${movie[${counter}].alternate_titles}|${currAka[0]}"/>
+        </loop>
+
         <set name="movie[${counter}].year" value="${curr_details[3]:htmldecode}"/>
         <set name="movie[${counter}].details_url" value="http://www.imdb.com/title/${curr_details[1]}"/>
         <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
@@ -181,10 +200,10 @@
     <set name="movie.summary" value="${summary_clean:htmldecode}" />
     
     <!-- AKA page -->
-    <retrieve name='aka_page' url='http://www.imdb.com/title/${movie.site_id}/releaseinfo'/>
-    <parse name='akas' input='"${aka_page}' regex="${rx_aka}"/>
+    <retrieve name="aka_page" url='http://www.imdb.com/title/${movie.site_id}/releaseinfo'/>
+    <parse name="akas" input="${aka_page}" regex="${rx_aka}"/>
     <set name="movie.alternate_titles" value=""/>
-    <loop name='currAka' on='akas'>
+    <loop name="currAka" on="akas">
       <set name="movie.alternate_titles" value="${movie.alternate_titles}|${currAka[0]:htmldecode}"/>
     </loop>
     

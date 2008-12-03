@@ -70,7 +70,7 @@
       </setting>
 
       <setting id="importer_filter" name="Regular Expression Noise Filter" type="STRING">
-        <default>((720p|1080p|1080i|DirCut|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264|dxva)[-]?.*?$)</default>
+        <default>((720p|1080p|1080i|dircut|dvdrip|dvdscreener|dvdscr|avchd|wmv|ntsc|mpeg|dsr|r5|dvdr|dts|ac3|bluray|blu-ray|hdtv|pdtv|hddvd|xvid|divx|x264|dxva|(?-i)LIMITED|DC|UNRATED)[-]?.*?$)</default>
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
 
