@@ -134,7 +134,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = Regex.Replace(newTitle, @"[\.:;\+\-\*]", @" ");
 
             // Remove other non-descriptive characters completely
-            newTitle = Regex.Replace(newTitle, @"[\(\(\[\]'`,""\#\$\?]", "");
+            newTitle = Regex.Replace(newTitle, @"[\(\)\[\]'`,""\#\$\?]", "");
 
             // Equalize: Common characters with words of the same meaning
             newTitle = newTitle.Replace(" & ", " and ");
