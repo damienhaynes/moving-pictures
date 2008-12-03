@@ -95,7 +95,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // Regular expression pattern that matches an "article" that need to be moved for title conversions
         // todo: the articles should really be a user definable setting in the future
-        private const string rxTitleSortPrefix = "(the|a|an|ein|das|die|der|les|une)";
+        private const string rxTitleSortPrefix = "(the|a|an|ein|das|die|der|les|la|le|el|une|de|het)";
 
         /// <summary>
         /// Converts a movie title to the display name.
@@ -144,7 +144,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = Regex.Replace(newTitle, @"[\(\)\[\]'`,""\#\$\?]", "");
 
             // Equalize: Common characters with words of the same meaning
-            newTitle = newTitle.Replace(" & ", " and ");
+            newTitle = Regex.Replace(newTitle, @"\s(and|und|en|et|y)\s", " & ");
 
             // Equalize: Roman Numbers To Numeric
             // todo: create or look for special method that does this
