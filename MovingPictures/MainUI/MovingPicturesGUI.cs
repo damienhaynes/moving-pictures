@@ -1039,6 +1039,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void SetProperty(string property, string value) {
+            if (property == null)
+                return;
+
             if (!loggedProperties.ContainsKey(property)) {
                 logger.Debug(property + " = \"" + value + "\"");
                 loggedProperties[property] = true;
