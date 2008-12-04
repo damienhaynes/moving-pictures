@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MediaPortal.GUI.Library;
 using NLog;
+using System.Threading;
 
 namespace Cornerstone.MP {
     /// <summary>
@@ -166,37 +167,39 @@ namespace Cornerstone.MP {
         // Once image loading is complete this method is called and the visibility of the
         // two GUIImages is swapped.
         private void imageResource_ImageLoadingComplete(AsyncImageResource image) {
-            if (_guiImageOne == null)
-                return;
+            lock (loadingLock) {
+                if (_guiImageOne == null)
+                    return;
 
-            if (_filename == null) {
-                if (_guiImageOne != null) _guiImageOne.Visible = false;
-                if (_guiImageTwo != null) _guiImageTwo.Visible = false;
-                return;
-            }
-
-            
-            // if we have a second backdrop image object, alternate between the two
-            if (_guiImageTwo != null) {
-                if (_imageResource.Property.Equals(_propertyOne)) {
-                    _guiImageOne.Visible = _active;
-                    _guiImageTwo.Visible = false;
-                    logger.Info("1");
-                }
-                else {
-                    _guiImageOne.Visible = false;
-                    _guiImageTwo.Visible = _active;
-                    logger.Info("2");
+                if (_filename == null) {
+                    if (_guiImageOne != null) _guiImageOne.Visible = false;
+                    if (_guiImageTwo != null) _guiImageTwo.Visible = false;
+                    return;
                 }
 
-                imagesNeedSwapping = true;
+                _guiImageOne.ResetAnimations();
+                if (_guiImageTwo != null) _guiImageTwo.ResetAnimations();
+
+                // if we have a second backdrop image object, alternate between the two
+                if (_guiImageTwo != null) {
+                    if (_imageResource.Property.Equals(_propertyOne)) {
+                        _guiImageOne.Visible = _active;
+                        _guiImageTwo.Visible = false;
+                    }
+                    else {
+                        _guiImageOne.Visible = false;
+                        _guiImageTwo.Visible = _active;
+                    }
+
+                    imagesNeedSwapping = true;
+                }
+
+
+                // if no 2nd backdrop control, just update normally
+                else _guiImageOne.Visible = _active;
+
+                if (_loadingImage != null) _loadingImage.Visible = false;
             }
-
-
-            // if no 2nd backdrop control, just update normally
-            else _guiImageOne.Visible = _active;
-
-            if (_loadingImage != null) _loadingImage.Visible = false;
         }
 
     }
