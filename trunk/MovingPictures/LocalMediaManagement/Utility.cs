@@ -138,7 +138,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = TitleToDisplayName(newTitle);
 
             // Replace non-descriptive characters with spaces
-            newTitle = Regex.Replace(newTitle, @"[\.:;\+\-\*]", @" ");
+            newTitle = Regex.Replace(newTitle, @"[\.:;\+\-\*]", " ");
 
             // Remove other non-descriptive characters completely
             newTitle = Regex.Replace(newTitle, @"[\(\)\[\]'`,""\#\$\?]", "");
@@ -147,7 +147,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = Regex.Replace(newTitle, @"\s(and|und|en|et|y)\s", " & ");
 
             // Equalize: Roman Numbers To Numeric
-            // todo: create or look for special method that does this
             newTitle = Regex.Replace(newTitle, @"\sII($|\s)", @" 2$1", RegexOptions.IgnoreCase);
             newTitle = Regex.Replace(newTitle, @"\sIII($|\s)", @" 3$1", RegexOptions.IgnoreCase);
             newTitle = Regex.Replace(newTitle, @"\sIV($|\s)", @" 4$1", RegexOptions.IgnoreCase);
@@ -172,8 +171,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static string trimSpaces(string input) {
             return Regex.Replace(input, @"\s{2,}", " ").Trim();
         }
-
-
 
         /// <summary>
         /// Checks if the foldername is a multipart marker.

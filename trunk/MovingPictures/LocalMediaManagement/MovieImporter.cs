@@ -1246,83 +1246,28 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         movieList = MovingPicturesCore.DataProviderManager.Get(signature);
 
       bool strictYear = (bool)MovingPicturesCore.SettingsManager["importer_strict_year"].Value;
-      // TODO: this boolean will probably be removed on improvement of the matching system
-      bool imdbBoost = (bool)MovingPicturesCore.SettingsManager["importer_autoimdb"].Value;
 
       foreach (DBMovieInfo currMovie in movieList) {
+        
+        // Skip this movie if the strict year setting is on and the years don't match
+        if (strictYear) // todo: refactor / rethink / relocate
+            if ((currMovie.Year != signature.Year) && (currMovie.Year != 0) && (signature.Year != 0))
+                continue; 
+        
+        // Create a Possible Match object
         PossibleMatch currMatch = new PossibleMatch();
+        
+        // Add the movie
         currMatch.Movie = currMovie;
 
-        // TODO: code below is the part of the matching system that should change
-
-        MovieSignature currSignature = new MovieSignature(currMovie.Title);
-        currSignature.Year = currMovie.Year;
-        currSignature.ImdbId = currMovie.ImdbID;
-
-        // If strict year matching is enabled exclude match when years don't match
-        if (strictYear)
-          if ((currSignature.Year != signature.Year) && (currSignature.Year != 0) && (signature.Year != 0))
-            continue; // move to next match in the list               
-
-        int bestMatch = calculateMatchValue(signature, currSignature, imdbBoost);
-        foreach (string akaTitle in currMovie.AlternateTitles.ToArray()) {
-          currSignature.Title = akaTitle;
-          int matchValue = calculateMatchValue(signature, currSignature, imdbBoost);
-          if (matchValue < bestMatch)
-            bestMatch = matchValue;
-        }
-        // Set the MatchValue to the best match found.
-        currMatch.MatchValue = bestMatch;
+        // Get the matching score for this movie
+        currMatch.MatchValue = signature.MatchScore(currMovie);
 
         // Add the match to the ranked movie list
         rankedMovieList.Add(currMatch);
       }
 
       mediaMatch.PossibleMatches = rankedMovieList;
-    }
-
-    private static int calculateMatchValue(MovieSignature sig1, MovieSignature sig2, bool imdbBoost) {
-      // Clean titles to improve matching 
-      string cleanSource = Utility.normalizeTitle(sig1.Title);
-      string cleanMatch = Utility.normalizeTitle(sig2.Title);
-
-      // Account for Year when criteria is met
-      // this should give the match a higher priority  
-      if (sig1.Year > 0 && sig2.Year > 0) {
-        cleanMatch += ' ' + sig2.Year.ToString();
-        cleanSource += ' ' + sig1.Year.ToString();
-      }
-
-      // Account for IMDB when criteria is met
-      if (sig1.ImdbId != null && sig2.ImdbId != null) {
-
-          string s1Imdb = sig1.ImdbId.Trim();
-          string s2Imdb = sig2.ImdbId.Trim();
-
-          // only proceed if both are not empty
-          if (s1Imdb != string.Empty && s2Imdb != string.Empty) {
-              if (imdbBoost && s2Imdb == s1Imdb) {
-                  // If IMDB Auto-Approval is active
-                  // and the we have an ImdbId match,
-                  // cheat the current match system into
-                  // an auto-match
-                  cleanMatch = s2Imdb;
-                  cleanSource = s1Imdb;
-              }
-              else {
-                  // add the imdb id tot the complete matching string
-                  // this should improve priority
-                  cleanMatch += ' ' + s2Imdb;
-                  cleanSource += ' ' + s1Imdb;
-              }
-          }
-      }
-
-      // get the Levenshtein distance between the two string and use them for the match value
-      
-      int dist = AdvancedStringComparer.Levenshtein(cleanMatch, cleanSource);
-      logger.Debug("Compare: '{0}', With: '{1}, Result: {2}", cleanSource, cleanMatch, dist);
-      return dist;
     }
 
     #endregion
@@ -1371,15 +1316,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             string displayname = currFile.File.Name;
 
-            // logic for DVD folder display
-            if (displayname.ToLower() == "video_ts.ifo") {
-              if (currFile.File.Directory.Name.ToLower() == "video_ts") {
-                displayname = currFile.File.Directory.Parent.Name;
-              }
-              else {
-                displayname = currFile.File.Directory.Name;
-              }
-            }
+            if (displayname.ToLower() == "video_ts.ifo")
+                displayname = Utility.GetMovieBaseDirectory(currFile.File.Directory).Name;
 
             _localMediaString += displayname;
           }
@@ -1429,14 +1367,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public MovieSignature Signature {
       get {
         if (_signature == null)
-          _signature = LocalMediaParser.parseMediaMatch(this);
-        if (_existingMovieInfo != null) {
-            _signature.Title = _existingMovieInfo.Title;
-            _signature.Year = _existingMovieInfo.Year;
-            _signature.ImdbId = _existingMovieInfo.ImdbID;
-            if (_existingMovieInfo.LocalMedia != null && _existingMovieInfo.LocalMedia.Count > 0)
-                _signature.DiscId = _existingMovieInfo.LocalMedia[0].DiscId;
-        }
+            if (_existingMovieInfo != null)
+                _signature = new MovieSignature(_existingMovieInfo);
+            else
+                _signature = LocalMediaParser.parseMediaMatch(this);
+        
         return _signature;
       }
       set {
