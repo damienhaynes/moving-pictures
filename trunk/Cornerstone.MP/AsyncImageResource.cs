@@ -16,6 +16,7 @@ namespace Cornerstone.MP {
         private Object loadingLock = new Object();
         private int pendingToken = 0;
         private int threadsWaiting = 0;
+        private bool warned = false;
 
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace Cornerstone.MP {
             lock (loadingLock) {
                 if (!_active) {
                     // load the resource
-                    _identifier = loadResource(_filename);
+                    _identifier = loadResourceSafe(_filename);
                     _active = true;
 
                     // notify any listeners a resource has been loaded
@@ -159,12 +160,11 @@ namespace Cornerstone.MP {
                 if (_filename != null && _filename.Equals(newFilename))
                     return;
 
-                // load the new resource then assign it to our property
-                string newIdentifier = loadResource(newFilename);
+                string newIdentifier = loadResourceSafe(newFilename);
 
                 // check if we have a new loading action pending, if so just quit
                 if (localToken < pendingToken) {
-                    unloadResource(newFilename);
+                    unloadResource(newIdentifier);
                     return;
                 }
 
@@ -192,25 +192,44 @@ namespace Cornerstone.MP {
         /// Loads the given file into memory and registers it with MediaPortal.
         /// </summary>
         /// <param name="filename">The image file to be loaded.</param>
-        /// <returns>The resource identifier used by MediaPortal.</returns>
-        private string loadResource(string filename) {
+        private bool loadResource(string filename) {
             if (!_active || filename == null || !File.Exists(filename))
+                return false;
+
+            if (GUITextureManager.Load(filename, 0, 0, 0, true) > 0)
+                return true;
+           
+            return false;
+        }
+
+        private string loadResourceSafe(string filename) {
+            if (filename == null || filename.Trim().Length == 0)
                 return null;
-
-            string identifier = getIdentifier(filename);
-
-            // check if MP already has this image loaded
-            if (GUITextureManager.LoadFromMemory(null, identifier, 0, 0, 0) > 0) {
-                return identifier;
+            
+            // try to load with new persistent load feature
+            try {
+                if (loadResource(filename))
+                    return filename;
+            }
+            catch (MissingMethodException) {
+                if (!warned) {
+                    logger.Warn("Cannot preform asynchronous loading with this version of MediaPortal. Please upgrade for improved performance.");
+                    warned = true;
+                }
             }
 
-            // load image ourselves and pass to MediaPortal
+            // if not available load image ourselves and pass to MediaPortal. Much slower but this still
+            // gives us asynchronous loading. 
             Image image = LoadImageFastFromFile(filename);
-            if (GUITextureManager.LoadFromMemory(image, identifier, 0, 0, 0) > 0) {
-                return identifier;
+            if (GUITextureManager.LoadFromMemory(image, getIdentifier(filename), 0, 0, 0) > 0) {
+                return getIdentifier(filename);
             }
 
             return null;
+        }
+
+        private string getIdentifier(string filename) {
+            return "[MovingPictures:" + filename.GetHashCode() + "]";
         }
 
         /// <summary>
@@ -222,12 +241,12 @@ namespace Cornerstone.MP {
             if (filename == null)
                 return;
 
+            // double duty since we dont know if we loaded via new fast way or old
+            // slow way
             GUITextureManager.ReleaseTexture(getIdentifier(filename));
+            GUITextureManager.ReleaseTexture(filename);
         }
 
-        private string getIdentifier(string filename) {
-            return "[MovingPictures:" + filename.GetHashCode() + "]";
-        }
 
         [DllImport("gdiplus.dll", CharSet = CharSet.Unicode)]
         private static extern int GdipLoadImageFromFile(string filename, out IntPtr image);
