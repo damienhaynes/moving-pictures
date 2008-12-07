@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using NLog;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
@@ -31,6 +32,41 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } 
         private DirectoryInfo dirInfo;
 
+        public DriveType Type {
+            get {
+                if (Directory != null) {
+                    DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
+                    if (driveInfo != null)
+                        return driveInfo.DriveType;
+                }
+                return DriveType.Unknown;
+            }
+        }
+
+        public string VolumeLabel {
+            get {
+                // this property won't be stored as it can differ in time
+                if (Directory != null) {
+                    DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
+                    if (driveInfo != null)
+                        if (driveInfo.IsReady)
+                            return driveInfo.VolumeLabel;
+                    return null;
+                }
+                return null;
+            }
+        }
+        
+        public string Serial {
+            get {
+                // this property won't be stored as it can differ in time
+                if (Directory != null)
+                    return DeviceManager.GetDiskSerial(Directory);
+                else
+                    return null;
+            }
+        }
+
         #region Database Fields
 
         [DBFieldAttribute(FieldName="path")]
@@ -51,16 +87,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         }
-
-
-        [DBFieldAttribute(Default = "false")]
-        public bool Removable {
-            get { return removable; }
-            set {
-                removable = value;
-                commitNeeded = true;
-            }
-        } private bool removable;
 
         #endregion
 
@@ -111,26 +137,70 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (Directory == null)
                 return null;
 
+            logger.Debug("Starting scan for import path: {0}", Directory.FullName);
+            string drive = Directory.Root.FullName;
+            DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
+            DriveType driveType = Type;
+            string mediaLabel = null;
+
+            int timeout = 0;
+            if (driveInfo != null) {
+                // If we have a DriveInfo object this means we are going 
+                // to scan a logical disk (or mounted UNC)
+                drive = driveInfo.Name;
+                
+                // Check if the drive is available before starting the scan
+                while (!driveInfo.IsReady) {
+                    // If not then wait it out with a timeout of 30 seconds (should be more then enough for optical media)
+                    // before we cancel the scan or cancel immediatly when it's a fixed drive
+                    if (timeout == 30 || driveType == DriveType.Fixed) {
+                        logger.Error("Scan for '{0}' was cancelled because the drive is not available or empty.", Directory.FullName);
+                        return null;
+                    }
+                    // wait one second
+                    Thread.Sleep(1000);
+                    timeout++;
+                }
+                mediaLabel = driveInfo.VolumeLabel;
+            }
+            else {
+                // We do not have a DriveInfo object than we probably have a UNC path
+                // we use some other logic here to detect if it's offline and wait for it to 
+                // come online for 30 seconds.
+                while (!Directory.Exists) {
+                    if (timeout == 30) {
+                        logger.Error("Scan for '{0}' was cancelled because the UNC path is not available.", Directory.FullName);
+                        return null;
+                    }
+                    Thread.Sleep(1000);
+                    timeout++;
+
+                    // Refresh the state of the directory object
+                    Directory.Refresh();                    
+                }
+            }
+
+            // get volume serial
+            string diskSerial = DeviceManager.GetDiskSerial(Directory);
+            logger.Debug("Drive: {0}, Type= {1}, Serial={2}", drive, driveType.ToString(), diskSerial);
+
             List<DBLocalMedia> rtn = new List<DBLocalMedia>();
 
             // grab the list of files and parse out appropriate ones based on extension
             try {
                 List<FileInfo> fileList = getFilesRecursive(Directory);
                 foreach (FileInfo currFile in fileList) {
-                    DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName);
-                    foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
-                        if (currFile.Extension.ToLower().Equals(currExt.ToLower())) {
+                    DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName, diskSerial);
+                    
+                    // if this file is in the database continue if we only want new files
+                    if (newFile.ID != null && returnOnlyNew)
+                        break;
 
-                            // if this file is in the database continue if we only want new files
-                            if (newFile.ID != null && returnOnlyNew) 
-                                break;
-                            
-                            // good extension for new file, so add it
-                            logger.Debug("Pulling new file " + currFile.Name + " from import path.");
-                            newFile.ImportPath = this;
-                            rtn.Add(newFile);
-                            break;
-                        }
+                    if (newFile.IsVideo) {
+                        // good extension for new file, so add it
+                        logger.Debug("Pulling new file " + currFile.Name + " from import path.");
+                        newFile.ImportPath = this;
+                        rtn.Add(newFile);
                     }
                 }
             }

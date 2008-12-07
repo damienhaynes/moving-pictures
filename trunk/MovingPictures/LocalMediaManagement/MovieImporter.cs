@@ -496,9 +496,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         while (true) {
           logger.Info("Initiating full scan on watch folders.");
           
-          // maintainence tasks
-          RemoveOrphanFiles();
-          RemoveMissingFiles();
+          // maintenance tasks
+          RemoveInvalidFiles();
           RemoveOrphanArtwork();
 
           SetupFileSystemWatchers();
@@ -576,104 +575,134 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
       // setup new file systems watchers
       foreach (DBImportPath currPath in paths) {
-        try {
-          FileSystemWatcher currWatcher = new FileSystemWatcher(currPath.FullPath);
-          currWatcher.IncludeSubdirectories = true;
-          currWatcher.Created += OnFileAdded;
-          currWatcher.Deleted += OnFileDeleted;
-          currWatcher.EnableRaisingEvents = true;
-          fileSystemWatchers.Add(currWatcher);
-          pathLookup[currWatcher] = currPath;
-        }
-        catch (ArgumentException) {
-          if (currPath.Removable)
-            logger.Info("Removable import path " + currPath.Removable + " is offline.");
-          else
-            logger.Error("Failed accessing import path " + currPath.FullPath + ". Should be set to 'Removable'?");
-        }
+          DriveInfo driveInfo = DeviceManager.GetDriveInfo(currPath.FullPath);
+          DriveType driveType = DriveType.Unknown; // = UNC
+
+          // get drive type if it's not UNC
+          if (driveInfo != null)
+              driveType = driveInfo.DriveType;
+
+          // nothing will change on CD/DVD so skip these
+          if (driveType == DriveType.CDRom)
+              continue;
+
+          // try to activate watchers
+          try {
+              FileSystemWatcher currWatcher = new FileSystemWatcher(currPath.FullPath);
+              currWatcher.IncludeSubdirectories = true;
+              currWatcher.Created += OnFileAdded;
+              currWatcher.Deleted += OnFileDeleted;
+              currWatcher.EnableRaisingEvents = true;
+              fileSystemWatchers.Add(currWatcher);
+              pathLookup[currWatcher] = currPath;
+              logger.Debug("Created FileSystemWatcher for: '{0}' ({1})", currPath.FullPath, driveType.ToString());
+          }
+          catch (ArgumentException) {
+              logger.Info("Import path: '{0}' ({1}) is offline.", currPath.FullPath, driveType.ToString());
+          }
       }
 
     }
 
+    // When a volume is removed
+    public void OnVolumeRemoved(string volume) {
+        // Clear existing cached information for this drive
+        DeviceManager.Flush(volume);
+    }
+    
+    // When a volume is inserted scan it
+    public void OnVolumeInserted(string volume) {
+        // Clear existing cached information for this drive
+        DeviceManager.Flush(volume);
+
+        // Check if this volume has an import path
+        // if so rescan these import paths
+        foreach (DBImportPath importPath in DBImportPath.GetAll()) {
+            if (importPath.Directory.Root.Name.StartsWith(volume))
+                ScanPath(importPath);
+        }
+    }
+    
     // When a FileSystemWatcher detects a new file, this method queues it up for processing.
     private void OnFileAdded(Object source, FileSystemEventArgs e) {
-      DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath);
+      DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath));
       DBImportPath importPath = pathLookup[(FileSystemWatcher)source];
 
       // if this file is already in the system, disable (this happens if it's a removable source)
       if (newFile.ID != null) {
-        if (!importPath.Removable)
-          logger.Warn("FileSystemWatcher tried to add a pre-existing file: " + newFile.File.Name);
-        else
-          logger.Info("Removable file " + newFile.File.Name + " brought online.");
+        logger.Info("Removable file " + newFile.File.Name + " brought online.");
         return;
       }
 
       // if the extension is proper, add the file
-      foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions)
-        if (newFile.File.Extension == currExt) {
-          newFile.ImportPath = importPath;
-          lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
-          logger.Info("FileSystemWatcher queued " + newFile.File.Name + " for processing.");
-          break;
+        if (newFile.IsVideo) {
+            newFile.ImportPath = importPath;
+            lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
+            logger.Info("FileSystemWatcher queued " + newFile.File.Name + " for processing.");
         }
     }
 
     // When a FileSystemWatcher detects a file has been removed, delete it.
     private void OnFileDeleted(Object source, FileSystemEventArgs e) {
-      DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath);
+      DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath));
 
       logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal from the database.");
 
       // if the file is not in our system there's nothing to do
-      if (removedFile.ID == null) {
-        logger.Warn("FileSystemWatcher tried to remove a file from the database that is not in our system.");
+      // todo: this is not entirely true because the file could be sitting in the match system
+      // waiting for user input  we would have to  remove it there also.
+      if (removedFile.ID == null)
         return;
-      }
-
-      // if this file is from a removable source, there is no action
-      if (removedFile.ImportPath.Removable) {
+     
+      // Check if the file is really removed
+      if (!removedFile.Removed) {
         logger.Info("Removable file " + removedFile.File.Name + " taken offline.");
         return;
       }
 
-      // if this file's root is unavailable, there is no action
-      if (!removedFile.File.Directory.Root.Exists) {
-          logger.Info("File " + removedFile.File.Name + " taken offline. (root unavailable)");
-          return;
-      }
-
-      // remove file, it's movie object it's attached to, and all other files
-      // owned by that movie if it's a multi-part movie.
-      foreach (DBMovieInfo currMovie in removedFile.AttachedMovies) {
-        foreach (DBLocalMedia currFile in currMovie.LocalMedia)
-          currFile.Delete();
-        currMovie.Delete();
-      }
+      // Remove the file
+      RemoveLocalMedia(removedFile);
     }
+    
+    // Loops through all local files in the system and removes anything that's invalid.
+    private void RemoveInvalidFiles() {
+        logger.Info("Cleaning up invalid files from database.");
+        int cleaned = 0;
+        foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
+            // Skip previous deleted files
+            if (currFile.ID == null)
+                continue;            
 
-    // loops through all local files in the system and removes anything that does not actually exist
-    // and is not a part of a removable import path
-    private void RemoveMissingFiles() {
-      logger.Info("Removing missing video files from database.");
-      // take care of cover art
-      foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
-          if (!currFile.ImportPath.Removable && !currFile.File.Exists && currFile.File.Directory.Root.Exists) {         
-          // remove file, it's movie object it's attached to, and all other files
-          // owned by that movie if it's a multi-part movie.
-          logger.Info("Removing " + currFile.FullPath + " and associated movie from database because file is missing and not flagged as removable.");
-          foreach (DBMovieInfo currMovie in currFile.AttachedMovies) {
-            foreach (DBLocalMedia otherFile in currMovie.LocalMedia)
-              otherFile.Delete();
-            currMovie.Delete();
-          }
+            // Remove Missing Files Or Without An Import Path
+            if (currFile.Removed || currFile.ImportPath == null || currFile.ImportPath.ID == null) {
+                RemoveLocalMedia(currFile);
+                cleaned++;
+                continue;
+            }
 
-          // should have already been deleted, but if we for some reason have a
-          // file with no associated movie then delete it too.
-          currFile.Delete();
+            // Remove Orphan Files
+            if (currFile.AttachedMovies.Count == 0 && !currFile.Ignored) {
+                logger.Info("Removing " + currFile.FullPath + " (orphan)");
+                currFile.Delete();
+                cleaned++;
+                continue;
+            }
         }
-      }
+        logger.Info("Cleanup finished. Removed {0} files.", cleaned.ToString());
+
     }
+
+    private void RemoveLocalMedia(DBLocalMedia localMedia) {
+        logger.Info("Removing " + localMedia.FullPath + " and associated movie.");
+        foreach (DBMovieInfo currMovie in localMedia.AttachedMovies) {
+            foreach (DBLocalMedia otherFile in currMovie.LocalMedia)
+                otherFile.Delete();
+            currMovie.Delete();
+        }
+        // should have already been deleted, but if we for some reason have a
+        // file with no associated movie then delete it too.
+        localMedia.Delete();
+    }  
 
     private void RemoveOrphanArtwork() {
       logger.Info("Removing missing artwork from database attached to existing movies.");
@@ -705,35 +734,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
       }
     }
 
-    // Removes all files not belonging to an import path.
-    private void RemoveOrphanFiles() {
-      logger.Info("Removing files from database not attached to movies.");
-      foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
-        if (currFile.AttachedMovies.Count == 0 && !currFile.Ignored)
-          currFile.Delete();
-      }
-
-        
-      logger.Info("Removing files from database belonging to deleted Import Paths.");
-      foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
-        if (currFile.ImportPath == null || currFile.ImportPath.ID == null) {
-          // remove file, it's movie object it's attached to, and all other files
-          // owned by that movie if it's a multi-part movie.
-          logger.Info("Removing " + currFile.FullPath + " and associated movie because ImportPath has been removed.");
-          foreach (DBMovieInfo currMovie in currFile.AttachedMovies) {
-            foreach (DBLocalMedia otherFile in currMovie.LocalMedia)
-              otherFile.Delete();
-            currMovie.Delete();
-          }
-
-          // should have already been deleted, but if we for some reason have a
-          // file with no associated movie then delete it too.
-          currFile.Delete();
-        }
-      }
-    }
-
-
     // Grabs the files from the DBImportPath and add them to the queue for use
     // by the ScanMedia thread.
     private void ScanPath(DBImportPath importPath) {
@@ -743,27 +743,49 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     // Adds the files to the importer for processing. If a file has recently been commited 
     // and it's readded, it will be reprocessed.
     private void ScanFiles(List<DBLocalMedia> importFileList, bool highPriority) {
+        if (importFileList == null)
+            return;
+
       List<DBLocalMedia> currFileSet = new List<DBLocalMedia>();
       bool alwaysGroup = (bool)MovingPicturesCore.SettingsManager["importer_groupfolder"].Value;
         
       foreach (DBLocalMedia currFile in importFileList) {
-        //string currFolder = currFile.File.DirectoryName;
-        // if we have already loaded this file, move to the next
-        if (matchesInSystem.ContainsKey(currFile) || currFile.ID != null) {
-          logger.Debug("Skipping " + currFile.File.Name + " because it is already in the system.");
-          continue;
-        }
+
+          // if we have already loaded this file, move to the next
+          if (currFile.ID != null) {
+              logger.Debug("Skipping " + currFile.File.Name + " because it is already in the system.");
+              continue;
+          }
+                    
+          if (matchesInSystem.ContainsKey(currFile)) {
+              foreach ( DBLocalMedia file in matchesInSystem[currFile].LocalMedia )
+                  if (currFile.VolumeSerial == file.VolumeSerial) {
+                      logger.Debug("Skipping " + currFile.File.Name + " because it's being matched.");
+                      continue;
+                  }
+           }
 
         // only grab the video_ts.ifo when extension is ifo
         // to prevent unnecessary stacking
-        if (currFile.File.Extension.ToLower() == ".ifo")
-          if (currFile.File.Name.ToLower() != "video_ts.ifo")
-            continue;
-        
+          if (currFile.File.Extension.ToLower() == ".ifo") {
+              if (currFile.File.Name.ToLower() != "video_ts.ifo") {
+                  //logger.Debug("Skipping " + currFile.File.Name + " because it's not an video_ts.ifo .");
+                  continue;
+              }
+          }
+
         // don't add vob files that are part of a DVD disc/folder
         if (currFile.File.Extension.ToLower() == ".vob")
-            if (Utility.isDvdContainer(currFile.File.Directory))
+            if (Utility.isDvdContainer(currFile.File.Directory)) {
+                //logger.Debug("Skipping " + currFile.File.Name + " because it's part of a DVD.");
                 continue;
+            }
+
+        // only grab the index.bdmv when the extension is bdmv (blu-ray disk)
+        if (currFile.File.Extension.ToLower() == ".bdmv") {
+            if (currFile.File.Name.ToLower() != "index.bdmv" || currFile.File.Directory.Name.ToLower() != "bdmv")
+                continue;
+        }
 
         // exclude samplefiles
         if (Utility.isSampleFile(currFile.File)) {
@@ -781,6 +803,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // check if the currFile is a part of the same movie as the previous
         // file(s)
         bool isAdditionalMatch = true;
+
         foreach (DBLocalMedia otherFile in currFileSet) {
           
             DirectoryInfo currentDir = currFile.File.Directory;
@@ -1315,9 +1338,20 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
               _localMediaString += ", ";
 
             string displayname = currFile.File.Name;
-
-            if (displayname.ToLower() == "video_ts.ifo")
+            
+            // if this is a DVD/BLURAY file show the base directory as display name
+            if (displayname.ToLower() == "video_ts.ifo" || displayname.ToLower() == "index.bdmv")
                 displayname = Utility.GetMovieBaseDirectory(currFile.File.Directory).Name;
+            
+            // If read from CD/DVD/BLURAY drive
+            if (currFile.ImportPath.Type == DriveType.CDRom && displayname.Length == 3) {
+                // Show DVD
+                if (currFile.File.Name.ToLower() == "video_ts.ifo")
+                    displayname = "<DVD>";
+                // Show BLURAY
+                if (currFile.File.Name.ToLower() == "index.bdmv")
+                    displayname = "<BLURAY>";
+            }
 
             _localMediaString += displayname;
           }

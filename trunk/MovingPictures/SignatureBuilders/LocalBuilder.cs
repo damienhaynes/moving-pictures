@@ -20,7 +20,10 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             string source;
             int year;
 
-            if (Utility.isFolderDedicated(dir, filecount) && (preferFolder || (filecount > 1))) {
+            if ((Utility.isFolderDedicated(dir, filecount) && (preferFolder || (filecount > 1)) ||
+                signature.File.ToLower() == "video_ts.ifo" || // DVD
+                signature.File.ToLower() == "index.bdmv" // Blu-Ray
+                )) {
                 // Use foldername
                 source = signature.Folder;
             }

@@ -127,7 +127,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             // If we have alternative titles iterate through these titles and check
             // for a better score
             foreach (string altTitle in movie.AlternateTitles.ToArray()) {
-                movieSignature.Title = altTitle.Trim();
+                movieSignature.Title = altTitle;
                 int score = MatchScore(movieSignature);
                 // if this match is better than the previous one save the score
                 if (score < bestScore)

@@ -120,9 +120,6 @@
   <metadata name="pathColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="removableColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="notesLabel.Text" xml:space="preserve">
     <value>Specify the location(s) of your movie files. Any video that is placed in these folders will automatically be added to your Library, and any media removed from these folders will be automatically removed from your Library. These folders should contain movies only.
 
