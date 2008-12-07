@@ -138,10 +138,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             // add movie to the list, update the facade and log the action
             // a full update of the facade is neccisary because of the possibility
             // that the new item should be filtered out by the ActiveFilters
-            logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie browser.");
-            allMovies.Add((DBMovieInfo)obj);
-            ReapplyFilters();
-            ReloadFacade();
+            DBMovieInfo movie = (DBMovieInfo)obj;
+            if (!allMovies.Contains(movie)) {
+                logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie browser.");
+                allMovies.Add((DBMovieInfo)obj);
+                ReapplyFilters();
+                ReloadFacade();
+            }
+            else {
+                logger.Warn("Received multiple \"Added\" messages for " + movie);
+                return;
+            }            
         }
 
         // Listens for newly removed items from the database manager.

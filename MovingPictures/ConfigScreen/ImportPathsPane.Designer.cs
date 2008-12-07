@@ -25,12 +25,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImportPathsPane));
             this.pathsGridView = new System.Windows.Forms.DataGridView();
-            this.pathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.removableColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.pathsGroupBox = new System.Windows.Forms.GroupBox();
             this.removeSourceButton = new System.Windows.Forms.Button();
             this.addSourceButton = new System.Windows.Forms.Button();
             this.notesLabel = new System.Windows.Forms.TextBox();
+            this.pathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.pathsGridView)).BeginInit();
             this.pathsGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -45,8 +44,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.pathsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.pathsGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.pathColumn,
-            this.removableColumn});
+            this.pathColumn});
             this.pathsGridView.Location = new System.Drawing.Point(6, 97);
             this.pathsGridView.MultiSelect = false;
             this.pathsGridView.Name = "pathsGridView";
@@ -54,21 +52,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.pathsGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.pathsGridView.Size = new System.Drawing.Size(480, 167);
             this.pathsGridView.TabIndex = 0;
-            // 
-            // pathColumn
-            // 
-            this.pathColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.pathColumn.DataPropertyName = "FullPath";
-            this.pathColumn.HeaderText = "Path";
-            this.pathColumn.Name = "pathColumn";
-            this.pathColumn.ReadOnly = true;
-            // 
-            // removableColumn
-            // 
-            this.removableColumn.DataPropertyName = "Removable";
-            this.removableColumn.HeaderText = "Removable";
-            this.removableColumn.Name = "removableColumn";
-            this.removableColumn.Width = 65;
             // 
             // pathsGroupBox
             // 
@@ -121,6 +104,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.notesLabel.TabIndex = 1;
             this.notesLabel.Text = resources.GetString("notesLabel.Text");
             // 
+            // pathColumn
+            // 
+            this.pathColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.pathColumn.DataPropertyName = "FullPath";
+            this.pathColumn.HeaderText = "Path";
+            this.pathColumn.Name = "pathColumn";
+            this.pathColumn.ReadOnly = true;
+            // 
             // ImportPathsPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,6 +135,5 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.Button addSourceButton;
         private System.Windows.Forms.Button removeSourceButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn pathColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn removableColumn;
     }
 }

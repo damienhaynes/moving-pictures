@@ -17,8 +17,9 @@ namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesCore {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        
         private const string dbFileName = "movingpictures.db3";
-        private const string logFileName = "movingpictures.log";
+        private const string logFileName = "movingpictures.log";        
 
         #region Properties
         
@@ -56,7 +57,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             get {
                 return DataProviderManager.GetInstance();
             }
-        }
+        }       
 
         // Settings from Media Portal
         // Instead of calling this line whenever we need some MP setting we only define it once

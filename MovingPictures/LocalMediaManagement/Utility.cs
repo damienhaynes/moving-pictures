@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Management;
 using DirectShowLib;
 using DirectShowLib.Dvd;
 using NLog;
@@ -192,7 +193,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // a) Name is too short
             // b) video_ts folder (dvd subfolder)
             // c) multipart folder (subfolder)
-            return (name.Length == 1 || name.ToLower() == "video_ts" || isFolderMultipart(name));
+            return (name.Length == 1 || name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist" 
+                || name.ToLower() == "clipinf" ||name.ToLower() == "backup" || name.ToLower() == "video_ts" || isFolderMultipart(name));
         }
 
         /// <summary>
@@ -266,17 +268,24 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             foreach (FileInfo currFile in fileList) {
                 // Loop through files having valid video extensions
                 // NOTE: MediaPortal Dependency!
-                foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
-                    if (currFile.Extension == currExt) {
-                        if (!isSampleFile(currFile))
-                            rtn++;
-                    }
-                }
+                if (IsMediaPortalVideoFile(currFile))
+                    if (!isSampleFile(currFile))
+                        rtn++;
             }
 
             // Save to cache and return count
             folderCountCache[folder.FullName] = rtn;
             return rtn;
+        }
+
+        // NOTE: MediaPortal Dependency!
+        // Checks if file has valid video extensions (as specified by media portal
+        public static bool IsMediaPortalVideoFile(FileInfo file) {
+            foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
+                if (file.Extension.ToLower() == currExt)
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -289,6 +298,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static bool isFolderDedicated(DirectoryInfo folder, int expectedCount) {
             return (GetVideoFileCount(folder) <= expectedCount);
         }
+
+        #region DirectShowLib
 
         /// <summary>
         /// Get Disc ID as a string
@@ -320,6 +331,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
             return discID;
         }
+
+        #endregion
 
     }
 }
