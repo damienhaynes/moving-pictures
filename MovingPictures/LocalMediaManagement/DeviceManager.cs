@@ -96,7 +96,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             ManagementObject managementObject = GetManagementObject(path);
             if ( managementObject != null )
                 if (managementObject["volumeserialnumber"] != null)
-                    return managementObject["volumeserialnumber"].ToString();
+                    return managementObject["volumeserialnumber"].ToString().Trim();
 
             return null;
         }

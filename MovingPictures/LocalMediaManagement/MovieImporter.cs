@@ -497,7 +497,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     logger.Info("Initiating full scan on watch folders.");
 
                     // maintenance tasks
-                    RemoveInvalidFiles();
+                    DoFileMaintenance();
                     RemoveOrphanArtwork();
 
                     SetupFileSystemWatchers();
@@ -523,8 +523,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         lock (filesAdded.SyncRoot) {
                             if (filesAdded.Count > 0) {
                                 List<DBLocalMedia> fileList = new List<DBLocalMedia>();
-                                foreach (object currFile in filesAdded)
-                                    fileList.Add((DBLocalMedia)currFile);
+                                foreach (object currFile in filesAdded) {
+                                    DBLocalMedia addedFile = (DBLocalMedia)currFile;
+                                    if (!fileList.Contains(addedFile))
+                                        fileList.Add((DBLocalMedia)currFile);
+                                }
 
                                 ScanFiles(fileList, false);
                                 filesAdded.Clear();
@@ -665,8 +668,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         // Loops through all local files in the system and removes anything that's invalid.
-        private void RemoveInvalidFiles() {
-            logger.Info("Cleaning up invalid files from database.");
+        private void DoFileMaintenance() {
+            logger.Info("Running file maintenance for database.");
             int cleaned = 0;
             foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
                 // Skip previous deleted files
@@ -687,9 +690,28 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     cleaned++;
                     continue;
                 }
-            }
-            logger.Info("Cleanup finished. Removed {0} files.", cleaned.ToString());
 
+                // Upgrade Tasks
+                UpdateMissingProperties(currFile);
+
+            }
+            logger.Info("Maintenance finished. Removed {0} files.", cleaned.ToString());
+
+        }
+
+        // Pre 0.6.5 LocalMedia correction
+        // This update *should* only trigger once on a pre-0.6.5 database
+        private void UpdateMissingProperties(DBLocalMedia localMedia) {
+            DriveType type = localMedia.ImportPath.Type;
+
+            if (String.IsNullOrEmpty(localMedia.VolumeSerial) && type != DriveType.Unknown && type != DriveType.CDRom) {
+                if (localMedia.Available) {
+                    // Trigger serial+volume logic
+                    localMedia.ImportPath = localMedia.ImportPath;
+                    localMedia.Commit();
+                    logger.Info("Added missing disk info to: {0} (serial: {1}, label: {2})", localMedia.FullPath, localMedia.VolumeSerial, localMedia.MediaLabel);
+                }                    
+            }
         }
 
         private void RemoveLocalMedia(DBLocalMedia localMedia) {
