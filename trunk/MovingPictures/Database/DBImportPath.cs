@@ -1,19 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Windows.Forms;
-using NLog;
+using System.Threading;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using System.Threading;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("import_path")]
-    public class DBImportPath: MovingPicturesDBTable  {
+    public class DBImportPath : MovingPicturesDBTable {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-                
+
         public DBImportPath()
             : base() {
             dirInfo = null;
@@ -21,15 +19,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public override void AfterDelete() {
         }
-        
+
         public DirectoryInfo Directory {
             get { return dirInfo; }
-            
+
             set {
                 dirInfo = value;
                 commitNeeded = true;
             }
-        } 
+        }
         private DirectoryInfo dirInfo;
 
         public DriveType Type {
@@ -56,7 +54,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return null;
             }
         }
-        
+
         public string Serial {
             get {
                 // this property won't be stored as it can differ in time
@@ -69,12 +67,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #region Database Fields
 
-        [DBFieldAttribute(FieldName="path")]
+        [DBFieldAttribute(FieldName = "path")]
         public string FullPath {
-            get { 
+            get {
                 if (dirInfo == null)
                     return "";
-                
+
                 return dirInfo.FullName;
             }
 
@@ -117,9 +115,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             foreach (DirectoryInfo currChildDir in childDirs) {
                 try {
-                    if ((currChildDir.Attributes & FileAttributes.System) == 0) 
+                    if ((currChildDir.Attributes & FileAttributes.System) == 0)
                         fileList.AddRange(getFilesRecursive(currChildDir));
-                    else 
+                    else
                         logger.Debug("Rejecting directory " + currChildDir.FullName + " because it is flagged as a System folder.");
                 }
                 catch (Exception e) {
@@ -130,7 +128,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             return fileList;
-        }    
+        }
 
 
         public List<DBLocalMedia> GetLocalMedia(bool returnOnlyNew) {
@@ -148,7 +146,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // If we have a DriveInfo object this means we are going 
                 // to scan a logical disk (or mounted UNC)
                 drive = driveInfo.Name;
-                
+
                 // Check if the drive is available before starting the scan
                 while (!driveInfo.IsReady) {
                     // If not then wait it out with a timeout of 30 seconds (should be more then enough for optical media)
@@ -176,7 +174,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     timeout++;
 
                     // Refresh the state of the directory object
-                    Directory.Refresh();                    
+                    Directory.Refresh();
                 }
             }
 
@@ -191,7 +189,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 List<FileInfo> fileList = getFilesRecursive(Directory);
                 foreach (FileInfo currFile in fileList) {
                     DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName, diskSerial);
-                    
+
                     // if this file is in the database continue if we only want new files
                     if (newFile.ID != null && returnOnlyNew)
                         break;
@@ -215,7 +213,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public override string ToString() {
             return FullPath;
-        }        
+        }
 
 
         #endregion

@@ -17,12 +17,12 @@ namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesCore {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        
+
         private const string dbFileName = "movingpictures.db3";
-        private const string logFileName = "movingpictures.log";        
+        private const string logFileName = "movingpictures.log";
 
         #region Properties
-        
+
         // The MovieImporter object that should be used by all components of the plugin
         public static MovieImporter Importer {
             get {
@@ -36,7 +36,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         // The DatabaseManager that should be used by all components of the plugin.       
         public static DatabaseManager DatabaseManager {
             get {
-                if (databaseManager == null) 
+                if (databaseManager == null)
                     initDB();
 
                 return databaseManager;
@@ -57,7 +57,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             get {
                 return DataProviderManager.GetInstance();
             }
-        }       
+        }
 
         // Settings from Media Portal
         // Instead of calling this line whenever we need some MP setting we only define it once
@@ -77,8 +77,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             initLogger();
         }
 
-        public static bool Initialize()
-        {
+        public static bool Initialize() {
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
             logger.Info("Moving Pictures (" + ver.Major + "." + ver.Minor + "." + ver.Build + ":" + ver.Revision + ")");
             logger.Info("Plugin Launched");
@@ -92,15 +91,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             return true;
         }
 
-        public static void Shutdown()
-        {
+        public static void Shutdown() {
             importer.Stop();
             settingsManager.Shutdown();
-            
+
             importer = null;
             settingsManager = null;
             databaseManager = null;
-            
+
             logger.Info("Plugin Closed");
         }
 
@@ -111,7 +109,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         // Initializes the database connection to the Movies Plugin database
         private static void initDB() {
             string fullDBFileName = Config.GetFile(Config.Dir.Database, dbFileName);
-            databaseManager = new DatabaseManager(fullDBFileName);            
+            databaseManager = new DatabaseManager(fullDBFileName);
 
             // check that we at least have a default user
             List<DBUser> users = DBUser.GetAll();
@@ -171,7 +169,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             LoggingRule rule = new LoggingRule("*", logLevel, fileTarget);
             config.LoggingRules.Add(rule);
 
-            LogManager.Configuration = config; 
+            LogManager.Configuration = config;
         }
 
         private static void initAdditionalSettings() {
@@ -202,7 +200,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             // create the backdrop thumbs folder if it doesn't already exist
             if (!Directory.Exists((string)SettingsManager["backdrop_thumbs_folder"].Value))
                 Directory.CreateDirectory((string)SettingsManager["backdrop_thumbs_folder"].Value);
-        
+
         }
 
         #endregion

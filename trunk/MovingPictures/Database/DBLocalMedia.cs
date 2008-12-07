@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Collections.ObjectModel;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
@@ -10,7 +8,7 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("local_media")]
-    public class DBLocalMedia: MovingPicturesDBTable {
+    public class DBLocalMedia : MovingPicturesDBTable {
 
         public override void AfterDelete() {
         }
@@ -43,7 +41,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (fileInfo != null)
                     return DeviceManager.IsRemoved(fileInfo, volume_serial);
                 else
-                // no file so yes.. it's removed
+                    // no file so yes.. it's removed
                     return true;
             }
         }
@@ -72,7 +70,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
         private string media_label;
-                
+
         [DBFieldAttribute]
         public string FullPath {
             get {
@@ -174,7 +172,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private DBImportPath importPath;
 
-        [DBRelation(AutoRetrieve=true)]
+        [DBRelation(AutoRetrieve = true)]
         public RelationList<DBLocalMedia, DBMovieInfo> AttachedMovies {
             get {
                 if (_attachedMovies == null) {
@@ -189,7 +187,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         #region Overrides
         public override bool Equals(object obj) {
             if (obj.GetType() == typeof(DBLocalMedia) && ((DBLocalMedia)obj).File != null && this.File != null)
-                return ( this.File.FullName.Equals(((DBLocalMedia)obj).File.FullName) && 
+                return (this.File.FullName.Equals(((DBLocalMedia)obj).File.FullName) &&
                     this.VolumeSerial.Equals(((DBLocalMedia)obj).VolumeSerial)
                     );
 
@@ -224,7 +222,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             string op = (diskSerial != null) ? "=" : "is";
             ICriteria serialCriteria = new BaseCriteria(serialField, op, diskSerial);
 
-            ICriteria criteria= new GroupedCriteria(pathCriteria, GroupedCriteria.Operator.AND, serialCriteria);
+            ICriteria criteria = new GroupedCriteria(pathCriteria, GroupedCriteria.Operator.AND, serialCriteria);
 
             List<DBLocalMedia> resultSet = MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(criteria);
 

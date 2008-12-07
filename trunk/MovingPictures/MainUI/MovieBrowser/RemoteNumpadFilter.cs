@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using MediaPortal.Plugins.MovingPictures.Database;
 using System.Text.RegularExpressions;
+using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
     public class RemoteNumpadFilter : IBrowserFilter {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        
+
         public event FilterUpdatedDelegate Updated;
-        
+
         private enum FilterAction {
             Default,
             StartsWith,
@@ -51,7 +50,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
                 Predicate<DBMovieInfo> byDecade = delegate(DBMovieInfo item) {
                     int start = int.Parse(_listFilterString + "0");
                     return ((item.Year >= start) && (item.Year < (start + 10)));
-                };              
+                };
 
                 // Filter the list with the specified critera
                 List<DBMovieInfo> filteredList;
@@ -105,7 +104,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
                 else if ((_listFilterString == string.Empty) && (key == '0')) {
                     _listFilterAction = FilterAction.StartsWith;
                 }
-                
+
                 // Use StartsWith Filter
                 else if (_listFilterAction == FilterAction.StartsWith) {
                     _listFilterString = NumPadNext(_listFilterString, key.ToString());
@@ -113,14 +112,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
                 }
                 // Add the numeric code to the list filter string   
                 else {
-                    
+
                     // Default
                     _listFilterAction = FilterAction.Default;
                     _listFilterString += key.ToString();
                     _text = "Filtered";
 
                     // If this looks like (3 digit part) of a year, try year filters.
-                    int year;                    
+                    int year;
                     if ((_listFilterString.Length > 2) && int.TryParse(_listFilterString, out year)) {
                         // exact year
                         if (_listFilterString.Length == 4 && year < DateTime.Now.Year + 2) {
@@ -149,7 +148,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             string newValue;
             switch (requested) {
                 case "2":
-                    newValue = getNextFromRange("abc2", current); 
+                    newValue = getNextFromRange("abc2", current);
                     break;
                 case "3":
                     newValue = getNextFromRange("def3", current);
@@ -178,7 +177,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             }
             return newValue;
         }
-        
+
         public static string getNextFromRange(string range, string current) {
             if (current == string.Empty)
                 return range[0].ToString();

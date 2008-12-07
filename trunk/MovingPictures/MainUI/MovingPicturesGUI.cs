@@ -1,32 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
-using MediaPortal.Profile;
-using MediaPortal.Configuration;
-using MediaPortal.GUI.Library;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen;
-using MediaPortal.Dialogs;
-using MediaPortal.Player;
+using System.Globalization;
 using System.Threading;
-using MediaPortal.Plugins.MovingPictures.Database;
-using NLog;
-using System.Collections;
 using System.Xml;
-using System.Timers;
-using MediaPortal.Plugins.MovingPictures.DataProviders;
-using Cornerstone.Database.Tables;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
-using MediaPortal.Util;
-using MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser;
-using System.Globalization;
+using Cornerstone.Database.Tables;
 using Cornerstone.MP;
+using MediaPortal.Dialogs;
+using MediaPortal.GUI.Library;
+using MediaPortal.Player;
+using MediaPortal.Plugins.MovingPictures.Database;
+using MediaPortal.Plugins.MovingPictures.DataProviders;
+using MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser;
+using MediaPortal.Profile;
+using MediaPortal.Util;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {
         public enum ViewMode { LIST, SMALLICON, LARGEICON, FILMSTRIP, DETAILS }
-        
+
         #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -172,7 +166,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             cover.Property = "#MovingPictures.Coverart";
             cover.Delay = artworkDelay;
 
-            
+
             // used to prevent overzelous logging of skin properties
             loggedProperties = new Dictionary<string, bool>();
         }
@@ -272,7 +266,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             dialog.DoModal(GetID);
         }
 
-        private void OnFilterChanged(IBrowserFilter filter) {        
+        private void OnFilterChanged(IBrowserFilter filter) {
             // set the global watched indicator
             if (watchedFilteringIndicator != null && filter == watchedFilter)
                 if (filter.Active)
@@ -350,7 +344,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (browser == null) {
                 browser = new MovieBrowser();
                 browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(updateMovieDetails);
-                
+
                 remoteFilter = new RemoteNumpadFilter();
                 remoteFilter.Updated += new FilterUpdatedDelegate(OnFilterChanged);
                 browser.ActiveFilters.Add(remoteFilter);
@@ -616,7 +610,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                 unwatchedItem.ItemId = currID;
                 dialog.Add(unwatchedItem);
                 currID++;
-            } else {
+            }
+            else {
                 watchedItem = new GUIListItem("Mark as Watched");
                 watchedItem.ItemId = currID;
                 dialog.Add(watchedItem);
@@ -631,7 +626,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             else if (dialog.SelectedId == cycleArtItem.ItemId) {
                 browser.SelectedMovie.NextCover();
                 browser.SelectedMovie.Commit();
-                
+
                 // update the new cover art in the facade
                 browser.facade.SelectedListItem.IconImage = browser.SelectedMovie.CoverThumbFullPath.Trim();
                 browser.facade.SelectedListItem.IconImageBig = browser.SelectedMovie.CoverThumbFullPath.Trim();
@@ -758,7 +753,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                             displayTime += selectedMovie.LocalMedia[i].Duration;
                     }
                 }
-                
+
                 GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
                 if (null == dlgYesNo) return;
                 dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); //resume movie?
@@ -775,7 +770,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             // ask which part the user wants to play
             // todo: customize the dialog
             string ext = selectedMovie.LocalMedia[0].File.Extension;
-            if (parts > 1 && resumeTime == 0 && (DaemonTools.IsImageFile(ext) || ext == ".ifo" )) {
+            if (parts > 1 && resumeTime == 0 && (DaemonTools.IsImageFile(ext) || ext == ".ifo")) {
                 GUIDialogFileStacking dlg = (GUIDialogFileStacking)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_FILESTACKING);
                 if (null != dlg) {
                     dlg.SetNumberOfFiles(parts);
@@ -827,10 +822,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 playImage(media);
             else
                 playFile(media);
-            
+
             // set the currently playing part if playback was successful
             if (currentlyPlaying) {
-               
+
                 currentMovie = movie;
                 currentPart = part;
 
@@ -898,10 +893,10 @@ namespace MediaPortal.Plugins.MovingPictures {
             // Lookup the MediaPortal settings reponsable for Auto-Play
             Settings mpSettings = MovingPicturesCore.MediaPortalSettings;
             bool dtAutoPlay = (mpSettings.GetValueAsString("daemon", "askbeforeplaying", "no").ToLower() != "no");
-            bool dvdAutoPlay = ( mpSettings.GetValueAsString("dvdplayer", "autoplay", "ask").ToLower() != "no");
+            bool dvdAutoPlay = (mpSettings.GetValueAsString("dvdplayer", "autoplay", "ask").ToLower() != "no");
 
             // if this image was already mounted or mediaportal will not take action, launch the DVD ourselve.
-            if (alreadyMounted || (!dtAutoPlay && !dvdAutoPlay)) {             
+            if (alreadyMounted || (!dtAutoPlay && !dvdAutoPlay)) {
                 playFile(ifoPath);
             }
 
@@ -953,15 +948,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             // we are getting the duration when the DVD is stopped. If the duration of 
             // feature is an hour or more it's probably the main feature and we will update
             // the database. 
-            if (g_Player.IsDVD && (g_Player.Player.Duration >= 3600 )) {
+            if (g_Player.IsDVD && (g_Player.Player.Duration >= 3600)) {
                 DBLocalMedia playingFile = currentMovie.LocalMedia[currentPart - 1];
                 updateMediaDuration(playingFile);
             }
 
-            int requiredWatchedPercent = (int) MovingPicturesCore.SettingsManager["gui_watch_percentage"].Value;
+            int requiredWatchedPercent = (int)MovingPicturesCore.SettingsManager["gui_watch_percentage"].Value;
             logger.Debug("OnPlayBackStoppedOrChanged: filename={1} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, currentMovie.Title, currentPart, timeMovieStopped);
             logger.Debug("Percentage: " + currentMovie.GetPercentage(currentPart, timeMovieStopped) + " Required: " + requiredWatchedPercent);
-          
+
             // if enough of the movie has been watched, hit the watched flag
             if (currentMovie.GetPercentage(currentPart, timeMovieStopped) >= requiredWatchedPercent) {
                 updateMovieWatchedCounter(currentMovie);
@@ -989,11 +984,11 @@ namespace MediaPortal.Plugins.MovingPictures {
             userSetting.Commit();
 
             browser.ReapplyFilters();
-            
+
             // if we are on the details page for the movie just marked as watched and we are filtering
             // go back to facade since this movie is no longer selectable. later need to tweak to allow 
             // movies filtered out to be displayed in details anyway.
-            if (movie == browser.SelectedMovie && CurrentView == ViewMode.DETAILS && watchedFilter.Active) 
+            if (movie == browser.SelectedMovie && CurrentView == ViewMode.DETAILS && watchedFilter.Active)
                 CurrentView = previousView;
         }
 
@@ -1032,7 +1027,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         #endregion
 
         #region Skin and Property Settings
-        
+
 
         private void updateMovieDetails(DBMovieInfo movie) {
             PublishDetails(movie, "SelectedMovie");
@@ -1115,15 +1110,17 @@ namespace MediaPortal.Plugins.MovingPictures {
                         SetProperty(propertyStr, valueStr);
                     }
 
-                // for floats we need to make sure we use english style printing or imagelist controls
-                // will break. 
-                } else if (value.GetType() == typeof(float)) {
+                    // for floats we need to make sure we use english style printing or imagelist controls
+                    // will break. 
+                }
+                else if (value.GetType() == typeof(float)) {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = ((float)currField.GetValue(obj)).ToString(CultureInfo.CreateSpecificCulture("en-US"));
                     SetProperty(propertyStr, valueStr);
-                
-                // vanilla publication
-                } else {
+
+                    // vanilla publication
+                }
+                else {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = currField.GetValue(obj).ToString().Trim();
                     SetProperty(propertyStr, valueStr);
