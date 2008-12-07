@@ -5,10 +5,13 @@ using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("local_media")]
     public class DBLocalMedia : MovingPicturesDBTable {
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public override void AfterDelete() {
         }
@@ -158,16 +161,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             set {
                 importPath = value;
 
-                // When the importhPath is attached to the file
+                // When the importhPath is attached to a new LocalMedia object
                 // copy the current label and serial over
                 // this keeps the logic in one place
-                if (importPath != null) {
+                if (importPath != null && ID == null) {
                     if (volume_serial == null)
                         volume_serial = importPath.Serial;
                     if (media_label == null)
                         media_label = importPath.VolumeLabel;
                 }
-
                 commitNeeded = true;
             }
         } private DBImportPath importPath;
@@ -232,7 +234,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             DBLocalMedia newFile = new DBLocalMedia();
             newFile.FullPath = fullPath;
-            newFile.VolumeSerial = diskSerial;
 
             return newFile;
         }
