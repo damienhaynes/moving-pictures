@@ -37,7 +37,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
 
             // If there are periods or underscores, 
             // assume the period is replacement for spaces.
-            source = Regex.Replace(source,@"[\._]", " ");
+            source = Regex.Replace(source, @"[\._]", " ");
 
             // Phase #2: Cleaning (remove noise)
             source = removeNoise(source);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Management;
 using DirectShowLib;
 using DirectShowLib.Dvd;
 using NLog;
@@ -11,7 +10,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     class Utility {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        
+
         /// <summary>
         /// This method will create a string that can be safely used as a filename.
         /// </summary>
@@ -193,8 +192,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // a) Name is too short
             // b) video_ts folder (dvd subfolder)
             // c) multipart folder (subfolder)
-            return (name.Length == 1 || name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist" 
-                || name.ToLower() == "clipinf" ||name.ToLower() == "backup" || name.ToLower() == "video_ts" || isFolderMultipart(name));
+            return (name.Length == 1 || name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist"
+                || name.ToLower() == "clipinf" || name.ToLower() == "backup" || name.ToLower() == "video_ts" || isFolderMultipart(name));
         }
 
         /// <summary>

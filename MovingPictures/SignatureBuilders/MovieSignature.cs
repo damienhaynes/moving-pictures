@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using Cornerstone.Tools;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
-    
+
     /// <summary>
     /// a movie signature object that is used as input to a dataprovider.
     /// </summary>
@@ -16,7 +16,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        
+
         #endregion
 
         #region Public properties
@@ -29,17 +29,17 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 if (title == string.Empty)
                     title = null;
             }
-        } private string title = null;        
-        
-        public int? Year        = null; // ex. 1999
+        } private string title = null;
+
+        public int? Year = null; // ex. 1999
 
         public string ImdbId { // ex. "tt0168122"
             get { return imdb_id; }
             set {
                 if (value != null)
                     imdb_id = value.Trim();
-                    if (imdb_id == string.Empty)
-                        imdb_id = null;                  
+                if (imdb_id == string.Empty)
+                    imdb_id = null;
             }
         } private string imdb_id = null;
 
@@ -85,7 +85,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 return path;
             }
         } private string path = null;
-             
+
         #endregion
 
         #endregion
@@ -120,7 +120,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
 
             // Create Signature From Movie
             MovieSignature movieSignature = new MovieSignature(movie);
-                     
+
             // Get the default score for this movie
             int bestScore = MatchScore(movieSignature);
 
@@ -135,14 +135,14 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 // if the best score is 0 (the best possible score) then stop score checking
                 if (bestScore == 0) break;
             }
-            
+
             // return the best score for this movie
             return bestScore;
         }
 
         // todo: this logic was moved from the importer but this is not the final form
         public int MatchScore(MovieSignature signature) {
-            
+
             bool imdbBoost = (bool)MovingPicturesCore.SettingsManager["importer_autoimdb"].Value;
             bool hasImdb = (imdb_id != null);
             bool hasYear = (Year > 0);
@@ -173,7 +173,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                     // this should improve priority
                     compareThis += ' ' + ImdbId;
                     compareOther += ' ' + signature.ImdbId;
-               }
+                }
             }
 
             // get the Levenshtein distance between the two string and use them 
@@ -184,7 +184,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             logger.Debug("Compare: '{0}', With: '{1}', Result: {2}", compareThis, compareOther, score);
             return score;
         }
- 
+
 
         #endregion
 
