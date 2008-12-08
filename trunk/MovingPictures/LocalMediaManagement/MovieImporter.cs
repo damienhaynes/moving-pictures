@@ -10,6 +10,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using NLog;
+using Win32.Utils.Cd;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public enum MovieImporterAction {
@@ -34,6 +35,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private DeviceVolumeMonitor deviceMonitor;
 
         // threads that do actual processing
         private List<Thread> mediaScannerThreads;
@@ -252,6 +254,35 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             this.Stop();
             this.initialize();
             this.Start();
+        }
+
+        /// <summary>
+        /// Start monitoring device events like Inserts/Removes using winform
+        /// </summary>
+        /// <remarks>
+        /// This is a possible MediaPortal dependancy if the library used is customized.
+        /// todo: create a generic device monitor that works regardless of winform?
+        /// </remarks>
+        /// <param name="handle"></param>
+        public void StartDeviceMonitoring(IntPtr handle) {
+            if (deviceMonitor == null) {
+                deviceMonitor = new DeviceVolumeMonitor(handle);
+                deviceMonitor.OnVolumeInserted += new DeviceVolumeAction(onVolumeInserted);
+                deviceMonitor.OnVolumeRemoved += new DeviceVolumeAction(onVolumeRemoved);
+                deviceMonitor.AsynchronousEvents = true;
+            }
+            deviceMonitor.Enabled = true;
+            logger.Info("Starting Device Monitor...");
+        }
+
+        /// <summary>
+        /// Stop monitoring device events
+        /// </summary>
+        public void StopDeviceMonitoring() {
+            if (deviceMonitor != null) {
+                deviceMonitor.Enabled = false;
+                logger.Info("Stopping Device Monitoring...");
+            }
         }
 
         // This method is written weird and needs to be clarified. But I think it works, 
@@ -610,14 +641,17 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
         }
-
-        // When a volume is removed
-        public void OnVolumeRemoved(string volume) {
-            // Clear existing cached information for this drive
-            DeviceManager.Flush(volume);
+        
+        /// <summary>
+        /// Event listener for winform based detection of inserted volumes
+        /// </summary>
+        /// <param name="bitMask"></param>
+        public void onVolumeInserted(int bitMask) {
+            string driveLetter = deviceMonitor.MaskToLogicalPaths(bitMask);
+            // Notify the importer
+            OnVolumeInserted(driveLetter);
         }
 
-        // When a volume is inserted scan it
         public void OnVolumeInserted(string volume) {
             // Clear existing cached information for this drive
             DeviceManager.Flush(volume);
@@ -628,6 +662,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (importPath.Directory.Root.Name.StartsWith(volume))
                     ScanPath(importPath);
             }
+        }
+
+        /// <summary>
+        /// Event listener for winform based detection of removed volumes
+        /// </summary>
+        /// <param name="bitMask"></param>
+        public void onVolumeRemoved(int bitMask) {
+            string driveLetter = deviceMonitor.MaskToLogicalPaths(bitMask);
+            // Notify the importer
+            OnVolumeRemoved(driveLetter);
+        }
+        
+        public void OnVolumeRemoved(string volume) {
+            // Clear existing cached information for this drive
+            DeviceManager.Flush(volume);
         }
 
         // When a FileSystemWatcher detects a new file, this method queues it up for processing.
