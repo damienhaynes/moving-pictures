@@ -12,10 +12,8 @@ using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Win32.Utils.Cd;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
-    public partial class MovingPicturesConfig : Form {
-        
-        private DeviceVolumeMonitor deviceMonitor;
-     
+    public partial class MovingPicturesConfig : Form {      
+    
         public MovingPicturesConfig() {
             InitializeComponent();
 
@@ -23,13 +21,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
-            // todo: possible MePo dependancy, check if this is mediaportal customized or common library.
-            deviceMonitor = new DeviceVolumeMonitor(this.Handle);
-            deviceMonitor.OnVolumeInserted += new DeviceVolumeAction(onVolumeInserted);
-            deviceMonitor.OnVolumeRemoved += new DeviceVolumeAction(onVolumeRemoved);
-            deviceMonitor.AsynchronousEvents = true;
-            deviceMonitor.Enabled = true;
-
+            // start winform based device monitoring
+            MovingPicturesCore.Importer.StartDeviceMonitoring(this.Handle);
+            
             advancedSettingsWarningPane1.SettingsPane.populateTree(MovingPicturesCore.SettingsManager);
         }
 
@@ -50,21 +44,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 popup.Owner = this;
                 popup.ShowDialog();
             }
-        }
-
-
-        private void onVolumeRemoved(int bitMask) {
-            string driveLetter = deviceMonitor.MaskToLogicalPaths(bitMask);
-            // Notify the importer
-            MovingPicturesCore.Importer.OnVolumeRemoved(driveLetter);
-        }
-
-
-        private void onVolumeInserted(int bitMask) {
-            string driveLetter = deviceMonitor.MaskToLogicalPaths(bitMask);
-            // Notify the importer
-            MovingPicturesCore.Importer.OnVolumeInserted(driveLetter);
-        }
+        }        
 
     }
 }
