@@ -30,41 +30,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private DirectoryInfo dirInfo;
 
-        public DriveType Type {
-            get {
-                if (Directory != null) {
-                    DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
-                    if (driveInfo != null)
-                        return driveInfo.DriveType;
-                }
-                return DriveType.Unknown;
-            }
-        }
-
-        public string VolumeLabel {
-            get {
-                // this property won't be stored as it can differ in time
-                if (Directory != null) {
-                    DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
-                    if (driveInfo != null)
-                        if (driveInfo.IsReady)
-                            return driveInfo.VolumeLabel;
-                    return null;
-                }
-                return null;
-            }
-        }
-
-        public string Serial {
-            get {
-                // this property won't be stored as it can differ in time
-                if (Directory != null)
-                    return DeviceManager.GetDiskSerial(Directory);
-                else
-                    return null;
-            }
-        }
-
         #region Database Fields
 
         [DBFieldAttribute(FieldName = "path")]
@@ -138,7 +103,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             logger.Debug("Starting scan for import path: {0}", Directory.FullName);
             string drive = Directory.Root.FullName;
             DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
-            DriveType driveType = Type;
+            DriveType driveType = GetDriveType();
             string mediaLabel = null;
 
             int timeout = 0;
@@ -166,7 +131,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // we use some other logic here to detect if it's offline and wait for it to 
                 // come online for 30 seconds.
                 while (!Directory.Exists) {
-                    if (timeout == 30) {
+                    if (timeout == 30 || Directory.Root.Exists) {
                         logger.Error("Scan for '{0}' was cancelled because the UNC path is not available.", Directory.FullName);
                         return null;
                     }
@@ -178,8 +143,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 }
             }
 
-            // get volume serial
-            string diskSerial = DeviceManager.GetDiskSerial(Directory);
+            // get disk serial
+            string diskSerial = GetDiskSerial();
             logger.Debug("Drive: {0}, Type= {1}, Serial={2}", drive, driveType.ToString(), diskSerial);
 
             List<DBLocalMedia> rtn = new List<DBLocalMedia>();
@@ -209,6 +174,36 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             return rtn;
+        }
+
+
+        public DriveType GetDriveType() {
+            if (Directory != null) {
+                DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
+                if (driveInfo != null)
+                    return driveInfo.DriveType;
+            }
+            return DriveType.Unknown;
+        }
+
+        public string GetVolumeLabel() {
+            // this property won't be stored as it can differ in time
+            if (Directory != null) {
+                DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
+                if (driveInfo != null)
+                    if (driveInfo.IsReady)
+                        return driveInfo.VolumeLabel;
+                return null;
+            }
+            return null;
+        }
+
+        public string GetDiskSerial() {
+            // this property won't be stored as it can differ in time
+            if (Directory != null)
+                return DeviceManager.GetDiskSerial(Directory);
+            else
+                return null;
         }
 
         public override string ToString() {

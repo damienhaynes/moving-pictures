@@ -166,9 +166,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // this keeps the logic in one place
                 if (importPath != null && ID == null) {
                     if (volume_serial == null)
-                        volume_serial = importPath.Serial;
+                        volume_serial = importPath.GetDiskSerial();
                     if (media_label == null)
-                        media_label = importPath.VolumeLabel;
+                        media_label = importPath.GetVolumeLabel();
                 }
                 commitNeeded = true;
             }
