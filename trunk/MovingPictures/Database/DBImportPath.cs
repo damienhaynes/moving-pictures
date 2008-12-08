@@ -163,6 +163,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         // good extension for new file, so add it
                         logger.Debug("Pulling new file " + currFile.Name + " from import path.");
                         newFile.ImportPath = this;
+
+                        // we could use the UpdateDiskInformation() method but because we already have the information
+                        // let's just fill the properties manually
+                        // newFile.UpdateDiskInformation();
+                        newFile.VolumeSerial = diskSerial;
+                        newFile.MediaLabel = mediaLabel;
                         rtn.Add(newFile);
                     }
                 }

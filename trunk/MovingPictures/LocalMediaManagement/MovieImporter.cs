@@ -647,6 +647,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // if the extension is proper, add the file
             if (newFile.IsVideo) {
                 newFile.ImportPath = importPath;
+                newFile.UpdateDiskProperties();
                 lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
                 logger.Info("FileSystemWatcher queued " + newFile.File.Name + " for processing.");
             }
@@ -699,7 +700,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
 
                 // Upgrade Tasks
-                UpdateMissingProperties(currFile);
+                UpdateMissingDiskInfoProperties(currFile);
 
             }
             logger.Info("Maintenance finished. Removed {0} files.", cleaned.ToString());
@@ -708,13 +709,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // Pre 0.6.5 LocalMedia correction
         // This update *should* only trigger once on a pre-0.6.5 database
-        private void UpdateMissingProperties(DBLocalMedia localMedia) {
+        private void UpdateMissingDiskInfoProperties(DBLocalMedia localMedia) {
             DriveType type = localMedia.ImportPath.GetDriveType();
-
             if (String.IsNullOrEmpty(localMedia.VolumeSerial) && type != DriveType.Unknown && type != DriveType.CDRom) {
                 if (localMedia.Available) {
-                    // Trigger serial+volume logic
-                    localMedia.ImportPath = localMedia.ImportPath;
+                    localMedia.UpdateDiskProperties();
                     localMedia.Commit();
                     logger.Info("Added missing disk info to: {0} (serial: {1}, label: {2})", localMedia.FullPath, localMedia.VolumeSerial, localMedia.MediaLabel);
                 }                    

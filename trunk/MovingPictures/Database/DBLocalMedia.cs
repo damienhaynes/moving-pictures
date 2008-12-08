@@ -29,6 +29,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #region read-only properties
 
+        /// <summary>
+        /// Checks if the file is currently available.
+        /// Online returns true, offline returns false)
+        /// </summary>
         public bool Available {
             get {
                 if (fileInfo != null)
@@ -38,6 +42,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
+        /// <summary>
+        /// Checks if the file is removed from the disk.
+        /// If the file is removed (this is different from being offline) this will return true
+        /// </summary>
         public bool Removed {
             get {
                 // if fileInfo exists then let DeviceManager figure it out
@@ -49,6 +57,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
+        /// <summary>
+        /// Check if the file is a video
+        /// todo: possibly move this out of the object completely after refactoring how localmedia is added
+        /// </summary>
         public bool IsVideo {
             get {
                 if (fileInfo != null)
@@ -160,16 +172,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             get { return importPath; }
             set {
                 importPath = value;
-
-                // When the importhPath is attached to a new LocalMedia object
-                // copy the current label and serial over
-                // this keeps the logic in one place
-                if (importPath != null && ID == null) {
-                    if (volume_serial == null)
-                        volume_serial = importPath.GetDiskSerial();
-                    if (media_label == null)
-                        media_label = importPath.GetVolumeLabel();
-                }
                 commitNeeded = true;
             }
         } private DBImportPath importPath;
@@ -186,6 +188,24 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #endregion
 
+
+        #region Public methods
+
+        public bool UpdateDiskProperties() {
+            // This will overwrite/update the label and serial field with the current 
+            // disk information available from it's import path
+            if (importPath != null) {
+                VolumeSerial = importPath.GetDiskSerial();
+                MediaLabel = importPath.GetVolumeLabel();
+                return true; 
+            }
+            else {
+                return false; 
+            }
+        }
+
+        #endregion
+        
         #region Overrides
         public override bool Equals(object obj) {
             if (obj.GetType() == typeof(DBLocalMedia) && ((DBLocalMedia)obj).File != null && this.File != null)
