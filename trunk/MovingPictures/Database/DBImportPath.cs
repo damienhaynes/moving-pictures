@@ -157,7 +157,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                     // if this file is in the database continue if we only want new files
                     if (newFile.ID != null && returnOnlyNew)
-                        break;
+                        continue;
 
                     if (newFile.IsVideo) {
                         // good extension for new file, so add it
