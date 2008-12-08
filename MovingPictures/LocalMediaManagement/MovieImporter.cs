@@ -601,7 +601,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     logger.Debug("Created FileSystemWatcher for: '{0}' ({1})", currPath.FullPath, driveType.ToString());
                 }
                 catch (ArgumentException) {
-                    logger.Info("Import path: '{0}' ({1}) is offline.", currPath.FullPath, driveType.ToString());
+                    if (DeviceManager.IsRemovable(currPath.Directory))                    
+                        logger.Info("Import path: '{0}' ({1}) is offline.", currPath.FullPath, driveType.ToString());
+                    else
+                        logger.Error("Failed accessing import path {0}", currPath.FullPath);
+
                 }
             }
 
@@ -633,7 +637,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // if this file is already in the system, disable (this happens if it's a removable source)
             if (newFile.ID != null) {
-                logger.Info("Removable file " + newFile.File.Name + " brought online.");
+                if (DeviceManager.IsRemovable(importPath.Directory))                  
+                    logger.Info("Removable file " + newFile.File.Name + " brought online.");
+                else
+                    logger.Warn("FileSystemWatcher tried to add a pre-existing file: " + newFile.File.Name);
                 return;
             }
 
@@ -702,7 +709,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Pre 0.6.5 LocalMedia correction
         // This update *should* only trigger once on a pre-0.6.5 database
         private void UpdateMissingProperties(DBLocalMedia localMedia) {
-            DriveType type = localMedia.ImportPath.Type;
+            DriveType type = localMedia.ImportPath.GetDriveType();
 
             if (String.IsNullOrEmpty(localMedia.VolumeSerial) && type != DriveType.Unknown && type != DriveType.CDRom) {
                 if (localMedia.Available) {
@@ -1366,7 +1373,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             displayname = Utility.GetMovieBaseDirectory(currFile.File.Directory).Name;
 
                         // If read from CD/DVD/BLURAY drive
-                        if (currFile.ImportPath.Type == DriveType.CDRom && displayname.Length == 3) {
+                        if (currFile.ImportPath.GetDriveType() == DriveType.CDRom && displayname.Length == 3) {
                             // Show DVD
                             if (currFile.File.Name.ToLower() == "video_ts.ifo")
                                 displayname = "<DVD>";
