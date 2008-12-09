@@ -20,6 +20,24 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public override void AfterDelete() {
         }
 
+        public bool IsAvailable {
+            get {
+                if (dirInfo != null)
+                    return MovingPicturesCore.DeviceManager.IsAvailable(dirInfo);
+                else
+                    return false;
+            }
+        }
+
+        public bool IsRemovable {
+            get {
+                if (dirInfo != null)
+                    return MovingPicturesCore.DeviceManager.IsRemovable(dirInfo);
+                else
+                    return false;
+            }
+        }
+
         public DirectoryInfo Directory {
             get { return dirInfo; }
 
@@ -97,55 +115,25 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
 
         public List<DBLocalMedia> GetLocalMedia(bool returnOnlyNew) {
-            if (Directory == null)
-                return null;
-
             logger.Debug("Starting scan for import path: {0}", Directory.FullName);
-            string drive = Directory.Root.FullName;
-            DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
-            DriveType driveType = GetDriveType();
-            string mediaLabel = null;
-
-            int timeout = 0;
-            if (driveInfo != null) {
-                // If we have a DriveInfo object this means we are going 
-                // to scan a logical disk (or mounted UNC)
-                drive = driveInfo.Name;
-
-                // Check if the drive is available before starting the scan
-                while (!driveInfo.IsReady) {
-                    // If not then wait it out with a timeout of 30 seconds (should be more then enough for optical media)
-                    // before we cancel the scan or cancel immediatly when it's a fixed drive
-                    if (timeout == 30 || driveType == DriveType.Fixed) {
-                        logger.Error("Scan for '{0}' was cancelled because the drive is not available or empty.", Directory.FullName);
-                        return null;
-                    }
-                    // wait one second
-                    Thread.Sleep(1000);
-                    timeout++;
+            string volume = null;
+            string label = null;
+            string serial = null;
+            DriveType type = DriveType.Unknown;
+            if (IsAvailable) {                
+                VolumeInfo vi = MovingPicturesCore.DeviceManager.GetVolumeInfo(Directory);
+                if (vi != null) {
+                    volume = vi.Drive.Name;
+                    label = vi.Drive.VolumeLabel;
+                    serial = vi.Serial;
+                    type = vi.Drive.DriveType;
                 }
-                mediaLabel = driveInfo.VolumeLabel;
+                logger.Debug("Volume: {0}, Type= {1}, Serial={2}", volume, type, serial);
             }
             else {
-                // We do not have a DriveInfo object than we probably have a UNC path
-                // we use some other logic here to detect if it's offline and wait for it to 
-                // come online for 30 seconds.
-                while (!Directory.Exists) {
-                    if (timeout == 30 || Directory.Root.Exists) {
-                        logger.Error("Scan for '{0}' was cancelled because the UNC path is not available.", Directory.FullName);
-                        return null;
-                    }
-                    Thread.Sleep(1000);
-                    timeout++;
-
-                    // Refresh the state of the directory object
-                    Directory.Refresh();
-                }
+                logger.Error("Scan for '{0}' was cancelled because the import path is not available.", Directory.FullName);
+                return null;
             }
-
-            // get disk serial
-            string diskSerial = GetDiskSerial();
-            logger.Debug("Drive: {0}, Type= {1}, Serial={2}", drive, driveType.ToString(), diskSerial);
 
             List<DBLocalMedia> rtn = new List<DBLocalMedia>();
 
@@ -153,7 +141,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             try {
                 List<FileInfo> fileList = getFilesRecursive(Directory);
                 foreach (FileInfo currFile in fileList) {
-                    DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName, diskSerial);
+                    DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName, serial);
 
                     // if this file is in the database continue if we only want new files
                     if (newFile.ID != null && returnOnlyNew)
@@ -167,8 +155,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         // we could use the UpdateDiskInformation() method but because we already have the information
                         // let's just fill the properties manually
                         // newFile.UpdateDiskInformation();
-                        newFile.VolumeSerial = diskSerial;
-                        newFile.MediaLabel = mediaLabel;
+                        newFile.VolumeSerial = serial;
+                        newFile.MediaLabel = label;
                         rtn.Add(newFile);
                     }
                 }
@@ -184,30 +172,27 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
 
         public DriveType GetDriveType() {
+            // this property won't be stored as it can differ in time
             if (Directory != null) {
-                DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
-                if (driveInfo != null)
-                    return driveInfo.DriveType;
+                VolumeInfo vi = MovingPicturesCore.DeviceManager.GetVolumeInfo(Directory);
+                if (vi != null)
+                    return vi.Drive.DriveType;
             }
             return DriveType.Unknown;
         }
 
         public string GetVolumeLabel() {
             // this property won't be stored as it can differ in time
-            if (Directory != null) {
-                DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
-                if (driveInfo != null)
-                    if (driveInfo.IsReady)
-                        return driveInfo.VolumeLabel;
+            if (Directory != null)
+                return MovingPicturesCore.DeviceManager.GetVolumeLabel(Directory);
+            else
                 return null;
-            }
-            return null;
         }
 
         public string GetDiskSerial() {
             // this property won't be stored as it can differ in time
             if (Directory != null)
-                return DeviceManager.GetDiskSerial(Directory);
+                return MovingPicturesCore.DeviceManager.GetDiskSerial(Directory);
             else
                 return null;
         }

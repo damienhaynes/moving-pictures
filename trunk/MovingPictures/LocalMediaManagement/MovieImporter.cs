@@ -35,7 +35,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private DeviceVolumeMonitor deviceMonitor;
 
         // threads that do actual processing
         private List<Thread> mediaScannerThreads;
@@ -111,9 +110,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Creates a MovieImporter object which will scan ImportPaths and import new media.
         public MovieImporter() {
             initialize();
-
             MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectDeleted);
-
+            MovingPicturesCore.DeviceManager.OnVolumeInserted += new DeviceManager.DeviceAction(OnVolumeInserted);
             percentDone = 0;
         }
 
@@ -254,35 +252,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             this.Stop();
             this.initialize();
             this.Start();
-        }
-
-        /// <summary>
-        /// Start monitoring device events like Inserts/Removes using winform
-        /// </summary>
-        /// <remarks>
-        /// This is a possible MediaPortal dependancy if the library used is customized.
-        /// todo: create a generic device monitor that works regardless of winform?
-        /// </remarks>
-        /// <param name="handle"></param>
-        public void StartDeviceMonitoring(IntPtr handle) {
-            if (deviceMonitor == null) {
-                deviceMonitor = new DeviceVolumeMonitor(handle);
-                deviceMonitor.OnVolumeInserted += new DeviceVolumeAction(onVolumeInserted);
-                deviceMonitor.OnVolumeRemoved += new DeviceVolumeAction(onVolumeRemoved);
-                deviceMonitor.AsynchronousEvents = true;
-            }
-            deviceMonitor.Enabled = true;
-            logger.Info("Starting Device Monitor...");
-        }
-
-        /// <summary>
-        /// Stop monitoring device events
-        /// </summary>
-        public void StopDeviceMonitoring() {
-            if (deviceMonitor != null) {
-                deviceMonitor.Enabled = false;
-                logger.Info("Stopping Device Monitoring...");
-            }
         }
 
         // This method is written weird and needs to be clarified. But I think it works, 
@@ -609,84 +578,58 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // setup new file systems watchers
             foreach (DBImportPath currPath in paths) {
-                DriveInfo driveInfo = DeviceManager.GetDriveInfo(currPath.FullPath);
-                DriveType driveType = DriveType.Unknown; // = UNC
-
-                // get drive type if it's not UNC
-                if (driveInfo != null)
-                    driveType = driveInfo.DriveType;
+                DriveType driveType = currPath.GetDriveType();
 
                 // nothing will change on CD/DVD so skip these
                 if (driveType == DriveType.CDRom)
                     continue;
 
-                // try to activate watchers
-                try {
-                    FileSystemWatcher currWatcher = new FileSystemWatcher(currPath.FullPath);
-                    currWatcher.IncludeSubdirectories = true;
-                    currWatcher.Created += OnFileAdded;
-                    currWatcher.Deleted += OnFileDeleted;
-                    currWatcher.EnableRaisingEvents = true;
-                    fileSystemWatchers.Add(currWatcher);
-                    pathLookup[currWatcher] = currPath;
-                    logger.Debug("Created FileSystemWatcher for: '{0}' ({1})", currPath.FullPath, driveType.ToString());
+                // Check if the import path is available
+                if (currPath.IsAvailable) {
+                    // if so, try to activate watchers
+                    try {
+                        FileSystemWatcher currWatcher = new FileSystemWatcher(currPath.FullPath);
+                        currWatcher.IncludeSubdirectories = true;
+                        currWatcher.Created += OnFileAdded;
+                        currWatcher.Deleted += OnFileDeleted;
+                        currWatcher.EnableRaisingEvents = true;
+                        fileSystemWatchers.Add(currWatcher);
+                        pathLookup[currWatcher] = currPath;
+                        logger.Debug("Created FileSystemWatcher for: '{0}' ({1})", currPath.FullPath, driveType.ToString());
+                    }
+                    catch (ArgumentException e) {
+                        // if activating fails log the error.
+                        logger.Error("Failed accessing import path {0}: {1}", currPath.FullPath, e.Message);   
+                    }
                 }
-                catch (ArgumentException) {
-                    if (DeviceManager.IsRemovable(currPath.Directory))                    
+                else {
+                    // if not log a message
+                    if (currPath.IsRemovable)
                         logger.Info("Import path: '{0}' ({1}) is offline.", currPath.FullPath, driveType.ToString());
                     else
-                        logger.Error("Failed accessing import path {0}", currPath.FullPath);
-
+                        logger.Info("Import path: '{0}' ({1}) does not exist.", currPath.FullPath, driveType.ToString());
                 }
             }
 
         }
-        
-        /// <summary>
-        /// Event listener for winform based detection of inserted volumes
-        /// </summary>
-        /// <param name="bitMask"></param>
-        public void onVolumeInserted(int bitMask) {
-            string driveLetter = deviceMonitor.MaskToLogicalPaths(bitMask);
-            // Notify the importer
-            OnVolumeInserted(driveLetter);
-        }
 
         public void OnVolumeInserted(string volume) {
-            // Clear existing cached information for this drive
-            DeviceManager.Flush(volume);
-
             // Check if this volume has an import path
             // if so rescan these import paths
             foreach (DBImportPath importPath in DBImportPath.GetAll()) {
                 if (importPath.Directory.Root.Name.StartsWith(volume))
-                    ScanPath(importPath);
+                    ScanFiles(importPath.GetNewLocalMedia(), true);
             }
         }
-
-        /// <summary>
-        /// Event listener for winform based detection of removed volumes
-        /// </summary>
-        /// <param name="bitMask"></param>
-        public void onVolumeRemoved(int bitMask) {
-            string driveLetter = deviceMonitor.MaskToLogicalPaths(bitMask);
-            // Notify the importer
-            OnVolumeRemoved(driveLetter);
-        }
-        
-        public void OnVolumeRemoved(string volume) {
-            // Clear existing cached information for this drive
-            DeviceManager.Flush(volume);
-        }
-
+       
         // When a FileSystemWatcher detects a new file, this method queues it up for processing.
         private void OnFileAdded(Object source, FileSystemEventArgs e) {
-            DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath));
+            DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath, MovingPicturesCore.DeviceManager.GetDiskSerial(e.FullPath));
             DBImportPath importPath = pathLookup[(FileSystemWatcher)source];
 
             // if this file is already in the system, disable (this happens if it's a removable source)
             if (newFile.ID != null) {
-                if (DeviceManager.IsRemovable(importPath.Directory))                  
+                if (importPath.IsRemovable)                  
                     logger.Info("Removable file " + newFile.File.Name + " brought online.");
                 else
                     logger.Warn("FileSystemWatcher tried to add a pre-existing file: " + newFile.File.Name);
@@ -704,7 +647,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // When a FileSystemWatcher detects a file has been removed, delete it.
         private void OnFileDeleted(Object source, FileSystemEventArgs e) {
-            DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath));
+            DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath, MovingPicturesCore.DeviceManager.GetDiskSerial(e.FullPath));
 
             logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal from the database.");
 
@@ -715,7 +658,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return;
 
             // Check if the file is really removed
-            if (!removedFile.Removed) {
+            if (!removedFile.IsRemoved) {
                 logger.Info("Removable file " + removedFile.File.Name + " taken offline.");
                 return;
             }
@@ -734,7 +677,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     continue;
 
                 // Remove Missing Files Or Without An Import Path
-                if (currFile.Removed || currFile.ImportPath == null || currFile.ImportPath.ID == null) {
+                if (currFile.IsRemoved || currFile.ImportPath == null || currFile.ImportPath.ID == null) {
                     RemoveLocalMedia(currFile);
                     cleaned++;
                     continue;
@@ -761,7 +704,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void UpdateMissingDiskInfoProperties(DBLocalMedia localMedia) {
             DriveType type = localMedia.ImportPath.GetDriveType();
             if (String.IsNullOrEmpty(localMedia.VolumeSerial) && type != DriveType.Unknown && type != DriveType.CDRom) {
-                if (localMedia.Available) {
+                if (localMedia.IsAvailable) {
                     localMedia.UpdateDiskProperties();
                     localMedia.Commit();
                     logger.Info("Added missing disk info to: {0} (serial: {1}, label: {2})", localMedia.FullPath, localMedia.VolumeSerial, localMedia.MediaLabel);
@@ -834,12 +777,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     continue;
                 }
 
+                // File is already in the matching system
                 if (matchesInSystem.ContainsKey(currFile)) {
-                    foreach (DBLocalMedia file in matchesInSystem[currFile].LocalMedia)
-                        if (currFile.VolumeSerial == file.VolumeSerial) {
-                            logger.Debug("Skipping " + currFile.File.Name + " because it's being matched.");
-                            continue;
-                        }
+                    logger.Debug("Skipping " + currFile.File.Name + " because it's being matched.");
+                    continue;
                 }
 
                 // only grab the video_ts.ifo when extension is ifo
@@ -1424,10 +1365,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         if (currFile.ImportPath.GetDriveType() == DriveType.CDRom && displayname.Length == 3) {
                             // Show DVD
                             if (currFile.File.Name.ToLower() == "video_ts.ifo")
-                                displayname = "<DVD>";
+                                displayname = "(DVD)";
                             // Show BLURAY
                             if (currFile.File.Name.ToLower() == "index.bdmv")
-                                displayname = "<BLURAY>";
+                                displayname = "(BLURAY)";
+                            // Add the media label
+                            displayname =  displayname + " <" + currFile.MediaLabel + ">";
                         }
 
                         _localMediaString += displayname;

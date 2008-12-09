@@ -33,10 +33,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         /// Checks if the file is currently available.
         /// Online returns true, offline returns false)
         /// </summary>
-        public bool Available {
+        public bool IsAvailable {
             get {
                 if (fileInfo != null)
-                    return DeviceManager.IsAvailable(fileInfo, volume_serial);
+                    return MovingPicturesCore.DeviceManager.IsAvailable(fileInfo, volume_serial);
                 else
                     return false;
             }
@@ -46,11 +46,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         /// Checks if the file is removed from the disk.
         /// If the file is removed (this is different from being offline) this will return true
         /// </summary>
-        public bool Removed {
+        public bool IsRemoved {
             get {
                 // if fileInfo exists then let DeviceManager figure it out
                 if (fileInfo != null)
-                    return DeviceManager.IsRemoved(fileInfo, volume_serial);
+                    return MovingPicturesCore.DeviceManager.IsRemoved(fileInfo, volume_serial);
                 else
                     // no file so yes.. it's removed
                     return true;
@@ -125,7 +125,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
                 if ((discid == "0") && (fileInfo != null) && getDiscId)
                     if (fileInfo.Name.ToLower() == "video_ts.ifo")
-                        if (volume_serial == DeviceManager.GetDiskSerial(fileInfo.Directory) || String.IsNullOrEmpty(volume_serial))
+                        if (volume_serial == MovingPicturesCore.DeviceManager.GetDiskSerial(fileInfo.Directory) || String.IsNullOrEmpty(volume_serial))
                             discid = Utility.GetDiscIdString(fileInfo.DirectoryName);
 
                 return discid;

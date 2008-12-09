@@ -207,6 +207,27 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         /// <summary>
+        /// Checks if the directory is a logical drive root
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>True if this is a root</returns>
+        public static bool IsDriveRoot(DirectoryInfo directory) {
+            return IsDriveRoot(directory.FullName);
+        }
+
+        /// <summary>
+        /// Checks if the given path is a logical drive root
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>True if this is a root</returns>
+        public static bool IsDriveRoot(string path) {
+            if (path.Length < 4)
+                return (path.Substring(1, 1) == ":");
+            
+            return false;
+        }
+
+        /// <summary>
         /// Returns the base directory for the movie files that are part of the input directory
         /// </summary>
         /// <param name="directory">directory to start in</param>
