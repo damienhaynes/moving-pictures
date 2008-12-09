@@ -6,17 +6,222 @@ using System.Management;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
+
+    public class VolumeInfo {
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+        private ManagementBaseObject managementObject;
+
+        public DriveInfo Drive {
+            get {
+                return driveInfo;
+            }
+        } private DriveInfo driveInfo;
+               
+        public string Serial {
+            get {
+                if (driveInfo.IsReady) {
+                    if (managementObject == null)
+                        Refresh();
+
+                    if (managementObject != null)
+                        if (managementObject["volumeserialnumber"] != null)
+                            return managementObject["volumeserialnumber"].ToString().Trim();
+                    
+                    return null;
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+
+        public void Refresh() {
+            if (driveInfo.IsReady) {
+                try {
+                    SelectQuery query = new SelectQuery("select * from win32_logicaldisk where deviceid = '" + driveInfo.Name.Substring(0, 2) + "'");
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+
+                    // this statement should return only one row (or none)
+                    foreach (ManagementBaseObject mo in searcher.Get()) {
+                        Refresh(mo);
+                    }
+                }
+                catch (Exception e) {
+                    managementObject = null;
+                    logger.Debug("Error during WMI query for '{0}', message: {1}", driveInfo.Name.Substring(0, 2), e.Message);
+                }                
+            }
+            else {
+                managementObject = null;
+            }
+        }
+
+        public void Refresh(ManagementBaseObject mo) {
+            managementObject = mo;
+            logger.Debug("Succesfully updated drive information for '{0}'", driveInfo.Name.Substring(0, 2));
+        }
+
+        public VolumeInfo(DriveInfo di) {
+            driveInfo = di;
+            Refresh();
+        }
+
+    }
+    
     public class DeviceManager {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private static Dictionary<string, ManagementObject> cache = new Dictionary<string, ManagementObject>();
-        private static Dictionary<string, DriveInfo> drives = new Dictionary<string, DriveInfo>();
+        private Dictionary<string, VolumeInfo> volumes;
+        private ManagementEventWatcher monitor;
+
+        public delegate void DeviceAction(string volume);
+        public event DeviceAction OnVolumeInserted;
+        public event DeviceAction OnVolumeRemoved;
+
+        public bool Monitoring {
+            get {
+                return monitorStarted;
+            }
+        } private bool monitorStarted = false;
+
+        public DeviceManager() {
+            volumes = new Dictionary<string, VolumeInfo>();
+            Start();
+        }
+
+        ~DeviceManager() {
+            Stop();
+        }
+
+        public void Start() {
+            if (monitor == null) {
+                logger.Info("Starting device monitor ...");
+                WqlEventQuery query;
+                ManagementOperationObserver observer = new ManagementOperationObserver();
+                ConnectionOptions options = new ConnectionOptions();
+                options.EnablePrivileges = true;
+                ManagementScope scope = new ManagementScope(@"root\CIMV2", options);
+
+                try {
+                    query = new WqlEventQuery();
+                    query.EventClassName = "__InstanceModificationEvent";
+                    query.WithinInterval = new TimeSpan(0, 0, 1);
+                    // TODO: make query more specific only monitor import path volumes/drivetypes?
+                    query.Condition = "TargetInstance ISA 'Win32_LogicalDisk'";
+                    //+ " and TargetInstance.DriveType = 5";
+                    monitor = new ManagementEventWatcher(scope, query);
+                    monitor.EventArrived += new EventArrivedEventHandler(OnEventArrived);
+                    monitor.Start();
+                    monitorStarted = true;
+                    logger.Info("Device monitor started.");
+                }
+                catch (Exception e) {
+                    logger.Error("Device monitor error during startup: ", e.Message);
+                    monitor = null;
+                }
+
+            }
+
+        }
+
+        public void Stop() {
+            if (monitor != null) {
+                monitor.Stop();
+                monitor = null;
+                monitorStarted = false;
+                logger.Info("Device monitor stopped.");
+            }
+        }
+
+        private void OnEventArrived(object sender, EventArrivedEventArgs e) {
+            PropertyData pdOld = e.NewEvent.Properties["PreviousInstance"];
+            PropertyData pdNew = e.NewEvent.Properties["TargetInstance"];
+            if (pdNew != null) {
+                ManagementBaseObject moNew = (ManagementBaseObject)pdNew.Value;
+                ManagementBaseObject moOld = (ManagementBaseObject)pdOld.Value;
+                // DeviceId
+                if (moNew != null && moOld != null) {
+                    string eventType = "WMI_EVENT_UNKNOWN";
+                    string volume = moNew.Properties["DeviceID"].Value.ToString();
+                    object serial = moNew.Properties["VolumeSerialNumber"].Value;
+                    object serialOld = moOld.Properties["VolumeSerialNumber"].Value;
+                    if (serial != serialOld) {
+
+                        VolumeInfo volumeInfo = GetVolumeInfo(volume);
+
+                        // Trigger events
+                        if (serial == null && serialOld != null) {
+                            eventType = "WMI_EVENT_VOLUME_REMOVED";
+                            volumeInfo.Refresh(moNew); // update volume Info
+                            if (OnVolumeRemoved != null)
+                                OnVolumeRemoved(volume); // fire event
+                        }
+                        else if (serial != null && serialOld == null) {
+                            eventType = "WMI_EVENT_VOLUME_INSERTED";
+                            volumeInfo.Refresh(moNew); // update volume Info
+                            if (OnVolumeInserted != null)
+                                OnVolumeInserted(volume); // fire event
+                        }
+
+                        
+                    }
+                    logger.Debug("{0}: DeviceID= {1} ({2}), VolumeSerialNumber = {3} ({4})", eventType, volume, moOld.Properties["DeviceID"].Value.ToString(), serial, serialOld);
+                }
+
+            }
+        }
+
+        public string GetVolume(FileSystemInfo fsInfo) {
+            return GetVolume(fsInfo.FullName);
+        }
+
+        public string GetVolume(string path) {
+            // if the path is UNC return null
+            if (path.StartsWith(@"/") || path.StartsWith(@"\"))
+                return null;
+
+            // return the first 2 characters
+            if (path.Length > 1)
+                return path.Substring(0, 2);
+            else // or if only a letter was given add colon
+                return path + ":";
+        }
+
+        public VolumeInfo GetVolumeInfo(FileSystemInfo fsInfo) {
+            return GetVolumeInfo(fsInfo.FullName);
+        }
+
+        public VolumeInfo GetVolumeInfo(string path) {
+            string volume = GetVolume(path);
+            // if volume is null then it's UNC
+            if (volume == null)
+                return null;
+
+            // check if we have previously cached this instance
+            if (!volumes.ContainsKey(volume)) {
+                try {
+                    // not cached so we have to create is
+                    DriveInfo driveInfo = new DriveInfo(volume);
+                    VolumeInfo volumeInfo = new VolumeInfo(driveInfo);
+                    // add it to the cache
+                    volumes.Add(volume, volumeInfo);
+                }
+                catch (Exception e) {
+                    logger.Error("Error adding drive '{0}' : {1}", volume, e.Message);
+                    return null;
+                }
+            }
+
+            // return from cache
+            return volumes[volume];
+        }
         
         /// <summary>
         /// Flushes the drive information cache for all drives
         /// </summary>
-        public static void Flush() {
-            cache.Clear();
+        public void Flush() {
+            volumes.Clear();
             logger.Debug("Flushed drive information cache for all drives.");
         }
 
@@ -26,11 +231,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// detected or removed for optimal results.
         /// </summary>
         /// <param name="driveletter">X:</param>
-        public static void Flush(string driveletter) {
-            if (cache.ContainsKey(driveletter))
-                cache.Remove(driveletter);
+        public void Flush(string volume) {
+            if (volumes.ContainsKey(volume))
+                volumes.Remove(volume);
 
-            logger.Debug("Flushed drive information cache for '{0}'.", driveletter);
+            logger.Debug("Flushed drive information cache for '{0}'.", volume);
         }
 
         /// <summary>
@@ -39,7 +244,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="file"></param>
         /// <param name="serial">drive serial</param>
         /// <returns>true if file doesn't exist but disk/root is available.</returns>
-        public static bool IsRemoved(FileInfo file, string serial) {
+        public bool IsRemoved(FileInfo file, string serial) {
             file.Refresh();
             // If we got a volume serial then compare and judge
             if (!String.IsNullOrEmpty(serial))
@@ -55,130 +260,73 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return false;
         }
 
-        public static bool IsAvailable(FileInfo file) {
-            return IsAvailable(file, null);
+        public bool IsAvailable(FileSystemInfo fsInfo) {
+            return IsAvailable(fsInfo, null);
         }
 
-        public static bool IsAvailable(FileInfo file, string serial) {
-            file.Refresh();
-            if (!String.IsNullOrEmpty(serial)) {
-                if ((GetDiskSerial(file) == serial) && file.Exists)
-                    return true;
-            } else {
-                if (file.Exists)
-                    return true;
-            }
+        public bool IsAvailable(FileSystemInfo fsInfo, string serial) {         
+            
+            // Get Volume Info
+            VolumeInfo volumeInfo = GetVolumeInfo(fsInfo);
 
-            return false;
+            // Refresh the object information (important)
+            fsInfo.Refresh();
+
+            // do we have a disk serial?
+            if (!String.IsNullOrEmpty(serial) && volumeInfo != null) {
+
+                // do the disk serials match and does the file exist?
+                if (volumeInfo.Serial == serial && fsInfo.Exists) {
+                    return true; // file available.
+                } else {
+                    return false; // file not available.
+                } 
+            }
+            else {
+                // no serial so we have to do it the old way
+                return fsInfo.Exists;
+            }                    
+                
+        }
+
+        public bool IsRemovable(FileSystemInfo fsInfo) {
+            return IsRemovable(fsInfo.FullName);
+        }
+
+        public bool IsRemovable(string path) {
+            VolumeInfo volumeInfo = GetVolumeInfo(path);
+            if (volumeInfo == null)
+                return true; // true because it's UNC (=network)
+
+            return (volumeInfo.Drive.DriveType == DriveType.CDRom || volumeInfo.Drive.DriveType == DriveType.Removable || volumeInfo.Drive.DriveType == DriveType.Network);
+        }
+
+        public string GetDiskSerial(FileSystemInfo fsInfo) {
+            return GetDiskSerial(fsInfo.FullName);   
+        }
+
+        public string GetDiskSerial(string path) {
+           VolumeInfo volumeInfo = GetVolumeInfo(path);
+           if (volumeInfo != null)
+               return volumeInfo.Serial;
+           else
+               return null;
+        }
+
+        public string GetVolumeLabel(FileSystemInfo fsInfo) {
+            return GetVolumeLabel(fsInfo.FullName);
         }
         
-        public static bool IsRemovable(DirectoryInfo directory) {
-            return IsRemovable(directory.FullName);
-        }
-
-        public static bool IsRemovable(string path) {
-            DriveInfo driveInfo = GetDriveInfo(path);
-            if (driveInfo == null)
-                return false;
-
-            return (driveInfo.DriveType == DriveType.CDRom || driveInfo.DriveType == DriveType.Removable || driveInfo.DriveType == DriveType.Network);
-        }
-
-        public static string GetDiskSerial(DirectoryInfo directory) {
-            return GetDiskSerial(directory.FullName);   
-        }
-
-        public static string GetDiskSerial(FileInfo file) {
-            return GetDiskSerial(file.FullName);   
-        }
-
-        public static string GetDiskSerial(string path) {
-            ManagementObject managementObject = GetManagementObject(path);
-            if ( managementObject != null )
-                if (managementObject["volumeserialnumber"] != null)
-                    return managementObject["volumeserialnumber"].ToString().Trim();
-
-            return null;
-        }
-
-        public static DriveInfo GetDriveInfo(DirectoryInfo directory) {
-            return GetDriveInfo(directory.FullName);
-        }
-
-        public static DriveInfo GetDriveInfo(string path) {
-            string drive = GetDriveLetter(path);
-            if (drive == null)
-                return null;
-
-            if (!drives.ContainsKey(drive)) {
-                try {
-                    drives.Add(drive, new DriveInfo(drive));
-                }
-                catch (Exception e) {
-                    logger.Error("Error drive '{0}' : {1}", drive, e.Message);
-                    return null;
-                }
-            }
-            
-            return drives[drive];
-        }
-
-        private static ManagementObject GetManagementObject(string path) {
-            if ( GetDrive(path) )
-                return cache[GetDriveLetter(path)];
+        public string GetVolumeLabel(string path) {
+            VolumeInfo volumeInfo = GetVolumeInfo(path);
+            if (volumeInfo != null)
+                return volumeInfo.Drive.VolumeLabel;
             else
-                return null;
+                return null;            
         }
 
-        private static bool GetDrive(string path) {
-            string drive = GetDriveLetter(path);
-            
-            if (drive == null)
-                return false;
-
-            if ( !cache.ContainsKey(drive) )
-                return collectDriveInformation(drive);
-            else
-                return true;
-        }
-
-        public static string GetDriveLetter(string path) {
-            string drive = path.Substring(0, 2);
-            if (drive.StartsWith(@"/") || drive.StartsWith(@"\")) 
-                return null;
-
-            return drive;
-        }
-
-        public static string GetDriveLetter(FileInfo file) {
-            return GetDriveLetter(file.FullName);
-        }
-
-        public static string GetDriveLetter(DirectoryInfo directory) {
-            return GetDriveLetter(directory.FullName);
-        }
         
-        private static bool collectDriveInformation(string driveletter) {
-            try {
-                SelectQuery query = new SelectQuery("select * from win32_logicaldisk where deviceid = '" + driveletter + "'");
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
 
-                // this statement should return only one row (or none)
-                foreach (ManagementObject managementObject in searcher.Get()) {
-                    if (cache.ContainsKey(driveletter))
-                        cache[driveletter] = managementObject;
-                    else
-                        cache.Add(driveletter, managementObject);
-                }
-            }
-            catch (Exception e) {
-                logger.Debug("Error during WMI query for '{0}' message: {1}", driveletter, e.Message);     
-                return false;
-            }
-
-            logger.Debug("Succesfully collected drive information for '{0}'", driveletter);     
-            return true;
-        }
-
+        
     }
 }

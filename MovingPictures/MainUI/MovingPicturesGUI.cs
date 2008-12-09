@@ -490,14 +490,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         public override bool OnMessage(GUIMessage message) {
-            switch (message.Message) {
-                case GUIMessage.MessageType.GUI_MSG_VOLUME_REMOVED:
-                    MovingPicturesCore.Importer.OnVolumeRemoved(message.Label);
-                    break;
-                case GUIMessage.MessageType.GUI_MSG_VOLUME_INSERTED:
-                    MovingPicturesCore.Importer.OnVolumeInserted(message.Label);
-                    break;
-            }
             return base.OnMessage(message);
         }
 
@@ -799,14 +791,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             DBLocalMedia localMediaToPlay = movie.LocalMedia[part - 1];
 
             // check if the media is online
-            if (!localMediaToPlay.Available) {
+            if (!localMediaToPlay.IsAvailable) {
                 ShowMessage("Media Not Available",
                             "The media for the Movie you have selected is not",
                             "currently available. Please insert or connect media ",
                             "label: " + localMediaToPlay.MediaLabel, null);
                 return;
             }
-            else if (localMediaToPlay.Removed) {
+            else if (localMediaToPlay.IsRemoved) {
                 ShowMessage("Error",
                             "The media for the Movie you have selected is missing!",
                             "Very sorry but something has gone wrong...", null, null);

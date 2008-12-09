@@ -24,8 +24,13 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 signature.File.ToLower() == "video_ts.ifo" || // DVD
                 signature.File.ToLower() == "index.bdmv" // Blu-Ray
                 )) {
+                
                 // Use foldername
                 source = signature.Folder;
+      
+                // If the foldername is a volume use the media label                
+                if (Utility.IsDriveRoot(source))
+                    source = signature.LocalMedia[0].MediaLabel;
             }
             else {
                 // Use filename
