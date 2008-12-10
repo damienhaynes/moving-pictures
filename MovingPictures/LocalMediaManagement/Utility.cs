@@ -252,7 +252,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // b) special video folders
             // c) multipart folder (subfolder)
             // todo: make this more generic
-            return (name.Length == 1 || name.ToLower() == "adv_obj" | name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist"
+            return (name.Length == 1 || name.ToLower() == "hvdvd_ts" || name.ToLower() == "adv_obj" || name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist"
                 || name.ToLower() == "clipinf" || name.ToLower() == "backup" || name.ToLower() == "video_ts" || isFolderMultipart(name));
         }
 
