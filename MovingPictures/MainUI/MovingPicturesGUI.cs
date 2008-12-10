@@ -11,10 +11,12 @@ using MediaPortal.Dialogs;
 using MediaPortal.GUI.Library;
 using MediaPortal.Player;
 using MediaPortal.Plugins.MovingPictures.Database;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser;
 using MediaPortal.Profile;
 using MediaPortal.Util;
+using MediaPortal.Ripper;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures {
@@ -40,6 +42,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private ImageSwapper backdrop;
         private AsyncImageResource cover = null;
+
+        private bool discAutoplay;
+        private bool discDetails;
 
         #endregion
 
@@ -154,6 +159,13 @@ namespace MediaPortal.Plugins.MovingPictures {
                 logger.Error("Cannot add PlayBackChanged handler (running < RC4).");
             }
 
+            // Listen to the DeviceManager
+            MovingPicturesCore.DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
+            MovingPicturesCore.DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
+
+            // Get Blu-Ray/DVD disc settings
+            discDetails = (bool)MovingPicturesCore.SettingsManager["ondisc_details"].Value;
+            discAutoplay = (bool)MovingPicturesCore.SettingsManager["ondisc_autoplay"].Value;
 
             // setup the image resources for cover and backdrop display
             int artworkDelay = (int)MovingPicturesCore.SettingsManager["gui_artwork_delay"].Value;
@@ -165,7 +177,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             cover = new AsyncImageResource();
             cover.Property = "#MovingPictures.Coverart";
             cover.Delay = artworkDelay;
-
 
             // used to prevent overzelous logging of skin properties
             loggedProperties = new Dictionary<string, bool>();
@@ -284,6 +295,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                     remoteFilteringIndicator.Visible = false;
         }
 
+
+
         #region GUIWindow Methods
 
         public override int GetID {
@@ -399,10 +412,30 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             // load fanart and coverart
             UpdateArtwork();
+
+            // Take control and disable MediaPortal AutoPlay when the plugin has focus
+            disableNativeAutoplay();
         }
 
         protected override void OnPageDestroy(int new_windowId) {
+            // Enable autoplay again when we are leaving the plugin
+            // But only when the new window is NOT the fullscreen window.
+            if (new_windowId != (int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO)
+                enableNativeAutoplay();
+
             base.OnPageDestroy(new_windowId);
+        }
+
+        // Disable MediaPortal's AutoPlay
+        private void disableNativeAutoplay() {
+            logger.Info("Disabling native autoplay.");
+            AutoPlay.StopListening();
+        }
+
+        // Enable MediaPortal's AutoPlay
+        private void enableNativeAutoplay() {
+            logger.Info("Re-enabling native autoplay.");
+            AutoPlay.StartListening();
         }
 
         protected override void OnClicked(int controlId, GUIControl control, MediaPortal.GUI.Library.Action.ActionType actionType) {
@@ -721,18 +754,24 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
-            DBMovieInfo selectedMovie = browser.SelectedMovie;
-            int part = 1;
-            int parts = selectedMovie.LocalMedia.Count;
+            playMovie(browser.SelectedMovie);
+         }
+
+        private void playMovie(DBMovieInfo movie) {
+            playMovie(movie, 1, 0, null);
+        }
+
+        private void playMovie(DBMovieInfo movie, int part) {
+            int parts = movie.LocalMedia.Count;
             int resumeTime = 0;
             int resumePart = 0;
             byte[] resumeData = null;
 
             // Get User Settings for this movie
-            if (selectedMovie.UserSettings.Count > 0) {
-                resumeTime = selectedMovie.UserSettings[0].ResumeTime;
-                resumePart = selectedMovie.UserSettings[0].ResumePart;
-                resumeData = selectedMovie.UserSettings[0].ResumeData;
+            if (movie.UserSettings.Count > 0) {
+                resumeTime = movie.UserSettings[0].ResumeTime;
+                resumePart = movie.UserSettings[0].ResumePart;
+                resumeData = movie.UserSettings[0].ResumeData;
             }
 
             // If we have resume data ask the user if he wants to resume
@@ -741,15 +780,15 @@ namespace MediaPortal.Plugins.MovingPictures {
                 int displayTime = resumeTime;
                 if (parts > 1) {
                     for (int i = 0; i < resumePart - 1; i++) {
-                        if (selectedMovie.LocalMedia[i].Duration > 0)
-                            displayTime += selectedMovie.LocalMedia[i].Duration;
+                        if (movie.LocalMedia[i].Duration > 0)
+                            displayTime += movie.LocalMedia[i].Duration;
                     }
                 }
 
                 GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
                 if (null == dlgYesNo) return;
                 dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); //resume movie?
-                dlgYesNo.SetLine(1, selectedMovie.Title);
+                dlgYesNo.SetLine(1, movie.Title);
                 dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(displayTime));
                 dlgYesNo.SetDefaultToYes(true);
                 dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
@@ -761,7 +800,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             // if we have a multi-part DVD/IMAGE and we are not resuming
             // ask which part the user wants to play
             // todo: customize the dialog
-            string ext = selectedMovie.LocalMedia[0].File.Extension;
+            string ext = movie.LocalMedia[0].File.Extension;
             if (parts > 1 && resumeTime == 0 && (DaemonTools.IsImageFile(ext) || ext == ".ifo")) {
                 GUIDialogFileStacking dlg = (GUIDialogFileStacking)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_FILESTACKING);
                 if (null != dlg) {
@@ -773,12 +812,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             // Start playing the movie with defined parameters
-            playMovie(selectedMovie, part, resumeTime, resumeData);
-        }
-
-        private void playMovie(DBMovieInfo movie, int part) {
-            playMovie(movie, part, 0, null);
-        }
+            playMovie(movie, part, resumeTime, resumeData);
+        }       
 
         private void playMovie(DBMovieInfo movie, int part, int resumeTime) {
             playMovie(movie, part, resumeTime, null);
@@ -795,7 +830,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 ShowMessage("Media Not Available",
                             "The media for the Movie you have selected is not",
                             "currently available. Please insert or connect media ",
-                            "label: " + localMediaToPlay.MediaLabel, null);
+                            "labeled: " + localMediaToPlay.MediaLabel, null);
                 return;
             }
             else if (localMediaToPlay.IsRemoved) {
@@ -853,13 +888,11 @@ namespace MediaPortal.Plugins.MovingPictures {
         // start playback of an image file (ISO)
         private void playImage(string media) {
             string drive;
-            bool alreadyMounted;
 
             // Check if the current image is already mounted
             if (!DaemonTools.IsMounted(media)) {
                 // if not try to mount the image
                 logger.Info("Trying to mount image.");
-                alreadyMounted = false;
                 if (!DaemonTools.Mount(media, out drive)) {
                     ShowMessage("Error", "Sorry, failed mounting DVD Image...", null, null, null);
                     return;
@@ -867,36 +900,23 @@ namespace MediaPortal.Plugins.MovingPictures {
                 // We call this method to let the (un)mount events be handled by mediaportal
                 // before we start playback. Not doing so would result in 
                 // the DVD being stopped right after we start it.
+                // todo: investigate if this is still needed with the autoplay listener stopped
                 GUIWindowManager.Process();
             }
             else {
                 logger.Info("DVD Image already mounted.");
                 drive = DaemonTools.GetVirtualDrive();
-                alreadyMounted = true;
             }
 
-            // try to grab a DVD IFO file off the newly mounted drive, and check if it exists
-            string ifoPath = drive + @"\VIDEO_TS\VIDEO_TS.IFO";
-            if (!System.IO.File.Exists(media)) {
-                ShowMessage("Error", "The image file does not contain a DVD!", null, null, null);
+            // Try to grab a known video disc format
+            string discPath = Utility.GetVideoDiscPath(drive);
+            if (discPath == null) {
+                ShowMessage("Error", "The image file does not contain a valid video disc format", null, null, null);
                 return;
             }
 
-            // Lookup the MediaPortal settings reponsable for Auto-Play
-            Settings mpSettings = MovingPicturesCore.MediaPortalSettings;
-            bool dtAutoPlay = (mpSettings.GetValueAsString("daemon", "askbeforeplaying", "no").ToLower() != "no");
-            bool dvdAutoPlay = (mpSettings.GetValueAsString("dvdplayer", "autoplay", "ask").ToLower() != "no");
-
-            // if this image was already mounted or mediaportal will not take action, launch the DVD ourselve.
-            if (alreadyMounted || (!dtAutoPlay && !dvdAutoPlay)) {
-                playFile(ifoPath);
-            }
-
-            // if we have not already mounted and we let the auto play system start the movie
-            // this data could be wrong because the user could chose not to play via the prmpt.
-            // this should be handled in the future. possible bug.
-            currentlyPlaying = true;
-            return;
+            // play the file
+            playFile(discPath);
         }
 
         // store the duration of the file if it is not set
@@ -930,6 +950,12 @@ namespace MediaPortal.Plugins.MovingPictures {
                 currentlyPlaying = false;
                 currentMovie = null;
             }
+
+            // If we or stopping in another windows enable native auto-play again
+            // This will most of the time be the fullscreen playback window, 
+            // if we would re-enter the plugin, autoplay be disabled again.
+            if (GetID != GUIWindowManager.ActiveWindow)
+                enableNativeAutoplay();
         }
 
         private void OnPlayBackStoppedOrChanged(g_Player.MediaType type, int timeMovieStopped, string filename) {
@@ -964,6 +990,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             currentPart = 0;
             currentlyPlaying = false;
             currentMovie = null;
+            
+            // If we or stopping in another windows enable native auto-play again
+            // This will most of the time be the fullscreen playback window, 
+            // if we would re-enter the plugin, autoplay be disabled again.
+            if (GetID != GUIWindowManager.ActiveWindow)
+                enableNativeAutoplay();
         }
 
         private void updateMovieWatchedCounter(DBMovieInfo movie) {
@@ -1017,6 +1049,65 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         #endregion
+
+        #region DeviceManager Methods
+
+        private void OnVolumeInserted(string volume, string serial) {
+            // only respond when the plugin (or it's playback) is active
+            if (GUIWindowManager.ActiveWindow == GetID || currentlyPlaying) {
+                logger.Debug("onVolumeInserted: " + volume);
+
+                if (GUIWindowManager.ActiveWindow == GetID) {
+
+                    string moviePath = Utility.GetVideoDiscPath(volume);
+                    DBMovieInfo movie = null;
+                    int part = 1;
+                    
+                    if (moviePath != null) {
+
+                        DBLocalMedia localMedia = DBLocalMedia.Get(moviePath, serial);
+                        if (localMedia.ID != null) {
+                            if (localMedia.AttachedMovies.Count > 0) {
+                                movie = localMedia.AttachedMovies[0];
+                                part = localMedia.Part;
+                            }
+                        } else {
+                            return;   
+                        }
+
+                        // if disc details is enabled select the movie
+                        // and go to the details page
+                        if (discDetails && movie != null) {
+                            logger.Debug("Auto-details for '" + movie.Title);
+                            browser.SelectedMovie = movie;
+                            CurrentView = ViewMode.DETAILS;
+                        }
+
+                        // if autoplay is enabled start playback
+                        if (discAutoplay && movie != null) {
+                            logger.Debug("Auto-play for '" + movie.Title);
+                            playMovie(movie, part);
+                        }
+                    }
+                }
+
+            }
+        }
+
+        private void OnVolumeRemoved(string volume, string serial) {
+            // only respond when the plugin (or it's playback) is active
+            if (GUIWindowManager.ActiveWindow == GetID || currentlyPlaying) {
+                // if we are playing something from this volume stop it
+                if (currentlyPlaying)
+                    if (currentMovie.LocalMedia[currentPart].Volume == volume)
+                        g_Player.Stop();
+
+                logger.Debug("OnVolumeRemoved" + volume);
+            }            
+        }
+
+        #endregion
+
 
         #region Skin and Property Settings
 

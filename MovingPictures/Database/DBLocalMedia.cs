@@ -26,7 +26,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private FileInfo fileInfo;
 
-
         #region read-only properties
 
         /// <summary>
@@ -40,6 +39,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 else
                     return false;
             }
+        }
+
+        public string Volume {
+            get {
+                return MovingPicturesCore.DeviceManager.GetVolume(fileInfo);
+            }
+
         }
 
         /// <summary>
@@ -239,7 +245,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public static DBLocalMedia Get(string fullPath, string diskSerial) {
             DBField pathField = DBField.GetField(typeof(DBLocalMedia), "FullPath");
-            ICriteria pathCriteria = new BaseCriteria(pathField, "=", fullPath);
+            // using operator LIKE to make the search case insensitive
+            ICriteria pathCriteria = new BaseCriteria(pathField, "like", fullPath);
             DBField serialField = DBField.GetField(typeof(DBLocalMedia), "VolumeSerial");
             string op = (diskSerial != null) ? "=" : "is";
             ICriteria serialCriteria = new BaseCriteria(serialField, op, diskSerial);

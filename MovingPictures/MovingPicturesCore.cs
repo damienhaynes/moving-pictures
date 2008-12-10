@@ -94,7 +94,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             initDB();
             initAdditionalSettings();
-            Importer.VerifyUserMovieSettings();
+            Importer.DoMovieMaintenance();
 
             DataProviderManager.GetInstance();
 

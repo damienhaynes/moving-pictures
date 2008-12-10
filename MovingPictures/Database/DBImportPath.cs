@@ -38,6 +38,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
+        public string Volume {
+            get {
+                return MovingPicturesCore.DeviceManager.GetVolume(dirInfo);
+            }
+        }
+
         public DirectoryInfo Directory {
             get { return dirInfo; }
 
