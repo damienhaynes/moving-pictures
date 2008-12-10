@@ -27,7 +27,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             [Description(@"\video_ts\video_ts.ifo")]
             DVD,
             [Description(@"\bdmv\index.bdmv")]
-            BLURAY,
+            Bluray,
             [Description(@"\hvdvd\hva00001.vti")]
             HDDVD,
             [Description("")]
@@ -249,12 +249,58 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static bool isFolderAmbiguous(string name) {
             // Conditions:
             // a) Name is too short
-            // b) video_ts folder (dvd subfolder)
+            // b) special video folders
             // c) multipart folder (subfolder)
             return (name.Length == 1 || name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist"
                 || name.ToLower() == "clipinf" || name.ToLower() == "backup" || name.ToLower() == "video_ts" || isFolderMultipart(name));
         }
 
+        /// <summary>
+        /// Checks if the file is a valid video file.
+        /// </summary>
+        /// <param name="fileInfo"></param>
+        /// <returns></returns>
+        public static bool IsVideoFile(FileInfo fileInfo) {
+            string fullPath = fileInfo.FullName;
+            // Video Disc Standards Are OK
+            if (IsVideoDiscPath(fullPath))
+                return true;
+
+            // Check files that pass the MediaPortal Video Extension list
+            if (IsMediaPortalVideoFile(fileInfo)) {
+                string ext = fileInfo.Extension.ToLower();
+                string name = fileInfo.Name;
+
+                // DVD: Non-Standalone content is invalid
+                if (ext == ".vob" && Regex.Match(name, @"(video_ts|vts_).+", RegexOptions.IgnoreCase).Success)
+                     return false;
+
+                // DVD: Filter ifo's that are not called video_ts.ifo
+                // This allows the exception of a video_ts.ifo being in the root without a video_ts folder
+                if (ext == ".ifo" && name != "video_ts.ifo")
+                    return false;
+
+                // Bluray: the only valid bluray file would already passed the method, we filter the rest
+                if (ext == ".bdmv")
+                    return false;
+
+                // Bluray: m2ts files sitting in a stream folder are part of a bluray disc
+                if (ext == ".m2ts" && fileInfo.Directory.Name.ToLower() == "stream")
+                    return false;
+
+                // if we made it this far we have a winner
+                return true;
+            }
+
+            // we did not pass so return false
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the Video Disc Type
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static VideoDiscType GetVideoDiscType(string path) {
             foreach (VideoDiscType format in EnumToList<VideoDiscType>()) {
                 if (format != VideoDiscType.UnknownFormat) {
@@ -265,6 +311,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return VideoDiscType.UnknownFormat;
         }
 
+        /// <summary>
+        /// Check if the path specified is a video disc standard
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static bool IsVideoDiscPath(string path) {
             foreach(VideoDiscType format in EnumToList<VideoDiscType>()) {
                 if (format != VideoDiscType.UnknownFormat)
@@ -290,16 +341,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                }
            }
            return null;
-        }
-
-        /// <summary>
-        /// Checks if a given directory is a DVD container.
-        /// </summary>
-        /// <param name="directory">the directory to check</param>
-        /// <returns>True if the directory contains a DVD</returns>
-        public static bool isDvdContainer(DirectoryInfo directory) {
-            FileInfo[] files = directory.GetFiles("video_ts.ifo");
-            return (files.Length == 1);
         }
 
         /// <summary>
