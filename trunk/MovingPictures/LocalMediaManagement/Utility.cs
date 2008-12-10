@@ -195,6 +195,33 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return (name.Length == 1 || name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist"
                 || name.ToLower() == "clipinf" || name.ToLower() == "backup" || name.ToLower() == "video_ts" || isFolderMultipart(name));
         }
+              
+        private static string[] videoDiscPaths = new string[] { @"\video_ts\video_ts.ifo", @"\bdmv\index.bdmv" };
+        
+        public static bool IsVideoDiscPath(string path) {
+            string videoPath = path.ToLower();
+            foreach (string p in videoDiscPaths) {
+                if (videoPath.EndsWith(p))
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the full path to the video disc or null if it doesn't find one.
+        /// </summary>
+        /// <param name="drive"></param>
+        /// <returns></returns>
+        public static string GetVideoDiscPath(string drive) {
+           FileInfo discPath;
+           foreach (string p in videoDiscPaths) {
+               discPath = new FileInfo(drive + p);
+               discPath.Refresh();
+               if (discPath.Exists)
+                   return discPath.FullName;
+           }
+           return null;
+        }
 
         /// <summary>
         /// Checks if a given directory is a DVD container.
@@ -316,7 +343,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="expectedCount">maximum count</param>
         /// <returns>True if folder is dedicated</returns>
         public static bool isFolderDedicated(DirectoryInfo folder, int expectedCount) {
-            return (GetVideoFileCount(folder) <= expectedCount);
+            return (GetVideoFileCount(folder, false) <= expectedCount);
         }
 
         #region DirectShowLib

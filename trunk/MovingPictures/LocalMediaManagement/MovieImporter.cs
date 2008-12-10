@@ -111,7 +111,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public MovieImporter() {
             initialize();
             MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectDeleted);
-            MovingPicturesCore.DeviceManager.OnVolumeInserted += new DeviceManager.DeviceAction(OnVolumeInserted);
+            MovingPicturesCore.DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
             percentDone = 0;
         }
 
@@ -498,7 +498,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                     // maintenance tasks
                     DoFileMaintenance();
-                    RemoveOrphanArtwork();
 
                     SetupFileSystemWatchers();
 
@@ -539,31 +538,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
             catch (ThreadAbortException) {
             }
-        }
-
-        // The DBUserMovieSettings system was revamped so we need to get 
-        // rid of any obsolete data and populate new objects as neccisary
-        public void VerifyUserMovieSettings() {
-            List<DBUserMovieSettings> allUserSettings = DBUserMovieSettings.GetAll();
-            foreach (DBUserMovieSettings currSetting in allUserSettings) {
-                if (currSetting.AttachedMovies.Count == 0)
-                    currSetting.Delete();
-            }
-
-            List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
-            foreach (DBMovieInfo currMovie in allMovies)
-                if (currMovie.UserSettings.Count == 0) {
-                    logger.Info(currMovie.Title + " was missing UserMovingSettings, adding now.");
-                    foreach (DBUser currUser in DBUser.GetAll()) {
-                        DBUserMovieSettings userSettings = new DBUserMovieSettings();
-                        userSettings.User = currUser;
-                        userSettings.Commit();
-                        currMovie.UserSettings.Add(userSettings);
-                        userSettings.CommitNeeded = false;
-                    }
-
-                    currMovie.Commit();
-                }
         }
 
         // Sets up the objects that will watch the file system for changes, specifically
@@ -613,11 +587,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         }
 
-        public void OnVolumeInserted(string volume) {
+        public void OnVolumeInserted(string volume, string serial) {
             // Check if this volume has an import path
             // if so rescan these import paths
             foreach (DBImportPath importPath in DBImportPath.GetAll()) {
-                if (importPath.Directory.Root.Name.StartsWith(volume))
+                if (importPath.GetDiskSerial() == serial)
                     ScanFiles(importPath.GetNewLocalMedia(), true);
             }
         }
@@ -668,7 +642,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         // Loops through all local files in the system and removes anything that's invalid.
-        private void DoFileMaintenance() {
+        public void DoFileMaintenance() {
             logger.Info("Running file maintenance for database.");
             int cleaned = 0;
             foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
@@ -699,6 +673,54 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         }
 
+        // Loops through all movie in the system and removed anything that's invalid
+        public void DoMovieMaintenance() {
+            // Movies
+            int cleaned = 0;
+            List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
+            logger.Info("Running movie maintenance for database.");
+            foreach (DBMovieInfo currMovie in allMovies) {
+
+                // Remove movie with no files
+                if (currMovie.LocalMedia.Count == 0) {
+                    logger.Info("'{0}' was removed from the system because it had no local media.", currMovie.Title);
+                    currMovie.Delete();
+                    cleaned++;
+                    continue;
+                }
+
+                // Update User Settings
+                UpdateMovieUserSettings(currMovie);
+
+                // Remove Artwork That Doesn't exist
+                RemoveOrphanArtwork(currMovie);
+
+            }
+            logger.Info("Maintenance finished. Removed {0} movies.", cleaned.ToString());
+
+            // Remove Orphan User Settings
+            List<DBUserMovieSettings> allUserSettings = DBUserMovieSettings.GetAll();
+            foreach (DBUserMovieSettings currSetting in allUserSettings) {
+                if (currSetting.AttachedMovies.Count == 0)
+                    currSetting.Delete();
+            }
+        }
+
+        // Updates missing user settings for a movie
+        private void UpdateMovieUserSettings(DBMovieInfo movie) {
+            if (movie.UserSettings.Count == 0) {
+                logger.Info(movie.Title + " was missing UserMovingSettings, adding now.");
+                foreach (DBUser currUser in DBUser.GetAll()) {
+                    DBUserMovieSettings userSettings = new DBUserMovieSettings();
+                    userSettings.User = currUser;
+                    userSettings.Commit();
+                    movie.UserSettings.Add(userSettings);
+                    userSettings.CommitNeeded = false;
+                }
+                movie.Commit();
+            }
+        }
+
         // Pre 0.6.5 LocalMedia correction
         // This update *should* only trigger once on a pre-0.6.5 database
         private void UpdateMissingDiskInfoProperties(DBLocalMedia localMedia) {
@@ -712,6 +734,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         }
 
+        // Removes everything that has a relating to the local media file
         private void RemoveLocalMedia(DBLocalMedia localMedia) {
             logger.Info("Removing " + localMedia.FullPath + " and associated movie.");
             foreach (DBMovieInfo currMovie in localMedia.AttachedMovies) {
@@ -724,34 +747,32 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             localMedia.Delete();
         }
 
-        private void RemoveOrphanArtwork() {
-            logger.Info("Removing missing artwork from database attached to existing movies.");
-            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
-                // get the list of elements to remove
-                List<string> toRemove = new List<string>();
-                foreach (string currCoverPath in currMovie.AlternateCovers) {
-                    if (!new FileInfo(currCoverPath).Exists)
-                        toRemove.Add(currCoverPath);
-                }
-
-                // remove them
-                foreach (string currItem in toRemove) {
-                    currMovie.AlternateCovers.Remove(currItem);
-                }
-
-                // reset default cover is needed
-                if (!currMovie.AlternateCovers.Contains(currMovie.CoverFullPath))
-                    if (currMovie.AlternateCovers.Count == 0)
-                        currMovie.CoverFullPath = " ";
-                    else
-                        currMovie.CoverFullPath = currMovie.AlternateCovers[0];
-
-                // get rid of the backdrop link if it doesnt exist
-                if (currMovie.BackdropFullPath.Trim().Length > 0 && !new FileInfo(currMovie.BackdropFullPath).Exists)
-                    currMovie.BackdropFullPath = " ";
-
-                currMovie.Commit();
+        // Removes Artwork From a Movie
+        private void RemoveOrphanArtwork(DBMovieInfo movie) {
+            // get the list of elements to remove
+            List<string> toRemove = new List<string>();
+            foreach (string currCoverPath in movie.AlternateCovers) {
+                if (!new FileInfo(currCoverPath).Exists)
+                    toRemove.Add(currCoverPath);
             }
+
+            // remove them
+            foreach (string currItem in toRemove) {
+                movie.AlternateCovers.Remove(currItem);
+            }
+
+            // reset default cover is needed
+            if (!movie.AlternateCovers.Contains(movie.CoverFullPath))
+                if (movie.AlternateCovers.Count == 0)
+                    movie.CoverFullPath = " ";
+                else
+                    movie.CoverFullPath = movie.AlternateCovers[0];
+
+            // get rid of the backdrop link if it doesnt exist
+            if (movie.BackdropFullPath.Trim().Length > 0 && !new FileInfo(movie.BackdropFullPath).Exists)
+                movie.BackdropFullPath = " ";
+
+            movie.Commit();
         }
 
         // Grabs the files from the DBImportPath and add them to the queue for use

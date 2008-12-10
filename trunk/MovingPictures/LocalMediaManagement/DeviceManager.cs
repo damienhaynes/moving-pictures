@@ -75,9 +75,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private Dictionary<string, VolumeInfo> volumes;
         private ManagementEventWatcher monitor;
 
-        public delegate void DeviceAction(string volume);
-        public event DeviceAction OnVolumeInserted;
-        public event DeviceAction OnVolumeRemoved;
+        public delegate void DeviceManagerEvent(string volume, string serial);
+        public event DeviceManagerEvent OnVolumeInserted;
+        public event DeviceManagerEvent OnVolumeRemoved;
 
         public bool Monitoring {
             get {
@@ -155,13 +155,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             eventType = "WMI_EVENT_VOLUME_REMOVED";
                             volumeInfo.Refresh(moNew); // update volume Info
                             if (OnVolumeRemoved != null)
-                                OnVolumeRemoved(volume); // fire event
+                                OnVolumeRemoved(volume, serialOld.ToString().Trim()); // fire event
                         }
                         else if (serial != null && serialOld == null) {
                             eventType = "WMI_EVENT_VOLUME_INSERTED";
                             volumeInfo.Refresh(moNew); // update volume Info
                             if (OnVolumeInserted != null)
-                                OnVolumeInserted(volume); // fire event
+                                OnVolumeInserted(volume, serial.ToString().Trim()); // fire event
                         }
 
                         
@@ -173,19 +173,25 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         public string GetVolume(FileSystemInfo fsInfo) {
-            return GetVolume(fsInfo.FullName);
+            if (fsInfo != null)
+                return GetVolume(fsInfo.FullName);
+            else
+                return null;
         }
 
         public string GetVolume(string path) {
+            if (path == null)
+                return path;
+
             // if the path is UNC return null
             if (path.StartsWith(@"/") || path.StartsWith(@"\"))
                 return null;
 
             // return the first 2 characters
             if (path.Length > 1)
-                return path.Substring(0, 2);
+                return path.Substring(0, 2).ToUpper();
             else // or if only a letter was given add colon
-                return path + ":";
+                return path.ToUpper() + ":";
         }
 
         public VolumeInfo GetVolumeInfo(FileSystemInfo fsInfo) {
