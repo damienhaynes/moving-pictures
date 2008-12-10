@@ -45,6 +45,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private bool discAutoplay;
         private bool discDetails;
+        Dictionary<string, string> discRecent;
 
         #endregion
 
@@ -365,6 +366,15 @@ namespace MediaPortal.Plugins.MovingPictures {
                 watchedFilter = new WatchedFlagFilter();
                 watchedFilter.Updated += new FilterUpdatedDelegate(OnFilterChanged);
                 browser.ActiveFilters.Add(watchedFilter);
+            }
+
+            if (discRecent == null) {              
+                // Also listen to new movies added as part of the autoplay/details functionality
+                if (discDetails || discAutoplay) {
+                    discRecent = new Dictionary<string, string>();
+                    MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
+                    logger.Debug("Autoplay/details is now listening for movie additions");
+                }
             }
 
             OnFilterChanged(remoteFilter);
@@ -1052,58 +1062,117 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #region DeviceManager Methods
 
+        /// <summary>
+        /// Call this method to trigger auto-play/detail actions
+        /// </summary>
+        /// <param name="movie">the movie object</param>
+        /// <param name="part">the localmedia part</param>
+        private void OnMovieDiscDetected(DBMovieInfo movie, int part) {
+            // if disc details is enabled select the movie
+            // and go to the details page
+            if (discDetails && movie != null) {
+                logger.Info("Showing details for video disc: '{0}'", movie.Title);
+                browser.SelectedMovie = movie;
+                CurrentView = ViewMode.DETAILS;
+            }
+
+            // if autoplay is enabled start playback
+            if (discAutoplay && movie != null) {
+                logger.Info("Starting playback for video disc: '{0}'", movie.Title);
+                playMovie(movie, part);
+            }
+        }
+
+        /// <summary>
+        /// Listens for newly added movies from the database manager.
+        /// Used for triggering delayed autoplay/details
+        /// </summary>
+        /// <param name="obj"></param>
+        private void onMovieAdded(DatabaseTable obj) {
+            // If this is no movie object, we don't have focus or 
+            // recent disk information - do nothing
+            if (obj.GetType() != typeof(DBMovieInfo) || discRecent.Count == 0 || GUIWindowManager.ActiveWindow != GetID)
+                return;
+
+            logger.Debug("onMovieAdded: " + movie.Title);
+            DBMovieInfo movie = (DBMovieInfo)obj;
+            foreach (DBLocalMedia localMedia in movie.LocalMedia) {
+                string path = localMedia.FullPath.ToLower();
+                // Check if this path was recently inserted
+                if (discRecent.ContainsKey(path))
+                    // Double check the serial (just in case)
+                    if (localMedia.VolumeSerial == discRecent[path]) {
+                        // Take Action
+                        discRecent.Clear();
+                        OnMovieDiscDetected(movie, localMedia.Part);
+                        return;
+                    }
+            }
+        }
+
         private void OnVolumeInserted(string volume, string serial) {
             // only respond when the plugin (or it's playback) is active
-            if (GUIWindowManager.ActiveWindow == GetID || currentlyPlaying) {
-                logger.Debug("onVolumeInserted: " + volume);
+            if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlaying)
+                return;
+            
+            logger.Debug("onVolumeInserted: " + volume);
 
-                if (GUIWindowManager.ActiveWindow == GetID) {
+            if (GUIWindowManager.ActiveWindow == GetID) {
 
-                    string moviePath = Utility.GetVideoDiscPath(volume);
-                    DBMovieInfo movie = null;
-                    int part = 1;
-                    
-                    if (moviePath != null) {
+                // Clear recent disc information
+                logger.Debug("Resetting Recent Disc Information.");
+                discRecent.Clear();
 
-                        DBLocalMedia localMedia = DBLocalMedia.Get(moviePath, serial);
-                        if (localMedia.ID != null) {
-                            if (localMedia.AttachedMovies.Count > 0) {
-                                movie = localMedia.AttachedMovies[0];
-                                part = localMedia.Part;
-                            }
-                        } else {
-                            return;   
-                        }
+                // DVD / Blu-ray 
+                // Try to grab a valid video path from the disc
+                string moviePath = Utility.GetVideoDiscPath(volume);
+                DBMovieInfo movie = null;
+                int part = 1;
 
-                        // if disc details is enabled select the movie
-                        // and go to the details page
-                        if (discDetails && movie != null) {
-                            logger.Debug("Auto-details for '" + movie.Title);
-                            browser.SelectedMovie = movie;
-                            CurrentView = ViewMode.DETAILS;
-                        }
-
-                        // if autoplay is enabled start playback
-                        if (discAutoplay && movie != null) {
-                            logger.Debug("Auto-play for '" + movie.Title);
-                            playMovie(movie, part);
+                if (moviePath != null) {
+                    logger.Info("Video Disc Detected.");
+                    // if we have a video path we have a movie
+                    // lookup the path in localmedia (including serial)
+                    // we should get one match
+                    DBLocalMedia localMedia = DBLocalMedia.Get(moviePath, serial);
+                    if (localMedia.ID != null) {
+                        // if we have a match check if this media
+                        // i still linked to a movie (there should be one)
+                        if (localMedia.AttachedMovies.Count > 0) {
+                            // we have a movie so get the movie object
+                            movie = localMedia.AttachedMovies[0];
+                            // also get the part number from the local media
+                            part = localMedia.Part;
                         }
                     }
-                }
+                    else {
+                        // Movie is not currently known we will store this
+                        // unknown disc into "memory" so OnMovieAdded can
+                        // trigger autoplay/details when the movie arrives. 
+                        // @todo: maybe just store a new DBLocalMedia object?
+                        logger.Debug("Adding Recent Disc Information: {0} ({1})", moviePath.ToLower(), serial);
+                        discRecent.Add(moviePath.ToLower(), serial);
+                        return;
+                    }
 
+                    // Take action
+                    OnMovieDiscDetected(movie, part);
+                }
             }
+
         }
 
         private void OnVolumeRemoved(string volume, string serial) {
             // only respond when the plugin (or it's playback) is active
-            if (GUIWindowManager.ActiveWindow == GetID || currentlyPlaying) {
-                // if we are playing something from this volume stop it
-                if (currentlyPlaying)
-                    if (currentMovie.LocalMedia[currentPart].Volume == volume)
-                        g_Player.Stop();
+            if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlaying)
+                return;
+                
+            // if we are playing something from this volume stop it
+            if (currentlyPlaying)
+                if (currentMovie.LocalMedia[currentPart].Volume == volume)
+                    g_Player.Stop();
 
-                logger.Debug("OnVolumeRemoved" + volume);
-            }            
+            logger.Debug("OnVolumeRemoved" + volume);
         }
 
         #endregion
