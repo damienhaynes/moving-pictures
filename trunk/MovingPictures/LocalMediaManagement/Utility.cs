@@ -28,7 +28,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             DVD,
             [Description(@"\bdmv\index.bdmv")]
             Bluray,
-            [Description(@"\hvdvd\hva00001.vti")]
+            [Description(@"\adv_obj\discid.dat")] // or adv_obj\vplst000.xpl ?
             HDDVD,
             [Description("")]
             UnknownFormat
@@ -251,7 +251,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // a) Name is too short
             // b) special video folders
             // c) multipart folder (subfolder)
-            return (name.Length == 1 || name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist"
+            // todo: make this more generic
+            return (name.Length == 1 || name.ToLower() == "adv_obj" | name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist"
                 || name.ToLower() == "clipinf" || name.ToLower() == "backup" || name.ToLower() == "video_ts" || isFolderMultipart(name));
         }
 
@@ -286,6 +287,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                 // Bluray: m2ts files sitting in a stream folder are part of a bluray disc
                 if (ext == ".m2ts" && fileInfo.Directory.Name.ToLower() == "stream")
+                    return false;
+
+                // HD-DVD: evo files sitting in a hvdvd_ts folder are part of a hddvd disc
+                if (ext == ".evo" && fileInfo.Directory.Name.ToLower() == "hvdvd_ts")
                     return false;
 
                 // if we made it this far we have a winner

@@ -1357,22 +1357,17 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                         string displayname = currFile.File.Name;
 
-                        // if this is a DVD/BLURAY file show the base directory as display name
-                        if (displayname.ToLower() == "video_ts.ifo" || displayname.ToLower() == "index.bdmv")
+                        // if this is a ripped video disc type show the base directory as display name
+                        if (displayname.ToLower() == "video_ts.ifo" || displayname.ToLower() == "index.bdmv" || displayname.ToLower() == "discid.dat")
                             displayname = Utility.GetMovieBaseDirectory(currFile.File.Directory).Name;
 
-                        // If read from CD/DVD/BLURAY drive
+                        // If read from optical drive
                         if (currFile.ImportPath.GetDriveType() == DriveType.CDRom && displayname.Length == 3) {
-                            // Show DVD
-                            if (currFile.File.Name.ToLower() == "video_ts.ifo")
-                                displayname = "(DVD)";
-                            // Show BLURAY
-                            if (currFile.File.Name.ToLower() == "index.bdmv")
-                                displayname = "(BLURAY)";
-                            // Add the media label
-                            displayname =  displayname + " <" + currFile.MediaLabel + ">";
+                            Utility.VideoDiscType videoDisc = Utility.GetVideoDiscType(currFile.FullPath);
+                            // Add the video disc type and media label
+                            if (videoDisc != Utility.VideoDiscType.UnknownFormat)
+                                displayname = String.Format("({0}) <{1}>", videoDisc.ToString(), currFile.MediaLabel);                                                      
                         }
-
                         _localMediaString += displayname;
                     }
                 }
