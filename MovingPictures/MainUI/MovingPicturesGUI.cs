@@ -1094,8 +1094,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (obj.GetType() != typeof(DBMovieInfo) || discRecent.Count == 0 || GUIWindowManager.ActiveWindow != GetID)
                 return;
 
-            logger.Debug("onMovieAdded: " + movie.Title);
             DBMovieInfo movie = (DBMovieInfo)obj;
+            logger.Debug("onMovieAdded: " + movie.Title);
             foreach (DBLocalMedia localMedia in movie.LocalMedia) {
                 string path = localMedia.FullPath.ToLower();
                 // Check if this path was recently inserted
