@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -9,7 +11,54 @@ using NLog;
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     class Utility {
 
+        #region Ctor / Private variables
+        
         private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        private Utility() {
+
+        }
+
+        #endregion        
+
+        #region Enums
+
+        public enum VideoDiscType {
+            [Description(@"\video_ts\video_ts.ifo")]
+            DVD,
+            [Description(@"\bdmv\index.bdmv")]
+            BLURAY,
+            [Description(@"\hvdvd\hva00001.vti")]
+            HDDVD,
+            [Description("")]
+            UnknownFormat
+        }
+
+        #endregion
+
+        #region Enum Helper Methods
+
+        public static List<T> EnumToList<T>() {
+            Type enumType = typeof(T);
+            if (enumType.BaseType != typeof(Enum))
+                throw new ArgumentException("T must be of type System.Enum");
+
+            return new List<T>(Enum.GetValues(enumType) as IEnumerable<T>);
+        }
+
+        public static string GetEnumValueDescription(object value) {
+            Type objType = value.GetType();
+            FieldInfo fieldInfo = objType.GetField(Enum.GetName(objType, value));
+            DescriptionAttribute attribute = (DescriptionAttribute)
+            (fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false)[0]);
+
+            // Return the description.
+            return attribute.Description;
+        }
+
+        #endregion
+
+        #region FileSystem Methods
 
         /// <summary>
         /// This method will create a string that can be safely used as a filename.
@@ -31,6 +80,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         /// <summary>
         /// Removes the extension from a filename
+        /// @todo: remove this method
         /// </summary>
         /// <param name="file"></param>
         /// <returns>filename without extension</returns>
@@ -92,6 +142,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             Regex expr = new Regex(rxFileStackMarkers + @"|[^\s\d](\d+)$|([a-c])$", RegexOptions.IgnoreCase);
             return expr.Match(filename).Success;
         }
+
+        #endregion
+
+        #region String Modification / Regular Expressions Methods
 
         // Regular expression pattern that matches an "article" that need to be moved for title conversions
         // todo: the articles should really be a user definable setting in the future
@@ -172,6 +226,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return Regex.Replace(input, @"\s{2,}", " ").Trim();
         }
 
+        #endregion
+
+        #region General Methods (Unsorted)
+
+
         /// <summary>
         /// Checks if the foldername is a multipart marker.
         /// </summary>
@@ -195,14 +254,22 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return (name.Length == 1 || name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist"
                 || name.ToLower() == "clipinf" || name.ToLower() == "backup" || name.ToLower() == "video_ts" || isFolderMultipart(name));
         }
-              
-        private static string[] videoDiscPaths = new string[] { @"\video_ts\video_ts.ifo", @"\bdmv\index.bdmv" };
-        
+
+        public static VideoDiscType GetVideoDiscType(string path) {
+            foreach (VideoDiscType format in EnumToList<VideoDiscType>()) {
+                if (format != VideoDiscType.UnknownFormat) {
+                    if (path.EndsWith(GetEnumValueDescription(format), true, null))
+                        return format;
+                }
+            }
+            return VideoDiscType.UnknownFormat;
+        }
+
         public static bool IsVideoDiscPath(string path) {
-            string videoPath = path.ToLower();
-            foreach (string p in videoDiscPaths) {
-                if (videoPath.EndsWith(p))
-                    return true;
+            foreach(VideoDiscType format in EnumToList<VideoDiscType>()) {
+                if (format != VideoDiscType.UnknownFormat)
+                    if (path.EndsWith(GetEnumValueDescription(format), true, null))
+                        return true;
             }
             return false;
         }
@@ -214,11 +281,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns></returns>
         public static string GetVideoDiscPath(string drive) {
            FileInfo discPath;
-           foreach (string p in videoDiscPaths) {
-               discPath = new FileInfo(drive + p);
-               discPath.Refresh();
-               if (discPath.Exists)
-                   return discPath.FullName;
+           foreach (VideoDiscType format in EnumToList<VideoDiscType>()) {
+               if (format != VideoDiscType.UnknownFormat) {
+                   discPath = new FileInfo(drive + GetEnumValueDescription(format));
+                   discPath.Refresh();
+                   if (discPath.Exists)
+                       return discPath.FullName;
+               }
            }
            return null;
         }
@@ -323,17 +392,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // Save to cache and return count
             folderCountCache[folder.FullName] = rtn;
             return rtn;
-        }
-
-        // NOTE: MediaPortal Dependency!
-        // Checks if file has valid video extensions (as specified by media portal
-        public static bool IsMediaPortalVideoFile(FileInfo file) {
-            foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
-                if (file.Extension.ToLower() == currExt)
-                    return true;
-            }
-            return false;
-        }
+        }       
 
         /// <summary>
         /// Checks if a folder contains a maximum amount of video files
@@ -345,6 +404,28 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static bool isFolderDedicated(DirectoryInfo folder, int expectedCount) {
             return (GetVideoFileCount(folder, false) <= expectedCount);
         }
+
+        #endregion
+
+        #region MediaPortal
+
+        /// <summary>
+        /// Checks if file has valid video extensions (as specified by media portal
+        /// </summary>
+        /// <remarks>
+        /// MediaPortal Dependency!
+        /// </remarks>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static bool IsMediaPortalVideoFile(FileInfo file) {
+            foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
+                if (file.Extension.ToLower() == currExt)
+                    return true;
+            }
+            return false;
+        }
+
+        #endregion
 
         #region DirectShowLib
 
