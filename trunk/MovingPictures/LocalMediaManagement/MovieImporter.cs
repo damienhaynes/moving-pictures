@@ -592,26 +592,26 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // if so rescan these import paths
             foreach (DBImportPath importPath in DBImportPath.GetAll()) {
                 if (importPath.GetDiskSerial() == serial)
-                    ScanFiles(importPath.GetNewLocalMedia(), true);
+                    ScanPath(importPath);
             }
         }
        
         // When a FileSystemWatcher detects a new file, this method queues it up for processing.
         private void OnFileAdded(Object source, FileSystemEventArgs e) {
-            DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath, MovingPicturesCore.DeviceManager.GetDiskSerial(e.FullPath));
-            DBImportPath importPath = pathLookup[(FileSystemWatcher)source];
+            if (Utility.IsVideoFile(new FileInfo(e.FullPath))) {
 
-            // if this file is already in the system, disable (this happens if it's a removable source)
-            if (newFile.ID != null) {
-                if (importPath.IsRemovable)                  
-                    logger.Info("Removable file " + newFile.File.Name + " brought online.");
-                else
-                    logger.Warn("FileSystemWatcher tried to add a pre-existing file: " + newFile.File.Name);
-                return;
-            }
+                DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath, MovingPicturesCore.DeviceManager.GetDiskSerial(e.FullPath));
+                DBImportPath importPath = pathLookup[(FileSystemWatcher)source];
 
-            // if the extension is proper, add the file
-            if (newFile.IsVideo) {
+                // if this file is already in the system, disable (this happens if it's a removable source)
+                if (newFile.ID != null) {
+                    if (importPath.IsRemovable)
+                        logger.Info("Removable file " + newFile.File.Name + " brought online.");
+                    else
+                        logger.Warn("FileSystemWatcher tried to add a pre-existing file: " + newFile.File.Name);
+                    return;
+                }
+
                 newFile.ImportPath = importPath;
                 newFile.UpdateDiskProperties();
                 lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
@@ -621,6 +621,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // When a FileSystemWatcher detects a file has been removed, delete it.
         private void OnFileDeleted(Object source, FileSystemEventArgs e) {
+            
             DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath, MovingPicturesCore.DeviceManager.GetDiskSerial(e.FullPath));
 
             logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal from the database.");
@@ -803,29 +804,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     logger.Debug("Skipping " + currFile.File.Name + " because it's being matched.");
                     continue;
                 }
-
-                // only grab the video_ts.ifo when extension is ifo
-                // to prevent unnecessary stacking
-                if (currFile.File.Extension.ToLower() == ".ifo") {
-                    if (currFile.File.Name.ToLower() != "video_ts.ifo") {
-                        //logger.Debug("Skipping " + currFile.File.Name + " because it's not an video_ts.ifo .");
-                        continue;
-                    }
-                }
-
-                // don't add vob files that are part of a DVD disc/folder
-                if (currFile.File.Extension.ToLower() == ".vob")
-                    if (Utility.isDvdContainer(currFile.File.Directory)) {
-                        //logger.Debug("Skipping " + currFile.File.Name + " because it's part of a DVD.");
-                        continue;
-                    }
-
-                // only grab the index.bdmv when the extension is bdmv (blu-ray disk)
-                if (currFile.File.Extension.ToLower() == ".bdmv") {
-                    if (currFile.File.Name.ToLower() != "index.bdmv" || currFile.File.Directory.Name.ToLower() != "bdmv")
-                        continue;
-                }
-
+                
                 // exclude samplefiles
                 if (Utility.isSampleFile(currFile.File)) {
                     logger.Info("Sample detected. Skipping {0} ({1} bytes)", currFile.File.Name, currFile.File.Length);

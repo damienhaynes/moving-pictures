@@ -65,12 +65,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         /// <summary>
         /// Check if the file is a video
-        /// todo: possibly move this out of the object completely after refactoring how localmedia is added
         /// </summary>
         public bool IsVideo {
             get {
                 if (fileInfo != null)
-                    return Utility.IsMediaPortalVideoFile(fileInfo);
+                    return Utility.IsVideoFile(fileInfo);
                 else
                     return false;
             }

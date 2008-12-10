@@ -147,14 +147,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             try {
                 List<FileInfo> fileList = getFilesRecursive(Directory);
                 foreach (FileInfo currFile in fileList) {
-                    DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName, serial);
+                    if (Utility.IsVideoFile(currFile)) {
+                        DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName, serial);
 
-                    // if this file is in the database continue if we only want new files
-                    if (newFile.ID != null && returnOnlyNew)
-                        continue;
-
-                    if (newFile.IsVideo) {
-                        // good extension for new file, so add it
+                        // if this file is in the database continue if we only want new files
+                        if (newFile.ID != null && returnOnlyNew)
+                            continue;
+                        
                         logger.Debug("Pulling new file " + currFile.Name + " from import path.");
                         newFile.ImportPath = this;
 
