@@ -346,7 +346,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 dialog.SetHeading("No Import Paths!");
                 dialog.SetLine(1, "It doesn't look like you have");
                 dialog.SetLine(2, "defined any import paths. You");
-                dialog.SetLine(2, "should close MediaPortal and");
+                dialog.SetLine(3, "should close MediaPortal and");
                 dialog.SetLine(4, "launch the MediaPortal");
                 dialog.SetLine(5, "Configuration Screen to");
                 dialog.SetLine(6, "configure Moving Pictures.");
