@@ -83,8 +83,7 @@ namespace Cornerstone.MP {
                 _guiImageOne = value;
                 if (_guiImageOne != null) {
                     _guiImageOne.FileName = _propertyOne;
-                    imagesNeedSwapping = false;
-                    _imageResource.Property = _propertyOne;
+                    _filename = null;
                 }
             }
         }
@@ -104,8 +103,7 @@ namespace Cornerstone.MP {
                 _guiImageTwo = value;
                 if (_guiImageTwo != null) {
                     _guiImageTwo.FileName = _propertyTwo;
-                    imagesNeedSwapping = false;
-                    _imageResource.Property = _propertyOne;
+                    _filename = null;
                 }
             }
         }
