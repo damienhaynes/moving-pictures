@@ -100,7 +100,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <summary>
         /// Check if the monitor is started
         /// </summary>
-        public bool Started {
+        public bool MonitorStarted {
             get {
                 return monitorStarted;
             }
@@ -294,9 +294,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="volume"></param>
         /// <param name="serial"></param>
         private void invokeOnVolumeInserted(string volume, string serial) {
-            logger.Debug("Event: OnVolumeInserted, Volume: {0}, Serial: {1}", volume, serial);
-            if (OnVolumeInserted != null)
-                OnVolumeInserted.BeginInvoke(volume, serial, null, null);
+            if (OnVolumeInserted != null) {
+                OnVolumeInserted(volume, serial);
+                logger.Debug("Event: OnVolumeInserted, Volume: {0}, Serial: {1}", volume, serial);
+                //OnVolumeInserted.BeginInvoke(volume, serial, null, null);
+            }
             
         }
 
@@ -306,9 +308,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="volume"></param>
         /// <param name="serial"></param>
         private void invokeOnVolumeRemoved(string volume, string serial) {
-            logger.Debug("Event: OnVolumeRemoved, Volume: {0}, Serial: {1}", volume, serial);
-            if (OnVolumeRemoved != null)
-                OnVolumeRemoved.BeginInvoke(volume, serial, null, null);
+            if (OnVolumeRemoved != null) {
+                OnVolumeRemoved(volume, serial);
+                //OnVolumeRemoved.BeginInvoke(volume, serial, null, null);
+                logger.Debug("Event: OnVolumeRemoved, Volume: {0}, Serial: {1}", volume, serial);
+            }
+
         }
 
         #endregion
@@ -317,10 +322,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         public void StartMonitor() {
             logger.Info("Starting device monitor ...");
-            if (handle != IntPtr.Zero)
+            if (handle != IntPtr.Zero) {
                 startMonitor();
-            else
-                startMonitorWmi();                
+            }
+            else {
+                startMonitorWmi();
+            }
 
             // todo: retry starting monitor?
             if (monitorStarted)
