@@ -160,10 +160,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 logger.Error("Cannot add PlayBackChanged handler (running < RC4).");
             }
 
-            // Listen to the DeviceManager
-            MovingPicturesCore.DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
-            MovingPicturesCore.DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
-
             // Get Blu-Ray/DVD disc settings
             discDetails = (bool)MovingPicturesCore.SettingsManager["ondisc_details"].Value;
             discAutoplay = (bool)MovingPicturesCore.SettingsManager["ondisc_autoplay"].Value;
@@ -316,10 +312,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             // start the background importer
             MovingPicturesCore.Importer.Start();
 
-            // start the device monitor
-            MovingPicturesCore.DeviceManager.Handle = GUIGraphicsContext.form.Handle;
-            MovingPicturesCore.DeviceManager.StartMonitor();
-
             // grab any <define> tags from the skin for later use
             LoadDefinesFromSkin();
 
@@ -370,6 +362,17 @@ namespace MediaPortal.Plugins.MovingPictures {
                 watchedFilter = new WatchedFlagFilter();
                 watchedFilter.Updated += new FilterUpdatedDelegate(OnFilterChanged);
                 browser.ActiveFilters.Add(watchedFilter);
+            }
+
+            // start the device monitor
+            if (!MovingPicturesCore.DeviceManager.MonitorStarted) {
+                MovingPicturesCore.DeviceManager.Handle = GUIGraphicsContext.form.Handle;
+                MovingPicturesCore.DeviceManager.StartMonitor();
+                
+                // Listen to the DeviceManager
+                logger.Debug("Listening for device changes.");
+                MovingPicturesCore.DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
+                MovingPicturesCore.DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
             }
 
             if (discRecent == null) {              

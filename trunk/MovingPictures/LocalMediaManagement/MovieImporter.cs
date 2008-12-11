@@ -94,7 +94,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // list of watcher objects that monitor the filesystem for changes
         List<FileSystemWatcher> fileSystemWatchers;
+        List<DBImportPath> watcherQueue;
         Dictionary<FileSystemWatcher, DBImportPath> pathLookup;
+        int watcherInterval;
 
         #endregion
 
@@ -131,6 +133,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             matchesInSystem = new Dictionary<DBLocalMedia, MovieMatch>();
 
+            watcherQueue = new List<DBImportPath>();
+            watcherInterval = 30;
             fileSystemWatchers = new List<FileSystemWatcher>();
             pathLookup = new Dictionary<FileSystemWatcher, DBImportPath>();
         }
@@ -500,6 +504,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     DoFileMaintenance();
 
                     SetupFileSystemWatchers();
+                    int checkWatchers= 0;
 
                     // do an initial scan on all paths
                     // grab all the files in our import paths
@@ -518,6 +523,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     while (true) {
                         Thread.Sleep(1000);
 
+
                         // if the filesystem scanner found any files, add them
                         lock (filesAdded.SyncRoot) {
                             if (filesAdded.Count > 0) {
@@ -532,60 +538,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                                 filesAdded.Clear();
                             }
                         }
+
+                        checkWatchers++;
+                        if (checkWatchers == watcherInterval) {
+                            // check the watchers
+                            UpdateFileSystemWatchers();
+                            checkWatchers = 0;
+                        }
+
                     }
 
                 }
             }
             catch (ThreadAbortException) {
             }
-        }
-
-        // Sets up the objects that will watch the file system for changes, specifically
-        // new files added to the import path, or old files removed.
-        private void SetupFileSystemWatchers() {
-            List<DBImportPath> paths = DBImportPath.GetAll();
-
-            // clear out old watchers, if any
-            foreach (FileSystemWatcher currWatcher in fileSystemWatchers)
-                currWatcher.EnableRaisingEvents = false;
-            fileSystemWatchers.Clear();
-
-            // setup new file systems watchers
-            foreach (DBImportPath currPath in paths) {
-                DriveType driveType = currPath.GetDriveType();
-
-                // nothing will change on CD/DVD so skip these
-                if (driveType == DriveType.CDRom)
-                    continue;
-
-                // Check if the import path is available
-                if (currPath.IsAvailable) {
-                    // if so, try to activate watchers
-                    try {
-                        FileSystemWatcher currWatcher = new FileSystemWatcher(currPath.FullPath);
-                        currWatcher.IncludeSubdirectories = true;
-                        currWatcher.Created += OnFileAdded;
-                        currWatcher.Deleted += OnFileDeleted;
-                        currWatcher.EnableRaisingEvents = true;
-                        fileSystemWatchers.Add(currWatcher);
-                        pathLookup[currWatcher] = currPath;
-                        logger.Debug("Created FileSystemWatcher for: '{0}' ({1})", currPath.FullPath, driveType.ToString());
-                    }
-                    catch (ArgumentException e) {
-                        // if activating fails log the error.
-                        logger.Error("Failed accessing import path {0}: {1}", currPath.FullPath, e.Message);   
-                    }
-                }
-                else {
-                    // if not log a message
-                    if (currPath.IsRemovable)
-                        logger.Info("Import path: '{0}' ({1}) is offline.", currPath.FullPath, driveType.ToString());
-                    else
-                        logger.Info("Import path: '{0}' ({1}) does not exist.", currPath.FullPath, driveType.ToString());
-                }
-            }
-
-        }
+        }     
 
         public void OnVolumeInserted(string volume, string serial) {
             // Check if this volume has an import path
@@ -595,7 +562,98 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     ScanPath(importPath);
             }
         }
-       
+        
+        // Sets up the objects that will watch the file system for changes, specifically
+        // new files added to the import path, or old files removed.
+        private void SetupFileSystemWatchers() {
+            List<DBImportPath> paths = DBImportPath.GetAll();
+
+            // clear out old watchers, if any
+            foreach (FileSystemWatcher currWatcher in fileSystemWatchers)
+                currWatcher.EnableRaisingEvents = false;
+
+            fileSystemWatchers.Clear();           
+            
+            // fill the watcher queue with import paths
+            foreach (DBImportPath currPath in paths)
+                watcherQueue.Add(currPath);
+
+            // Actually add the file system watchers
+            UpdateFileSystemWatchers();
+        }
+
+        private void UpdateFileSystemWatchers() {
+            if (watcherQueue.Count > 0) {
+                foreach (DBImportPath importPath in watcherQueue.ToArray()) {
+                    FileSystemWatcher watcher = new FileSystemWatcher();
+                    bool success = false;
+                    try {
+                        // nothing will change on CD/DVD so skip these
+                        // else try to create a watcher
+                        if (importPath.GetDriveType() != DriveType.CDRom)
+                            WatchImportPath(watcher, importPath);
+
+                        success = true;
+                    }
+                    catch (Exception e) {
+                        // if the path is not available
+                        if (!importPath.IsAvailable) {
+                            if (importPath.IsRemovable) {
+                                // if it's removable just leave a message
+                                logger.Info("Import path: '{0}' ({1}) is offline.", importPath.FullPath, importPath.GetDriveType().ToString());
+                            }
+                            else {
+                                // if it's not removable do not process it anymore
+                                logger.Info("Import path: '{0}' ({1}) does not exist.", importPath.FullPath, importPath.GetDriveType().ToString());
+                                watcherQueue.Remove(importPath);
+                            }
+                        }
+                        else {
+                            logger.Info("FileSystemWatcher error: {0}", e.Message.ToString());
+                        }
+                    }
+
+                    if (success)
+                        watcherQueue.Remove(importPath);
+                }
+            }
+        }
+
+        private void WatchImportPath(FileSystemWatcher watcher, DBImportPath importPath) {
+            watcher.Path = importPath.FullPath;
+            watcher.IncludeSubdirectories = true;
+            watcher.Error += OnWatcherError;
+            watcher.Created += OnFileAdded;
+            watcher.Deleted += OnFileDeleted;
+            watcher.EnableRaisingEvents = true;
+            
+            fileSystemWatchers.Add(watcher);
+            pathLookup[watcher] = importPath;
+            
+            logger.Debug("Created FileSystemWatcher for: '{0}' ({1})", importPath.FullPath, importPath.GetDriveType().ToString()) ;
+        }
+
+        // When a FileSystemWatcher gets corrupted this handler will add it to the queue again
+        private void OnWatcherError(object source, ErrorEventArgs e) {
+            Exception watchException = e.GetException();
+            FileSystemWatcher watcher = (FileSystemWatcher)source;
+            DBImportPath importPath = pathLookup[watcher];
+            logger.Debug("A FileSystemWatcher error has occurred for {0}: {1}", importPath, watchException.Message);
+            
+            // remove the watcher from the lookups
+            if (pathLookup.ContainsKey(watcher))
+                pathLookup.Remove(watcher);
+            if (fileSystemWatchers.Contains(watcher))
+                fileSystemWatchers.Remove(watcher);
+
+            // Clean the old watcher (?)
+            watcher.Dispose();
+
+            // Add the importPath to the watcher queue
+            watcherQueue.Add(importPath);
+        }
+
+
         // When a FileSystemWatcher detects a new file, this method queues it up for processing.
         private void OnFileAdded(Object source, FileSystemEventArgs e) {
             if (Utility.IsVideoFile(new FileInfo(e.FullPath))) {
