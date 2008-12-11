@@ -106,7 +106,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 try {
                     query = new WqlEventQuery();
                     query.EventClassName = "__InstanceModificationEvent";
-                    query.WithinInterval = new TimeSpan(0, 0, 1);
+                    query.WithinInterval = new TimeSpan(0, 0, 5);
                     // TODO: make query more specific only monitor import path volumes/drivetypes?
                     query.Condition = "TargetInstance ISA 'Win32_LogicalDisk'";
                     //+ " and TargetInstance.DriveType = 5";
