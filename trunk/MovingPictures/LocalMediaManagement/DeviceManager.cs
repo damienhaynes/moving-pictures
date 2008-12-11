@@ -21,20 +21,22 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public string Serial {
             get {
                 if (driveInfo.IsReady) {
-                    if (managementObject == null)
-                        Refresh();
+                    if (serial == null) {
+                        if (managementObject == null)
+                            Refresh();
 
-                    if (managementObject != null)
-                        if (managementObject["volumeserialnumber"] != null)
-                            return managementObject["volumeserialnumber"].ToString().Trim();
-                    
-                    return null;
+                        if (managementObject != null)
+                            if (managementObject["volumeserialnumber"] != null)
+                                serial = managementObject["volumeserialnumber"].ToString().Trim();
+                    }
+                    return serial;
                 }
                 else {
-                    return null;
+                    serial = null;
+                    return serial;
                 }
             }
-        }
+        } private string serial;
 
         public void Refresh() {
             if (driveInfo.IsReady) {
@@ -53,11 +55,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }                
             }
             else {
+                serial = null;
                 managementObject = null;
             }
         }
 
         public void Refresh(ManagementBaseObject mo) {
+            serial = null;
             managementObject = mo;
             logger.Debug("Succesfully updated drive information for '{0}'", driveInfo.Name.Substring(0, 2));
         }
@@ -71,32 +75,72 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     
     public class DeviceManager {
 
+        #region Private Variables
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        // Volume Information Cache
         private Dictionary<string, VolumeInfo> volumes;
-        private ManagementEventWatcher monitor;
+        
+        // Monitor Types
+        private ManagementEventWatcher wmiMonitor;
+        private DeviceVolumeMonitor dvMonitor;
+
+        #endregion
+
+        #region Events / Delegates
 
         public delegate void DeviceManagerEvent(string volume, string serial);
         public event DeviceManagerEvent OnVolumeInserted;
         public event DeviceManagerEvent OnVolumeRemoved;
 
-        public bool Monitoring {
+        #endregion
+
+        #region Public properties
+
+        /// <summary>
+        /// Check if the monitor is started
+        /// </summary>
+        public bool Started {
             get {
                 return monitorStarted;
             }
         } private bool monitorStarted = false;
 
+        /// <summary>
+        /// If you set this property to a form handle
+        /// before starting the monitor it will use the WndProc
+        /// method otherwise it will use the WMI monitor (slower)        
+        /// </summary>
+        public IntPtr Handle {
+            get {return handle;}
+            set { handle = value; }
+        } private IntPtr handle = IntPtr.Zero;
+
+        #endregion
+
+        #region Ctor
+
         public DeviceManager() {
             volumes = new Dictionary<string, VolumeInfo>();
-            Start();
         }
 
         ~DeviceManager() {
-            Stop();
+            if (monitorStarted)
+                StopMonitor();
         }
 
-        public void Start() {
-            if (monitor == null) {
-                logger.Info("Starting device monitor ...");
+        #endregion
+
+        #region Monitor: WMI
+
+        /// <summary>
+        /// Starts the WMI monitor
+        /// </summary>
+        private void startMonitorWmi() {
+            logger.Debug("Monitor: WMI");
+            if (wmiMonitor == null) {
+               
                 WqlEventQuery query;
                 ManagementOperationObserver observer = new ManagementOperationObserver();
                 ConnectionOptions options = new ConnectionOptions();
@@ -106,34 +150,45 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 try {
                     query = new WqlEventQuery();
                     query.EventClassName = "__InstanceModificationEvent";
-                    query.WithinInterval = new TimeSpan(0, 0, 5);
-                    // TODO: make query more specific only monitor import path volumes/drivetypes?
-                    query.Condition = "TargetInstance ISA 'Win32_LogicalDisk'";
-                    //+ " and TargetInstance.DriveType = 5";
-                    monitor = new ManagementEventWatcher(scope, query);
-                    monitor.EventArrived += new EventArrivedEventHandler(OnEventArrived);
-                    monitor.Start();
+                    //TWEAK: polling interval
+                    query.WithinInterval = new TimeSpan(0, 0, 10);
+                    //TWEAK: only poll for removable types
+                    query.Condition = "TargetInstance ISA 'Win32_LogicalDisk' and TargetInstance.DriveType = 5";
+                    wmiMonitor = new ManagementEventWatcher(scope, query);
+                    wmiMonitor.EventArrived += new EventArrivedEventHandler(OnEventArrived);
+                    wmiMonitor.Start();
                     monitorStarted = true;
-                    logger.Info("Device monitor started.");
                 }
                 catch (Exception e) {
-                    logger.Error("Device monitor error during startup: ", e.Message);
-                    monitor = null;
+                    logger.Debug("WMI monitor error during startup: ", e.Message);
+                    wmiMonitor = null;
+                    monitorStarted = false;
                 }
 
             }
-
         }
 
-        public void Stop() {
-            if (monitor != null) {
-                monitor.Stop();
-                monitor = null;
-                monitorStarted = false;
-                logger.Info("Device monitor stopped.");
+        /// <summary>
+        /// Stops the WMI monitor
+        /// </summary>
+        private void stopMonitorWmi() {
+            if (wmiMonitor != null) {
+                try {
+                    wmiMonitor.Stop();
+                    wmiMonitor = null;
+                    monitorStarted = false;
+                }
+                catch (Exception e) {
+                    logger.Debug("WMI monitor error during shutdown: ", e.Message);
+                }
             }
         }
 
+        /// <summary>
+        /// Handles events generated by the WMI monitor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnEventArrived(object sender, EventArrivedEventArgs e) {
             PropertyData pdOld = e.NewEvent.Properties["PreviousInstance"];
             PropertyData pdNew = e.NewEvent.Properties["TargetInstance"];
@@ -154,14 +209,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         if (serial == null && serialOld != null) {
                             eventType = "WMI_EVENT_VOLUME_REMOVED";
                             volumeInfo.Refresh(moNew); // update volume Info
-                            if (OnVolumeRemoved != null)
-                                OnVolumeRemoved(volume, serialOld.ToString().Trim()); // fire event
+                            invokeOnVolumeRemoved(volume, serialOld.ToString().Trim());
                         }
                         else if (serial != null && serialOld == null) {
                             eventType = "WMI_EVENT_VOLUME_INSERTED";
                             volumeInfo.Refresh(moNew); // update volume Info
-                            if (OnVolumeInserted != null)
-                                OnVolumeInserted(volume, serial.ToString().Trim()); // fire event
+                            invokeOnVolumeInserted(volume, serial.ToString().Trim());
                         }
 
                         
@@ -172,6 +225,127 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         }
 
+        #endregion
+
+        #region Monitor: DeviceVolumeMonitor
+
+        private void startMonitor() {
+            logger.Debug("Monitor: DeviceVolumeMonitor");
+            if (dvMonitor == null) {
+                try {
+                    dvMonitor = new DeviceVolumeMonitor(handle);
+                    dvMonitor.OnVolumeInserted += new DeviceVolumeAction(dvVolumeInserted);
+                    dvMonitor.OnVolumeRemoved += new DeviceVolumeAction(dvVolumeRemoved);
+                    dvMonitor.AsynchronousEvents = true;
+                    dvMonitor.Enabled = true;
+                    monitorStarted = true;
+                }
+                catch (Exception e) {
+                    logger.Debug("DeviceVolumeMonitor Error during startup: ", e.Message);
+                    dvMonitor = null;
+                    monitorStarted = false;
+                }
+            }           
+        }
+
+        private void stopMonitor() {
+            if (dvMonitor != null) {
+                try {
+
+                    dvMonitor = null;
+                    monitorStarted = false;
+                }
+                catch (Exception e) {
+                    logger.Debug("Device Volume Monitor error during shutdown: ", e.Message);
+                }
+            }
+        }
+
+        private void dvVolumeInserted(int bitMask) {
+            // get volume letter
+            string volume = dvMonitor.MaskToLogicalPaths(bitMask);
+
+            // refresh volume cache
+            VolumeInfo volumeInfo = GetVolumeInfo(volume);
+            volumeInfo.Refresh();
+
+            // invoke event
+            invokeOnVolumeInserted(volume, volumeInfo.Serial);
+        }
+
+        private void dvVolumeRemoved(int bitMask) {
+            // get volume letter
+            string volume = dvMonitor.MaskToLogicalPaths(bitMask);
+            
+            // refresh volume cache
+            VolumeInfo volumeInfo = GetVolumeInfo(volume);
+            volumeInfo.Refresh();
+
+            // invoke event
+            invokeOnVolumeRemoved(volume, null);
+        }
+
+        #endregion
+
+        #region Event Logic
+
+        /// <summary>
+        /// Invokes the (async.) OnVolumeInserted event
+        /// </summary>
+        /// <param name="volume"></param>
+        /// <param name="serial"></param>
+        private void invokeOnVolumeInserted(string volume, string serial) {
+            logger.Debug("Event: OnVolumeInserted, Volume: {0}, Serial: {1}", volume, serial);
+            if (OnVolumeInserted != null)
+                OnVolumeInserted.BeginInvoke(volume, serial, null, null);
+            
+        }
+
+        /// <summary>
+        /// Invokes the (async.) OnVolumeRemoved event
+        /// </summary>
+        /// <param name="volume"></param>
+        /// <param name="serial"></param>
+        private void invokeOnVolumeRemoved(string volume, string serial) {
+            logger.Debug("Event: OnVolumeRemoved, Volume: {0}, Serial: {1}", volume, serial);
+            if (OnVolumeRemoved != null)
+                OnVolumeRemoved.BeginInvoke(volume, serial, null, null);
+        }
+
+        #endregion
+        
+        #region Public Methods
+
+        public void StartMonitor() {
+            logger.Info("Starting device monitor ...");
+            if (handle != IntPtr.Zero)
+                startMonitor();
+            else
+                startMonitorWmi();                
+
+            // todo: retry starting monitor?
+            if (monitorStarted)
+                logger.Info("Device monitor started.");
+            else
+                logger.Error("Device monitor failed to start.");
+        }
+
+        public void StopMonitor() {
+            if (!monitorStarted)
+                logger.Debug("Device monitor was not running.");
+
+            if (wmiMonitor!=null)
+                stopMonitorWmi();
+            else
+                stopMonitor();
+
+            if (monitorStarted)
+                logger.Info("Device monitor failed to stop.");
+            else
+                logger.Info("Device monitor stopped.");
+
+        }
+        
         public string GetVolume(FileSystemInfo fsInfo) {
             if (fsInfo != null)
                 return GetVolume(fsInfo.FullName);
@@ -328,11 +502,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (volumeInfo != null)
                 return volumeInfo.Drive.VolumeLabel;
             else
-                return null;            
+                return null;
         }
 
-        
+        #endregion
 
-        
-    }
+     }
 }

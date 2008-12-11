@@ -95,14 +95,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             initDB();
             initAdditionalSettings();
             Importer.DoMovieMaintenance();
-
             DataProviderManager.GetInstance();
 
             return true;
         }
 
         public static void Shutdown() {
-            deviceManager.Stop();
+            deviceManager.StopMonitor();
             importer.Stop();
             settingsManager.Shutdown();
 
