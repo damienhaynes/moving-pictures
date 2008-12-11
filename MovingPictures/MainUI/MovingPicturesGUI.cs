@@ -316,6 +316,10 @@ namespace MediaPortal.Plugins.MovingPictures {
             // start the background importer
             MovingPicturesCore.Importer.Start();
 
+            // start the device monitor
+            MovingPicturesCore.DeviceManager.Handle = GUIGraphicsContext.form.Handle;
+            MovingPicturesCore.DeviceManager.StartMonitor();
+
             // grab any <define> tags from the skin for later use
             LoadDefinesFromSkin();
 
