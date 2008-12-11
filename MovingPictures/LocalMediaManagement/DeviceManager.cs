@@ -29,12 +29,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             if (managementObject["volumeserialnumber"] != null)
                                 serial = managementObject["volumeserialnumber"].ToString().Trim();
                     }
-                    return serial;
                 }
                 else {
                     serial = null;
-                    return serial;
                 }
+                return serial;
             }
         } private string serial;
 
