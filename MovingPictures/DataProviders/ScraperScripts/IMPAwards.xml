@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874903</id>
-    <version major="1" minor="0" point="2"/>
-    <published month="12" day="10" year="2008"/>
+    <version major="1" minor="0" point="1"/>
+    <published month="11" day="18" year="2008"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -30,12 +30,10 @@
   <action name="get_cover_art">
     <!-- first lets try google matching because it is very fast -->
     <retrieve name="google_results" url="http://www.google.com/custom?q=${movie.title:safe}&amp;sitesearch=www.impawards.com"/>
-    <set name="test_cover_page" value="" />
     <parse name="test_cover_url" input="${google_results}" regex='&lt;h2 class=r&gt;&lt;a href="([^"]+).+?&lt;/h2&gt;'/>
-    <if test="${test_cover_url}!=">
-      <!-- grab the first result and see if it is what we are looking for -->
-      <retrieve name ='test_cover_page' url='${test_cover_url[0][0]}'/>
-    </if>
+
+    <!-- grab the first result and see if it is what we are looking for -->
+    <retrieve name ='test_cover_page' url='${test_cover_url[0][0]}'/>
     <parse name='imdb_id' input='${test_cover_page}' regex='tt\d{7}'/>
     <if test='${imdb_id}=${movie.imdb_id}'>
       <!-- excellent, this is our movie, grab the covers -->

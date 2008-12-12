@@ -9,7 +9,6 @@ using System.Net;
 using Cornerstone.Database;
 using System.Web;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using System.Reflection;
 using System.Threading;
 using System.Globalization;
@@ -23,7 +22,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         // we should be using the movie object but we have to assign it before locking which 
         // is not good if the thread gets interupted after the asssignment, but before it gets 
         // locked. So we use this dumby var.
-        private String lockObj = "";     
+        private String lockObj = "";
 
         public string Name {
             get {
@@ -118,10 +117,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             
             string backdropFolderPath = MovingPicturesCore.SettingsManager["backdrop_folder"].StringValue;
             DirectoryInfo backdropFolder = new DirectoryInfo(backdropFolderPath);
-
             string safeName = Utility.CreateFilename(movie.Title.Replace(' ', '.'));
-            Regex oldBackdropRegex = new Regex("{?" + Regex.Escape(safeName) + "}? \\[-?\\d+\\]\\.jpg");
-
+            Regex oldBackdropRegex = new Regex("{?" + safeName + "}? \\[-?\\d+\\].jpg");
             foreach (FileInfo currFile in backdropFolder.GetFiles()) {
                 if (oldBackdropRegex.IsMatch(currFile.Name)) {
                     found &= movie.AddBackdropFromFile(currFile.FullName);
@@ -192,10 +189,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             
             string coverartFolderPath = MovingPicturesCore.SettingsManager["cover_art_folder"].StringValue;
             DirectoryInfo coverFolder = new DirectoryInfo(coverartFolderPath);
-            
             string safeName = Utility.CreateFilename(movie.Title.Replace(' ', '.'));
-            Regex oldCoverRegex = new Regex("{?" + Regex.Escape(safeName) + "}? \\[-?\\d+\\]\\.jpg");
-            
+            Regex oldCoverRegex = new Regex("{?" + safeName + "}? \\[-?\\d+\\].jpg");
             foreach (FileInfo currFile in coverFolder.GetFiles()) {
                 if (oldCoverRegex.IsMatch(currFile.Name)) {
                     bool success = movie.AddCoverFromFile(currFile.FullName);

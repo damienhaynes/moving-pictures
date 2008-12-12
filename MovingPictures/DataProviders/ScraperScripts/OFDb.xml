@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="1" minor="0" point="3"/>
-    <published month="11" day="27" year="2008"/>
+    <version major="1" minor="0" point="2"/>
+    <published month="11" day="19" year="2008"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -31,7 +31,8 @@
     
     <!-- Variables -->
     <set name="site" value="http://xml.n4rf.net/ofdbgw/" />
-        
+    
+    
     <!-- Regular Expressions -->
     <set name="rx_title_clean" value="\[(TV-Mini-Serie|Kurzfilm)\]" />
     <set name="rx_title" value="(.+?)(?:, (The|A|Ein|Das|Die|Der|Les|Une))?\s*$" />
@@ -81,24 +82,17 @@
     <loop name="search_results_verified" on="search_results_block">
       <parse name="movie_details" input="${search_results_verified}" regex="${rx_results}" />
       <loop name="curr_details" on="movie_details">
-        <set name="tvserie" value="" />
-        <parse name="tvserie" input="${curr_details[1]}" regex="(TV-Mini-Serie|TV-Serie)" />
-        <if test="${tvserie}!=">
-          <subtract name="offset" value1="${offset}" value2="1" />
-        </if>
-        <if test="${tvserie}=">
-          <add name="counter" value1="${count}" value2="${offset}" />
-          <replace name="title" input="${curr_details[1]:htmldecode}" pattern="${rx_title_clean}" with="" />
-          <replace name="aka" input="${curr_details[3]:htmldecode}" pattern="${rx_title_clean}" with="" />
-          <parse name="title" input="${title}" regex="${rx_title}"/>
-          <parse name="aka" input="${aka}" regex="${rx_title}"/>
-          <set name="movie[${counter}].title" value="${title[0][1]} ${title[0][0]}"/>
-          <set name="movie[${counter}].alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
-          <set name="movie[${counter}].year" value="${curr_details[4]:htmldecode}"/>
-          <set name="movie[${counter}].details_url" value="${site}movie/${curr_details[0]}"/>
-          <set name="movie[${counter}].site_id" value="${curr_details[0]}"/>
-          <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
-        </if>
+        <add name="counter" value1="${count}" value2="${offset}" />
+        <replace name="title" input="${curr_details[1]:htmldecode}" pattern="${rx_title_clean}" with="" />
+        <replace name="aka" input="${curr_details[3]:htmldecode}" pattern="${rx_title_clean}" with="" />
+        <parse name="title" input="${title}" regex="${rx_title}"/>
+        <parse name="aka" input="${aka}" regex="${rx_title}"/>
+        <set name="movie[${counter}].title" value="${title[0][1]} ${title[0][0]}"/>
+        <set name="movie[${counter}].alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
+        <set name="movie[${counter}].year" value="${curr_details[4]:htmldecode}"/>
+        <set name="movie[${counter}].details_url" value="${site}movie/${curr_details[0]}"/>
+        <set name="movie[${counter}].site_id" value="${curr_details[0]}"/>
+        <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
       </loop>
     </loop>
     

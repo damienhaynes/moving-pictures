@@ -70,15 +70,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     ((DBImportPath)pathBindingSource.Current).Delete();
                     pathBindingSource.RemoveCurrent();
 
-                    MovingPicturesCore.Importer.DoFileMaintenance();
                     MovingPicturesCore.Importer.RestartScanner();
-                    
                 }
             }
-        }
-
-        private void notesLabel_TextChanged(object sender, EventArgs e) {
-
         }
 
 

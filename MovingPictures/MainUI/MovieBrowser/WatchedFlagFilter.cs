@@ -19,7 +19,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             }
         }
         private bool active;
-
+        
         public List<DBMovieInfo> Filter(List<DBMovieInfo> input) {
             if (active) {
 

@@ -121,6 +121,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             List<DBMovieInfo> movies = DBMovieInfo.GetAll();
             foreach (DBMovieInfo currMovie in movies)
                 allMovies.Add(currMovie);
+
+            if (FilteredMovies.Count > 0)
+                SelectedMovie = FilteredMovies[0];
         }
 
         // Listens for newly added movies from the database manager.
@@ -141,7 +144,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie browser.");
             allMovies.Add((DBMovieInfo)obj);
             ReapplyFilters();
-            ReloadFacade();        
+            ReloadFacade();
         }
 
         // Listens for newly removed items from the database manager.

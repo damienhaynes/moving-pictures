@@ -67,6 +67,23 @@ multiple view modes.
   
   
     <!-- ********************* Background /  Movie Backdrop (Fan-art) *************************** -->
+<!-- when no default backdrop is enabled, just copy some favorites to "<skinpath>\animations\MovingPictures" and enable following code... 
+    <control>
+      <type>multiimage</type>
+      <id>0</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>768</width>
+      <height>576</height>
+      <imagepath>Moving Pictures</imagepath>
+      <timeperimage>3000</timeperimage>
+      <fadetime>3000</fadetime>
+      <loop>yes</loop>
+      <randomize>true</randomize>
+      <visible>!Control.IsVisible(1)</visible>
+      <animation effect="fade" time="200">VisibleChange</animation>
+    </control>
+-->
     <control>
       <description>Background to be displayed when there is no Movie Backdrop</description>
       <type>image</type>
@@ -75,9 +92,11 @@ multiple view modes.
       <posY>0</posY>
       <width>768</width>
       <height>576</height>
+      <colordiffuse>bbffffff</colordiffuse> 
       <texture>MovingPictures\background.png</texture>
+      <visible>!Control.IsVisible(1)</visible>
     </control>
-
+    
     <control>
       <description>Movie Backdrop (Fan Art) - Plug-in sets to invisible, if no art.</description>
       <type>image</type>
@@ -87,24 +106,7 @@ multiple view modes.
       <width>768</width>
       <height>576</height>
       <texture>#MovingPictures.Backdrop</texture>
-      <animation effect="fade" start="0" end="100" time="3000">WindowOpen</animation>
-      <animation effect="fade" start="0" end="100" time="200">Visible</animation>
-      <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
-      <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above 
-           defines for conditional visibility if you dont want to use fan-art only specific views. -->
-    </control>
-
-    <control>
-      <description>Alternate Movie Backdrop - Toggles Load with Component 1 for animations on visibiltiy</description>
-      <type>image</type>
-      <id>11</id>
-      <posX>0</posX>
-      <posY>0</posY>
-      <width>768</width>
-      <height>576</height>
-      <texture>#MovingPictures.Backdrop2</texture>
-      <animation effect="fade" start="0" end="100" time="200">Visible</animation>
-      <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
+      <animation effect="fade" time="1000">VisibleChange</animation>
       <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above 
            defines for conditional visibility if you dont want to use fan-art only specific views. -->
     </control>
@@ -232,11 +234,23 @@ multiple view modes.
 		<posY>243</posY>
 		<width>430</width>
 		<height>300</height>
-		<texture>MovingPictures\grey.png</texture>
+		<texture>MovingPictures\background.png</texture>
         <colordiffuse>ccbbbbbb</colordiffuse> 
 		<visible>!Control.IsVisible(50)</visible>
     </control>
-		
+	
+	<!--control>
+		<description>Overlay image for better reading of detailed information</description>
+		<type>image</type>
+		<id>0</id>
+		<posX>240</posX>
+		<posY>205</posY>
+		<width>420</width>
+		<height>370</height>
+		<texture>osd_dialog_big.png</texture>
+		<visible>!Control.IsVisible(50)</visible>
+    </control-->
+	
     <control>
       <description>Summary</description>
       <type>textboxscrollup</type>
@@ -694,8 +708,8 @@ multiple view modes.
       <description>10 star rating? 10 is a lot...</description>
       <type>imagelist</type>
       <id>0</id>
-      <posX>250</posX>
-      <posY>38</posY>
+      <posX>280</posX>
+      <posY>39</posY>
       <width>200</width>
       <height>20</height>
       <textureWidth>20</textureWidth>
@@ -796,20 +810,19 @@ multiple view modes.
     
     <!-- ******************** Side Bar Buttons, Not Used. The Cycle Button is the only one currently Functional *******************-->
    	<control>
-    	<description>Cycle View Button</description>
-     	<type>button</type>
-      <!-- change id to 2 to cycle through the views in stead of bring up the view selection dialog -->
-      <id>3</id>
-      <onleft>50</onleft>
-      <ondown>4</ondown>
-      <posX>665</posX>
-      <posY>80</posY>
-      <width>50</width>
-      <height>50</height>
-      <textureFocus>MovingPictures\moving_pictures_view_focus.png</textureFocus>
-      <textureNoFocus>MovingPictures\moving_pictures_view.png</textureNoFocus>
-      <visible>Control.IsVisible(50)</visible>
-    </control>
+    	  <description>Cycle View Button</description>
+     	  <type>button</type>
+	  <id>2</id>
+	  <onleft>50</onleft>
+	  <ondown>4</ondown>
+	  <posX>665</posX>
+	  <posY>80</posY>
+          <width>50</width>
+	  <height>50</height>
+	  <textureFocus>MovingPictures\moving_pictures_view_focus.png</textureFocus>
+	  <textureNoFocus>MovingPictures\moving_pictures_view.png</textureNoFocus>
+	  <visible>Control.IsVisible(50)</visible>
+    	</control>
     
     <!-- This is an alternate view button that brings up a menu for view 
          selection, rather than just cycling the view. You can use both
@@ -823,41 +836,41 @@ multiple view modes.
       <posY>160</posY>
       <width>81</width>
       <height>81</height>
-      <textureFocus>MovingPictures\moving_pictures_view_focus.png</textureFocus>
-      <textureNoFocus>MovingPictures\moving_pictures_view.png</textureNoFocus>
+      <textureFocus>moving_pictures_view_focus.png</textureFocus>
+      <textureNoFocus>moving_pictures_view.png</textureNoFocus>
       <visible>Control.IsVisible(50)</visible>
     </control> -->
 
     <control>
-      <description>Filters Button</description>
-      <type>button</type>
-      <id>4</id>
-      <!-- onup>2</onup-->
-      <onleft>50</onleft>
-      <ondown>5</ondown>
-      <posX>665</posX>
-      <posY>130</posY>
-      <width>50</width>
-      <height>50</height>
-      <textureFocus>MovingPictures\moving_pictures_filter_focus.png</textureFocus>
-      <textureNoFocus>MovingPictures\moving_pictures_filter.png</textureNoFocus>
-      <visible>Control.IsVisible(50)</visible>
+	<description>Filters Button</description>
+	<type>button</type>
+	<id>4</id>
+	<onup>2</onup>
+	<onleft>50</onleft>
+	<ondown>5</ondown>
+	<posX>665</posX>
+	<posY>130</posY>
+	<width>50</width>
+	<height>50</height>
+	<textureFocus>MovingPictures\moving_pictures_filter_focus.png</textureFocus>
+	<textureNoFocus>MovingPictures\moving_pictures_filter.png</textureNoFocus>
+	<visible>Control.IsVisible(50)</visible>
     </control>
     
     <control>
-      <description>Settings Button - Not sure what this will do...</description>
-      <type>button</type>
-      <id>5</id>
-      <onup>4</onup>
-      <ondown>50</ondown>
-      <onleft>50</onleft>
-      <posX>665</posX>
-      <posY>180</posY>
-      <width>50</width>
-      <height>50</height>
-      <textureFocus>MovingPictures\moving_pictures_settings_focus.png</textureFocus>
-      <textureNoFocus>MovingPictures\moving_pictures_settings.png</textureNoFocus>
-      <visible>Control.IsVisible(50)</visible>
+        <description>Settings Button - Not sure what this will do...</description>
+        <type>button</type>
+        <id>5</id>
+        <onup>4</onup>
+        <onleft>50</onleft>
+        <posX>665</posX>
+        <posY>180</posY>
+        <width>50</width>
+        <height>50</height>
+        <textureFocus>MovingPictures\moving_pictures_settings_focus.png</textureFocus>
+        <textureNoFocus>MovingPictures\moving_pictures_settings.png</textureNoFocus>
+        <visible>Control.IsVisible(50)</visible>
     </control>
+
 </controls>
 </window>

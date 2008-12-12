@@ -109,14 +109,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void addMovie(DBMovieInfo movie) {
             ListViewItem newItem = new ListViewItem(movie.Title);
             newItem.Tag = movie;
-            // if the movie is offline color it red
-            // todo: maybe fancy this up?
-            if (movie.LocalMedia.Count > 0) {
-                if (!movie.LocalMedia[0].IsAvailable) {
-                    newItem.ForeColor = Color.Red;
-                    newItem.ToolTipText = "This movie is currently offline";
-                }
-            }
             movieListBox.Items.Add(newItem);
             listItems[movie] = newItem;
         }

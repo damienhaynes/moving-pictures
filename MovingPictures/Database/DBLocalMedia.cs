@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.IO;
+using System.Collections.ObjectModel;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("local_media")]
-    public class DBLocalMedia : MovingPicturesDBTable {
-
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+    public class DBLocalMedia: MovingPicturesDBTable {
 
         public override void AfterDelete() {
         }
@@ -26,70 +24,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private FileInfo fileInfo;
 
-        #region read-only properties
-
-        /// <summary>
-        /// Checks if the file is currently available.
-        /// Online returns true, offline returns false)
-        /// </summary>
-        public bool IsAvailable {
-            get {
-                if (fileInfo != null)
-                    return DeviceManager.IsAvailable(fileInfo, volume_serial);
-                else
-                    return false;
-            }
-        }
-
-        public string Volume {
-            get {
-                return DeviceManager.GetVolume(fileInfo);
-            }
-
-        }
-
-        /// <summary>
-        /// Checks if the file is removed from the disk.
-        /// If the file is removed (this is different from being offline) this will return true
-        /// </summary>
-        public bool IsRemoved {
-            get {
-                // if fileInfo exists then let DeviceManager figure it out
-                if (fileInfo != null)
-                    return DeviceManager.IsRemoved(fileInfo, volume_serial);
-                else
-                    // no file so yes.. it's removed
-                    return true;
-            }
-        }
-
-        /// <summary>
-        /// Check if the file is a video
-        /// </summary>
-        public bool IsVideo {
-            get {
-                if (fileInfo != null)
-                    return Utility.IsVideoFile(fileInfo);
-                else
-                    return false;
-            }
-        }
-
-        #endregion
-
+         
         #region Database Fields
-
-        [DBFieldAttribute(Default = null, FieldName = "media_label")]
-        public string MediaLabel {
-            get {
-                return media_label;
-            }
-            set {
-                media_label = value;
-                commitNeeded = true;
-            }
-        }
-        private string media_label;
 
         [DBFieldAttribute]
         public string FullPath {
@@ -109,40 +45,25 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         }
-
-        [DBFieldAttribute(Default = null, FieldName = "volume_serial")]
-        public string VolumeSerial {
-            get {
-                return volume_serial;
-            }
+        /*
+        [DBFieldAttribute(Default=null, FieldName="movie_info_id")]
+        public int? MovieID {
+            get { return movieID; }
             set {
-                volume_serial = value;
+                if (value == null) {
+                    movieID = null;
+                    commitNeeded = true;
+                    return;
+                }
+
+                Movie = DBMovieInfo.Get((int)value);
                 commitNeeded = true;
             }
         }
-        private string volume_serial;
+        private int? movieID;
+        */
 
-        [DBFieldAttribute(Default = "0")]
-        public string DiscId {
-            get {
-                // Calculate DiscId
-                // todo: how to handle iso?
-                bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
-                if ((discid == "0") && (fileInfo != null) && getDiscId)
-                    if (fileInfo.Name.ToLower() == "video_ts.ifo")
-                        if (volume_serial == DeviceManager.GetDiskSerial(fileInfo.Directory) || String.IsNullOrEmpty(volume_serial))
-                            discid = Utility.GetDiscIdString(fileInfo.DirectoryName);
-
-                return discid;
-            }
-            set {
-                discid = value;
-                commitNeeded = true;
-            }
-        }
-        private string discid;
-
-        [DBFieldAttribute(Default = "1")]
+        [DBFieldAttribute(Default="1")]
         public int Part {
             get { return part; }
             set {
@@ -161,6 +82,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
         private int duration;
+
+
 
         [DBFieldAttribute(Default = "false")]
         public bool Ignored {
@@ -181,7 +104,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private DBImportPath importPath;
 
-        [DBRelation(AutoRetrieve = true)]
+        [DBRelation(AutoRetrieve=true)]
         public RelationList<DBLocalMedia, DBMovieInfo> AttachedMovies {
             get {
                 if (_attachedMovies == null) {
@@ -193,37 +116,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #endregion
 
-
-        #region Public methods
-
-        public bool UpdateDiskProperties() {
-            // This will overwrite/update the label and serial field with the current 
-            // disk information available from it's import path
-            if (importPath != null) {
-                VolumeSerial = importPath.GetDiskSerial();
-                MediaLabel = importPath.GetVolumeLabel();
-                return true; 
-            }
-            else {
-                return false; 
-            }
-        }
-
-        #endregion
-        
         #region Overrides
         public override bool Equals(object obj) {
             if (obj.GetType() == typeof(DBLocalMedia) && ((DBLocalMedia)obj).File != null && this.File != null)
-                return (this.File.FullName.Equals(((DBLocalMedia)obj).File.FullName) &&
-                    this.VolumeSerial.Equals(((DBLocalMedia)obj).VolumeSerial)
-                    );
+                return (this.File.FullName.Equals(((DBLocalMedia)obj).File.FullName));
 
             return false;
         }
 
         public override int GetHashCode() {
             if (File != null)
-                return (VolumeSerial + "|" + File.FullName).GetHashCode();
+                return File.FullName.GetHashCode();
 
             return base.GetHashCode();
         }
@@ -239,19 +142,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         #region Database Management Methods
 
         public static DBLocalMedia Get(string fullPath) {
-            return Get(fullPath, null);
-        }
-
-        public static DBLocalMedia Get(string fullPath, string diskSerial) {
             DBField pathField = DBField.GetField(typeof(DBLocalMedia), "FullPath");
-            // using operator LIKE to make the search case insensitive
-            ICriteria pathCriteria = new BaseCriteria(pathField, "like", fullPath);
-            DBField serialField = DBField.GetField(typeof(DBLocalMedia), "VolumeSerial");
-            string op = (diskSerial != null) ? "=" : "is";
-            ICriteria serialCriteria = new BaseCriteria(serialField, op, diskSerial);
-
-            ICriteria criteria = new GroupedCriteria(pathCriteria, GroupedCriteria.Operator.AND, serialCriteria);
-
+            ICriteria criteria = new BaseCriteria(pathField, "=", fullPath);
             List<DBLocalMedia> resultSet = MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(criteria);
 
             if (resultSet.Count > 0) {

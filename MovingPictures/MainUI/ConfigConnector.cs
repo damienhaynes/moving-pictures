@@ -31,7 +31,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public void ShowPlugin() {
             try {
                 MovingPicturesCore.Initialize();
-                MovingPicturesCore.DeviceManager.StartMonitor();
             }
             catch (Exception e) {
                 logger.FatalException("Unexpected error from plug-in initialization!", e);

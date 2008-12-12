@@ -11,11 +11,6 @@
       <description>Determines behavior when a movie in the movie browser is clicked. If true, the details view appears. If false the movie starts playback.</description>
     </setting>
 
-    <setting id="enable_rc_filter" name="Enable Remote Control Filter" type="BOOL">
-      <default>true</default>
-      <description>Enables the Remote Controle Filter, set to false if you want to use the default mediaportal remote control functionality.</description>
-    </setting>
-
     <setting id="max_string_list_items" name="Max Actors, Genres, etc. to Display" type="INT">
       <default>5</default>
       <description>This determines the number of actors, genres, directors, etc to display on the GUI. This applies to all string based list fields.</description>
@@ -25,22 +20,11 @@
       <default>250</default>
       <description>The number of milliseconds that Moving Pictures waits before it loads new artwork (backdrops and covers) when traversing movies in the GUI. Increasing this value can improve performance if you are experiencing slow down with rapid movements in the GUI.</description>
     </setting>
-    
+
     <setting id="home_name" name="Name for Home Screen" type="STRING">
       <default>Moving Pictures</default>
       <description>The name that appears on the home screen for the plugin.</description>
     </setting>
-
-    <setting id="ondisc_details" name="Show movie details screen when a Blu-ray/DVD disc is inserted." type="BOOL">
-      <default>true</default>
-      <description>Set this to true if you want the GUI to show you the movie details (if known).</description>
-    </setting>
-
-    <setting id="ondisc_autoplay" name="Start playback when a Blu-ray/DVD disc is inserted." type="BOOL">
-      <default>false</default>
-      <description>Set this to true if you want to start playback (autoplay).</description>
-    </setting>  
-    
 
     <setting id="gui_watch_percentage" name="GUI Watch Percentage" type="INT">
       <default>90</default>
@@ -81,13 +65,13 @@
       </setting>
 
       <setting id="importer_filter" name="Regular Expression Noise Filter" type="STRING">
-        <default>((720p|1080p|1080i|dircut|directors cut|dvdrip|dvdscreener|dvdscr|avchd|wmv|ntsc|mpeg|dsr|r5|dvdr|dvd5|dvd9|bd5|bd9|dts|ac3|bluray|blu-ray|hdtv|pdtv|hddvd|xvid|divx|x264|dxva|(?-i)LIMITED|DC|UNRATED)([-].+?$)?)</default>
+        <default>((720p|1080p|1080i|DirCut|DVDRip|DVDScreener|DVDScr|AVCHD|WMV|NTSC|MPEG|DSR|R5|DVDR|DTS|AC3|Bluray|Blu-ray|HDTV|PDTV|HDDVD|XviD|DiVX|x264|dxva)[-]?.*?$)</default>
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
 
       <setting id="importer_discid" name="Enable Disc ID" type="BOOL">
         <default>true</default>
-        <description>Calculate Disc ID for DVD media. This enables better matching for DVD discs</description>
+        <description>Calculate Disc ID for DVD media</description>
       </setting>
 
     </group>

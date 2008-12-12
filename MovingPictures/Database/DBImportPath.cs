@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.IO;
-using System.Threading;
+using System.Windows.Forms;
+using NLog;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using NLog;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("import_path")]
-    public class DBImportPath : MovingPicturesDBTable {
+    public class DBImportPath: MovingPicturesDBTable  {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-
+                
         public DBImportPath()
             : base() {
             dirInfo = null;
@@ -19,49 +20,25 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public override void AfterDelete() {
         }
-
-        public bool IsAvailable {
-            get {
-                if (dirInfo != null)
-                    return DeviceManager.IsAvailable(dirInfo);
-                else
-                    return false;
-            }
-        }
-
-        public bool IsRemovable {
-            get {
-                if (dirInfo != null)
-                    return DeviceManager.IsRemovable(dirInfo);
-                else
-                    return false;
-            }
-        }
-
-        public string Volume {
-            get {
-                return DeviceManager.GetVolume(dirInfo);
-            }
-        }
-
+        
         public DirectoryInfo Directory {
             get { return dirInfo; }
-
+            
             set {
                 dirInfo = value;
                 commitNeeded = true;
             }
-        }
+        } 
         private DirectoryInfo dirInfo;
 
         #region Database Fields
 
-        [DBFieldAttribute(FieldName = "path")]
+        [DBFieldAttribute(FieldName="path")]
         public string FullPath {
-            get {
+            get { 
                 if (dirInfo == null)
                     return "";
-
+                
                 return dirInfo.FullName;
             }
 
@@ -74,6 +51,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         }
+
+
+        [DBFieldAttribute(Default = "false")]
+        public bool Removable {
+            get { return removable; }
+            set {
+                removable = value;
+                commitNeeded = true;
+            }
+        } private bool removable;
 
         #endregion
 
@@ -104,9 +91,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             foreach (DirectoryInfo currChildDir in childDirs) {
                 try {
-                    if ((currChildDir.Attributes & FileAttributes.System) == 0)
+                    if ((currChildDir.Attributes & FileAttributes.System) == 0) 
                         fileList.AddRange(getFilesRecursive(currChildDir));
-                    else
+                    else 
                         logger.Debug("Rejecting directory " + currChildDir.FullName + " because it is flagged as a System folder.");
                 }
                 catch (Exception e) {
@@ -117,29 +104,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             return fileList;
-        }
+        }    
 
 
         public List<DBLocalMedia> GetLocalMedia(bool returnOnlyNew) {
-            logger.Debug("Starting scan for import path: {0}", Directory.FullName);
-            string volume = null;
-            string label = null;
-            string serial = null;
-            DriveType type = DriveType.Unknown;
-            if (IsAvailable) {                
-                VolumeInfo vi = DeviceManager.GetVolumeInfo(Directory);
-                if (vi != null) {
-                    volume = vi.Drive.Name;
-                    label = vi.Label;
-                    serial = vi.Serial;
-                    type = vi.Drive.DriveType;
-                }
-                logger.Debug("Volume: {0}, Type= {1}, Serial={2}", volume, type, serial);
-            }
-            else {
-                logger.Error("Scan for '{0}' was cancelled because the import path is not available.", Directory.FullName);
+            if (Directory == null)
                 return null;
-            }
 
             List<DBLocalMedia> rtn = new List<DBLocalMedia>();
 
@@ -147,22 +117,20 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             try {
                 List<FileInfo> fileList = getFilesRecursive(Directory);
                 foreach (FileInfo currFile in fileList) {
-                    if (Utility.IsVideoFile(currFile)) {
-                        DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName, serial);
+                    DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName);
+                    foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
+                        if (currFile.Extension.ToLower().Equals(currExt.ToLower())) {
 
-                        // if this file is in the database continue if we only want new files
-                        if (newFile.ID != null && returnOnlyNew)
-                            continue;
-                        
-                        logger.Debug("Pulling new file " + currFile.Name + " from import path.");
-                        newFile.ImportPath = this;
-
-                        // we could use the UpdateDiskInformation() method but because we already have the information
-                        // let's just fill the properties manually
-                        // newFile.UpdateDiskInformation();
-                        newFile.VolumeSerial = serial;
-                        newFile.MediaLabel = label;
-                        rtn.Add(newFile);
+                            // if this file is in the database continue if we only want new files
+                            if (newFile.ID != null && returnOnlyNew) 
+                                break;
+                            
+                            // good extension for new file, so add it
+                            logger.Debug("Pulling new file " + currFile.Name + " from import path.");
+                            newFile.ImportPath = this;
+                            rtn.Add(newFile);
+                            break;
+                        }
                     }
                 }
             }
@@ -175,36 +143,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return rtn;
         }
 
-
-        public DriveType GetDriveType() {
-            // this property won't be stored as it can differ in time
-            if (Directory != null) {
-                VolumeInfo vi = DeviceManager.GetVolumeInfo(Directory);
-                if (vi != null)
-                    return vi.Drive.DriveType;
-            }
-            return DriveType.Unknown;
-        }
-
-        public string GetVolumeLabel() {
-            // this property won't be stored as it can differ in time
-            if (Directory != null)
-                return DeviceManager.GetVolumeLabel(Directory);
-            else
-                return null;
-        }
-
-        public string GetDiskSerial() {
-            // this property won't be stored as it can differ in time
-            if (Directory != null)
-                return DeviceManager.GetDiskSerial(Directory);
-            else
-                return null;
-        }
-
         public override string ToString() {
             return FullPath;
-        }
+        }        
 
 
         #endregion

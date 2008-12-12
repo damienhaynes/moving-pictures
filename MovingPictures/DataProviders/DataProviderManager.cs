@@ -7,7 +7,6 @@ using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using System.Reflection;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using System.Collections.ObjectModel;
 using NLog;
 using System.IO;
@@ -234,8 +233,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Allocine);
 
             AddSource(typeof(MeligroveProvider));
+            AddSource(typeof(ScriptableProvider), Resources.IMPAwards);
             AddSource(typeof(ScriptableProvider), Resources.MoTechPosters);
-            AddSource(typeof(ScriptableProvider), Resources.IMPAwards);          
             
             AddSource(typeof(MyVideosProvider));
 
