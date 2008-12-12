@@ -287,9 +287,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     object serial = moNew.Properties["VolumeSerialNumber"].Value;
                     object serialOld = moOld.Properties["VolumeSerialNumber"].Value;
                     if (serial != serialOld) {
-
                         VolumeInfo volumeInfo = GetVolumeInfo(volume);
-
                         // Trigger events
                         if (serial == null && serialOld != null) {
                             eventType = "WMI_EVENT_VOLUME_REMOVED";
@@ -301,10 +299,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             volumeInfo.Refresh(moNew); // update volume Info
                             invokeOnVolumeInserted(volume, serial.ToString().Trim());
                         }
-
-                        
                     }
-                    logger.Debug("{0}: DeviceID= {1} ({2}), VolumeSerialNumber = {3} ({4})", eventType, volume, moOld.Properties["DeviceID"].Value.ToString(), serial, serialOld);
+                    //logger.Debug("{0}: DeviceID= {1} ({2}), VolumeSerialNumber = {3} ({4})", eventType, volume, moOld.Properties["DeviceID"].Value.ToString(), serial, serialOld);
                 }
 
             }

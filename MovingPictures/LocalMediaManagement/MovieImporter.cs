@@ -599,19 +599,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         if (!importPath.IsAvailable) {
                             if (importPath.IsRemovable) {
                                 // if it's removable just leave a message
-                                logger.Info("Import path: '{0}' ({1}) is offline.", importPath.FullPath, importPath.GetDriveType().ToString());
+                                logger.Info("Failed watching: '{0}' ({1}) - Path is currently offline.", importPath.FullPath, importPath.GetDriveType().ToString());
                             }
                             else {
                                 // if it's not removable do not process it anymore
-                                logger.Info("Import path: '{0}' ({1}) does not exist.", importPath.FullPath, importPath.GetDriveType().ToString());
+                                logger.Info("Cancelled watching: '{0}' ({1}) - Path does not exist (anymore).", importPath.FullPath, importPath.GetDriveType().ToString());
                                 watcherQueue.Remove(importPath);
                             }
                         }
-                        else {
-                            logger.Info("FileSystemWatcher error: {0}", e.Message.ToString());
+                        else { // Other kind of error?
+                            logger.Debug("FileSystemWatcher error: {0}", e.Message.ToString());
                         }
                     }
-
+                    
+                    // If starting the watcher was succesful 
+                    // remove it from startup queue
                     if (success)
                         watcherQueue.Remove(importPath);
                 }
@@ -628,8 +630,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             
             fileSystemWatchers.Add(watcher);
             pathLookup[watcher] = importPath;
-            
-            logger.Debug("Created FileSystemWatcher for: '{0}' ({1})", importPath.FullPath, importPath.GetDriveType().ToString()) ;
+            logger.Info("Started watching '{0}' ({1}) - Path is now being monitored for changes.", importPath.FullPath, importPath.GetDriveType().ToString());
         }
 
         // When a FileSystemWatcher gets corrupted this handler will add it to the queue again
@@ -637,8 +638,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             Exception watchException = e.GetException();
             FileSystemWatcher watcher = (FileSystemWatcher)source;
             DBImportPath importPath = pathLookup[watcher];
-            logger.Debug("A FileSystemWatcher error has occurred for {0}: {1}", importPath, watchException.Message);
-            
+            logger.Info("Stopped watching '{0}' ({1}) - Reason: {2}", importPath, importPath.GetDriveType(), watchException.Message);
+
             // remove the watcher from the lookups
             if (pathLookup.ContainsKey(watcher))
                 pathLookup.Remove(watcher);
@@ -665,14 +666,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     if (importPath.IsRemovable)
                         logger.Info("Removable file " + newFile.File.Name + " brought online.");
                     else
-                        logger.Warn("FileSystemWatcher tried to add a pre-existing file: " + newFile.File.Name);
+                        logger.Warn("Watcher tried to add a pre-existing file: " + newFile.File.Name);
                     return;
                 }
 
                 newFile.ImportPath = importPath;
                 newFile.UpdateDiskProperties();
                 lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
-                logger.Info("FileSystemWatcher queued " + newFile.File.Name + " for processing.");
+                logger.Info("Watcher queued " + newFile.File.Name + " for processing.");
             }
         }
 
@@ -681,7 +682,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             
             DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath));
 
-            logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal from the database.");
+            logger.Info("Watcher flagged " + removedFile.File.Name + " for removal from the database.");
 
             // if the file is not in our system there's nothing to do
             // todo: this is not entirely true because the file could be sitting in the match system
