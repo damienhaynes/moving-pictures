@@ -566,7 +566,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             file.Refresh();
             // If we got a volume serial then compare and judge
             if (!String.IsNullOrEmpty(serial))
-                if ((GetDiskSerial(file) == serial) && !file.Exists)
+                if ((GetDiskSerial(file) == serial) && !file.Exists && file.Directory.Root.Exists)
                     return true;
                 else
                     return false;
