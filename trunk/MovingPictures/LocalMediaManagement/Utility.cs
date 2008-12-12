@@ -13,8 +13,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         #region Ctor / Private variables
         
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
+        private static Logger logger = LogManager.GetCurrentClassLogger();         
+        
         private Utility() {
 
         }
@@ -247,13 +247,22 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="name"></param>
         /// <returns></returns>
         public static bool isFolderAmbiguous(string name) {
-            // Conditions:
-            // a) Name is too short
-            // b) special video folders
-            // c) multipart folder (subfolder)
-            // todo: make this more generic
-            return (name.Length == 1 || name.ToLower() == "hvdvd_ts" || name.ToLower() == "adv_obj" || name.ToLower() == "bdmv" || name.ToLower() == "stream" || name.ToLower() == "playlist"
-                || name.ToLower() == "clipinf" || name.ToLower() == "backup" || name.ToLower() == "video_ts" || isFolderMultipart(name));
+            string[] folders = new string[] { 
+                "video_ts", "hvdvd_ts", "adv_obj", "bdmv", 
+                "stream", "playlist", "clipinf", "backup"
+            };
+
+            // Name is too short or is marked as being multi-part
+            if (name.Length == 1 || isFolderMultipart(name))
+                return true;
+
+            // Ignore specific names
+            foreach (string folderName in folders) {
+                if (name.Equals(folderName, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -286,11 +295,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     return false;
 
                 // Bluray: m2ts files sitting in a stream folder are part of a bluray disc
-                if (ext == ".m2ts" && fileInfo.Directory.Name.ToLower() == "stream")
+                if (ext == ".m2ts" && fileInfo.Directory.Name.Equals("stream", StringComparison.OrdinalIgnoreCase))
                     return false;
 
                 // HD-DVD: evo files sitting in a hvdvd_ts folder are part of a hddvd disc
-                if (ext == ".evo" && fileInfo.Directory.Name.ToLower() == "hvdvd_ts")
+                if (ext == ".evo" && fileInfo.Directory.Name.Equals("hvdvd_ts", StringComparison.OrdinalIgnoreCase))
                     return false;
 
                 // HD-DVD: .dat files other than discid.dat should be ignored
@@ -313,7 +322,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static VideoDiscType GetVideoDiscType(string path) {
             foreach (VideoDiscType format in EnumToList<VideoDiscType>()) {
                 if (format != VideoDiscType.UnknownFormat) {
-                    if (path.EndsWith(GetEnumValueDescription(format), true, null))
+                    if (path.EndsWith(GetEnumValueDescription(format),StringComparison.OrdinalIgnoreCase))
                         return format;
                 }
             }
@@ -328,7 +337,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static bool IsVideoDiscPath(string path) {
             foreach(VideoDiscType format in EnumToList<VideoDiscType>()) {
                 if (format != VideoDiscType.UnknownFormat)
-                    if (path.EndsWith(GetEnumValueDescription(format), true, null))
+                    if (path.EndsWith(GetEnumValueDescription(format), StringComparison.OrdinalIgnoreCase))
                         return true;
             }
             return false;
@@ -400,47 +409,22 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return ((file.Length < sampleMaxSize) && expr.Match(file.Name).Success);
         }
 
-        // Cached Dictionary for GetVideoFileCount()
-        private static Dictionary<string, int> folderCountCache;
-
         /// <summary>
         /// Get the number of video files (excluding sample files) that are in a folder
         /// </summary>
         /// <param name="folder">the directory to count video files in</param>
         /// <returns>total number of files found in the folder</returns>
         public static int GetVideoFileCount(DirectoryInfo folder) {
-            return GetVideoFileCount(folder, true);
-        }
-
-        /// <summary>
-        /// Get the number of video files (excluding sample files) that are in a folder
-        /// </summary>
-        /// <param name="folder">the directory to count video files in</param>
-        /// <param name="cached">If the count for this folder was already calculated this session return the cache value, set to false to disable cache</param>
-        /// <returns>total number of files found in the folder</returns>
-        public static int GetVideoFileCount(DirectoryInfo folder, bool cached) {
-            // If there's no cache object, create it
-            if (folderCountCache == null)
-                folderCountCache = new Dictionary<string, int>();
-
-            // if we have already scanned this folder move on
-            // todo: remove the cache or let it expire when the directory is changed
-            if (folderCountCache.ContainsKey(folder.FullName) && cached)
-                return folderCountCache[folder.FullName];
-
-            // count the number of non-sample video files in the folder
             int rtn = 0;
             FileInfo[] fileList = folder.GetFiles("*");
             foreach (FileInfo currFile in fileList) {
-                // Loop through files having valid video extensions
-                // NOTE: MediaPortal Dependency!
-                if (IsMediaPortalVideoFile(currFile))
+                // count the number of non-sample video files in the folder
+                if (IsVideoFile(currFile))
                     if (!isSampleFile(currFile))
                         rtn++;
             }
 
-            // Save to cache and return count
-            folderCountCache[folder.FullName] = rtn;
+            // Return count
             return rtn;
         }       
 
@@ -452,7 +436,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="expectedCount">maximum count</param>
         /// <returns>True if folder is dedicated</returns>
         public static bool isFolderDedicated(DirectoryInfo folder, int expectedCount) {
-            return (GetVideoFileCount(folder, false) <= expectedCount);
+            return (GetVideoFileCount(folder) <= expectedCount);
         }
 
         #endregion
@@ -468,8 +452,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="file"></param>
         /// <returns></returns>
         public static bool IsMediaPortalVideoFile(FileInfo file) {
-            foreach (string currExt in MediaPortal.Util.Utils.VideoExtensions) {
-                if (file.Extension.ToLower() == currExt)
+            foreach (string ext in MediaPortal.Util.Utils.VideoExtensions) {
+                if (file.Extension.Equals(ext, StringComparison.OrdinalIgnoreCase))
                     return true;
             }
             return false;
