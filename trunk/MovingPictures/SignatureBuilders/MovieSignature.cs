@@ -207,7 +207,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region Overrides
 
         public override string ToString() {
-            return String.Format("Path= {0} || Folder= {1}|| File= {2} || Title= \"{3}\" || Year= {4} || DiscId= {5} || ImdbId= {6} || ",
+            return String.Format("Path= \"{0}\", Folder= \"{1}\", File= \"{2}\", Title= \"{3}\", Year= {4}, DiscId= \"{5}\", ImdbId= \"{6}\"",
             this.Path, this.Folder, this.File, this.Title, this.Year.ToString(), this.DiscId, this.ImdbId);
         }
 

@@ -293,6 +293,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (ext == ".evo" && fileInfo.Directory.Name.ToLower() == "hvdvd_ts")
                     return false;
 
+                // HD-DVD: .dat files other than discid.dat should be ignored
+                if (ext == ".dat" && name != "discid.dat")
+                    return false;
+
                 // if we made it this far we have a winner
                 return true;
             }
