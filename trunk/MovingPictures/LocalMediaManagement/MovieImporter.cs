@@ -10,7 +10,6 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using NLog;
-using Win32.Utils.Cd;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public enum MovieImporterAction {
@@ -658,7 +657,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void OnFileAdded(Object source, FileSystemEventArgs e) {
             if (Utility.IsVideoFile(new FileInfo(e.FullPath))) {
 
-                DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath, MovingPicturesCore.DeviceManager.GetDiskSerial(e.FullPath));
+                DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath));
                 DBImportPath importPath = pathLookup[(FileSystemWatcher)source];
 
                 // if this file is already in the system, disable (this happens if it's a removable source)
@@ -680,7 +679,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // When a FileSystemWatcher detects a file has been removed, delete it.
         private void OnFileDeleted(Object source, FileSystemEventArgs e) {
             
-            DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath, MovingPicturesCore.DeviceManager.GetDiskSerial(e.FullPath));
+            DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath));
 
             logger.Info("FileSystemWatcher flagged " + removedFile.File.Name + " for removal from the database.");
 

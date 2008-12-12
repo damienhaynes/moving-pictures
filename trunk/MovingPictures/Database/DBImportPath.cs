@@ -23,7 +23,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool IsAvailable {
             get {
                 if (dirInfo != null)
-                    return MovingPicturesCore.DeviceManager.IsAvailable(dirInfo);
+                    return DeviceManager.IsAvailable(dirInfo);
                 else
                     return false;
             }
@@ -32,7 +32,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool IsRemovable {
             get {
                 if (dirInfo != null)
-                    return MovingPicturesCore.DeviceManager.IsRemovable(dirInfo);
+                    return DeviceManager.IsRemovable(dirInfo);
                 else
                     return false;
             }
@@ -40,7 +40,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public string Volume {
             get {
-                return MovingPicturesCore.DeviceManager.GetVolume(dirInfo);
+                return DeviceManager.GetVolume(dirInfo);
             }
         }
 
@@ -127,10 +127,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             string serial = null;
             DriveType type = DriveType.Unknown;
             if (IsAvailable) {                
-                VolumeInfo vi = MovingPicturesCore.DeviceManager.GetVolumeInfo(Directory);
+                VolumeInfo vi = DeviceManager.GetVolumeInfo(Directory);
                 if (vi != null) {
                     volume = vi.Drive.Name;
-                    label = vi.Drive.VolumeLabel;
+                    label = vi.Label;
                     serial = vi.Serial;
                     type = vi.Drive.DriveType;
                 }
@@ -179,7 +179,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public DriveType GetDriveType() {
             // this property won't be stored as it can differ in time
             if (Directory != null) {
-                VolumeInfo vi = MovingPicturesCore.DeviceManager.GetVolumeInfo(Directory);
+                VolumeInfo vi = DeviceManager.GetVolumeInfo(Directory);
                 if (vi != null)
                     return vi.Drive.DriveType;
             }
@@ -189,7 +189,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public string GetVolumeLabel() {
             // this property won't be stored as it can differ in time
             if (Directory != null)
-                return MovingPicturesCore.DeviceManager.GetVolumeLabel(Directory);
+                return DeviceManager.GetVolumeLabel(Directory);
             else
                 return null;
         }
@@ -197,7 +197,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public string GetDiskSerial() {
             // this property won't be stored as it can differ in time
             if (Directory != null)
-                return MovingPicturesCore.DeviceManager.GetDiskSerial(Directory);
+                return DeviceManager.GetDiskSerial(Directory);
             else
                 return null;
         }

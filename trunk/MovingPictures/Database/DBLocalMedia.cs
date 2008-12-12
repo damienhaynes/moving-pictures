@@ -35,7 +35,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool IsAvailable {
             get {
                 if (fileInfo != null)
-                    return MovingPicturesCore.DeviceManager.IsAvailable(fileInfo, volume_serial);
+                    return DeviceManager.IsAvailable(fileInfo, volume_serial);
                 else
                     return false;
             }
@@ -43,7 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public string Volume {
             get {
-                return MovingPicturesCore.DeviceManager.GetVolume(fileInfo);
+                return DeviceManager.GetVolume(fileInfo);
             }
 
         }
@@ -56,7 +56,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             get {
                 // if fileInfo exists then let DeviceManager figure it out
                 if (fileInfo != null)
-                    return MovingPicturesCore.DeviceManager.IsRemoved(fileInfo, volume_serial);
+                    return DeviceManager.IsRemoved(fileInfo, volume_serial);
                 else
                     // no file so yes.. it's removed
                     return true;
@@ -130,7 +130,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
                 if ((discid == "0") && (fileInfo != null) && getDiscId)
                     if (fileInfo.Name.ToLower() == "video_ts.ifo")
-                        if (volume_serial == MovingPicturesCore.DeviceManager.GetDiskSerial(fileInfo.Directory) || String.IsNullOrEmpty(volume_serial))
+                        if (volume_serial == DeviceManager.GetDiskSerial(fileInfo.Directory) || String.IsNullOrEmpty(volume_serial))
                             discid = Utility.GetDiscIdString(fileInfo.DirectoryName);
 
                 return discid;
