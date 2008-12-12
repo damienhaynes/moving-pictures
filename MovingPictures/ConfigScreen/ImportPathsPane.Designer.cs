@@ -30,6 +30,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.addSourceButton = new System.Windows.Forms.Button();
             this.notesLabel = new System.Windows.Forms.TextBox();
             this.pathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Removable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.pathsGridView)).BeginInit();
             this.pathsGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -44,7 +45,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.pathsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.pathsGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.pathColumn});
+            this.pathColumn,
+            this.Removable});
             this.pathsGridView.Location = new System.Drawing.Point(6, 97);
             this.pathsGridView.MultiSelect = false;
             this.pathsGridView.Name = "pathsGridView";
@@ -103,6 +105,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.notesLabel.Size = new System.Drawing.Size(517, 72);
             this.notesLabel.TabIndex = 1;
             this.notesLabel.Text = resources.GetString("notesLabel.Text");
+            this.notesLabel.TextChanged += new System.EventHandler(this.notesLabel_TextChanged);
             // 
             // pathColumn
             // 
@@ -111,6 +114,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.pathColumn.HeaderText = "Path";
             this.pathColumn.Name = "pathColumn";
             this.pathColumn.ReadOnly = true;
+            // 
+            // Removable
+            // 
+            this.Removable.DataPropertyName = "IsRemovable";
+            this.Removable.HeaderText = "Removable";
+            this.Removable.Name = "Removable";
+            this.Removable.ReadOnly = true;
             // 
             // ImportPathsPane
             // 
@@ -135,5 +145,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.Button addSourceButton;
         private System.Windows.Forms.Button removeSourceButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn pathColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Removable;
     }
 }
