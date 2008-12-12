@@ -100,14 +100,14 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                     // scan file and retrieve result
                     string imdbid = parseFile(file.FullName);
                     // if a match is found return the imdb id
-                    if (imdbid != string.Empty)
+                    if (imdbid != null)
                         return imdbid;
                 }
 
             }
 
             // we found nothing so return empty
-            return string.Empty;
+            return null;
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 logger.Debug("ImdbID Found: {0}", s);
             }
             else {
-                s = string.Empty;
+                s = null;
                 logger.Debug("No ImdbID Found.");
             }
 
