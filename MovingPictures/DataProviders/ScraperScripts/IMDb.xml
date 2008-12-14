@@ -2,7 +2,7 @@
   <details>
     <!-- These details are for display purposes only. -->
     <name>imdb.com</name>
-    <author>John Conrad (fforde)</author>
+    <author>John Conrad (fforde), Armand Pondman (armandp)</author>
     <description>This script pulls data from IMDb.</description>
     
     <!-- 
@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="0" point="10"/>
-    <published month="12" day="12" year="2008"/>
+    <version major="1" minor="1" point="0"/>
+    <published month="12" day="13" year="2008"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 

@@ -77,11 +77,5 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
-        private void notesLabel_TextChanged(object sender, EventArgs e) {
-
-        }
-
-
-
     }
 }

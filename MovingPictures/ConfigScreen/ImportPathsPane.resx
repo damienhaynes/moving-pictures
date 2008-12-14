@@ -124,6 +124,6 @@
     <value>True</value>
   </metadata>
   <data name="notesLabel.Text" xml:space="preserve">
-    <value>Specify the location(s) of your movie files. Any video that is placed in these folders will automatically be added to your Library, and any media removed from these folders will be automatically removed from your Library. It's recommended to mount network shares to a local drive. Media is only removed from your library when the application is certain it's not available from the original source of the import.</value>
+    <value>Please specify the location(s) of your movie files. Any video that is placed in these folders will automatically be added to your Library, and any video removed from these folders will be automatically removed from your Library.  Moving Pictures will automatically detect if an import path is offline and will NOT remove your files if a computer goes offline, a CD is removed, etc.</value>
   </data>
 </root>

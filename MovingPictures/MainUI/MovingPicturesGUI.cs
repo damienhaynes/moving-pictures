@@ -275,6 +275,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void OnFilterChanged(IBrowserFilter filter) {
+            // update properties
+            publishViewDetails();
+            
             // set the global watched indicator
             if (watchedFilteringIndicator != null && filter == watchedFilter)
                 if (filter.Active)
@@ -1323,6 +1326,23 @@ namespace MediaPortal.Plugins.MovingPictures {
                     valueStr = valueStr + string.Format(", {0} minute{1}", minValue, minValue != 1 ? "s" : string.Empty);
                 SetProperty(propertyStr, valueStr);
             }
+
+        }
+
+        // all details relating to the current view and filtering status
+        private void publishViewDetails() {
+            string propertyStr;
+            string valueStr;
+
+            // total number of movies.
+            propertyStr = "#MovingPictures.general.totalmoviecount";
+            valueStr = browser.AllMovies.Count.ToString();
+            SetProperty(propertyStr, valueStr);
+
+            // number of movies in list based on filter
+            propertyStr = "#MovingPictures.general.filteredmoviecount";
+            valueStr = browser.FilteredMovies.Count.ToString();
+            SetProperty(propertyStr, valueStr);
         }
 
         // Grabs the <define> tags from the skin for skin parameters from skinner.
