@@ -31,12 +31,12 @@
       <description>The name that appears on the home screen for the plugin.</description>
     </setting>
 
-    <setting id="ondisc_details" name="Show movie details screen when a Blu-ray/DVD disc is inserted." type="BOOL">
+    <setting id="ondisc_details" name="Show movie details screen when a DVD/Bluray/HD-DVD disc is inserted." type="BOOL">
       <default>true</default>
       <description>Set this to true if you want the GUI to show you the movie details (if known).</description>
     </setting>
 
-    <setting id="ondisc_autoplay" name="Start playback when a Blu-ray/DVD disc is inserted." type="BOOL">
+    <setting id="ondisc_autoplay" name="Start playback when a DVD/Bluray/HD-DVD is inserted." type="BOOL">
       <default>false</default>
       <description>Set this to true if you want to start playback (autoplay).</description>
     </setting>  
@@ -81,7 +81,7 @@
       </setting>
 
       <setting id="importer_filter" name="Regular Expression Noise Filter" type="STRING">
-        <default>((720p|1080p|1080i|dircut|directors cut|dvdrip|dvdscreener|dvdscr|avchd|wmv|ntsc|mpeg|dsr|r5|dvdr|dvd5|dvd9|bd5|bd9|dts|ac3|bluray|blu-ray|hdtv|pdtv|hddvd|xvid|divx|x264|dxva|(?-i)LIMITED|DC|UNRATED)([-].+?$)?)</default>
+        <default>(\b(576p|720p|1080p|1080i|dircut|directors cut|dvdrip|dvdscreener|dvdscr|avchd|wmv|ntsc|pal|mpeg|dsr|hd|r5|dvd|dvdr|dvd5|dvd9|bd5|bd9|dts|ac3|bluray|blu-ray|hdtv|pdtv|hddvd|xvid|divx|x264|dxva|(?-i)LIMITED|DC|UNRATED)\b([-].+?$)?)</default>
         <description>A regular expression that removes common used keywords from the folder/filename.</description>
       </setting>
 
