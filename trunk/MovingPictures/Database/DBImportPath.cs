@@ -85,40 +85,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public List<DBLocalMedia> GetNewLocalMedia() {
             return GetLocalMedia(true);
-        }
-
-        public static List<FileInfo> getFilesRecursive(DirectoryInfo inputDir) {
-            List<FileInfo> fileList = new List<FileInfo>();
-            DirectoryInfo[] childDirs = new DirectoryInfo[] { };
-
-            try {
-                fileList.AddRange(inputDir.GetFiles("*"));
-                childDirs = inputDir.GetDirectories();
-            }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
-
-                logger.Error("Error while retrieving files/directories for: " + inputDir.FullName, e);
-            }
-
-            foreach (DirectoryInfo currChildDir in childDirs) {
-                try {
-                    if ((currChildDir.Attributes & FileAttributes.System) == 0)
-                        fileList.AddRange(getFilesRecursive(currChildDir));
-                    else
-                        logger.Debug("Rejecting directory " + currChildDir.FullName + " because it is flagged as a System folder.");
-                }
-                catch (Exception e) {
-                    if (e.GetType() == typeof(ThreadAbortException))
-                        throw e;
-                    logger.Error("Error during attribute check for: " + currChildDir.FullName, e);
-                }
-            }
-
-            return fileList;
-        }
-
+        }     
 
         public List<DBLocalMedia> GetLocalMedia(bool returnOnlyNew) {
             logger.Debug("Starting scan for import path: {0}", Directory.FullName);
@@ -145,25 +112,23 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // grab the list of files and parse out appropriate ones based on extension
             try {
-                List<FileInfo> fileList = getFilesRecursive(Directory);
-                foreach (FileInfo currFile in fileList) {
-                    if (Utility.IsVideoFile(currFile)) {
-                        DBLocalMedia newFile = DBLocalMedia.Get(currFile.FullName, serial);
+                List<FileInfo> fileList = Utility.GetVideoFilesRecursive(Directory);
+                foreach (FileInfo videoFile in fileList) {
+                    DBLocalMedia newFile = DBLocalMedia.Get(videoFile.FullName, serial);
 
-                        // if this file is in the database continue if we only want new files
-                        if (newFile.ID != null && returnOnlyNew)
-                            continue;
-                        
-                        logger.Debug("Pulling new file " + currFile.Name + " from import path.");
-                        newFile.ImportPath = this;
+                    // if this file is in the database continue if we only want new files
+                    if (newFile.ID != null && returnOnlyNew)
+                        continue;
 
-                        // we could use the UpdateDiskInformation() method but because we already have the information
-                        // let's just fill the properties manually
-                        // newFile.UpdateDiskInformation();
-                        newFile.VolumeSerial = serial;
-                        newFile.MediaLabel = label;
-                        rtn.Add(newFile);
-                    }
+                    logger.Debug("Pulling new file " + videoFile.Name + " from import path.");
+                    newFile.ImportPath = this;
+
+                    // we could use the UpdateDiskInformation() method but because we already have the information
+                    // let's just fill the properties manually
+                    // newFile.UpdateDiskInformation();
+                    newFile.VolumeSerial = serial;
+                    newFile.MediaLabel = label;
+                    rtn.Add(newFile);
                 }
             }
             catch (Exception e) {

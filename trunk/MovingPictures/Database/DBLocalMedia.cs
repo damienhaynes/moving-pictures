@@ -243,6 +243,22 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public static DBLocalMedia Get(string fullPath, string diskSerial) {
+            List<DBLocalMedia> resultSet = GetAll(fullPath, diskSerial);
+            if (resultSet.Count > 0) {
+                return resultSet[0];
+            }
+
+            DBLocalMedia newFile = new DBLocalMedia();
+            newFile.FullPath = fullPath;
+
+            return newFile;
+        }
+
+        public static List<DBLocalMedia> GetAll(string fullPath) {
+            return GetAll(fullPath, null);
+        }
+
+        public static List<DBLocalMedia> GetAll(string fullPath, string diskSerial) {
             DBField pathField = DBField.GetField(typeof(DBLocalMedia), "FullPath");
             // using operator LIKE to make the search case insensitive
             ICriteria pathCriteria = new BaseCriteria(pathField, "like", fullPath);
@@ -253,15 +269,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             ICriteria criteria = new GroupedCriteria(pathCriteria, GroupedCriteria.Operator.AND, serialCriteria);
 
             List<DBLocalMedia> resultSet = MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(criteria);
-
-            if (resultSet.Count > 0) {
-                return resultSet[0];
-            }
-
-            DBLocalMedia newFile = new DBLocalMedia();
-            newFile.FullPath = fullPath;
-
-            return newFile;
+            return resultSet;
         }
 
         public static List<DBLocalMedia> GetAll() {
