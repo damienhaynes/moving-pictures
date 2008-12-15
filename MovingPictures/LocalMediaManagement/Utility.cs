@@ -251,7 +251,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = Regex.Replace(newTitle, @"[\(\)\[\]'`,""\#\$\?]", "");
 
             // Equalize: Common characters with words of the same meaning
-            newTitle = Regex.Replace(newTitle, @"\s(and|und|en|et|y)\s", " & ");
+            newTitle = Regex.Replace(newTitle, @"\b(and|und|en|et|y)\b", " & ");
 
             // Equalize: Roman Numbers To Numeric
             newTitle = Regex.Replace(newTitle, @"\sII($|\s)", @" 2$1", RegexOptions.IgnoreCase);
