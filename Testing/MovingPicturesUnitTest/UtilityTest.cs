@@ -423,5 +423,31 @@ namespace MovingPicturesUnitTest
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
+
+        /// <summary>
+        ///A test for GetFilesRecursive
+        ///</summary>
+        [TestMethod()]
+        public void GetFilesRecursiveTest() {
+            DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
+            List<FileInfo> expected = null; // TODO: Initialize to an appropriate value
+            List<FileInfo> actual;
+            actual = Utility.GetFilesRecursive(directory);
+            Assert.AreEqual(expected, actual);
+            Assert.Inconclusive("Verify the correctness of this test method.");
+        }
+
+        /// <summary>
+        ///A test for GetVideoFilesRecursive
+        ///</summary>
+        [TestMethod()]
+        public void GetVideoFilesRecursiveTest() {
+            DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
+            List<FileInfo> expected = null; // TODO: Initialize to an appropriate value
+            List<FileInfo> actual;
+            actual = Utility.GetVideoFilesRecursive(directory);
+            Assert.AreEqual(expected, actual);
+            Assert.Inconclusive("Verify the correctness of this test method.");
+        }
     }
 }

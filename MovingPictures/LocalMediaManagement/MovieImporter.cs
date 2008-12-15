@@ -621,6 +621,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         private void WatchImportPath(FileSystemWatcher watcher, DBImportPath importPath) {
+            // todo: figure out if Renamed has to be in this list
             watcher.Path = importPath.FullPath;
             watcher.IncludeSubdirectories = true;
             watcher.Error += OnWatcherError;
@@ -653,51 +654,80 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             watcherQueue.Add(importPath);
         }
 
-
         // When a FileSystemWatcher detects a new file, this method queues it up for processing.
         private void OnFileAdded(Object source, FileSystemEventArgs e) {
-            if (Utility.IsVideoFile(new FileInfo(e.FullPath))) {
+            List<FileInfo> filesCreated = new List<FileInfo>();
+            
+            if (File.Exists(e.FullPath)) {
+                // This is just one file so add it to the list
+                filesCreated.Add(new FileInfo(e.FullPath));
+            }
+            else {
+                // This is a directory so scan it and add create the (video) filelist
+                filesCreated = Utility.GetVideoFilesRecursive(new DirectoryInfo(e.FullPath));
+            }
 
-                DBLocalMedia newFile = DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath));
+            // If we have a list of video files process them
+            if (filesCreated.Count > 0) {
+
+                // Get the importPath attached to this event
                 DBImportPath importPath = pathLookup[(FileSystemWatcher)source];
 
-                // if this file is already in the system, disable (this happens if it's a removable source)
-                if (newFile.ID != null) {
-                    if (importPath.IsRemovable)
-                        logger.Info("Removable file " + newFile.File.Name + " brought online.");
-                    else
-                        logger.Warn("Watcher tried to add a pre-existing file: " + newFile.File.Name);
-                    return;
+                // Process all files that were created
+                foreach (FileInfo videoFile in filesCreated) {
+                    // Check if the file already exists in our system
+                    DBLocalMedia newFile = DBLocalMedia.Get(videoFile.FullName, DeviceManager.GetDiskSerial(videoFile.FullName));
+                    if (newFile.ID != null) {
+                        // if this file is already in the system, ignore and log a message.
+                        if (importPath.IsRemovable)
+                            logger.Info("Removable file " + newFile.File.Name + " brought online.");
+                        else
+                            logger.Warn("Watcher tried to add a pre-existing file: " + newFile.File.Name);
+                        continue;
+                    }
+                    // We have a new file so add it to the filesAdded list
+                    newFile.ImportPath = importPath;
+                    newFile.UpdateDiskProperties();
+                    lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
+                    logger.Info("Watcher queued " + newFile.File.Name + " for processing.");
                 }
-
-                newFile.ImportPath = importPath;
-                newFile.UpdateDiskProperties();
-                lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
-                logger.Info("Watcher queued " + newFile.File.Name + " for processing.");
             }
         }
 
         // When a FileSystemWatcher detects a file has been removed, delete it.
         private void OnFileDeleted(Object source, FileSystemEventArgs e) {
-            
-            DBLocalMedia removedFile = DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath));
+            List<DBLocalMedia> localMediaRemoved = new List<DBLocalMedia>();
 
-            logger.Info("Watcher flagged " + removedFile.File.Name + " for removal from the database.");
-
-            // if the file is not in our system there's nothing to do
-            // todo: this is not entirely true because the file could be sitting in the match system
-            // waiting for user input  we would have to  remove it there also.
-            if (removedFile.ID == null)
-                return;
-
-            // Check if the file is really removed
-            if (!removedFile.IsRemoved) {
-                logger.Info("Removable file " + removedFile.File.Name + " taken offline.");
-                return;
+            if (File.Exists(e.FullPath)) {
+                // This is just one file so add it to the list
+                localMediaRemoved.Add(DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath)));
+            }
+            else {
+                // This is a directory so we are going to get all localmedia that uses 
+                // this directory we can do this by adding a % character to the end of 
+                // the path as the sqlite query behind it uses LIKE as operator.
+                localMediaRemoved = DBLocalMedia.GetAll(e.FullPath + '%', DeviceManager.GetDiskSerial(e.FullPath));
             }
 
-            // Remove the file
-            RemoveLocalMedia(removedFile);
+            // Loop through the remove files list and process
+            foreach (DBLocalMedia removedFile in localMediaRemoved) {
+                logger.Info("Watcher flagged " + removedFile.File.Name + " for removal from the database.");
+                
+                // if the file is not in our system anymore there's nothing to do
+                // todo: this is not entirely true because the file could be sitting in the match system
+                // waiting for user input  we would have to  remove it there also.
+                if (removedFile.ID == null)
+                    continue;
+
+                // Check if the file is really removed
+                if (!removedFile.IsRemoved) {
+                    logger.Info("Removable file " + removedFile.File.Name + " taken offline.");
+                    continue;
+                }
+
+                // Remove the file
+                RemoveLocalMedia(removedFile);
+            }
         }
 
         // Loops through all local files in the system and removes anything that's invalid.

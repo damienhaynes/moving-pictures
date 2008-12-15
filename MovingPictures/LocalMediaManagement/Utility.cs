@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
 using DirectShowLib;
 using DirectShowLib.Dvd;
 using NLog;
@@ -60,6 +61,58 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         #region FileSystem Methods
 
+        /// <summary>
+        /// Get all files from directory and it's subdirectories.
+        /// </summary>
+        /// <param name="inputDir"></param>
+        /// <returns></returns>
+        public static List<FileInfo> GetFilesRecursive(DirectoryInfo directory) {
+            List<FileInfo> fileList = new List<FileInfo>();
+            DirectoryInfo[] subdirectories = new DirectoryInfo[] { };
+
+            try {
+                fileList.AddRange(directory.GetFiles("*"));
+                subdirectories = directory.GetDirectories();
+            }
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
+                logger.Error("Error while retrieving files/directories for: " + directory.FullName, e);
+            }
+
+            foreach (DirectoryInfo subdirectory in subdirectories) {
+                try {
+                    if ((subdirectory.Attributes & FileAttributes.System) == 0)
+                        fileList.AddRange(GetFilesRecursive(subdirectory));
+                    else
+                        logger.Debug("Rejecting directory " + subdirectory.FullName + " because it is flagged as a System folder.");
+                }
+                catch (Exception e) {
+                    if (e.GetType() == typeof(ThreadAbortException))
+                        throw e;
+                    logger.Error("Error during attribute check for: " + subdirectory.FullName, e);
+                }
+            }
+
+            return fileList;
+        }
+        
+        /// <summary>
+        /// Get all video files from directory and it's subdirectories.
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <returns></returns>
+        public static List<FileInfo> GetVideoFilesRecursive(DirectoryInfo directory) {
+            List<FileInfo> fileList = GetFilesRecursive(directory);
+            List<FileInfo> videoFileList = new List<FileInfo>();
+            foreach (FileInfo file in fileList) {
+                if (Utility.IsVideoFile(file))
+                    videoFileList.Add(file);
+            }
+            return videoFileList;
+        }
+        
         /// <summary>
         /// This method will create a string that can be safely used as a filename.
         /// </summary>
