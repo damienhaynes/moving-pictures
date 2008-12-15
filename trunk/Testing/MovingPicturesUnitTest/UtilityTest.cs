@@ -16,6 +16,7 @@ namespace MovingPicturesUnitTest
 
 
         private TestContext testContextInstance;
+        private FileInfo fileTest;
 
         /// <summary>
         ///Gets or sets the test context which provides
@@ -47,10 +48,11 @@ namespace MovingPicturesUnitTest
         //}
         //
         //Use TestInitialize to run code before running each test
-        //[TestInitialize()]
-        //public void MyTestInitialize()
-        //{
-        //}
+        [TestInitialize()]
+        public void MyTestInitialize()
+        {
+            fileTest = new FileInfo(@"c:\movies\The Big Movie cd2.avi");
+        }
         //
         //Use TestCleanup to run code after each test has run
         //[TestCleanup()]
@@ -102,12 +104,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void RemoveFileStackMarkersTest1() {
-            FileInfo file = null; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            FileInfo file = fileTest;
+            string expected = "The Big Movie";
             string actual;
             actual = Utility.RemoveFileStackMarkers(file);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -115,12 +116,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void RemoveFileStackMarkersTest() {
-            string filename = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string filename = fileTest.Name; 
+            string expected = "The Big Movie";
             string actual;
             actual = Utility.RemoveFileStackMarkers(filename);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -128,12 +128,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void RemoveFileExtensionTest1() {
-            string filename = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string filename = fileTest.Name;
+            string expected = "The Big Movie cd2";
             string actual;
             actual = Utility.RemoveFileExtension(filename);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -141,12 +140,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void RemoveFileExtensionTest() {
-            FileInfo file = null; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            FileInfo file = fileTest; 
+            string expected = "The Big Movie cd2";
             string actual;
             actual = Utility.RemoveFileExtension(file);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -154,12 +152,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void normalizeTitleTest() {
-            string title = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string title = "TesT#ING:  and Other stuff II" ;
+            string expected = "testing & other stuff 2";
             string actual;
             actual = Utility.normalizeTitle(title);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -167,12 +164,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void IsVideoFileTest() {
-            FileInfo fileInfo = null; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            FileInfo fileInfo = fileTest;
+            bool expected = true;
             bool actual;
             actual = Utility.IsVideoFile(fileInfo);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -180,12 +176,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void IsVideoDiscPathTest() {
-            string path = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string path = fileTest.FullName;
+            bool expected = false;
             bool actual;
             actual = Utility.IsVideoDiscPath(path);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -193,12 +188,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void isSampleFileTest() {
-            FileInfo file = null; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            FileInfo file = fileTest;
+            bool expected = false;
             bool actual;
             actual = Utility.isSampleFile(file);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -206,12 +200,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void IsMediaPortalVideoFileTest() {
-            FileInfo file = null; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            FileInfo file = fileTest;
+            bool expected = true;
             bool actual;
             actual = Utility.IsMediaPortalVideoFile(file);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -219,12 +212,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void isFolderMultipartTest() {
-            string name = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string name = "cd4"; // TODO: Initialize to an appropriate value
+            bool expected = true; // TODO: Initialize to an appropriate value
             bool actual;
             actual = Utility.isFolderMultipart(name);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -246,12 +238,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void isFolderAmbiguousTest() {
-            string name = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string name = "video_ts"; // TODO: Initialize to an appropriate value
+            bool expected = true; // TODO: Initialize to an appropriate value
             bool actual;
             actual = Utility.isFolderAmbiguous(name);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -259,12 +250,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void isFileMultiPartTest1() {
-            string filename = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string filename = fileTest.FullName; // TODO: Initialize to an appropriate value
+            bool expected = true; // TODO: Initialize to an appropriate value
             bool actual;
             actual = Utility.isFileMultiPart(filename);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -272,12 +262,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void isFileMultiPartTest() {
-            FileInfo file = null; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            FileInfo file = fileTest; // TODO: Initialize to an appropriate value
+            bool expected = true; // TODO: Initialize to an appropriate value
             bool actual;
             actual = Utility.isFileMultiPart(file);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -285,12 +274,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void IsDriveRootTest1() {
-            string path = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string path = @"X:\" ; 
+            bool expected = true;
             bool actual;
             actual = Utility.IsDriveRoot(path);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -298,12 +286,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void IsDriveRootTest() {
-            DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            DirectoryInfo directory = fileTest.Directory; // TODO: Initialize to an appropriate value
+            bool expected = false; 
             bool actual;
             actual = Utility.IsDriveRoot(directory);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -336,12 +323,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void GetVideoDiscPathTest() {
-            string drive = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string drive = @"X:\"; // TODO: Initialize to an appropriate value
+            string expected = null; // TODO: Initialize to an appropriate value
             string actual;
             actual = Utility.GetVideoDiscPath(drive);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -416,12 +402,11 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void CreateFilenameTest() {
-            string subject = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string subject = "MyN*wFile`Name.ext";
+            string expected = "MyN_wFile`Name.ext";
             string actual;
             actual = Utility.CreateFilename(subject);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
