@@ -29,7 +29,7 @@ multiple view modes.
   
   <!-- Colors, attributes, etc -->
   <define>#smalltitle.color:ff000000</define>
-  <define>#spin.xposition:680</define>
+  <define>#spin.xposition:655</define>
   <define>#spin.yposition:418</define>
   <define>#spin.width:13</define>
   <define>#spin.height:13</define>
@@ -147,19 +147,19 @@ multiple view modes.
       <visible>!Control.IsVisible(50)</visible>
     </control>
 
-    <!-- <control>
+    <control>
       <description>Play Button</description>
       <type>button</type>
       <id>6</id>
       <onright>7</onright>
       <posX>275</posX>
-      <posY>205</posY>
-      <width>65</width>
-      <height>65</height>
+      <posY>200</posY>
+      <width>50</width>
+      <height>50</height>
       <textureFocus>MovingPictures\moving_pictures_play_focus.png</textureFocus>
       <textureNoFocus>MovingPictures\moving_pictures_play.png</textureNoFocus>
       <visible>!Control.IsVisible(50)</visible>
-    </control> -->
+    </control>
     
     <control>
       <description>Cycle Details Button (not implemented yet)</description>
@@ -167,24 +167,11 @@ multiple view modes.
       <id>7</id>
       <onleft>6</onleft>
       <posX>340</posX>
-      <posY>415</posY>
-      <width>35</width>
-      <height>35</height>
-      <textureFocus>moving_pictures_details_focus.png</textureFocus>
-      <textureNoFocus>moving_pictures_details.png</textureNoFocus>
-      <visible>!Control.IsVisible(50)</visible>
-    </control>
-
-    <control>
-      <description>Play Area on top of cover art</description>
-      <type>button</type>
-      <id>6</id>
-      <onright>7</onright>
-      <posX>35</posX>
-      <posY>255</posY>
-      <width>180</width>
-      <height>278</height>
-      <textureFocus>osd_bg_settings.png</textureFocus>
+      <posY>200</posY>
+      <width>50</width>
+      <height>50</height>
+      <textureFocus>MovingPictures\moving_pictures_details_focus.png</textureFocus>
+      <textureNoFocus>MovingPictures\moving_pictures_details.png</textureNoFocus>
       <visible>!Control.IsVisible(50)</visible>
     </control>
     
@@ -212,18 +199,6 @@ multiple view modes.
       <visible>!Control.IsVisible(50)</visible>
     </control>
 
-	<!--control>
-		<description>Overlay image for better reading of detailed information</description>
-		<type>image</type>
-		<id>0</id>
-		<posX>260</posX>
-		<posY>110</posY>
-		<width>400</width>
-		<height>435</height>
-		<texture>MovingPictures\overlay_bottom.png</texture>
-		<visible>!Control.IsVisible(50)</visible>
-    </control-->
-	
 	<control>
 		<description>Overlay image for better reading of detailed information</description>
 		<type>image</type>
@@ -233,7 +208,7 @@ multiple view modes.
 		<width>430</width>
 		<height>300</height>
 		<texture>MovingPictures\grey.png</texture>
-        <colordiffuse>ccbbbbbb</colordiffuse> 
+    <colordiffuse>ccbbbbbb</colordiffuse> 
 		<visible>!Control.IsVisible(50)</visible>
     </control>
 		
@@ -247,7 +222,7 @@ multiple view modes.
       <height>130</height>
       <textcolor>ffffff</textcolor>
       <seperator> ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  </seperator>
-      <font>font12</font>
+      <font>font14</font>
       <label>#MovingPictures.SelectedMovie.summary</label>
       <visible>!Control.IsVisible(50)</visible>
     </control>
@@ -319,7 +294,6 @@ multiple view modes.
       <id>0</id>
       <posX>370</posX>
       <posY>300</posY>
-      <!--width>1366</width-->
       <textcolor>ffffff</textcolor>
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.year</label>
@@ -411,17 +385,6 @@ multiple view modes.
       <visible>facadeview.list+Control.IsVisible(50)</visible>
     </control>
 	
-<!--    <control>
-      <type>image</type>
-      <id>0</id>
-      <posX>0</posX>
-      <posY>450</posY>
-      <height>176</height>
-      <width>1024</width>
-      <texture>MovingPictures\overlay_bottom.png</texture>
-      <visible>facadeview.list+Control.IsVisible(50)</visible>
-    </control>
--->
     <!-- ****************** Facade *************************************** -->
     <import>movingpictures.facade.xml</import>
 
@@ -439,21 +402,6 @@ multiple view modes.
 	  <!-- <visible>[facadeview.list|facadeview.smallicons]+Control.IsVisible(50)</visible> -->
     </control>
     
-    <!--*********************       Using a different approach for filmstrip      **************************-->
-	<!--control>
-      <description>Movie Title</description>
-      <type>label</type>
-      <id>0</id>
-      <posX>0</posX>
-      <posY>400</posY>
-      <width>700</width>
-      <font>font18</font>
-      <label>#MovingPictures.SelectedMovie.title</label>
-      <align>center</align>
-      <textcolor>ffffff</textcolor>
-	  <visible>[facadeview.filmstrip]+Control.IsVisible(50)</visible>
-    </control-->
- 
     <control>
       <description>Cover Art</description>
       <type>image</type>
@@ -644,27 +592,6 @@ multiple view modes.
       <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
     </control>
 
-	<!--control>
-      <description>10 star rating? 10 is a lot...</description>
-      <type>imagelist</type>
-      <id>0</id>
-      <posX>443</posX>
-      <posY>540</posY>
-      <width>190</width>
-      <height>20</height>
-      <textureWidth>20</textureWidth>
-      <textureHeight>20</textureHeight>
-      <subitems>
-        <subitem>MovingPictures\greystar.png</subitem>
-        <subitem>MovingPictures\starbest.png</subitem>
-      </subitems>
-      <orientation>horizontal</orientation>
-      <align>left</align>
-      <imagesToDraw>10</imagesToDraw>
-      <percentage>#MovingPictures.SelectedMovie.score</percentage>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
-    </control-->
-
     <!-- ***************** All Views  (Details at the top) ***************************************** -->
     <control>
       <description>fancy bar at top</description>
@@ -689,8 +616,21 @@ multiple view modes.
       <align>center</align>
       <textcolor>ffffff</textcolor>
     </control>
-    
-	<control>
+
+    <control>
+      <description>Tagline</description>
+      <type>label</type>
+      <id>0</id>
+      <posX>0</posX>
+      <posY>65</posY>
+      <width>700</width>
+      <textcolor>ffffff</textcolor>
+      <font>font14</font>
+      <label>#MovingPictures.SelectedMovie.tagline</label>
+      <align>center</align>
+    </control>
+
+    <control>
       <description>10 star rating? 10 is a lot...</description>
       <type>imagelist</type>
       <id>0</id>
@@ -709,23 +649,8 @@ multiple view modes.
       <imagesToDraw>10</imagesToDraw>
       <percentage>#MovingPictures.SelectedMovie.score</percentage>
     </control>
-
-    <control>
-      <description>Tagline</description>
-      <type>label</type>
-      <id>0</id>
-      <posX>0</posX>
-		<!-- posY>150</posY> --> 
-      <posY>65</posY>
-      <width>700</width>
-      <textcolor>ffffff</textcolor>
-      <font>font14</font>
-      <label>#MovingPictures.SelectedMovie.tagline</label>
-      <align>center</align>
-    </control>    
     
-        <!-- ***************************** Filtering Indicator ******************************* -->
-    
+    <!-- ***************************** Filtering Indicator ******************************* -->
     <control>
       <description>short filtering background</description>
       <type>image</type>
@@ -774,7 +699,8 @@ multiple view modes.
       <width>250</width>
       <textcolor>000000</textcolor>
       <font>font8</font>
-      <label>Filtered Movies</label>
+      <label>#MovingPictures.Filter.Label</label>
+      <!--<label>Filtered Movies</label>-->
       <visible>Control.IsVisible(50)+!Control.IsVisible(8)+Control.IsVisible(10)</visible>
       <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
       <animation effect="slide" end="-300,0" time="500">Hidden</animation>
@@ -788,7 +714,8 @@ multiple view modes.
       <width>250</width>
       <textcolor>000000</textcolor>
       <font>font8</font>
-      <label>Unwatched and Filtered Movies</label>
+      <!--<label>Unwatched and Filtered Movies</label>-->
+      <label>Unwatched + #MovingPictures.Filter.Label</label>
       <visible>Control.IsVisible(50)+Control.IsVisible(8)+Control.IsVisible(10)</visible>
       <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
       <animation effect="slide" end="-300,0" time="500">Hidden</animation>

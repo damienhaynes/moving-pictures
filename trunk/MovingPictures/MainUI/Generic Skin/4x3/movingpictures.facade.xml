@@ -21,6 +21,7 @@ This file should contain the facade view
         <spinPosY>#spin.yposition</spinPosY>
         <spinWidth>#spin.width</spinWidth>
         <spinHeight>#spin.height</spinHeight>
+        <spinAlign>left</spinAlign>
         <scrollOffset>1</scrollOffset>
         <textureUp>MovingPictures\page_up_nofocus.png</textureUp>
         <textureDown>MovingPictures\page_down_nofocus.png</textureDown>
@@ -39,13 +40,14 @@ This file should contain the facade view
         <id>50</id>
         <posX>40</posX>
         <posY>90</posY>
+        <onright>5</onright>
         <width>690</width>
         <height>375</height>
         <spinPosX>#spin.xposition</spinPosX>
         <spinPosY>#spin.yposition</spinPosY>
         <spinWidth>#spin.width</spinWidth>
         <spinHeight>#spin.height</spinHeight>
-        <spinColor>ff000000</spinColor>
+        <spinAlign>left</spinAlign>
         <textureUp>MovingPictures\page_up_nofocus.png</textureUp>
         <textureDown>MovingPictures\page_down_nofocus.png</textureDown>
         <textureUpFocus>MovingPictures\page_up_focus.png</textureUpFocus>
@@ -60,7 +62,6 @@ This file should contain the facade view
         <thumbPosY>0</thumbPosY>
         <imageFolder>movie_preview_thumb_background_nofocus.png</imageFolder>
         <imageFolderFocus>MovingPictures\dvd_frame.png</imageFolderFocus>
-        <font>font10</font>
         <suffix>|</suffix>
         <textureWidthBig>115</textureWidthBig>
         <textureHeightBig>175</textureHeightBig>
@@ -73,7 +74,7 @@ This file should contain the facade view
         <thumbZoom>yes</thumbZoom>
         <enableFocusZoom>no</enableFocusZoom>
         <unfocusedAlpha>150</unfocusedAlpha>
-	<textXOff>1400</textXOff>
+        <textXOff>1400</textXOff>
       </control>
       <control>
         <description>Filmstrip view</description>
@@ -88,6 +89,7 @@ This file should contain the facade view
         <spinPosY>550</spinPosY>
         <spinWidth>#spin.width</spinWidth>
         <spinHeight>#spin.height</spinHeight>
+        <spinAlign>left</spinAlign>
         <itemWidth>150</itemWidth>
         <itemHeight>230</itemHeight>
         <textureWidth>150</textureWidth>
@@ -112,9 +114,9 @@ This file should contain the facade view
         <showInfoImage>no</showInfoImage>
         <thumbAnimation effect="zoom" start="100,100" end="140,140" time="100">focus</thumbAnimation>
         <thumbAnimation effect="zoom" start="140,140" end="100,100" time="100"></thumbAnimation>
-	<textXOff>1400</textXOff>		
-      </control>		
-		
+        <enableFocusZoom>no</enableFocusZoom>
+        <textXOff>1400</textXOff>		
+      </control>			
     </control>
   </controls>
 </window>
