@@ -948,6 +948,10 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void OnPlayBackStarted(g_Player.MediaType type, string filename) {
+            // we don't have to start the thread if we didn't start playback
+            if (type != g_Player.MediaType.Video || currentMovie == null)
+                return;
+
             // delay to possibly update the screen info
             Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
             newThread.Start();
