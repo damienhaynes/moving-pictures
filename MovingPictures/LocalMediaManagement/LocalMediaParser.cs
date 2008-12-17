@@ -19,6 +19,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             signatureProviders.Add(new LocalBuilder());
             signatureProviders.Add(new MetaServicesBuilder());
             signatureProviders.Add(new NfoBuilder());
+            signatureProviders.Add(new ImdbBuilder());
         }
 
         foreach (ISignatureBuilder provider in signatureProviders) {

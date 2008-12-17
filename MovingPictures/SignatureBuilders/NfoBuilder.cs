@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 
@@ -26,28 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                     string fileName = Utility.RemoveFileStackMarkers(signature.File);
                     signature.ImdbId = fileScanner(dir, fileName);
                 }
-            }
-            
-            // If there's no ImdbId in the signature return the signature immediatly
-            if (String.IsNullOrEmpty(signature.ImdbId))
-                return signature;
-
-            // Fill signature information from IMDB
-            string detailsPage = getImdbDetailsPage(signature.ImdbId);
-            if (String.IsNullOrEmpty(signature.ImdbId))
-                return signature;
-
-            // See if we get a Title and Year from the title node
-            Regex expr = new Regex(@"<title>([^\(]+?)\((\d{4})[\/IVX]*\).*?</title>", RegexOptions.IgnoreCase);
-            Match details = expr.Match(detailsPage);
-            if (details.Success) {
-                signature.Title = details.Groups[1].Value;
-                signature.Year = int.Parse(details.Groups[2].Value);
-                logger.Debug("Lookup Imdbid={0}: Title= '{1}', Year= {2}", signature.ImdbId, details.Groups[1], details.Groups[2]);
-            }
-            else {
-                logger.Debug("Lookup failed for Imdbid={0}", signature.ImdbId);
-            }
+            }          
 
             return signature;
         }
@@ -136,43 +113,5 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             // return the string
             return s;
         }
-
-        private static string getImdbDetailsPage(string ImdbId) {
-            String sData = string.Empty;
-            string url = "http://www.imdb.com/title/" + ImdbId;
-
-            int tryCount = 0;
-            int maxRetries = 3;
-            int timeout = 5000;
-            int timeoutIncrement = 1000;
-
-            while (sData == string.Empty) {
-                try {
-                    // builds the request and retrieves the respones from the url
-                    tryCount++;
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                    request.Timeout = timeout + (timeoutIncrement * tryCount);
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                    // converts the resulting stream to a string for easier use
-                    Stream resultData = response.GetResponseStream();
-                    StreamReader reader = new StreamReader(resultData, Encoding.UTF8, true);
-                    sData = reader.ReadToEnd().Replace('\0', ' ');
-                    sData = HttpUtility.HtmlDecode(sData);
-                    resultData.Close();
-                    reader.Close();
-                    response.Close();
-                }
-                catch (WebException e) {
-                    if (tryCount == maxRetries) {
-                        logger.ErrorException("Error connecting to imdb.com Reached retry limit of " + maxRetries, e);
-                        return null;
-                    }
-                }
-            }
-
-            return sData;
-        }
-
     }
 }
