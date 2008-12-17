@@ -102,7 +102,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (useMovieFolderBackdrops) {
                 List<string> movieFolderFilenames = getPossibleNamesFromPattern(pattern, movie);
                 foreach (string currFile in movieFolderFilenames) {
-                    FileInfo newBackdrop = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + currFile);
+                    FileInfo newBackdrop = new FileInfo(Utility.GetMovieBaseDirectory(movie.LocalMedia[0].File.Directory).FullName + "\\" + currFile);
                     if (newBackdrop.Exists)
                         found &= movie.AddBackdropFromFile(newBackdrop.FullName);
                 }
@@ -177,7 +177,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (useMovieFolderCovers) {
                 List<string> movieFolderFilenames = getPossibleNamesFromPattern(pattern, movie);
                 foreach (string currFile in movieFolderFilenames) {
-                    FileInfo newCover = new FileInfo(movie.LocalMedia[0].File.DirectoryName + "\\" + currFile);
+                    FileInfo newCover = new FileInfo(Utility.GetMovieBaseDirectory(movie.LocalMedia[0].File.Directory).FullName + "\\" + currFile);
                     if (newCover.Exists)
                         found &= movie.AddCoverFromFile(newCover.FullName);
                 }
