@@ -51,6 +51,12 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             signature.Title = extractYearFromTitle(source, out year);
             signature.Year = year;
 
+            // Phase #4: See if an IMDB id could be read from the source string
+            Match match = Regex.Match(source, @"tt\d{7}", RegexOptions.IgnoreCase);
+
+            // Set the IMDB id in the signature if succes
+            if (match.Success) signature.ImdbId = match.Value;
+
             return signature;
         }
 

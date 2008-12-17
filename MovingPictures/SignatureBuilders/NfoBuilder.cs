@@ -121,8 +121,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             // Read the nfo file content into a string
             string s = File.ReadAllText(filePath);
             // Check for the existance of a imdb id 
-            Regex rxIMDB = new Regex(@"tt\d{7}", RegexOptions.IgnoreCase);
-            Match match = rxIMDB.Match(s);
+            Match match = Regex.Match(s, @"tt\d{7}", RegexOptions.IgnoreCase);
 
             // If success return the id, on failure return empty. 
             if (match.Success) {
