@@ -332,7 +332,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // Check files that pass the MediaPortal Video Extension list
             if (IsMediaPortalVideoFile(fileInfo)) {
                 string ext = fileInfo.Extension.ToLower();
-                string name = fileInfo.Name;
+                string name = fileInfo.Name.ToLower(); ;
 
                 // DVD: Non-Standalone content is invalid
                 if (ext == ".vob" && Regex.Match(name, @"(video_ts|vts_).+", RegexOptions.IgnoreCase).Success)
