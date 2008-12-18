@@ -23,6 +23,8 @@ namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {
         public enum ViewMode { LIST, SMALLICON, LARGEICON, FILMSTRIP, DETAILS }
 
+        public enum DiskInsertedAction { PLAY, DETAILS, NOTHING }
+
         #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -35,17 +37,16 @@ namespace MediaPortal.Plugins.MovingPictures {
         Dictionary<string, bool> loggedProperties;
 
         private bool currentlyPlaying = false;
-        private DBMovieInfo currentMovie;
-        private int currentPart = 1;
+        private DBMovieInfo currentlyPlayingMovie;
+        private int currentlyPlayingPart = 1;
 
         private bool loaded = false;
 
         private ImageSwapper backdrop;
         private AsyncImageResource cover = null;
 
-        private bool discAutoplay;
-        private bool discDetails;
-        Dictionary<string, string> discRecent;
+        private DiskInsertedAction diskInsertedAction;
+        Dictionary<string, string> recentInsertedDiskSerials;
 
         #endregion
 
@@ -157,12 +158,15 @@ namespace MediaPortal.Plugins.MovingPictures {
                 g_Player.PlayBackChanged += new g_Player.ChangedHandler(OnPlayBackStoppedOrChanged);
             }
             catch (Exception) {
-                logger.Error("Cannot add PlayBackChanged handler (running < RC4).");
+                logger.Error("Running MediaPortal 1.0 RC3 or earlier. Unexpected behavior may occur when starting playback of a new movie without stopping previous movie. Please upgrade for better performance.");
             }
 
-            // Get Blu-Ray/DVD disc settings
-            discDetails = (bool)MovingPicturesCore.SettingsManager["ondisc_details"].Value;
-            discAutoplay = (bool)MovingPicturesCore.SettingsManager["ondisc_autoplay"].Value;
+            // Get Moving Pictures specific autoplay setting
+            try {
+                diskInsertedAction = (DiskInsertedAction) Enum.Parse(typeof(DiskInsertedAction), MovingPicturesCore.SettingsManager["on_disc_loaded"].StringValue);
+            } catch {
+                diskInsertedAction = DiskInsertedAction.DETAILS;
+            }
 
             // setup the image resources for cover and backdrop display
             int artworkDelay = (int)MovingPicturesCore.SettingsManager["gui_artwork_delay"].Value;
@@ -175,7 +179,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             cover.Property = "#MovingPictures.Coverart";
             cover.Delay = artworkDelay;
 
-            // used to prevent overzelous logging of skin properties
+            // used to prevent overzealous logging of skin properties
             loggedProperties = new Dictionary<string, bool>();
         }
 
@@ -378,11 +382,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                 MovingPicturesCore.DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
             }
 
-            if (discRecent == null) {              
+            if (recentInsertedDiskSerials == null) {              
                 // Also listen to new movies added as part of the autoplay/details functionality
-                if (discDetails || discAutoplay) {
-                    discRecent = new Dictionary<string, string>();
-                    MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
+                if (diskInsertedAction != DiskInsertedAction.NOTHING) {
+                    recentInsertedDiskSerials = new Dictionary<string, string>();
+                    MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(OnMovieAdded);
                     logger.Debug("Autoplay/details is now listening for movie additions");
                 }
             }
@@ -774,127 +778,115 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
-            playMovie(browser.SelectedMovie);
+            playMovie(browser.SelectedMovie, 1);
          }
 
-        private void playMovie(DBMovieInfo movie) {
-            playMovie(movie, 1, 0, null);
-        }
-
-        private void playMovie(DBMovieInfo movie, int part) {
-            int parts = movie.LocalMedia.Count;
-            int resumeTime = 0;
-            int resumePart = 0;
-            byte[] resumeData = null;
-
-            // Get User Settings for this movie
-            if (movie.UserSettings.Count > 0) {
-                resumeTime = movie.UserSettings[0].ResumeTime;
-                resumePart = movie.UserSettings[0].ResumePart;
-                resumeData = movie.UserSettings[0].ResumeData;
-            }
-
-            // If we have resume data ask the user if he wants to resume
-            // todo: customize the dialog
-            if (resumeTime > 0) {
-                int displayTime = resumeTime;
-                if (parts > 1) {
-                    for (int i = 0; i < resumePart - 1; i++) {
-                        if (movie.LocalMedia[i].Duration > 0)
-                            displayTime += movie.LocalMedia[i].Duration;
-                    }
-                }
-
-                GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
-                if (null == dlgYesNo) return;
-                dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); //resume movie?
-                dlgYesNo.SetLine(1, movie.Title);
-                dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(displayTime));
-                dlgYesNo.SetDefaultToYes(true);
-                dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
-
-                if (!dlgYesNo.IsConfirmed) resumeTime = 0; // reset resume time
-                if (resumeTime > 0) part = resumePart; // on resume set part also
-            }
-
-            // if we have a multi-part DVD/IMAGE and we are not resuming
-            // ask which part the user wants to play
-            // todo: customize the dialog
-            string ext = movie.LocalMedia[0].File.Extension;
-            if (parts > 1 && resumeTime == 0 && (DaemonTools.IsImageFile(ext) || ext == ".ifo")) {
-                GUIDialogFileStacking dlg = (GUIDialogFileStacking)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_FILESTACKING);
-                if (null != dlg) {
-                    dlg.SetNumberOfFiles(parts);
-                    dlg.DoModal(GUIWindowManager.ActiveWindow);
-                    part = dlg.SelectedFile;
-                    if (part < 1) return;
-                }
-            }
-
-            // Start playing the movie with defined parameters
-            playMovie(movie, part, resumeTime, resumeData);
-        }       
-
-        private void playMovie(DBMovieInfo movie, int part, int resumeTime) {
-            playMovie(movie, part, resumeTime, null);
-        }
-
-        private void playMovie(DBMovieInfo movie, int part, int resumeTime, byte[] resumeData) {
-            if (movie == null)
+        private void playMovie(DBMovieInfo movie, int requestedPart) {
+            if (movie == null || requestedPart > movie.LocalMedia.Count || requestedPart < 1) 
                 return;
 
-            DBLocalMedia localMediaToPlay = movie.LocalMedia[part - 1];
+            int part = requestedPart;
+            bool resume = false;
 
-            // check if the media is online
-            if (!localMediaToPlay.IsAvailable) {
+            // if this is a request to start the movie from the begining, check if we should resume
+            // or prompt the user for disk selection
+            if (requestedPart == 1) {
+                // check if we should be resuming, and if not, clear resume data
+                resume = PromptUserToResume(movie);
+                if (resume)
+                    part = movie.UserSettings[0].ResumePart;
+                else
+                    clearMovieResumeState(movie);
+
+                // if we have a multi-part movie composed of disk images and we are not resuming 
+                // ask which part the user wants to play
+                string firstExtension = movie.LocalMedia[0].File.Extension;
+                if (!resume && movie.LocalMedia.Count > 1 && (DaemonTools.IsImageFile(firstExtension) || firstExtension == ".ifo")) {
+                    GUIDialogFileStacking dlg = (GUIDialogFileStacking)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_FILESTACKING);
+                    if (null != dlg) {
+                        dlg.SetNumberOfFiles(movie.LocalMedia.Count);
+                        dlg.DoModal(GUIWindowManager.ActiveWindow);
+                        part = dlg.SelectedFile;
+                        if (part < 1) return;
+                    }
+                }
+            }
+
+
+            // if the media is missing, alert the user and quit.
+            DBLocalMedia mediaToPlay = movie.LocalMedia[part - 1];
+            if (!mediaToPlay.IsAvailable) {
                 ShowMessage("Media Not Available",
                             "The media for the Movie you have selected is not",
                             "currently available. Please insert or connect media ",
-                            "labeled: " + localMediaToPlay.MediaLabel, null);
+                            "labeled: " + mediaToPlay.MediaLabel, null);
                 return;
             }
-            else if (localMediaToPlay.IsRemoved) {
+            else if (mediaToPlay.IsRemoved) {
                 ShowMessage("Error",
                             "The media for the Movie you have selected is missing!",
                             "Very sorry but something has gone wrong...", null, null);
                 return;
             }
 
-            // grab media info
-            string media = movie.LocalMedia[part - 1].FullPath;
-            string ext = movie.LocalMedia[part - 1].File.Extension;
 
-            // check if the current media is an image file
-            if (DaemonTools.IsImageFile(ext))
-                playImage(media);
+            // start playback
+            logger.Info("Playing {0} ({1})", movie.Title, mediaToPlay.FullPath);
+            string filename = mediaToPlay.FullPath;
+            string extension = mediaToPlay.File.Extension;
+            if (DaemonTools.IsImageFile(extension))
+                playImage(filename);
             else
-                playFile(media);
+                playFile(filename);
 
-            // set the currently playing part if playback was successful
+
+            // if playback started
             if (currentlyPlaying) {
+                // set class level variables to track what is playing
+                currentlyPlayingMovie = movie;
+                currentlyPlayingPart = part;
 
-                currentMovie = movie;
-                currentPart = part;
+                // grab the duration of this file
+                updateMediaDuration(mediaToPlay);
 
-                // update duration
-                DBLocalMedia playingFile = currentMovie.LocalMedia[currentPart - 1];
-                updateMediaDuration(playingFile);
-
-                // use resume data if needed
-                if (resumeTime > 0 && g_Player.Playing) {
-                    if (g_Player.IsDVD) {
-                        // Resume DVD 
-                        g_Player.Player.SetResumeState(resumeData);
-                    }
+                // and jump to our resume position if necessary
+                if (resume && g_Player.Playing) {  
+                    if (g_Player.IsDVD) 
+                        g_Player.Player.SetResumeState(movie.UserSettings[0].ResumeData.Data);
                     else {
-                        // Resume Other
                         GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SEEK_POSITION, 0, 0, 0, 0, 0, null);
-                        msg.Param1 = (int)resumeTime;
+                        msg.Param1 = movie.UserSettings[0].ResumeTime;
                         GUIGraphicsContext.SendMessage(msg);
                     }
                 }
-
             }
+        }
+
+        private bool PromptUserToResume(DBMovieInfo movie) {
+            if (movie.UserSettings == null || movie.UserSettings.Count == 0 || movie.UserSettings[0].ResumeTime == 0)
+                return false;
+
+            // figure out the resume time to display to the user
+            int displayTime = movie.UserSettings[0].ResumeTime;
+            if (movie.LocalMedia.Count > 1) {
+                for (int i = 0; i < movie.UserSettings[0].ResumePart - 1; i++) {
+                    if (movie.LocalMedia[i].Duration > 0)
+                        displayTime += movie.LocalMedia[i].Duration;
+                }
+            }
+
+            GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+            if (null == dlgYesNo) return false;
+            dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); 
+            dlgYesNo.SetLine(1, movie.Title);
+            dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(displayTime));
+            dlgYesNo.SetDefaultToYes(true);
+            dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
+
+            if (dlgYesNo.IsConfirmed)
+                return true;
+
+            return false;
         }
 
         // start playback of a regular file
@@ -949,7 +941,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void OnPlayBackStarted(g_Player.MediaType type, string filename) {
             // we don't have to start the thread if we didn't start playback
-            if (type != g_Player.MediaType.Video || currentMovie == null)
+            if (type != g_Player.MediaType.Video || currentlyPlayingMovie == null)
                 return;
 
             // delay to possibly update the screen info
@@ -958,21 +950,22 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void OnPlayBackEnded(g_Player.MediaType type, string filename) {
-            if (type != g_Player.MediaType.Video || currentMovie == null)
+            logger.Debug("OnPlayBackEnded");
+            if (type != g_Player.MediaType.Video || currentlyPlayingMovie == null)
                 return;
 
-            logger.Debug("OnPlayBackEnded filename={0} currentMovie={1} currentPart={2}", filename, currentMovie.Title, currentPart);
-            clearMovieResumeState(currentMovie);
-            if (currentMovie.LocalMedia.Count >= (currentPart + 1)) {
+            logger.Debug("OnPlayBackEnded filename={0} currentMovie={1} currentPart={2}", filename, currentlyPlayingMovie.Title, currentlyPlayingPart);
+            clearMovieResumeState(currentlyPlayingMovie);
+            if (currentlyPlayingMovie.LocalMedia.Count >= (currentlyPlayingPart + 1)) {
                 logger.Debug("Goto next part");
-                currentPart++;
-                playMovie(currentMovie, currentPart);
+                currentlyPlayingPart++;
+                playMovie(currentlyPlayingMovie, currentlyPlayingPart);
             }
             else {
-                updateMovieWatchedCounter(currentMovie);
-                currentPart = 0;
+                updateMovieWatchedCounter(currentlyPlayingMovie);
+                currentlyPlayingPart = 0;
                 currentlyPlaying = false;
-                currentMovie = null;
+                currentlyPlayingMovie = null;
             }
 
             // If we or stopping in another windows enable native auto-play again
@@ -983,37 +976,39 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void OnPlayBackStoppedOrChanged(g_Player.MediaType type, int timeMovieStopped, string filename) {
-            if (type != g_Player.MediaType.Video || currentMovie == null)
+            logger.Debug("OnPlayBackStoppedOrChanged");
+            if (type != g_Player.MediaType.Video || currentlyPlayingMovie == null)
                 return;
+
+            logger.Debug("OnPlayBackStoppedOrChanged: filename={1} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, currentlyPlayingMovie.Title, currentlyPlayingPart, timeMovieStopped);
 
             // Because we can't get duration for DVD's at start like with normal files
             // we are getting the duration when the DVD is stopped. If the duration of 
             // feature is an hour or more it's probably the main feature and we will update
             // the database. 
             if (g_Player.IsDVD && (g_Player.Player.Duration >= 3600)) {
-                DBLocalMedia playingFile = currentMovie.LocalMedia[currentPart - 1];
+                DBLocalMedia playingFile = currentlyPlayingMovie.LocalMedia[currentlyPlayingPart - 1];
                 updateMediaDuration(playingFile);
             }
 
             int requiredWatchedPercent = (int)MovingPicturesCore.SettingsManager["gui_watch_percentage"].Value;
-            logger.Debug("OnPlayBackStoppedOrChanged: filename={1} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, currentMovie.Title, currentPart, timeMovieStopped);
-            logger.Debug("Percentage: " + currentMovie.GetPercentage(currentPart, timeMovieStopped) + " Required: " + requiredWatchedPercent);
+            logger.Debug("Percentage: " + currentlyPlayingMovie.GetPercentage(currentlyPlayingPart, timeMovieStopped) + " Required: " + requiredWatchedPercent);
 
             // if enough of the movie has been watched, hit the watched flag
-            if (currentMovie.GetPercentage(currentPart, timeMovieStopped) >= requiredWatchedPercent) {
-                updateMovieWatchedCounter(currentMovie);
-                clearMovieResumeState(currentMovie);
+            if (currentlyPlayingMovie.GetPercentage(currentlyPlayingPart, timeMovieStopped) >= requiredWatchedPercent) {
+                updateMovieWatchedCounter(currentlyPlayingMovie);
+                clearMovieResumeState(currentlyPlayingMovie);
             }
             // otherwise, store resume data.
             else {
                 byte[] resumeData = null;
                 g_Player.Player.GetResumeState(out resumeData);
-                updateMovieResumeState(currentMovie, currentPart, timeMovieStopped, resumeData);
+                updateMovieResumeState(currentlyPlayingMovie, currentlyPlayingPart, timeMovieStopped, resumeData);
             }
 
-            currentPart = 0;
+            currentlyPlayingPart = 0;
             currentlyPlaying = false;
-            currentMovie = null;
+            currentlyPlayingMovie = null;
             
             // If we or stopping in another windows enable native auto-play again
             // This will most of the time be the fullscreen playback window, 
@@ -1057,7 +1052,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 // set part and time data 
                 userSetting.ResumePart = part;
                 userSetting.ResumeTime = timePlayed;
-                userSetting.ResumeData = resumeData;
+                userSetting.ResumeData = new ByteArray(resumeData);
                 logger.Debug("Updating movie resume state.");
             }
             else {
@@ -1077,51 +1072,48 @@ namespace MediaPortal.Plugins.MovingPictures {
         #region DeviceManager Methods
 
         /// <summary>
-        /// Call this method to trigger auto-play/detail actions
+        /// Handles action to be taken after a disk has been inserted and added to the database.
         /// </summary>
-        /// <param name="movie">the movie object</param>
-        /// <param name="part">the localmedia part</param>
-        private void OnMovieDiscDetected(DBMovieInfo movie, int part) {
-            // if disc details is enabled select the movie
-            // and go to the details page
-            if (discDetails && movie != null) {
-                logger.Info("Showing details for video disc: '{0}'", movie.Title);
-                browser.SelectedMovie = movie;
-                CurrentView = ViewMode.DETAILS;
-            }
-
-            // if autoplay is enabled start playback
-            if (discAutoplay && movie != null) {
-                logger.Info("Starting playback for video disc: '{0}'", movie.Title);
-                playMovie(movie, part);
+        private void HandleInsertedDisk(DBMovieInfo movie, int part) {
+            switch (diskInsertedAction) {
+                case DiskInsertedAction.DETAILS:
+                    logger.Info("HandleInsertedDisk: Showing details for video disc: '{0}'", movie.Title);
+                    browser.SelectedMovie = movie;
+                    CurrentView = ViewMode.DETAILS;
+                    break;
+                case DiskInsertedAction.PLAY:
+                    logger.Info("HandleInsertedDisk: Starting playback for video disc: '{0}'", movie.Title);
+                    playMovie(movie, part);
+                    break;
             }
         }
 
         /// <summary>
-        /// Listens for newly added movies from the database manager.
-        /// Used for triggering delayed autoplay/details
+        /// Listens for newly added movies from the database manager. Used for triggering delayed 
+        /// actions when a disk is inserted.
         /// </summary>
         /// <param name="obj"></param>
-        private void onMovieAdded(DatabaseTable obj) {
-            // If this is no movie object, we don't have focus or 
-            // recent disk information - do nothing
-            if (obj.GetType() != typeof(DBMovieInfo) || discRecent.Count == 0 || GUIWindowManager.ActiveWindow != GetID)
+        private void OnMovieAdded(DatabaseTable obj) {
+            // if not a movie, not a recently inserted disk, or if we aren't in Moving Pics, quit
+            if (obj.GetType() != typeof(DBMovieInfo) || recentInsertedDiskSerials.Count == 0 || GUIWindowManager.ActiveWindow != GetID)
                 return;
 
             DBMovieInfo movie = (DBMovieInfo)obj;
-            logger.Debug("onMovieAdded: " + movie.Title);
-            foreach (DBLocalMedia localMedia in movie.LocalMedia) {
-                string path = localMedia.FullPath.ToLower();
-                // Check if this path was recently inserted
-                if (discRecent.ContainsKey(path))
-                    // Double check the serial (just in case)
-                    if (localMedia.VolumeSerial == discRecent[path]) {
-                        // Take Action
-                        discRecent.Clear();
-                        OnMovieDiscDetected(movie, localMedia.Part);
-                        return;
-                    }
-            }
+
+            if (movie.LocalMedia.Count == 0)
+                return;
+
+            string path = movie.LocalMedia[0].FullPath.ToLower();
+            logger.Debug("OnMovieAdded: " + movie.Title);
+
+            // Check if this path was recently inserted
+            if (recentInsertedDiskSerials.ContainsKey(path))
+                // Double check the serial (just in case)
+                if (movie.LocalMedia[0].VolumeSerial == recentInsertedDiskSerials[path]) {
+                    recentInsertedDiskSerials.Clear();
+                    HandleInsertedDisk(movie, 1);
+                    return;
+                }
         }
 
         private void OnVolumeInserted(string volume, string serial) {
@@ -1135,7 +1127,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 // Clear recent disc information
                 logger.Debug("Resetting Recent Disc Information.");
-                discRecent.Clear();
+                recentInsertedDiskSerials.Clear();
 
                 // DVD / Blu-ray 
                 // Try to grab a valid video path from the disc
@@ -1143,34 +1135,28 @@ namespace MediaPortal.Plugins.MovingPictures {
                 DBMovieInfo movie = null;
                 int part = 1;
 
+                // if we have a video path a video disk was inserted.
                 if (moviePath != null) {
                     logger.Info("Video Disc Detected.");
-                    // if we have a video path we have a movie
-                    // lookup the path in localmedia (including serial)
-                    // we should get one match
+
+                    // Try to grab the movie from our DB
                     DBLocalMedia localMedia = DBLocalMedia.Get(moviePath, serial);
                     if (localMedia.ID != null) {
-                        // if we have a match check if this media
-                        // i still linked to a movie (there should be one)
                         if (localMedia.AttachedMovies.Count > 0) {
-                            // we have a movie so get the movie object
+                            // movie already exists in the database, so lets handle it
                             movie = localMedia.AttachedMovies[0];
-                            // also get the part number from the local media
                             part = localMedia.Part;
+                            HandleInsertedDisk(movie, part);
                         }
                     }
                     else {
-                        // Movie is not currently known we will store this
-                        // unknown disc into "memory" so OnMovieAdded can
-                        // trigger autoplay/details when the movie arrives. 
+                        // This is a new disk, so lets keep track of it, in case it's added
+                        // to the database by the importer.
                         // @todo: maybe just store a new DBLocalMedia object?
                         logger.Debug("Adding Recent Disc Information: {0} ({1})", moviePath.ToLower(), serial);
-                        discRecent.Add(moviePath.ToLower(), serial);
+                        recentInsertedDiskSerials.Add(moviePath.ToLower(), serial);
                         return;
                     }
-
-                    // Take action
-                    OnMovieDiscDetected(movie, part);
                 }
             }
 
@@ -1183,7 +1169,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 
             // if we are playing something from this volume stop it
             if (currentlyPlaying)
-                if (currentMovie.LocalMedia[currentPart].Volume == volume)
+                if (currentlyPlayingMovie.LocalMedia[currentlyPlayingPart].Volume == volume)
                     g_Player.Stop();
 
             logger.Debug("OnVolumeRemoved" + volume);
@@ -1230,14 +1216,14 @@ namespace MediaPortal.Plugins.MovingPictures {
         // We want to update this after that happens so the correct info is there.
         private void UpdatePlaybackInfo() {
             Thread.Sleep(2000);
-            if (currentMovie != null && currentlyPlaying) {
-                SetProperty("#Play.Current.Title", currentMovie.Title);
-                SetProperty("#Play.Current.Plot", currentMovie.Summary);
-                SetProperty("#Play.Current.Thumb", currentMovie.CoverThumbFullPath);
-                SetProperty("#Play.Current.Year", currentMovie.Year.ToString());
+            if (currentlyPlayingMovie != null && currentlyPlaying) {
+                SetProperty("#Play.Current.Title", currentlyPlayingMovie.Title);
+                SetProperty("#Play.Current.Plot", currentlyPlayingMovie.Summary);
+                SetProperty("#Play.Current.Thumb", currentlyPlayingMovie.CoverThumbFullPath);
+                SetProperty("#Play.Current.Year", currentlyPlayingMovie.Year.ToString());
 
-                if (currentMovie.Genres.Count > 0)
-                    SetProperty("#Play.Current.Genre", currentMovie.Genres[0]);
+                if (currentlyPlayingMovie.Genres.Count > 0)
+                    SetProperty("#Play.Current.Genre", currentlyPlayingMovie.Genres[0]);
                 else
                     SetProperty("#Play.Current.Genre", "");
 

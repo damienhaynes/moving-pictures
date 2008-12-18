@@ -411,41 +411,41 @@ namespace Cornerstone.Database {
 
         // inserts a new object to the database
         private void insert(DatabaseTable dbObject) {
-                try {
-                    string queryFieldList = "";
-                    string queryValueList = "";
+            try {
+                string queryFieldList = "";
+                string queryValueList = "";
 
-                    // loop through the fields and build the strings for the query
-                    foreach (DBField currField in DBField.GetFieldList(dbObject.GetType())) {
-                        if (queryFieldList != "") {
-                            queryFieldList += ", ";
-                            queryValueList += ", ";
-                        }
-
-                        queryFieldList += currField.FieldName;
-                        queryValueList += getSQLiteString(currField.GetValue(dbObject));
+                // loop through the fields and build the strings for the query
+                foreach (DBField currField in DBField.GetFieldList(dbObject.GetType())) {
+                    if (queryFieldList != "") {
+                        queryFieldList += ", ";
+                        queryValueList += ", ";
                     }
 
-                    string query = "insert into " + GetTableName(dbObject.GetType()) +
-                                   " (" + queryFieldList + ") values (" + queryValueList + ")";
-
-                    logger.Debug("INSERTING: " + dbObject.ToString());
-                    logger.Debug(query);
-                    lock (dbClient) {
-                        dbClient.Execute(query);
-                        dbObject.ID = dbClient.LastInsertID();
-                    }
-                    dbObject.DBManager = this;
-                    updateRelationTables(dbObject);
-                    cache.Add(dbObject);
-
-                    // notify any listeners of the status change
-                    if (ObjectInserted != null)
-                        ObjectInserted(dbObject);
+                    queryFieldList += currField.FieldName;
+                    queryValueList += getSQLiteString(currField.GetValue(dbObject));
                 }
-                catch (SQLiteException e) {
-                    logger.ErrorException("Could not commit to " + GetTableName(dbObject.GetType()) + " table.", e);
+
+                string query = "insert into " + GetTableName(dbObject.GetType()) +
+                               " (" + queryFieldList + ") values (" + queryValueList + ")";
+
+                logger.Debug("INSERTING: " + dbObject.ToString());
+                logger.Debug(query);
+                lock (dbClient) {
+                    dbClient.Execute(query);
+                    dbObject.ID = dbClient.LastInsertID();
                 }
+                dbObject.DBManager = this;
+                updateRelationTables(dbObject);
+                cache.Add(dbObject);
+
+                // notify any listeners of the status change
+                if (ObjectInserted != null)
+                    ObjectInserted(dbObject);
+            }
+            catch (SQLiteException e) {
+                logger.ErrorException("Could not commit to " + GetTableName(dbObject.GetType()) + " table.", e);
+            }
         }
 
         // updates the given object in the database. assumes the object was previously retrieved 

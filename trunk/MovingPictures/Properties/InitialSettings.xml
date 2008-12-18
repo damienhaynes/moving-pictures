@@ -31,16 +31,10 @@
       <description>The name that appears on the home screen for the plugin.</description>
     </setting>
 
-    <setting id="ondisc_details" name="Show movie details screen when a DVD/Bluray/HD-DVD disc is inserted." type="BOOL">
-      <default>true</default>
-      <description>Set this to true if you want the GUI to show you the movie details (if known).</description>
+    <setting id="on_disc_loaded" name="Disk Insetion Behavior" type="STRING">
+      <default>DETAILS</default>
+      <description>Action to take when a DVD, Bluray, or HDDVD disk is inserted. ("DETAILS": Goto the details page for the DVD. "PLAY": Start playback immediately. "NOTHING": Take no action).</description>
     </setting>
-
-    <setting id="ondisc_autoplay" name="Start playback when a DVD/Bluray/HD-DVD is inserted." type="BOOL">
-      <default>false</default>
-      <description>Set this to true if you want to start playback (autoplay).</description>
-    </setting>  
-    
 
     <setting id="gui_watch_percentage" name="GUI Watch Percentage" type="INT">
       <default>90</default>

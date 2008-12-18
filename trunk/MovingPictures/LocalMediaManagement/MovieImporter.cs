@@ -1507,7 +1507,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     if (_existingMovieInfo != null)
                         _signature = new MovieSignature(_existingMovieInfo);
                     else
-                        _signature = LocalMediaParser.parseMediaMatch(this);
+                        _signature = MovieSignatureProvider.parseMediaMatch(this);
 
                 return _signature;
             }
