@@ -659,8 +659,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             List<FileInfo> filesCreated = new List<FileInfo>();
             
             if (File.Exists(e.FullPath)) {
-                // This is just one file so add it to the list
-                filesCreated.Add(new FileInfo(e.FullPath));
+                // This is just one file so add it to the list if it's a video file
+                FileInfo file = new FileInfo(e.FullPath);
+                if (Utility.IsVideoFile(file))
+                    filesCreated.Add(file);
             }
             else {
                 // This is a directory so scan it and add create the (video) filelist
