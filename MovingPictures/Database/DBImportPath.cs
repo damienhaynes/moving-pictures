@@ -104,7 +104,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 logger.Debug("Volume: {0}, Type= {1}, Serial={2}", volume, type, serial);
             }
             else {
-                logger.Error("Scan for '{0}' was cancelled because the import path is not available.", Directory.FullName);
+                if (this.IsRemovable)
+                    logger.Info("Scanning of removable import path '{0}' was skipped because it is not available.");
+                else
+                    logger.Error("Scan for '{0}' was cancelled because the import path is not available.", Directory.FullName);
+
                 return null;
             }
 

@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\CustomTypes\ByteArray.cs" />
     <Compile Include="Database\CustomTypes\DBObjectList.cs" />
     <Compile Include="Database\CustomTypes\DynamicList.cs" />
     <Compile Include="Database\CustomTypes\IDynamic.cs" />
