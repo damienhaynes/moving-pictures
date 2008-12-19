@@ -95,8 +95,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
 
         #region Events
 
+        public delegate void ContentsChangedDelegate();
         public delegate void SelectionChangedDelegate(DBMovieInfo obj);
+        
         public event SelectionChangedDelegate SelectionChanged;
+        public event ContentsChangedDelegate ContentsChanged;
         
         #endregion
 
@@ -121,6 +124,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             List<DBMovieInfo> movies = DBMovieInfo.GetAll();
             foreach (DBMovieInfo currMovie in movies)
                 allMovies.Add(currMovie);
+
+            if (ContentsChanged != null)
+                ContentsChanged();
         }
 
         // Listens for newly added movies from the database manager.
@@ -141,7 +147,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie browser.");
             allMovies.Add((DBMovieInfo)obj);
             ReapplyFilters();
-            ReloadFacade();        
+            ReloadFacade();
+
+            if (ContentsChanged != null)
+                ContentsChanged();
         }
 
         // Listens for newly removed items from the database manager.
@@ -164,6 +173,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
 
             // update the facade to reflect the changes
             ReloadFacade();
+
+            if (ContentsChanged != null)
+                ContentsChanged();
         }
 
         // When a new filter is added to or removed update our listeners and reload the facade
@@ -179,12 +191,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             
             ReapplyFilters();
             ReloadFacade();
+
+            if (ContentsChanged != null)
+                ContentsChanged();
         }
 
         private void onFilterUpdated(IBrowserFilter obj) {
             logger.Debug("OnFilterUpdated: " + obj);
             ReapplyFilters();
             ReloadFacade();
+
+            if (ContentsChanged != null)
+                ContentsChanged();
         }
 
         public void ReapplyFilters() {
