@@ -237,7 +237,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void stopMonitor() {
             if (monitor != null) {
                 try {
-
+                    monitor.Dispose();
                     monitor = null;
                     monitorStarted = false;
                 }

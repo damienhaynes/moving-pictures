@@ -376,6 +376,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 logger.Debug("Listening for device changes.");
                 MovingPicturesCore.DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
                 MovingPicturesCore.DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
+
             }
 
             if (recentInsertedDiskSerials == null) {              
@@ -453,8 +454,10 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         // Enable MediaPortal's AutoPlay
         private void enableNativeAutoplay() {
-            logger.Info("Re-enabling native autoplay.");
-            AutoPlay.StartListening();
+            if (GUIGraphicsContext.CurrentState == GUIGraphicsContext.State.RUNNING) {
+                logger.Info("Re-enabling native autoplay.");
+                AutoPlay.StartListening();
+            }
         }
 
         protected override void OnClicked(int controlId, GUIControl control, MediaPortal.GUI.Library.Action.ActionType actionType) {
