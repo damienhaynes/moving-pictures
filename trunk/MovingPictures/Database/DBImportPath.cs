@@ -105,7 +105,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
             else {
                 if (this.IsRemovable)
-                    logger.Info("Scanning of removable import path '{0}' was skipped because it is not available.");
+                    logger.Info("Scanning of removable import path '{0}' was skipped because it is not available.", Directory.FullName);
                 else
                     logger.Error("Scan for '{0}' was cancelled because the import path is not available.", Directory.FullName);
 
