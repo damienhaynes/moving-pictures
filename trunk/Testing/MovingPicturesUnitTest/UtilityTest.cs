@@ -164,10 +164,21 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void IsVideoFileTest() {
-            FileInfo fileInfo = fileTest;
-            bool expected = true;
+            FileInfo fileInfo = new FileInfo("NotAMovie.srt");
+            bool expected = false;
             bool actual;
             actual = Utility.IsVideoFile(fileInfo);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for IsVideoFile
+        ///</summary>
+        [TestMethod()]
+        public void IsVideoFileTest2() {
+            bool expected = true;
+            bool actual;
+            actual = Utility.IsVideoFile(fileTest);
             Assert.AreEqual(expected, actual);
         }
 

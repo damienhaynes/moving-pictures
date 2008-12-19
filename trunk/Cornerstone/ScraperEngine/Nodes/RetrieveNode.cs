@@ -120,8 +120,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
                         // converts the resulting stream to a string for easier use
                         Stream resultData = response.GetResponseStream();
-                        StreamReader reader = new StreamReader(resultData, Encoding.UTF8, true);
-                        pageContents = reader.ReadToEnd().Replace('\0', ' ');
+                        StreamReader reader = new StreamReader(resultData, true);
+                        pageContents = reader.ReadToEnd();
 
                         resultData.Close();
                         reader.Close();
