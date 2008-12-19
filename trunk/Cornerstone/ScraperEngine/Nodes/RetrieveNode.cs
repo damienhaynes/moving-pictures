@@ -113,14 +113,14 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
                         // get the response
                         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
+                        
                         // save the current session to a variable using the hostname as an identifier
                         if (DebugMode) logger.Debug("CookieHeader: {0}", request.CookieContainer.GetCookieHeader(request.RequestUri));
                         setVariable(variables, sessionKey, request.CookieContainer.GetCookieHeader(request.RequestUri));
 
                         // converts the resulting stream to a string for easier use
-                        Stream resultData = response.GetResponseStream();
-                        StreamReader reader = new StreamReader(resultData, Encoding.UTF8, true);
+                        Stream resultData = response.GetResponseStream();                                            
+                        StreamReader reader = new StreamReader(resultData, Encoding.GetEncoding(response.CharacterSet), true);
                         pageContents = reader.ReadToEnd();
 
                         resultData.Close();
