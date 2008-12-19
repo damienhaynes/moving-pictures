@@ -277,25 +277,21 @@ namespace MediaPortal.Plugins.MovingPictures {
             dialog.DoModal(GetID);
         }
 
-        private void OnFilterChanged(IBrowserFilter filter) {
+        private void OnBrowserContentsChanged() {
             // update properties
-            publishViewDetails();
-            
+            PublishViewDetails();
+
             // set the global watched indicator
-            if (watchedFilteringIndicator != null && filter == watchedFilter)
-                if (filter.Active)
-                    watchedFilteringIndicator.Visible = true;
-                else
-                    watchedFilteringIndicator.Visible = false;
+            if (watchedFilteringIndicator != null && watchedFilter.Active != watchedFilteringIndicator.Visible)
+                watchedFilteringIndicator.Visible = watchedFilter.Active;
 
             // set the label for the remoteFiltering indicator
-            if (remoteFilteringIndicator != null && filter == remoteFilter)
-                if (filter.Active) {
-                    SetProperty("#MovingPictures.Filter.Label", remoteFilter.Text);
-                    remoteFilteringIndicator.Visible = true;
-                }
-                else
-                    remoteFilteringIndicator.Visible = false;
+            if (remoteFilteringIndicator != null && remoteFilter.Active) {
+                SetProperty("#MovingPictures.Filter.Label", remoteFilter.Text);
+                remoteFilteringIndicator.Visible = true;
+            }
+            else
+                remoteFilteringIndicator.Visible = false;
         }
 
 
@@ -359,15 +355,16 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             if (browser == null) {
                 browser = new MovieBrowser();
-                browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(updateMovieDetails);
 
                 remoteFilter = new RemoteNumpadFilter();
-                remoteFilter.Updated += new FilterUpdatedDelegate(OnFilterChanged);
                 browser.ActiveFilters.Add(remoteFilter);
 
                 watchedFilter = new WatchedFlagFilter();
-                watchedFilter.Updated += new FilterUpdatedDelegate(OnFilterChanged);
                 browser.ActiveFilters.Add(watchedFilter);
+
+                browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(updateMovieDetails);
+                browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
+
             }
 
             // start the device monitor
@@ -390,8 +387,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
             }
 
-            OnFilterChanged(remoteFilter);
-            OnFilterChanged(watchedFilter);
+            OnBrowserContentsChanged();
 
             browser.Facade = facade;
             facade.Focus = true;
@@ -1175,10 +1171,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
-
         #region Skin and Property Settings
-
-
+        
         private void updateMovieDetails(DBMovieInfo movie) {
             PublishDetails(movie, "SelectedMovie");
 
@@ -1318,7 +1312,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         // all details relating to the current view and filtering status
-        private void publishViewDetails() {
+        private void PublishViewDetails() {
             string propertyStr;
             string valueStr;
 
