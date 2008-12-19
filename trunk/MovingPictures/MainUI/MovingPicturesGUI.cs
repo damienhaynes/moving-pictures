@@ -148,7 +148,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         private ViewMode previousView;
 
         public MovingPicturesGUI() {
-            g_Player.PlayBackStarted += new g_Player.StartedHandler(OnPlayBackStarted);
             g_Player.PlayBackEnded += new g_Player.EndedHandler(OnPlayBackEnded);
             g_Player.PlayBackStopped += new g_Player.StoppedHandler(OnPlayBackStoppedOrChanged);
 
@@ -478,6 +477,12 @@ namespace MediaPortal.Plugins.MovingPictures {
                                     CurrentView = ViewMode.DETAILS;
                                 else
                                     playSelectedMovie();
+                            }
+                            break;
+                        case Action.ActionType.ACTION_SHOW_INFO:
+                            if (control == facade)
+                            {
+                                CurrentView = ViewMode.DETAILS;
                             }
                             break;
                     }
@@ -846,6 +851,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                 currentlyPlayingMovie = movie;
                 currentlyPlayingPart = part;
 
+                Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
+                newThread.Start();
+
                 // grab the duration of this file
                 updateMediaDuration(mediaToPlay);
 
@@ -937,16 +945,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 localMedia.Duration = (int)g_Player.Player.Duration;
                 localMedia.Commit();
             }
-        }
-
-        private void OnPlayBackStarted(g_Player.MediaType type, string filename) {
-            // we don't have to start the thread if we didn't start playback
-            if (type != g_Player.MediaType.Video || currentlyPlayingMovie == null)
-                return;
-
-            // delay to possibly update the screen info
-            Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
-            newThread.Start();
         }
 
         private void OnPlayBackEnded(g_Player.MediaType type, string filename) {

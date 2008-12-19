@@ -176,6 +176,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                     break;
             }
 
+            logLevel = LogLevel.Debug;
+
             LoggingRule rule = new LoggingRule("*", logLevel, fileTarget);
             config.LoggingRules.Add(rule);
 
