@@ -171,7 +171,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
 
             // resort the list
-            sourceList.Sort(sorters[type]);
+            lock (sourceList) sourceList.Sort(sorters[type]);
         }
 
         public void SetDisabled(DBSourceInfo source, DataType type, bool disable) {
@@ -326,22 +326,24 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         public void RemoveSource(DBSourceInfo source) {
             foreach (DataType currType in Enum.GetValues(typeof(DataType)))
-                getEditableList(currType).Remove(source);
+                lock (getEditableList(currType)) 
+                    getEditableList(currType).Remove(source);
 
-            allSources.Remove(source);
+            lock (allSources) allSources.Remove(source);
             source.Delete();
         }
 
         private void addToLists(DBSourceInfo newSource) {
-            allSources.Add(newSource);
+            lock (allSources) allSources.Add(newSource);
+
             if (newSource.Provider.ProvidesBackdrops)
-                backdropSources.Add(newSource);
+                lock (backdropSources) backdropSources.Add(newSource);
 
             if (newSource.Provider.ProvidesCoverArt)
-                coverSources.Add(newSource);
+                lock (coverSources) coverSources.Add(newSource);
 
             if (newSource.Provider.ProvidesMoviesDetails)
-                detailSources.Add(newSource);
+                lock (detailSources) detailSources.Add(newSource);
         }
 
         // reinitializes all the priorities based on existing list order.
@@ -366,11 +368,20 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         #region Data Loading Methods
 
         public List<DBMovieInfo> Get(MovieSignature movieSignature) {
-            return detailSources[0].Provider.Get(movieSignature);
+            List<DBSourceInfo> sources;
+            lock (detailSources) sources = new List<DBSourceInfo>(detailSources);
+
+            if (sources.Count > 0)
+                return sources[0].Provider.Get(movieSignature);
+            else
+                return new List<DBMovieInfo>();
         }
 
         public void Update(DBMovieInfo movie) {
-            foreach(DBSourceInfo currSource in detailSources) {
+            List<DBSourceInfo> sources;
+            lock (detailSources) sources = new List<DBSourceInfo>(detailSources);
+
+            foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.DETAILS))
                     continue;
 
@@ -381,7 +392,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool GetArtwork(DBMovieInfo movie) {
-            foreach (DBSourceInfo currSource in coverSources) {
+            List<DBSourceInfo> sources;
+            lock (coverSources) sources = new List<DBSourceInfo>(coverSources);
+
+            foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.COVERS))
                     continue;
 
@@ -393,13 +407,17 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool GetBackdrop(DBMovieInfo movie) {
-            foreach (DBSourceInfo currSource in backdropSources) {
+            List<DBSourceInfo> sources;
+            lock (backdropSources) sources = new List<DBSourceInfo>(backdropSources);
+
+            foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.BACKDROPS))
                     continue;
-                
+
                 bool success = currSource.Provider.GetBackdrop(movie);
-                if (success) return true; 
+                if (success) return true;
             }
+            
 
             return false;
         }

@@ -61,6 +61,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
 
         private void okButton_Click(object sender, EventArgs e) {
             source.SelectedScript = (DBScriptInfo) listView.SelectedItems[0].Tag;
+            source.Commit();
             this.Close();
         }
 
