@@ -94,6 +94,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         // if flagged, check for backdrops in the movie folder based on the user defined pattern
         private bool getBackdropsFromMovieFolder(DBMovieInfo movie) {
+            // should never really happen, but if the database is corrupt, 
+            // we dont want to crash, so just quit.
+            if (movie.LocalMedia.Count == 0)
+                return false;
+
             bool found = false;
 
             bool useMovieFolderBackdrops = (bool)MovingPicturesCore.SettingsManager["local_backdrop_from_movie_folder"].Value;
