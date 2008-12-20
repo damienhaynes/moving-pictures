@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874903</id>
-    <version major="1" minor="0" point="2"/>
-    <published month="12" day="10" year="2008"/>
+    <version major="1" minor="0" point="3"/>
+    <published month="12" day="20" year="2008"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -85,28 +85,48 @@
         -->
           <sort name='movies' by='distance'/>
           <loop name='curr_movie' on='movies' limit='5'>
+            <!-- we dont want to do uneeded work though, so only proceed if we haven't found covers yet -->
+            <if test="${cover_art[0].url}=">
 
-            <!-- get the list of covers for this possible match -->
-            <parse name="covers" input="${curr_movie}" regex='&lt;A HREF = "([^"]+)"&gt;'/>
+              <!-- get the list of covers for this possible match -->
+              <parse name="covers" input="${curr_movie}" regex='&lt;A HREF = "([^"]+)"&gt;'/>
 
-            <!-- goto the first coverpage and check if it's the right movie, if so loop through and load all covers -->
-            <retrieve name='test_cover_page' url='http://www.impawards.com/${curr_year}/${covers[0][0]}'/>
-            <set name='imdb_id' value=''/>
-            <parse name='imdb_id' input='${test_cover_page}' regex='tt\d{7}'/>
-            <if test='${imdb_id}=${movie.imdb_id}'>
+              <!-- goto the first coverpage and check if it's the right movie, if so loop through and load all covers -->
+              <retrieve name='test_cover_page' url='http://www.impawards.com/${curr_year}/${covers[0][0]}'/>
 
-              <loop name='cover_url' on='covers'>
-                <retrieve name='cover_page' url='http://www.impawards.com/${curr_year}/${cover_url[0]}'/>
-                <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="([^"]+)" ALT = "Movie Poster Image for'/>
-                <set name='cover_art[${count}].url' value='http://www.impawards.com/${curr_year}/${cover_img_url[0][0]}'/>
-              </loop>
+              <!-- check by imdb id -->
+              <set name='imdb_id' value=''/>
+              <parse name='imdb_id' input='${test_cover_page}' regex='tt\d{7}'/>
+              <if test='${movie.imdb_id}!='>
+                <if test='${imdb_id}=${movie.imdb_id}'>
 
+                  <loop name='cover_url' on='covers'>
+                    <retrieve name='cover_page' url='http://www.impawards.com/${curr_year}/${cover_url[0]}'/>
+                    <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="([^"]+)" ALT = "Movie Poster Image for'/>
+                    <set name='cover_art[${count}].url' value='http://www.impawards.com/${curr_year}/${cover_img_url[0][0]}'/>
+                  </loop>
+
+                </if>
+              </if>
+
+              <!-- if no imdb id, check by title -->
+              <if test='${movie.imdb_id}='>
+                <if test='${movies[${count}].distance}&lt;=2'>
+
+                  <loop name='cover_url' on='covers'>
+                    <retrieve name='cover_page' url='http://www.impawards.com/${curr_year}/${cover_url[0]}'/>
+                    <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="([^"]+)" ALT = "Movie Poster Image for'/>
+                    <set name='cover_art[${count}].url' value='http://www.impawards.com/${curr_year}/${cover_img_url[0][0]}'/>
+                  </loop>
+
+                </if>
+              </if>
             </if>
 
           </loop>
         </if>
       </loop>
-      
+
     </if>
   </action>
 </ScriptableScraper>

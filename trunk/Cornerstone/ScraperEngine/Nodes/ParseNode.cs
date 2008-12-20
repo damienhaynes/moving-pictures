@@ -58,8 +58,15 @@ namespace Cornerstone.ScraperEngine.Nodes {
             if (DebugMode) logger.Debug("name: " + parsedName + " ||| pattern: " + parsedPattern + " ||| input: " + parsedInput);
 
             // try to find matches via regex pattern
-            Regex regEx = new Regex(parsedPattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            MatchCollection matches = regEx.Matches(parsedInput);
+            MatchCollection matches;
+            try {
+                Regex regEx = new Regex(parsedPattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                matches = regEx.Matches(parsedInput);
+            }
+            catch (Exception e) {
+                logger.Error("Regex expression failed!", e);
+                return;
+            }
 
             if (matches.Count == 0) {
                 if (DebugMode) logger.Debug("Parse node returned no results... " + xmlNode.OuterXml);
