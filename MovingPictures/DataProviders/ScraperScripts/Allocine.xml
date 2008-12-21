@@ -3,7 +3,7 @@
   <details>
     <!-- These details are for display purposes only. -->
     <name>allocine.fr</name>
-    <author>Armand Pondman (armandp)</author>
+    <author>Armand Pondman (armandp) and John Conrad (fforde)</author>
     <description>This script pulls data from allocine.fr</description>
 
     <!-- 
@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874930</id>
-    <version major="1" minor="0" point="1"/>
-    <published month="11" day="18" year="2008"/>
+    <version major="1" minor="0" point="2"/>
+    <published month="12" day="20" year="2008"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -70,13 +70,13 @@
     <!-- Regular Expressions -->
     <set name="rx_details">
       <![CDATA[
-        <table.+?>.+?<h4>Genre.+?</table>  
+        <table[^>]+>.+?<h4>Genre.+?</table> 
       ]]>
     </set>
 
     <set name="rx_title">
       <![CDATA[
-        <title>(.+?)</title>
+        <title>([^<]+?)</title>
         ]]>
     </set>
 
@@ -86,17 +86,48 @@
       ]]>
     </set>
 
-    <set name="rx_info">
+    <set name="rx_year">
       <![CDATA[
-      <h4>Date de sortie\s:\s.+?(\d+)</b>.*?</h4>.*?<h4>Réalisé\spar\s(.+?)</h4>.*?<h4>Avec\s(.+?)</h4>.*?<h4>Genre\s:\s(.+?)</h4>.*?<h4>Durée\s:\s(\d+)h\s(\d+)min.*?</h4>
+      <h4>Date de sortie\s:\s<b>[^<]+?(\d{4})\s*?</
       ]]>
     </set>
 
-    <set name="rx_geta">
+    <set name="rx_director_block">
       <![CDATA[
-      <a.+?(?=/personne/|genretxt).+?>(.+?)</a>
+      <h4>R.alis. par .+?</h4>
       ]]>
     </set>
+
+    <set name="rx_actor_block">
+      <![CDATA[
+      <h4>\s*?Avec(.+?)</h4>
+      ]]>
+    </set>
+
+    
+    <set name="rx_get_person_from_anchor_text">
+      <![CDATA[
+      <a[^>]+personne[^>]+>\s*?([^<]+)\s*?</a>
+      ]]>
+    </set>
+
+    <set name="rx_genre_block">
+      <![CDATA[
+      <h4>Genre\s:\s(.+?)</h4>
+      ]]>
+    </set>
+
+    <set name="rx_get_genre_from_anchor_text">
+      <![CDATA[
+      <a[^>]+genre[^>]+>\s*?([^<]+)\s*?</a>
+      ]]>
+    </set>
+
+    <set name="rx_runtime">
+      <![CDATA[
+      <h4>Dur.e\s:\s(\d+)h(?:\s(\d+)min.*?</h4>)?
+      ]]>
+    </set>    
 
     <set name="rx_score">
       <![CDATA[
@@ -107,7 +138,6 @@
     <set name="success" value="false"/>
     <if test="${movie.site_id}!=">
       <retrieve name="details_page" url="${site}film/fichefilm_gen_cfilm=${movie.site_id}.html"/>
-      <parse name="details" input="${details_page}" regex="${rx_info}"/>
 
       <!-- Title -->
       <parse name="title" input="${details_page}" regex="${rx_title}"/>
@@ -116,34 +146,42 @@
       <!-- Plot/Summary -->
       <parse name="plot" input="${details_page}" regex="${rx_plot}"/>
       <set name="movie.summary" value="${plot[0][0]:htmldecode}"/>
+      <set name="movie.summary" value="${movie.summary:striptags}"/>
 
       <!-- Year -->
-      <set name="movie.year" value="${details[0][0]}"/>
+      <parse name="year" input="${details_page}" regex="${rx_year}"/>
+      <set name="movie.year" value="${year[0][0]}"/>
 
       <!-- Directors -->
-      <parse name="directors" input="${details[0][1]}" regex="${rx_geta}"/>
+      <parse name="director_block" input="${details_page}" regex="${rx_director_block}"/>
+      <parse name="directors" input="${director_block}" regex="${rx_get_person_from_anchor_text}"/>
       <set name='movie.directors' value=''/>
       <loop name='currDirector' on='directors'>
         <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
       </loop>
 
       <!-- Actors -->
-      <parse name="actors" input="${details[0][2]}" regex="${rx_geta}"/>
+      <parse name="actor_block" input="${details_page}" regex="${rx_actor_block}"/>
+      <parse name="actors" input="${actor_block}" regex="${rx_get_person_from_anchor_text}"/>
       <set name='movie.actors' value=''/>
       <loop name='currActor' on='actors'>
-        <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
+        <set name="movie.actors" value="${movie.actors}|${currActor[0]:htmldecode}"/>
       </loop>
 
       <!-- Genres -->
-      <parse name="genres" input="${details[0][3]}" regex="${rx_geta}"/>
+      <parse name="genre_block" input="${details_page}" regex="${rx_genre_block}"/>
+      <parse name="genres" input="${genre_block}" regex="${rx_get_genre_from_anchor_text}"/>
       <set name='movie.genres' value=''/>
       <loop name='currGenre' on='genres'>
-        <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
+        <set name="movie.genres" value="${movie.genres}|${currGenre[0]:htmldecode}"/>
       </loop>
 
       <!-- Runtime -->
-      <multiply name="minutes" value1="60" value2="${details[0][4]}"/>
-      <add name="movie.runtime" value1="${minutes}" value2="${details[0][5]}"/>
+      <parse name="runtime" input="${details_page}" regex="${rx_runtime}"/>
+      <multiply name="movie.runtime" value1="60" value2="${runtime[0][0]}"/>
+      <if test="${runtime[0][1]}!=">
+        <add name="movie.runtime" value1="${movie.runtime}" value2="${runtime[0][1]}"/>
+      </if>
 
       <!-- Score -->
       <parse name="score" input="${details_page}" regex="${rx_score}"/>

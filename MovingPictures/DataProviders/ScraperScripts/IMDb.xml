@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="1" point="0"/>
-    <published month="12" day="12" year="2008"/>
+    <version major="1" minor="1" point="2"/>
+    <published month="12" day="20" year="2008"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -139,13 +139,21 @@
       <tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
        ]]>
     </set>
+    
     <set name="rx_plot">
       <![CDATA[
       <p class="plotpar">\s*(.+?)<i>.*?</i>.*?</p>
       ]]>
     </set>
+
+    <set name="rx_plot2">
+      <![CDATA[
+      <h5>Plot:</h5>\s+([^|]+)\|\s<a class="[^"]+" href="synopsis">
+      ]]>
+    </set>
     
     <retrieve name="details_page" url="http://www.imdb.com/title/${movie.site_id}"/>
+    <set name="movie.imdb_id" value="${movie.site_id}"/>
 
     <!-- Title and Year -->
     <parse name="title_year" input="${details_page}" regex="&lt;title&gt;([^\(]+?)\((\d{4})[\/IVX]*\).*?&lt;/title&gt;"/>
@@ -213,6 +221,13 @@
     <parse name="summary" input="${summary_page}" regex="${rx_plot}"/>
     <set name="summary_clean" value="${summary[0][0]:striptags}" />
     <set name="movie.summary" value="${summary_clean:htmldecode}" />
+    
+    <!-- Plot Summary (if first method fails) -->
+    <if test="${movie.summary}=">
+      <parse name="summary2" input="${details_page}" regex="${rx_plot2}"/>
+      <set name="summary_clean" value="${summary2[0][0]:striptags}" />
+      <set name="movie.summary" value="${summary_clean:htmldecode}" />
+    </if>
     
     <!-- AKA page -->
     <retrieve name="aka_page" url='http://www.imdb.com/title/${movie.site_id}/releaseinfo'/>
