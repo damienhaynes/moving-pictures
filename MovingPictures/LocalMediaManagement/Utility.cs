@@ -339,10 +339,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                      return false;
 
                 // DVD: Filter ifo's that are not called video_ts.ifo
-                // This allows the exception of a video_ts.ifo being in the root without a video_ts folder
+                // but allow them when we don't have a video_ts.ifo in the same folder
                 if (ext == ".ifo" && name != "video_ts.ifo")
-                    return false;
-
+                    if (File.Exists(fileInfo.FullName.ToLower().Replace(name, "video_ts.ifo")))
+                        return false;
+               
                 // Bluray: the only valid bluray file would already passed the method, we filter the rest
                 if (ext == ".bdmv")
                     return false;
