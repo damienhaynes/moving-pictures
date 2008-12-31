@@ -65,6 +65,11 @@
         <description>When enabled this option will ALWAYS group multiple files in one folder together (assuming a multi-part movie).</description>
       </setting>
 
+      <setting id="importer_disc_enabled" name="Enable Import Paths For Optical Drives" type="BOOL">
+        <default>true</default>
+        <description>Enables import from all available CD/DVD/HD-DVD/Bluray drives</description>
+      </setting>
+
     </group>
 
     <group name="Local Media Parser">

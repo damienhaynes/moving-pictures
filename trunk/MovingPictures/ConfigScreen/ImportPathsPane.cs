@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -20,8 +21,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
-            // grab all existing paths
-            paths = DBImportPath.GetAll();
+            // grab all user defined paths
+            paths = DBImportPath.GetAllCustom();
 
             // set up the binding for the on screen control
             pathBindingSource = new BindingSource();
@@ -52,13 +53,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 
         private void addSourceButton_Click(object sender, EventArgs e) {
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
-            
             DialogResult result = folderDialog.ShowDialog();
             if (result == DialogResult.OK) {
                 DBImportPath newPath = new DBImportPath();
                 newPath.FullPath = folderDialog.SelectedPath;
-                pathBindingSource.Add(newPath);
-                MovingPicturesCore.Importer.RestartScanner();
+                if (newPath.GetDriveType() != DriveType.CDRom) {
+                    pathBindingSource.Add(newPath);
+                    MovingPicturesCore.Importer.RestartScanner();
+                }
+                else {
+                    newPath = null;
+                    MessageBox.Show("Importing from this drive is controlled through the setting 'Enable Import Paths For Optical Drives'", "Not Allowed!");
+                }
             }
             
         }

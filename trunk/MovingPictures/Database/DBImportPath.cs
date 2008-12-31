@@ -54,6 +54,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private DirectoryInfo dirInfo;
 
+        /// <summary>
+        /// Gets a value indicating wether this path is active.
+        /// </summary>
+        public bool Active {
+            get {
+                // Paths that are not of CDRom type are always active
+                if (this.GetDriveType() != DriveType.CDRom)
+                    return true;
+                else // If CDRom type check the configuration setting 
+                    return (bool)MovingPicturesCore.SettingsManager["importer_disc_enabled"].Value;
+             }
+        }
+
         #region Database Fields
 
         [DBFieldAttribute(FieldName = "path")]
@@ -189,8 +202,34 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return MovingPicturesCore.DatabaseManager.Get<DBImportPath>(id);
         }
 
+        // Gets the corresponding DBImportPath object using it's FullPath property
+        public static DBImportPath Get(string fullPath) {
+            DBField pathField = DBField.GetField(typeof(DBImportPath), "FullPath");
+            ICriteria criteria = new BaseCriteria(pathField, "like", fullPath);
+            List<DBImportPath> resultSet = MovingPicturesCore.DatabaseManager.Get<DBImportPath>(criteria);
+            if (resultSet.Count > 0)
+                return resultSet[0];
+
+            DBImportPath newImportPath = new DBImportPath();
+            newImportPath.FullPath = fullPath;
+
+            return newImportPath;
+        }
+
         public static List<DBImportPath> GetAll() {
             return MovingPicturesCore.DatabaseManager.Get<DBImportPath>(null);
+        }
+
+        /// <summary>
+        /// Returns all user defined import paths
+        /// </summary>
+        public static List<DBImportPath> GetAllCustom() {
+            List<DBImportPath> paths = new List<DBImportPath>();
+            foreach (DBImportPath path in DBImportPath.GetAll()) {
+                if (path.GetDriveType() != DriveType.CDRom)
+                    paths.Add(path);
+            }
+            return paths;
         }
 
         #endregion
