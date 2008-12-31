@@ -9,6 +9,7 @@ using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
+using MediaPortal.Profile;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
@@ -510,11 +511,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     int count = 0;
                     List<DBImportPath> paths = DBImportPath.GetAll();
                     foreach (DBImportPath currPath in paths) {
-                        count++;
-                        if (Progress != null)
-                            Progress(percentDone, count, paths.Count, "Scanning local media sources...");
+                        if (currPath.Active) {
+                            count++;
+                            if (Progress != null)
+                                Progress(percentDone, count, paths.Count, "Scanning local media sources...");
 
-                        ScanPath(currPath);
+                            ScanPath(currPath);
+                        }
                     }
 
 
@@ -557,7 +560,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // Check if this volume has an import path
             // if so rescan these import paths
             foreach (DBImportPath importPath in DBImportPath.GetAll()) {
-                if (importPath.GetDiskSerial() == serial)
+                if (importPath.Active && importPath.GetDiskSerial() == serial)
                     ScanPath(importPath);
             }
         }
@@ -755,9 +758,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     cleaned++;
                     continue;
                 }
+                
+                UpdateMissingDiskInfoProperties(currFile); // Update Disk Info
 
-                // Upgrade Tasks
-                UpdateMissingDiskInfoProperties(currFile);
+                
 
             }
             logger.Info("Maintenance finished. Removed {0} files.", cleaned.ToString());
@@ -825,7 +829,35 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         }
 
-        // Removes everything that has a relating to the local media file
+        // Update System Managed Import Paths
+        public void UpdateImportPaths() {
+            bool daemonEnabled = MovingPicturesCore.MediaPortalSettings.GetValueAsBool("daemon", "enabled", false);
+            string virtualDrive = MovingPicturesCore.MediaPortalSettings.GetValueAsString("daemon", "drive", "?:");
+            // Get all drives
+            foreach (DriveInfo drive in DriveInfo.GetDrives()) {
+                if (drive.DriveType != DriveType.CDRom)
+                    continue;
+              
+                // Add the import path if it does not exist and 
+                // is not marked virtual by MediaPortal.
+                DBImportPath importPath = DBImportPath.Get(drive.Name);
+                bool isVirtual = drive.Name.StartsWith(virtualDrive, StringComparison.OrdinalIgnoreCase) && daemonEnabled;
+
+                if (importPath.ID == null && !isVirtual) {
+                    importPath.Commit();
+                    logger.Info("Added system managed import path: {0}", importPath.FullPath);
+                }
+                else {
+                    if (importPath.ID != null && isVirtual) {
+                        // Remove an existing path if it's defined as the virtual drive
+                        importPath.Delete();
+                        logger.Info("Removed system managed import path: {0} (drive is marked as virtual)", importPath.FullPath);
+                    }
+                }
+            }
+        }
+
+        // Removes everything that has a relation to the local media file
         private void RemoveLocalMedia(DBLocalMedia localMedia) {
             logger.Info("Removing " + localMedia.FullPath + " and associated movie.");
             foreach (DBMovieInfo currMovie in localMedia.AttachedMovies) {
