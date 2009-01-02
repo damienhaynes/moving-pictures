@@ -119,8 +119,14 @@ namespace Cornerstone.ScraperEngine.Nodes {
                         setVariable(variables, sessionKey, request.CookieContainer.GetCookieHeader(request.RequestUri));
 
                         // converts the resulting stream to a string for easier use
-                        Stream resultData = response.GetResponseStream();                                            
-                        StreamReader reader = new StreamReader(resultData, Encoding.GetEncoding(response.CharacterSet), true);
+                        Stream resultData = response.GetResponseStream();
+                        
+                        // use the proper encoding
+                        Encoding encoding = Encoding.UTF8;
+                        if (response.ContentType != "text/xml")
+                            encoding = Encoding.GetEncoding(response.CharacterSet);
+
+                        StreamReader reader = new StreamReader(resultData, encoding, true);
                         pageContents = reader.ReadToEnd();
 
                         resultData.Close();

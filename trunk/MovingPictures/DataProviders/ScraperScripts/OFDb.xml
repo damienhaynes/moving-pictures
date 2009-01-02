@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="1" minor="0" point="3"/>
-    <published month="11" day="27" year="2008"/>
+    <version major="1" minor="0" point="4"/>
+    <published month="1" day="3" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -123,7 +123,7 @@
     </set>
     <set name="rx_details">
       <![CDATA[
-      <titel>(.+?)</titel>\s*<jahr>(.+?)</jahr>.*<note>(.+?)</note>.*<stimmen>(.+?)</stimmen>.*<regie>(.+?)</regie>.*<genre>(.+?)</genre>.+<kurzbeschreibung>(.+?)</kurzbeschreibung>.*<beschreibung>(.+?)</beschreibung>.*<besetzung>(.+?)</besetzung>.*<alternativ>(.+?)</alternativ>
+      <titel>(.+?)</titel>\s*<jahr>(.+?)</jahr>.*<imdbid>(.+?)</imdbid>.*<note>(.+?)</note>.*<stimmen>(.+?)</stimmen>.*<regie>(.+?)</regie>.*<genre>(.+?)</genre>.+<kurzbeschreibung>(.+?)</kurzbeschreibung>.*<beschreibung>(.+?)</beschreibung>.*<besetzung>(.+?)</besetzung>.*<alternativ>(.+?)</alternativ>
       ]]>
     </set>    
     
@@ -133,43 +133,41 @@
 
     <!-- Titles -->
     <replace name="title" input="${details[0][0]:htmldecode}" pattern="${rx_title_clean}" with="" />
-    <replace name="aka" input="${details[0][9]:htmldecode}" pattern="${rx_title_clean}" with="" />
+    <replace name="aka" input="${details[0][10]:htmldecode}" pattern="${rx_title_clean}" with="" />
     <parse name="title" input="${title}" regex="${rx_title}"/>
     <parse name="aka" input="${aka}" regex="${rx_title}"/>
     <set name="movie.alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
     <set name="movie.title" value="${title[0][1]} ${title[0][0]}"/>
     
+    <!-- IMDB ID -->
+    <set name="movie.imdb_id" value="tt${details[0][2]}" />
+    
     <!-- Year, Summary, Score and Votes-->
     <set name="movie.year" value="${details[0][1]}"/>
-    <set name="movie.summary" value="${details[0][7]:htmldecode}"/>
-    <set name="movie.score" value="${details[0][2]}"/>
-    <set name="movie.popularity" value="${details[0][3]}"/>
+    <set name="movie.summary" value="${details[0][8]:htmldecode}"/>
+    <set name="movie.score" value="${details[0][3]}"/>
+    <set name="movie.popularity" value="${details[0][4]}"/>
     
     <!-- Directors -->
-    <parse name="directors" input="${details[0][4]}" regex="${rx_person}"/>
+    <parse name="directors" input="${details[0][5]}" regex="${rx_person}"/>
     <set name='movie.directors' value=''/>
     <loop name='currDirector' on='directors'>
       <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
     </loop>
 
     <!-- Actors -->
-    <parse name='actors' input='${details[0][8]}' regex="${rx_person}"/>
+    <parse name='actors' input='${details[0][9]}' regex="${rx_person}"/>
     <set name='movie.actors' value=''/>
     <loop name='currActor' on='actors'>
       <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
     </loop>
 
     <!-- Genres -->
-    <parse name='genres' input='${details[0][5]}' regex="${rx_genre}"/>
+    <parse name='genres' input='${details[0][6]}' regex="${rx_genre}"/>
     <set name='movie.genres' value=''/>
     <loop name='currGenre' on='genres'>
       <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
     </loop>
-    
-    <!-- IMDB id lookup -->
-    <retrieve name="imdblookup" url="http://www.ofdb.de/view.php?page=film&amp;fid=${movie.site_id}"/>
-    <parse name="imdbid" input="${imdblookup}" regex="imdb.com\/Title\?(\d+)"/>
-    <set name="movie.imdb_id" value="tt${imdbid[0][0]}" />
     
   </action>
   
