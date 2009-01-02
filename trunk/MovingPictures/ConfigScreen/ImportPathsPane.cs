@@ -22,7 +22,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
 
             // grab all user defined paths
-            paths = DBImportPath.GetAllCustom();
+            paths = DBImportPath.GetAllUserDefined();
 
             // set up the binding for the on screen control
             pathBindingSource = new BindingSource();
@@ -57,7 +57,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (result == DialogResult.OK) {
                 DBImportPath newPath = new DBImportPath();
                 newPath.FullPath = folderDialog.SelectedPath;
-                if (newPath.GetDriveType() != DriveType.CDRom) {
+                if (!newPath.System) {
                     pathBindingSource.Add(newPath);
                     MovingPicturesCore.Importer.RestartScanner();
                 }
