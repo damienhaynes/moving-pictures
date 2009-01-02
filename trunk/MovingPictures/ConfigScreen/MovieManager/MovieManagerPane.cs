@@ -109,14 +109,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void addMovie(DBMovieInfo movie) {
             ListViewItem newItem = new ListViewItem(movie.Title);
             newItem.Tag = movie;
+            
             // if the movie is offline color it red
-            // todo: maybe fancy this up?
             if (movie.LocalMedia.Count > 0) {
                 if (!movie.LocalMedia[0].IsAvailable) {
                     newItem.ForeColor = Color.Red;
-                    newItem.ToolTipText = "This movie is currently offline";
+                    newItem.ToolTipText = "This movie is currently offline.";
                 }
             }
+            
+            // add to list
             movieListBox.Items.Add(newItem);
             listItems[movie] = newItem;
         }
@@ -186,14 +188,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
             }
 
+            movieDetailsSubPane.DatabaseObject = CurrentMovie;
+
             if (CurrentMovie == null) {
                 // if we have no movie selcted (or multiple movies selected) clear out details
-                movieTitleTextBox.DatabaseObject = null;
-                movieDetailsList.DatabaseObject = null;
-                movieDetailsList.Enabled = false;
-                
-                userMovieDetailsList.DatabaseObject = null;
-                userMovieDetailsList.Enabled = false;
+                titleLabel.Text = "";
                 
                 coverImage.Image = null;
                 resolutionLabel.Text = "";
@@ -206,8 +205,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                
                 return;
             }
-            movieDetailsList.Enabled = true;
-            userMovieDetailsList.Enabled = true;
 
             reassignMovieButton.Enabled = true;
             playMovieButton.Enabled = true;
@@ -246,36 +243,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
             
             // populate movie details fields
-            movieTitleTextBox.DatabaseObject = CurrentMovie;
-            movieDetailsList.DatabaseObject = CurrentMovie;
-            userMovieDetailsList.DatabaseObject = CurrentMovie.UserSettings[0];
+            titleLabel.Text = CurrentMovie.Title;
         }
 
         private void updateFilePanel() {
-            // if no object selected (or multiple objects selected) clear details
-            if (CurrentMovie == null) {
-                fileList.Items.Clear();
-                fileList.Enabled = false;
-                fileDetailsList.DatabaseObject = null;
-                return;
-            }
-
-            // populate file list combo
-            fileList.Items.Clear();
-            CurrentMovie.LocalMedia.Sort(new DBLocalMediaComparer());
-            foreach (DBLocalMedia currFile in CurrentMovie.LocalMedia) 
-                fileList.Items.Add(currFile);
-
-            // select first file            
-            if (fileList.Items.Count > 0) {
-                fileList.SelectedIndex = 0;
-            }
-
-            // only allow user to drop down if there is more than one movie file
-            if (fileList.Items.Count > 1)
-                fileList.Enabled = true;
-            else
-                fileList.Enabled = false;
+            fileDetailsSubPane.DatabaseObject = CurrentMovie;
         }
 
         private void movieTree_AfterSelect(object sender, EventArgs e) {
@@ -284,9 +256,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
 
             // unload the artowrk and commit for the previously selected movie
-            if (movieDetailsList.DatabaseObject != null) {
-                ((DBMovieInfo)movieDetailsList.DatabaseObject).UnloadArtwork();
-                ((DBMovieInfo)movieDetailsList.DatabaseObject).Commit();
+            if (movieDetailsSubPane.DatabaseObject != null) {
+                ((DBMovieInfo)movieDetailsSubPane.DatabaseObject).UnloadArtwork();
+                ((DBMovieInfo)movieDetailsSubPane.DatabaseObject).Commit();
             }
 
             updateMoviePanel();
@@ -406,10 +378,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
-        private void fileList_SelectedIndexChanged(object sender, EventArgs e) {
-            if (fileList.SelectedItem != null)
-                fileDetailsList.DatabaseObject = (DBLocalMedia)fileList.SelectedItem;
-        }
 
         private void deleteMovieButton_Click(object sender, EventArgs e) {
             if (movieListBox.SelectedItems.Count > 0) {
@@ -434,11 +402,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void playMovieButton_Click(object sender, EventArgs e) {
-            if (fileList.SelectedItem == null)
-                return;
-
-            ProcessStartInfo processInfo = new ProcessStartInfo(((DBLocalMedia)fileList.SelectedItem).File.FullName);
-            Process.Start(processInfo);
+            fileDetailsSubPane.playSelected();
         }
 
         private void refreshMovieButton_Click(object sender, EventArgs e) {
@@ -584,36 +548,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             artworkProgressBar.Visible = false;
         }
 
-        private void fileUpButton_Click(object sender, EventArgs e) {
-            int index = fileList.SelectedIndex;
-            if (index == 0)
-                return;
-
-            // swap the part# with the file above
-            int partA = ((DBLocalMedia)fileList.Items[index]).Part;
-            int partB = ((DBLocalMedia)fileList.Items[index - 1]).Part;
-            ((DBLocalMedia)fileList.Items[index]).Part = partB;
-            ((DBLocalMedia)fileList.Items[index - 1]).Part = partA;
-
-            updateFilePanel();
-            fileList.SelectedIndex = index - 1;
-        }
-
-        private void fileDownButton_Click(object sender, EventArgs e) {
-            int index = fileList.SelectedIndex;
-            if (index == fileList.Items.Count - 1)
-                return;
-
-            // swap the part# with the file above
-            int partA = ((DBLocalMedia)fileList.Items[index]).Part;
-            int partB = ((DBLocalMedia)fileList.Items[index + 1]).Part;
-            ((DBLocalMedia)fileList.Items[index]).Part = partB;
-            ((DBLocalMedia)fileList.Items[index + 1]).Part = partA;
-
-            updateFilePanel();
-            fileList.SelectedIndex = index + 1;
-        }
-
         private void markAsUnwatchedToolStripMenuItem_Click(object sender, EventArgs e) {
             foreach (ListViewItem currItem in movieListBox.SelectedItems)
                 ((DBMovieInfo)currItem.Tag).UserSettings[0].Watched = 0;
@@ -627,6 +561,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     ((DBMovieInfo)currItem.Tag).UserSettings[0].Watched = 1;
 
             updateMoviePanel();
+        }
+
+        private void movieDetailsToolStripMenuItem_Click(object sender, EventArgs e) {
+            detailsViewDropDown.Text = movieDetailsToolStripMenuItem.Text;
+            movieDetailsSubPane.Visible = true;
+            fileDetailsSubPane.Visible = false;
+        }
+
+        private void fileDetailsToolStripMenuItem_Click(object sender, EventArgs e) {
+            detailsViewDropDown.Text = fileDetailsToolStripMenuItem.Text;
+            movieDetailsSubPane.Visible = false;
+            fileDetailsSubPane.Visible = true;
         }
 
     }
