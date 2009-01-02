@@ -30,7 +30,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.pathsGroupBox = new System.Windows.Forms.GroupBox();
             this.removeSourceButton = new System.Windows.Forms.Button();
             this.addSourceButton = new System.Windows.Forms.Button();
-            this.notesLabel = new System.Windows.Forms.TextBox();
+            this.notesLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pathsGridView)).BeginInit();
             this.pathsGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -111,12 +111,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.notesLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.notesLabel.BackColor = System.Drawing.SystemColors.Control;
-            this.notesLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.notesLabel.Location = new System.Drawing.Point(7, 19);
-            this.notesLabel.Multiline = true;
             this.notesLabel.Name = "notesLabel";
-            this.notesLabel.ReadOnly = true;
             this.notesLabel.Size = new System.Drawing.Size(517, 72);
             this.notesLabel.TabIndex = 1;
             this.notesLabel.Text = resources.GetString("notesLabel.Text");
@@ -131,7 +127,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.Size = new System.Drawing.Size(530, 270);
             ((System.ComponentModel.ISupportInitialize)(this.pathsGridView)).EndInit();
             this.pathsGroupBox.ResumeLayout(false);
-            this.pathsGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -140,7 +135,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private System.Windows.Forms.DataGridView pathsGridView;
         private System.Windows.Forms.GroupBox pathsGroupBox;
-        private System.Windows.Forms.TextBox notesLabel;
+        private System.Windows.Forms.Label notesLabel;
         private System.Windows.Forms.Button addSourceButton;
         private System.Windows.Forms.Button removeSourceButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn pathColumn;

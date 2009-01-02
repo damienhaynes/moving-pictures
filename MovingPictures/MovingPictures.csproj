@@ -69,6 +69,18 @@
     <Compile Include="ConfigScreen\ImportPathsPane.Designer.cs">
       <DependentUpon>ImportPathsPane.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\MovieManager\FileDetailsSubPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\MovieManager\FileDetailsSubPane.Designer.cs">
+      <DependentUpon>FileDetailsSubPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\MovieManager\MovieDetailsSubPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\MovieManager\MovieDetailsSubPane.Designer.cs">
+      <DependentUpon>MovieDetailsSubPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\Popups\ManualAssignPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,10 +93,10 @@
     <Compile Include="ConfigScreen\MovieImporterPane.Designer.cs">
       <DependentUpon>MovieImporterPane.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\MovieManagerPane.cs">
+    <Compile Include="ConfigScreen\MovieManager\MovieManagerPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ConfigScreen\MovieManagerPane.Designer.cs">
+    <Compile Include="ConfigScreen\MovieManager\MovieManagerPane.Designer.cs">
       <DependentUpon>MovieManagerPane.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\MovingPicturesConfig.cs">
@@ -192,6 +204,14 @@
       <DependentUpon>ImportPathsPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\MovieManager\FileDetailsSubPane.resx">
+      <DependentUpon>FileDetailsSubPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\MovieManager\MovieDetailsSubPane.resx">
+      <DependentUpon>MovieDetailsSubPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\ManualAssignPopup.resx">
       <DependentUpon>ManualAssignPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -200,7 +220,7 @@
       <DependentUpon>MovieImporterPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\MovieManagerPane.resx">
+    <EmbeddedResource Include="ConfigScreen\MovieManager\MovieManagerPane.resx">
       <DependentUpon>MovieManagerPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
