@@ -33,6 +33,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             pathsGridView.AutoGenerateColumns = false;
             pathsGridView.DataSource = pathBindingSource;
 
+            // link the checkbox to db settings
+            importDvdCheckBox.Setting = MovingPicturesCore.SettingsManager["importer_disc_enabled"];
+
             this.HandleDestroyed += new EventHandler(ImportPathsPane_HandleDestroyed);
         }
 
@@ -83,5 +86,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
+        private void helpButton_Click(object sender, EventArgs e) {
+            MessageBox.Show(ParentForm, "Watch Folders\n\nMoving Pictures will automatically import movie content from the watch folders you have added in this section. As new movies are added to your watch folders they will also be automatically added to Moving Pictures. Likewise, when movies are deleted or moved from your watch folders, they will also be removed from Moving Pictures.\n\n\n\nNetwork / Removable Media\n\nMoving Pictures will now automatically detect if an import path is on a network or removable drive. If an entire import path is taken offline, Moving Pictures will not remove any files. Only when files are actually deleted or moved out of an import path will they be removed from your library.\n\n\n\nOptical Media\n\nIf the \"Automatically Import Inserted DVDs\" option is set, all media from any optical drives on your system will be loaded when inserted. Generally this means that if you play a DVD through Moving Pictures, from that point forward that DVD will be listed as a part of your library and when you click play, you will be prompted to insert the appropriate disk.");
+        }
     }
 }

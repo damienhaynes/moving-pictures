@@ -286,6 +286,7 @@
     <Content Include="Images\exclamation.png" />
     <None Include="Images\folder_image.png" />
     <None Include="Images\grey_bug.png" />
+    <None Include="Images\help.png" />
     <Content Include="Images\ignored.png" />
     <Content Include="Images\information.png" />
     <Content Include="Images\list-add.png" />

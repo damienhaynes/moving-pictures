@@ -65,9 +65,9 @@
         <description>When enabled this option will ALWAYS group multiple files in one folder together (assuming a multi-part movie).</description>
       </setting>
 
-      <setting id="importer_disc_enabled" name="Enable Import Paths For Optical Drives" type="BOOL">
+      <setting id="importer_disc_enabled" name="Automatically Import Inserted DVDs" type="BOOL">
         <default>true</default>
-        <description>Enables import from all available CD/DVD/HD-DVD/Bluray drives</description>
+        <description>Enables importation of media from all available optical drives. This can include CDs, DVDs, HD-DVDs, and Bluray disks. This also applies to "loose video files" on a data CD/DVD.</description>
       </setting>
 
     </group>

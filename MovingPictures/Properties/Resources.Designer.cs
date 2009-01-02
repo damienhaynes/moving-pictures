@@ -73,13 +73,13 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;allocine.fr&lt;/name&gt;
-        ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
+        ///    &lt;author&gt;Armand Pondman (armandp) and John Conrad (fforde)&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from allocine.fr&lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should change. E [rest of string was truncated]&quot;;.
+        ///    new versions of the script the version [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Allocine {
             get {
@@ -206,6 +206,13 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap help {
+            get {
+                object obj = ResourceManager.GetObject("help", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ignored {
             get {
                 object obj = ResourceManager.GetObject("ignored", resourceCulture);
@@ -218,14 +225,14 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;imdb.com&lt;/name&gt;
-        ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
+        ///    &lt;author&gt;John Conrad (fforde), Armand Pondman (armandp)&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from IMDb.&lt;/description&gt;
         ///    
         ///    &lt;!-- 
         ///    These fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
         ///    new versions of the script the version numbers should change. EVEN FOR 
-        ///    MINOR CHANGES, you should change the ver [rest of string was truncated]&quot;;.
+        ///    MINOR CHANGES, [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string IMDb {
             get {
@@ -318,15 +325,15 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;impawards.com&lt;/name&gt;
-        ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
-        ///    &lt;description&gt;This script grabs cover-art from impawards.com.&lt;/description&gt;
+        ///    &lt;name&gt;posters.motechnet.com&lt;/name&gt;
+        ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
+        ///    &lt;description&gt;This script grabs cover-art from posters.motechnet.com.&lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
         ///    new versions of the script the version numbers should change. EVEN FOR 
-        ///    MINOR CHANGES, you sh [rest of string was truncated]&quot;;.
+        ///    M [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MoTechPosters {
             get {
