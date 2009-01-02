@@ -88,6 +88,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
+        [DBFieldAttribute(Default = "false")]
+        public bool System {
+            get { return _system;}
+            set {_system = value;}
+        }
+        private bool _system;
+
         #endregion
 
         #region Public Methods
@@ -223,10 +230,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         /// <summary>
         /// Returns all user defined import paths
         /// </summary>
-        public static List<DBImportPath> GetAllCustom() {
+        public static List<DBImportPath> GetAllUserDefined() {
             List<DBImportPath> paths = new List<DBImportPath>();
             foreach (DBImportPath path in DBImportPath.GetAll()) {
-                if (path.GetDriveType() != DriveType.CDRom)
+                if (!path.System)
                     paths.Add(path);
             }
             return paths;

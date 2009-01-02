@@ -834,24 +834,42 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             bool daemonEnabled = MovingPicturesCore.MediaPortalSettings.GetValueAsBool("daemon", "enabled", false);
             string virtualDrive = MovingPicturesCore.MediaPortalSettings.GetValueAsString("daemon", "drive", "?:");
             // Get all drives
-            foreach (DriveInfo drive in DriveInfo.GetDrives()) {
-                if (drive.DriveType != DriveType.CDRom)
-                    continue;
-              
+            foreach (DriveInfo drive in DriveInfo.GetDrives()) {           
                 // Add the import path if it does not exist and 
                 // is not marked virtual by MediaPortal.
                 DBImportPath importPath = DBImportPath.Get(drive.Name);
                 bool isVirtual = drive.Name.StartsWith(virtualDrive, StringComparison.OrdinalIgnoreCase) && daemonEnabled;
+                bool isCDRom = (drive.DriveType == DriveType.CDRom);
 
-                if (importPath.ID == null && !isVirtual) {
-                    importPath.Commit();
-                    logger.Info("Added system managed import path: {0}", importPath.FullPath);
+                if (importPath.ID != null) {
+                    // Remove an system managed path if for any reason it's not of type CDRom
+                    if (!isCDRom && importPath.System) {
+                        importPath.Delete();
+                        logger.Info("Removed system managed import path: {0} (drive type has changed)", importPath.FullPath);
+                        continue;
+                    }
+
+                    // Remove an existing path if it's defined as the virtual drive
+                    if (isVirtual) {
+                        importPath.Delete();
+                        logger.Info("Removed import path: {0} (drive is marked as virtual)", importPath.FullPath);
+                        continue;
+                    }
+
+                    // Update an existing import path to a system managed import path
+                    // if the drive type is CDRom but the system flag isn't set
+                    if (isCDRom && !importPath.System) {
+                        importPath.System = true;
+                        importPath.Commit();
+                        logger.Info("{0} was updated to a system managed import path.", importPath.FullPath);
+                    }
+
                 }
                 else {
-                    if (importPath.ID != null && isVirtual) {
-                        // Remove an existing path if it's defined as the virtual drive
-                        importPath.Delete();
-                        logger.Info("Removed system managed import path: {0} (drive is marked as virtual)", importPath.FullPath);
+                    if (isCDRom && !isVirtual) {
+                        importPath.System = true;
+                        importPath.Commit();
+                        logger.Info("Added system managed import path: {0}", importPath.FullPath);
                     }
                 }
             }
