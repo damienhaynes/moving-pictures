@@ -120,10 +120,10 @@
   <metadata name="pathColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="Removable.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="pathColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="notesLabel.Text" xml:space="preserve">
-    <value>Please specify the location(s) of your movie files. Any video that is placed in these folders will automatically be added to your Library, and any video removed from these folders will be automatically removed from your Library.  Moving Pictures will automatically detect if an import path is offline and will NOT remove your files if a computer goes offline, a CD is removed, etc.</value>
-  </data>
+  <metadata name="toolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

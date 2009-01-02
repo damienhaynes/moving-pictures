@@ -81,6 +81,9 @@
     <Compile Include="GUI\Controls\DBTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\Controls\SettingCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\DesignMode\DatabaseTableTypeConverter.cs" />
     <Compile Include="GUI\DesignMode\DBFieldTypeConverter.cs" />
     <Compile Include="GUI\DesignMode\DBObjectListFieldEditor.cs">
