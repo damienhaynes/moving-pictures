@@ -139,13 +139,7 @@ namespace Cornerstone.Database {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(settingsXML);
             
-            if (xml.DocumentElement.Name != "MoviesPluginSettings") {
-                logger.Error("Error parsing settings file.");
-                return;
-            }
-
             processChildNodes(xml.DocumentElement, null);
-
         }
 
         public bool AddSetting(string key, List<string> groups, String name, String description, String value, String type) {
