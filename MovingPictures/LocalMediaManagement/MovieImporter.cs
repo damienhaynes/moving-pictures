@@ -479,18 +479,30 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     private void LookForMissingArtworkWorker() {
         try {
             foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
-                if (currMovie.CoverFullPath.Trim().Length == 0) {
-                    MovingPicturesCore.DataProviderManager.GetArtwork(currMovie);
-                    currMovie.UnloadArtwork();
-                    currMovie.Commit();
+                try {
+                    if (currMovie.ID == null)
+                        continue;
+
+                    if (currMovie.CoverFullPath.Trim().Length == 0) {
+                        MovingPicturesCore.DataProviderManager.GetArtwork(currMovie);
+                        currMovie.UnloadArtwork();
+                        currMovie.Commit();
+                    }
+
+                    if (currMovie.BackdropFullPath.Trim().Length == 0) {
+                        new LocalProvider().GetBackdrop(currMovie);
+                        MovingPicturesCore.DataProviderManager.GetBackdrop(currMovie);
+                        currMovie.Commit();
+
+                    }
+                }
+                catch (Exception e) {
+                    if (e is ThreadAbortException)
+                        throw e;
+
+                    logger.ErrorException("Error retrieving artwork for " + currMovie.Title, e);                    
                 }
 
-                if (currMovie.BackdropFullPath.Trim().Length == 0) {
-                    new LocalProvider().GetBackdrop(currMovie);
-                    MovingPicturesCore.DataProviderManager.GetBackdrop(currMovie);
-                    currMovie.Commit();
-
-                }
             }
         }
         catch (ThreadAbortException) {
@@ -510,6 +522,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           logger.Info("Initiating full scan on watch folders.");
           
           // maintainence tasks
+          DoMovieMaintenanceMini();
           RemoveOrphanFiles();
           RemoveMissingFiles();
           RemoveOrphanArtwork();
@@ -657,6 +670,25 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           currFile.Delete();
         currMovie.Delete();
       }
+    }
+
+    // Subset of the DoMovieMaintenance method in trunk (0.7). This was
+    // added to fix a bug and should nto be merged as a more complete version is in the trunk.
+    public void DoMovieMaintenanceMini() {
+        // Movies
+        int cleaned = 0;
+        List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
+        logger.Info("Running movie maintenance for database.");
+        foreach (DBMovieInfo currMovie in allMovies) {
+            // Remove movie with no files
+            if (currMovie.LocalMedia.Count == 0) {
+                logger.Info("'{0}' was removed from the system because it had no local media.", currMovie.Title);
+                currMovie.Delete();
+                cleaned++;
+                continue;
+            }
+        }
+        logger.Info("Maintenance finished. Removed {0} movies.", cleaned.ToString());
     }
 
     // loops through all local files in the system and removes anything that does not actually exist
