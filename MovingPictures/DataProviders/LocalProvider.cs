@@ -62,6 +62,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool GetBackdrop(DBMovieInfo movie) {
+            if (movie == null) 
+                return false;
+
             // if we already have a backdrop move on for now
             if (movie.BackdropFullPath.Trim().Length > 0)
                 return false;
@@ -76,6 +79,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         private bool getBackdropsFromBackdropFolder(DBMovieInfo movie) {
+            if (movie == null) 
+                return false;
+
             // grab a list of possible filenames for the backdrop based on the user pattern
             string pattern = MovingPicturesCore.SettingsManager["local_backdrop_pattern"].StringValue;
             List<string> filenames = getPossibleNamesFromPattern(pattern, movie);
