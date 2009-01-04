@@ -745,6 +745,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                     request.Timeout = timeout + (timeoutIncrement * tryCount);
                     request.ReadWriteTimeout = 20000;
+                    request.UserAgent = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                     // parse the stream into an image file
