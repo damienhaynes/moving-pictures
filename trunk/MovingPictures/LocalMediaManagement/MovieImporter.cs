@@ -470,18 +470,29 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void LookForMissingArtworkWorker() {
             try {
                 foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
-                    if (currMovie.CoverFullPath.Trim().Length == 0) {
-                        MovingPicturesCore.DataProviderManager.GetArtwork(currMovie);
-                        currMovie.UnloadArtwork();
-                        currMovie.Commit();
+                    try {
+                        if (currMovie.ID == null)
+                            continue;
+
+                        if (currMovie.CoverFullPath.Trim().Length == 0) {
+                            MovingPicturesCore.DataProviderManager.GetArtwork(currMovie);
+                            currMovie.UnloadArtwork();
+                            currMovie.Commit();
+                        }
+
+                        if (currMovie.BackdropFullPath.Trim().Length == 0) {
+                            new LocalProvider().GetBackdrop(currMovie);
+                            MovingPicturesCore.DataProviderManager.GetBackdrop(currMovie);
+                            currMovie.Commit();
+                        }
+                    }
+                    catch (Exception e) {
+                        if (e is ThreadAbortException)
+                            throw e;
+
+                        logger.ErrorException("Error retrieving artwork for " + currMovie.Title, e);
                     }
 
-                    if (currMovie.BackdropFullPath.Trim().Length == 0) {
-                        new LocalProvider().GetBackdrop(currMovie);
-                        MovingPicturesCore.DataProviderManager.GetBackdrop(currMovie);
-                        currMovie.Commit();
-
-                    }
                 }
             }
             catch (ThreadAbortException) {

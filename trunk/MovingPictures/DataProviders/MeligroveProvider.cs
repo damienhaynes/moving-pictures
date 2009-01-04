@@ -124,7 +124,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
                     // converts the resulting stream to a string for easier use
                     Stream resultData = response.GetResponseStream();
-                    StreamReader reader = new StreamReader(resultData, Encoding.Default, true);
+                    StreamReader reader = new StreamReader(resultData, Encoding.UTF8, true);
                     sXmlData = reader.ReadToEnd().Replace('\0', ' ');
 
                     resultData.Close();
@@ -136,6 +136,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         logger.ErrorException("Error connecting to MovieXML web service. Reached retry limit of " + maxRetries, e);
                         return null;
                     }
+                }
+                catch (IOException e) {
+                    logger.ErrorException("Error reading data from connection to themoviedb.org", e);
+                    return null;
                 }
             }
 
