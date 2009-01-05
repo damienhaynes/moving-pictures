@@ -8,6 +8,9 @@ using System.Text;
 using System.Windows.Forms;
 
 using MediaPortal.Plugins.MovingPictures.Database;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using MediaPortal.Plugins.MovingPictures.Properties;
+using Cornerstone.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class ImportPathsPane : UserControl {
@@ -39,6 +42,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.HandleDestroyed += new EventHandler(ImportPathsPane_HandleDestroyed);
         }
 
+        private void addTooltips() {
+            foreach (DataGridViewRow currRow in pathsGridView.Rows) {
+                DBImportPath path = (DBImportPath) currRow.DataBoundItem;
+
+                string toolTipText = path.FullPath + "\n" + "Drive Type: " + path.GetDriveType().ToString();
+                if (path.IsRemovable)
+                    toolTipText += " (Removable)\nOnline: " + path.IsAvailable;
+                
+                currRow.Cells[0].ToolTipText = toolTipText;
+            }
+        }
+
         // Commits new and existing itmes on addition or modification.
         void pathBindingSource_ListChanged(object sender, ListChangedEventArgs e) {
             if (e.ListChangedType != ListChangedType.ItemDeleted) {
@@ -63,6 +78,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 if (!newPath.System) {
                     pathBindingSource.Add(newPath);
                     MovingPicturesCore.Importer.RestartScanner();
+                    addTooltips();
                 }
                 else {
                     newPath = null;
@@ -87,7 +103,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void helpButton_Click(object sender, EventArgs e) {
-            MessageBox.Show(ParentForm, "Watch Folders\n\nMoving Pictures will automatically import movie content from the watch folders you have added in this section. As new movies are added to your watch folders they will also be automatically added to Moving Pictures. Likewise, when movies are deleted or moved from your watch folders, they will also be removed from Moving Pictures.\n\n\n\nNetwork / Removable Media\n\nMoving Pictures will now automatically detect if an import path is on a network or removable drive. If an entire import path is taken offline, Moving Pictures will not remove any files. Only when files are actually deleted or moved out of an import path will they be removed from your library.\n\n\n\nOptical Media\n\nIf the \"Automatically Import Inserted DVDs\" option is set, all media from any optical drives on your system will be loaded when inserted. Generally this means that if you play a DVD through Moving Pictures, from that point forward that DVD will be listed as a part of your library and when you click play, you will be prompted to insert the appropriate disk.");
+            // show the help content fo the Media Sources section
+            Help.ShowHelp(ParentForm, MovingPicturesCore.SettingsManager["help_file"].StringValue, HelpNavigator.Topic, "2_MediaSources.htm");
+        }
+
+        private void ImportPathsPane_Load(object sender, EventArgs e) {
+            addTooltips();
         }
     }
 }

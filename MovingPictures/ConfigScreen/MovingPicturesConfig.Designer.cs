@@ -58,7 +58,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.managerTab.Location = new System.Drawing.Point(4, 22);
             this.managerTab.Name = "managerTab";
             this.managerTab.Padding = new System.Windows.Forms.Padding(3);
-            this.managerTab.Size = new System.Drawing.Size(560, 575);
+            this.managerTab.Size = new System.Drawing.Size(560, 559);
             this.managerTab.TabIndex = 2;
             this.managerTab.Text = "Movie Manager";
             this.managerTab.UseVisualStyleBackColor = true;
@@ -68,7 +68,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieManagerPane1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.movieManagerPane1.Location = new System.Drawing.Point(3, 3);
             this.movieManagerPane1.Name = "movieManagerPane1";
-            this.movieManagerPane1.Size = new System.Drawing.Size(554, 569);
+            this.movieManagerPane1.Size = new System.Drawing.Size(554, 553);
             this.movieManagerPane1.TabIndex = 0;
             // 
             // importSettingsTab
@@ -111,7 +111,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.settingsTab.Location = new System.Drawing.Point(4, 22);
             this.settingsTab.Name = "settingsTab";
             this.settingsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.settingsTab.Size = new System.Drawing.Size(560, 575);
+            this.settingsTab.Size = new System.Drawing.Size(560, 559);
             this.settingsTab.TabIndex = 1;
             this.settingsTab.Text = "Advanced Settings";
             this.settingsTab.UseVisualStyleBackColor = true;
@@ -121,7 +121,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.advancedSettingsWarningPane1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.advancedSettingsWarningPane1.Location = new System.Drawing.Point(3, 3);
             this.advancedSettingsWarningPane1.Name = "advancedSettingsWarningPane1";
-            this.advancedSettingsWarningPane1.Size = new System.Drawing.Size(554, 569);
+            this.advancedSettingsWarningPane1.Size = new System.Drawing.Size(554, 553);
             this.advancedSettingsWarningPane1.TabIndex = 0;
             // 
             // MovingPicturesConfig
@@ -130,7 +130,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(592, 609);
             this.Controls.Add(this.mainTabControl);
-            this.HelpButton = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(600, 400);
