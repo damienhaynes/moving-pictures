@@ -257,8 +257,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             // unload the artowrk and commit for the previously selected movie
             if (movieDetailsSubPane.DatabaseObject != null) {
-                ((DBMovieInfo)movieDetailsSubPane.DatabaseObject).UnloadArtwork();
-                ((DBMovieInfo)movieDetailsSubPane.DatabaseObject).Commit();
+                DBMovieInfo oldMovie = (DBMovieInfo)movieDetailsSubPane.DatabaseObject;
+                oldMovie.UnloadArtwork();
+                if (oldMovie.ID != null)
+                    oldMovie.Commit();
             }
 
             updateMoviePanel();
