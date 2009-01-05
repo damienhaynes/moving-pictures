@@ -33,7 +33,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager {
                 return movie;
             }
             set {
-                if (value is DBMovieInfo)
+                if (value is DBMovieInfo || value == null)
                     movie = value as DBMovieInfo;
 
                 updateControls();
