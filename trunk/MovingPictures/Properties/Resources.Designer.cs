@@ -67,26 +67,6 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;ScriptableScraper&gt;
-        ///  &lt;details&gt;
-        ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;allocine.fr&lt;/name&gt;
-        ///    &lt;author&gt;Armand Pondman (armandp) and John Conrad (fforde)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from allocine.fr&lt;/description&gt;
-        ///
-        ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string Allocine {
-            get {
-                return ResourceManager.GetString("Allocine", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Bitmap approved {
             get {
                 object obj = ResourceManager.GetObject("approved", resourceCulture);
@@ -213,50 +193,30 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///    &lt;title&gt;Media Sources&lt;/title&gt;
+        ///&lt;/head&gt;
+        ///&lt;body bgcolor=&quot;FFFFE1&quot;&gt;
+        ///    &lt;h1&gt;Media Sources&lt;/h1&gt;
+        ///    &lt;h2&gt;Watch Folders&lt;/h2&gt;
+        ///    &lt;p&gt; Moving Pictures will automatically import movie content from the watch folders you
+        ///        have added in this section. As new movies are added to your watch folders they will
+        ///        also be automatically added to Moving Pictures. Likewise, when movies are deleted
+        ///        or moved from your watch folders, they will also be removed from Moving Pictures.&lt;/p&gt;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Help_MediaSources {
+            get {
+                return ResourceManager.GetString("Help_MediaSources", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap ignored {
             get {
                 object obj = ResourceManager.GetObject("ignored", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
-        ///  &lt;details&gt;
-        ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;imdb.com&lt;/name&gt;
-        ///    &lt;author&gt;John Conrad (fforde), Armand Pondman (armandp)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from IMDb.&lt;/description&gt;
-        ///    
-        ///    &lt;!-- 
-        ///    These fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should change. EVEN FOR 
-        ///    MINOR CHANGES, [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string IMDb {
-            get {
-                return ResourceManager.GetString("IMDb", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
-        ///  &lt;details&gt;
-        ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;impawards.com&lt;/name&gt;
-        ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
-        ///    &lt;description&gt;This script grabs cover-art from impawards.com.&lt;/description&gt;
-        ///
-        ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should change. EVEN FOR 
-        ///    MINOR CHANGES, you sh [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string IMPAwards {
-            get {
-                return ResourceManager.GetString("IMPAwards", resourceCulture);
             }
         }
         
@@ -321,43 +281,10 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
-        ///  &lt;details&gt;
-        ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;posters.motechnet.com&lt;/name&gt;
-        ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
-        ///    &lt;description&gt;This script grabs cover-art from posters.motechnet.com.&lt;/description&gt;
-        ///
-        ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should change. EVEN FOR 
-        ///    M [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string MoTechPosters {
+        internal static byte[] movingpictures_chm {
             get {
-                return ResourceManager.GetString("MoTechPosters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;ScriptableScraper&gt;
-        ///  &lt;details&gt;
-        ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;moviemeter.nl&lt;/name&gt;
-        ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from moviemeter.nl&lt;/description&gt;
-        ///
-        ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should chang [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string MovieMeter {
-            get {
-                return ResourceManager.GetString("MovieMeter", resourceCulture);
+                object obj = ResourceManager.GetObject("movingpictures_chm", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -372,26 +299,6 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             get {
                 object obj = ResourceManager.GetObject("noatunstop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;ScriptableScraper&gt;
-        ///  &lt;details&gt;
-        ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;ofdb.de&lt;/name&gt;
-        ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)&lt;/description&gt;
-        ///
-        ///    &lt;!-- 
-        ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new ve [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string OFDb {
-            get {
-                return ResourceManager.GetString("OFDb", resourceCulture);
             }
         }
         
@@ -423,10 +330,130 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;allocine.fr&lt;/name&gt;
+        ///    &lt;author&gt;Armand Pondman (armandp) and John Conrad (fforde)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from allocine.fr&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_Allocine {
+            get {
+                return ResourceManager.GetString("Script_Allocine", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap script_delete {
             get {
                 object obj = ResourceManager.GetObject("script_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;imdb.com&lt;/name&gt;
+        ///    &lt;author&gt;John Conrad (fforde), Armand Pondman (armandp)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from IMDb.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_IMDb {
+            get {
+                return ResourceManager.GetString("Script_IMDb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;impawards.com&lt;/name&gt;
+        ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
+        ///    &lt;description&gt;This script grabs cover-art from impawards.com.&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you sh [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_IMPAwards {
+            get {
+                return ResourceManager.GetString("Script_IMPAwards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;posters.motechnet.com&lt;/name&gt;
+        ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
+        ///    &lt;description&gt;This script grabs cover-art from posters.motechnet.com.&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    M [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_MoTechPosters {
+            get {
+                return ResourceManager.GetString("Script_MoTechPosters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;moviemeter.nl&lt;/name&gt;
+        ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from moviemeter.nl&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should chang [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_MovieMeter {
+            get {
+                return ResourceManager.GetString("Script_MovieMeter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;ofdb.de&lt;/name&gt;
+        ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new ve [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_OFDb {
+            get {
+                return ResourceManager.GetString("Script_OFDb", resourceCulture);
             }
         }
         

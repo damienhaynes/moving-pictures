@@ -270,5 +270,16 @@
     </setting>
     
   </group>
-  
+
+  <group name="Help Settings">
+
+    <setting id="help_file" name="Path to the Moving Pictures Help File" type="STRING">
+      <default></default>
+      <description>The path to the Moving Pictures help file. For internal use only and reset on each launch.</description>
+    </setting>
+
+  </group>
+
+
+
 </MoviesPluginSettings>

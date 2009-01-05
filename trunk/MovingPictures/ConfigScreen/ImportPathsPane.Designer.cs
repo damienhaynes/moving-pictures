@@ -136,7 +136,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.addSourceButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_add;
             this.addSourceButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.addSourceButton.Name = "addSourceButton";
-            this.addSourceButton.Size = new System.Drawing.Size(30, 20);
+            this.addSourceButton.Size = new System.Drawing.Size(22, 20);
             this.addSourceButton.Text = "toolStripButton1";
             this.addSourceButton.ToolTipText = "Add Watch Folder";
             this.addSourceButton.Click += new System.EventHandler(this.addSourceButton_Click);
@@ -147,7 +147,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.removeSourceButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_remove;
             this.removeSourceButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.removeSourceButton.Name = "removeSourceButton";
-            this.removeSourceButton.Size = new System.Drawing.Size(30, 20);
+            this.removeSourceButton.Size = new System.Drawing.Size(22, 20);
             this.removeSourceButton.Text = "toolStripButton2";
             this.removeSourceButton.ToolTipText = "Remove Watch Folder";
             this.removeSourceButton.Click += new System.EventHandler(this.removeSourceButton_Click);
@@ -155,7 +155,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(30, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(22, 6);
             // 
             // helpButton
             // 
@@ -163,7 +163,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.helpButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.help;
             this.helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.helpButton.Name = "helpButton";
-            this.helpButton.Size = new System.Drawing.Size(30, 20);
+            this.helpButton.Size = new System.Drawing.Size(22, 20);
             this.helpButton.Text = "toolStripButton3";
             this.helpButton.ToolTipText = "Help";
             this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
@@ -184,6 +184,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.MinimumSize = new System.Drawing.Size(530, 155);
             this.Name = "ImportPathsPane";
             this.Size = new System.Drawing.Size(530, 155);
+            this.Load += new System.EventHandler(this.ImportPathsPane_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pathsGridView)).EndInit();
             this.pathsGroupBox.ResumeLayout(false);
             this.pathsGroupBox.PerformLayout();

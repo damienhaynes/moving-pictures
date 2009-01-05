@@ -37,6 +37,7 @@
     </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External\NLog.dll</HintPath>
@@ -175,17 +176,17 @@
     <Compile Include="MainUI\MovingPicturesGUI.cs" />
     <Compile Include="MovingPicturesCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\ImdbBuilder.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\ISignatureBuilder.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\LocalBuilder.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\MovieSignature.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\MetaServicesBuilder.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\NfoBuilder.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.Database.MoviesPluginTables.DBUser.datasource" />
@@ -268,43 +269,7 @@
     <Content Include="DataProviders\ScraperScripts\MoTechPosters.xml" />
     <Content Include="DataProviders\ScraperScripts\MovieMeter.xml" />
     <Content Include="DataProviders\ScraperScripts\OFDb.xml" />
-    <Content Include="Images\accept.png" />
-    <Content Include="Images\approved.png" />
-    <Content Include="Images\arrow_cross.png" />
-    <Content Include="Images\arrow_divide.png" />
-    <None Include="Images\arrow_down.png" />
-    <Content Include="Images\arrow_join.png" />
-    <Content Include="Images\arrow_rotate_clockwise.png" />
-    <Content Include="Images\arrow_switch.png" />
-    <None Include="Images\arrow_up.png" />
-    <None Include="Images\bug.png" />
-    <None Include="Images\bin_empty.png" />
-    <Content Include="Images\bullet_arrow_down.png" />
-    <Content Include="Images\bullet_arrow_down_dark.png" />
-    <None Include="Images\cog.png" />
-    <Content Include="Images\cross.png" />
-    <Content Include="Images\exclamation.png" />
-    <None Include="Images\folder_image.png" />
-    <None Include="Images\grey_bug.png" />
-    <None Include="Images\help.png" />
-    <Content Include="Images\ignored.png" />
-    <Content Include="Images\information.png" />
-    <Content Include="Images\list-add.png" />
-    <Content Include="Images\list-remove.png" />
-    <Content Include="Images\MediaPause.png" />
-    <Content Include="Images\MediaPlay.png" />
-    <None Include="Images\MediaStop.png" />
-    <None Include="Images\noatunplay.png" />
-    <None Include="Images\noatunstop.png" />
-    <None Include="Images\resultset_next.png" />
-    <None Include="Images\resultset_previous.png" />
-    <None Include="Images\pencil_add.png" />
-    <Content Include="Images\script_add.png" />
-    <Content Include="Images\script_delete.png" />
-    <None Include="Images\television.png" />
-    <Content Include="Images\tick.png" />
-    <None Include="Images\zoom.png" />
-    <None Include="Images\world_add.png" />
+    <None Include="Resources\Help\MediaSources.html" />
     <Content Include="MainUI\Generic Skin\16x9\Media\MovingPictures\background.png" />
     <Content Include="MainUI\Generic Skin\16x9\Media\MovingPictures\dvd_frame.png" />
     <Content Include="MainUI\Generic Skin\16x9\Media\MovingPictures\greystar.png" />
@@ -334,7 +299,45 @@
     <Content Include="MainUI\Generic Skin\16x9\movingpictures.xml" />
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.facade.xml" />
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.xml" />
-    <Content Include="Properties\InitialSettings.xml" />
+    <None Include="Resources\Help\MovingPictures.chm" />
+    <Content Include="Resources\InitialSettings.xml" />
+    <Content Include="Resources\Images\accept.png" />
+    <Content Include="Resources\Images\approved.png" />
+    <Content Include="Resources\Images\arrow_cross.png" />
+    <Content Include="Resources\Images\arrow_divide.png" />
+    <Content Include="Resources\Images\arrow_down.png" />
+    <Content Include="Resources\Images\arrow_join.png" />
+    <Content Include="Resources\Images\arrow_rotate_clockwise.png" />
+    <Content Include="Resources\Images\arrow_switch.png" />
+    <Content Include="Resources\Images\arrow_up.png" />
+    <Content Include="Resources\Images\bin_empty.png" />
+    <Content Include="Resources\Images\bug.png" />
+    <Content Include="Resources\Images\bullet_arrow_down.png" />
+    <Content Include="Resources\Images\bullet_arrow_down_dark.png" />
+    <Content Include="Resources\Images\cog.png" />
+    <Content Include="Resources\Images\cross.png" />
+    <Content Include="Resources\Images\exclamation.png" />
+    <Content Include="Resources\Images\folder_image.png" />
+    <Content Include="Resources\Images\grey_bug.png" />
+    <Content Include="Resources\Images\help.png" />
+    <Content Include="Resources\Images\ignored.png" />
+    <Content Include="Resources\Images\information.png" />
+    <Content Include="Resources\Images\list-add.png" />
+    <Content Include="Resources\Images\list-remove.png" />
+    <Content Include="Resources\Images\MediaPause.png" />
+    <Content Include="Resources\Images\MediaPlay.png" />
+    <Content Include="Resources\Images\MediaStop.png" />
+    <Content Include="Resources\Images\noatunplay.png" />
+    <Content Include="Resources\Images\noatunstop.png" />
+    <Content Include="Resources\Images\pencil_add.png" />
+    <Content Include="Resources\Images\resultset_next.png" />
+    <Content Include="Resources\Images\resultset_previous.png" />
+    <Content Include="Resources\Images\script_add.png" />
+    <Content Include="Resources\Images\script_delete.png" />
+    <Content Include="Resources\Images\television.png" />
+    <Content Include="Resources\Images\tick.png" />
+    <Content Include="Resources\Images\world_add.png" />
+    <Content Include="Resources\Images\zoom.png" />
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>

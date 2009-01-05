@@ -228,14 +228,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             AddSource(typeof(LocalProvider));
             
-            AddSource(typeof(ScriptableProvider), Resources.IMDb);
-            AddSource(typeof(ScriptableProvider), Resources.MovieMeter);
-            AddSource(typeof(ScriptableProvider), Resources.OFDb);
-            AddSource(typeof(ScriptableProvider), Resources.Allocine);
+            AddSource(typeof(ScriptableProvider), Resources.Script_IMDb);
+            AddSource(typeof(ScriptableProvider), Resources.Script_MovieMeter);
+            AddSource(typeof(ScriptableProvider), Resources.Script_OFDb);
+            AddSource(typeof(ScriptableProvider), Resources.Script_Allocine);
 
             AddSource(typeof(MeligroveProvider));
-            AddSource(typeof(ScriptableProvider), Resources.MoTechPosters);
-            AddSource(typeof(ScriptableProvider), Resources.IMPAwards);          
+            AddSource(typeof(ScriptableProvider), Resources.Script_MoTechPosters);
+            AddSource(typeof(ScriptableProvider), Resources.Script_IMPAwards);          
             
             AddSource(typeof(MyVideosProvider));
 
