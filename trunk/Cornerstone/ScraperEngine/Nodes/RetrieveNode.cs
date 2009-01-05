@@ -55,7 +55,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
               if (e.GetType() == typeof(ThreadAbortException))
                 throw e;
 
-              userAgent = "Mozilla/5.0 (compatible; MSIE 7.0; Windows NT 5.1)";
+              userAgent = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
             }
 
             // grab timeout and retry values. if none specified use defaults
@@ -105,6 +105,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
                         if (DebugMode) logger.Debug("UserAgent: {0}", userAgent);  
                         request.CookieContainer = new CookieContainer();
                         request.Timeout = timeout + (timeoutIncrement * tryCount);
+                        request.Accept = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
 
                         // if we already had a session for this host name persist it
                         string sessionKey = "urn://scraper/header/" + request.RequestUri.Host;
