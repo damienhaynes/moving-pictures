@@ -137,6 +137,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return MovingPicturesCore.DatabaseManager.Get<DBSourceInfo>(null);
         }
 
+        public static DBSourceInfo GetFromProviderObject(IMovieProvider provider) {
+            foreach (DBSourceInfo currSource in GetAll()) {
+                if (currSource.providerType == provider.GetType()) {
+                    if (currSource.IsScriptable())
+                        return GetFromScriptID(((IScriptableMovieProvider)provider).ScriptID);
+                    else
+                        return currSource;
+                }
+            }
+
+            return null;
+        }
+
         public static DBSourceInfo GetFromScriptID(int scriptID) {
             foreach (DBSourceInfo currSource in GetAll()) {
                 if (currSource.IsScriptable() && currSource.SelectedScript.Provider.ScriptID == scriptID)

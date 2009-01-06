@@ -31,7 +31,7 @@
       <description>The name that appears on the home screen for the plugin.</description>
     </setting>
 
-    <setting id="on_disc_loaded" name="Disk Insetion Behavior" type="STRING">
+    <setting id="on_disc_loaded" name="Disk Insertion Behavior" type="STRING">
       <default>DETAILS</default>
       <description>Action to take when a DVD, Bluray, or HDDVD disk is inserted. ("DETAILS": Goto the details page for the DVD. "PLAY": Start playback immediately. "NOTHING": Take no action).</description>
     </setting>

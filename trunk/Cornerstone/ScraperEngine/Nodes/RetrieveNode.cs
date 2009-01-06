@@ -19,6 +19,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return maxRetries; }
         } protected int maxRetries;
 
+        public Encoding Encoding {
+            get { return encoding; }
+        } protected Encoding encoding;
+
         public String UserAgent {
           get { return userAgent; }
         } protected String userAgent;
@@ -56,6 +60,16 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 throw e;
 
               userAgent = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
+            }
+
+            // grab encoding, if not specified it will try to set 
+            // the encoding using information from the response header.
+            try { 
+                encoding = Encoding.GetEncoding(xmlNode.Attributes["encoding"].Value);
+            }
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
             }
 
             // grab timeout and retry values. if none specified use defaults
@@ -102,7 +116,6 @@ namespace Cornerstone.ScraperEngine.Nodes {
                         tryCount++;
                         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(parsedUrl);
                         request.UserAgent = userAgent;
-                        if (DebugMode) logger.Debug("UserAgent: {0}", userAgent);  
                         request.CookieContainer = new CookieContainer();
                         request.Timeout = timeout + (timeoutIncrement * tryCount);
                         request.Accept = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
@@ -114,18 +127,25 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
                         // get the response
                         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                        
+
+                        // get the cookie header
+                        string cookieHeader = request.CookieContainer.GetCookieHeader(request.RequestUri);
                         // save the current session to a variable using the hostname as an identifier
-                        if (DebugMode) logger.Debug("CookieHeader: {0}", request.CookieContainer.GetCookieHeader(request.RequestUri));
-                        setVariable(variables, sessionKey, request.CookieContainer.GetCookieHeader(request.RequestUri));
+                        setVariable(variables, sessionKey, cookieHeader);
 
                         // converts the resulting stream to a string for easier use
                         Stream resultData = response.GetResponseStream();
                         
                         // use the proper encoding
-                        Encoding encoding = Encoding.UTF8;
-                        if (response.ContentType != "text/xml")
+                        if (encoding == null)
                             encoding = Encoding.GetEncoding(response.CharacterSet);
+
+                        // Log some debug values
+                        if (DebugMode) {
+                            logger.Debug("UserAgent: {0}", userAgent);
+                            logger.Debug("CookieHeader: {0}", cookieHeader);
+                            logger.Debug("Encoding: {0}", encoding.EncodingName);
+                        }
 
                         StreamReader reader = new StreamReader(resultData, encoding, true);
                         pageContents = reader.ReadToEnd();
@@ -138,6 +158,12 @@ namespace Cornerstone.ScraperEngine.Nodes {
                     }
 
                     catch (WebException e) {
+                        // Don't retry on protocol errors
+                        if (e.Status == WebExceptionStatus.ProtocolError) {
+                            logger.Error("Error connecting to: URL={0}, Status={1}, Description={2}.", parsedUrl, ((HttpWebResponse)e.Response).StatusCode, ((HttpWebResponse)e.Response).StatusDescription);
+                            return;
+                        }
+                        // Return when hitting maximum retries.
                         if (tryCount == maxRetries) {
                             logger.ErrorException("Error connecting to URL. Reached retry limit of " + maxRetries + ". " + parsedUrl, e);
                             return;

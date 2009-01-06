@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="1" minor="0" point="4"/>
-    <published month="1" day="3" year="2009"/>
+    <version major="1" minor="0" point="5"/>
+    <published month="1" day="5" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -55,7 +55,7 @@
 
     <!-- Retrieve IMDB result if we have an imdb id to search on -->
     <if test='${search.imdb_id}!='>
-      <retrieve name="search_imdb" url="${site}imdb2ofdb/${search.imdb_id}"/>
+      <retrieve name="search_imdb" url="${site}imdb2ofdb/${search.imdb_id}" encoding="UTF-8"/>
       <parse name="imdb_details" input="${search_imdb}" regex="${rx_imdb_results}" />
       <if test="${imdb_details}!=">
         <replace name="title" input="${imdb_details[0][0]:htmldecode}" pattern="${rx_title_clean}" with="" />
@@ -74,7 +74,7 @@
     </if>
 
     <!-- Retrieve the search results -->
-    <retrieve name="search_page" url="${site}search/${search.title:safe}"/>
+    <retrieve name="search_page" url="${site}search/${search.title:safe}" encoding="UTF-8"/>
     
     <!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop.-->
     <parse name="search_results_block" input="${search_page}" regex="${rx_page}" />
@@ -128,7 +128,7 @@
     </set>    
     
     <!-- Details -->
-    <retrieve name="details_page" url="${site}${movie.site_id}"/>
+    <retrieve name="details_page" url="${site}${movie.site_id}" encoding="UTF-8" />
     <parse name="details" input="${details_page}" regex="${rx_details}"/>
 
     <!-- Titles -->
