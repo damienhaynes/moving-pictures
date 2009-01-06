@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874903</id>
-    <version major="1" minor="0" point="3"/>
-    <published month="12" day="20" year="2008"/>
+    <version major="1" minor="1" point="0"/>
+    <published month="1" day="6" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -42,7 +42,7 @@
 
       <!-- current page cover-->
       <parse name='url_prefix' input='${test_cover_url[0][0]}' regex='(.+)/.+?$'/>
-      <parse name='cover_img_url' input='${test_cover_page}' regex='&lt;img SRC="([^"]+)" ALT = "Movie Poster Image for'/>
+      <parse name='cover_img_url' input='${test_cover_page}' regex='&lt;img SRC="(posters[^"]+)"'/>
       <set name='cover_art[0].url' value='${url_prefix[0][0]}/${cover_img_url[0][0]}'/>
 
       <!-- all the others -->
@@ -50,7 +50,7 @@
       <loop name='cover_url' on='covers'>
         <add name='next' value1='${count}' value2='1'/>
         <retrieve name='cover_page' url='${url_prefix[0][0]}/${cover_url[0]}'/>
-        <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="([^"]+)" ALT = "Movie Poster Image for'/>
+        <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="(posters[^"]+)"'/>
         <set name='cover_art[${next}].url' value='${url_prefix[0][0]}/${cover_img_url[0][0]}'/>
       </loop>
 
@@ -102,7 +102,7 @@
 
                   <loop name='cover_url' on='covers'>
                     <retrieve name='cover_page' url='http://www.impawards.com/${curr_year}/${cover_url[0]}'/>
-                    <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="([^"]+)" ALT = "Movie Poster Image for'/>
+                    <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="(posters[^"]+)"'/>
                     <set name='cover_art[${count}].url' value='http://www.impawards.com/${curr_year}/${cover_img_url[0][0]}'/>
                   </loop>
 
@@ -115,7 +115,7 @@
 
                   <loop name='cover_url' on='covers'>
                     <retrieve name='cover_page' url='http://www.impawards.com/${curr_year}/${cover_url[0]}'/>
-                    <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="([^"]+)" ALT = "Movie Poster Image for'/>
+                    <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="(posters[^"]+)"'/>
                     <set name='cover_art[${count}].url' value='http://www.impawards.com/${curr_year}/${cover_img_url[0][0]}'/>
                   </loop>
 
