@@ -3,7 +3,11 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Net;
+using System.Web;
 using System.Text.RegularExpressions;
+using System.Globalization;
 using System.Threading;
 using DirectShowLib;
 using DirectShowLib.Dvd;
@@ -198,6 +202,73 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         #endregion
 
+        #region HttpWebRequest
+
+        // todo: make the default values configurable in advanced settings?
+        private const int getWebPageMaxRetries = 3;
+        private const int getWebPageTimeout = 5000;
+        private const int getWebPageTimeoutIncrement = 1000;
+
+        public static string GetWebPage(string url) {
+            return GetWebPage(url, null, getWebPageMaxRetries, getWebPageTimeout, getWebPageTimeoutIncrement);
+        }
+
+        public static string GetWebPage(string url, Encoding encoding) {
+            return GetWebPage(url, encoding, getWebPageMaxRetries, getWebPageTimeout, getWebPageTimeoutIncrement);
+        }
+
+        public static string GetWebPage(string url, Encoding encoding, int maxRetries) {
+            return GetWebPage(url, encoding, maxRetries, getWebPageTimeout, getWebPageTimeoutIncrement);
+        }
+
+        /// <summary>
+        /// Gets webpage as string
+        /// </summary>
+        public static string GetWebPage(string url, Encoding encoding, int maxRetries, int timeout, int timeoutIncrement) {
+            String data = string.Empty;
+            int tryCount = 0;
+            while (data == string.Empty) {
+                try {
+                    // builds the request and retrieves the response from the url
+                    tryCount++;
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Timeout = timeout + (timeoutIncrement * tryCount);
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                    // converts the resulting stream to a string for easier use
+                    Stream resultData = response.GetResponseStream();
+                    
+                    // use the proper encoding
+                    if (encoding == null)
+                        encoding = Encoding.GetEncoding(response.CharacterSet);
+
+                    StreamReader reader = new StreamReader(resultData, encoding, true);
+                    data = reader.ReadToEnd();
+                    resultData.Close();
+                    reader.Close();
+                    response.Close();
+                }
+                catch (WebException e) {
+                    // Don't retry on protocol errors
+                    // todo: maybe differentiate between errors?
+                    if (e.Status == WebExceptionStatus.ProtocolError) {
+                        logger.Error("Error connecting to: URL={0}, Status={1}, Description={2}.", url, ((HttpWebResponse)e.Response).StatusCode, ((HttpWebResponse)e.Response).StatusDescription);
+                        return null;
+                    }
+                    
+                    // Return when hitting maximum retries.
+                    if (tryCount == maxRetries) {
+                        logger.ErrorException("Error connecting to [" + url + "] Reached retry limit of " + maxRetries, e);
+                        return null;
+                    }
+                }
+            }
+
+            return data;
+        }
+
+        #endregion
+
         #region String Modification / Regular Expressions Methods
 
         // Regular expression pattern that matches an "article" that need to be moved for title conversions
@@ -236,39 +307,65 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="title">the original title</param>
         /// <returns>the normalized title</returns>
         public static string normalizeTitle(string title) {
-            // todo: optimize, maybe also include htmldecode?
-
-            // Convert title to lowercase
-            string newTitle = title.ToLower();
+            // Convert title to lowercase culture invariant
+            string newTitle = title.ToLowerInvariant();
 
             // Swap article
             newTitle = TitleToDisplayName(newTitle);
 
             // Replace non-descriptive characters with spaces
-            newTitle = Regex.Replace(newTitle, @"[\.:;\+\-\*]", " ");
+            newTitle = Regex.Replace(newTitle, @"[\.:;\+\-\–\—\―\˜\*]", " ");
 
             // Remove other non-descriptive characters completely
             newTitle = Regex.Replace(newTitle, @"[\(\)\[\]'`,""\#\$\?]", "");
+
+            // Equalize: Convert to base character string
+            newTitle = RemoveDiacritics(newTitle);
 
             // Equalize: Common characters with words of the same meaning
             newTitle = Regex.Replace(newTitle, @"\b(and|und|en|et|y)\b", " & ");
 
             // Equalize: Roman Numbers To Numeric
-            newTitle = Regex.Replace(newTitle, @"\sII($|\s)", @" 2$1", RegexOptions.IgnoreCase);
-            newTitle = Regex.Replace(newTitle, @"\sIII($|\s)", @" 3$1", RegexOptions.IgnoreCase);
-            newTitle = Regex.Replace(newTitle, @"\sIV($|\s)", @" 4$1", RegexOptions.IgnoreCase);
-            newTitle = Regex.Replace(newTitle, @"\sV($|\s)", @" 5$1", RegexOptions.IgnoreCase);
-            newTitle = Regex.Replace(newTitle, @"\sVI($|\s)", @" 6$1", RegexOptions.IgnoreCase);
-            newTitle = Regex.Replace(newTitle, @"\sVI($|\s)", @" 6$1", RegexOptions.IgnoreCase);
-            newTitle = Regex.Replace(newTitle, @"\sVII($|\s)", @" 7$1", RegexOptions.IgnoreCase);
-            newTitle = Regex.Replace(newTitle, @"\sVIII($|\s)", @" 8$1", RegexOptions.IgnoreCase);
-            newTitle = Regex.Replace(newTitle, @"\sIX($|\s)", @" 9$1", RegexOptions.IgnoreCase);
+            newTitle = Regex.Replace(newTitle, @"\sii(\b)", @" 2$1");
+            newTitle = Regex.Replace(newTitle, @"\siii(\b)", @" 3$1");
+            newTitle = Regex.Replace(newTitle, @"\siv(\b)", @" 4$1");
+            newTitle = Regex.Replace(newTitle, @"\sv(\b)", @" 5$1");
+            newTitle = Regex.Replace(newTitle, @"\svi(\b)", @" 6$1");
+            newTitle = Regex.Replace(newTitle, @"\svii(\b)", @" 7$1");
+            newTitle = Regex.Replace(newTitle, @"\sviii(\b)", @" 8$1");
+            newTitle = Regex.Replace(newTitle, @"\six(\b)", @" 9$1");
 
             // Remove double spaces and trim
             newTitle = trimSpaces(newTitle);
+
             // return the cleaned title
             return newTitle;
         }
+
+        /// <summary>
+        /// Translates characters to their base form.
+        /// </summary>
+        /// <example>
+        /// characters: ë, é, è
+        /// result: e
+        /// </example>
+        /// <remarks>
+        /// source: http://blogs.msdn.com/michkap/archive/2007/05/14/2629747.aspx
+        /// </remarks>
+        public static string RemoveDiacritics(string title) {
+            string stFormD = title.Normalize(NormalizationForm.FormD);
+            StringBuilder sb = new StringBuilder();
+
+            for (int ich = 0; ich < stFormD.Length; ich++) {
+                UnicodeCategory uc = CharUnicodeInfo.GetUnicodeCategory(stFormD[ich]);
+                if (uc != UnicodeCategory.NonSpacingMark) {
+                    sb.Append(stFormD[ich]);
+                }
+            }
+
+            return (sb.ToString().Normalize(NormalizationForm.FormC));
+        }
+
 
         /// <summary>
         /// Removes multiple spaces and replaces them with one space   

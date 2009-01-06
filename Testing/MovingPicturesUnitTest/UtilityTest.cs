@@ -152,8 +152,8 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void normalizeTitleTest() {
-            string title = "TesT#ING:  and Other stuff II" ;
-            string expected = "testing & other stuff 2";
+            string title = "Star Wars: Episode IV – A New Hope";
+            string expected = "star wars episode 4 a new hope";
             string actual;
             actual = Utility.normalizeTitle(title);
             Assert.AreEqual(expected, actual);
