@@ -171,6 +171,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     case "title":
                         movie.Title = value;
                         break;
+                    case "alternative_title":
+                        // todo: remove this check when the api is fixed
+                        if (value.Trim() != "None found.")
+                            movie.AlternateTitles.Add(value);
+                        break;
                     case "release":
                         DateTime date;
                         if (DateTime.TryParse(value, out date))
@@ -210,6 +215,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         foreach (XmlNode person in node.SelectNodes("person[@job='actor']/name")) {
                             movie.Actors.Add(person.InnerText.Trim());
                         }
+                        break;
+                    case "categories":
+                        //todo: uncomment and adapt when the genres are implemented
+                        //foreach (XmlNode category in node.SelectNodes("category/name")) {
+                        //    movie.Genres.Add(category.InnerText.Trim());
+                        //}
                         break;
                 }
             }
