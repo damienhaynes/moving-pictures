@@ -20,6 +20,8 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -300,6 +302,7 @@
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.facade.xml" />
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.xml" />
     <None Include="Resources\Help\MovingPictures.chm" />
+    <None Include="Properties\RevisionInfo.cs" />
     <Content Include="Resources\InitialSettings.xml" />
     <Content Include="Resources\Images\accept.png" />
     <Content Include="Resources\Images\approved.png" />
@@ -379,5 +382,8 @@
 copy "$(ProjectDir)..\External\merge.bat" "$(TargetDir)" /Y
 copy "$(ProjectDir)..\External\ilmerge.exe" "$(TargetDir)" /Y
 </PostBuildEvent>
+    <PreBuildEvent>"$(ProjectDir)..\External\SubWCRev.exe" "$(ProjectDir)." "$(ProjectDir)Properties\RevisionInfo.cs" "$(ProjectDir)Properties\AssemblyInfo.cs"
+
+</PreBuildEvent>
   </PropertyGroup>
 </Project>
