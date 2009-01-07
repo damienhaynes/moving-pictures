@@ -73,17 +73,24 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
             DialogResult result = folderDialog.ShowDialog();
             if (result == DialogResult.OK) {
-                DBImportPath newPath = new DBImportPath();
-                newPath.FullPath = folderDialog.SelectedPath;
-                if (!newPath.System) {
+                DBImportPath newPath = DBImportPath.Get(folderDialog.SelectedPath);
+                
+                if (newPath.GetDriveType() == DriveType.CDRom) {
+                    MessageBox.Show("Importing from this drive is controlled through the setting 'Enable Import Paths For Optical Drives'", "Not Allowed!");
+                    return;
+                }
+                
+                if (newPath.ID != null) {
+                    MessageBox.Show("This import path is already loaded.");
+                    return;
+                }
+
+                if (newPath.InternallyManaged != true) {
                     pathBindingSource.Add(newPath);
                     MovingPicturesCore.Importer.RestartScanner();
                     addTooltips();
                 }
-                else {
-                    newPath = null;
-                    MessageBox.Show("Importing from this drive is controlled through the setting 'Enable Import Paths For Optical Drives'", "Not Allowed!");
-                }
+
             }
             
         }

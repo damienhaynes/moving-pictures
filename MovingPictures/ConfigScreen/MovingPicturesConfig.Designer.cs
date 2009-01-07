@@ -30,12 +30,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importSettingsTab = new System.Windows.Forms.TabPage();
             this.movieImporterPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieImporterPane();
             this.importPathsListView1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImportPathsPane();
-            this.settingsTab = new System.Windows.Forms.TabPage();
-            this.advancedSettingsWarningPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AdvancedSettingsWarningPane();
+            this.guiTab = new System.Windows.Forms.TabPage();
+            this.importerSettingsTab = new System.Windows.Forms.TabPage();
+            this.importerSettingsPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImporterSettingsPane();
+            this.artworkSettingsPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ArtworkSettingsPane();
+            this.aboutTabPage = new System.Windows.Forms.TabPage();
+            this.aboutPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AboutPane();
             this.mainTabControl.SuspendLayout();
             this.managerTab.SuspendLayout();
             this.importSettingsTab.SuspendLayout();
-            this.settingsTab.SuspendLayout();
+            this.importerSettingsTab.SuspendLayout();
+            this.aboutTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainTabControl
@@ -45,7 +50,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.mainTabControl.Controls.Add(this.managerTab);
             this.mainTabControl.Controls.Add(this.importSettingsTab);
-            this.mainTabControl.Controls.Add(this.settingsTab);
+            this.mainTabControl.Controls.Add(this.guiTab);
+            this.mainTabControl.Controls.Add(this.importerSettingsTab);
+            this.mainTabControl.Controls.Add(this.aboutTabPage);
             this.mainTabControl.Location = new System.Drawing.Point(12, 12);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
@@ -105,24 +112,63 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importPathsListView1.Size = new System.Drawing.Size(548, 157);
             this.importPathsListView1.TabIndex = 0;
             // 
-            // settingsTab
+            // guiTab
             // 
-            this.settingsTab.Controls.Add(this.advancedSettingsWarningPane1);
-            this.settingsTab.Location = new System.Drawing.Point(4, 22);
-            this.settingsTab.Name = "settingsTab";
-            this.settingsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.settingsTab.Size = new System.Drawing.Size(560, 559);
-            this.settingsTab.TabIndex = 1;
-            this.settingsTab.Text = "Advanced Settings";
-            this.settingsTab.UseVisualStyleBackColor = true;
+            this.guiTab.Location = new System.Drawing.Point(4, 22);
+            this.guiTab.Name = "guiTab";
+            this.guiTab.Size = new System.Drawing.Size(560, 559);
+            this.guiTab.TabIndex = 5;
+            this.guiTab.Text = "GUI Settings";
+            this.guiTab.UseVisualStyleBackColor = true;
             // 
-            // advancedSettingsWarningPane1
+            // importerSettingsTab
             // 
-            this.advancedSettingsWarningPane1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.advancedSettingsWarningPane1.Location = new System.Drawing.Point(3, 3);
-            this.advancedSettingsWarningPane1.Name = "advancedSettingsWarningPane1";
-            this.advancedSettingsWarningPane1.Size = new System.Drawing.Size(554, 553);
-            this.advancedSettingsWarningPane1.TabIndex = 0;
+            this.importerSettingsTab.Controls.Add(this.importerSettingsPane1);
+            this.importerSettingsTab.Controls.Add(this.artworkSettingsPane1);
+            this.importerSettingsTab.Location = new System.Drawing.Point(4, 22);
+            this.importerSettingsTab.Name = "importerSettingsTab";
+            this.importerSettingsTab.Padding = new System.Windows.Forms.Padding(3);
+            this.importerSettingsTab.Size = new System.Drawing.Size(560, 559);
+            this.importerSettingsTab.TabIndex = 3;
+            this.importerSettingsTab.Text = "Importer Settings";
+            this.importerSettingsTab.UseVisualStyleBackColor = true;
+            // 
+            // importerSettingsPane1
+            // 
+            this.importerSettingsPane1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.importerSettingsPane1.Location = new System.Drawing.Point(3, 3);
+            this.importerSettingsPane1.MinimumSize = new System.Drawing.Size(332, 304);
+            this.importerSettingsPane1.Name = "importerSettingsPane1";
+            this.importerSettingsPane1.Size = new System.Drawing.Size(554, 304);
+            this.importerSettingsPane1.TabIndex = 1;
+            // 
+            // artworkSettingsPane1
+            // 
+            this.artworkSettingsPane1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.artworkSettingsPane1.Location = new System.Drawing.Point(3, 321);
+            this.artworkSettingsPane1.MinimumSize = new System.Drawing.Size(400, 147);
+            this.artworkSettingsPane1.Name = "artworkSettingsPane1";
+            this.artworkSettingsPane1.Size = new System.Drawing.Size(554, 235);
+            this.artworkSettingsPane1.TabIndex = 0;
+            // 
+            // aboutTabPage
+            // 
+            this.aboutTabPage.Controls.Add(this.aboutPane1);
+            this.aboutTabPage.Location = new System.Drawing.Point(4, 22);
+            this.aboutTabPage.Name = "aboutTabPage";
+            this.aboutTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.aboutTabPage.Size = new System.Drawing.Size(560, 559);
+            this.aboutTabPage.TabIndex = 6;
+            this.aboutTabPage.Text = "About";
+            this.aboutTabPage.UseVisualStyleBackColor = true;
+            // 
+            // aboutPane1
+            // 
+            this.aboutPane1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.aboutPane1.Location = new System.Drawing.Point(3, 3);
+            this.aboutPane1.Name = "aboutPane1";
+            this.aboutPane1.Size = new System.Drawing.Size(554, 553);
+            this.aboutPane1.TabIndex = 0;
             // 
             // MovingPicturesConfig
             // 
@@ -142,7 +188,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.mainTabControl.ResumeLayout(false);
             this.managerTab.ResumeLayout(false);
             this.importSettingsTab.ResumeLayout(false);
-            this.settingsTab.ResumeLayout(false);
+            this.importerSettingsTab.ResumeLayout(false);
+            this.aboutTabPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -151,11 +198,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private System.Windows.Forms.TabControl mainTabControl;
         private System.Windows.Forms.TabPage importSettingsTab;
-        private System.Windows.Forms.TabPage settingsTab;
         private ImportPathsPane importPathsListView1;
         private MovieImporterPane movieImporterPane1;
         private System.Windows.Forms.TabPage managerTab;
         private MovieManagerPane movieManagerPane1;
-        private AdvancedSettingsWarningPane advancedSettingsWarningPane1;
+        private System.Windows.Forms.TabPage importerSettingsTab;
+        private ArtworkSettingsPane artworkSettingsPane1;
+        private ImporterSettingsPane importerSettingsPane1;
+        private System.Windows.Forms.TabPage guiTab;
+        private System.Windows.Forms.TabPage aboutTabPage;
+        private AboutPane aboutPane1;
     }
 }
