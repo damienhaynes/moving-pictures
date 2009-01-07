@@ -1341,9 +1341,17 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     DBMovieInfo movie = match.ExistingMovieInfo;
 
                     // pass on the site_id from the selected match
-                    int scriptID = match.PreferedDataSource.SelectedScript.Provider.ScriptID;
-                    string siteID = match.Selected.Movie.GetSourceMovieInfo(scriptID).Identifier;
-                    movie.GetSourceMovieInfo(scriptID).Identifier = siteID;
+                    if (match.PreferedDataSource.IsScriptable()) {
+                        // Using scriptable provider script
+                        int scriptID = match.PreferedDataSource.SelectedScript.Provider.ScriptID;
+                        string siteID = match.Selected.Movie.GetSourceMovieInfo(scriptID).Identifier;
+                        movie.GetSourceMovieInfo(scriptID).Identifier = siteID;
+                    }
+                    else {
+                        // Using IMovieProvider
+                        string siteID = match.Selected.Movie.GetSourceMovieInfo(match.PreferedDataSource).Identifier;
+                        movie.GetSourceMovieInfo(match.PreferedDataSource).Identifier = siteID;
+                    }
 
                     // and update from that
                     match.PreferedDataSource.Provider.Update(movie);
