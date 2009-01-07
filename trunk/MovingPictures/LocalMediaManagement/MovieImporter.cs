@@ -854,7 +854,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                 if (importPath.ID != null) {
                     // Remove an system managed path if for any reason it's not of type CDRom
-                    if (!isCDRom && importPath.System) {
+                    if (!isCDRom && importPath.InternallyManaged) {
                         importPath.Delete();
                         logger.Info("Removed system managed import path: {0} (drive type has changed)", importPath.FullPath);
                         continue;
@@ -869,8 +869,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                     // Update an existing import path to a system managed import path
                     // if the drive type is CDRom but the system flag isn't set
-                    if (isCDRom && !importPath.System) {
-                        importPath.System = true;
+                    if (isCDRom && !importPath.InternallyManaged) {
+                        importPath.InternallyManaged = true;
                         importPath.Commit();
                         logger.Info("{0} was updated to a system managed import path.", importPath.FullPath);
                     }
@@ -878,7 +878,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
                 else {
                     if (isCDRom && !isVirtual) {
-                        importPath.System = true;
+                        importPath.InternallyManaged = true;
                         importPath.Commit();
                         logger.Info("Added system managed import path: {0}", importPath.FullPath);
                     }
@@ -1340,18 +1340,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (match.ExistingMovieInfo != null && update) {
                     DBMovieInfo movie = match.ExistingMovieInfo;
 
-                    // pass on the site_id from the selected match
-                    if (match.PreferedDataSource.IsScriptable()) {
-                        // Using scriptable provider script
-                        int scriptID = match.PreferedDataSource.SelectedScript.Provider.ScriptID;
-                        string siteID = match.Selected.Movie.GetSourceMovieInfo(scriptID).Identifier;
-                        movie.GetSourceMovieInfo(scriptID).Identifier = siteID;
-                    }
-                    else {
-                        // Using IMovieProvider
-                        string siteID = match.Selected.Movie.GetSourceMovieInfo(match.PreferedDataSource).Identifier;
-                        movie.GetSourceMovieInfo(match.PreferedDataSource).Identifier = siteID;
-                    }
+                    // Using IMovieProvider
+                    string siteID = match.Selected.Movie.GetSourceMovieInfo(match.PreferedDataSource).Identifier;
+                    movie.GetSourceMovieInfo(match.PreferedDataSource).Identifier = siteID;
 
                     // and update from that
                     match.PreferedDataSource.Provider.Update(movie);

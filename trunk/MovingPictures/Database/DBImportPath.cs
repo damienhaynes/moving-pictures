@@ -89,11 +89,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         [DBFieldAttribute(Default = "false")]
-        public bool System {
-            get { return _system;}
-            set {_system = value;}
+        public bool InternallyManaged {
+            get { return _internallyManaged;}
+            set {_internallyManaged = value;}
         }
-        private bool _system;
+        private bool _internallyManaged;
 
         #endregion
 
@@ -233,7 +233,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public static List<DBImportPath> GetAllUserDefined() {
             List<DBImportPath> paths = new List<DBImportPath>();
             foreach (DBImportPath path in DBImportPath.GetAll()) {
-                if (!path.System)
+                if (!path.InternallyManaged)
                     paths.Add(path);
             }
             return paths;

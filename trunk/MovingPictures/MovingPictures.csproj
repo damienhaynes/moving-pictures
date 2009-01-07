@@ -54,6 +54,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigScreen\AboutPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\AboutPane.Designer.cs">
+      <DependentUpon>AboutPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\ArtworkSettingsPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\ArtworkSettingsPane.Designer.cs">
+      <DependentUpon>ArtworkSettingsPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\AdvancedSettingsWarningPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -65,6 +77,12 @@
     </Compile>
     <Compile Include="ConfigScreen\DataSourcePane.Designer.cs">
       <DependentUpon>DataSourcePane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\ImporterSettingsPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\ImporterSettingsPane.Designer.cs">
+      <DependentUpon>ImporterSettingsPane.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\ImportPathsPane.cs">
       <SubType>UserControl</SubType>
@@ -84,11 +102,23 @@
     <Compile Include="ConfigScreen\MovieManager\MovieDetailsSubPane.Designer.cs">
       <DependentUpon>MovieDetailsSubPane.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\Popups\AdvancedSettingsPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\AdvancedSettingsPopup.Designer.cs">
+      <DependentUpon>AdvancedSettingsPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\Popups\ManualAssignPopup.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConfigScreen\Popups\ManualAssignPopup.designer.cs">
       <DependentUpon>ManualAssignPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\DataSourcesPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\DataSourcesPopup.designer.cs">
+      <DependentUpon>DataSourcesPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\MovieImporterPane.cs">
       <SubType>UserControl</SubType>
@@ -195,12 +225,24 @@
     <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.LocalMediaManagement.MediaMatches.datasource" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ConfigScreen\AboutPane.resx">
+      <DependentUpon>AboutPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\ArtworkSettingsPane.resx">
+      <DependentUpon>ArtworkSettingsPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\AdvancedSettingsWarningPane.resx">
       <DependentUpon>AdvancedSettingsWarningPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\DataSourcePane.resx">
       <DependentUpon>DataSourcePane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\ImporterSettingsPane.resx">
+      <DependentUpon>ImporterSettingsPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\ImportPathsPane.resx">
@@ -213,6 +255,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\MovieManager\MovieDetailsSubPane.resx">
       <DependentUpon>MovieDetailsSubPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\AdvancedSettingsPopup.resx">
+      <DependentUpon>AdvancedSettingsPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\DataSourcesPopup.resx">
+      <DependentUpon>DataSourcesPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\ManualAssignPopup.resx">
@@ -344,23 +394,23 @@
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MediaPortal\Stable\Core\Core.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Core\Core.csproj">
       <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\MediaPortal\Stable\Databases\Databases.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
       <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
       <Name>Databases</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\MediaPortal\Stable\Dialogs\Dialogs.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Dialogs\Dialogs.csproj">
       <Project>{396C5208-5D46-4A11-92C1-FD0F2F42D7DD}</Project>
       <Name>Dialogs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\MediaPortal\Stable\DirectShowLib\DirectShowLib.csproj">
+    <ProjectReference Include="..\..\MediaPortal\DirectShowLib\DirectShowLib.csproj">
       <Project>{CE009BFA-5EF6-4153-B2A1-2FA79698A9AE}</Project>
       <Name>DirectShowLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\MediaPortal\Stable\Utils\Utils.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Utils\Utils.csproj">
       <Project>{6DA0E4DF-6230-4642-98B5-E690BB6942BB}</Project>
       <Name>Utils</Name>
     </ProjectReference>

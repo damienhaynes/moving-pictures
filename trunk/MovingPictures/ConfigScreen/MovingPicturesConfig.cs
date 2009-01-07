@@ -19,8 +19,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // if we are in designer, break to prevent errors with rendering, it cant access the DB...
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
-
-            advancedSettingsWarningPane1.SettingsPane.populateTree(MovingPicturesCore.SettingsManager);
         }
 
         private void MoviesPluginConfig_Load(object sender, EventArgs e) {

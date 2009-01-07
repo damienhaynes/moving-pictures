@@ -29,9 +29,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     return;
                 }
 
-                if ((listView != null && listView.Items != null && listView.Items.Count != 0) && displayType == value)
-                    return;
-
                 displayType = value;
 
                 switch (displayType) {
@@ -52,7 +49,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             get { return displayType; }
         }
-        private DataType displayType;
+        private DataType displayType = DataType.DETAILS;
 
         public DataSourcePane() {
             InitializeComponent();
@@ -61,7 +58,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void DataSourcePane_Load(object sender, EventArgs e) {
             if (!DesignMode) {
-                DisplayType = DataType.DETAILS;
+                // force an update on load
+                DisplayType = displayType;
                 updateDebugModeMenuItem();
             }
         }

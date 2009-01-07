@@ -50,7 +50,7 @@
         <description>The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.</description>
       </setting>
 
-      <setting id="importer_strict_year" name="Only Show Results From Same Year" type="BOOL">
+      <setting id="importer_strict_year" name="Ignore Possible Matches with Incorrect Year" type="BOOL">
         <default>false</default>
         <description>If a year keyword is detected and no exact match is found only show the results from the same year or blank year. (experimental)</description>
       </setting>
@@ -74,7 +74,7 @@
 
     <group name="Local Media Parser">
 
-      <setting id="importer_prefer_foldername" name="Prefer Folder For Single Part Movies" type="BOOL">
+      <setting id="importer_prefer_foldername" name="Prefer Folder Name for Movie Matching" type="BOOL">
         <default>true</default>
         <description>If a folder contains just one movie file it will use the folder name for matching. If you are sure that the filenames are more accurate than the folder name disable this setting.</description>
       </setting>

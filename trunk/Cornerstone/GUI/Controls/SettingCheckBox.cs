@@ -18,11 +18,20 @@ namespace Cornerstone.GUI.Controls {
                 _setting = value;
 
                 // Update the control to reflect the setting
-                Text = _setting.Name;
+                if (_ignoreSettingName) Text = _setting.Name;
                 Checked = (bool)_setting.Value;
            }
         }
         private DBSetting _setting;
+
+        public bool IgnoreSettingName {
+            set {
+                _ignoreSettingName = value;
+            }
+            get { return _ignoreSettingName; }
+        }
+        private bool _ignoreSettingName = false;
+
 
         public SettingCheckBox() {
             CheckedChanged += new EventHandler(SettingCheckBox_CheckedChanged);
