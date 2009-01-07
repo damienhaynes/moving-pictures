@@ -74,18 +74,13 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             year = 0;
 
             // if there is a four digit number that looks like a year, parse it out
-            Regex expr = new Regex(@"(^.+)[\[\(]?([0-9]{4})[\]\)]?($|.+)");
+            Regex expr = new Regex(@"^(.*)[\[\(]?(19\d{2}|20\d{2})[\]\)]?($|.+)");
             Match match = expr.Match(rtn);
             if (match.Success) {
-                // set the year
+                rtn = match.Groups[1].Value.TrimEnd('(', '['); // leading title string
                 year = int.Parse(match.Groups[2].Value);
-                // check if it's really a year value
-                if (year > 1900 && year < DateTime.Now.Year + 2)
-                    // clean the possible left overs from the title
-                    rtn = match.Groups[1].Value.TrimEnd('(', '[');
-                else
-                    // year check failed so reset it to 0
-                    year = 0;
+                if (rtn.Trim() == string.Empty)
+                    rtn = match.Groups[3].Value.TrimEnd('(', '['); // trailing title string
             }
 
             // trim and return the title
