@@ -228,16 +228,35 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public UpdateResults Update(DBMovieInfo movie) {
-            string tmdbId;
             if (movie == null)
                 return UpdateResults.FAILED;
 
             // try to load the id for the movie for this script
+            string tmdbId = null;
             DBSourceMovieInfo idObj = movie.GetSourceMovieInfo(SourceInfo);
-            if (idObj != null && idObj.Identifier != null)
+            if (idObj != null && idObj.Identifier != null) {
                 tmdbId = idObj.Identifier;
-            else
-                return UpdateResults.FAILED_NEED_ID;
+            } else {
+                // if we don't have a tmdb id check for imdb id
+                string imdbId = movie.ImdbID.Trim();
+                if (imdbId != string.Empty) {
+                    // if we have an imdb id we can also do a valid getInfo request
+                    // we first need to call the IMDB api search before we can move on
+                    DBMovieInfo imdbMovie = getMovieByImdb(imdbId);
+                    if (imdbMovie != null) {
+                        // if we got a movie, check for identifier again
+                        idObj = imdbMovie.GetSourceMovieInfo(SourceInfo);
+                        if (idObj != null && idObj.Identifier != null) {
+                            // we got an identifier so fill tmdbId
+                            tmdbId = idObj.Identifier;
+                        }
+                    }
+                }
+
+                // check if tmdbId is still null, if so request id.
+                if (tmdbId == null)
+                    return UpdateResults.FAILED_NEED_ID;
+            }
 
             XmlNodeList xml = getXML(apiGetInfo + tmdbId);
             if (xml != null) {
