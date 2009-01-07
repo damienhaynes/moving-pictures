@@ -115,8 +115,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (SelectedScript != null && !(SelectedScript.Contents.Trim().Length == 0))
                     return SelectedScript.Provider;
 
-                if (provider == null) 
-                    provider = (IMovieProvider) Activator.CreateInstance(providerType);
+                if (provider == null && providerType != null)
+                    try {
+                        provider = (IMovieProvider)Activator.CreateInstance(providerType);
+                    }
+                    catch (Exception e) {
+                        logger.Error("Failed creating instance for type '{0}': {1}", providerType, e);
+                    }
+                else {
+                    logger.Error("Failed creating instance: no providerType specified.");
+                }
 
                 return provider;
             }

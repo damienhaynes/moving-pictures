@@ -215,7 +215,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         private void loadProvidersFromDatabase() {
             logger.Info("Loading existing data sources...");
 
-            foreach (DBSourceInfo currSource in DBSourceInfo.GetAll()) 
+            foreach (DBSourceInfo currSource in DBSourceInfo.GetAll())
                 addToLists(currSource);
 
             detailSources.Sort(sorters[DataType.DETAILS]);
@@ -333,6 +333,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         private void addToLists(DBSourceInfo newSource) {
+            if (newSource.ProviderType == null) {
+               logger.Info("Removing invalid provider.");
+               newSource.Delete();
+               return;
+            }
+
             lock (allSources) allSources.Add(newSource);
 
             if (newSource.Provider.ProvidesBackdrops)
@@ -408,7 +414,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         public bool GetBackdrop(DBMovieInfo movie) {
             List<DBSourceInfo> sources;
             lock (backdropSources) sources = new List<DBSourceInfo>(backdropSources);
-
+            
             foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.BACKDROPS))
                     continue;
