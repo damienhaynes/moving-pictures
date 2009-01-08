@@ -56,7 +56,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.mainTabControl.Location = new System.Drawing.Point(12, 12);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
-            this.mainTabControl.Size = new System.Drawing.Size(568, 585);
+            this.mainTabControl.Size = new System.Drawing.Size(568, 499);
             this.mainTabControl.TabIndex = 0;
             // 
             // managerTab
@@ -128,7 +128,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importerSettingsTab.Location = new System.Drawing.Point(4, 22);
             this.importerSettingsTab.Name = "importerSettingsTab";
             this.importerSettingsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.importerSettingsTab.Size = new System.Drawing.Size(560, 559);
+            this.importerSettingsTab.Size = new System.Drawing.Size(560, 473);
             this.importerSettingsTab.TabIndex = 3;
             this.importerSettingsTab.Text = "Importer Settings";
             this.importerSettingsTab.UseVisualStyleBackColor = true;
@@ -144,11 +144,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // artworkSettingsPane1
             // 
-            this.artworkSettingsPane1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.artworkSettingsPane1.Location = new System.Drawing.Point(3, 321);
+            this.artworkSettingsPane1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.artworkSettingsPane1.Location = new System.Drawing.Point(3, 317);
             this.artworkSettingsPane1.MinimumSize = new System.Drawing.Size(400, 147);
             this.artworkSettingsPane1.Name = "artworkSettingsPane1";
-            this.artworkSettingsPane1.Size = new System.Drawing.Size(554, 235);
+            this.artworkSettingsPane1.Size = new System.Drawing.Size(554, 153);
             this.artworkSettingsPane1.TabIndex = 0;
             // 
             // aboutTabPage
@@ -174,11 +176,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(592, 609);
+            this.ClientSize = new System.Drawing.Size(592, 523);
             this.Controls.Add(this.mainTabControl);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(600, 400);
+            this.MinimumSize = new System.Drawing.Size(600, 550);
             this.Name = "MovingPicturesConfig";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
