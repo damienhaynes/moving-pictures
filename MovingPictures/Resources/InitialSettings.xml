@@ -11,7 +11,7 @@
       <description>Determines behavior when a movie in the movie browser is clicked. If true, the details view appears. If false the movie starts playback.</description>
     </setting>
 
-    <setting id="enable_rc_filter" name="Enable Remote Control Filter" type="BOOL">
+    <setting id="enable_rc_filter" name="Use Remote Control Filtering" type="BOOL">
       <default>true</default>
       <description>Enables the Remote Controle Filter, set to false if you want to use the default mediaportal remote control functionality.</description>
     </setting>
