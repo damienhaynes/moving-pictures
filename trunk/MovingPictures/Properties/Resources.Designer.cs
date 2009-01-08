@@ -438,6 +438,27 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;mymovies.it&lt;/name&gt;
+        ///    &lt;author&gt;Ricciolo&lt;/author&gt;
+        ///    &lt;description&gt;test&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you should change the version number if you are going to
+        ///    d [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_MyMoviesItalian {
+            get {
+                return ResourceManager.GetString("Script_MyMoviesItalian", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
