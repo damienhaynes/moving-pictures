@@ -326,6 +326,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = Regex.Replace(newTitle, @"\b(and|und|en|et|y)\b", " & ");
 
             // Equalize: Roman Numbers To Numeric
+            newTitle = Regex.Replace(newTitle, @"\si(\b)", @" 1$1");
             newTitle = Regex.Replace(newTitle, @"\sii(\b)", @" 2$1");
             newTitle = Regex.Replace(newTitle, @"\siii(\b)", @" 3$1");
             newTitle = Regex.Replace(newTitle, @"\siv(\b)", @" 4$1");
@@ -334,6 +335,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = Regex.Replace(newTitle, @"\svii(\b)", @" 7$1");
             newTitle = Regex.Replace(newTitle, @"\sviii(\b)", @" 8$1");
             newTitle = Regex.Replace(newTitle, @"\six(\b)", @" 9$1");
+
+            // Remove the number 1 from the end of a title string
+            newTitle = Regex.Replace(newTitle, @"\s(1)$","");
 
             // Remove double spaces and trim
             newTitle = trimSpaces(newTitle);
