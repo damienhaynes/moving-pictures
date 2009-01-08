@@ -160,6 +160,18 @@ namespace MovingPicturesUnitTest
         }
 
         /// <summary>
+        ///A test for normalizeTitle
+        ///</summary>
+        [TestMethod()]
+        public void normalizeTitleTest2() {
+            string title = "Spïdér-Man I";
+            string expected = "spider man";
+            string actual;
+            actual = Utility.normalizeTitle(title);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
         ///A test for IsVideoFile
         ///</summary>
         [TestMethod()]
@@ -199,10 +211,14 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void isSampleFileTest() {
-            FileInfo file = fileTest;
-            bool expected = false;
+            TextWriter tw = new StreamWriter("this-is-a-sample-file.mkv");
+            tw.Close();
+            FileInfo file = new FileInfo("this-is-a-sample-file.mkv");
+            file.Create();
+            bool expected = true;
             bool actual;
             actual = Utility.isSampleFile(file);
+            file.Delete();
             Assert.AreEqual(expected, actual);
         }
 
@@ -238,8 +254,8 @@ namespace MovingPicturesUnitTest
             DirectoryInfo folder = null; // TODO: Initialize to an appropriate value
             int expectedCount = 0; // TODO: Initialize to an appropriate value
             bool expected = false; // TODO: Initialize to an appropriate value
-            bool actual;
-            actual = Utility.isFolderDedicated(folder, expectedCount);
+            bool actual = false;
+            //actual = Utility.isFolderDedicated(folder, expectedCount);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -311,8 +327,8 @@ namespace MovingPicturesUnitTest
         public void GetVideoFileCountTest() {
             DirectoryInfo folder = null; // TODO: Initialize to an appropriate value
             int expected = 0; // TODO: Initialize to an appropriate value
-            int actual;
-            actual = Utility.GetVideoFileCount(folder);
+            int actual = 0;
+            //actual = Utility.GetVideoFileCount(folder);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -348,8 +364,8 @@ namespace MovingPicturesUnitTest
         public void GetMovieBaseDirectoryTest() {
             DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
             DirectoryInfo expected = null; // TODO: Initialize to an appropriate value
-            DirectoryInfo actual;
-            actual = Utility.GetMovieBaseDirectory(directory);
+            DirectoryInfo actual = null;
+            //actual = Utility.GetMovieBaseDirectory(directory);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -372,7 +388,7 @@ namespace MovingPicturesUnitTest
         [TestMethod()]
         public void GetDiscIdStringTest() {
             string path = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string expected = null; // TODO: Initialize to an appropriate value
             string actual;
             actual = Utility.GetDiscIdString(path);
             Assert.AreEqual(expected, actual);
@@ -397,8 +413,8 @@ namespace MovingPicturesUnitTest
         ///</summary>
         public void EnumToListTestHelper<T>() {
             List<T> expected = null; // TODO: Initialize to an appropriate value
-            List<T> actual;
-            actual = Utility.EnumToList<T>();
+            List<T> actual = null;
+            //actual = Utility.EnumToList<T>();
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -427,8 +443,8 @@ namespace MovingPicturesUnitTest
         public void GetFilesRecursiveTest() {
             DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
             List<FileInfo> expected = null; // TODO: Initialize to an appropriate value
-            List<FileInfo> actual;
-            actual = Utility.GetFilesRecursive(directory);
+            List<FileInfo> actual = null;
+            //actual = Utility.GetFilesRecursive(directory);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -440,8 +456,8 @@ namespace MovingPicturesUnitTest
         public void GetVideoFilesRecursiveTest() {
             DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
             List<FileInfo> expected = null; // TODO: Initialize to an appropriate value
-            List<FileInfo> actual;
-            actual = Utility.GetVideoFilesRecursive(directory);
+            List<FileInfo> actual = null;
+            //actual = Utility.GetVideoFilesRecursive(directory);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
