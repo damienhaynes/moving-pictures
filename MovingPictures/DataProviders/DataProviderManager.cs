@@ -114,6 +114,16 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 alreadyInitedSetting.Commit();
             }
 
+            turnOffMotech();
+        }
+
+        private void turnOffMotech() {
+            foreach (DBSourceInfo currSource in coverSources) {
+                if (currSource.IsScriptable() && currSource.SelectedScript.Provider.ScriptID == 874904) {
+                    SetDisabled(currSource, DataType.COVERS, true);
+                    return;
+                }
+            }
         }
 
         #endregion
