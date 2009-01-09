@@ -392,7 +392,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // countProgressLabel
             // 
             this.countProgressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.countProgressLabel.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.countProgressLabel.Location = new System.Drawing.Point(539, 379);
             this.countProgressLabel.Name = "countProgressLabel";
             this.countProgressLabel.Size = new System.Drawing.Size(93, 13);

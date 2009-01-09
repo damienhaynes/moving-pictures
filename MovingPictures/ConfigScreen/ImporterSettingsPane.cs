@@ -40,6 +40,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             autoApproveTrackBar.Value = (int)autoApproval.Value;
 
+            // this is a conditional that is true under vista. the trackbar backcolor is wrong under
+            // vista just haven't figured out the right color yet....
+            //if (Environment.OSVersion.Version.Major == 6)
+            //    autoApproveTrackBar.BackColor = SystemColors.ControlLightLight;
+
             updateGUI();
         }
 

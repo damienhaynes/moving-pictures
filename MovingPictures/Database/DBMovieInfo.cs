@@ -530,7 +530,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 if (!File.Exists(newFileName)) {
-                    newCover.Save(newFileName);
+                    newCover.Save(newFileName, ImageFormat.Jpeg);
                     AlternateCovers.Add(newFileName);
                 }
                 else return false;
@@ -611,7 +611,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // save the artwork
             logger.Info("Added cover art for '" + Title + "' [" + ID + "] from " + url + ".");
-            currImage.Save(filename);
+            currImage.Save(filename, ImageFormat.Jpeg);
             AlternateCovers.Add(filename);
             _cover = currImage;
             GenerateThumbnail();
@@ -679,7 +679,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             // save the backdrop
-            currImage.Save(filename);
+            currImage.Save(filename, ImageFormat.Jpeg);
             _backdropFullPath = filename;
             commitNeeded = true;
             return ArtworkLoadStatus.SUCCESS;
@@ -712,7 +712,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 
                 // save the backdrop
-                newBackdrop.Save(newFileName);
+                newBackdrop.Save(newFileName, ImageFormat.Jpeg);
                 _backdropFullPath = filename;
                 commitNeeded = true;
                 return true;
@@ -805,7 +805,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
             _coverThumb = Cover.GetThumbnailImage(width, height, myCallback, IntPtr.Zero);
-            _coverThumb.Save(fullname);
+            _coverThumb.Save(fullname, ImageFormat.Jpeg);
             _coverThumbFullPath = fullname;
             commitNeeded = true;
         }
