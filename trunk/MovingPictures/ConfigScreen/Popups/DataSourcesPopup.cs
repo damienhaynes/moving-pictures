@@ -30,5 +30,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
 
             Location = newLocation;
         }
+
+        private void okButton_Click(object sender, EventArgs e) {
+            Close();
+        }
     }
 }
