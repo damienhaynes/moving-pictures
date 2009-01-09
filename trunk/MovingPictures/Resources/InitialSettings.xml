@@ -280,6 +280,11 @@
 
   </group>
 
+  <group name="Custom Intro">
+    <setting id="custom_intro_location" name="Custom Intro Location" type="STRING">
+    <description>Location of a custom intro that will play before each movie.  This should be the full path including the movie. For example: c:\custom_intro\into.mpg</description>
+    </setting>
+  </group>
 
 
 </MoviesPluginSettings>

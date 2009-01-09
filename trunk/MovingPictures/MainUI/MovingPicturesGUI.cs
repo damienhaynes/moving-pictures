@@ -18,6 +18,7 @@ using MediaPortal.Profile;
 using MediaPortal.Util;
 using MediaPortal.Ripper;
 using NLog;
+using System.IO;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesGUI : GUIWindow {
@@ -41,6 +42,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         private int currentlyPlayingPart = 1;
 
         private bool loaded = false;
+
+        private bool customIntroPlayed = false;
 
         private ImageSwapper backdrop;
         private AsyncImageResource cover = null;
@@ -777,11 +780,17 @@ namespace MediaPortal.Plugins.MovingPictures {
         #region Playback Methods
 
         private void playSelectedMovie() {
+            // make sure we have a valid movie selected
             if (browser.SelectedMovie == null) {
                 logger.Error("Tried to play when there is no selected movie!");
                 return;
             }
 
+            // try playing our custom intro (if present). If successful quit, as we need to
+            // wait for the intro to finish.
+            bool success = playCustomIntro();
+            if (success) return;
+            
             playMovie(browser.SelectedMovie, 1);
          }
 
@@ -869,6 +878,37 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
 
+        private bool playCustomIntro() {
+            // Check if we have already played a custom intro
+            if (!customIntroPlayed) {
+                // Only play custom intro for we are not resuming
+                if (browser.SelectedMovie.UserSettings == null || browser.SelectedMovie.UserSettings.Count == 0 || browser.SelectedMovie.UserSettings[0].ResumeTime == 0) {
+                    string custom_intro = (string)MovingPicturesCore.SettingsManager["custom_intro_location"].Value;
+
+                    // Check if the custom intro is specified by user and exists
+                    if (custom_intro.Length > 0 && File.Exists(custom_intro)) {
+                        logger.Debug("Playing Custom Into: {0}", custom_intro);
+
+                        // start playback
+                        playFile(custom_intro);
+
+                        // if playback started
+                        if (currentlyPlaying) {
+                            // set class level variables to track what is playing
+                            customIntroPlayed = true;
+
+                            Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
+                            newThread.Start();
+
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private bool PromptUserToResume(DBMovieInfo movie) {
             if (movie.UserSettings == null || movie.UserSettings.Count == 0 || movie.UserSettings[0].ResumeTime == 0)
                 return false;
@@ -948,6 +988,16 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void OnPlayBackEnded(g_Player.MediaType type, string filename) {
             logger.Debug("OnPlayBackEnded");
+
+            if (customIntroPlayed) {
+                // If a custom intro was just played, we need to play the selected movie
+                playSelectedMovie();
+
+                // Set custom intro played back to false so it will play again on next movie selection
+                customIntroPlayed = false;
+                return;
+            }
+
             if (type != g_Player.MediaType.Video || currentlyPlayingMovie == null)
                 return;
 
