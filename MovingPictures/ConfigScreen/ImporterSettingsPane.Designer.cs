@@ -1,4 +1,6 @@
-﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
+﻿using Cornerstone.GUI.Controls;
+using System.Windows.Forms;
+namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     partial class ImporterSettingsPane {
         /// <summary> 
         /// Required designer variable.
@@ -25,19 +27,19 @@
         private void InitializeComponent() {
             this.helpButton1 = new System.Windows.Forms.Button();
             this.detailsButton = new System.Windows.Forms.Button();
-            this.nfoAutoApproveCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
-            this.nfoExtTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
-            this.nfoScannerCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
-            this.preferFolderCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
-            this.folderGroupingCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
-            this.strictYearCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.autoApproveTrackBar = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.autoApproveTrackBar = new System.Windows.Forms.TrackBar();
+            this.nfoAutoApproveCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.nfoExtTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
+            this.strictYearCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.nfoScannerCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.folderGroupingCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.preferFolderCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.autoApproveTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,81 +66,6 @@
             this.detailsButton.UseVisualStyleBackColor = true;
             this.detailsButton.Click += new System.EventHandler(this.detailsButton_Click);
             // 
-            // nfoAutoApproveCheckBox
-            // 
-            this.nfoAutoApproveCheckBox.AutoSize = true;
-            this.nfoAutoApproveCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nfoAutoApproveCheckBox.IgnoreSettingName = false;
-            this.nfoAutoApproveCheckBox.Location = new System.Drawing.Point(147, 184);
-            this.nfoAutoApproveCheckBox.Name = "nfoAutoApproveCheckBox";
-            this.nfoAutoApproveCheckBox.Setting = null;
-            this.nfoAutoApproveCheckBox.Size = new System.Drawing.Size(211, 17);
-            this.nfoAutoApproveCheckBox.TabIndex = 9;
-            this.nfoAutoApproveCheckBox.Text = "Auto approve based on info file details";
-            this.nfoAutoApproveCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // nfoExtTextBox
-            // 
-            this.nfoExtTextBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nfoExtTextBox.Location = new System.Drawing.Point(147, 158);
-            this.nfoExtTextBox.Name = "nfoExtTextBox";
-            this.nfoExtTextBox.Setting = null;
-            this.nfoExtTextBox.Size = new System.Drawing.Size(158, 21);
-            this.nfoExtTextBox.TabIndex = 8;
-            // 
-            // nfoScannerCheckBox
-            // 
-            this.nfoScannerCheckBox.AutoSize = true;
-            this.nfoScannerCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nfoScannerCheckBox.IgnoreSettingName = false;
-            this.nfoScannerCheckBox.Location = new System.Drawing.Point(128, 135);
-            this.nfoScannerCheckBox.Name = "nfoScannerCheckBox";
-            this.nfoScannerCheckBox.Setting = null;
-            this.nfoScannerCheckBox.Size = new System.Drawing.Size(317, 17);
-            this.nfoScannerCheckBox.TabIndex = 7;
-            this.nfoScannerCheckBox.Text = "Scan movie folder for info files with the following extensions:";
-            this.nfoScannerCheckBox.UseVisualStyleBackColor = true;
-            this.nfoScannerCheckBox.CheckedChanged += new System.EventHandler(this.nfoScannerCheckBox_CheckedChanged);
-            // 
-            // preferFolderCheckBox
-            // 
-            this.preferFolderCheckBox.AutoSize = true;
-            this.preferFolderCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.preferFolderCheckBox.IgnoreSettingName = false;
-            this.preferFolderCheckBox.Location = new System.Drawing.Point(128, 71);
-            this.preferFolderCheckBox.Name = "preferFolderCheckBox";
-            this.preferFolderCheckBox.Setting = null;
-            this.preferFolderCheckBox.Size = new System.Drawing.Size(213, 17);
-            this.preferFolderCheckBox.TabIndex = 4;
-            this.preferFolderCheckBox.Text = "Prefer Folder Name for Movie Matching";
-            this.preferFolderCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // folderGroupingCheckBox
-            // 
-            this.folderGroupingCheckBox.AutoSize = true;
-            this.folderGroupingCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.folderGroupingCheckBox.IgnoreSettingName = false;
-            this.folderGroupingCheckBox.Location = new System.Drawing.Point(128, 103);
-            this.folderGroupingCheckBox.Name = "folderGroupingCheckBox";
-            this.folderGroupingCheckBox.Setting = null;
-            this.folderGroupingCheckBox.Size = new System.Drawing.Size(208, 17);
-            this.folderGroupingCheckBox.TabIndex = 3;
-            this.folderGroupingCheckBox.Text = "Always Group Files in the Same Folder";
-            this.folderGroupingCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // strictYearCheckBox
-            // 
-            this.strictYearCheckBox.AutoSize = true;
-            this.strictYearCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.strictYearCheckBox.IgnoreSettingName = false;
-            this.strictYearCheckBox.Location = new System.Drawing.Point(128, 48);
-            this.strictYearCheckBox.Name = "strictYearCheckBox";
-            this.strictYearCheckBox.Setting = null;
-            this.strictYearCheckBox.Size = new System.Drawing.Size(237, 17);
-            this.strictYearCheckBox.TabIndex = 2;
-            this.strictYearCheckBox.Text = "Ignore Possible Matches with Incorrect Year";
-            this.strictYearCheckBox.UseVisualStyleBackColor = true;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -148,16 +75,6 @@
             this.label1.Size = new System.Drawing.Size(106, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Auto Approval Rate:";
-            // 
-            // autoApproveTrackBar
-            // 
-            this.autoApproveTrackBar.LargeChange = 3;
-            this.autoApproveTrackBar.Location = new System.Drawing.Point(237, 0);
-            this.autoApproveTrackBar.Maximum = 3;
-            this.autoApproveTrackBar.Name = "autoApproveTrackBar";
-            this.autoApproveTrackBar.Size = new System.Drawing.Size(72, 42);
-            this.autoApproveTrackBar.TabIndex = 0;
-            this.autoApproveTrackBar.Scroll += new System.EventHandler(this.autoApproveTrackBar_Scroll);
             // 
             // label2
             // 
@@ -213,6 +130,91 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "groupBox4";
             // 
+            // autoApproveTrackBar
+            // 
+            this.autoApproveTrackBar.LargeChange = 1;
+            this.autoApproveTrackBar.Location = new System.Drawing.Point(237, 0);
+            this.autoApproveTrackBar.Maximum = 3;
+            this.autoApproveTrackBar.Name = "autoApproveTrackBar";
+            this.autoApproveTrackBar.Size = new System.Drawing.Size(72, 42);
+            this.autoApproveTrackBar.TabIndex = 0;
+            this.autoApproveTrackBar.Scroll += new System.EventHandler(this.autoApproveTrackBar_Scroll);
+            // 
+            // nfoAutoApproveCheckBox
+            // 
+            this.nfoAutoApproveCheckBox.AutoSize = true;
+            this.nfoAutoApproveCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nfoAutoApproveCheckBox.IgnoreSettingName = false;
+            this.nfoAutoApproveCheckBox.Location = new System.Drawing.Point(147, 184);
+            this.nfoAutoApproveCheckBox.Name = "nfoAutoApproveCheckBox";
+            this.nfoAutoApproveCheckBox.Setting = null;
+            this.nfoAutoApproveCheckBox.Size = new System.Drawing.Size(211, 17);
+            this.nfoAutoApproveCheckBox.TabIndex = 9;
+            this.nfoAutoApproveCheckBox.Text = "Auto approve based on info file details";
+            this.nfoAutoApproveCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // nfoExtTextBox
+            // 
+            this.nfoExtTextBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nfoExtTextBox.Location = new System.Drawing.Point(147, 158);
+            this.nfoExtTextBox.Name = "nfoExtTextBox";
+            this.nfoExtTextBox.Setting = null;
+            this.nfoExtTextBox.Size = new System.Drawing.Size(158, 21);
+            this.nfoExtTextBox.TabIndex = 8;
+            // 
+            // strictYearCheckBox
+            // 
+            this.strictYearCheckBox.AutoSize = true;
+            this.strictYearCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.strictYearCheckBox.IgnoreSettingName = false;
+            this.strictYearCheckBox.Location = new System.Drawing.Point(128, 48);
+            this.strictYearCheckBox.Name = "strictYearCheckBox";
+            this.strictYearCheckBox.Setting = null;
+            this.strictYearCheckBox.Size = new System.Drawing.Size(237, 17);
+            this.strictYearCheckBox.TabIndex = 2;
+            this.strictYearCheckBox.Text = "Ignore Possible Matches with Incorrect Year";
+            this.strictYearCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // nfoScannerCheckBox
+            // 
+            this.nfoScannerCheckBox.AutoSize = true;
+            this.nfoScannerCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nfoScannerCheckBox.IgnoreSettingName = false;
+            this.nfoScannerCheckBox.Location = new System.Drawing.Point(128, 135);
+            this.nfoScannerCheckBox.Name = "nfoScannerCheckBox";
+            this.nfoScannerCheckBox.Setting = null;
+            this.nfoScannerCheckBox.Size = new System.Drawing.Size(317, 17);
+            this.nfoScannerCheckBox.TabIndex = 7;
+            this.nfoScannerCheckBox.Text = "Scan movie folder for info files with the following extensions:";
+            this.nfoScannerCheckBox.UseVisualStyleBackColor = true;
+            this.nfoScannerCheckBox.CheckedChanged += new System.EventHandler(this.nfoScannerCheckBox_CheckedChanged);
+            // 
+            // folderGroupingCheckBox
+            // 
+            this.folderGroupingCheckBox.AutoSize = true;
+            this.folderGroupingCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.folderGroupingCheckBox.IgnoreSettingName = false;
+            this.folderGroupingCheckBox.Location = new System.Drawing.Point(128, 103);
+            this.folderGroupingCheckBox.Name = "folderGroupingCheckBox";
+            this.folderGroupingCheckBox.Setting = null;
+            this.folderGroupingCheckBox.Size = new System.Drawing.Size(208, 17);
+            this.folderGroupingCheckBox.TabIndex = 3;
+            this.folderGroupingCheckBox.Text = "Always Group Files in the Same Folder";
+            this.folderGroupingCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // preferFolderCheckBox
+            // 
+            this.preferFolderCheckBox.AutoSize = true;
+            this.preferFolderCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.preferFolderCheckBox.IgnoreSettingName = false;
+            this.preferFolderCheckBox.Location = new System.Drawing.Point(128, 71);
+            this.preferFolderCheckBox.Name = "preferFolderCheckBox";
+            this.preferFolderCheckBox.Setting = null;
+            this.preferFolderCheckBox.Size = new System.Drawing.Size(213, 17);
+            this.preferFolderCheckBox.TabIndex = 4;
+            this.preferFolderCheckBox.Text = "Prefer Folder Name for Movie Matching";
+            this.preferFolderCheckBox.UseVisualStyleBackColor = true;
+            // 
             // ImporterSettingsPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -244,7 +246,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TrackBar autoApproveTrackBar;
+        private TrackBar autoApproveTrackBar;
         private System.Windows.Forms.Label label1;
         private Cornerstone.GUI.Controls.SettingCheckBox strictYearCheckBox;
         private Cornerstone.GUI.Controls.SettingCheckBox preferFolderCheckBox;
