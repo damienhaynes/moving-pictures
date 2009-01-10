@@ -91,6 +91,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
         }
         private DBMovieInfo selectedMovie = null;
 
+        public GUIListItemMovieComparer.SortingFields SortField { get; set; }
+        public GUIListItemMovieComparer.SortingDirections SortDirection { get; set; }
+
         #endregion
 
         #region Events
@@ -113,6 +116,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             listItems = new Dictionary<DBMovieInfo, GUIListItem>();
 
             loadMovies();
+            initSortingDefaults();
         }
 
         // An initial load of all movies in the database.
@@ -127,6 +131,29 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
 
             if (ContentsChanged != null)
                 ContentsChanged();
+        }
+
+        // Sets the initial settings for how movies should be sorted on launch.
+        private void initSortingDefaults() {
+            // set default sort method
+            string defaultSortField = ((string)MovingPicturesCore.SettingsManager["default_sort_field"].Value).Trim();
+            string defaultSortDirection = ((string)MovingPicturesCore.SettingsManager["default_sort_direction"].Value).Trim();
+
+            try {
+                SortField = (GUIListItemMovieComparer.SortingFields)Enum.Parse(typeof(GUIListItemMovieComparer.SortingFields), defaultSortField, true);
+            }
+            catch {
+                logger.Error("Invalid Sort Field provided: {0}.  Defaulting to Title", defaultSortField);
+                SortField = GUIListItemMovieComparer.SortingFields.Title;
+            }
+
+            try {
+                SortDirection = (GUIListItemMovieComparer.SortingDirections)Enum.Parse(typeof(GUIListItemMovieComparer.SortingDirections), defaultSortDirection, true);
+            }
+            catch {
+                logger.Error("Invalid Sort Direction provided: {0}.  Defaulting to ascending", defaultSortDirection);
+                SortDirection = GUIListItemMovieComparer.SortingDirections.Ascending;
+            }
         }
 
         // Listens for newly added movies from the database manager.
@@ -236,7 +263,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
                 addMovieToFacade(currMovie);
             
             // sort it using our basic sorter
-            facade.Sort(new GUIListItemMovieComparer());
+            facade.Sort(new GUIListItemMovieComparer(this.SortField, this.SortDirection));
 
             // reapply the current selection
             facade.SelectedListItemIndex = facadeIndexOf(SelectedMovie);
@@ -297,19 +324,134 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
     }
 
     public class GUIListItemMovieComparer : IComparer<GUIListItem> {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// enum of all possible sort fields
+        /// </summary>
+        public enum SortingFields {
+            Title,
+            DateAdded,
+            Year,
+            Certification,
+            Language,
+            Score,
+            UserScore,
+            Popularity,
+            Runtime,
+            FilePath
+        }
+
+        public enum SortingDirections{
+            Ascending,
+            Descending
+        }
+
+        private SortingFields _sortField;
+        private SortingDirections _sortDirection; 
+
+        /// <summary>
+        /// Constructor for GUIListItemMovieComparer
+        /// </summary>
+        /// <param name="sortField">The database field to sort by</param>
+        /// <param name="sortDirection">The direction to sort by</param>
+        public GUIListItemMovieComparer(SortingFields sortField, SortingDirections sortDirection) {
+            _sortField = sortField;
+            _sortDirection = sortDirection;
+            logger.Info("Sort Field: {0} Sort Direction: {1}", sortField, sortDirection);
+        }
+
         public int Compare(GUIListItem x, GUIListItem y) {
             try {
+                
                 DBMovieInfo movieX = (DBMovieInfo)x.TVTag;
                 DBMovieInfo movieY = (DBMovieInfo)y.TVTag;
+                int rtn;
 
-                int rtn = movieX.SortBy.CompareTo(movieY.SortBy);
+                switch (_sortField) {
+                    case SortingFields.DateAdded:
+                        rtn = movieX.ID.GetValueOrDefault(0).CompareTo(movieY.ID.GetValueOrDefault(0));
+                        break;
+
+                    case SortingFields.Year:
+                        rtn = movieX.Year.CompareTo(movieY.Year);
+                        break;
+
+                    case SortingFields.Certification:
+                        int intX = GetCertificationValue(movieX.Certification);
+                        int intY = GetCertificationValue(movieY.Certification);
+                        if (intX == 100 && intY == 100)
+                            rtn = movieX.Certification.CompareTo(movieY.Certification);
+                        else
+                            rtn = intX.CompareTo(intY);
+                        break;
+
+                    case SortingFields.Language:
+                        rtn = movieX.Language.CompareTo(movieY.Language);
+                        break;
+
+                    case SortingFields.Score:
+                        rtn = movieX.Score.CompareTo(movieY.Score);
+                        break;
+
+                    case SortingFields.UserScore:
+                        rtn = movieX.UserScore.CompareTo(movieY.UserScore);
+                        break;
+
+                    case SortingFields.Popularity:
+                        rtn = movieX.Popularity.CompareTo(movieY.Popularity);
+                        break;
+
+                    case SortingFields.Runtime:
+                        rtn = movieX.Runtime.CompareTo(movieY.Runtime);
+                        break;
+
+                    case SortingFields.FilePath:
+                        rtn = movieX.LocalMedia[0].FullPath.CompareTo(movieY.LocalMedia[0].FullPath);
+                        break;
+
+                    // default to the title field
+                    case SortingFields.Title:
+                    default:
+                        rtn = movieX.SortBy.CompareTo(movieY.SortBy);
+                        break;
+                }
+
+                
+
+                // if both items are identical, fallback to using the Title
+                if (rtn == 0)
+                    rtn = movieX.SortBy.CompareTo(movieY.SortBy);
+
+                // if both items are STILL identical, fallback to using the ID
                 if (rtn == 0)
                     rtn = movieX.ID.GetValueOrDefault(0).CompareTo(movieY.ID.GetValueOrDefault(0));
+
+                if (_sortDirection == SortingDirections.Descending)
+                    rtn = -rtn; 
 
                 return rtn;
             }
             catch {
                 return 0;
+            }
+        }
+
+
+        private int GetCertificationValue(string certification) {
+            switch (certification) {
+                case "G":
+                    return 1;
+                case "PG":
+                    return 2;
+                case "PG-13":
+                    return 3;
+                case "R":
+                    return 4;
+                case "NC-17":
+                    return 5;
+                default:
+                    return 100;
             }
         }
     }
