@@ -589,20 +589,24 @@ namespace MediaPortal.Plugins.MovingPictures {
             watchItem.ItemId = 1;
             dialog.Add(watchItem);
 
+            GUIListItem sortItem = new GUIListItem("Sort By");
+            sortItem.ItemId = 2;
+            dialog.Add(sortItem);
+
             GUIListItem listItem = new GUIListItem("List View");
-            listItem.ItemId = 2;
+            listItem.ItemId = 3;
             dialog.Add(listItem);
 
             GUIListItem thumbItem = new GUIListItem("Thumbnail View");
-            thumbItem.ItemId = 3;
+            thumbItem.ItemId = 4;
             dialog.Add(thumbItem);
 
             GUIListItem largeThumbItem = new GUIListItem("Large Thumbnail View");
-            largeThumbItem.ItemId = 4;
+            largeThumbItem.ItemId = 5;
             dialog.Add(largeThumbItem);
 
             GUIListItem filmItem = new GUIListItem("Filmstrip View");
-            filmItem.ItemId = 5;
+            filmItem.ItemId = 6;
             dialog.Add(filmItem);
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
@@ -610,20 +614,138 @@ namespace MediaPortal.Plugins.MovingPictures {
                 case 1:
                     watchedFilter.Active = !watchedFilter.Active;
                     break;
+
                 case 2:
-                    CurrentView = ViewMode.LIST;
+                    showSortContext();
                     break;
                 case 3:
-                    CurrentView = ViewMode.SMALLICON;
+                    CurrentView = ViewMode.LIST;
                     break;
                 case 4:
-                    CurrentView = ViewMode.LARGEICON;
+                    CurrentView = ViewMode.SMALLICON;
                     break;
                 case 5:
+                    CurrentView = ViewMode.LARGEICON;
+                    break;
+                case 6:
                     CurrentView = ViewMode.FILMSTRIP;
                     break;
             }
 
+        }
+
+        private void showSortContext() {
+
+            IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+            dialog.Reset();
+            dialog.SetHeading("Moving Pictures - Sort By");
+
+            GUIListItem titleItem = new GUIListItem("Title");
+            titleItem.ItemId = 1;
+            dialog.Add(titleItem);
+
+            GUIListItem dateAddedItem = new GUIListItem("Date Added");
+            dateAddedItem.ItemId = 2;
+            dialog.Add(dateAddedItem);
+
+            GUIListItem yearItem = new GUIListItem("Year");
+            yearItem.ItemId = 3;
+            dialog.Add(yearItem);
+
+            GUIListItem certificationItem = new GUIListItem("Certification");
+            certificationItem.ItemId = 4;
+            dialog.Add(certificationItem);
+
+            GUIListItem languageItem = new GUIListItem("Language");
+            languageItem.ItemId = 5;
+            dialog.Add(languageItem);
+
+            GUIListItem scoreItem = new GUIListItem("Score");
+            scoreItem.ItemId = 6;
+            dialog.Add(scoreItem);
+
+            GUIListItem userScoreItem = new GUIListItem("User Score");
+            userScoreItem.ItemId = 7;
+            dialog.Add(userScoreItem);
+
+            GUIListItem popularityItem = new GUIListItem("Popularity");
+            popularityItem.ItemId = 8;
+            dialog.Add(popularityItem);
+
+            GUIListItem runtimeItem = new GUIListItem("Runtime");
+            runtimeItem.ItemId = 9;
+            dialog.Add(runtimeItem);
+
+            GUIListItem filePathItem = new GUIListItem("File Path");
+            filePathItem.ItemId = 10;
+            dialog.Add(filePathItem);
+
+            dialog.DoModal(GUIWindowManager.ActiveWindow);
+
+            GUIListItemMovieComparer.SortingFields newSortField = GUIListItemMovieComparer.SortingFields.Title;
+            GUIListItemMovieComparer.SortingDirections defaultSortDirection = GUIListItemMovieComparer.SortingDirections.Ascending;
+
+            switch (dialog.SelectedId) {
+                case 1:
+                    newSortField = GUIListItemMovieComparer.SortingFields.Title;
+                    break;
+
+                case 2:
+                    newSortField = GUIListItemMovieComparer.SortingFields.DateAdded;
+                    defaultSortDirection = GUIListItemMovieComparer.SortingDirections.Descending;
+                    break;
+
+                case 3:
+                    newSortField = GUIListItemMovieComparer.SortingFields.Year;
+                    break;
+
+                case 4:
+                    newSortField = GUIListItemMovieComparer.SortingFields.Certification;
+                    break;
+
+                case 5:
+                    newSortField = GUIListItemMovieComparer.SortingFields.Language;
+                    break;
+
+                case 6:
+                    newSortField = GUIListItemMovieComparer.SortingFields.Score;
+                    break;
+
+                case 7:
+                    newSortField = GUIListItemMovieComparer.SortingFields.UserScore;
+                    break;
+
+                case 8:
+                    newSortField = GUIListItemMovieComparer.SortingFields.Popularity;
+                    break;
+
+                case 9:
+                    newSortField = GUIListItemMovieComparer.SortingFields.Runtime;
+                    break;
+
+                case 10:
+                    newSortField = GUIListItemMovieComparer.SortingFields.FilePath;
+                    break;
+
+                default:
+                    // do nothing
+                    return;
+                    break;
+            }
+
+            if (browser.SortField == newSortField) {
+                // toggle sort direction
+                if (browser.SortDirection == GUIListItemMovieComparer.SortingDirections.Ascending)
+                    browser.SortDirection = GUIListItemMovieComparer.SortingDirections.Descending;
+                else
+                    browser.SortDirection = GUIListItemMovieComparer.SortingDirections.Ascending;
+            }
+            else {
+                browser.SortField = newSortField;
+                browser.SortDirection = defaultSortDirection;
+            }
+
+            browser.ReloadFacade();
         }
 
         private void showDetailsContext() {

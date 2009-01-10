@@ -40,6 +40,16 @@
       <default>90</default>
       <description>The percentage of a movie that must be watched before it will be flagged as watched. This also affects whether resume data is stored.</description>
     </setting>
+
+	  <setting id="default_sort_field" name="Default Sort Field" type="STRING">
+		  <default>title</default>
+		  <description>The default sort field used in the MediaPortal GUI when the plug-in is first opened. Valid options are "title", "dateadded", "year", "certification", "language", "score", "userscore", "popularity", "runtime", "filepath".</description>
+	  </setting>
+
+	  <setting id="default_sort_direction" name="Default Sort Direction" type="STRING">
+		  <default>asc</default>
+		  <description>The default sort direction used in the MediaPortal GUI when the plug-in is first opened. Valid options are "asc" and "desc".</description>
+	  </setting>
   </group>
 
   <group name="Movie Importer">
