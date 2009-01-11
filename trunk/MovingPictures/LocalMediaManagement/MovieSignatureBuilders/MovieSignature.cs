@@ -43,7 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             }
         } private string imdb_id = null;
 
-        public string DiscId { // ex. (16 character hash)
+        public string DiscId { // ex. (16 character hash of a DVD)
             get {
                 if (LocalMedia != null)
                     discid = LocalMedia[0].DiscId;
@@ -52,6 +52,15 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             set { discid = value; }
         } private string discid = null;
 
+        public string MovieHash { // ex. (16 character hash of a movie file)
+            get {
+                if (LocalMedia != null)
+                    filehash = LocalMedia[0].FileHash;
+                return filehash;
+            }
+            set { filehash = value; }
+        } private string filehash = null;
+        
         public List<DBLocalMedia> LocalMedia = null; // LocalMedia collection
 
         #region Read-only
@@ -207,8 +216,8 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region Overrides
 
         public override string ToString() {
-            return String.Format("Path= \"{0}\", Folder= \"{1}\", File= \"{2}\", Title= \"{3}\", Year= {4}, DiscId= \"{5}\", ImdbId= \"{6}\"",
-            this.Path, this.Folder, this.File, this.Title, this.Year.ToString(), this.DiscId, this.ImdbId);
+            return String.Format("Path= \"{0}\", Folder= \"{1}\", File= \"{2}\", Title= \"{3}\", Year= {4}, DiscId= \"{5}\", MovieHash= \"{6}\", ImdbId= \"{7}\"",
+            this.Path, this.Folder, this.File, this.Title, this.Year.ToString(), this.DiscId, this.MovieHash, this.ImdbId);
         }
 
         #endregion

@@ -122,16 +122,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private string volume_serial;
 
-        [DBFieldAttribute(Default = "0")]
+        [DBFieldAttribute(Default = null)]
         public string DiscId {
             get {
-                // Calculate DiscId
                 // todo: how to handle iso?
                 bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
-                if ((discid == "0") && (fileInfo != null) && getDiscId)
-                    if (fileInfo.Name.ToLower() == "video_ts.ifo")
-                        if (volume_serial == DeviceManager.GetDiskSerial(fileInfo.Directory) || String.IsNullOrEmpty(volume_serial))
-                            discid = Utility.GetDiscIdString(fileInfo.DirectoryName);
+                if (discid == null && IsAvailable && getDiscId && (Utility.GetVideoDiscType(fileInfo.FullName) == Utility.VideoDiscType.DVD))
+                    discid = Utility.GetDiscIdString(fileInfo.DirectoryName);
 
                 return discid;
             }
@@ -141,6 +138,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
         private string discid;
+
+        [DBFieldAttribute(Default = null)]
+        public string FileHash {
+            get {
+                if (fileHash == null && IsAvailable && (Utility.GetVideoDiscType(fileInfo.FullName) == Utility.VideoDiscType.UnknownFormat))
+                    fileHash = Utility.GetMovieHashString(fileInfo.FullName);
+
+                return fileHash;
+            }
+            set {
+                fileHash = value;
+                commitNeeded = true;
+            }
+        }
+        private string fileHash;
 
         [DBFieldAttribute(Default = "1")]
         public int Part {

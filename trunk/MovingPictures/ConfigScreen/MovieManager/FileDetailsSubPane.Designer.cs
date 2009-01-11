@@ -31,6 +31,7 @@
             Cornerstone.GUI.Controls.FieldProperty fieldProperty22 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty23 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty24 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty25 = new Cornerstone.GUI.Controls.FieldProperty();
             this.fileList = new System.Windows.Forms.ListBox();
             this.playbackOrderToolStrip = new System.Windows.Forms.ToolStrip();
             this.fileUpButton = new System.Windows.Forms.ToolStripButton();
@@ -140,6 +141,10 @@
             fieldProperty24.FieldName = "DiscId";
             fieldProperty24.ReadOnly = true;
             fieldProperty24.Visible = false;
+            fieldProperty25.DisplayName = "File Hash";
+            fieldProperty25.FieldName = "FileHash";
+            fieldProperty25.ReadOnly = true;
+            fieldProperty25.Visible = false;
             this.fileDetailsList.FieldProperties.Add(fieldProperty17);
             this.fileDetailsList.FieldProperties.Add(fieldProperty18);
             this.fileDetailsList.FieldProperties.Add(fieldProperty19);
@@ -148,6 +153,7 @@
             this.fileDetailsList.FieldProperties.Add(fieldProperty22);
             this.fileDetailsList.FieldProperties.Add(fieldProperty23);
             this.fileDetailsList.FieldProperties.Add(fieldProperty24);
+            this.fileDetailsList.FieldProperties.Add(fieldProperty25);
             this.fileDetailsList.Location = new System.Drawing.Point(0, 111);
             this.fileDetailsList.Name = "fileDetailsList";
             this.fileDetailsList.Size = new System.Drawing.Size(408, 320);
