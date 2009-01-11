@@ -827,8 +827,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         }
 
-        // Pre 0.6.5 LocalMedia correction
-        // This update *should* only trigger once on a pre-0.6.5 database
+        // This update *should* only trigger once on a pre-0.7 database
         private void UpdateMissingDiskInfoProperties(DBLocalMedia localMedia) {
             DriveType type = localMedia.ImportPath.GetDriveType();
             if (String.IsNullOrEmpty(localMedia.VolumeSerial) && type != DriveType.Unknown && type != DriveType.CDRom) {
