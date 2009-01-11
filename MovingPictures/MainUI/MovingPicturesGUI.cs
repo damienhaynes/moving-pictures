@@ -764,6 +764,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             GUIListItem retrieveArtItem = new GUIListItem();
             GUIListItem unwatchedItem = new GUIListItem();
             GUIListItem watchedItem = new GUIListItem();
+            GUIListItem deleteItem = new GUIListItem();
 
             int currID = 1;
 
@@ -801,6 +802,14 @@ namespace MediaPortal.Plugins.MovingPictures {
                 currID++;
             }
 
+            bool deleteEnabled = (bool)MovingPicturesCore.SettingsManager["enable_delete_movie"].Value;
+
+            if (deleteEnabled) {
+                deleteItem = new GUIListItem("Delete Movie");
+                deleteItem.ItemId = currID;
+                dialog.Add(deleteItem);
+                currID++;
+            }
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             if (dialog.SelectedId == detailsItem.ItemId) {
@@ -834,7 +843,32 @@ namespace MediaPortal.Plugins.MovingPictures {
                 browser.ReapplyFilters();
                 browser.ReloadFacade();
             }
+            else if (dialog.SelectedId == deleteItem.ItemId) {
+                deleteMovie();
+            }
+        }
 
+        private void deleteMovie() {
+            GUIDialogYesNo deleteDialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+            deleteDialog.Reset();
+            deleteDialog.SetHeading("Moving Pictures");
+            deleteDialog.SetLine(1, String.Format("You are about to permanently delete {0} from your hard drive", browser.SelectedMovie.Title));
+            deleteDialog.SetLine(2, "Do you want to continue?");
+            deleteDialog.SetDefaultToYes(false);
+            deleteDialog.DoModal(GUIWindowManager.ActiveWindow);
+
+            if (deleteDialog.IsConfirmed) {
+                bool deleteSuccesful = browser.SelectedMovie.DeleteFiles();
+
+                if (deleteSuccesful) {
+                    if (CurrentView == ViewMode.DETAILS)
+                        // return to the facade screen
+                        CurrentView = previousView;
+                }
+                else {
+                    ShowMessage("Moving Pictures", "Delete failed", "", "", "");
+                }
+            }
         }
 
         // rotates the current view to the next available

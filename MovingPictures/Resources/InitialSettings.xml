@@ -55,7 +55,11 @@
       <default>false</default>
       <description>When Moving Pictures starts up, if this option is set to true only Unwatched movies will be displayed until the user changes the filtering options.</description>
     </setting>
-
+	  
+	<setting id="enable_delete_movie" name="Enable Delete Movie" type="BOOL">
+		<default>false</default>
+		<description>Enables a delete menu item, which allows you to delete movies from your hard drive.</description>
+	</setting>
   </group>
 
   <group name="Movie Importer">

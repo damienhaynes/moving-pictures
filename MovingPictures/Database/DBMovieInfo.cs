@@ -434,6 +434,29 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return (int)(100 *(tally / (float) ActualRuntime));
         }
 
+
+        public bool DeleteFiles() {
+            try {
+                FileInfo fInfo = new FileInfo(this.LocalMedia[0].FullPath);
+                bool isFolderDedicated = Utility.isFolderDedicated(fInfo.Directory, this.LocalMedia.Count);
+
+                if (isFolderDedicated) {
+                    fInfo.Directory.Delete(true);
+                }
+                else {
+                    foreach (var item in this.LocalMedia) {
+                        File.Delete(item.FullPath);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex) {
+                logger.LogException(LogLevel.Error, "Error when deleting file", ex);
+                return false;
+            }
+        }
+
         #endregion
 
         #region Coverart Management Methods
