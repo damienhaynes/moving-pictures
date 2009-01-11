@@ -478,6 +478,13 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap splash_small {
+            get {
+                object obj = ResourceManager.GetObject("splash_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap television {
             get {
                 object obj = ResourceManager.GetObject("television", resourceCulture);

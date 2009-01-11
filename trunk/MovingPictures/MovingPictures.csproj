@@ -364,6 +364,8 @@
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.xml" />
     <None Include="Resources\Help\MovingPictures.chm" />
     <None Include="Properties\RevisionInfo.cs" />
+    <None Include="Resources\Images\splash_small.jpg" />
+    <None Include="Resources\Images\splash_large.jpg" />
     <Content Include="Resources\InitialSettings.xml" />
     <Content Include="Resources\Images\accept.png" />
     <Content Include="Resources\Images\approved.png" />

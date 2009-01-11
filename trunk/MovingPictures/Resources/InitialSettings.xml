@@ -47,9 +47,15 @@
 	  </setting>
 
 	  <setting id="default_sort_direction" name="Default Sort Direction" type="STRING">
-		  <default>asc</default>
-		  <description>The default sort direction used in the MediaPortal GUI when the plug-in is first opened. Valid options are "asc" and "desc".</description>
+		  <default>ascending</default>
+		  <description>The default sort direction used in the MediaPortal GUI when the plug-in is first opened. Valid options are "ascending" and "descending".</description>
 	  </setting>
+
+    <setting id="start_watched_filter_on" name="Show Only Unwatched Movies on Startup" type="BOOL">
+      <default>false</default>
+      <description>When Moving Pictures starts up, if this option is set to true only Unwatched movies will be displayed until the user changes the filtering options.</description>
+    </setting>
+
   </group>
 
   <group name="Movie Importer">
