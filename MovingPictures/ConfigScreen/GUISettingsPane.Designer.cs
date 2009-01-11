@@ -49,6 +49,14 @@
             this.label9 = new System.Windows.Forms.Label();
             this.remoteControlCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.label10 = new System.Windows.Forms.Label();
+            this.watchedComboBox = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.sortFieldComboBox = new Cornerstone.GUI.Controls.SettingsComboBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.sortDirComboBox = new Cornerstone.GUI.Controls.SettingsComboBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -314,7 +322,7 @@
             // 
             this.remoteControlCheckBox.AutoSize = true;
             this.remoteControlCheckBox.IgnoreSettingName = false;
-            this.remoteControlCheckBox.Location = new System.Drawing.Point(128, 250);
+            this.remoteControlCheckBox.Location = new System.Drawing.Point(128, 311);
             this.remoteControlCheckBox.Name = "remoteControlCheckBox";
             this.remoteControlCheckBox.Setting = null;
             this.remoteControlCheckBox.Size = new System.Drawing.Size(163, 17);
@@ -325,17 +333,107 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(315, 252);
+            this.linkLabel1.Location = new System.Drawing.Point(315, 313);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(68, 13);
             this.linkLabel1.TabIndex = 30;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "What is this?";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(125, 250);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(91, 13);
+            this.label10.TabIndex = 31;
+            this.label10.Text = "On startup show:";
+            // 
+            // watchedComboBox
+            // 
+            this.watchedComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.watchedComboBox.FormattingEnabled = true;
+            this.watchedComboBox.Items.AddRange(new object[] {
+            "All Movies",
+            "Unwatched Movies"});
+            this.watchedComboBox.Location = new System.Drawing.Point(227, 247);
+            this.watchedComboBox.Name = "watchedComboBox";
+            this.watchedComboBox.Size = new System.Drawing.Size(121, 21);
+            this.watchedComboBox.TabIndex = 32;
+            this.watchedComboBox.SelectedIndexChanged += new System.EventHandler(this.watchedComboBox_SelectedIndexChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(125, 278);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(96, 13);
+            this.label11.TabIndex = 33;
+            this.label11.Text = "On startup sort by";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox5.Location = new System.Drawing.Point(120, 302);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(380, 3);
+            this.groupBox5.TabIndex = 35;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "groupBox5";
+            // 
+            // sortFieldComboBox
+            // 
+            this.sortFieldComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.sortFieldComboBox.EnumType = null;
+            this.sortFieldComboBox.FormattingEnabled = true;
+            this.sortFieldComboBox.Location = new System.Drawing.Point(227, 275);
+            this.sortFieldComboBox.Name = "sortFieldComboBox";
+            this.sortFieldComboBox.Setting = null;
+            this.sortFieldComboBox.Size = new System.Drawing.Size(93, 21);
+            this.sortFieldComboBox.TabIndex = 36;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(326, 278);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(15, 13);
+            this.label12.TabIndex = 37;
+            this.label12.Text = "in";
+            // 
+            // sortDirComboBox
+            // 
+            this.sortDirComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.sortDirComboBox.EnumType = null;
+            this.sortDirComboBox.FormattingEnabled = true;
+            this.sortDirComboBox.Location = new System.Drawing.Point(347, 275);
+            this.sortDirComboBox.Name = "sortDirComboBox";
+            this.sortDirComboBox.Setting = null;
+            this.sortDirComboBox.Size = new System.Drawing.Size(82, 21);
+            this.sortDirComboBox.TabIndex = 38;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(435, 278);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(37, 13);
+            this.label13.TabIndex = 39;
+            this.label13.Text = "order.";
+            // 
             // GUISettingsPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.sortDirComboBox);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.sortFieldComboBox);
+            this.Controls.Add(this.groupBox5);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.watchedComboBox);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.remoteControlCheckBox);
             this.Controls.Add(this.label9);
@@ -399,5 +497,13 @@
         private System.Windows.Forms.Label label9;
         private Cornerstone.GUI.Controls.SettingCheckBox remoteControlCheckBox;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox watchedComboBox;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private Cornerstone.GUI.Controls.SettingsComboBox sortFieldComboBox;
+        private System.Windows.Forms.Label label12;
+        private Cornerstone.GUI.Controls.SettingsComboBox sortDirComboBox;
+        private System.Windows.Forms.Label label13;
     }
 }

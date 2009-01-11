@@ -48,6 +48,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
             
             // set visibility of progressbar and info labels
+            progressPanel.Visible = true;
             currentTaskDesc.Visible = true;
             countProgressLabel.Visible = true;
 
@@ -58,6 +59,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             // if finished hide the progress info components
             if (percentDone == 100) {
+                progressPanel.Visible = false;
+
                 currentTaskDesc.Visible = false;
                 countProgressLabel.Visible = false;
                 progressBar.Value = 0;
@@ -287,6 +290,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             approveButton.Enabled = approveButtonEnabled;
             rescanButton.Enabled = validMatchSelected;
             ignoreButton.Enabled = ignoreButtonEnabled;
+
+            if (unapprovedGrid.SelectedRows.Count > 0)
+                manualAssignButton.Enabled = true;
+            else
+                manualAssignButton.Enabled = false;
 
             // check if we have multiple rows selected to join
             if (unapprovedGrid.SelectedRows.Count > 1) {

@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Cornerstone.Database.Tables;
+using MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class GUISettingsPane : UserControl {
@@ -13,6 +14,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         DBSetting clickGoesToDetails;
         DBSetting dvdInsertedAction;
         DBSetting defaultView;
+        DBSetting watchedFilterStartsOn;
 
         public GUISettingsPane() {
             InitializeComponent();
@@ -25,9 +27,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             watchedPercentTextBox.Setting = MovingPicturesCore.SettingsManager["gui_watch_percentage"];
             remoteControlCheckBox.Setting = MovingPicturesCore.SettingsManager["enable_rc_filter"];
 
+            sortFieldComboBox.Setting = MovingPicturesCore.SettingsManager["default_sort_field"];
+            sortFieldComboBox.EnumType = typeof(GUIListItemMovieComparer.SortingFields);
+
+            sortDirComboBox.Setting = MovingPicturesCore.SettingsManager["default_sort_direction"];
+            sortDirComboBox.EnumType = typeof(GUIListItemMovieComparer.SortingDirections);
+
             clickGoesToDetails = MovingPicturesCore.SettingsManager["click_to_details"];
             dvdInsertedAction = MovingPicturesCore.SettingsManager["on_disc_loaded"];
             defaultView = MovingPicturesCore.SettingsManager["default_view"];
+            watchedFilterStartsOn = MovingPicturesCore.SettingsManager["start_watched_filter_on"];
         }
 
         private void GUISettingsPane_Load(object sender, EventArgs e) {
@@ -57,6 +66,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 displayDvdDetailsRadioButton.Checked = true;
             else if (dvdInsertedAction.StringValue.Equals("NOTHING"))
                 doNothingRadioButton.Checked = true;
+
+            // configure watched filter settings
+            if ((bool)watchedFilterStartsOn.Value)
+                watchedComboBox.SelectedIndex = 1;
+            else
+                watchedComboBox.SelectedIndex = 0;
         }
 
         #region Movie Clicked Action Checkboxes
@@ -111,6 +126,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 defaultView.Value = "largethumbs";
             if (defaultViewComboBox.SelectedIndex == 3)
                 defaultView.Value = "filmstrip";
+        }
+
+        private void watchedComboBox_SelectedIndexChanged(object sender, EventArgs e) {
+            if (watchedComboBox.SelectedIndex == 0)
+                watchedFilterStartsOn.Value = false;
+            if (watchedComboBox.SelectedIndex == 1)
+                watchedFilterStartsOn.Value = true;
         }
     }
 }

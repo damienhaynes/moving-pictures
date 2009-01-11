@@ -365,6 +365,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                 watchedFilter = new WatchedFlagFilter();
                 browser.ActiveFilters.Add(watchedFilter);
 
+                // if option is set, turn on the watched movies filter by default
+                bool startWithWatchedFilterOn = (bool)MovingPicturesCore.SettingsManager["start_watched_filter_on"].Value;
+                if (startWithWatchedFilterOn)
+                    watchedFilter.Active = true;
+
                 browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(updateMovieDetails);
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
 
