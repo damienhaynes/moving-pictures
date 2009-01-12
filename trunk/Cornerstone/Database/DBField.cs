@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Cornerstone.Database {
     public class DBField {
-        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, TYPE, ENUM, DB_OBJECT }
+        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, TYPE, ENUM, DATE_TIME, DB_OBJECT }
 
         #region Private Variables
         
@@ -52,6 +52,10 @@ namespace Cornerstone.Database {
                 type = DBDataType.BOOL;
             else if (propertyInfo.PropertyType == typeof(Boolean))
                 type = DBDataType.BOOL;
+            else if (propertyInfo.PropertyType == typeof(DateTime))
+                type = DBDataType.DATE_TIME;
+            else if (propertyInfo.PropertyType == typeof(DateTime?))
+                type = DBDataType.DATE_TIME;
             else if (propertyInfo.PropertyType == typeof(Type))
                 type = DBDataType.TYPE;
             else if (propertyInfo.PropertyType.IsEnum)
@@ -121,6 +125,16 @@ namespace Cornerstone.Database {
                             return false;
                         else
                             return attribute.Default == "true" || attribute.Default.ToString() == "1";
+                    case DBDataType.DATE_TIME:
+                        if (attribute.Default == "")
+                            return DateTime.Now;
+                        else {
+                            try {
+                                return DateTime.Parse(attribute.Default);
+                            }
+                            catch { }
+                        }
+                        return DateTime.Now;
                     case DBDataType.STRING_OBJECT:
                         IStringSourcedObject newObj = (IStringSourcedObject)propertyInfo.PropertyType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
                         newObj.LoadFromString(attribute.Default);
@@ -195,6 +209,16 @@ namespace Cornerstone.Database {
                             object enumVal = Enum.Parse(enumType, value.ToString());
                             propertyInfo.GetSetMethod().Invoke(owner, new object[] { enumVal });
                         }
+                        break;
+                    case DBDataType.DATE_TIME:
+                        DateTime newDateTimeObj = DateTime.Now;
+                        if (value.ToString().Trim().Length != 0)
+                            try {
+                                newDateTimeObj = DateTime.Parse(value.ToString());
+                            }
+                            catch { }
+
+                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { newDateTimeObj });
                         break;
                     case DBDataType.DB_OBJECT:
                         DatabaseTable newDBObj;

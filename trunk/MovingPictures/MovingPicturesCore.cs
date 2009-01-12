@@ -21,6 +21,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private const string dbFileName = "movingpictures.db3";
         private const string logFileName = "movingpictures.log";
+        private const string oldLogFileName = "movingpictures.old.log";
 
         #region Properties
 
@@ -144,8 +145,13 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             try {
                 FileInfo logFile = new FileInfo(Config.GetFile(Config.Dir.Log, logFileName));
-                if (logFile.Exists)
+                if (logFile.Exists) {
+                    if (File.Exists(Config.GetFile(Config.Dir.Log, oldLogFileName)))
+                        File.Delete(Config.GetFile(Config.Dir.Log, oldLogFileName));
+
+                    logFile.CopyTo(Config.GetFile(Config.Dir.Log, oldLogFileName));
                     logFile.Delete();
+                }
             }
             catch (Exception) { }
 
@@ -177,6 +183,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                     logLevel = LogLevel.Debug;
                     break;
             }
+
+            #if DEBUG
+            logLevel = LogLevel.Debug;
+            #endif
 
             LoggingRule rule = new LoggingRule("*", logLevel, fileTarget);
             config.LoggingRules.Add(rule);

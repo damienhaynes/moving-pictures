@@ -213,6 +213,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _popularity;
 
+        [DBFieldAttribute(FieldName="date_added")]
+        public DateTime DateAdded {
+            get { return _dateAdded; }
+
+            set {
+                _dateAdded = value;
+                commitNeeded = true;
+            }
+        } private DateTime _dateAdded;
+
 
         [DBFieldAttribute]
         public int Runtime {
