@@ -173,8 +173,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return UpdateResults.FAILED_NEED_ID;
 
             // load params
-            foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo))) 
-                paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
+            foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo))) {
+                if (currField.GetValue(movie) != null)
+                    paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
+            }
 
             // try to retrieve results
             results = scraper.Execute("get_details", paramList);
@@ -211,7 +213,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // load params for scraper
             foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo)))
-                paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
+                if (currField.GetValue(movie) != null)
+                    paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
 
             // run the scraper
             results = scraper.Execute("get_cover_art", paramList);

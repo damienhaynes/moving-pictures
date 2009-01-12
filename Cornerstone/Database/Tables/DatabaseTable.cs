@@ -89,6 +89,11 @@ namespace Cornerstone.Database.Tables {
                 object newValue = currField.GetValue(newData);
                 object oldValue = currField.GetValue(this);
                 if (currField.AutoUpdate) {
+                    if (newValue == null) {
+                        currField.SetValue(this, newValue);
+                        continue;
+                    }
+                    
                     // if the updated value is just the default, don't update. 
                     // something is better than nothing
                     if (newValue.Equals(currField.Default))
