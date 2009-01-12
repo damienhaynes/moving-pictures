@@ -393,6 +393,9 @@ namespace Cornerstone.Database {
             else if (value is Type) 
                 strVal = ((Type)value).AssemblyQualifiedName;
 
+            else if (value is DateTime) {
+                strVal = ((DateTime)value).ToUniversalTime().ToString("u");
+            }
             // everythign else just uses ToString()
             else
                 strVal = value.ToString();
