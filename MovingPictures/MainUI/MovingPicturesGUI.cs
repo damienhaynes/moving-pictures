@@ -376,14 +376,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             // start the device monitor
-            if (!MovingPicturesCore.DeviceManager.MonitorStarted) {
-                MovingPicturesCore.DeviceManager.Handle = GUIGraphicsContext.form.Handle;
-                MovingPicturesCore.DeviceManager.StartMonitor();
+            if (!DeviceManager.MonitorStarted) {
+                DeviceManager.Handle = GUIGraphicsContext.form.Handle;
+                DeviceManager.StartMonitor();
                 
                 // Listen to the DeviceManager
                 logger.Debug("Listening for device changes.");
-                MovingPicturesCore.DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
-                MovingPicturesCore.DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
+                DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
+                DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
 
             }
 

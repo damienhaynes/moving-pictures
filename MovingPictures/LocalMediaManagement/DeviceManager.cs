@@ -32,11 +32,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             get {
                 // If WMI information is not available
                 // Refresh the object
-                if (driveInfo.IsReady && managementObject == null)
+                bool ready = driveInfo.IsReady;
+                if (ready && managementObject == null)
                     Refresh();
                 
                 // Just relaying DriveInfo.IsReady for convience
-                return driveInfo.IsReady;
+                return ready;
             }
         }
 
@@ -111,35 +112,37 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// Refresh the VolumeInfo object
         /// </summary>
         public void Refresh() {
-            if (driveInfo.IsReady) {
-                try {
-                    // Query WMI for extra disk information
-                    SelectQuery query = new SelectQuery("select * from win32_logicaldisk where deviceid = '" + driveInfo.Name.Substring(0, 2) + "'");
-                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
-                    // this statement should return only one row (or none)
-                    foreach (ManagementBaseObject mo in searcher.Get()) {
-                        Refresh(mo);
+            lock (driveInfo) {
+                if (driveInfo.IsReady) {
+                    try {
+                        // Query WMI for extra disk information
+                        SelectQuery query = new SelectQuery("select * from win32_logicaldisk where deviceid = '" + driveInfo.Name.Substring(0, 2) + "'");
+                        ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+                        // this statement should return only one row (or none)
+                        foreach (ManagementBaseObject mo in searcher.Get()) {
+                            Refresh(mo);
+                        }
+
+                        // Return so the variables won't get reset after succesful refresh
+                        return;
                     }
-
-                    // Return so the variables won't get reset after succesful refresh
-                    return;
+                    catch (Exception e) {
+                        // Log the WMI query exception
+                        logger.Debug("Error during WMI query for '{0}', message: {1}", driveInfo.Name.Substring(0, 2), e.Message);
+                    }
                 }
-                catch (Exception e) {
-                    // Log the WMI query exception
-                    logger.Debug("Error during WMI query for '{0}', message: {1}", driveInfo.Name.Substring(0, 2), e.Message);
-                }                
-            }
 
-          // reset the private variables if we make it this far
-          serial = null;
-          managementObject = null;
+                // reset the private variables if we make it this far
+                serial = null;
+                managementObject = null;
+            }
         }
 
         /// <summary>
         /// Refresh the VolumeInfo object with ManagementBaseObject information.
         /// </summary>
         /// <param name="mo"></param>
-        public void Refresh(ManagementBaseObject mo) {
+        private void Refresh(ManagementBaseObject mo) {
             // Update WMI management object
             managementObject = mo;
             
@@ -167,18 +170,18 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         // Volume Information Cache
-        private static Dictionary<string, VolumeInfo> volumes = new Dictionary<string, VolumeInfo>();
+        private static Dictionary<string, VolumeInfo> volumes;
         
         // Monitor
-        private DeviceVolumeMonitor monitor;
+        private static DeviceVolumeMonitor monitor;
 
         #endregion
 
         #region Events / Delegates
 
         public delegate void DeviceManagerEvent(string volume, string serial);
-        public event DeviceManagerEvent OnVolumeInserted;
-        public event DeviceManagerEvent OnVolumeRemoved;
+        public static event DeviceManagerEvent OnVolumeInserted;
+        public static event DeviceManagerEvent OnVolumeRemoved;
 
         #endregion
 
@@ -187,25 +190,31 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <summary>
         /// Check if the monitor is started
         /// </summary>
-        public bool MonitorStarted {
+        public static bool MonitorStarted {
             get {
                 return monitorStarted;
             }
-        } private bool monitorStarted = false;
+        } private static bool monitorStarted = false;
 
         /// <summary>
         /// Set this property to a form handle before starting the monitor   
         /// </summary>
-        public IntPtr Handle {
+        public static IntPtr Handle {
             get {return handle;}
             set { handle = value; }
-        } private IntPtr handle = IntPtr.Zero;
+        } private static IntPtr handle = IntPtr.Zero;
 
         #endregion
 
         #region Constructor
 
-        public DeviceManager() { }
+        private DeviceManager() {
+
+        }
+
+        static DeviceManager() {
+            volumes = new Dictionary<string, VolumeInfo>();
+        }
 
         ~DeviceManager() {
             if (monitorStarted)
@@ -214,9 +223,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         #endregion
 
-        #region Monitor: DeviceVolumeMonitor
+        #region Monitor
 
-        private void startMonitor() {
+        private static void startMonitor() {
             if (monitor == null) {
                 try {
                     monitor = new DeviceVolumeMonitor(handle);
@@ -234,7 +243,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }           
         }
 
-        private void stopMonitor() {
+        private static void stopMonitor() {
             if (monitor != null) {
                 try {
                     monitor.Dispose();
@@ -247,7 +256,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         }
 
-        private void dvVolumeInserted(int bitMask) {
+        private static void dvVolumeInserted(int bitMask) {
             // get volume letter
             string volume = monitor.MaskToLogicalPaths(bitMask);
 
@@ -259,7 +268,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             invokeOnVolumeInserted(volume, volumeInfo.Serial);
         }
 
-        private void dvVolumeRemoved(int bitMask) {
+        private static void dvVolumeRemoved(int bitMask) {
             // get volume letter
             string volume = monitor.MaskToLogicalPaths(bitMask);
             
@@ -280,7 +289,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         /// <param name="volume"></param>
         /// <param name="serial"></param>
-        private void invokeOnVolumeInserted(string volume, string serial) {
+        private static void invokeOnVolumeInserted(string volume, string serial) {
             logger.Debug("Event: OnVolumeInserted, Volume: {0}, Serial: {1}", volume, serial);
             if (OnVolumeInserted != null) {
                 OnVolumeInserted(volume, serial);
@@ -292,7 +301,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         /// <param name="volume"></param>
         /// <param name="serial"></param>
-        private void invokeOnVolumeRemoved(string volume, string serial) {
+        private static void invokeOnVolumeRemoved(string volume, string serial) {
             logger.Debug("Event: OnVolumeRemoved, Volume: {0}, Serial: {1}", volume, serial);
             if (OnVolumeRemoved != null) {
                 OnVolumeRemoved(volume, serial);               
@@ -307,7 +316,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <summary>
         /// Start monitoring volume changes
         /// </summary>
-        public void StartMonitor() {
+        public static void StartMonitor() {
             logger.Info("Starting device monitor ...");
             startMonitor();
 
@@ -325,7 +334,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <summary>
         /// Stop monitoring volume changes
         /// </summary>
-        public void StopMonitor() {
+        public static void StopMonitor() {
             if (!monitorStarted) {
                 logger.Debug("Device monitor was not running.");
                 return;
