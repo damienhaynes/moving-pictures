@@ -113,7 +113,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public MovieImporter() {
             initialize();
             MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectDeleted);
-            MovingPicturesCore.DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
+            DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
             percentDone = 0;
         }
 

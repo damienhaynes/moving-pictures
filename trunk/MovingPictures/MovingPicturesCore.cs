@@ -55,16 +55,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         } private static SettingsManager settingsManager;
 
-        // The DeviceManager object that should be used by all components of the plugin
-        public static DeviceManager DeviceManager {
-            get {
-                if (deviceManager == null)
-                    deviceManager = new DeviceManager();
-
-                return deviceManager;
-            }
-        } private static DeviceManager deviceManager;
-
         public static DataProviderManager DataProviderManager {
             get {
                 return DataProviderManager.GetInstance();
@@ -104,7 +94,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         public static void Shutdown() {
-            deviceManager.StopMonitor();
+            DeviceManager.StopMonitor();
             importer.Stop();
             settingsManager.Shutdown();
 

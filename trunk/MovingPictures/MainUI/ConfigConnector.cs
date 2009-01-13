@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
@@ -39,8 +40,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             
             try {
                 MovingPicturesConfig configScr = new MovingPicturesConfig();
-                MovingPicturesCore.DeviceManager.Handle = configScr.Handle;
-                MovingPicturesCore.DeviceManager.StartMonitor();
+                DeviceManager.Handle = configScr.Handle;
+                DeviceManager.StartMonitor();
+
                 configScr.ShowDialog();
             }
             catch (Exception e) {
