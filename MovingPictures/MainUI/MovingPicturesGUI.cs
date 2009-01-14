@@ -51,6 +51,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         private DiskInsertedAction diskInsertedAction;
         Dictionary<string, string> recentInsertedDiskSerials;
 
+        private bool waitingForMedia = false;
+        private string waitingForMediaSerial;
+
         #endregion
 
         #region GUI Controls
@@ -278,6 +281,44 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (line3 != null) dialog.SetLine(3, line3);
             if (line4 != null) dialog.SetLine(4, line4);
             dialog.DoModal(GetID);
+        }
+
+        /// <summary>
+        /// Displays a yes/no dialog with custom labels for the buttons
+        /// This method may become obsolete in the future if media portal adds more dialogs
+        /// </summary>
+        /// <returns>True if yes was clicked, False if no was clicked</returns>
+        private bool ShowCustomYesNo(string heading, string line1, string line2, string line3, string line4, string yesLabel, string noLabel, bool defaultYes) {
+            GUIDialogYesNo dialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+            try {
+                dialog.Reset();
+                dialog.SetHeading(heading);
+                if (!String.IsNullOrEmpty(line1)) dialog.SetLine(1, line1);
+                if (!String.IsNullOrEmpty(line1)) dialog.SetLine(2, line2);
+                if (!String.IsNullOrEmpty(line1)) dialog.SetLine(3, line3);
+                if (!String.IsNullOrEmpty(line1)) dialog.SetLine(4, line4);
+                dialog.SetDefaultToYes(defaultYes);
+
+
+                foreach (System.Windows.UIElement item in dialog.Children) {
+                    if (item is GUIButtonControl) {
+                        GUIButtonControl btn = (GUIButtonControl)item;
+                        if (btn.GetID == 11) // Yes button
+                            btn.Label = yesLabel;
+                        else if (btn.GetID == 10) // No button
+                            btn.Label = noLabel;
+                    }
+                }
+
+                dialog.DoModal(GetID);
+
+                return dialog.IsConfirmed;
+            }
+            finally {
+                // set the standard yes/no dialog back to it's original state (yes/no buttons)
+                if (dialog != null)
+                    dialog.ClearAll();
+            }
         }
 
         private void OnBrowserContentsChanged() {
@@ -645,7 +686,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             dialog.Reset();
             dialog.SetHeading("Moving Pictures - Sort By");
 
-            GUIListItem titleItem = new GUIListItem("Title");
+            GUIListItem titleItem = new GUIListItem(GUILocalizeStrings.Get(369)); // "Title"
             titleItem.ItemId = 1;
             dialog.Add(titleItem);
 
@@ -653,7 +694,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             dateAddedItem.ItemId = 2;
             dialog.Add(dateAddedItem);
 
-            GUIListItem yearItem = new GUIListItem("Year");
+            GUIListItem yearItem = new GUIListItem(GUILocalizeStrings.Get(345)); // Year
             yearItem.ItemId = 3;
             dialog.Add(yearItem);
 
@@ -661,11 +702,11 @@ namespace MediaPortal.Plugins.MovingPictures {
             certificationItem.ItemId = 4;
             dialog.Add(certificationItem);
 
-            GUIListItem languageItem = new GUIListItem("Language");
+            GUIListItem languageItem = new GUIListItem(GUILocalizeStrings.Get(248)); // Language
             languageItem.ItemId = 5;
             dialog.Add(languageItem);
 
-            GUIListItem scoreItem = new GUIListItem("Score");
+            GUIListItem scoreItem = new GUIListItem(GUILocalizeStrings.Get(19005)); // Score
             scoreItem.ItemId = 6;
             dialog.Add(scoreItem);
 
@@ -849,12 +890,46 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void deleteMovie() {
+            DBLocalMedia firstFile = browser.SelectedMovie.LocalMedia[0];
+            FileInfo fInfo = new FileInfo(firstFile.FullPath);
+
+            // if the file is available and read only, or known to be stored on optical media, prompt to ignore.
+            if ((firstFile.IsAvailable && fInfo.IsReadOnly) || DeviceManager.GetVolumeInfo(firstFile.Volume).Drive.DriveType == DriveType.CDRom) {
+                GUIDialogYesNo ignoreDialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+                ignoreDialog.Reset();
+                ignoreDialog.SetHeading("Moving Pictures");
+                ignoreDialog.SetLine(1, "Cannot delete a read-only movie.");
+                ignoreDialog.SetLine(2, "Would you like Moving Pictures to ignore this movie?");
+                ignoreDialog.SetDefaultToYes(false);
+                ignoreDialog.DoModal(GUIWindowManager.ActiveWindow);
+
+                if (ignoreDialog.IsConfirmed) {
+                    browser.SelectedMovie.DeleteAndIgnore();
+                    if (CurrentView == ViewMode.DETAILS)
+                        // return to the facade screen
+                        CurrentView = previousView;
+                }
+                return;
+            }
+
+
+            // if the file is offline display an error dialog
+            if (!firstFile.IsAvailable) {
+                ShowMessage("Moving Pictures", "Not able to delete " + browser.SelectedMovie.Title, "because the file is offline", null, null);
+                return;
+            }
+
+
+            // if the file is available and not read only, confirm delete.
             GUIDialogYesNo deleteDialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
             deleteDialog.Reset();
             deleteDialog.SetHeading("Moving Pictures");
-            deleteDialog.SetLine(1, String.Format("You are about to permanently delete {0} from your hard drive", browser.SelectedMovie.Title));
-            deleteDialog.SetLine(2, "Do you want to continue?");
+            deleteDialog.SetLine(1, "Do you want to permanently delete");
+            deleteDialog.SetLine(2, browser.SelectedMovie.Title);
+            deleteDialog.SetLine(3, "from your hard drive?");
             deleteDialog.SetDefaultToYes(false);
+
+
             deleteDialog.DoModal(GUIWindowManager.ActiveWindow);
 
             if (deleteDialog.IsConfirmed) {
@@ -866,7 +941,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                         CurrentView = previousView;
                 }
                 else {
-                    ShowMessage("Moving Pictures", "Delete failed", "", "", "");
+                    ShowMessage("Moving Pictures", "Delete failed", null, null, null);
                 }
             }
         }
@@ -975,7 +1050,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 // if we have a multi-part movie composed of disk images and we are not resuming 
                 // ask which part the user wants to play
                 string firstExtension = movie.LocalMedia[0].File.Extension;
-                if (!resume && movie.LocalMedia.Count > 1 && (DaemonTools.IsImageFile(firstExtension) || firstExtension == ".ifo")) {
+                if (!resume && movie.LocalMedia.Count > 1 && (DaemonTools.IsImageFile(firstExtension) || firstExtension.ToLower() == ".ifo")) {
                     GUIDialogFileStacking dlg = (GUIDialogFileStacking)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_FILESTACKING);
                     if (null != dlg) {
                         dlg.SetNumberOfFiles(movie.LocalMedia.Count);
@@ -987,16 +1062,41 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
 
-            // if the media is missing, alert the user and quit.
             DBLocalMedia mediaToPlay = movie.LocalMedia[part - 1];
-            if (!mediaToPlay.IsAvailable) {
-                ShowMessage("Media Not Available",
-                            "The media for the Movie you have selected is not",
-                            "currently available. Please insert or connect media ",
-                            "labeled: " + mediaToPlay.MediaLabel, null);
-                return;
+
+            // If the media is missing, this loop will ask the user to insert it.
+            // This loop can exit in 2 ways:
+            // 1. the user clicked "retry" and the media is now available
+            // 2. the user clicked "cancel" and we break out of the method
+            while (!mediaToPlay.IsAvailable) {
+
+                // the waiting for variables are set so that
+                // we can auto play in the OnVolumeInserted event handler.
+                waitingForMedia = true;
+                waitingForMediaSerial = mediaToPlay.VolumeSerial;
+
+                bool retry = ShowCustomYesNo("Media Not Available",
+                                            "The media for the movie you have selected is not",
+                                            "currently available. Please insert or connect media",
+                                            "labeled: " + mediaToPlay.MediaLabel,
+                                            null, "Retry", GUILocalizeStrings.Get(222), true);
+
+                waitingForMedia = false;
+                waitingForMediaSerial = "";
+
+                if (retry) {
+                    // user clicked Retry,
+                    // do nothing and let the while loop
+                    // test it's condition again
+                }
+                else {
+                    // user clicked Cancel, break out of this method.
+                    return;
+                }
             }
-            else if (mediaToPlay.IsRemoved) {
+
+
+            if (mediaToPlay.IsRemoved) {
                 ShowMessage("Error",
                             "The media for the Movie you have selected is missing!",
                             "Very sorry but something has gone wrong...", null, null);
@@ -1328,14 +1428,29 @@ namespace MediaPortal.Plugins.MovingPictures {
             // only respond when the plugin (or it's playback) is active
             if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlaying)
                 return;
-            
-            logger.Debug("onVolumeInserted: " + volume);
+
+            logger.Debug("OnVolumeInserted  volume: {0}; serial: {1}", volume, serial);
 
             if (GUIWindowManager.ActiveWindow == GetID) {
 
                 // Clear recent disc information
                 logger.Debug("Resetting Recent Disc Information.");
                 recentInsertedDiskSerials.Clear();
+
+
+                if (waitingForMedia) {
+                    if (waitingForMediaSerial == serial) {
+                        // Correct volume inserted.  Starting playback.
+                        waitingForMedia = false;
+                        waitingForMediaSerial = "";
+                        playSelectedMovie();
+
+                        // Why is the following needed?  For some reason, playSelectedMovie() isn't 
+                        // playing in full screen.  I have to manually switch to fullscreen here. - Z6
+                        GUIGraphicsContext.IsFullScreenVideo = true;
+                        return;
+                    }
+                }
 
                 // DVD / Blu-ray 
                 // Try to grab a valid video path from the disc
