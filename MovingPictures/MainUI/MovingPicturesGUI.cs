@@ -294,9 +294,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                 dialog.Reset();
                 dialog.SetHeading(heading);
                 if (!String.IsNullOrEmpty(line1)) dialog.SetLine(1, line1);
-                if (!String.IsNullOrEmpty(line1)) dialog.SetLine(2, line2);
-                if (!String.IsNullOrEmpty(line1)) dialog.SetLine(3, line3);
-                if (!String.IsNullOrEmpty(line1)) dialog.SetLine(4, line4);
+                if (!String.IsNullOrEmpty(line2)) dialog.SetLine(2, line2);
+                if (!String.IsNullOrEmpty(line3)) dialog.SetLine(3, line3);
+                if (!String.IsNullOrEmpty(line4)) dialog.SetLine(4, line4);
                 dialog.SetDefaultToYes(defaultYes);
 
 
@@ -891,10 +891,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void deleteMovie() {
             DBLocalMedia firstFile = browser.SelectedMovie.LocalMedia[0];
-            FileInfo fInfo = new FileInfo(firstFile.FullPath);
 
             // if the file is available and read only, or known to be stored on optical media, prompt to ignore.
-            if ((firstFile.IsAvailable && fInfo.IsReadOnly) || DeviceManager.GetVolumeInfo(firstFile.Volume).Drive.DriveType == DriveType.CDRom) {
+            if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || DeviceManager.GetVolumeInfo(firstFile.Volume).Drive.DriveType == DriveType.CDRom) {
                 GUIDialogYesNo ignoreDialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
                 ignoreDialog.Reset();
                 ignoreDialog.SetHeading("Moving Pictures");
