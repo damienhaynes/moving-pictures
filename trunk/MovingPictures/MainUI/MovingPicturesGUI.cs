@@ -635,46 +635,24 @@ namespace MediaPortal.Plugins.MovingPictures {
             watchItem.ItemId = 1;
             dialog.Add(watchItem);
 
-            GUIListItem sortItem = new GUIListItem("Sort By");
+            GUIListItem sortItem = new GUIListItem("Sort By ...");
             sortItem.ItemId = 2;
             dialog.Add(sortItem);
 
-            GUIListItem listItem = new GUIListItem("List View");
-            listItem.ItemId = 3;
-            dialog.Add(listItem);
-
-            GUIListItem thumbItem = new GUIListItem("Thumbnail View");
-            thumbItem.ItemId = 4;
-            dialog.Add(thumbItem);
-
-            GUIListItem largeThumbItem = new GUIListItem("Large Thumbnail View");
-            largeThumbItem.ItemId = 5;
-            dialog.Add(largeThumbItem);
-
-            GUIListItem filmItem = new GUIListItem("Filmstrip View");
-            filmItem.ItemId = 6;
-            dialog.Add(filmItem);
+            GUIListItem viewItem = new GUIListItem("Change View ...");
+            viewItem.ItemId = 3;
+            dialog.Add(viewItem);
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             switch (dialog.SelectedId) {
                 case 1:
                     watchedFilter.Active = !watchedFilter.Active;
                     break;
-
                 case 2:
                     showSortContext();
                     break;
                 case 3:
-                    CurrentView = ViewMode.LIST;
-                    break;
-                case 4:
-                    CurrentView = ViewMode.SMALLICON;
-                    break;
-                case 5:
-                    CurrentView = ViewMode.LARGEICON;
-                    break;
-                case 6:
-                    CurrentView = ViewMode.FILMSTRIP;
+                    showChangeViewContext();
                     break;
             }
 
@@ -792,6 +770,47 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             browser.ReloadFacade();
+        }
+
+        private void showChangeViewContext() {
+
+            IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+            dialog.Reset();
+            dialog.SetHeading("Moving Pictures - Change View");
+
+
+            GUIListItem listItem = new GUIListItem("List View");
+            listItem.ItemId = 1;
+            dialog.Add(listItem);
+
+            GUIListItem thumbItem = new GUIListItem("Thumbnail View");
+            thumbItem.ItemId = 2;
+            dialog.Add(thumbItem);
+
+            GUIListItem largeThumbItem = new GUIListItem("Large Thumbnail View");
+            largeThumbItem.ItemId = 3;
+            dialog.Add(largeThumbItem);
+
+            GUIListItem filmItem = new GUIListItem("Filmstrip View");
+            filmItem.ItemId = 4;
+            dialog.Add(filmItem);
+
+            dialog.DoModal(GUIWindowManager.ActiveWindow);
+
+            switch (dialog.SelectedId) {
+                case 1:
+                    CurrentView = ViewMode.LIST;
+                    break;
+                case 2:
+                    CurrentView = ViewMode.SMALLICON;
+                    break;
+                case 3:
+                    CurrentView = ViewMode.LARGEICON;
+                    break;
+                case 4:
+                    CurrentView = ViewMode.FILMSTRIP;
+                    break;
+            }
         }
 
         private void showDetailsContext() {
