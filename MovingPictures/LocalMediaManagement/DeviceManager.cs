@@ -113,10 +113,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         public void Refresh() {
             lock (driveInfo) {
+                string driveLetter = driveInfo.Name.Substring(0, 2);
+                logger.Debug("Checking status of drive {0}", driveLetter);
                 if (driveInfo.IsReady) {
+                    logger.Debug("Querying serial for {0}", driveLetter);
                     try {
                         // Query WMI for extra disk information
-                        SelectQuery query = new SelectQuery("select * from win32_logicaldisk where deviceid = '" + driveInfo.Name.Substring(0, 2) + "'");
+                        SelectQuery query = new SelectQuery("select * from win32_logicaldisk where deviceid = '" + driveLetter + "'");
                         ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
                         // this statement should return only one row (or none)
                         foreach (ManagementBaseObject mo in searcher.Get()) {
@@ -128,11 +131,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     }
                     catch (Exception e) {
                         // Log the WMI query exception
-                        logger.Debug("Error during WMI query for '{0}', message: {1}", driveInfo.Name.Substring(0, 2), e.Message);
+                        logger.Debug("Error during query for '{0}', message: {1}", driveLetter, e.Message);
                     }
                 }
 
                 // reset the private variables if we make it this far
+                logger.Debug("Drive {0} is not ready. Clearing serial.", driveLetter);
                 serial = null;
                 managementObject = null;
             }
