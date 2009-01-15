@@ -95,6 +95,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // list of watcher objects that monitor the filesystem for changes
         List<FileSystemWatcher> fileSystemWatchers;
         List<DBImportPath> watcherQueue;
+        List<DBImportPath> rescanQueue;
         Dictionary<FileSystemWatcher, DBImportPath> pathLookup;
         int watcherInterval;
 
@@ -134,6 +135,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             matchesInSystem = new Dictionary<DBLocalMedia, MovieMatch>();
 
             watcherQueue = new List<DBImportPath>();
+            rescanQueue = new List<DBImportPath>();
             watcherInterval = 30;
             fileSystemWatchers = new List<FileSystemWatcher>();
             pathLookup = new Dictionary<FileSystemWatcher, DBImportPath>();
@@ -614,11 +616,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             if (importPath.IsRemovable) {
                                 // if it's removable just leave a message
                                 logger.Info("Failed watching: '{0}' ({1}) - Path is currently offline.", importPath.FullPath, importPath.GetDriveType().ToString());
+                                if (!rescanQueue.Contains(importPath))
+                                    rescanQueue.Add(importPath);
                             }
                             else {
                                 // if it's not removable do not process it anymore
                                 logger.Info("Cancelled watching: '{0}' ({1}) - Path does not exist (anymore).", importPath.FullPath, importPath.GetDriveType().ToString());
                                 watcherQueue.Remove(importPath);
+                                if (rescanQueue.Contains(importPath))
+                                    rescanQueue.Remove(importPath);
                             }
                         }
                         else { // Other kind of error?
@@ -628,8 +634,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     
                     // If starting the watcher was succesful 
                     // remove it from startup queue
-                    if (success)
+                    if (success) {
                         watcherQueue.Remove(importPath);
+                        if (rescanQueue.Contains(importPath)) {
+                            // rescan the import path
+                            ScanPath(importPath);
+                            // remove it from the rescan queue
+                            rescanQueue.Remove(importPath);
+                        }
+                    }
                 }
             }
         }
@@ -641,6 +654,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             watcher.Error += OnWatcherError;
             watcher.Created += OnFileAdded;
             watcher.Deleted += OnFileDeleted;
+            watcher.Renamed += OnFileRenamed;
             watcher.EnableRaisingEvents = true;
             
             fileSystemWatchers.Add(watcher);
@@ -666,6 +680,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // Add the importPath to the watcher queue
             watcherQueue.Add(importPath);
+            
+            // Add the importPath to the rescan queue
+            if (!rescanQueue.Contains(importPath))
+                rescanQueue.Add(importPath);
         }
 
         // When a FileSystemWatcher detects a new file, this method queues it up for processing.
@@ -745,6 +763,34 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 RemoveLocalMedia(removedFile);
             }
         }
+
+        private void OnFileRenamed(object source, RenamedEventArgs e) {
+            List<DBLocalMedia> localMediaRenamed = new List<DBLocalMedia>();
+
+            if (File.Exists(e.FullPath)) {
+                // This is just one file so add it to the list
+                localMediaRenamed.Add(DBLocalMedia.Get(e.OldFullPath, DeviceManager.GetDiskSerial(e.FullPath)));
+                logger.Info("Watched file '{0}' was renamed to '{1}'", e.OldFullPath, e.FullPath);
+            }
+            else {
+                // This is a directory so we are going to get all localmedia that uses 
+                // this directory we can do this by adding a % character to the end of 
+                // the path as the sqlite query behind it uses LIKE as operator.
+                localMediaRenamed = DBLocalMedia.GetAll(e.OldFullPath + '%', DeviceManager.GetDiskSerial(e.FullPath));
+                logger.Info("Watched folder '{0}' was renamed to '{1}'", e.OldFullPath, e.FullPath);
+            }
+
+            // Loop through the renamed files list and process
+            int renamed = 0;
+            foreach (DBLocalMedia renamedFile in localMediaRenamed) {
+                renamedFile.FullPath = renamedFile.FullPath.Replace(e.OldFullPath, e.FullPath);
+                renamedFile.Commit();
+                renamed++;
+            }
+
+            logger.Info("Watcher updated {0} local media records that were affected by a rename event.", renamed);
+        }
+
 
         // Loops through all local files in the system and removes anything that's invalid.
         public void DoFileMaintenance() {
