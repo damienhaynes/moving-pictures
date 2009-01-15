@@ -115,9 +115,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public void Refresh() {
             lock (driveInfo) {
                 string driveLetter = driveInfo.Name.Substring(0, 2);
-                logger.Debug("Checking status of drive {0}", driveLetter);
                 if (driveInfo.IsReady) {
-                    logger.Debug("Querying serial for {0}", driveLetter);
+                    logger.Debug("Querying drive information for '{0}'", driveLetter);
                     try {
                         // Query WMI for extra disk information
                         SelectQuery query = new SelectQuery("select * from win32_logicaldisk where deviceid = '" + driveLetter + "'");
@@ -137,7 +136,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
 
                 // reset the private variables if we make it this far
-                logger.Debug("Drive {0} is not ready. Clearing serial.", driveLetter);
+                logger.Debug("Drive '{0}' is not ready.", driveLetter);
                 serial = null;
                 managementObject = null;
             }
@@ -271,9 +270,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // if the volume is not ready yet wait for it
             while (!volumeInfo.IsReady)
                 Thread.Sleep(100);
-
-            // refresh volume cache
-            volumeInfo.Refresh();
 
             // invoke event
             invokeOnVolumeInserted(volume, volumeInfo.Serial);
