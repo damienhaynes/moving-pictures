@@ -205,10 +205,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         currWatcher.EnableRaisingEvents = false;
                         currWatcher.Created -= OnFileAdded;
                         currWatcher.Deleted -= OnFileDeleted;
+                        currWatcher.Renamed -= OnFileRenamed;
                     }
 
                     fileSystemWatchers.Clear();
                     pathLookup.Clear();
+                    watcherQueue.Clear();
+                    rescanQueue.Clear();
                 }
 
                 if (pathScannerThread != null) {
@@ -789,6 +792,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             logger.Info("Watcher updated {0} local media records that were affected by a rename event.", renamed);
+        }
+
+        private void OnFileChanged(object source, FileSystemEventArgs e) {
+            // Specify what is done when a file is changed, created, or deleted.
+            logger.Info("File: " + e.FullPath + " " + e.ChangeType);
         }
 
 
