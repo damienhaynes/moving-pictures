@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Management;
+using System.Threading;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
@@ -264,8 +265,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // get volume letter
             string volume = monitor.MaskToLogicalPaths(bitMask);
 
-            // refresh volume cache
+            // get the volume information object
             VolumeInfo volumeInfo = GetVolumeInfo(volume);
+
+            // if the volume is not ready yet wait for it
+            while (!volumeInfo.IsReady)
+                Thread.Sleep(100);
+
+            // refresh volume cache
             volumeInfo.Refresh();
 
             // invoke event
