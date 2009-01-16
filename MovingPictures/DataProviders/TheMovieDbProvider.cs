@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using MediaPortal.Plugins.MovingPictures.Database;
-using NLog;
-using System.Net;
-using System.IO;
-using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using System.Reflection;
 using System.Globalization;
+using System.Text;
 using System.Xml;
+using Cornerstone.Tools;
+using MediaPortal.Plugins.MovingPictures.Database;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     class TheMovieDbProvider: IMovieProvider {
@@ -173,7 +170,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         break;
                     case "alternative_title":
                         // todo: remove this check when the api is fixed
-                        if (value.Trim() != "None found.")
+                        if (value.Trim() != "None found." && value.Trim().Length > 0 )
                             movie.AlternateTitles.Add(value);
                         break;
                     case "release":
@@ -322,26 +319,16 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         // given a url, retrieves the xml result set and returns the nodelist of Item objects
         private XmlNodeList getXML(string url) {
-            int maxRetries = (int)MovingPicturesCore.SettingsManager["tmdb_max_timeouts"].Value;
-            int timeout = (int)MovingPicturesCore.SettingsManager["tmdb_timeout_length"].Value;
-            int timeoutIncrement = (int)MovingPicturesCore.SettingsManager["tmdb_timeout_increment"].Value;
+            WebGrabber grabber = new WebGrabber(url);
+            grabber.MaxRetries = (int)MovingPicturesCore.SettingsManager["tmdb_max_timeouts"].Value;
+            grabber.Timeout = (int)MovingPicturesCore.SettingsManager["tmdb_timeout_length"].Value;
+            grabber.TimeoutIncrement = (int)MovingPicturesCore.SettingsManager["tmdb_timeout_increment"].Value;
+            grabber.Encoding = Encoding.UTF8;
 
-            string sXmlData = Utility.GetWebPage(url, Encoding.UTF8, maxRetries, timeout, timeoutIncrement);
-
-            try {
-                // attempts to convert the returned string into an XmlDocument
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(sXmlData);
-                XmlNode root = doc.FirstChild.NextSibling;
-                if (root.Name == "results")
-                    return root.ChildNodes;
-
-            }
-            catch (XmlException e) {
-                logger.ErrorException("Error parsing results from themoviedb.org web service (" + url + ").", e);
-            }
-
-            return null;
+            if (grabber.GetResponse())
+                return grabber.GetXML("results");
+            else
+                return null;
         }
 
     }

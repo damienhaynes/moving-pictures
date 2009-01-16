@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Reflection;
-using System.ComponentModel;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Net;
-using System.Web;
-using System.Text.RegularExpressions;
+using System.ComponentModel;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using DirectShowLib;
 using DirectShowLib.Dvd;
@@ -198,73 +196,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static bool isFileMultiPart(string filename) {
             Regex expr = new Regex(rxFileStackMarkers + @"|[^\s\d](\d+)$|([a-c])$", RegexOptions.IgnoreCase);
             return expr.Match(filename).Success;
-        }
-
-        #endregion
-
-        #region HttpWebRequest
-
-        // todo: make the default values configurable in advanced settings?
-        private const int getWebPageMaxRetries = 3;
-        private const int getWebPageTimeout = 5000;
-        private const int getWebPageTimeoutIncrement = 1000;
-
-        public static string GetWebPage(string url) {
-            return GetWebPage(url, null, getWebPageMaxRetries, getWebPageTimeout, getWebPageTimeoutIncrement);
-        }
-
-        public static string GetWebPage(string url, Encoding encoding) {
-            return GetWebPage(url, encoding, getWebPageMaxRetries, getWebPageTimeout, getWebPageTimeoutIncrement);
-        }
-
-        public static string GetWebPage(string url, Encoding encoding, int maxRetries) {
-            return GetWebPage(url, encoding, maxRetries, getWebPageTimeout, getWebPageTimeoutIncrement);
-        }
-
-        /// <summary>
-        /// Gets webpage as string
-        /// </summary>
-        public static string GetWebPage(string url, Encoding encoding, int maxRetries, int timeout, int timeoutIncrement) {
-            String data = string.Empty;
-            int tryCount = 0;
-            while (data == string.Empty) {
-                try {
-                    // builds the request and retrieves the response from the url
-                    tryCount++;
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                    request.Timeout = timeout + (timeoutIncrement * tryCount);
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                    // converts the resulting stream to a string for easier use
-                    Stream resultData = response.GetResponseStream();
-                    
-                    // use the proper encoding
-                    if (encoding == null)
-                        encoding = Encoding.GetEncoding(response.CharacterSet);
-
-                    StreamReader reader = new StreamReader(resultData, encoding, true);
-                    data = reader.ReadToEnd();
-                    resultData.Close();
-                    reader.Close();
-                    response.Close();
-                }
-                catch (WebException e) {
-                    // Don't retry on protocol errors
-                    // todo: maybe differentiate between errors?
-                    if (e.Status == WebExceptionStatus.ProtocolError) {
-                        logger.Error("Error connecting to: URL={0}, Status={1}, Description={2}.", url, ((HttpWebResponse)e.Response).StatusCode, ((HttpWebResponse)e.Response).StatusDescription);
-                        return null;
-                    }
-                    
-                    // Return when hitting maximum retries.
-                    if (tryCount == maxRetries) {
-                        logger.ErrorException("Error connecting to [" + url + "] Reached retry limit of " + maxRetries, e);
-                        return null;
-                    }
-                }
-            }
-
-            return data;
         }
 
         #endregion
