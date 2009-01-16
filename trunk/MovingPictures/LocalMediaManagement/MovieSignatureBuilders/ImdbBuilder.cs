@@ -1,11 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using Cornerstone.Tools;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
@@ -33,7 +29,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 try {
                     signature.Title = details.Groups[1].Value;
                     signature.Year = int.Parse(details.Groups[2].Value);
-                    logger.Debug("Lookup Imdbid={0}: Title= '{1}', Year= {2}", signature.ImdbId, details.Groups[1], details.Groups[2]);
+                    logger.Debug("Lookup Imdbid={0}: Title='{1}', Year={2}", signature.ImdbId, signature.Title, signature.Year);
                 }
                 catch (Exception e) {
                     logger.Error("Error while parsing IMDB details for '{0}': {1}", signature.ImdbId, e.Message);
@@ -55,9 +51,11 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         /// <param name="ImdbId"></param>
         /// <returns></returns>
         private static string getImdbDetailsPage(string ImdbId) {
-            string url = "http://www.imdb.com/title/" + ImdbId;
-            string data = Utility.GetWebPage(url); // Encoding.UTF8
-            return HttpUtility.HtmlDecode(data);
+            WebGrabber grabber = new WebGrabber("http://www.imdb.com/title/" + ImdbId);
+            if (grabber.GetResponse())
+                return HttpUtility.HtmlDecode(grabber.GetString());
+            else
+                return null;            
         }
 
 

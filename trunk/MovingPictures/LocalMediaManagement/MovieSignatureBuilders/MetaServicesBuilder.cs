@@ -1,10 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using Cornerstone.Tools;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
@@ -41,22 +38,12 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         }
 
         private static XmlNodeList getMDRDVDByCRC(string DiscID) {
-            string url = "http://movie.metaservices.microsoft.com/pas_movie_B/template/GetMDRDVDByCRC.xml?CRC=" + DiscID;
-            string sXmlData = Utility.GetWebPage(url, Encoding.UTF8);
-
-            try {
-                // attempts to convert the returned string into an XmlDocument
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(sXmlData);
-                XmlNode root = doc.FirstChild.NextSibling;
-                if (root.Name == "METADATA")
-                    return root.ChildNodes;
-            }
-            catch (XmlException e) {
-                logger.ErrorException("Error while trying to convert metadata to XMLDocument.", e);
-            }
-
-            return null;
+            WebGrabber grabber = new WebGrabber("http://movie.metaservices.microsoft.com/pas_movie_B/template/GetMDRDVDByCRC.xml?CRC=" + DiscID);
+            grabber.Encoding = Encoding.UTF8;
+            if (grabber.GetResponse())
+                return grabber.GetXML("METADATA");
+            else
+                return null;
         }
 
     }
