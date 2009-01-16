@@ -28,10 +28,10 @@
 
 
   <action name="get_cover_art">
-    <!-- first lets try google matching because it is very fast -->
-    <retrieve name="google_results" url="http://www.google.com/custom?q=${movie.title:safe}&amp;sitesearch=www.impawards.com"/>
+    <!-- first lets try google matching on the title because it is very fast -->
+    <retrieve name="google_results" url="http://ajax.googleapis.com/ajax/services/search/web?v=1.0&amp;q=${movie.title:safe}+Poster+site:http://www.impawards.com"/>
     <set name="test_cover_page" value="" />
-    <parse name="test_cover_url" input="${google_results}" regex='&lt;h2 class=r&gt;&lt;a href="([^"]+).+?&lt;/h2&gt;'/>
+    <parse name="test_cover_url" input="${google_results}" regex='"url":"([^"]+)"'/>
     <if test="${test_cover_url}!=">
       <!-- grab the first result and see if it is what we are looking for -->
       <retrieve name ='test_cover_page' url='${test_cover_url[0][0]}'/>
@@ -46,14 +46,48 @@
       <set name='cover_art[0].url' value='${url_prefix[0][0]}/${cover_img_url[0][0]}'/>
 
       <!-- all the others -->
-      <parse name='covers' input='${test_cover_page}' regex='&lt;a href = ([^&gt;]+)&gt;&lt;img'/>
+      <parse name='covers' input='${test_cover_page}' regex='&lt;a href = ([^>]+)&gt;&lt;img[^&gt;]+"poster"' />
       <loop name='cover_url' on='covers'>
         <add name='next' value1='${count}' value2='1'/>
         <retrieve name='cover_page' url='${url_prefix[0][0]}/${cover_url[0]}'/>
         <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="(posters[^"]+)"'/>
         <set name='cover_art[${next}].url' value='${url_prefix[0][0]}/${cover_img_url[0][0]}'/>
       </loop>
+    </if>
 
+
+    <!-- if we haven't found the right movie yet, try google matching all alternate titles  -->
+    <if test="${cover_art[0].url}=">
+      <parse name="akas" input="${movie.alternate_titles}" regex='([^\|]+)' />
+      <loop name='alternate_title' on='akas' >
+        <if test="${cover_art[0].url}=">
+          <retrieve name="google_results" url="http://ajax.googleapis.com/ajax/services/search/web?v=1.0&amp;q=${alternate_title:safe}+Poster+site:http://www.impawards.com"/>
+          <set name="test_cover_page" value="" />
+          <parse name="test_cover_url" input="${google_results}" regex='"url":"([^"]+)"'/>
+          <if test="${test_cover_url}!=">
+            <!-- grab the first result and see if it is what we are looking for -->
+            <retrieve name ='test_cover_page' url='${test_cover_url[0][0]}'/>
+          </if>
+          <parse name='imdb_id' input='${test_cover_page}' regex='tt\d{7}'/>
+          <if test='${imdb_id}=${movie.imdb_id}'>
+            <!-- excellent, this is our movie, grab the covers -->
+
+            <!-- current page cover-->
+            <parse name='url_prefix' input='${test_cover_url[0][0]}' regex='(.+)/.+?$'/>
+            <parse name='cover_img_url' input='${test_cover_page}' regex='&lt;img SRC="(posters[^"]+)"'/>
+            <set name='cover_art[0].url' value='${url_prefix[0][0]}/${cover_img_url[0][0]}'/>
+
+            <!-- all the others -->
+            <parse name='covers' input='${test_cover_page}' regex='&lt;a href = ([^&gt;]+)&gt;&lt;img'/>
+            <loop name='cover_url' on='covers'>
+              <add name='next' value1='${count}' value2='1'/>
+              <retrieve name='cover_page' url='${url_prefix[0][0]}/${cover_url[0]}'/>
+              <parse name='cover_img_url' input='${cover_page}' regex='&lt;img SRC="(posters[^"]+)"'/>
+              <set name='cover_art[${next}].url' value='${url_prefix[0][0]}/${cover_img_url[0][0]}'/>
+            </loop>
+          </if>
+        </if>
+      </loop>
     </if>
 
     <!-- 
