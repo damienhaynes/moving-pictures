@@ -108,6 +108,12 @@
     <Compile Include="ConfigScreen\MovieManager\MovieDetailsSubPane.Designer.cs">
       <DependentUpon>MovieDetailsSubPane.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\Popups\AddImportPathPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\AddImportPathPopup.Designer.cs">
+      <DependentUpon>AddImportPathPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\Popups\AdvancedSettingsPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -265,6 +271,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\MovieManager\MovieDetailsSubPane.resx">
       <DependentUpon>MovieDetailsSubPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\AddImportPathPopup.resx">
+      <DependentUpon>AddImportPathPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\AdvancedSettingsPopup.resx">
