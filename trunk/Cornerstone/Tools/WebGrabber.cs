@@ -109,10 +109,21 @@ namespace Cornerstone.Tools {
                     response.Close();                
                 }
                 catch (WebException e) {
-                    // Don't retry on protocol errors
+                    
+                    // Skip retry logic on protocol errors
                     if (e.Status == WebExceptionStatus.ProtocolError) {
-                        logger.Error("Connection failed: URL={0}, Status={1}, Description={2}.", requestUrl, ((HttpWebResponse)e.Response).StatusCode, ((HttpWebResponse)e.Response).StatusDescription);
-                        return false;
+                        HttpStatusCode statusCode = ((HttpWebResponse)e.Response).StatusCode;
+                        switch (statusCode) {
+                            // Currently the only exception is the service temporarily unavailable status
+                            // So keep retrying when this is the case
+                            case HttpStatusCode.ServiceUnavailable:
+                                break;
+                            // all other status codes mostly indicate problems that won't be
+                            // solved within the retry period so fail these immediatly
+                            default:
+                                logger.Error("Connection failed: URL={0}, Status={1}, Description={2}.", requestUrl, statusCode, ((HttpWebResponse)e.Response).StatusDescription);
+                                return false;
+                        }
                     }
                     
                     // Return when hitting maximum retries.
