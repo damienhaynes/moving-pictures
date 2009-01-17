@@ -89,6 +89,12 @@
         <default>true</default>
         <description>Enables importation of media from all available optical drives. This can include CDs, DVDs, HD-DVDs, and Bluray disks. This also applies to "loose video files" on a data CD/DVD.</description>
       </setting>
+      
+      <setting id="importer_gui_enabled" name="Enable Importer While In GUI" type="BOOL">
+        <default>true</default>
+        <description>Enables the importer while in the GUI</description>
+      </setting>
+
 
     </group>
 

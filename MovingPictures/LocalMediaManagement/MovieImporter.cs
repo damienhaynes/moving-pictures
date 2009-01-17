@@ -253,8 +253,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         }
 
-        public bool IsScanning() {
-            return (mediaScannerThreads.Count != 0);
+        public bool IsScanning {
+            get {
+                return (mediaScannerThreads.Count != 0);
+            }
         }
 
         public void RestartScanner() {
@@ -1484,6 +1486,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // grab a list of movies from our dataProvider and rank each returned movie on 
             // how close a match it is
+            
             if (mediaMatch.PreferedDataSource != null)
                 movieList = mediaMatch.PreferedDataSource.Provider.Get(signature);
             else
