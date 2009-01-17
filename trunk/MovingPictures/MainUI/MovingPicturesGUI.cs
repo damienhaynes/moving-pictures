@@ -356,7 +356,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             success = success && MovingPicturesCore.Initialize();
 
             // start the background importer
-            MovingPicturesCore.Importer.Start();
+            if ((bool)MovingPicturesCore.SettingsManager["importer_gui_enabled"].Value)
+                MovingPicturesCore.Importer.Start();
 
             // grab any <define> tags from the skin for later use
             LoadDefinesFromSkin();
