@@ -98,12 +98,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             if (backdropURL == string.Empty)
                 return false;
-            ArtworkLoadStatus status = movie.AddBackdropFromURL(backdropURL); 
 
-            if (movie.BackdropFullPath.Trim().Length > 0)
+            ArtworkLoadStatus status = movie.AddBackdropFromURL(backdropURL);
+
+            if (status == ArtworkLoadStatus.SUCCESS)
                 return true;
-            
-            return false;
+            else
+                return false;            
         }
 
         public List<DBMovieInfo> Get(MovieSignature movieSignature) {
