@@ -35,6 +35,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (ID == null) {
                 while (AlternateCovers.Count > 0)
                     this.DeleteCurrentCover();
+                foreach (var wh in this.WatchedHistory) {
+                    wh.Delete();
+                }
             }
         }
 
@@ -297,6 +300,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return _sourceIDs;
           }
         } RelationList<DBMovieInfo, DBSourceMovieInfo> _sourceIDs;
+
+        [DBRelation(AutoRetrieve = true)]
+        public RelationList<DBMovieInfo, DBWatchedHistory> WatchedHistory {
+            get {
+                if (_watchedHistory == null) {
+                    _watchedHistory = new RelationList<DBMovieInfo, DBWatchedHistory>(this);
+                }
+                return _watchedHistory;
+            }
+        } RelationList<DBMovieInfo, DBWatchedHistory> _watchedHistory;
 
         public DBSourceMovieInfo GetSourceMovieInfo(int scriptID) {
             return DBSourceMovieInfo.GetOrCreate(this, scriptID);

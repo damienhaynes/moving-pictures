@@ -200,6 +200,7 @@
     <Compile Include="Database\DBSourceMovieInfo.cs" />
     <Compile Include="Database\DBUser.cs" />
     <Compile Include="Database\DBUserMovieSettings.cs" />
+    <Compile Include="Database\DBWatchedHistory.cs" />
     <Compile Include="Database\MovingPicturesDBTable.cs" />
     <Compile Include="DataProviders\DataProviderManager.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
