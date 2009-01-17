@@ -153,12 +153,16 @@ namespace Cornerstone.MP {
                 string newFilename = (string)newFilenameObj;
                 if (newFilename != null && newFilename.Trim().Length == 0)
                     newFilename = null;
-                else
+                else if (newFilename != null)
                     newFilename = newFilename.Trim();
 
                 // if there is no change, quit
-                if (_filename != null && _filename.Equals(newFilename))
+                if (_filename != null && _filename.Equals(newFilename)) {
+                    if (ImageLoadingComplete != null)
+                        ImageLoadingComplete(this);
+
                     return;
+                }
 
                 string newIdentifier = loadResourceSafe(newFilename);
 
