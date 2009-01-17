@@ -1352,6 +1352,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             DBUserMovieSettings userSetting = movie.UserSettings[0];
             userSetting.Watched++; // increment watch counter
             userSetting.Commit();
+            DBWatchedHistory.AddWatchedHistory(movie, userSetting.User);
 
             browser.ReapplyFilters();
 
