@@ -70,10 +70,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
                 
         private void addSourceButton_Click(object sender, EventArgs e) {
-            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
-            DialogResult result = folderDialog.ShowDialog();
+            AddImportPathPopup addPopup = new AddImportPathPopup();
+            addPopup.Owner = ParentForm;
+            DialogResult result = addPopup.ShowDialog();
             if (result == DialogResult.OK) {
-                DBImportPath newPath = DBImportPath.Get(folderDialog.SelectedPath);
+                DBImportPath newPath = DBImportPath.Get(addPopup.SelectedPath);
                 
                 if (newPath.GetDriveType() == DriveType.CDRom) {
                     MessageBox.Show("Importing from this drive is controlled through the setting 'Enable Import Paths For Optical Drives'", "Not Allowed!");

@@ -64,7 +64,7 @@
             // advancedSettingsButton
             // 
             this.advancedSettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.advancedSettingsButton.Location = new System.Drawing.Point(403, 468);
+            this.advancedSettingsButton.Location = new System.Drawing.Point(403, 488);
             this.advancedSettingsButton.Name = "advancedSettingsButton";
             this.advancedSettingsButton.Size = new System.Drawing.Size(122, 23);
             this.advancedSettingsButton.TabIndex = 0;
@@ -124,7 +124,7 @@
             this.groupBox1.Controls.Add(this.forumLabel);
             this.groupBox1.Controls.Add(this.websiteLabel);
             this.groupBox1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(3, 368);
+            this.groupBox1.Location = new System.Drawing.Point(3, 388);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(522, 94);
             this.groupBox1.TabIndex = 4;
@@ -203,7 +203,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label12.Location = new System.Drawing.Point(326, 272);
+            this.label12.Location = new System.Drawing.Point(326, 291);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(59, 13);
             this.label12.TabIndex = 14;
@@ -214,7 +214,7 @@
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label11.Location = new System.Drawing.Point(251, 260);
+            this.label11.Location = new System.Drawing.Point(251, 279);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(72, 13);
             this.label11.TabIndex = 13;
@@ -223,7 +223,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(251, 333);
+            this.label9.Location = new System.Drawing.Point(251, 352);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(50, 26);
             this.label9.TabIndex = 11;
@@ -234,7 +234,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label8.Location = new System.Drawing.Point(251, 320);
+            this.label8.Location = new System.Drawing.Point(251, 339);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(49, 13);
             this.label8.TabIndex = 10;
@@ -299,7 +299,7 @@
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Location = new System.Drawing.Point(252, 243);
+            this.groupBox4.Location = new System.Drawing.Point(252, 262);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(9);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(266, 3);
@@ -311,7 +311,7 @@
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Location = new System.Drawing.Point(252, 308);
+            this.groupBox5.Location = new System.Drawing.Point(252, 327);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(9);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(266, 3);
@@ -344,9 +344,9 @@
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(249, 195);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(69, 39);
+            this.label16.Size = new System.Drawing.Size(71, 52);
             this.label16.TabIndex = 25;
-            this.label16.Text = "Travis Collins\r\ngshipley\r\ncyberfix";
+            this.label16.Text = "Travis Collins\r\ngshipley\r\nMartin Guillon\r\ncyberfix";
             // 
             // label17
             // 
@@ -361,7 +361,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(252, 272);
+            this.label18.Location = new System.Drawing.Point(252, 291);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(68, 13);
             this.label18.TabIndex = 27;
@@ -371,7 +371,7 @@
             // 
             this.label19.AutoSize = true;
             this.label19.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label19.Location = new System.Drawing.Point(324, 286);
+            this.label19.Location = new System.Drawing.Point(324, 305);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(64, 13);
             this.label19.TabIndex = 14;
@@ -380,7 +380,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(252, 286);
+            this.label20.Location = new System.Drawing.Point(252, 305);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(66, 13);
             this.label20.TabIndex = 27;
@@ -389,7 +389,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(324, 333);
+            this.label10.Location = new System.Drawing.Point(324, 352);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(92, 26);
             this.label10.TabIndex = 12;
@@ -427,7 +427,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(528, 494);
             this.Name = "AboutPane";
-            this.Size = new System.Drawing.Size(528, 494);
+            this.Size = new System.Drawing.Size(528, 531);
             this.Load += new System.EventHandler(this.AboutPane_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
