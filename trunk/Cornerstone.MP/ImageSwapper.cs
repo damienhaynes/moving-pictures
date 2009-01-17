@@ -48,7 +48,10 @@ namespace Cornerstone.MP {
 
             set {
                 lock (loadingLock) {
-                    if ((value != null && value.Equals(_filename)) || _guiImageOne == null || !_active)
+                    if (!Active)
+                        value = null;
+
+                    if ((value != null && value.Equals(_filename)) || _guiImageOne == null)
                         return;
 
                     // if we have a second backdrop image object, alternate between the two
