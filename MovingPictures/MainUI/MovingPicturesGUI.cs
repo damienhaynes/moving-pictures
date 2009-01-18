@@ -37,7 +37,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         Dictionary<string, string> defines;
         Dictionary<string, bool> loggedProperties;
 
-        private bool currentlyPlaying = false;
+        private bool currentlyPlayingInternally = false;
         private DBMovieInfo currentlyPlayingMovie;
         private int currentlyPlayingPart = 1;
 
@@ -156,6 +156,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         public MovingPicturesGUI() {
             g_Player.PlayBackEnded += new g_Player.EndedHandler(OnPlayBackEnded);
             g_Player.PlayBackStopped += new g_Player.StoppedHandler(OnPlayBackStoppedOrChanged);
+            MediaPortal.Util.Utils.OnStopExternal += new MediaPortal.Util.Utils.UtilEventHandler(Utils_OnStopExternal);
+            MediaPortal.Util.Utils.OnStartExternal += new MediaPortal.Util.Utils.UtilEventHandler(Utils_OnStartExternal);
+
 
             // This is a handler added in RC4 - if we are using an older mediaportal version
             // this would throw an exception.
@@ -560,7 +563,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             switch (action.wID) {
                 case Action.ActionType.ACTION_PARENT_DIR:
                 case Action.ActionType.ACTION_HOME:
-                    currentlyPlaying = false;
+                    currentlyPlayingInternally = false;
                     GUIWindowManager.ShowPreviousWindow();
                     break;
                 case Action.ActionType.ACTION_PREVIOUS_MENU:
@@ -572,7 +575,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                         remoteFilter.Clear();
                     else {
                         // show previous screen (exit the plug-in
-                        currentlyPlaying = false;
+                        currentlyPlayingInternally = false;
                         GUIWindowManager.ShowPreviousWindow();
                     }
                     break;
@@ -1122,6 +1125,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
+            currentlyPlayingMovie = movie;
+            currentlyPlayingPart = part;
 
             // start playback
             logger.Info("Playing {0} ({1})", movie.Title, mediaToPlay.FullPath);
@@ -1134,7 +1139,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
             // if playback started
-            if (currentlyPlaying) {
+            if (currentlyPlayingInternally) {
                 // set class level variables to track what is playing
                 currentlyPlayingMovie = movie;
                 currentlyPlayingPart = part;
@@ -1173,7 +1178,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                         playFile(custom_intro);
 
                         // if playback started
-                        if (currentlyPlaying) {
+                        if (currentlyPlayingInternally) {
                             // set class level variables to track what is playing
                             customIntroPlayed = true;
 
@@ -1221,7 +1226,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             GUIGraphicsContext.IsFullScreenVideo = true;
             GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
             bool success = g_Player.Play(media, g_Player.MediaType.Video);
-            currentlyPlaying = success;
+            currentlyPlayingInternally = success;
         }
 
         // start playback of an image file (ISO)
@@ -1278,7 +1283,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
-            if (type != g_Player.MediaType.Video || currentlyPlayingMovie == null)
+            if (type != g_Player.MediaType.Video || !currentlyPlayingInternally)
                 return;
 
             logger.Debug("OnPlayBackEnded filename={0} currentMovie={1} currentPart={2}", filename, currentlyPlayingMovie.Title, currentlyPlayingPart);
@@ -1291,7 +1296,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             else {
                 updateMovieWatchedCounter(currentlyPlayingMovie);
                 currentlyPlayingPart = 0;
-                currentlyPlaying = false;
+                currentlyPlayingInternally = false;
                 currentlyPlayingMovie = null;
             }
 
@@ -1302,9 +1307,36 @@ namespace MediaPortal.Plugins.MovingPictures {
                 enableNativeAutoplay();
         }
 
+        private void Utils_OnStartExternal(System.Diagnostics.Process proc, bool waitForExit) {
+            logger.Info("OnStartExternal");
+        }
+
+        private void Utils_OnStopExternal(System.Diagnostics.Process proc, bool waitForExit) {
+            logger.Info("OnStopExternal");
+            if (currentlyPlayingPart < currentlyPlayingMovie.LocalMedia.Count) {
+                GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
+                dlgYesNo.SetHeading("Continue to next part?");
+                dlgYesNo.SetLine(1, String.Format("Do you wish to continue with part {0}?", (currentlyPlayingPart + 1)));
+                dlgYesNo.SetLine(2, currentlyPlayingMovie.Title);
+                dlgYesNo.SetDefaultToYes(true);
+                dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
+                if (dlgYesNo.IsConfirmed) {
+                    logger.Debug("Goto next part");
+                    currentlyPlayingPart++;
+                    playMovie(currentlyPlayingMovie, currentlyPlayingPart);
+                }
+                else {
+                    currentlyPlayingMovie = null;
+                    currentlyPlayingPart = 0;
+                }
+                return;
+            }
+            
+        }
+
         private void OnPlayBackStoppedOrChanged(g_Player.MediaType type, int timeMovieStopped, string filename) {
             logger.Debug("OnPlayBackStoppedOrChanged");
-            if (type != g_Player.MediaType.Video || currentlyPlayingMovie == null)
+            if (type != g_Player.MediaType.Video || !currentlyPlayingInternally)
                 return;
 
             logger.Debug("OnPlayBackStoppedOrChanged: filename={1} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, currentlyPlayingMovie.Title, currentlyPlayingPart, timeMovieStopped);
@@ -1334,7 +1366,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             currentlyPlayingPart = 0;
-            currentlyPlaying = false;
+            currentlyPlayingInternally = false;
             currentlyPlayingMovie = null;
             
             // If we or stopping in another windows enable native auto-play again
@@ -1446,7 +1478,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void OnVolumeInserted(string volume, string serial) {
             // only respond when the plugin (or it's playback) is active
-            if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlaying)
+            if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlayingInternally)
                 return;
 
             logger.Debug("OnVolumeInserted  volume: {0}; serial: {1}", volume, serial);
@@ -1507,11 +1539,11 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void OnVolumeRemoved(string volume, string serial) {
             // only respond when the plugin (or it's playback) is active
-            if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlaying)
+            if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlayingInternally)
                 return;
                 
             // if we are playing something from this volume stop it
-            if (currentlyPlaying)
+            if (currentlyPlayingInternally)
                 if (currentlyPlayingMovie.LocalMedia[currentlyPlayingPart].Volume == volume)
                     g_Player.Stop();
 
@@ -1557,7 +1589,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         // We want to update this after that happens so the correct info is there.
         private void UpdatePlaybackInfo() {
             Thread.Sleep(2000);
-            if (currentlyPlayingMovie != null && currentlyPlaying) {
+            if (currentlyPlayingMovie != null && currentlyPlayingInternally) {
                 SetProperty("#Play.Current.Title", currentlyPlayingMovie.Title);
                 SetProperty("#Play.Current.Plot", currentlyPlayingMovie.Summary);
                 SetProperty("#Play.Current.Thumb", currentlyPlayingMovie.CoverThumbFullPath);
