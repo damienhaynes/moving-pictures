@@ -109,7 +109,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             // Try to grab the document
             try {
                 WebGrabber grabber = new WebGrabber(parsedUrl);
-                //grabber.Request.Accept = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+                grabber.Request.Accept = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
                 grabber.UserAgent = userAgent;
                 grabber.Encoding = encoding;
                 grabber.Timeout = timeout;
