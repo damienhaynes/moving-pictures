@@ -1201,7 +1201,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private bool PromptUserToResume(DBMovieInfo movie) {
-            if (movie.UserSettings == null || movie.UserSettings.Count == 0 || movie.UserSettings[0].ResumeTime == 0)
+            if (movie.UserSettings == null || movie.UserSettings.Count == 0 || movie.UserSettings[0].ResumeTime <= 30)
                 return false;
 
             // figure out the resume time to display to the user
