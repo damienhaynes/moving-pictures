@@ -75,6 +75,7 @@ namespace Cornerstone.Tools {
             data = string.Empty;
             int tryCount = 0;
             while (data == string.Empty) {
+                tryCount++;
                 try {
                     request.UserAgent = userAgent;
                     request.Timeout = timeout + (timeoutIncrement * tryCount);
@@ -84,10 +85,10 @@ namespace Cornerstone.Tools {
                     response = (HttpWebResponse)request.GetResponse();
                     cookieHeader = request.CookieContainer.GetCookieHeader(request.RequestUri);
 
-                    // converts the resulting stream to a string for easier use
+                    // Get result as stream
                     Stream resultData = response.GetResponseStream();
 
-                    // use the proper encoding
+                    // Detect or force encoding
                     if (encoding == null)
                         encoding = Encoding.GetEncoding(response.CharacterSet);
 
@@ -98,8 +99,8 @@ namespace Cornerstone.Tools {
                         logger.Debug("CookieHeader: {0}", cookieHeader);
                         logger.Debug("Encoding: {0}", encoding.EncodingName);
                     }
-                    
-                    // Read to string
+
+                    // Converts the stream to a string
                     StreamReader reader = new StreamReader(resultData, encoding, true);
                     data = reader.ReadToEnd(); 
 
