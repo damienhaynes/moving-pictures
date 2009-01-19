@@ -92,19 +92,15 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             foreach (XmlNode currNode in backdropNodes) {
                 if (currNode.Attributes["size"].Value == "original") {
                     backdropURL = currNode.InnerText;
-                    break;
+                    if (backdropURL.Trim().Length > 0)
+                        if (movie.AddBackdropFromURL(backdropURL) == ArtworkLoadStatus.SUCCESS)
+                            return true;
                 }
             }
 
-            if (backdropURL == string.Empty)
-                return false;
-
-            ArtworkLoadStatus status = movie.AddBackdropFromURL(backdropURL);
-
-            if (status == ArtworkLoadStatus.SUCCESS)
-                return true;
-            else
-                return false;            
+            // if we get here we didn't manage to find a proper backdrop
+            // so return false
+            return false;
         }
 
         public List<DBMovieInfo> Get(MovieSignature movieSignature) {
