@@ -97,6 +97,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         [SkinControl(12)]
         protected GUIImage loadingImage = null;
 
+        [SkinControl(13)]
+        protected GUILabelControl workingImage = null;
+
         #endregion
 
         // Defines the current view mode. Reassign to switch modes.        
@@ -156,9 +159,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         public MovingPicturesGUI() {
             g_Player.PlayBackEnded += new g_Player.EndedHandler(OnPlayBackEnded);
             g_Player.PlayBackStopped += new g_Player.StoppedHandler(OnPlayBackStoppedOrChanged);
-            MediaPortal.Util.Utils.OnStopExternal += new MediaPortal.Util.Utils.UtilEventHandler(Utils_OnStopExternal);
             MediaPortal.Util.Utils.OnStartExternal += new MediaPortal.Util.Utils.UtilEventHandler(Utils_OnStartExternal);
-
+            MediaPortal.Util.Utils.OnStopExternal += new MediaPortal.Util.Utils.UtilEventHandler(Utils_OnStopExternal);
+            MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(Importer_Progress);
 
             // This is a handler added in RC4 - if we are using an older mediaportal version
             // this would throw an exception.
@@ -468,6 +471,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                     CurrentView = ViewMode.LIST;
                     logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
                 }
+
+                if (workingImage != null)
+                    workingImage.Visible = false;
             }
 
             // if we have loaded before, lets update the view to match our previous settings
@@ -1376,6 +1382,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             // if we would re-enter the plugin, autoplay be disabled again.
             if (GetID != GUIWindowManager.ActiveWindow)
                 enableNativeAutoplay();
+        }
+
+        private void Importer_Progress(int percentDone, int taskCount, int taskTotal, string taskDescription) {
+            if (workingImage == null) return;
+
+            if (percentDone >= 100)
+                workingImage.Visible = false;
+            else if (workingImage.Visible == false)
+                workingImage.Visible = true;
         }
 
         private void updateMovieWatchedCounter(DBMovieInfo movie) {
