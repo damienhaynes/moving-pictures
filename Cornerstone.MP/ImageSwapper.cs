@@ -31,9 +31,16 @@ namespace Cornerstone.MP {
             set {
                 if (_active == value)
                     return;
-
+                
                 _active = value;
-                Filename = null;
+                _imageResource.Active = _active;
+
+                // if we are inactive be sure both properties are cleared
+                if (!Active) {
+                    logger.Info("Clearing Properties");
+                    _imageResource.Property = _propertyTwo;
+                    _imageResource.Property = _propertyOne;
+                }
             }
         }
         private bool _active = true;
