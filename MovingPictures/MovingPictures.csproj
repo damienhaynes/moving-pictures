@@ -39,10 +39,6 @@
     </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CookComputing.XmlRpcV2, Version=2.4.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\External\CookComputing.XmlRpcV2.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -209,7 +205,6 @@
     <Compile Include="DataProviders\DataProviderManager.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
     <Compile Include="DataProviders\LocalProvider.cs" />
-    <Compile Include="DataProviders\OSDbProvider.cs" />
     <Compile Include="DataProviders\TheMovieDbProvider.cs" />
     <Compile Include="DataProviders\MyVideosProvider.cs" />
     <Compile Include="DataProviders\ScriptableProvider.cs" />
