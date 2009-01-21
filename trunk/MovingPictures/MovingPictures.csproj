@@ -120,6 +120,12 @@
     <Compile Include="ConfigScreen\Popups\AdvancedSettingsPopup.Designer.cs">
       <DependentUpon>AdvancedSettingsPopup.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\Popups\LoadingPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\LoadingPopup.Designer.cs">
+      <DependentUpon>LoadingPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\Popups\ManualAssignPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -186,12 +192,19 @@
     <Compile Include="ConfigScreen\Popups\SingleMovieImporterPopup.Designer.cs">
       <DependentUpon>SingleMovieImporterPopup.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\SplashPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\SplashPane.Designer.cs">
+      <DependentUpon>SplashPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\UserManagementPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ConfigScreen\UserManagementPane.Designer.cs">
       <DependentUpon>UserManagementPane.cs</DependentUpon>
     </Compile>
+    <Compile Include="Database\DatabaseMaintenanceManager.cs" />
     <Compile Include="Database\DBScriptInfo.cs" />
     <Compile Include="Database\DBSourceInfo.cs" />
     <Compile Include="Database\DBImportPath.cs" />
@@ -286,6 +299,10 @@
       <DependentUpon>DataSourcesPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\LoadingPopup.resx">
+      <DependentUpon>LoadingPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\ManualAssignPopup.resx">
       <DependentUpon>ManualAssignPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -324,6 +341,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\SingleMovieImporterPopup.resx">
       <DependentUpon>SingleMovieImporterPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\SplashPane.resx">
+      <DependentUpon>SplashPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\UserManagementPane.resx">
@@ -419,23 +440,23 @@
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MediaPortal\Stable\Core\Core.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Core\Core.csproj">
       <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\MediaPortal\Stable\Databases\Databases.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
       <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
       <Name>Databases</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\MediaPortal\Stable\Dialogs\Dialogs.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Dialogs\Dialogs.csproj">
       <Project>{396C5208-5D46-4A11-92C1-FD0F2F42D7DD}</Project>
       <Name>Dialogs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\MediaPortal\Stable\DirectShowLib\DirectShowLib.csproj">
+    <ProjectReference Include="..\..\MediaPortal\DirectShowLib\DirectShowLib.csproj">
       <Project>{CE009BFA-5EF6-4153-B2A1-2FA79698A9AE}</Project>
       <Name>DirectShowLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\MediaPortal\Stable\Utils\Utils.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Utils\Utils.csproj">
       <Project>{6DA0E4DF-6230-4642-98B5-E690BB6942BB}</Project>
       <Name>Utils</Name>
     </ProjectReference>

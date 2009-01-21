@@ -225,12 +225,24 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         
         #region Overrides
         public override bool Equals(object obj) {
-            if (obj.GetType() == typeof(DBLocalMedia) && ((DBLocalMedia)obj).File != null && this.File != null)
-                return (this.File.FullName.Equals(((DBLocalMedia)obj).File.FullName) &&
-                    this.VolumeSerial.Equals(((DBLocalMedia)obj).VolumeSerial)
-                    );
+            // make sure we have a dblocalmedia object
+            if (obj == null || obj.GetType() != typeof(DBLocalMedia))
+                return false;
 
-            return false;
+            // make sure both objects are linked to a file
+            DBLocalMedia otherLocalMedia = (DBLocalMedia)obj;
+            if (otherLocalMedia.File == null || this.File == null)
+                return false;
+
+            // make sure we have the same file
+            if (!this.File.FullName.Equals(otherLocalMedia.File.FullName))
+                return false;
+            
+            // if we have a volume serial for either both, make sure they are equal
+            if (this.VolumeSerial != otherLocalMedia.VolumeSerial)
+                return false;
+
+            return true;
         }
 
         public override int GetHashCode() {
@@ -249,6 +261,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         #endregion
 
         #region Database Management Methods
+
+        public override void Delete() {
+            logger.Info("Removing " + FullPath + " and associated movie.");
+            foreach (DBMovieInfo currMovie in AttachedMovies) {
+                foreach (DBLocalMedia otherFile in currMovie.LocalMedia) {
+                    if (otherFile != this)
+                        otherFile.Delete();
+                }
+                currMovie.Delete();
+            }
+
+            base.Delete();
+        }
 
         public static DBLocalMedia Get(string fullPath) {
             return Get(fullPath, null);

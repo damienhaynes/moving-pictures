@@ -76,6 +76,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         #region Constructors
 
+        public static void Initialize() {
+            DataProviderManager.GetInstance();
+        }
+
         public static DataProviderManager GetInstance() {
             lock (lockObj) {
                 if (instance == null)

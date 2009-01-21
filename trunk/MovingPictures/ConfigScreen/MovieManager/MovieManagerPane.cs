@@ -477,7 +477,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
             DialogResult result = MessageBox.Show(
                     "You are about to reassign this file or set of files\n" +
-                    "to a new movie. You will loose all custom modifications\n" +
+                    "to a new movie. This will send the file(s) back to\n" +
+                    "the importer and you will loose all custom modifications\n" +
                     "to metadata and all user settings.\n\n" +
                     "Are you sure you want to continue?",
                     "Reassign Movie", MessageBoxButtons.YesNo);

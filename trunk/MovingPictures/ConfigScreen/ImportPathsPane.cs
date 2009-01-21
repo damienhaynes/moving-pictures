@@ -103,7 +103,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     ((DBImportPath)pathBindingSource.Current).Delete();
                     pathBindingSource.RemoveCurrent();
 
-                    MovingPicturesCore.Importer.DoFileMaintenance();
+                    DatabaseMaintenanceManager.RemoveInvalidFiles();
                     MovingPicturesCore.Importer.RestartScanner();
                     
                 }

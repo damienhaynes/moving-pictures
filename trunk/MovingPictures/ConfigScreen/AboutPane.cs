@@ -22,10 +22,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             popup.ShowDialog();
         }
 
-        private void AboutPane_Load(object sender, EventArgs e) {
-            versionLabel.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
-
         private void websiteLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             ProcessStartInfo process = new ProcessStartInfo("http://www.moving-pictures.tv");
             Process.Start(process);
