@@ -200,14 +200,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         } private static bool monitorStarted = false;
 
-        /// <summary>
-        /// Set this property to a form handle before starting the monitor   
-        /// </summary>
-        public static IntPtr Handle {
-            get {return handle;}
-            set { handle = value; }
-        } private static IntPtr handle = IntPtr.Zero;
-
         #endregion
 
         #region Constructor
@@ -232,7 +224,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private static void startMonitor() {
             if (monitor == null) {
                 try {
-                    monitor = new DeviceVolumeMonitor(handle);
+                    monitor = new DeviceVolumeMonitor();
                     monitor.OnVolumeInserted += new DeviceVolumeAction(dvVolumeInserted);
                     monitor.OnVolumeRemoved += new DeviceVolumeAction(dvVolumeRemoved);
                     monitor.AsynchronousEvents = true;

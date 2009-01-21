@@ -5,6 +5,10 @@ using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class ConfigConnector: ISetupForm {
@@ -30,8 +34,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // show the setup dialog                                                                                                               
         public void ShowPlugin() {
+
+            MovingPicturesConfig configScr;
+
             try {
-                MovingPicturesCore.Initialize();
+                configScr = new MovingPicturesConfig();
+                LoadingPopup loadingPopup = new LoadingPopup();
+
+                Thread initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
+                initThread.Start();
+                loadingPopup.ShowDialog();
             }
             catch (Exception e) {
                 logger.FatalException("Unexpected error from plug-in initialization!", e);
@@ -39,13 +51,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             
             try {
-                MovingPicturesConfig configScr = new MovingPicturesConfig();
-                DeviceManager.Handle = configScr.Handle;
-                DeviceManager.StartMonitor();
-
                 configScr.ShowDialog();
             }
             catch (Exception e) {
+                MessageBox.Show("There was an unexpected error in the Moving Pictures Configuration screen!", "Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 logger.FatalException("Unexpected error from the Configuration Screen!", e);
                 return;
             }

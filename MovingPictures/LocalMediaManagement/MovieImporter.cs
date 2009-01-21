@@ -518,9 +518,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 while (true) {
                     logger.Info("Initiating full scan on watch folders.");
 
-                    // maintenance tasks
-                    DoFileMaintenance();
-
                     SetupFileSystemWatchers();
                     int checkWatchers= 0;
 
@@ -765,7 +762,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
 
                 // Remove the file
-                RemoveLocalMedia(removedFile);
+                removedFile.Delete();
             }
         }
 
@@ -802,185 +799,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
 
-        // Loops through all local files in the system and removes anything that's invalid.
-        public void DoFileMaintenance() {
-            logger.Info("Running file maintenance for database.");
-            int cleaned = 0;
-            foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
-                // Skip previous deleted files
-                if (currFile.ID == null)
-                    continue;
 
-                // Remove Missing Files Or Without An Import Path
-                if (currFile.IsRemoved || currFile.ImportPath == null || currFile.ImportPath.ID == null) {
-                    RemoveLocalMedia(currFile);
-                    cleaned++;
-                    continue;
-                }
-
-                // Remove Orphan Files
-                if (currFile.AttachedMovies.Count == 0 && !currFile.Ignored) {
-                    logger.Info("Removing " + currFile.FullPath + " (orphan)");
-                    currFile.Delete();
-                    cleaned++;
-                    continue;
-                }
-                
-                UpdateMissingDiskInfoProperties(currFile); // Update Disk Info
-
-                
-
-            }
-            logger.Info("Maintenance finished. Removed {0} files.", cleaned.ToString());
-
-        }
-
-        // Loops through all movie in the system and removed anything that's invalid
-        public void DoMovieMaintenance() {
-            // Movies
-            int cleaned = 0;
-            List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
-            logger.Info("Running movie maintenance for database.");
-            foreach (DBMovieInfo currMovie in allMovies) {
-
-                // Remove movie with no files
-                if (currMovie.LocalMedia.Count == 0) {
-                    logger.Info("'{0}' was removed from the system because it had no local media.", currMovie.Title);
-                    currMovie.Delete();
-                    cleaned++;
-                    continue;
-                }
-
-                // Update User Settings
-                UpdateMovieUserSettings(currMovie);
-
-                // Remove Artwork That Doesn't exist
-                RemoveOrphanArtwork(currMovie);
-
-            }
-            logger.Info("Maintenance finished. Removed {0} movies.", cleaned.ToString());
-
-            // Remove Orphan User Settings
-            List<DBUserMovieSettings> allUserSettings = DBUserMovieSettings.GetAll();
-            foreach (DBUserMovieSettings currSetting in allUserSettings) {
-                if (currSetting.AttachedMovies.Count == 0)
-                    currSetting.Delete();
-            }
-        }
-
-        // Updates missing user settings for a movie
-        private void UpdateMovieUserSettings(DBMovieInfo movie) {
-            if (movie.UserSettings.Count == 0) {
-                logger.Info(movie.Title + " was missing UserMovingSettings, adding now.");
-                foreach (DBUser currUser in DBUser.GetAll()) {
-                    DBUserMovieSettings userSettings = new DBUserMovieSettings();
-                    userSettings.User = currUser;
-                    userSettings.Commit();
-                    movie.UserSettings.Add(userSettings);
-                    userSettings.CommitNeeded = false;
-                }
-                movie.Commit();
-            }
-        }
-
-        // This update *should* only trigger once on a pre-0.7 database
-        private void UpdateMissingDiskInfoProperties(DBLocalMedia localMedia) {
-            DriveType type = localMedia.ImportPath.GetDriveType();
-            if (String.IsNullOrEmpty(localMedia.VolumeSerial) && type != DriveType.Unknown && type != DriveType.CDRom) {
-                if (localMedia.IsAvailable) {
-                    localMedia.UpdateDiskProperties();
-                    localMedia.Commit();
-                    logger.Info("Added missing disk info to: {0} (serial: {1}, label: {2})", localMedia.FullPath, localMedia.VolumeSerial, localMedia.MediaLabel);
-                }                    
-            }
-        }
-
-        // Update System Managed Import Paths
-        public void UpdateImportPaths() {
-            bool daemonEnabled = MovingPicturesCore.MediaPortalSettings.GetValueAsBool("daemon", "enabled", false);
-            string virtualDrive = MovingPicturesCore.MediaPortalSettings.GetValueAsString("daemon", "drive", "?:");
-            // Get all drives
-            foreach (DriveInfo drive in DriveInfo.GetDrives()) {           
-                // Add the import path if it does not exist and 
-                // is not marked virtual by MediaPortal.
-                DBImportPath importPath = DBImportPath.Get(drive.Name);
-                bool isVirtual = drive.Name.StartsWith(virtualDrive, StringComparison.OrdinalIgnoreCase) && daemonEnabled;
-                bool isCDRom = (drive.DriveType == DriveType.CDRom);
-
-                if (importPath.ID != null) {
-                    // Remove an system managed path if for any reason it's not of type CDRom
-                    if (!isCDRom && importPath.InternallyManaged) {
-                        importPath.Delete();
-                        logger.Info("Removed system managed import path: {0} (drive type has changed)", importPath.FullPath);
-                        continue;
-                    }
-
-                    // Remove an existing path if it's defined as the virtual drive
-                    if (isVirtual) {
-                        importPath.Delete();
-                        logger.Info("Removed import path: {0} (drive is marked as virtual)", importPath.FullPath);
-                        continue;
-                    }
-
-                    // Update an existing import path to a system managed import path
-                    // if the drive type is CDRom but the system flag isn't set
-                    if (isCDRom && !importPath.InternallyManaged) {
-                        importPath.InternallyManaged = true;
-                        importPath.Commit();
-                        logger.Info("{0} was updated to a system managed import path.", importPath.FullPath);
-                    }
-
-                }
-                else {
-                    if (isCDRom && !isVirtual) {
-                        importPath.InternallyManaged = true;
-                        importPath.Commit();
-                        logger.Info("Added system managed import path: {0}", importPath.FullPath);
-                    }
-                }
-            }
-        }
-
-        // Removes everything that has a relation to the local media file
-        private void RemoveLocalMedia(DBLocalMedia localMedia) {
-            logger.Info("Removing " + localMedia.FullPath + " and associated movie.");
-            foreach (DBMovieInfo currMovie in localMedia.AttachedMovies) {
-                foreach (DBLocalMedia otherFile in currMovie.LocalMedia)
-                    otherFile.Delete();
-                currMovie.Delete();
-            }
-            // should have already been deleted, but if we for some reason have a
-            // file with no associated movie then delete it too.
-            localMedia.Delete();
-        }
-
-        // Removes Artwork From a Movie
-        private void RemoveOrphanArtwork(DBMovieInfo movie) {
-            // get the list of elements to remove
-            List<string> toRemove = new List<string>();
-            foreach (string currCoverPath in movie.AlternateCovers) {
-                if (!new FileInfo(currCoverPath).Exists)
-                    toRemove.Add(currCoverPath);
-            }
-
-            // remove them
-            foreach (string currItem in toRemove) {
-                movie.AlternateCovers.Remove(currItem);
-            }
-
-            // reset default cover is needed
-            if (!movie.AlternateCovers.Contains(movie.CoverFullPath))
-                if (movie.AlternateCovers.Count == 0)
-                    movie.CoverFullPath = " ";
-                else
-                    movie.CoverFullPath = movie.AlternateCovers[0];
-
-            // get rid of the backdrop link if it doesnt exist
-            if (movie.BackdropFullPath.Trim().Length > 0 && !new FileInfo(movie.BackdropFullPath).Exists)
-                movie.BackdropFullPath = " ";
-
-            movie.Commit();
-        }
 
         // Grabs the files from the DBImportPath and add them to the queue for use
         // by the ScanMedia thread.

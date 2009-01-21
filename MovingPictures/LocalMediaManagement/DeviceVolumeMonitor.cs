@@ -117,7 +117,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// Private fields
         /// </summary>
         _DeviceVolumeMonitor fInternal;
-        IntPtr fHandle;
         bool fDisposed;
         bool fEnabled;
         bool fAsync;
@@ -136,7 +135,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             get { return fEnabled; }
             set {
                 if (!fEnabled && value) {
-                    if (fInternal.Handle == IntPtr.Zero) { fInternal.AssignHandle(fHandle); }
+                    if (fInternal.Handle == IntPtr.Zero) { fInternal.CreateHandle(new CreateParams()); }                    
                     fEnabled = true;
                 }
                 if (fEnabled && !value) {
@@ -155,23 +154,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         /// <summary>
-        /// Constructor with no parameters
-        /// This constructo can be used if the instance is created in a form.
-        /// Caution: the form must already have an assigned Handle
-        /// </summary>
-        public DeviceVolumeMonitor() {
-            if (Form.ActiveForm != null) { fHandle = Form.ActiveForm.Handle; }
-            else { throw new DeviceVolumeMonitorException("There is no active form!"); }
-            Initialize();
-        }
-
-        /// <summary>
         /// Preferred constructor, accepts a Window Handle as single parameter
         /// </summary>
         /// <param name="aHandle">Window handle to be captured</param>
-        public DeviceVolumeMonitor(IntPtr aHandle) {
-            if (aHandle != IntPtr.Zero) { fHandle = aHandle; }
-            else { throw new DeviceVolumeMonitorException("Invalid handle!"); }
+        public DeviceVolumeMonitor() {
             Initialize();
         }
 

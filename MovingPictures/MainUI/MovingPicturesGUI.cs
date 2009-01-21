@@ -359,7 +359,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             // initialize the moving pictures core services
             success = Load(GUIGraphicsContext.Skin + @"\movingpictures.xml");
-            success = success && MovingPicturesCore.Initialize();
+            MovingPicturesCore.Initialize();
 
             // start the background importer
             if ((bool)MovingPicturesCore.SettingsManager["importer_gui_enabled"].Value)
@@ -423,18 +423,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             }
 
-            // start the device monitor
-            if (!DeviceManager.MonitorStarted) {
-                DeviceManager.Handle = GUIGraphicsContext.form.Handle;
-                DeviceManager.StartMonitor();
-                
-                // Listen to the DeviceManager
-                logger.Debug("Listening for device changes.");
-                DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
-                DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
-
-            }
-
             if (recentInsertedDiskSerials == null) {              
                 // Also listen to new movies added as part of the autoplay/details functionality
                 if (diskInsertedAction != DiskInsertedAction.NOTHING) {
@@ -449,24 +437,25 @@ namespace MediaPortal.Plugins.MovingPictures {
             browser.Facade = facade;
             facade.Focus = true;
 
-            // if this is our first time loading, we need to setup our default view data
+            // first time setup tasks
             if (!loaded) {
                 loaded = true;
 
+                // Listen to the DeviceManager for external media activity (i.e. disks inserted)
+                logger.Debug("Listening for device changes.");
+                DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
+                DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
+
                 // set the default view for the facade
                 string defaultView = ((string)MovingPicturesCore.SettingsManager["default_view"].Value).Trim().ToLower();
-                if (defaultView.Equals("list")) {
+                if (defaultView.Equals("list")) 
                     CurrentView = ViewMode.LIST;
-                }
-                else if (defaultView.Equals("thumbs")) {
+                else if (defaultView.Equals("thumbs")) 
                     CurrentView = ViewMode.SMALLICON;
-                }
-                else if (defaultView.Equals("largethumbs")) {
+                else if (defaultView.Equals("largethumbs")) 
                     CurrentView = ViewMode.LARGEICON;
-                }
-                else if (defaultView.Equals("filmstrip")) {
+                else if (defaultView.Equals("filmstrip")) 
                     CurrentView = ViewMode.FILMSTRIP;
-                }
                 else {
                     CurrentView = ViewMode.LIST;
                     logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
@@ -483,7 +472,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 previousView = tmp;
             }
 
-            // (re)link our backdrio image controls to the backdrop image swapper
+            // (re)link our backdrop image controls to the backdrop image swapper
             backdrop.GUIImageOne = movieBackdropControl;
             backdrop.GUIImageTwo = movieBackdropControl2;
             backdrop.LoadingImage = loadingImage;

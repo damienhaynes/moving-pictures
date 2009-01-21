@@ -102,7 +102,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieImporterPane1.Location = new System.Drawing.Point(6, 190);
             this.movieImporterPane1.MinimumSize = new System.Drawing.Size(422, 250);
             this.movieImporterPane1.Name = "movieImporterPane1";
-            this.movieImporterPane1.Size = new System.Drawing.Size(548, 407);
+            this.movieImporterPane1.Size = new System.Drawing.Size(548, 410);
             this.movieImporterPane1.TabIndex = 1;
             // 
             // importPathsListView1
@@ -164,7 +164,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.artworkSettingsPane1.Location = new System.Drawing.Point(3, 259);
             this.artworkSettingsPane1.MinimumSize = new System.Drawing.Size(400, 147);
             this.artworkSettingsPane1.Name = "artworkSettingsPane1";
-            this.artworkSettingsPane1.Size = new System.Drawing.Size(551, 147);
+            this.artworkSettingsPane1.Size = new System.Drawing.Size(551, 338);
             this.artworkSettingsPane1.TabIndex = 0;
             // 
             // aboutTabPage
@@ -183,7 +183,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.aboutPane1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.aboutPane1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.aboutPane1.Location = new System.Drawing.Point(3, 3);
-            this.aboutPane1.MinimumSize = new System.Drawing.Size(528, 494);
+            this.aboutPane1.MinimumSize = new System.Drawing.Size(528, 520);
             this.aboutPane1.Name = "aboutPane1";
             this.aboutPane1.Size = new System.Drawing.Size(554, 597);
             this.aboutPane1.TabIndex = 0;
@@ -197,7 +197,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(600, 578);
+            this.MinimumSize = new System.Drawing.Size(600, 600);
             this.Name = "MovingPicturesConfig";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

@@ -19,11 +19,19 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
+        public delegate void InitAction();
+        public delegate void ProgressDelegate(string actionName, int percentDone);
+        public static event ProgressDelegate InitializeProgress;
+
         private const string dbFileName = "movingpictures.db3";
         private const string logFileName = "movingpictures.log";
         private const string oldLogFileName = "movingpictures.old.log";
 
-        #region Properties
+        private static float loadingProgress;
+        private static float loadingTotal;
+        private static string loadingProgressDescription;
+
+        #region Properties & Events
 
         // The MovieImporter object that should be used by all components of the plugin
         public static MovieImporter Importer {
@@ -79,18 +87,78 @@ namespace MediaPortal.Plugins.MovingPictures {
             initLogger();
         }
 
-        public static bool Initialize() {
+        public static void Initialize() {
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
             logger.Info("Moving Pictures (" + ver.Major + "." + ver.Minor + "." + ver.Build + ":" + ver.Revision + ")");
             logger.Info("Plugin Launched");
 
-            initDB();
-            initAdditionalSettings();
-            Importer.UpdateImportPaths();
-            Importer.DoMovieMaintenance();
-            DataProviderManager.GetInstance();
+            DatabaseMaintenanceManager.MaintenanceProgress += new ProgressDelegate(DatabaseMaintenanceManager_MaintenanceProgress);
 
-            return true;
+            // setup the data structures sotring our list of startup actions
+            // we use this setup so we can easily add new tasks without having to 
+            // tweak any magic numbers for the progress bar / loading screen
+            List<InitAction> initActions = new List<InitAction>();
+            Dictionary<InitAction, string> actionDescriptions = new Dictionary<InitAction, string>();
+            InitAction newAction;
+
+            newAction = new InitAction(initDB);
+            actionDescriptions.Add(newAction, "Initializing Database...");
+            initActions.Add(newAction);
+
+            newAction = new InitAction(initAdditionalSettings);
+            actionDescriptions.Add(newAction, "Initializing Path Settings...");
+            initActions.Add(newAction);
+
+            newAction = new InitAction(DatabaseMaintenanceManager.RemoveInvalidFiles);
+            actionDescriptions.Add(newAction, "Removing deleted movies...");
+            initActions.Add(newAction);
+
+            newAction = new InitAction(DatabaseMaintenanceManager.RemoveInvalidMovies);
+            actionDescriptions.Add(newAction, "Removing invalid movie entries...");
+            initActions.Add(newAction);
+
+            newAction = new InitAction(DatabaseMaintenanceManager.RemoveOrphanArtwork);
+            actionDescriptions.Add(newAction, "Removing missing artwork...");
+            initActions.Add(newAction);
+
+            newAction = new InitAction(DatabaseMaintenanceManager.UpdateImportPaths);
+            actionDescriptions.Add(newAction, "Updating import paths...");
+            initActions.Add(newAction);
+
+            newAction = new InitAction(DatabaseMaintenanceManager.UpdateMissingDiskInfoProperties);
+            actionDescriptions.Add(newAction, "Updating disk information...");
+            initActions.Add(newAction);
+
+            newAction = new InitAction(DatabaseMaintenanceManager.UpdateUserSettings);
+            actionDescriptions.Add(newAction, "Updating user settings...");
+            initActions.Add(newAction);
+
+            newAction = new InitAction(DataProviderManager.Initialize);
+            actionDescriptions.Add(newAction, "Initializing Data Provider Manager...");
+            initActions.Add(newAction);
+
+            newAction = new InitAction(DeviceManager.StartMonitor);
+            actionDescriptions.Add(newAction, "Starting Device Monitor...");
+            initActions.Add(newAction);
+
+
+            // load all the above actions and notify any listeners of our progress
+            loadingProgress = 0;
+            loadingTotal = initActions.Count;
+            foreach (InitAction currAction in initActions) {
+                if (InitializeProgress != null) InitializeProgress(actionDescriptions[currAction], (int)(loadingProgress * 100 / loadingTotal));
+                loadingProgressDescription = actionDescriptions[currAction];
+
+                currAction();
+                loadingProgress++;
+            }
+
+            if (InitializeProgress != null) InitializeProgress("Done!", 100);
+        }
+
+        static void DatabaseMaintenanceManager_MaintenanceProgress(string actionName, int percentDone) {
+            int baseProgress = (int)(loadingProgress * 100 / loadingTotal);
+            if (InitializeProgress != null) InitializeProgress(loadingProgressDescription, baseProgress + (int)((float)percentDone / loadingTotal));
         }
 
         public static void Shutdown() {
