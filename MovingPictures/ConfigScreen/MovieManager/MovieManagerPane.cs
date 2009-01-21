@@ -483,10 +483,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     "Reassign Movie", MessageBoxButtons.YesNo);
 
             if (result == System.Windows.Forms.DialogResult.Yes) {
-                processingFiles.AddRange(CurrentMovie.LocalMedia);
-                SingleMovieImporterPopup popup = new SingleMovieImporterPopup(CurrentMovie);
-                popup.ShowDialog();
-                processingFiles.Clear();
+                List<DBLocalMedia> localMedia = new List<DBLocalMedia>(CurrentMovie.LocalMedia);
+                CurrentMovie.Delete();
+                MovingPicturesCore.Importer.Start();
+                MovingPicturesCore.Importer.Reprocess(localMedia);
+                MovingPicturesConfig configWindow = ((MovingPicturesConfig)this.TopLevelControl);
+                TabControl mainTabControl = (TabControl)configWindow.Controls["mainTabControl"];
+                mainTabControl.SelectedTab = (TabPage)mainTabControl.Controls["importSettingsTab"];
             }
         }
 
