@@ -13,6 +13,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
+        private bool deleting = false;
+
         public override void AfterDelete() {
         }
 
@@ -263,16 +265,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         #region Database Management Methods
 
         public override void Delete() {
+            if (deleting)
+                return;
+
+            deleting = true;
             logger.Info("Removing " + FullPath + " and associated movie.");
             foreach (DBMovieInfo currMovie in AttachedMovies) {
                 foreach (DBLocalMedia otherFile in currMovie.LocalMedia) {
                     if (otherFile != this)
-                        otherFile.Delete();
+                        DBManager.Delete(otherFile);
                 }
                 currMovie.Delete();
             }
 
             base.Delete();
+            deleting = false;
         }
 
         public static DBLocalMedia Get(string fullPath) {
