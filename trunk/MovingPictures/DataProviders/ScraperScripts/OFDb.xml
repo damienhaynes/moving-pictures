@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="1" minor="0" point="5"/>
-    <published month="1" day="5" year="2009"/>
+    <!--<version major="1" minor="0" point="6"/>-->
+    <published month="1" day="23" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -42,7 +42,7 @@
     </set>
     <set name="rx_imdb_results">
       <![CDATA[
-      <result>.*?<title>(.+?)(\s/\s(.+?))?\((\d{4})\)</title>.*?<imdbid>(.+?)</imdbid>.*?<ofdbid>(.+?)</ofdbid>.*?</result>
+     <resultat>[^<]*?<titel>(.+?)(\s/\s(.+?))?\((\d{4})\)</titel>[^<]*?<imdbid>(.+?)</imdbid>[^<]*?<ofdbid>(.+?)</ofdbid>[^<]*?</resultat>
       ]]>
     </set>
     <set name="rx_results">
