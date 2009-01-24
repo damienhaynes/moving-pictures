@@ -26,6 +26,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             homeScreenTextBox.Setting = MovingPicturesCore.SettingsManager["home_name"];
             watchedPercentTextBox.Setting = MovingPicturesCore.SettingsManager["gui_watch_percentage"];
             remoteControlCheckBox.Setting = MovingPicturesCore.SettingsManager["enable_rc_filter"];
+            enableDeleteCheckBox.Setting = MovingPicturesCore.SettingsManager["enable_delete_movie"];
 
             sortFieldComboBox.Setting = MovingPicturesCore.SettingsManager["default_sort_field"];
             sortFieldComboBox.EnumType = typeof(GUIListItemMovieComparer.SortingFields);

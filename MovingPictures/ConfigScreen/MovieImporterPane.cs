@@ -347,7 +347,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 "continue?\n", "Warning", MessageBoxButtons.YesNo);
 
             if (result == DialogResult.Yes) {
-                ProgressPopup popup = new ProgressPopup(new ProgressPopup.WorkerDelegate(unignoreAllFiles));
+                ProgressPopup popup = new ProgressPopup(new WorkerDelegate(unignoreAllFiles));
                 popup.Owner = this.ParentForm;
                 popup.Show();
             }

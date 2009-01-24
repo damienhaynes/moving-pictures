@@ -31,11 +31,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.importerGroupBox = new System.Windows.Forms.GroupBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.unapprovedGrid = new System.Windows.Forms.DataGridView();
+            this.statusColumn = new System.Windows.Forms.DataGridViewImageColumn();
+            this.unapprovedLocalMediaColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.unapprovedPossibleMatchesColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.progressPanel = new System.Windows.Forms.Panel();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.countProgressLabel = new System.Windows.Forms.Label();
             this.currentTaskDesc = new System.Windows.Forms.Label();
-            this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.countProgressLabel = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.filterSplitButton = new System.Windows.Forms.ToolStripSplitButton();
             this.allMatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,18 +57,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.settingsButton = new System.Windows.Forms.ToolStripSplitButton();
             this.unignoreAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restartImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.unapprovedGrid = new System.Windows.Forms.DataGridView();
-            this.statusColumn = new System.Windows.Forms.DataGridViewImageColumn();
-            this.unapprovedLocalMediaColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.unapprovedPossibleMatchesColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.progressPanel = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.unapprovedMatchesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.importerGroupBox.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).BeginInit();
             this.progressPanel.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedMatchesBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -80,52 +80,125 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importerGroupBox.TabStop = false;
             this.importerGroupBox.Text = "Media Importer";
             // 
+            // panel2
+            // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.Controls.Add(this.unapprovedGrid);
+            this.panel2.Controls.Add(this.progressPanel);
+            this.panel2.Location = new System.Drawing.Point(3, 45);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(636, 379);
+            this.panel2.TabIndex = 7;
+            // 
+            // unapprovedGrid
+            // 
+            this.unapprovedGrid.AllowUserToAddRows = false;
+            this.unapprovedGrid.AllowUserToDeleteRows = false;
+            this.unapprovedGrid.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.unapprovedGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.unapprovedGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.unapprovedGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.statusColumn,
+            this.unapprovedLocalMediaColumn,
+            this.unapprovedPossibleMatchesColumn});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.unapprovedGrid.DefaultCellStyle = dataGridViewCellStyle2;
+            this.unapprovedGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.unapprovedGrid.Location = new System.Drawing.Point(0, 0);
+            this.unapprovedGrid.Name = "unapprovedGrid";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.unapprovedGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.unapprovedGrid.RowHeadersVisible = false;
+            this.unapprovedGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.unapprovedGrid.Size = new System.Drawing.Size(636, 345);
+            this.unapprovedGrid.TabIndex = 4;
+            this.unapprovedGrid.SelectionChanged += new System.EventHandler(this.unapprovedGrid_SelectionChanged);
+            // 
+            // statusColumn
+            // 
+            this.statusColumn.HeaderText = "";
+            this.statusColumn.Name = "statusColumn";
+            this.statusColumn.Width = 20;
+            // 
+            // unapprovedLocalMediaColumn
+            // 
+            this.unapprovedLocalMediaColumn.DataPropertyName = "LocalMediaString";
+            this.unapprovedLocalMediaColumn.HeaderText = "File(s)";
+            this.unapprovedLocalMediaColumn.Name = "unapprovedLocalMediaColumn";
+            this.unapprovedLocalMediaColumn.ReadOnly = true;
+            this.unapprovedLocalMediaColumn.Width = 200;
+            // 
+            // unapprovedPossibleMatchesColumn
+            // 
+            this.unapprovedPossibleMatchesColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.unapprovedPossibleMatchesColumn.DataPropertyName = "Selected";
+            this.unapprovedPossibleMatchesColumn.HeaderText = "Possible Matches";
+            this.unapprovedPossibleMatchesColumn.Name = "unapprovedPossibleMatchesColumn";
+            // 
+            // progressPanel
+            // 
+            this.progressPanel.Controls.Add(this.progressBar);
+            this.progressPanel.Controls.Add(this.currentTaskDesc);
+            this.progressPanel.Controls.Add(this.countProgressLabel);
+            this.progressPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressPanel.Location = new System.Drawing.Point(0, 345);
+            this.progressPanel.Name = "progressPanel";
+            this.progressPanel.Size = new System.Drawing.Size(636, 34);
+            this.progressPanel.TabIndex = 6;
+            // 
             // progressBar
             // 
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(7, 22);
+            this.progressBar.Location = new System.Drawing.Point(7, 21);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(622, 27);
+            this.progressBar.Size = new System.Drawing.Size(622, 10);
             this.progressBar.TabIndex = 0;
-            // 
-            // countProgressLabel
-            // 
-            this.countProgressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.countProgressLabel.Location = new System.Drawing.Point(538, 7);
-            this.countProgressLabel.Name = "countProgressLabel";
-            this.countProgressLabel.Size = new System.Drawing.Size(93, 13);
-            this.countProgressLabel.TabIndex = 3;
-            this.countProgressLabel.Text = "(0/99)";
-            this.countProgressLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.countProgressLabel.Visible = false;
             // 
             // currentTaskDesc
             // 
             this.currentTaskDesc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.currentTaskDesc.AutoSize = true;
             this.currentTaskDesc.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.currentTaskDesc.Location = new System.Drawing.Point(6, 6);
+            this.currentTaskDesc.Location = new System.Drawing.Point(4, 5);
             this.currentTaskDesc.Name = "currentTaskDesc";
             this.currentTaskDesc.Size = new System.Drawing.Size(115, 13);
             this.currentTaskDesc.TabIndex = 1;
             this.currentTaskDesc.Text = "Currently Processing ...";
             this.currentTaskDesc.Visible = false;
             // 
-            // dataGridViewComboBoxColumn1
+            // countProgressLabel
             // 
-            this.dataGridViewComboBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewComboBoxColumn1.DataPropertyName = "Selected";
-            this.dataGridViewComboBoxColumn1.HeaderText = "Possible Matches";
-            this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "LocalMediaString";
-            this.dataGridViewTextBoxColumn1.HeaderText = "File(s)";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 200;
+            this.countProgressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.countProgressLabel.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.countProgressLabel.Location = new System.Drawing.Point(536, 6);
+            this.countProgressLabel.Name = "countProgressLabel";
+            this.countProgressLabel.Size = new System.Drawing.Size(93, 13);
+            this.countProgressLabel.TabIndex = 3;
+            this.countProgressLabel.Text = "(0/99)";
+            this.countProgressLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.countProgressLabel.Visible = false;
             // 
             // toolStrip1
             // 
@@ -285,92 +358,20 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.restartImporterToolStripMenuItem.Text = "Restart Importer";
             this.restartImporterToolStripMenuItem.Click += new System.EventHandler(this.restartImporterToolStripMenuItem_Click);
             // 
-            // unapprovedGrid
+            // dataGridViewComboBoxColumn1
             // 
-            this.unapprovedGrid.AllowUserToAddRows = false;
-            this.unapprovedGrid.AllowUserToDeleteRows = false;
-            this.unapprovedGrid.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.unapprovedGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.unapprovedGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.unapprovedGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.statusColumn,
-            this.unapprovedLocalMediaColumn,
-            this.unapprovedPossibleMatchesColumn});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.unapprovedGrid.DefaultCellStyle = dataGridViewCellStyle2;
-            this.unapprovedGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.unapprovedGrid.Location = new System.Drawing.Point(0, 0);
-            this.unapprovedGrid.Name = "unapprovedGrid";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.unapprovedGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.unapprovedGrid.RowHeadersVisible = false;
-            this.unapprovedGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.unapprovedGrid.Size = new System.Drawing.Size(636, 327);
-            this.unapprovedGrid.TabIndex = 4;
-            this.unapprovedGrid.SelectionChanged += new System.EventHandler(this.unapprovedGrid_SelectionChanged);
+            this.dataGridViewComboBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewComboBoxColumn1.DataPropertyName = "Selected";
+            this.dataGridViewComboBoxColumn1.HeaderText = "Possible Matches";
+            this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
             // 
-            // statusColumn
+            // dataGridViewTextBoxColumn1
             // 
-            this.statusColumn.HeaderText = "";
-            this.statusColumn.Name = "statusColumn";
-            this.statusColumn.Width = 20;
-            // 
-            // unapprovedLocalMediaColumn
-            // 
-            this.unapprovedLocalMediaColumn.DataPropertyName = "LocalMediaString";
-            this.unapprovedLocalMediaColumn.HeaderText = "File(s)";
-            this.unapprovedLocalMediaColumn.Name = "unapprovedLocalMediaColumn";
-            this.unapprovedLocalMediaColumn.ReadOnly = true;
-            this.unapprovedLocalMediaColumn.Width = 200;
-            // 
-            // unapprovedPossibleMatchesColumn
-            // 
-            this.unapprovedPossibleMatchesColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.unapprovedPossibleMatchesColumn.DataPropertyName = "Selected";
-            this.unapprovedPossibleMatchesColumn.HeaderText = "Possible Matches";
-            this.unapprovedPossibleMatchesColumn.Name = "unapprovedPossibleMatchesColumn";
-            // 
-            // progressPanel
-            // 
-            this.progressPanel.Controls.Add(this.progressBar);
-            this.progressPanel.Controls.Add(this.currentTaskDesc);
-            this.progressPanel.Controls.Add(this.countProgressLabel);
-            this.progressPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressPanel.Location = new System.Drawing.Point(0, 327);
-            this.progressPanel.Name = "progressPanel";
-            this.progressPanel.Size = new System.Drawing.Size(636, 52);
-            this.progressPanel.TabIndex = 6;
-            // 
-            // panel2
-            // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.Controls.Add(this.unapprovedGrid);
-            this.panel2.Controls.Add(this.progressPanel);
-            this.panel2.Location = new System.Drawing.Point(3, 45);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(636, 379);
-            this.panel2.TabIndex = 7;
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "LocalMediaString";
+            this.dataGridViewTextBoxColumn1.HeaderText = "File(s)";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Width = 200;
             // 
             // unapprovedMatchesBindingSource
             // 
@@ -389,12 +390,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.HandleDestroyed += new System.EventHandler(this.MovieImporterPane_HandleDestroyed);
             this.importerGroupBox.ResumeLayout(false);
             this.importerGroupBox.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).EndInit();
             this.progressPanel.ResumeLayout(false);
             this.progressPanel.PerformLayout();
-            this.panel2.ResumeLayout(false);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedMatchesBindingSource)).EndInit();
             this.ResumeLayout(false);
 

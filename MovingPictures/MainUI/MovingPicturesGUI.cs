@@ -687,10 +687,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             scoreItem.ItemId = 6;
             dialog.Add(scoreItem);
 
-            GUIListItem userScoreItem = new GUIListItem("User Score");
-            userScoreItem.ItemId = 7;
-            dialog.Add(userScoreItem);
-
             GUIListItem popularityItem = new GUIListItem("Popularity");
             popularityItem.ItemId = 8;
             dialog.Add(popularityItem);
@@ -732,10 +728,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 case 6:
                     newSortField = GUIListItemMovieComparer.SortingFields.Score;
-                    break;
-
-                case 7:
-                    newSortField = GUIListItemMovieComparer.SortingFields.UserScore;
                     break;
 
                 case 8:

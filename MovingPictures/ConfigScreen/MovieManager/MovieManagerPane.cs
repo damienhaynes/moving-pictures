@@ -428,7 +428,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 if (movieListBox.SelectedItems.Count <= 1)
                     refreshMovies(null);
                 else {
-                    ProgressPopup popup = new ProgressPopup(new ProgressPopup.TrackableWorkerDelegate(refreshMovies));
+                    ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(refreshMovies));
                     popup.Owner = this.ParentForm;
                     popup.ShowDialog();
                 }
@@ -438,9 +438,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
-        private void refreshMovies(ProgressPopup.ProgressDelegate progress) {
-            int count = 0;
-            int total = processingMovies.Count;
+        private void refreshMovies(ProgressDelegate progress) {
+            float count = 0;
+            float total = processingMovies.Count;
             int sentToImporter = 0;
 
             foreach (DBMovieInfo currItem in processingMovies) {
@@ -461,7 +461,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 count++;
                 if (progress != null)
-                    progress(count, total);
+                    progress("", (int)(count*100/total));
             }
 
             if (sentToImporter > 0) 
@@ -507,7 +507,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 foreach (DBMovieInfo currItem in listItems.Keys)
                     processingMovies.Add(currItem);
 
-                ProgressPopup popup = new ProgressPopup(new ProgressPopup.TrackableWorkerDelegate(refreshMovies));
+                ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(refreshMovies));
                 popup.Owner = this.ParentForm;
                 popup.ShowDialog();
 

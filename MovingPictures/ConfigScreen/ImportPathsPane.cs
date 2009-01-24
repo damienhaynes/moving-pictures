@@ -23,6 +23,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // if we are in designer, break to prevent errors with rendering, it cant access the DB...
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
+        }
+
+        private void ImportPathsPane_Load(object sender, EventArgs e) {
+            if (DesignMode)
+                return;
 
             // grab all user defined paths
             paths = DBImportPath.GetAllUserDefined();
@@ -40,6 +45,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             importDvdCheckBox.Setting = MovingPicturesCore.SettingsManager["importer_disc_enabled"];
 
             this.HandleDestroyed += new EventHandler(ImportPathsPane_HandleDestroyed);
+
+            addTooltips();
         }
 
         private void addTooltips() {
@@ -100,10 +107,21 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (pathBindingSource.Current != null) {
                 DialogResult result = MessageBox.Show("This will remove from Moving Pictures all movies retrieved from this import path, are you sure?", "Warning!", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes) {
+                    // stop the importer
+                    MovingPicturesCore.Importer.Stop(); ;
+                    
+                    // remove the import path
                     ((DBImportPath)pathBindingSource.Current).Delete();
                     pathBindingSource.RemoveCurrent();
+                    
+                    // clean the database of the old movies using our progress bar popup
+                    ProgressPopup progressPopup = new ProgressPopup(new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidFiles));
+                    DatabaseMaintenanceManager.MaintenanceProgress += new ProgressDelegate(progressPopup.Progress);
+                    progressPopup.Owner = ParentForm;
+                    progressPopup.Text = "Removing related movies...";
+                    progressPopup.ShowDialog();
 
-                    DatabaseMaintenanceManager.RemoveInvalidFiles();
+                    // restart the importer
                     MovingPicturesCore.Importer.RestartScanner();
                     
                 }
@@ -115,8 +133,5 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             Help.ShowHelp(ParentForm, MovingPicturesCore.SettingsManager["help_file"].StringValue, HelpNavigator.Topic, "2_MediaSources.htm");
         }
 
-        private void ImportPathsPane_Load(object sender, EventArgs e) {
-            addTooltips();
-        }
     }
 }

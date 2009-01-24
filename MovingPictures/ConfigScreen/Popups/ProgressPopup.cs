@@ -9,10 +9,6 @@ using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     public partial class ProgressPopup : Form {
-        public delegate void ProgressDelegate(int current, int total);
-        public delegate void TrackableWorkerDelegate(ProgressDelegate progress);
-        public delegate void WorkerDelegate();
-
         Thread workerThread;
         
         WorkerDelegate worker;
@@ -61,7 +57,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         }
 
         private void paramThreadWrapper() {
-            trackableWorker.Invoke(new ProgressDelegate(progress));
+            trackableWorker.Invoke(new ProgressDelegate(Progress));
         }
 
         private void timer_Tick(object sender, EventArgs e) {
@@ -69,13 +65,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
                 this.Close();
         }
 
-        private void progress(int current, int total) {
+        public void Progress(string description, int percentage) {
             if (InvokeRequired) {
-                Invoke(new ProgressDelegate(progress), new object[] {current, total});
+                Invoke(new ProgressDelegate(Progress), new object[] { description, percentage });
                 return;
             }
 
-            progressBar.Value = (int)(((float)current / total) * 100);
+            if (progressBar.Style != ProgressBarStyle.Blocks)
+                progressBar.Style = ProgressBarStyle.Blocks;
+
+            progressBar.Value = percentage;
+            if (description.Trim().Length > 0)
+                this.Text = description;
         }
 
         private void center() {

@@ -13,14 +13,16 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using MediaPortal.Plugins.MovingPictures.Properties;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 
 namespace MediaPortal.Plugins.MovingPictures {
-    public class MovingPicturesCore {
+    public delegate void WorkerDelegate();
+    public delegate void TrackableWorkerDelegate(ProgressDelegate progress);
+    public delegate void ProgressDelegate(string actionName, int percentDone);
 
+    public class MovingPicturesCore {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public delegate void InitAction();
-        public delegate void ProgressDelegate(string actionName, int percentDone);
         public static event ProgressDelegate InitializeProgress;
 
         private const string dbFileName = "movingpictures.db3";
@@ -97,47 +99,47 @@ namespace MediaPortal.Plugins.MovingPictures {
             // setup the data structures sotring our list of startup actions
             // we use this setup so we can easily add new tasks without having to 
             // tweak any magic numbers for the progress bar / loading screen
-            List<InitAction> initActions = new List<InitAction>();
-            Dictionary<InitAction, string> actionDescriptions = new Dictionary<InitAction, string>();
-            InitAction newAction;
+            List<WorkerDelegate> initActions = new List<WorkerDelegate>();
+            Dictionary<WorkerDelegate, string> actionDescriptions = new Dictionary<WorkerDelegate, string>();
+            WorkerDelegate newAction;
 
-            newAction = new InitAction(initDB);
+            newAction = new WorkerDelegate(initDB);
             actionDescriptions.Add(newAction, "Initializing Database...");
             initActions.Add(newAction);
 
-            newAction = new InitAction(initAdditionalSettings);
+            newAction = new WorkerDelegate(initAdditionalSettings);
             actionDescriptions.Add(newAction, "Initializing Path Settings...");
             initActions.Add(newAction);
 
-            newAction = new InitAction(DatabaseMaintenanceManager.RemoveInvalidFiles);
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidFiles);
             actionDescriptions.Add(newAction, "Removing deleted movies...");
             initActions.Add(newAction);
 
-            newAction = new InitAction(DatabaseMaintenanceManager.RemoveInvalidMovies);
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidMovies);
             actionDescriptions.Add(newAction, "Removing invalid movie entries...");
             initActions.Add(newAction);
 
-            newAction = new InitAction(DatabaseMaintenanceManager.RemoveOrphanArtwork);
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveOrphanArtwork);
             actionDescriptions.Add(newAction, "Removing missing artwork...");
             initActions.Add(newAction);
 
-            newAction = new InitAction(DatabaseMaintenanceManager.UpdateImportPaths);
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateImportPaths);
             actionDescriptions.Add(newAction, "Updating import paths...");
             initActions.Add(newAction);
 
-            newAction = new InitAction(DatabaseMaintenanceManager.UpdateMissingDiskInfoProperties);
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateMissingDiskInfoProperties);
             actionDescriptions.Add(newAction, "Updating disk information...");
             initActions.Add(newAction);
 
-            newAction = new InitAction(DatabaseMaintenanceManager.UpdateUserSettings);
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateUserSettings);
             actionDescriptions.Add(newAction, "Updating user settings...");
             initActions.Add(newAction);
 
-            newAction = new InitAction(DataProviderManager.Initialize);
+            newAction = new WorkerDelegate(DataProviderManager.Initialize);
             actionDescriptions.Add(newAction, "Initializing Data Provider Manager...");
             initActions.Add(newAction);
 
-            newAction = new InitAction(DeviceManager.StartMonitor);
+            newAction = new WorkerDelegate(DeviceManager.StartMonitor);
             actionDescriptions.Add(newAction, "Starting Device Monitor...");
             initActions.Add(newAction);
 
@@ -145,7 +147,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             // load all the above actions and notify any listeners of our progress
             loadingProgress = 0;
             loadingTotal = initActions.Count;
-            foreach (InitAction currAction in initActions) {
+            foreach (WorkerDelegate currAction in initActions) {
                 if (InitializeProgress != null) InitializeProgress(actionDescriptions[currAction], (int)(loadingProgress * 100 / loadingTotal));
                 loadingProgressDescription = actionDescriptions[currAction];
 
@@ -179,6 +181,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         // Initializes the database connection to the Movies Plugin database
         private static void initDB() {
+            if (databaseManager != null)
+                return;
+
             string fullDBFileName = Config.GetFile(Config.Dir.Database, dbFileName);
             databaseManager = new DatabaseManager(fullDBFileName);
 

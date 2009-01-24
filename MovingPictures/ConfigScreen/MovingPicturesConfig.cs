@@ -36,7 +36,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void MovingPicturesConfig_FormClosing(object sender, FormClosedEventArgs e) {
             if (!DesignMode) {
                 MovingPicturesCore.Importer.Stop();
-                ProgressPopup popup = new ProgressPopup(new ProgressPopup.WorkerDelegate(movieManagerPane1.Commit));
+                ProgressPopup popup = new ProgressPopup(new WorkerDelegate(movieManagerPane1.Commit));
                 popup.Owner = this;
                 popup.ShowDialog();
             }
