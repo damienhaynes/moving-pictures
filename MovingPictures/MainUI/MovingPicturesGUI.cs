@@ -1033,6 +1033,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         #region Playback Methods
 
         private void playSelectedMovie() {
+            logger.Debug("playSelectedMovie()");
             // make sure we have a valid movie selected
             if (browser.SelectedMovie == null) {
                 logger.Error("Tried to play when there is no selected movie!");
@@ -1048,10 +1049,19 @@ namespace MediaPortal.Plugins.MovingPictures {
          }
 
         private void playMovie(DBMovieInfo movie, int requestedPart) {
+            logger.Debug("playMovie()");
+            
             if (movie == null || requestedPart > movie.LocalMedia.Count || requestedPart < 1) 
                 return;
 
+            logger.Debug(" movie: {0}, requestedPart: {1}", movie.Title, requestedPart);
+            for (int i = 0; i < movie.LocalMedia.Count; i++) {
+                logger.Debug("LocalMedia[{0}] = {1}  Duration = {2}", i, movie.LocalMedia[i].FullPath, movie.LocalMedia[i].Duration);
+            }
+
+
             int part = requestedPart;
+            logger.Debug("1. part = {0}", part);
             bool resume = false;
 
             // if this is a request to start the movie from the begining, check if we should resume
@@ -1059,27 +1069,32 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (requestedPart == 1) {
                 // check if we should be resuming, and if not, clear resume data
                 resume = PromptUserToResume(movie);
+                logger.Debug("resume = {0}", resume);
                 if (resume)
                     part = movie.UserSettings[0].ResumePart;
                 else
                     clearMovieResumeState(movie);
 
+                logger.Debug("2. part = {0}", part);
                 // if we have a multi-part movie composed of disk images and we are not resuming 
                 // ask which part the user wants to play
                 string firstExtension = movie.LocalMedia[0].File.Extension;
                 if (!resume && movie.LocalMedia.Count > 1 && (DaemonTools.IsImageFile(firstExtension) || firstExtension.ToLower() == ".ifo")) {
+                    logger.Debug("Displaying filestacking dialog");
                     GUIDialogFileStacking dlg = (GUIDialogFileStacking)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_FILESTACKING);
                     if (null != dlg) {
                         dlg.SetNumberOfFiles(movie.LocalMedia.Count);
                         dlg.DoModal(GUIWindowManager.ActiveWindow);
                         part = dlg.SelectedFile;
                         if (part < 1) return;
+                        logger.Debug("3. part = {0}", part);
                     }
                 }
             }
 
 
             DBLocalMedia mediaToPlay = movie.LocalMedia[part - 1];
+            logger.Debug("4. part = {0} mediaToPlay= {1}", part, mediaToPlay.FullPath);
 
             // If the media is missing, this loop will ask the user to insert it.
             // This loop can exit in 2 ways:
@@ -1146,10 +1161,12 @@ namespace MediaPortal.Plugins.MovingPictures {
                 updateMediaDuration(mediaToPlay);
 
                 // and jump to our resume position if necessary
-                if (resume && g_Player.Playing) {  
+                if (resume && g_Player.Playing) {
+                    logger.Debug("jumping to resume point");
                     if (g_Player.IsDVD) 
                         g_Player.Player.SetResumeState(movie.UserSettings[0].ResumeData.Data);
                     else {
+                        logger.Debug("ResumeTime = {0}", movie.UserSettings[0].ResumeTime);
                         GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SEEK_POSITION, 0, 0, 0, 0, 0, null);
                         msg.Param1 = movie.UserSettings[0].ResumeTime;
                         GUIGraphicsContext.SendMessage(msg);
@@ -1193,6 +1210,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (movie.UserSettings == null || movie.UserSettings.Count == 0 || movie.UserSettings[0].ResumeTime <= 30)
                 return false;
 
+            logger.Debug("PromptUserToResume {0} ResumeTime {1} ResumePart {2}", movie.Title, movie.UserSettings[0].ResumeTime, movie.UserSettings[0].ResumePart);
+
             // figure out the resume time to display to the user
             int displayTime = movie.UserSettings[0].ResumeTime;
             if (movie.LocalMedia.Count > 1) {
@@ -1209,7 +1228,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(displayTime));
             dlgYesNo.SetDefaultToYes(true);
             dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
-
+            logger.Debug("PromptUserToResume: User chose " + dlgYesNo.IsConfirmed.ToString());
             if (dlgYesNo.IsConfirmed)
                 return true;
 
@@ -1218,6 +1237,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         // start playback of a regular file
         private void playFile(string media) {
+            logger.Debug("playFile " + media);
             GUIGraphicsContext.IsFullScreenVideo = true;
             GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
             bool success = g_Player.Play(media, g_Player.MediaType.Video);
@@ -1226,6 +1246,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         // start playback of an image file (ISO)
         private void playImage(string media) {
+            logger.Debug("playImage " + media);
             string drive;
 
             // Check if the current image is already mounted
