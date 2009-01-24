@@ -234,7 +234,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void reloadDefaultSourcesToolStripMenuItem_Click(object sender, EventArgs e) {
-            ProgressPopup.WorkerDelegate worker = new ProgressPopup.WorkerDelegate(MovingPicturesCore.DataProviderManager.LoadInternalProviders);
+            WorkerDelegate worker = new WorkerDelegate(MovingPicturesCore.DataProviderManager.LoadInternalProviders);
             ProgressPopup popup = new ProgressPopup(worker);
             popup.Owner = this.ParentForm;
             popup.ShowDialog();

@@ -336,7 +336,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             Certification,
             Language,
             Score,
-            UserScore,
             Popularity,
             Runtime,
             FilePath
@@ -392,10 +391,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
 
                     case SortingFields.Score:
                         rtn = movieX.Score.CompareTo(movieY.Score);
-                        break;
-
-                    case SortingFields.UserScore:
-                        rtn = movieX.UserScore.CompareTo(movieY.UserScore);
                         break;
 
                     case SortingFields.Popularity:

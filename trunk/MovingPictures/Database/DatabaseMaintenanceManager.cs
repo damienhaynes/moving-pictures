@@ -9,7 +9,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
         
-        public static event MovingPicturesCore.ProgressDelegate MaintenanceProgress;
+        public static event ProgressDelegate MaintenanceProgress;
 
         // Loops through all local files in the system and removes anything that's invalid.
         public static void RemoveInvalidFiles() {

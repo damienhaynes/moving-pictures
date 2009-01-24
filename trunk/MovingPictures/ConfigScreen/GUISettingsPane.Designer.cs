@@ -57,6 +57,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.sortDirComboBox = new Cornerstone.GUI.Controls.SettingsComboBox();
             this.label13 = new System.Windows.Forms.Label();
+            this.enableDeleteCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -264,7 +266,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Location = new System.Drawing.Point(10, 240);
+            this.groupBox1.Location = new System.Drawing.Point(10, 272);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(492, 3);
             this.groupBox1.TabIndex = 16;
@@ -312,7 +314,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(4, 250);
+            this.label9.Location = new System.Drawing.Point(4, 282);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(56, 13);
             this.label9.TabIndex = 28;
@@ -322,7 +324,7 @@
             // 
             this.remoteControlCheckBox.AutoSize = true;
             this.remoteControlCheckBox.IgnoreSettingName = false;
-            this.remoteControlCheckBox.Location = new System.Drawing.Point(128, 311);
+            this.remoteControlCheckBox.Location = new System.Drawing.Point(128, 343);
             this.remoteControlCheckBox.Name = "remoteControlCheckBox";
             this.remoteControlCheckBox.Setting = null;
             this.remoteControlCheckBox.Size = new System.Drawing.Size(163, 17);
@@ -333,7 +335,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(315, 313);
+            this.linkLabel1.Location = new System.Drawing.Point(315, 345);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(68, 13);
             this.linkLabel1.TabIndex = 30;
@@ -343,7 +345,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(125, 250);
+            this.label10.Location = new System.Drawing.Point(125, 282);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(91, 13);
             this.label10.TabIndex = 31;
@@ -356,7 +358,7 @@
             this.watchedComboBox.Items.AddRange(new object[] {
             "All Movies",
             "Unwatched Movies"});
-            this.watchedComboBox.Location = new System.Drawing.Point(227, 247);
+            this.watchedComboBox.Location = new System.Drawing.Point(227, 279);
             this.watchedComboBox.Name = "watchedComboBox";
             this.watchedComboBox.Size = new System.Drawing.Size(121, 21);
             this.watchedComboBox.TabIndex = 32;
@@ -365,7 +367,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(125, 278);
+            this.label11.Location = new System.Drawing.Point(125, 310);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(96, 13);
             this.label11.TabIndex = 33;
@@ -375,7 +377,7 @@
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Location = new System.Drawing.Point(120, 302);
+            this.groupBox5.Location = new System.Drawing.Point(120, 334);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(380, 3);
             this.groupBox5.TabIndex = 35;
@@ -387,7 +389,7 @@
             this.sortFieldComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.sortFieldComboBox.EnumType = null;
             this.sortFieldComboBox.FormattingEnabled = true;
-            this.sortFieldComboBox.Location = new System.Drawing.Point(227, 275);
+            this.sortFieldComboBox.Location = new System.Drawing.Point(227, 307);
             this.sortFieldComboBox.Name = "sortFieldComboBox";
             this.sortFieldComboBox.Setting = null;
             this.sortFieldComboBox.Size = new System.Drawing.Size(93, 21);
@@ -396,7 +398,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(326, 278);
+            this.label12.Location = new System.Drawing.Point(326, 310);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(15, 13);
             this.label12.TabIndex = 37;
@@ -407,7 +409,7 @@
             this.sortDirComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.sortDirComboBox.EnumType = null;
             this.sortDirComboBox.FormattingEnabled = true;
-            this.sortDirComboBox.Location = new System.Drawing.Point(347, 275);
+            this.sortDirComboBox.Location = new System.Drawing.Point(347, 307);
             this.sortDirComboBox.Name = "sortDirComboBox";
             this.sortDirComboBox.Setting = null;
             this.sortDirComboBox.Size = new System.Drawing.Size(82, 21);
@@ -416,16 +418,40 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(435, 278);
+            this.label13.Location = new System.Drawing.Point(435, 310);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(37, 13);
             this.label13.TabIndex = 39;
             this.label13.Text = "order.";
             // 
+            // enableDeleteCheckBox
+            // 
+            this.enableDeleteCheckBox.AutoSize = true;
+            this.enableDeleteCheckBox.IgnoreSettingName = false;
+            this.enableDeleteCheckBox.Location = new System.Drawing.Point(128, 249);
+            this.enableDeleteCheckBox.Name = "enableDeleteCheckBox";
+            this.enableDeleteCheckBox.Setting = null;
+            this.enableDeleteCheckBox.Size = new System.Drawing.Size(277, 17);
+            this.enableDeleteCheckBox.TabIndex = 40;
+            this.enableDeleteCheckBox.Text = "Allow user to delete files from the GUI context menu";
+            this.enableDeleteCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox6.Location = new System.Drawing.Point(120, 240);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(380, 3);
+            this.groupBox6.TabIndex = 24;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "groupBox2";
+            // 
             // GUISettingsPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.enableDeleteCheckBox);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.sortDirComboBox);
             this.Controls.Add(this.label12);
@@ -440,6 +466,7 @@
             this.Controls.Add(this.label8);
             this.Controls.Add(this.watchedPercentTextBox);
             this.Controls.Add(this.label7);
+            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox4);
@@ -505,5 +532,7 @@
         private System.Windows.Forms.Label label12;
         private Cornerstone.GUI.Controls.SettingsComboBox sortDirComboBox;
         private System.Windows.Forms.Label label13;
+        private Cornerstone.GUI.Controls.SettingCheckBox enableDeleteCheckBox;
+        private System.Windows.Forms.GroupBox groupBox6;
     }
 }

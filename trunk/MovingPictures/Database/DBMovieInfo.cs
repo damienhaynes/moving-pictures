@@ -196,16 +196,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private float _score;
 
-        [DBFieldAttribute(FieldName="user_score")]
-        public float UserScore {
-            get { return _userScore; }
-
-            set {
-                _userScore = value;
-                commitNeeded = true;
-            }
-        } private float _userScore;
-
         [DBFieldAttribute]
         public int Popularity {
             get { return _popularity; }

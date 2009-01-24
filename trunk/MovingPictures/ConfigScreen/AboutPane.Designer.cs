@@ -298,7 +298,7 @@
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(71, 52);
             this.label16.TabIndex = 25;
-            this.label16.Text = "Travis Collins\r\ngshipley\r\nMartin Guillon\r\ncyberfix";
+            this.label16.Text = "Travis Collins\r\nGrant Shipley\r\nMartin Guillon\r\ncyberfix";
             // 
             // label17
             // 
@@ -306,9 +306,9 @@
             this.label17.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.label17.Location = new System.Drawing.Point(324, 195);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(103, 13);
+            this.label17.Size = new System.Drawing.Size(103, 26);
             this.label17.TabIndex = 26;
-            this.label17.Text = "(travistx, ZealotSix)";
+            this.label17.Text = "(travistx, ZealotSix)\r\n(gshipley)";
             // 
             // label18
             // 

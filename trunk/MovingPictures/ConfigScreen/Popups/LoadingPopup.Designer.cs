@@ -33,7 +33,10 @@
             this.splashPane1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splashPane1.Location = new System.Drawing.Point(0, 0);
             this.splashPane1.Name = "splashPane1";
+            this.splashPane1.Progress = 0;
+            this.splashPane1.ShowProgressComponents = false;
             this.splashPane1.Size = new System.Drawing.Size(511, 112);
+            this.splashPane1.Status = "Initializing...";
             this.splashPane1.TabIndex = 0;
             // 
             // LoadingPopup
@@ -44,7 +47,9 @@
             this.Controls.Add(this.splashPane1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LoadingPopup";
+            this.ShowInTaskbar = false;
             this.Text = "LoadingPopup";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.LoadingPopup_Load);
             this.ResumeLayout(false);
 

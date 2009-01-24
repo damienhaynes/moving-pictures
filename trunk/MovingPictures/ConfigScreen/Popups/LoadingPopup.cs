@@ -19,7 +19,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         private void LoadingPopup_Load(object sender, EventArgs e) {
             centerDialog();
 
-            MovingPicturesCore.InitializeProgress += new MovingPicturesCore.ProgressDelegate(MovingPicturesCore_InitializeProgress);
+            MovingPicturesCore.InitializeProgress += new ProgressDelegate(MovingPicturesCore_InitializeProgress);
             //Thread workThread = new Thread(new ThreadStart(worker));
             //workThread.Start();
         }

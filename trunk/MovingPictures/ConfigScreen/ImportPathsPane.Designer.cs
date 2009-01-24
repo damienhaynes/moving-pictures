@@ -86,6 +86,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // importDvdCheckBox
             // 
             this.importDvdCheckBox.AutoSize = true;
+            this.importDvdCheckBox.IgnoreSettingName = false;
             this.importDvdCheckBox.Location = new System.Drawing.Point(7, 131);
             this.importDvdCheckBox.Name = "importDvdCheckBox";
             this.importDvdCheckBox.Setting = null;
@@ -109,9 +110,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(7, 20);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(353, 13);
+            this.label1.Size = new System.Drawing.Size(338, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Videos in the following folders will be processed up by the Media Importer:";
+            this.label1.Text = "Videos in the following folders will be processed by the Media Importer:";
             // 
             // toolStrip
             // 
