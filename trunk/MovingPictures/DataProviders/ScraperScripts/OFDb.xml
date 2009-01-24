@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <!--<version major="1" minor="0" point="6"/>-->
-    <published month="1" day="23" year="2009"/>
+    <version major="1" minor="0" point="7"/>
+    <published month="1" day="24" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -47,7 +47,7 @@
     </set>
     <set name="rx_results">
       <![CDATA[
-      <eintrag>.*?<id>(.+?)</id>.*?<titel>(.+?)(\s/\s(.+?))?\((\d{4})\).*?</titel>.*?</eintrag>
+      <eintrag>[^<]*?<id>([^<]+?)</id>[^<]*?<titel>([^<]+?)</titel>[^<]*?<titel_orig>([^<]+?)</titel_orig>[^<]*?<jahr>([^<]+?)</jahr>[^<]*?</eintrag>
       ]]>
     </set>
 
@@ -89,12 +89,12 @@
         <if test="${tvserie}=">
           <add name="counter" value1="${count}" value2="${offset}" />
           <replace name="title" input="${curr_details[1]:htmldecode}" pattern="${rx_title_clean}" with="" />
-          <replace name="aka" input="${curr_details[3]:htmldecode}" pattern="${rx_title_clean}" with="" />
+          <replace name="aka" input="${curr_details[2]:htmldecode}" pattern="${rx_title_clean}" with="" />
           <parse name="title" input="${title}" regex="${rx_title}"/>
           <parse name="aka" input="${aka}" regex="${rx_title}"/>
           <set name="movie[${counter}].title" value="${title[0][1]} ${title[0][0]}"/>
           <set name="movie[${counter}].alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
-          <set name="movie[${counter}].year" value="${curr_details[4]:htmldecode}"/>
+          <set name="movie[${counter}].year" value="${curr_details[3]:htmldecode}"/>
           <set name="movie[${counter}].details_url" value="${site}movie/${curr_details[0]}"/>
           <set name="movie[${counter}].site_id" value="${curr_details[0]}"/>
           <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
