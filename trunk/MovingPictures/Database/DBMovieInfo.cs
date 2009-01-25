@@ -320,15 +320,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private StringList _covers;
 
 
-        public Image Cover {
-            get {
-                if (_cover == null && File.Exists(CoverFullPath))
-                    _cover = Image.FromFile(CoverFullPath);
-                return _cover;
-            }
-        } private Image _cover = null;
-
-
         [DBFieldAttribute(AllowAutoUpdate = false)]
         public String CoverFullPath
         {
@@ -341,20 +332,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             set {
                 _coverFullPath = value;
                 _coverThumbFullPath = "";
-                UnloadArtwork();
                 commitNeeded = true;
             }
         } private String _coverFullPath;
-
-
-        public Image CoverThumb {
-            get {
-                if (_coverThumb == null && File.Exists(CoverThumbFullPath))
-                    _coverThumb = Image.FromFile(CoverThumbFullPath);
-
-                return _coverThumb;
-            }
-        } private Image _coverThumb = null;
 
 
         [DBFieldAttribute(AllowAutoUpdate = false)]
@@ -367,7 +347,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             set {
                 _coverThumbFullPath = value;
-                UnloadArtwork();
                 commitNeeded = true;
             }
         } private String _coverThumbFullPath;
@@ -515,7 +494,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (AlternateCovers.Count == 0)
                 return;
             
-            UnloadArtwork();
             try {
                 FileInfo coverFile = new FileInfo(CoverFullPath);
                 if (coverFile.Exists)
@@ -533,24 +511,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             AlternateCovers.Remove(CoverFullPath);
             CoverFullPath = "";
             commitNeeded = true;
-        }
-
-        // Loads existing cover art and thumbnail into memory. This only 
-        // loads the currently selected cover.
-        public bool LoadArtwork() {
-            return (Cover != null && CoverThumb != null);
-        }
-
-        // Unloads coverart information from memory
-        public void UnloadArtwork() {
-            if (_cover != null)
-                _cover.Dispose();
-
-            if (_coverThumb != null)
-                _coverThumb.Dispose();
-            
-            _cover = null;
-            _coverThumb = null;
         }
 
         public bool AddCoverFromFile(string filename) {
@@ -593,7 +553,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // create a thumbnail for the cover
             logger.Info("Added cover art for '" + Title + "' [" + ID + "] from " + filename + ".");
-            _cover = newCover;
+            newCover.Dispose();
             commitNeeded = true;
             GenerateThumbnail();
             
@@ -658,9 +618,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             logger.Info("Added cover art for '" + Title + "' [" + ID + "] from " + url + ".");
             currImage.Save(filename, ImageFormat.Jpeg);
             AlternateCovers.Add(filename);
-            _cover = currImage;
             GenerateThumbnail();
             commitNeeded = true;
+
+            currImage.Dispose();
             return ArtworkLoadStatus.SUCCESS;
         }
 
@@ -725,6 +686,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // save the backdrop
             currImage.Save(filename, ImageFormat.Jpeg);
+            currImage.Dispose();
             _backdropFullPath = filename;
             commitNeeded = true;
             return ArtworkLoadStatus.SUCCESS;
@@ -758,6 +720,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 
                 // save the backdrop
                 newBackdrop.Save(newFileName, ImageFormat.Jpeg);
+                newBackdrop.Dispose();
                 _backdropFullPath = filename;
                 commitNeeded = true;
                 return true;
@@ -765,6 +728,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // if it's already in the folder, just store the filename in the db
             else {
+                newBackdrop.Dispose();
                 _backdropFullPath = filename;
                 commitNeeded = true;
                 return true;
@@ -842,17 +806,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return;
             }
 
-            if (Cover == null)
-                return;
+            Image cover = Image.FromFile(CoverFullPath);
 
             int width = 175;
-            int height = (int)(Cover.Height * ((float)width / (float)Cover.Width));
+            int height = (int)(cover.Height * ((float)width / (float)cover.Width));
 
             Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
-            _coverThumb = Cover.GetThumbnailImage(width, height, myCallback, IntPtr.Zero);
-            _coverThumb.Save(fullname, ImageFormat.Jpeg);
+            Image coverThumb = cover.GetThumbnailImage(width, height, myCallback, IntPtr.Zero);
+            coverThumb.Save(fullname, ImageFormat.Jpeg);
             _coverThumbFullPath = fullname;
             commitNeeded = true;
+
+            cover.Dispose();
+            coverThumb.Dispose();
         }
 
         public bool ThumbnailCallback() {

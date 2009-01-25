@@ -17,6 +17,7 @@ using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using NLog;
 using System.Collections.ObjectModel;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
+using System.IO;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {
@@ -27,6 +28,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private List<DBMovieInfo> processingMovies;
         private DBSourceInfo selectedSource;
 
+        private Image coverThumb;
         
         private delegate void InvokeDelegate();
         private delegate DBMovieInfo DBMovieInfoDelegate();
@@ -209,19 +211,23 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             reassignMovieButton.Enabled = true;
             playMovieButton.Enabled = true;
             
-            // setup coverart thumbnail panel
-            if (CurrentMovie.CoverThumb != null && CurrentMovie.Cover != null) {
-                coverImage.Image = CurrentMovie.CoverThumb;
-                resolutionLabel.Text = CurrentMovie.Cover.Width + " x " + CurrentMovie.Cover.Height;
+            // update cover artwork
+            try {
+                Image newCover = Image.FromFile(CurrentMovie.CoverThumbFullPath);
+                Image oldCover = coverImage.Image;
+                coverImage.Image = newCover;
+                if (oldCover != null) oldCover.Dispose();
+
+                resolutionLabel.Text = newCover.Width + " x " + newCover.Height;
                 coverNumLabel.Text = (CurrentMovie.AlternateCovers.IndexOf(CurrentMovie.CoverFullPath) + 1) +
                                      " / " + CurrentMovie.AlternateCovers.Count;
             }
-            else {
+            catch (Exception e) {
                 coverImage.Image = null;
                 resolutionLabel.Text = "";
                 coverNumLabel.Text = "";
             }
-
+            
             // enable/disable next/previous buttons for coverart
             if (CurrentMovie.AlternateCovers.Count <= 1) {
                 previousCoverButton.Enabled = false;
@@ -233,7 +239,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
 
             // enable/disable zoom & delete buttons for cover art
-            if (CurrentMovie.Cover != null) {
+            if (CurrentMovie.CoverFullPath.Trim().Length != 0) {
                 zoomButton.Enabled = true;
                 deleteCoverButton.Enabled = true;
             }
@@ -255,10 +261,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (movieListBox.SelectedItems.Count == 0)
                 return;
 
-            // unload the artowrk and commit for the previously selected movie
+            // commit the previous movie if necessary
             if (movieDetailsSubPane.DatabaseObject != null) {
                 DBMovieInfo oldMovie = (DBMovieInfo)movieDetailsSubPane.DatabaseObject;
-                oldMovie.UnloadArtwork();
                 if (oldMovie.ID != null)
                     oldMovie.Commit();
             }
@@ -284,19 +289,19 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void zoomButton_Click(object sender, EventArgs e) {
-            if (CurrentMovie == null || CurrentMovie.Cover == null)
+            if (CurrentMovie == null || CurrentMovie.CoverFullPath.Trim().Length == 0)
                 return;
 
-            CoverPopup popup = new CoverPopup(CurrentMovie.Cover);
+            CoverPopup popup = new CoverPopup(CurrentMovie.CoverFullPath);
             popup.Owner = this.ParentForm;
             popup.Show();
         }
 
         private void coverImage_DoubleClick(object sender, EventArgs e) {
-            if (CurrentMovie == null || CurrentMovie.Cover == null)
+            if (CurrentMovie == null || CurrentMovie.CoverFullPath.Trim().Length == 0)
                 return;
 
-            CoverPopup popup = new CoverPopup(CurrentMovie.Cover);
+            CoverPopup popup = new CoverPopup(CurrentMovie.CoverFullPath);
             popup.Owner = this.ParentForm;
             popup.Show();
         }

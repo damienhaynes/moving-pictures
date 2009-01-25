@@ -12,21 +12,27 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             InitializeComponent();
         }
 
-        public CoverPopup(Image image) {
+        public CoverPopup(string filename) {
             InitializeComponent();
-            pictureBox.Image = image;
+            try {
+                pictureBox.Image = Image.FromFile(filename);
+            }
+            catch (Exception) { }
         }
 
         private void pictureBox_Click(object sender, EventArgs e) {
             this.Close();
+            pictureBox.Image.Dispose();
         }
 
         private void CoverPopup_KeyPress(object sender, KeyPressEventArgs e) {
             this.Close();
+            pictureBox.Image.Dispose();
         }
 
         private void CoverPopup_Deactivate(object sender, EventArgs e) {
             this.Close();
+            pictureBox.Image.Dispose();
         }
 
         // if we have been launched as a dialog and we have an owner, center
