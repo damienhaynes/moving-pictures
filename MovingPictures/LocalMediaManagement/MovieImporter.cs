@@ -483,7 +483,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                         if (currMovie.CoverFullPath.Trim().Length == 0) {
                             MovingPicturesCore.DataProviderManager.GetArtwork(currMovie);
-                            currMovie.UnloadArtwork();
                             currMovie.Commit();
                         }
 
@@ -1188,8 +1187,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 MovingPicturesCore.DataProviderManager.GetArtwork(movie);
                 MovingPicturesCore.DataProviderManager.GetBackdrop(movie);
             }
-
-            movie.UnloadArtwork();
 
             foreach (DBLocalMedia currFile in localMedia)
                 currFile.CommitNeeded = false;

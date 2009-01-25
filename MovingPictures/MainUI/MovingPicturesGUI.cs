@@ -1007,7 +1007,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             if (browser.SelectedMovie.CoverFullPath.Trim().Length == 0) {
                 MovingPicturesCore.DataProviderManager.GetArtwork(browser.SelectedMovie);
-                browser.SelectedMovie.UnloadArtwork();
                 browser.SelectedMovie.Commit();
             }
 
