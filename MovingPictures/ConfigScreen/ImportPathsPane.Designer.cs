@@ -30,11 +30,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.addSourceButton = new System.Windows.Forms.ToolStripButton();
             this.removeSourceButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.helpButton = new System.Windows.Forms.ToolStripButton();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.addSourceButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.manuallyEnterMediaSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pathsGridView)).BeginInit();
             this.pathsGroupBox.SuspendLayout();
             this.toolStrip.SuspendLayout();
@@ -57,7 +58,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.pathsGridView.Name = "pathsGridView";
             this.pathsGridView.RowHeadersVisible = false;
             this.pathsGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.pathsGridView.Size = new System.Drawing.Size(497, 76);
+            this.pathsGridView.Size = new System.Drawing.Size(488, 76);
             this.pathsGridView.TabIndex = 0;
             // 
             // pathColumn
@@ -125,30 +126,20 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.toolStripSeparator1,
             this.helpButton});
             this.toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.toolStrip.Location = new System.Drawing.Point(503, 39);
+            this.toolStrip.Location = new System.Drawing.Point(494, 39);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(24, 77);
+            this.toolStrip.Size = new System.Drawing.Size(33, 96);
             this.toolStrip.TabIndex = 4;
             this.toolStrip.Text = "toolStrip1";
-            // 
-            // addSourceButton
-            // 
-            this.addSourceButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.addSourceButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_add;
-            this.addSourceButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.addSourceButton.Name = "addSourceButton";
-            this.addSourceButton.Size = new System.Drawing.Size(22, 20);
-            this.addSourceButton.Text = "toolStripButton1";
-            this.addSourceButton.ToolTipText = "Add Watch Folder";
-            this.addSourceButton.Click += new System.EventHandler(this.addSourceButton_Click);
             // 
             // removeSourceButton
             // 
             this.removeSourceButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.removeSourceButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_remove;
+            this.removeSourceButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.removeSourceButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.removeSourceButton.Name = "removeSourceButton";
-            this.removeSourceButton.Size = new System.Drawing.Size(22, 20);
+            this.removeSourceButton.Size = new System.Drawing.Size(31, 20);
             this.removeSourceButton.Text = "toolStripButton2";
             this.removeSourceButton.ToolTipText = "Remove Watch Folder";
             this.removeSourceButton.Click += new System.EventHandler(this.removeSourceButton_Click);
@@ -156,15 +147,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(22, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(31, 6);
             // 
             // helpButton
             // 
             this.helpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.helpButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.help;
+            this.helpButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.helpButton.Name = "helpButton";
-            this.helpButton.Size = new System.Drawing.Size(22, 20);
+            this.helpButton.Size = new System.Drawing.Size(31, 20);
             this.helpButton.Text = "toolStripButton3";
             this.helpButton.ToolTipText = "Help";
             this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
@@ -176,6 +168,26 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.dataGridViewTextBoxColumn1.HeaderText = "Watch Folders";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // addSourceButton
+            // 
+            this.addSourceButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.addSourceButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.manuallyEnterMediaSourceToolStripMenuItem});
+            this.addSourceButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_add;
+            this.addSourceButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.addSourceButton.Name = "addSourceButton";
+            this.addSourceButton.Size = new System.Drawing.Size(31, 20);
+            this.addSourceButton.Text = "toolStripButton1";
+            this.addSourceButton.ToolTipText = "Add Watch Folder";
+            this.addSourceButton.ButtonClick += new System.EventHandler(this.addSourceButton_Click);
+            // 
+            // manuallyEnterMediaSourceToolStripMenuItem
+            // 
+            this.manuallyEnterMediaSourceToolStripMenuItem.Name = "manuallyEnterMediaSourceToolStripMenuItem";
+            this.manuallyEnterMediaSourceToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.manuallyEnterMediaSourceToolStripMenuItem.Text = "Manually Enter Media Source";
+            this.manuallyEnterMediaSourceToolStripMenuItem.Click += new System.EventHandler(this.manuallyEnterMediaSourceToolStripMenuItem_Click);
             // 
             // ImportPathsPane
             // 
@@ -200,7 +212,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.DataGridView pathsGridView;
         private System.Windows.Forms.GroupBox pathsGroupBox;
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton addSourceButton;
         private System.Windows.Forms.ToolStripButton removeSourceButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton helpButton;
@@ -209,5 +220,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.Label label1;
         private Cornerstone.GUI.Controls.SettingCheckBox importDvdCheckBox;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.ToolStripSplitButton addSourceButton;
+        private System.Windows.Forms.ToolStripMenuItem manuallyEnterMediaSourceToolStripMenuItem;
     }
 }

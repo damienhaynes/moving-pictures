@@ -250,7 +250,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             DBField field = DBField.GetFieldByDBName(typeof(DBMovieInfo), fieldName);
 
             // if no dice, the user probably entered an invalid string.
-            if (field == null) {
+            if (field == null && match.Value != "%filename") {
                 logger.Error("Error parsing \"" + match.Value + "\" from local_backdrop_pattern advanced setting. Not a database field name.");
                 return match.Value;
             }

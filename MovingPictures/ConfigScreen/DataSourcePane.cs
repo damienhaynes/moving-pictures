@@ -258,6 +258,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             settingsButton.ShowDropDown();
         }
 
+        private void enableToolStripMenuItem_Click(object sender, EventArgs e) {
+            foreach (ListViewItem currItem in listView.SelectedItems) {
+                DBSourceInfo source = (DBSourceInfo)currItem.Tag;
+                if (source.IsDisabled(DisplayType))
+                    MovingPicturesCore.DataProviderManager.SetDisabled(source, DisplayType, false);
+            }
+
+            listView.Sort();
+            repaintListItems();
+        }
+
     }
     class ListViewItemComparer : IComparer {
         DBSourceInfoComparer comparer;
