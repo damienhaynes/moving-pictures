@@ -28,13 +28,16 @@
             this.sourceColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.versionColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.languageColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.publishedHeader = new System.Windows.Forms.ColumnHeader();
             this.topToolStrip = new System.Windows.Forms.ToolStrip();
             this.scriptTypeDropDown = new System.Windows.Forms.ToolStripDropDownButton();
             this.movieDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coversToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backdropsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.addButton = new System.Windows.Forms.ToolStripButton();
+            this.addButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.enableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeDropDown = new System.Windows.Forms.ToolStripSplitButton();
             this.disableSelectedDataSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteSelectedDataSourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +53,6 @@
             this.debugIcon = new System.Windows.Forms.ToolStripLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.publishedHeader = new System.Windows.Forms.ColumnHeader();
             this.topToolStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -92,6 +94,11 @@
             // 
             this.languageColumnHeader.Text = "Language";
             this.languageColumnHeader.Width = 134;
+            // 
+            // publishedHeader
+            // 
+            this.publishedHeader.Text = "Published";
+            this.publishedHeader.Width = 82;
             // 
             // topToolStrip
             // 
@@ -156,12 +163,29 @@
             // addButton
             // 
             this.addButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.addButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableToolStripMenuItem,
+            this.addToolStripMenuItem});
             this.addButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.list_add;
             this.addButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(23, 23);
+            this.addButton.Size = new System.Drawing.Size(32, 23);
             this.addButton.Text = "Add New Script";
-            this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            this.addButton.ButtonClick += new System.EventHandler(this.enableToolStripMenuItem_Click);
+            // 
+            // enableToolStripMenuItem
+            // 
+            this.enableToolStripMenuItem.Name = "enableToolStripMenuItem";
+            this.enableToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.enableToolStripMenuItem.Text = "Enable Selected Data Source";
+            this.enableToolStripMenuItem.Click += new System.EventHandler(this.enableToolStripMenuItem_Click);
+            // 
+            // addToolStripMenuItem
+            // 
+            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.addToolStripMenuItem.Text = "Add a New Data Source";
+            this.addToolStripMenuItem.Click += new System.EventHandler(this.addButton_Click);
             // 
             // removeDropDown
             // 
@@ -290,11 +314,6 @@
             this.openFileDialog.DefaultExt = "xml";
             this.openFileDialog.Filter = "Moving Pictures Script Files|*.xml|All Files|*.*";
             // 
-            // publishedHeader
-            // 
-            this.publishedHeader.Text = "Published";
-            this.publishedHeader.Width = 82;
-            // 
             // DataSourcePane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -318,7 +337,6 @@
         private System.Windows.Forms.ColumnHeader versionColumnHeader;
         private System.Windows.Forms.ColumnHeader languageColumnHeader;
         private System.Windows.Forms.ToolStrip topToolStrip;
-        private System.Windows.Forms.ToolStripButton addButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSplitButton settingsButton;
         private System.Windows.Forms.ToolStripMenuItem selectScriptVersionToolStripMenuItem;
@@ -340,5 +358,8 @@
         private System.Windows.Forms.ToolStripButton lowerPriorityButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ColumnHeader publishedHeader;
+        private System.Windows.Forms.ToolStripSplitButton addButton;
+        private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
     }
 }

@@ -77,11 +77,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
                 
         private void addSourceButton_Click(object sender, EventArgs e) {
-            AddImportPathPopup addPopup = new AddImportPathPopup();
-            addPopup.Owner = ParentForm;
-            DialogResult result = addPopup.ShowDialog();
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            DialogResult result = folderDialog.ShowDialog();
             if (result == DialogResult.OK) {
-                DBImportPath newPath = DBImportPath.Get(addPopup.SelectedPath);
+                DBImportPath newPath = DBImportPath.Get(folderDialog.SelectedPath);
                 
                 if (newPath.GetDriveType() == DriveType.CDRom) {
                     MessageBox.Show("Importing from this drive is controlled through the setting 'Enable Import Paths For Optical Drives'", "Not Allowed!");
@@ -100,7 +99,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 }
 
             }
-            
         }
 
         private void removeSourceButton_Click(object sender, EventArgs e) {
@@ -131,6 +129,33 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void helpButton_Click(object sender, EventArgs e) {
             // show the help content fo the Media Sources section
             Help.ShowHelp(ParentForm, MovingPicturesCore.SettingsManager["help_file"].StringValue, HelpNavigator.Topic, "2_MediaSources.htm");
+        }
+
+        private void manuallyEnterMediaSourceToolStripMenuItem_Click(object sender, EventArgs e) {
+            AddImportPathPopup addPopup = new AddImportPathPopup();
+            addPopup.Owner = ParentForm;
+            DialogResult result = addPopup.ShowDialog();
+            if (result == DialogResult.OK) {
+                DBImportPath newPath = DBImportPath.Get(addPopup.SelectedPath);
+
+                if (newPath.GetDriveType() == DriveType.CDRom) {
+                    MessageBox.Show("Importing from this drive is controlled through the setting 'Enable Import Paths For Optical Drives'", "Not Allowed!");
+                    return;
+                }
+
+                if (newPath.ID != null) {
+                    MessageBox.Show("This import path is already loaded.");
+                    return;
+                }
+
+                if (newPath.InternallyManaged != true) {
+                    pathBindingSource.Add(newPath);
+                    MovingPicturesCore.Importer.RestartScanner();
+                    addTooltips();
+                }
+
+            }
+
         }
 
     }

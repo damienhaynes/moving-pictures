@@ -811,18 +811,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             int width = 175;
             int height = (int)(cover.Height * ((float)width / (float)cover.Width));
 
-            Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
-            Image coverThumb = cover.GetThumbnailImage(width, height, myCallback, IntPtr.Zero);
+            Image coverThumb = cover.GetThumbnailImage(width, height, null, IntPtr.Zero);
             coverThumb.Save(fullname, ImageFormat.Jpeg);
             _coverThumbFullPath = fullname;
             commitNeeded = true;
 
             cover.Dispose();
             coverThumb.Dispose();
-        }
-
-        public bool ThumbnailCallback() {
-            return false;
         }
 
         #endregion

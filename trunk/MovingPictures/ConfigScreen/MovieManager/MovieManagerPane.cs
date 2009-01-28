@@ -469,11 +469,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     progress("", (int)(count*100/total));
             }
 
-            if (sentToImporter > 0) 
+            if (sentToImporter > 0) {
                 MessageBox.Show(this.ParentForm,
-                "There were " + sentToImporter + " movie(s) that needed to be sent to the importer to\n"+
+                "There were " + sentToImporter + " movie(s) that needed to be sent to the importer to\n" +
                 "search for possible matches from the " + selectedSource.Provider.Name + " data source.\n" +
-                "You should go to the Movie Importer tab to check for any matches requiring approval.", "Movies Sent to Importer", MessageBoxButtons.OK);
+                "You will now be taken to the Movie Importer tab to check for\n" + 
+                "any matches requiring approval.", "Movies Sent to Importer", MessageBoxButtons.OK);
+                switchToImporter();
+            }
 
         }
 
@@ -493,10 +496,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 CurrentMovie.Delete();
                 MovingPicturesCore.Importer.Start();
                 MovingPicturesCore.Importer.Reprocess(localMedia);
-                MovingPicturesConfig configWindow = ((MovingPicturesConfig)this.TopLevelControl);
-                TabControl mainTabControl = (TabControl)configWindow.Controls["mainTabControl"];
-                mainTabControl.SelectedTab = (TabPage)mainTabControl.Controls["importSettingsTab"];
+                switchToImporter();
             }
+        }
+
+        private void switchToImporter() {
+            MovingPicturesConfig configWindow = ((MovingPicturesConfig)this.TopLevelControl);
+            TabControl mainTabControl = (TabControl)configWindow.Controls["mainTabControl"];
+            mainTabControl.SelectedTab = (TabPage)mainTabControl.Controls["importSettingsTab"];
         }
 
         private void refreshAllMoviesToolStripMenuItem_Click(object sender, EventArgs e) {
