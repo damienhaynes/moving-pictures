@@ -6,10 +6,15 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
+    
+    /// <summary>
+    /// The NFO Signature Builder scans for text-based files containing the imdbid format
+    /// and updates the signature with the first occurance of an imdbid.
+    /// </summary>
     public class NfoBuilder : ISignatureBuilder {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public MovieSignature UpdateSignature(MovieSignature signature) {
+        public SignatureBuilderResult UpdateSignature(MovieSignature signature) {
             bool scanNFO = (bool)MovingPicturesCore.SettingsManager["importer_nfoscan"].Value;
 
             // Scan for NFO files 
@@ -24,10 +29,10 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                     string fileName = Utility.RemoveFileStackMarkers(signature.File);
                     signature.ImdbId = fileScanner(dir, fileName);
                 }
-            }          
+            }
 
-            return signature;
-        }
+            return SignatureBuilderResult.INCONCLUSIVE;
+       }
 
 
         /// <summary>

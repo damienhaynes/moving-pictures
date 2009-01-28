@@ -5,13 +5,23 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
+    
+    /// <summary>
+    /// The Local Builder fills the signature properties by using the filesystem names
+    /// </summary>
     class LocalBuilder : ISignatureBuilder {
+
+        #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public MovieSignature UpdateSignature(MovieSignature signature) {
+        #endregion
+
+        #region ISignatureBuilder Members
+
+        public SignatureBuilderResult UpdateSignature(MovieSignature signature) {
             if (signature.LocalMedia == null)
-                return signature;
+                return SignatureBuilderResult.INCONCLUSIVE;
 
             DirectoryInfo dir = new DirectoryInfo(signature.Path);
             bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
@@ -57,8 +67,12 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             // Set the IMDB id in the signature if succes
             if (match.Success) signature.ImdbId = match.Value;
 
-            return signature;
+            return SignatureBuilderResult.INCONCLUSIVE;
         }
+
+        #endregion
+
+        #region Static Methods
 
         // Filters "noise" from the input string
         private static string removeNoise(string input) {
@@ -87,7 +101,6 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             return rtn.Trim();
         }
 
-
-
+        #endregion
     }
 }

@@ -39,6 +39,10 @@
     </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CookComputing.XmlRpcV2, Version=2.4.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -218,11 +222,18 @@
     <Compile Include="DataProviders\DataProviderManager.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
     <Compile Include="DataProviders\LocalProvider.cs" />
+    <Compile Include="DataProviders\OpenSubtitles.cs" />
+    <Compile Include="DataProviders\OSDbProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DataProviders\TheMovieDbProvider.cs" />
     <Compile Include="DataProviders\MyVideosProvider.cs" />
     <Compile Include="DataProviders\ScriptableProvider.cs" />
     <Compile Include="LocalMediaManagement\DeviceManager.cs" />
     <Compile Include="LocalMediaManagement\DeviceVolumeMonitor.cs" />
+    <Compile Include="LocalMediaManagement\MovieSignatureBuilders\HashBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LocalMediaManagement\MovieSignatureProvider.cs" />
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
     <Compile Include="LocalMediaManagement\Utility.cs" />
@@ -440,23 +451,23 @@
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaPortal\Core\Core.csproj">
+    <ProjectReference Include="..\..\..\MediaPortal\Stable\Core\Core.csproj">
       <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
+    <ProjectReference Include="..\..\..\MediaPortal\Stable\Databases\Databases.csproj">
       <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
       <Name>Databases</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MediaPortal\Dialogs\Dialogs.csproj">
+    <ProjectReference Include="..\..\..\MediaPortal\Stable\Dialogs\Dialogs.csproj">
       <Project>{396C5208-5D46-4A11-92C1-FD0F2F42D7DD}</Project>
       <Name>Dialogs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MediaPortal\DirectShowLib\DirectShowLib.csproj">
+    <ProjectReference Include="..\..\..\MediaPortal\Stable\DirectShowLib\DirectShowLib.csproj">
       <Project>{CE009BFA-5EF6-4153-B2A1-2FA79698A9AE}</Project>
       <Name>DirectShowLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MediaPortal\Utils\Utils.csproj">
+    <ProjectReference Include="..\..\..\MediaPortal\Stable\Utils\Utils.csproj">
       <Project>{6DA0E4DF-6230-4642-98B5-E690BB6942BB}</Project>
       <Name>Utils</Name>
     </ProjectReference>
