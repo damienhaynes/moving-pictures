@@ -1,0 +1,316 @@
+<MoviesPluginSettings>
+
+  <group name="MediaPortal GUI">
+    <setting id="default_view" name="Default View" type="STRING">
+      <default>list</default>
+      <description>The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are "list", "thumbs", "largethumbs", and "filmstrip".</description>
+    </setting>
+
+    <setting id="click_to_details" name="Click Shows Details" type="BOOL">
+      <default>true</default>
+      <description>Determines behavior when a movie in the movie browser is clicked. If true, the details view appears. If false the movie starts playback.</description>
+    </setting>
+
+    <setting id="enable_rc_filter" name="Use Remote Control Filtering" type="BOOL">
+      <default>true</default>
+      <description>Enables the Remote Controle Filter, set to false if you want to use the default mediaportal remote control functionality.</description>
+    </setting>
+
+    <setting id="max_string_list_items" name="Max Actors, Genres, etc. to Display" type="INT">
+      <default>5</default>
+      <description>This determines the number of actors, genres, directors, etc to display on the GUI. This applies to all string based list fields.</description>
+    </setting>
+
+    <setting id="gui_artwork_delay" name="Artwork Loading Delay" type="INT">
+      <default>250</default>
+      <description>The number of milliseconds that Moving Pictures waits before it loads new artwork (backdrops and covers) when traversing movies in the GUI. Increasing this value can improve performance if you are experiencing slow down with rapid movements in the GUI.</description>
+    </setting>
+    
+    <setting id="home_name" name="Name for Home Screen" type="STRING">
+      <default>Moving Pictures</default>
+      <description>The name that appears on the home screen for the plugin.</description>
+    </setting>
+
+    <setting id="on_disc_loaded" name="Disk Insertion Behavior" type="STRING">
+      <default>DETAILS</default>
+      <description>Action to take when a DVD, Bluray, or HDDVD disk is inserted. ("DETAILS": Goto the details page for the DVD. "PLAY": Start playback immediately. "NOTHING": Take no action).</description>
+    </setting>
+
+    <setting id="gui_watch_percentage" name="GUI Watch Percentage" type="INT">
+      <default>90</default>
+      <description>The percentage of a movie that must be watched before it will be flagged as watched. This also affects whether resume data is stored.</description>
+    </setting>
+
+	  <setting id="default_sort_field" name="Default Sort Field" type="STRING">
+		  <default>title</default>
+		  <description>The default sort field used in the MediaPortal GUI when the plug-in is first opened. Valid options are "title", "dateadded", "year", "certification", "language", "score", "userscore", "popularity", "runtime", "filepath".</description>
+	  </setting>
+
+	  <setting id="default_sort_direction" name="Default Sort Direction" type="STRING">
+		  <default>ascending</default>
+		  <description>The default sort direction used in the MediaPortal GUI when the plug-in is first opened. Valid options are "ascending" and "descending".</description>
+	  </setting>
+
+    <setting id="start_watched_filter_on" name="Show Only Unwatched Movies on Startup" type="BOOL">
+      <default>false</default>
+      <description>When Moving Pictures starts up, if this option is set to true only Unwatched movies will be displayed until the user changes the filtering options.</description>
+    </setting>
+	  
+	<setting id="enable_delete_movie" name="Allow user to delete files from the GUI context menu" type="BOOL">
+		<default>false</default>
+		<description>Enables a delete menu item, which allows you to delete movies from your hard drive.</description>
+	</setting>
+  </group>
+
+  <group name="Movie Importer">
+    <group name="General">
+
+      <setting id="importer_thread_count" name="Thread Count" type="INT">
+        <default>5</default>
+        <description>The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.</description>
+      </setting>
+
+      <setting id="importer_strict_year" name="Ignore Possible Matches with Incorrect Year" type="BOOL">
+        <default>false</default>
+        <description>If a year keyword is detected and no exact match is found only show the results from the same year or blank year. (experimental)</description>
+      </setting>
+
+      <setting id="importer_autoapprove" name="Title Auto-Approve Threshold" type="INT">
+        <default>1</default>
+        <description>This is the maximum value for the levenshtein distance that is used for triggering auto-approval on close matching titles.</description>
+      </setting>
+
+      <setting id="importer_groupfolder" name="Always Group Files In The Same Folder" type="BOOL">
+        <default>false</default>
+        <description>When enabled this option will ALWAYS group multiple files in one folder together (assuming a multi-part movie).</description>
+      </setting>
+
+      <setting id="importer_disc_enabled" name="Automatically Import Inserted DVDs" type="BOOL">
+        <default>true</default>
+        <description>Enables importation of media from all available optical drives. This can include CDs, DVDs, HD-DVDs, and Bluray disks. This also applies to "loose video files" on a data CD/DVD.</description>
+      </setting>
+      
+      <setting id="importer_gui_enabled" name="Enable Importer While In GUI" type="BOOL">
+        <default>true</default>
+        <description>Enables the importer while in the GUI</description>
+      </setting>
+
+
+    </group>
+
+    <group name="Local Media Parser">
+
+      <setting id="importer_prefer_foldername" name="Prefer Folder Name for Movie Matching" type="BOOL">
+        <default>true</default>
+        <description>If a folder contains just one movie file it will use the folder name for matching. If you are sure that the filenames are more accurate than the folder name disable this setting.</description>
+      </setting>
+
+      <setting id="importer_filter" name="Regular Expression Noise Filter" type="STRING">
+        <default>(\b(576p|720p|1080p|1080i|dircut|directors cut|dvdrip|dvdscreener|dvdscr|avchd|wmv|ntsc|pal|mpeg|dsr|hd|r5|dvd|dvdr|dvd5|dvd9|bd5|bd9|dts|ac3|bluray|blu-ray|hdtv|pdtv|stv|hddvd|xvid|divx|x264|dxva|(?-i)FESTIVAL|LIMITED|WS|FS|PROPER|REPACK|RERIP|REAL|RETAIL|EXTENDED|REMASTERED|UNRATED|CHRONO|THEATRICAL|DC|SE|UNCUT|INTERNAL|DUBBED|SUBBED)\b([-].+?$)?)</default>
+        <description>A regular expression that removes common used keywords from the folder/filename.</description>
+      </setting>
+
+      <setting id="importer_discid" name="Enable Disc ID" type="BOOL">
+        <default>true</default>
+        <description>Calculate Disc ID for DVD media. This enables better matching for DVD discs</description>
+      </setting>
+
+    </group>
+
+    <group name="NFO Scanner">
+
+      <setting id="importer_nfoscan" name="Enable Scanner" type="BOOL">
+        <default>true</default>
+        <description>Scan for NFO file and if available parse out the IMDB id.</description>
+      </setting>
+
+      <setting id="importer_nfoext" name="File Extensions" type="STRING">
+        <default>nfo;txt</default>
+        <description>The extensions that are used when scanning for nfo files. Seperate multiple extensions with , or ;</description>
+      </setting>
+
+      <setting id="importer_autoimdb" name="Auto-Approve on IMDB Match" type="BOOL">
+        <default>true</default>
+        <description>If we found a match on IMDB id always auto-approve this match even if the other criteria doesn't match closely enough. </description>
+      </setting>
+
+    </group>
+
+    <!-- Sample Filter -->
+    <group name="Sample Filter">
+      <setting id="importer_sample_keyword" name="Regular Expression String" type="STRING">
+        <default>sample</default>
+        <description>a regular expression that matches keywords in the filename indicating that the file is possible sample.</description>
+      </setting>
+
+      <setting id="importer_sample_maxsize" name="Max Filesize (MB)" type="INT">
+        <default>150</default>
+        <description>If the filesize of the potential sample file is below this value it will be skipped.</description>
+      </setting>
+
+    </group>
+
+    <group name="Cover Art">
+      <setting id="cover_art_folder" name="Cover Artwork Folder" type="STRING">
+        <description>The folder in which cover art should be saved to disk.</description>
+      </setting>
+
+      <setting id="cover_thumbs_folder" name="Cover Artwork Thumbnails Folder" type="STRING">
+        <description>The folder in which cover art thumbnails should be saved to disk.</description>
+      </setting>
+
+      <setting id="redownload_coverart" name="Redownload Cover Artwork on Rescan" type="BOOL">
+        <default>false</default>
+        <description>When a full rescan is performed this setting determines if coverart that has already been downloaded will be reretrieved and the local copy updated.</description>
+      </setting>
+
+      <setting id="max_covers_per_movie" name="Max Covers per Movie" type="INT">
+        <default>9</default>
+        <description>When the movie importer automatically downloads cover art, it will not retrieve more than the given number of covers for a movie.</description>
+      </setting>
+
+      <setting id="max_covers_per_session" name="Max Covers per Movie per Session" type="INT">
+        <default>3</default>
+        <description>When the movie importer automatically downloads cover art it will not retrieve more than the given number of covers for a movie in a single update / import session. Next time a full update is done, if there are additional covers to download, it will grab those as well.</description>
+      </setting>
+
+      <setting id="min_cover_width" name="Minimum Cover Width" type="INT">
+        <default>175</default>
+        <description>The minimum width in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.</description>
+      </setting>
+
+      <setting id="min_cover_height" name="Minimum Cover Height" type="INT">
+        <default>260</default>
+        <description>The minimum height in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.</description>
+      </setting>
+
+    </group>
+
+    <group name="Backdrops (Fan Art)">
+      <setting id="backdrop_folder" name="Backdrop Folder" type="STRING">
+        <description>The folder in which movie backdrops should be saved to disk.</description>
+      </setting>
+
+      <setting id="backdrop_thumbs_folder" name="Backdrop Thumbnails Folder" type="STRING">
+        <description>The folder in which movie backdrop thumbnails should be saved to disk.</description>
+      </setting>
+
+      <setting id="redownload_backdrops" name="Redownload Backdrop on Rescan" type="BOOL">
+        <default>false</default>
+        <description>When a full rescan is performed this setting determines if backdrops that have already been downloaded will be reretrieved and the local copy updated.</description>
+      </setting>
+
+      <setting id="min_backdrop_width" name="Minimum Backdrop Width" type="INT">
+        <default>1280</default>
+        <description>The minimum width in pixels for any given movie backdrop. If a backdrop from any data provider is smaller than this value it will not automatically be downloaded and saved.</description>
+      </setting>
+
+      <setting id="min_backdrop_height" name="Minimum Backdrop Height" type="INT">
+        <default>720</default>
+        <description>The minimum height in pixels for any given movie backdrop. If a cover from any data provider is smaller than this value it will not automatically be downloaded and saved.</description>
+      </setting>
+
+    </group>
+
+    <!--group name="Config GUI">
+      <setting id="gui_approve_on_select" name="Approve Match on Select" type="BOOL">
+        <default>true</default>
+        <description>When a possible match is selected from the possible match dropdown list in the Media Importer, it will automatically be approved and queued for commiting. If this is set to false, a match must be manually approved even after an update.</description>
+      </setting>
+    </group-->
+
+    <group name="themoviedb.org Provider">
+
+      <setting id="tmdb_max_timeouts" name="Max Timeouts" type="INT">
+        <default>10</default>
+        <description>The maximum number of timeouts received from the server before a thread returns an error condition.</description>
+      </setting>
+
+      <setting id="tmdb_timeout_length" name="Timeout Length" type="INT">
+        <default>5000</default>
+        <description>The base length of time (in milliseconds) for a timeout when connecting to themoviedb.org data service.</description>
+      </setting>
+
+      <setting id="tmdb_timeout_increment" name="Timeout Increment" type="INT">
+        <default>1000</default>
+        <description>The amount of time (in milliseconds) added to the timeout limit  after each timeout failure. A non-zero value will help when the server is experience a large amount of congestion.</description>
+      </setting>
+
+    </group>
+
+    <group name="Local Provider">
+
+      <setting id="local_backdrop_pattern" name="Backdrop Filename Pattern" type="STRING">
+        <default>%imdb_id%.jpg|%imdb_id%.png|%imdb_id%.bmp</default>
+        <description>The importer will look in your backdrop folder and try to find a file that matches this pattern. If one is found, it will be used as a backdrop. If none is found, an online data provider will be used to auto download artwork.</description>
+      </setting>
+
+      <setting id="local_backdrop_from_movie_folder" name="Search Movie Folder for Backdrops" type="BOOL">
+        <default>false</default>
+        <description>If set to true the local media data provider will use files matching a specified pattern for backdrops. This setting should only be used if you have all movies in their own folders.</description>
+      </setting>
+
+      <setting id="local_moviefolder_backdrop_pattern" name="Movie Folder Backdrop Filename Pattern" type="STRING">
+        <default>backdrop.jpg|backdrop.png|backdrop.bmp</default>
+        <description>The importer will look in the folder the given movie was found in, and try to find a file that matches this pattern. If one is found, it will be used as a cover. DB field names can be used, surrounded by % symbols. e.g. %imdb_id%.jpg</description>
+      </setting>
+      
+      <setting id="local_coverart_pattern" name="Cover Artwork Filename Pattern" type="STRING">
+        <default>%imdb_id%.jpg|%imdb_id%.png|%imdb_id%.bmp</default>
+        <description>The importer will look in your cover art folder and try to find a file that matches this pattern. If one is found, it will be used as a cover. If none is found, an online data provider will be used to auto download artwork.</description>
+      </setting>
+
+      <setting id="local_cover_from_movie_folder" name="Search Movie Folder for Cover Art" type="BOOL">
+        <default>false</default>
+        <description>If set to true the local media data provider will use files matching a specified pattern for cover artwork. This setting should only be used if you have all movies in their own folders.</description>
+      </setting>
+
+      <setting id="local_moviefolder_coverart_pattern" name="Movie Folder Cover Artwork Filename Pattern" type="STRING">
+        <default>folder.jpg|folder.png|folder.bmp</default>
+        <description>The importer will look in the folder the given movie was found in, and try to find a file that matches this pattern. If one is found, it will be used as a cover. DB field names can be used, surrounded by % symbols. e.g. %imdb_id%.jpg</description>
+      </setting>
+
+    </group>
+
+    <group name="Data Source Manager">
+
+      <setting id="source_manager_debug" name="Data Source Manager Enhanced Debug Mode" type="BOOL">
+        <default>false</default>
+        <description>If set to true, additional logging will be written by the Scriptable Scraping Engine when the entire plug-in is in debug mode. Internal scripts stored in the DLL will also be reloaded on launch regardless of version number.</description>
+      </setting>
+
+      <setting id="source_manager_init_done" name="Data Provider Manager Initialized" type="BOOL">
+        <default>false</default>
+        <description>An internal flag to determine if an initial load of the Data Source Manager has been preformed.</description>
+      </setting>
+
+    </group>
+
+  </group>
+
+  <group name="Configuration Screen">
+    
+    <setting id="config_advanced_nag" name="Show Advanced Settings Warning" type="BOOL">
+      <default>true</default>
+      <description>If set to false, the Advanced Settings warning screen will no longer be displayed when first clicking on the Advanced Settings tab.</description>
+    </setting>
+    
+  </group>
+
+  <group name="Help Settings">
+
+    <setting id="help_file" name="Path to the Moving Pictures Help File" type="STRING">
+      <default></default>
+      <description>The path to the Moving Pictures help file. For internal use only and reset on each launch.</description>
+    </setting>
+
+  </group>
+
+  <group name="Custom Intro">
+    <setting id="custom_intro_location" name="Custom Intro Location" type="STRING">
+    <description>Location of a custom intro that will play before each movie.  This should be the full path including the movie. For example: c:\custom_intro\into.mpg</description>
+    </setting>
+  </group>
+
+
+</MoviesPluginSettings>

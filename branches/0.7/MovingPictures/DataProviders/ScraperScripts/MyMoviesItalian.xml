@@ -1,0 +1,184 @@
+<ScriptableScraper>
+  <details>
+    <!-- These details are for display purposes only. -->
+    <name>mymovies.it</name>
+    <author>Ricciolo</author>
+    <description>test</description>
+
+    <!-- 
+    These two fields uniquely identify the script. The ID should never 
+    change and should be unique (no other script should use this ID). With
+    new versions of the script the version numbers should change. EVEN FOR 
+    MINOR CHANGES, you should change the version number if you are going to
+    disribute it to anyone but internal testers. The point number 
+    is for minor bug fix releases. Use it.
+    -->
+    <id>874909</id>
+    <version major="0" minor="1" point="3"/>
+    <published month="12" day="18" year="2008"/>
+
+    <!--
+    These fields are used for categorization purposes. Seperate multiple 
+    types with a pipe | character.
+    -->
+    <type>MovieDetailsFetcher</type>
+    <language>it-IT</language>
+
+    <!-- If set to true, additional logging will be displayed during script execution. -->
+    <debug>false</debug>
+  </details>
+
+
+  <action name="search">
+    <retrieve name="search_page" url='http://www.google.com/custom?domains=www.mymovies.it&amp;q=${search.title:safe}&amp;sitesearch=www.mymovies.it&amp;client=pub-1699801751737986&amp;forid=1&amp;ie=ISO-8859-1&amp;oe=ISO-8859-1&amp;cof=GALT%3A%233333FF%3BGL%3A1%3BDIV%3A%23000099%3BVLC%3A663399%3BAH%3Acenter%3BBGC%3AFFFFFF%3BLBGC%3A000099%3BALC%3A000099%3BLC%3A000099%3BT%3A666666%3BGFNT%3A999999%3BGIMP%3A999999%3BLH%3A50%3BLW%3A549%3BL%3Ahttp%3A%2F%2Fwww.mymovies.it%2Flogogoogle.gif%3BS%3Ahttp%3A%2F%2Fwww.mymovies.it%3BFORID%3A1%3B&amp;hl=it' />
+
+    <parse name="search_results_block" input="${search_page}" regex='.*'/>
+    <loop name="search_results_verified" on="search_results_block">
+
+      <parse name="movie_details" input="${search_results_verified}" regex='&lt;a\s+href="[^"]+/recensione\.asp\?id=(\d+)[^"]*"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
+      <loop name='curr_details' on='movie_details'>
+        <parse name="movie_year" input="${curr_details}" regex='\((\d{4})\)(?!\()' />
+
+        <set name="movie[${count}].site_id" value="${curr_details[0]:htmldecode}"/>
+        <replace name='movie[${count}].title' input='${curr_details[1]:htmldecode}' pattern='(&lt;[^&gt;]+?&gt;)|(\s*\((\d{4})\)(?!\())' with='' />
+        <set name="movie[${count}].year" value="${movie_year[0][0]}" />
+        <set name="movie[${count}].details_url" value='http://www.mymovies.it/dizionario/recensione.asp?id=${curr_details[0]}'/>
+
+        <subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
+      </loop>
+
+    </loop>
+
+  </action>
+
+  <action name="get_details">
+    <retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.title:safe}+(${movie.year:safe})" />
+    <parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
+
+    <set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
+
+    <if test='${movie.imdb_id}!='>
+      <retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+
+      <!-- Directors -->
+      <parse name="directors_block" input="${details_page}" regex='&lt;h5&gt;Director[s]?:&lt;/h5&gt;.*?&lt;/div&gt;'/>
+      <parse name="directors" input="${directors_block}" regex='&lt;a href="/name/nm\d{7}/"&gt;([^&lt;]+)&lt;/a&gt;'/>
+      <set name='movie.directors' value=''/>
+      <loop name='currDirector' on='directors'>
+        <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
+      </loop>
+
+      <!-- Writers -->
+      <parse name="writers_block" input="${details_page}" regex='&lt;div class="info"&gt;\s+&lt;h5&gt;Writer[s]?(?: &lt;a href="[^"]+"&gt;\([^)]+\)&lt;/a&gt;)?:&lt;/h5&gt;.+?&lt;/div&gt;'/>
+      <parse name='writers' input="${writers_block}" regex='&lt;a href="/name/nm\d+/"&gt;([^&lt;]+)&lt;/a&gt;'/>
+      <set name='movie.writers' value=''/>
+      <loop name='currWriter' on='writers'>
+        <set name='movie.writers' value='${movie.writers}|${currWriter[0]:htmldecode}'/>
+      </loop>
+
+      <!-- Actors -->
+      <parse name="actors_block" input="${details_page}" regex='&lt;div class="headerinline"&gt;&lt;h3&gt;Cast&lt;/h3&gt;.+?&lt;h3&gt;Additional Details&lt;/h3&gt;'/>
+      <parse name='actors' input='"${actors_block}' regex='&lt;td class="nm"&gt;&lt;a href="/name/nm\d{7}/"&gt;(.+?)&lt;/a&gt;'/>
+      <set name='movie.actors' value=''/>
+      <loop name='currActor' on='actors'>
+        <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
+      </loop>
+
+      <!-- Genres -->
+      <parse name="genres_block" input="${details_page}" regex='&lt;h5&gt;Genre:&lt;/h5&gt;.+?&lt;/div&gt;'/>
+      <parse name='genres' input='"${genres_block}' regex='&lt;a href="/Sections/Genres/[^/]+/"&gt;(.+?)&lt;/a&gt;'/>
+      <set name='movie.genres' value=''/>
+      <loop name='currGenre' on='genres'>
+        <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
+      </loop>
+
+      <!-- Certification -->
+      <parse name="certification" input="${details_page}" regex='&gt;\s+USA:((?:G)|(?:PG)|(?:PG-13)|(?:R)|(?:X)|(?:NC-17))&lt;/a&gt;'/>
+      <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
+
+      <!-- Runtime -->
+      <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+'/>
+      <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
+
+      <!-- Tagline -->
+      <parse name="tagline" input="${details_page}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
+      <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
+
+      <!-- Score -->
+      <parse name="score" input="${details_page}" regex='&lt;div class="meta"&gt;\s+&lt;b&gt;(\d+.\d+)/10&lt;/b&gt; '/>
+      <set name='movie.score' value='${score[0][0]:htmldecode}'/>
+
+      <!-- Popularity -->
+      <parse name="votes" input="${details_page}" regex='"ratings"&gt;([^\s]+) votes&lt;/a&gt;'/>
+      <set name='movie.popularity' value='${votes[0][0]:htmldecode}'/>
+
+      <!-- Language -->
+      <parse name="language" input="${details_page}" regex='&lt;h5&gt;Language:&lt;/h5&gt;\s+&lt;a href="/Sections/Languages/[^/]+/"&gt;\s+([^&lt;]+)&lt;/a&gt;'/>
+      <set name='movie.language' value='${language[0][0]:htmldecode}'/>
+
+      <set name="rx_aka">
+        <![CDATA[
+      <tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
+       ]]>
+      </set>
+      <set name="rx_plot">
+        <![CDATA[
+      <p class="plotpar">\s*(.+?)<i>.*?</i>.*?</p>
+      ]]>
+      </set>
+
+      <!-- Plot Summary -->
+      <retrieve name='summary_page' url='http://www.imdb.com/title/${movie.imdb_id}/plotsummary'/>
+      <parse name="summary" input="${summary_page}" regex="${rx_plot}"/>
+      <set name="summary_clean" value="${summary[0][0]:striptags}" />
+      <set name="movie.summary" value="${summary_clean:htmldecode}" />
+
+      <!-- AKA page -->
+      <retrieve name="aka_page" url='http://www.imdb.com/title/${movie.imdb_id}/releaseinfo'/>
+      <parse name="akas" input="${aka_page}" regex="${rx_aka}"/>
+      <set name="movie.alternate_titles" value=""/>
+      <loop name="currAka" on="akas" limit="50">
+        <set name="movie.alternate_titles" value="${movie.alternate_titles}|${currAka[0]:htmldecode}"/>
+      </loop>
+    </if>
+
+    <retrieve name="details_page" url="${movie.details_url}"/>
+
+    <if test='${movie.movie.actors}='>
+      <!-- Actors -->
+      <parse name='actors' input='${details_page}' regex='&lt;a\s+href="http://www.mymovies.it/biografia/?[^"]+"&gt;(.+?)(?=(&lt;/a&gt;))'/>
+      <set name='movie.actors' value=''/>
+      <loop name='currActor' on='actors'>
+        <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
+      </loop>
+      <set name="movie.directors" value="|${actors[0][0]:htmldecode}|" />
+    </if>
+
+    <if test='${movie.genres}='>
+      <!-- Genres -->
+      <parse name='genres' input='${details_page}' regex='&lt;a\s+title="Film[^"]+"\s+href="[^"]+"&gt;([^&lt;]+)&lt;/a&gt;'/>
+      <set name='movie.genres' value='|${genres[0][0]:htmldecode}|'/>
+    </if>
+
+    <if test='${movie.runtime}='>
+      <!-- Runtime -->
+      <parse name="runtime" input="${details_page}" regex='durata\s+(\d+)\smin'/>
+      <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
+    </if>
+
+    <if test='${movie.score}='>
+      <!-- Score -->
+      <parse name="score" input="${details_page}" regex='&lt;i&gt;mymonetro&lt;/i&gt;\s+(.+?)(?=\s*stelle)'/>
+      <!--<set name='movie.score' value='${score[0][0]:htmldecode}'/>-->
+      <replace name='movie.score' input='${score[0][0]:htmldecode}' pattern=',' with='.' />
+      <multiply name="movie.score" value1="${movie.score}" value2="10" resultType="FLOAT" />
+      <divide name="movie.score" value1="${movie.score}" value2="5" resultType="INT"/>
+    </if>
+
+    <!-- Plot Summary -->
+    <parse name='summary' input ='${details_page}' regex='&lt;div\s+id="recensione"&gt;\s*&lt;p[^&gt;]*&gt;(.+)(?=&lt;/p&gt;\s*&lt;/div&gt;)'/>
+    <replace name='movie.summary' input='${summary[0][0]:htmldecode}' pattern='&lt;[^&gt;]+?&gt;' with='' />
+
+  </action>
+
+</ScriptableScraper>
