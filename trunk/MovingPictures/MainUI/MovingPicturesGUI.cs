@@ -98,7 +98,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         protected GUIImage loadingImage = null;
 
         [SkinControl(13)]
-        protected GUILabelControl workingImage = null;
+        protected GUIAnimation workingAnimation = null;
 
         #endregion
 
@@ -461,8 +461,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                     logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
                 }
 
-                if (workingImage != null)
-                    workingImage.Visible = false;
+                setWorkingAnimationStatus(false);
+                
             }
 
             // if we have loaded before, lets update the view to match our previous settings
@@ -1385,13 +1385,22 @@ namespace MediaPortal.Plugins.MovingPictures {
                 enableNativeAutoplay();
         }
 
-        private void Importer_Progress(int percentDone, int taskCount, int taskTotal, string taskDescription) {
-            if (workingImage == null) return;
+        private void setWorkingAnimationStatus(bool visible) {
+            try {
+                if (workingAnimation != null) {
+                    if (visible)
+                        workingAnimation.AllocResources();
+                    else
+                        workingAnimation.FreeResources();
+                    workingAnimation.Visible = visible;
+                }
+            }
+            catch (Exception) {
+            }
+        }
 
-            if (percentDone >= 100)
-                workingImage.Visible = false;
-            else if (workingImage.Visible == false)
-                workingImage.Visible = true;
+        private void Importer_Progress(int percentDone, int taskCount, int taskTotal, string taskDescription) {
+            setWorkingAnimationStatus(percentDone < 100);
         }
 
         private void updateMovieWatchedCounter(DBMovieInfo movie) {
