@@ -61,7 +61,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             set { filehash = value; }
         } private string filehash = null;
         
-        public List<DBLocalMedia> LocalMedia = null; // LocalMedia collection
+        public List<DBLocalMedia> LocalMedia = null; // LocalMedia collection 
 
         #region Read-only
 
@@ -102,7 +102,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region Constructors
 
         public MovieSignature() {
-
+ 
         }
 
         public MovieSignature(List<DBLocalMedia> localMedia) {
@@ -193,7 +193,6 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             logger.Debug("Compare: '{0}', With: '{1}', Result: {2}", compareThis, compareOther, score);
             return score;
         }
-
 
         #endregion
 

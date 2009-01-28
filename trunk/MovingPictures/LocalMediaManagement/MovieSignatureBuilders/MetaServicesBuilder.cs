@@ -8,7 +8,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
     class MetaServicesBuilder : ISignatureBuilder {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public MovieSignature UpdateSignature(MovieSignature signature) {
+        public SignatureBuilderResult UpdateSignature(MovieSignature signature) {
             if (signature.DiscId != null && signature.DiscId != "0") {
                 XmlNodeList mdrDVD = getMDRDVDByCRC(signature.DiscId);
                 if (mdrDVD != null) {
@@ -24,7 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                     }
                 }
             }
-            return signature;
+            return SignatureBuilderResult.INCONCLUSIVE;
         }
 
         /// <summary>

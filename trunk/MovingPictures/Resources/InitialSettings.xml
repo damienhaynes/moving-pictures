@@ -115,6 +115,25 @@
         <description>Calculate Disc ID for DVD media. This enables better matching for DVD discs</description>
       </setting>
 
+      <setting id="importer_lookup_imdb" name="Enable IMDB Lookup" type="BOOL">
+        <default>true</default>
+        <description>Enables pre-search lookup for title and year from imdb.com when an imdbid is available. This generally improves results from data providers that don't support imdb id searches.</description>
+      </setting>
+
+    </group>
+
+    <group name="Movie Hash (OSDb)">
+
+      <setting id="importer_lookup_hash" name="Enable Hash Lookup" type="BOOL">
+        <default>true</default>
+        <description>Enables pre-search lookup for title, year and imdbid by using the hash/movie match.</description>
+      </setting>
+
+      <setting id="importer_lookup_hash_seencount" name="Hash Confirmed Limit" type="INT">
+        <default>2</default>
+        <description>Only accepts the matched movie if it's confirmed X times or more. This is to prevent false positives.</description>
+      </setting>
+
     </group>
 
     <group name="NFO Scanner">

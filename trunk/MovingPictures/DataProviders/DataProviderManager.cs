@@ -231,9 +231,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             logger.Info("Checking internal scripts for updates...");
 
             AddSource(typeof(LocalProvider));
-            
             AddSource(typeof(ScriptableProvider), Resources.Script_IMDb);
             AddSource(typeof(TheMovieDbProvider));
+            AddSource(typeof(OSDbProvider));
             AddSource(typeof(ScriptableProvider), Resources.Script_MovieMeter);
             AddSource(typeof(ScriptableProvider), Resources.Script_OFDb);
             AddSource(typeof(ScriptableProvider), Resources.Script_Allocine);
