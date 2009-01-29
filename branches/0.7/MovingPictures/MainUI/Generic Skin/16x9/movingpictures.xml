@@ -61,15 +61,6 @@ multiple view modes.
       <width>0</width>
     </control>
 
-    <control>
-      <description>Visible when the importer is working</description>
-      <type>label</type>
-      <id>13</id>
-      <posX>-50</posX>
-      <posY>-50</posY>
-      <width>0</width>
-    </control>
-
     <!-- ********************* Background /  Movie Backdrop (Fan-art) *************************** -->
     <control>
       <description>Background to be displayed when there is no Movie Backdrop</description>
@@ -652,15 +643,14 @@ multiple view modes.
     </control>
     
     <control>
-      <description>Working Graphic</description>
-      <type>image</type>
-      <id>0</id>
+      <description>Working Animation</description>
+      <type>animation</type>
+      <id>13</id>
       <posX>1258</posX>
       <posY>5</posY>
       <width>16</width>
       <height>16</height>
-      <texture>MovingPictures\working.gif</texture>
-      <visible>Control.IsVisible(13)</visible>
+      <textures>MovingPictures\working.gif</textures>
     </control>
     
     <!-- ******************** Side Bar Buttons, Not Used. The Cycle Button is the only one currently Functional *******************-->
