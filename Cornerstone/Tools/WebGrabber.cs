@@ -4,7 +4,9 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Xml;
+using System.Reflection;
 using NLog;
+using System.Threading;
 
 namespace Cornerstone.Tools {
 
@@ -71,9 +73,20 @@ namespace Cornerstone.Tools {
             set { _debug = value; }
         } private bool _debug = false;
 
+        public bool AllowUnsafeHeader
+        {
+            get { return _allowUnsafeHeader; }
+            set { _allowUnsafeHeader = value; }
+        } private bool _allowUnsafeHeader = false;
+
+
         public bool GetResponse() {
             data = string.Empty;
             int tryCount = 0;
+
+            if (_allowUnsafeHeader) 
+                SetAllowUnsafeHeaderParsing(true);
+
             while (data == string.Empty) {
                 tryCount++;
                 try {
@@ -102,15 +115,15 @@ namespace Cornerstone.Tools {
 
                     // Converts the stream to a string
                     StreamReader reader = new StreamReader(resultData, encoding, true);
-                    data = reader.ReadToEnd(); 
+                    data = reader.ReadToEnd();
 
                     // Close stream and response objects
                     resultData.Close();
                     reader.Close();
-                    response.Close();                
+                    response.Close();
                 }
                 catch (WebException e) {
-                    
+
                     // Skip retry logic on protocol errors
                     if (e.Status == WebExceptionStatus.ProtocolError) {
                         HttpStatusCode statusCode = ((HttpWebResponse)e.Response).StatusCode;
@@ -126,12 +139,16 @@ namespace Cornerstone.Tools {
                                 return false;
                         }
                     }
-                    
+
                     // Return when hitting maximum retries.
                     if (tryCount == maxRetries) {
                         logger.ErrorException("Connection failed: Reached retry limit of " + maxRetries + ". URL=" + requestUrl, e);
                         return false;
                     }
+                }
+                finally { 
+                    if (_allowUnsafeHeader) 
+                        SetAllowUnsafeHeaderParsing(false); 
                 }
             }
             return true;
@@ -169,6 +186,45 @@ namespace Cornerstone.Tools {
                 logger.ErrorException("XML Parse error: URL=" + requestUrl, e);
                 return null;
             }          
+        }
+
+        //Method to change the AllowUnsafeHeaderParsing property of HttpWebRequest.
+        private bool SetAllowUnsafeHeaderParsing(bool setState) {
+            try {
+                //Get the assembly that contains the internal class
+                Assembly aNetAssembly = Assembly.GetAssembly(typeof(System.Net.Configuration.SettingsSection));
+                if (aNetAssembly == null)
+                    return false;
+
+                //Use the assembly in order to get the internal type for the internal class
+                Type aSettingsType = aNetAssembly.GetType("System.Net.Configuration.SettingsSectionInternal");
+                if (aSettingsType == null)
+                    return false;
+
+                //Use the internal static property to get an instance of the internal settings class.
+                //If the static instance isn't created allready the property will create it for us.
+                object anInstance = aSettingsType.InvokeMember("Section",
+                                                                BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic,
+                                                                null, null, new object[] { });
+                if (anInstance == null)
+                    return false;
+
+                //Locate the private bool field that tells the framework is unsafe header parsing should be allowed or not
+                FieldInfo aUseUnsafeHeaderParsing = aSettingsType.GetField("useUnsafeHeaderParsing", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (aUseUnsafeHeaderParsing == null)
+                    return false;
+
+                // and finally set our setting
+                aUseUnsafeHeaderParsing.SetValue(anInstance, setState);
+                return true;
+            }
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
+                logger.Error("Unsafe header parsing setting change failed.");
+                return false;
+            }
         }
     }
 }

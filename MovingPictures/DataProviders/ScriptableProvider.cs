@@ -223,6 +223,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movie.AlternateCovers.Count >= maxCovers)
                 return true;
 
+            // try to load the id for the movie for this script
+            DBSourceMovieInfo idObj = movie.GetSourceMovieInfo(ScriptID);
+            if (idObj != null && idObj.Identifier != null)
+                paramList["movie.site_id"] = idObj.Identifier;
+
             // load params for scraper
             foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo)))
                 if (currField.GetValue(movie) != null)

@@ -316,6 +316,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             addToLists(newSource);
             newScript.Commit();
             newSource.Commit();
+            normalizePriorities();
 
             return AddSourceResult.SUCCESS;
         }
@@ -333,6 +334,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             newSource.ProviderType = providerType;
             newSource.Commit();
             addToLists(newSource);
+            normalizePriorities();
 
             return AddSourceResult.SUCCESS;
         }
