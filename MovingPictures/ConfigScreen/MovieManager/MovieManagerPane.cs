@@ -483,6 +483,46 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void reassignMovieButton_Click(object sender, EventArgs e) {
             if (CurrentMovie == null)
                 return;
+
+            // Check if all files belonging to the movie are available.
+            bool continueReassign = false;
+            while (!continueReassign) {
+                continueReassign = true;
+                foreach (DBLocalMedia localMedia in CurrentMovie.LocalMedia) {
+                    // if the file is offline
+                    if (!localMedia.IsAvailable) {
+                        // do not continue
+                        continueReassign = false;
+
+                        // Prompt the user to insert the media containing the files
+                        string connect = string.Empty;
+                        if (localMedia.Volume != null) {
+                            if (localMedia.ImportPath.GetDriveType() == DriveType.CDRom)
+                                connect = "Please insert the disc labeled '" + localMedia.MediaLabel + "'.";
+                            else
+                                connect = "Please reconnect the media labeled '" + localMedia.MediaLabel + "' to " + localMedia.Volume;
+                        }
+                        else {
+                            connect = "Please make sure the network share '" + localMedia.FullPath + "' is available.";
+                        }
+                        
+                        // Show dialog
+                        DialogResult resultInsert = MessageBox.Show(
+                        "The file or files you want to reassign are currently not available.\n\n" + connect,
+                        "File(s) not available.", MessageBoxButtons.RetryCancel);
+
+                        // if cancel is pressed stop the reassign process.
+                        if (resultInsert == DialogResult.Cancel)
+                            return;
+                        
+                        // break foreach loop (and recheck condition)
+                        break;
+                    }
+                }
+            }
+
+            // If we made it this far all files are available and we can notify the user
+            // about what the reassign process is going to do.
             DialogResult result = MessageBox.Show(
                     "You are about to reassign this file or set of files\n" +
                     "to a new movie. This will send the file(s) back to\n" +
