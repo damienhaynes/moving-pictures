@@ -119,6 +119,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     ClearFocus();
                     facade.Focus = true;
                     facade.Visible = true;
+                    browser.Sync();
                 }
 
                 switch (currentView) {
@@ -147,7 +148,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
 
                 if (facade.SelectedListItem != null)
-                    updateMovieDetails(facade.SelectedListItem.TVTag as DBMovieInfo);
+                    updateMovieDetails();
 
                 SetBackdropVisibility();
                 UpdateArtwork();
@@ -344,6 +345,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 remoteFilteringIndicator.Visible = false;
         }
 
+        private void OnBrowserSelectionChanged(DBMovieInfo movie) {
+            updateMovieDetails();
+        }
+
 
 
         #region GUIWindow Methods
@@ -418,7 +423,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (startWithWatchedFilterOn)
                     watchedFilter.Active = true;
 
-                browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(updateMovieDetails);
+                browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(OnBrowserSelectionChanged);
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
 
             }
@@ -993,7 +998,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (dialog.IsConfirmed && browser.SelectedMovie != null) {
                 MovingPicturesCore.DataProviderManager.Update(browser.SelectedMovie);
                 browser.SelectedMovie.Commit();
-                PublishDetails(browser.SelectedMovie, "SelectedMovie");
+                updateMovieDetails();
             }
 
 
@@ -1580,12 +1585,12 @@ namespace MediaPortal.Plugins.MovingPictures {
         #endregion
 
         #region Skin and Property Settings
-        
-        private void updateMovieDetails(DBMovieInfo movie) {
-            PublishDetails(movie, "SelectedMovie");
+
+        private void updateMovieDetails() {
+            PublishDetails(browser.SelectedMovie, "SelectedMovie");
 
             if (selectedMovieWatchedIndicator != null)
-                if (movie.UserSettings[0].Watched > 0)
+                if (browser.SelectedMovie.UserSettings[0].Watched > 0)
                     selectedMovieWatchedIndicator.Visible = true;
                 else
                     selectedMovieWatchedIndicator.Visible = false;

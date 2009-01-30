@@ -10,9 +10,12 @@ using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using System.Reflection;
 using System.Globalization;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class ScriptableProvider : IScriptableMovieProvider {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         #region Properties
 
         public string Name {
@@ -126,6 +129,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movieSignature.DiscId != null) paramList["search.disc_id"] = movieSignature.DiscId;
 
             results = scraper.Execute("search", paramList);
+            if (results == null) {
+                logger.Error(Name + " scraper script failed to execute \"search\" node.");
+                return rtn;
+            }
 
             int count = 0;
             while (results.ContainsKey("movie[" + count + "].title")) {
@@ -180,6 +187,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // try to retrieve results
             results = scraper.Execute("get_details", paramList);
+            if (results == null) {
+                logger.Error(Name + " scraper script failed to execute \"get_details\" node.");
+                return UpdateResults.FAILED;
+            }
+
 
             // get our new movie details
             DBMovieInfo newMovie = new DBMovieInfo();
@@ -218,6 +230,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // run the scraper
             results = scraper.Execute("get_cover_art", paramList);
+            if (results == null) {
+                logger.Error(Name + " scraper script failed to execute \"get_cover_art\" node.");
+                return false;
+            }
 
             int coversAdded = 0;
             int count = 0;

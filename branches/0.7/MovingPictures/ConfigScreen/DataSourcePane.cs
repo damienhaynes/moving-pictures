@@ -191,9 +191,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (result == DialogResult.OK) {
                 logger.Info("New script specified by user: " + openFileDialog.FileName);
 
-                // grab the contents of the file and try to add it to the manager
+                // grab the contents of the file and try
                 StreamReader reader = new StreamReader(openFileDialog.FileName);
                 string script = reader.ReadToEnd();
+                reader.Close();
+
+                // and add it to the manager
                 DataProviderManager.AddSourceResult addResult = MovingPicturesCore.DataProviderManager.AddSource(typeof(ScriptableProvider), script);
 
                 if (addResult == DataProviderManager.AddSourceResult.FAILED_VERSION) {
@@ -210,7 +213,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                         "Because you are in debug mode, this script has replaced\n" +
                         "an existing script with the same version. If you are a\n" +
                         "developer, please be sure to increment your version number\n" +
-                        "before distribution.", "Warning");
+                        "and update your release date before distribution.", "Warning");
                 }
                 reloadList();
 

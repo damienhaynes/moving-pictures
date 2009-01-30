@@ -269,6 +269,19 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
             facade.SelectedListItemIndex = facadeIndexOf(SelectedMovie);
         }
 
+        public void Sync() {
+            // if we already are on this movie, exit
+            if (selectedMovie == facade.SelectedListItem.TVTag as DBMovieInfo)
+                return;
+
+            selectedMovie = facade.SelectedListItem.TVTag as DBMovieInfo;
+
+            // log and notify any listeners
+            logger.Debug("SelectedMovie changed: " + selectedMovie.Title);
+            if (SelectionChanged != null)
+                SelectionChanged(selectedMovie);
+        }
+
         // adds the given movie to the facade and creates a GUIListItem if neccesary
         private void addMovieToFacade(DBMovieInfo newMovie) {
             if (newMovie == null || facade == null)
@@ -296,16 +309,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
                 parent != facade.ThumbnailView && parent != facade.ListView)
                 return;
 
-            // if we already are on this movie, exit
-            if (SelectedMovie == item.TVTag)
-                return;
-
-            selectedMovie = item.TVTag as DBMovieInfo;
-
-            // log and notify any listeners
-            logger.Debug("SelectedMovie changed: " + ((DBMovieInfo)item.TVTag).Title);
-            if (SelectionChanged != null)
-                SelectionChanged(selectedMovie);
+            Sync();
         }
 
         // returns the index of the given item in the facade. If it doesn't exist 
