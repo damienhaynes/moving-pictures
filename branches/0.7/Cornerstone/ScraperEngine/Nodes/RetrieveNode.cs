@@ -34,6 +34,9 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return timeoutIncrement; }
         } protected int timeoutIncrement;
 
+        public bool AllowUnsafeHeader {
+            get { return allowUnsafeHeader; }
+        } protected bool allowUnsafeHeader;
         #endregion
 
         #region Methods
@@ -59,6 +62,15 @@ namespace Cornerstone.ScraperEngine.Nodes {
                     throw e;
 
                 userAgent = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
+            }
+
+            // grab user agent. if none specified use defaults
+            try { allowUnsafeHeader = bool.Parse(xmlNode.Attributes["allow_unsafe_header"].Value); }
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
+                allowUnsafeHeader = false;
             }
 
             // grab encoding, if not specified it will try to set 
@@ -115,6 +127,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 grabber.Timeout = timeout;
                 grabber.TimeoutIncrement = timeoutIncrement;
                 grabber.MaxRetries = maxRetries;
+                grabber.AllowUnsafeHeader = allowUnsafeHeader;
                 grabber.Debug = DebugMode;
 
                 // Keep session / chaining
