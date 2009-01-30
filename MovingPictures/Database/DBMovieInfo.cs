@@ -535,7 +535,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 if (!File.Exists(newFileName)) {
-                    newCover.Save(newFileName, ImageFormat.Jpeg);
+                    newCover.Save(newFileName, ImageFormat.Png);
                     AlternateCovers.Add(newFileName);
                 }
                 else return false;
@@ -616,7 +616,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // save the artwork
             logger.Info("Added cover art for '" + Title + "' [" + ID + "] from " + url + ".");
-            currImage.Save(filename, ImageFormat.Jpeg);
+            currImage.Save(filename, ImageFormat.Png);
             AlternateCovers.Add(filename);
             GenerateThumbnail();
             commitNeeded = true;
@@ -812,7 +812,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             int height = (int)(cover.Height * ((float)width / (float)cover.Width));
 
             Image coverThumb = cover.GetThumbnailImage(width, height, null, IntPtr.Zero);
-            coverThumb.Save(fullname, ImageFormat.Jpeg);
+            coverThumb.Save(fullname, ImageFormat.Png);
             _coverThumbFullPath = fullname;
             commitNeeded = true;
 

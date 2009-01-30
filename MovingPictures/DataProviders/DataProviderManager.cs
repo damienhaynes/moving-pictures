@@ -274,6 +274,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                                 logger.Warn("Script version number already loaded. Reloading because in Debug Mode.");
                                 currScript.Contents = scriptContents;
                                 currScript.Reload();
+                                currScript.Commit();
                                 return AddSourceResult.SUCCESS_REPLACED;
                             }
                             else {
@@ -284,12 +285,16 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     }
 
                     // if the date is unique, go ahead and add the new script
-                    if (uniqueDate) {
+                    if (uniqueDate || DebugMode) {
                         currSource.Scripts.Add(newScript);
                         currSource.SelectedScript = newScript;
                         newScript.Commit();
                         currSource.Commit();
-                        return AddSourceResult.SUCCESS;
+
+                        if (uniqueDate)
+                            return AddSourceResult.SUCCESS;
+                        else
+                            return AddSourceResult.SUCCESS_REPLACED;
                     }
                     else {
                         logger.Error("Script failed to load, publish date is not unique.");
@@ -316,6 +321,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public AddSourceResult AddSource(Type providerType) {
+            // internal scripts dont need to be updated, so just quit
+            // if we dont need to reload everything
+            if (updateOnly) return AddSourceResult.FAILED;
+
             foreach (DBSourceInfo currSource in allSources)
                 if (currSource.ProviderType == providerType)
                     return AddSourceResult.FAILED;
