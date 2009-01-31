@@ -113,7 +113,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 lastSplitJoinLocation++;
             } else 
                 rowNum = unapprovedMatchesBindingSource.IndexOf(obj);
-            
+
 
             // setup tooltip for filename
             DataGridViewTextBoxCell filenameCell = (DataGridViewTextBoxCell)unapprovedGrid.Rows[rowNum].Cells["unapprovedLocalMediaColumn"];
@@ -405,6 +405,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     MovingPicturesCore.Importer.ManualAssign(selectedMatch);
                 }
             }
+        }
+
+        private void unapprovedGrid_DataError_1(object sender, DataGridViewDataErrorEventArgs e) {
+            logger.Warn("Importer removed possible matches without telling the importer!");
+            DataGridViewComboBoxCell movieListCombo = (DataGridViewComboBoxCell)unapprovedGrid.Rows[e.RowIndex].Cells["unapprovedPossibleMatchesColumn"];
+            movieListCombo.Items.Clear();
         }
 
     }

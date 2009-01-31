@@ -133,6 +133,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.unapprovedGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.unapprovedGrid.Size = new System.Drawing.Size(636, 345);
             this.unapprovedGrid.TabIndex = 4;
+            this.unapprovedGrid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.unapprovedGrid_DataError_1);
             this.unapprovedGrid.SelectionChanged += new System.EventHandler(this.unapprovedGrid_SelectionChanged);
             // 
             // statusColumn
