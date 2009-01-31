@@ -467,6 +467,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 count++;
                 if (progress != null)
                     progress("", (int)(count*100/total));
+
+                // delay a little so we dont hammer the webserver.
+                logger.Info("refreshing movie #" + count);
+                Thread.Sleep(200);
+                if (count % 5 == 0)
+                    Thread.Sleep(1000);
             }
 
             if (sentToImporter > 0) {

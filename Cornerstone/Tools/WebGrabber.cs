@@ -13,8 +13,17 @@ namespace Cornerstone.Tools {
     public class WebGrabber {
         
         private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        private static int unsafeHeaderUserCount;
+        private static object lockingObj;
+
         private string requestUrl;
         private string data;
+
+        static WebGrabber() {
+            unsafeHeaderUserCount = 0;
+            lockingObj = new object();
+        }
 
         public WebGrabber(string url) {
             requestUrl = url;
@@ -84,12 +93,13 @@ namespace Cornerstone.Tools {
             data = string.Empty;
             int tryCount = 0;
 
-            if (_allowUnsafeHeader) 
-                SetAllowUnsafeHeaderParsing(true);
-
             while (data == string.Empty) {
                 tryCount++;
                 try {
+                    if (_allowUnsafeHeader) 
+                        SetAllowUnsafeHeaderParsing(true);
+
+
                     request.UserAgent = userAgent;
                     request.Timeout = timeout + (timeoutIncrement * tryCount);
                     request.CookieContainer = new CookieContainer();
@@ -191,32 +201,50 @@ namespace Cornerstone.Tools {
         //Method to change the AllowUnsafeHeaderParsing property of HttpWebRequest.
         private bool SetAllowUnsafeHeaderParsing(bool setState) {
             try {
-                //Get the assembly that contains the internal class
-                Assembly aNetAssembly = Assembly.GetAssembly(typeof(System.Net.Configuration.SettingsSection));
-                if (aNetAssembly == null)
-                    return false;
+                lock (lockingObj) {
+                    // update our counter of the number of requests needing 
+                    // unsafe header processing
+                    if (setState == true) unsafeHeaderUserCount++;
+                    else unsafeHeaderUserCount--;
 
-                //Use the assembly in order to get the internal type for the internal class
-                Type aSettingsType = aNetAssembly.GetType("System.Net.Configuration.SettingsSectionInternal");
-                if (aSettingsType == null)
-                    return false;
+                    // if there was already a request using unsafe heaser processing, we
+                    // dont need to take any action.
+                    if (unsafeHeaderUserCount > 1)
+                        return true;
 
-                //Use the internal static property to get an instance of the internal settings class.
-                //If the static instance isn't created allready the property will create it for us.
-                object anInstance = aSettingsType.InvokeMember("Section",
-                                                                BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic,
-                                                                null, null, new object[] { });
-                if (anInstance == null)
-                    return false;
+                    // if the request tried to turn off unsafe header processing but it is
+                    // still needed by another request, we should wait.
+                    if (unsafeHeaderUserCount >= 1 && setState == false)
+                        return true;
 
-                //Locate the private bool field that tells the framework is unsafe header parsing should be allowed or not
-                FieldInfo aUseUnsafeHeaderParsing = aSettingsType.GetField("useUnsafeHeaderParsing", BindingFlags.NonPublic | BindingFlags.Instance);
-                if (aUseUnsafeHeaderParsing == null)
-                    return false;
+                    //Get the assembly that contains the internal class
+                    Assembly aNetAssembly = Assembly.GetAssembly(typeof(System.Net.Configuration.SettingsSection));
+                    if (aNetAssembly == null)
+                        return false;
 
-                // and finally set our setting
-                aUseUnsafeHeaderParsing.SetValue(anInstance, setState);
-                return true;
+                    //Use the assembly in order to get the internal type for the internal class
+                    Type aSettingsType = aNetAssembly.GetType("System.Net.Configuration.SettingsSectionInternal");
+                    if (aSettingsType == null)
+                        return false;
+
+                    //Use the internal static property to get an instance of the internal settings class.
+                    //If the static instance isn't created allready the property will create it for us.
+                    object anInstance = aSettingsType.InvokeMember("Section",
+                                                                    BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic,
+                                                                    null, null, new object[] { });
+                    if (anInstance == null)
+                        return false;
+
+                    //Locate the private bool field that tells the framework is unsafe header parsing should be allowed or not
+                    FieldInfo aUseUnsafeHeaderParsing = aSettingsType.GetField("useUnsafeHeaderParsing", BindingFlags.NonPublic | BindingFlags.Instance);
+                    if (aUseUnsafeHeaderParsing == null)
+                        return false;
+
+                    // and finally set our setting
+                    aUseUnsafeHeaderParsing.SetValue(anInstance, setState);
+                    return true;
+                }
+
             }
             catch (Exception e) {
                 if (e.GetType() == typeof(ThreadAbortException))

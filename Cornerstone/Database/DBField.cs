@@ -236,8 +236,8 @@ namespace Cornerstone.Database {
             catch (Exception e) {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
-                logger.ErrorException("Error writing to " + owner.GetType().Name + "." + this.Name +
-                                " Property.", e);
+                logger.Error("Error writing to " + owner.GetType().Name + "." + this.Name +
+                                " Property: " + e.Message);
             }
         }
 

@@ -238,6 +238,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="title">the original title</param>
         /// <returns>the normalized title</returns>
         public static string normalizeTitle(string title) {
+            if (title == null)
+                return "";
+
             // Convert title to lowercase culture invariant
             string newTitle = title.ToLowerInvariant();
 
