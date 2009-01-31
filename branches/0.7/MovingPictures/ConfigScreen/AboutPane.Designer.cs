@@ -354,7 +354,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 26);
             this.label1.TabIndex = 29;
-            this.label1.Text = "LFalk\r\nchefkoch";
+            this.label1.Text = "LRFalk01\r\nchefkoch";
             // 
             // splashPane1
             // 
