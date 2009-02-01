@@ -231,16 +231,17 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             logger.Info("Checking internal scripts for updates...");
 
             AddSource(typeof(LocalProvider));
-            
+
+            AddSource(typeof(ScriptableProvider), Resources.Script_IMPAwards);          
+
             AddSource(typeof(ScriptableProvider), Resources.Script_IMDb);
             AddSource(typeof(TheMovieDbProvider));
             AddSource(typeof(ScriptableProvider), Resources.Script_MovieMeter);
             AddSource(typeof(ScriptableProvider), Resources.Script_OFDb);
             AddSource(typeof(ScriptableProvider), Resources.Script_Allocine);
-            AddSource(typeof(ScriptableProvider), Resources.Script_MyMoviesItalian);  
-            //AddSource(typeof(ScriptableProvider), Resources.Script_MoTechPosters);
-            AddSource(typeof(ScriptableProvider), Resources.Script_IMPAwards);          
-            
+            AddSource(typeof(ScriptableProvider), Resources.Script_MyMoviesItalian);
+            AddSource(typeof(ScriptableProvider), Resources.Script_FilmWeb);  
+
             AddSource(typeof(MyVideosProvider));
 
             normalizePriorities();
