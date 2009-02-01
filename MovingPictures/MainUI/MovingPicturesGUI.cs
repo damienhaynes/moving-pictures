@@ -908,7 +908,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             DBLocalMedia firstFile = browser.SelectedMovie.LocalMedia[0];
 
             // if the file is available and read only, or known to be stored on optical media, prompt to ignore.
-            if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || DeviceManager.GetVolumeInfo(firstFile.Volume).Drive.DriveType == DriveType.CDRom) {
+            if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || DeviceManager.GetVolumeInfo(firstFile.DriveLetter).DriveInfo.DriveType == DriveType.CDRom) {
                 GUIDialogYesNo ignoreDialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
                 ignoreDialog.Reset();
                 ignoreDialog.SetHeading("Moving Pictures");
@@ -1576,7 +1576,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 
             // if we are playing something from this volume stop it
             if (currentlyPlaying)
-                if (currentlyPlayingMovie.LocalMedia[currentlyPlayingPart].Volume == volume)
+                if (currentlyPlayingMovie.LocalMedia[currentlyPlayingPart].DriveLetter == volume)
                     g_Player.Stop();
 
             logger.Debug("OnVolumeRemoved" + volume);

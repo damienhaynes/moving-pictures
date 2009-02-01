@@ -361,6 +361,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;FilmWeb.pl&lt;/name&gt;
+        ///    &lt;author&gt;LRFalk01&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from FilmWeb.pl.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you should change the version [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_FilmWeb {
+            get {
+                return ResourceManager.GetString("Script_FilmWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;imdb.com&lt;/name&gt;
         ///    &lt;author&gt;John Conrad (fforde), Armand Pondman (armandp)&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from IMDb.&lt;/description&gt;

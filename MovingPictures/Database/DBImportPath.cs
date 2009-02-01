@@ -38,12 +38,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
-        public string Volume {
-            get {
-                return DeviceManager.GetVolume(dirInfo);
-            }
-        }
-
         public DirectoryInfo Directory {
             get { return dirInfo; }
 
@@ -116,10 +110,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (IsAvailable) {                
                 VolumeInfo vi = DeviceManager.GetVolumeInfo(Directory);
                 if (vi != null) {
-                    volume = vi.Drive.Name;
+                    volume = vi.DriveInfo.Name;
                     label = vi.Label;
                     serial = vi.Serial;
-                    type = vi.Drive.DriveType;
+                    type = vi.DriveInfo.DriveType;
                 }
                 logger.Debug("Volume: {0}, Type= {1}, Serial={2}", volume, type, serial);
             }
@@ -170,7 +164,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (Directory != null) {
                 VolumeInfo vi = DeviceManager.GetVolumeInfo(Directory);
                 if (vi != null)
-                    return vi.Drive.DriveType;
+                    return vi.DriveInfo.DriveType;
             }
             return DriveType.Unknown;
         }

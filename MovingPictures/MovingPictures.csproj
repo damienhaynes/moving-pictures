@@ -359,6 +359,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataProviders\ScraperScripts\Allocine.xml" />
+    <Content Include="DataProviders\ScraperScripts\FilmWeb.xml" />
     <Content Include="DataProviders\ScraperScripts\IMPAwards.xml" />
     <Content Include="DataProviders\ScraperScripts\MoTechPosters.xml" />
     <Content Include="DataProviders\ScraperScripts\MovieMeter.xml" />

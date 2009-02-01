@@ -502,11 +502,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                         // Prompt the user to insert the media containing the files
                         string connect = string.Empty;
-                        if (localMedia.Volume != null) {
+                        if (localMedia.DriveLetter != null) {
                             if (localMedia.ImportPath.GetDriveType() == DriveType.CDRom)
                                 connect = "Please insert the disc labeled '" + localMedia.MediaLabel + "'.";
                             else
-                                connect = "Please reconnect the media labeled '" + localMedia.MediaLabel + "' to " + localMedia.Volume;
+                                connect = "Please reconnect the media labeled '" + localMedia.MediaLabel + "' to " + localMedia.DriveLetter;
                         }
                         else {
                             connect = "Please make sure the network share '" + localMedia.FullPath + "' is available.";
