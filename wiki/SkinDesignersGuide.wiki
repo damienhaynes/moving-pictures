@@ -143,7 +143,7 @@ There are a few controls (and their corresponding IDs) that you as a skinner sho
 
   * *Secondary Backdrop (Fan-Art) Image* (11) - If the second backdrop image control is defined in the skin file, Moving Pictures will alternate between image control #1 and image control #11, setting the visibility to false for the control not currently in use. Because of the alternating visibility, this allows for animation effects to be used when the backdrop image changes. This is currently only tested with the fading effect. 
 
-  * *Working Animation* (13) - This is a control of type "animation". If you have it defined in your skin, it will be displayed when Moving Pictures is doing work in the background (such as loading a new movie).
+  * *Working Animation* (13) - This is a control of type "animation". If you have it defined in your skin, it will be displayed when Moving Pictures is doing work in the background (such as loading a new movie). _This working animation should be displayed in an unobtrusive manner! It is meant to indicate a *background* task is going on, and should not disrupt the user._
 
   * *Toggle View Button* (2) - When this button is clicked the current view will be cycled to the next available view.
 
