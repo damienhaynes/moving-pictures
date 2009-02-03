@@ -293,9 +293,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             // if a change has occured
                             if (driveStates[currDrive] != isAvailable) {
 
+                                // Refresh Serial
+                                GetVolumeInfo(currDrive).RefreshSerial();
+
                                 // notify any listeners
                                 if (isAvailable) {
-                                    GetVolumeInfo(currDrive).RefreshSerial();
                                     logger.Info("Volume Inserted: " + currDrive);
                                     if (OnVolumeInserted != null)
                                         OnVolumeInserted(currDrive, GetDiskSerial(currDrive));
