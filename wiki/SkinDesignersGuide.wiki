@@ -7,6 +7,12 @@ For skinning Moving Pictures, you are welcome to use whatever skin you like as a
 
 If you are new to skinning, I would suggest you check out [http://www.team-mediaportal.com/manual/MediaPortal1_Development/SkinArchitecture the skin designer's guide] on the !MediaPortal wiki.
 
+= Changes in 0.7 =
+  * Two new labels have been added to indicate the number of movies in the users movie collection, and the number of movies currently listed in the facade based on filtering. See the Labels section below for details.
+  * A second backdrop image control has been added to support a fading transition when the backdrop image changes. See the Backdrop Fading transition section below.
+  * A working animation control has been added to indicate when the Moving Pictures Importer is actively loading a movie file or retrieving details and artwork. See the controls section below for details.
+  * We would like to officially encourage you to display the movie rating on a five star scale rather than ten. With five stars it's easy to see at a very quick glance how a movie has been rated by critics. With ten stars though often users find themselves actually counting the number of stars, which is certainly not desirable. You are of course free to design your skin as you see fit, but please consider this suggestion. To make the change all you have to do is change the imagesToDraw tag of the imagelist control from 10 to 5.
+
 = Changes in 0.6.0 =
   *  Three dummy labels have been added to provide visibility indicators to the skin. For example it is possible to have an image visible only when the currently selected movie has already been watched. See the Dummy Controls section below for more details.
 
@@ -28,6 +34,42 @@ Details View:     <visible>!Control.IsVisible(50)</visible>
 Both Thumbnail Views:      <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
 }}}
 
+= The Backdrop Fading Transition =
+Beginning with Moving Pictures 0.7, it is now possible to apply animation effects to the backdrop as it fades from one image to another. This is possible by using two image controls instead of one. When the backdrop image changes, the first control is set to invisible while the second (with the new backdrop) is set to visible. If an animation is applied to each of these controls, to be triggered by a change in visibility, a smooth transition effect can be applied. An example implementation is listed below. 
+
+{{{
+    <control>
+      <description>Movie Backdrop (Fan Art) - Plug-in sets to invisible, if no art.</description>
+      <type>image</type>
+      <id>1</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>1366</width>
+      <height>768</height>
+      <texture>#MovingPictures.Backdrop</texture>
+      <animation effect="fade" start="0" end="100" time="3000">WindowOpen</animation>
+      <animation effect="fade" start="0" end="100" time="200">Visible</animation>
+      <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
+      <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above 
+           defines for conditional visibility if you dont want to use fan-art only specific views. -->
+    </control>
+
+    <control>
+      <description>Alternate Movie Backdrop - Toggles Load with Component 1 for animations on visibiltiy</description>
+      <type>image</type>
+      <id>11</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>1366</width>
+      <height>768</height>
+      <texture>#MovingPictures.Backdrop2</texture>
+      <animation effect="fade" start="0" end="100" time="200">Visible</animation>
+      <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
+      <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above 
+           defines for conditional visibility if you dont want to use fan-art only specific views. -->
+    </control>
+}}}
+
 = Available Labels / Strings =
 === Artwork Labels ==
 An important note, the standard label list includes the current backdrop and coverart paths. _These are not time delayed and as a consequence will cause the GUI to perform poorly if you use them for display._ They are included for completeness that is all. For artwork you should use the following two labels which will be updated with a time delay to dramatically boost performance of the plug-in.
@@ -35,6 +77,14 @@ An important note, the standard label list includes the current backdrop and cov
 {{{
 #MovingPictures.Coverart
 #MovingPictures.Backdrop
+}}}
+
+=== Movie Count Labels ===
+There are two labels that give numerical information about the size of the users movie collection. The first is the number of movies currently listed in the GUI based on filtering, for example, if the user is viewing only unwatched movies. The second is the total number of movies in the collection. 
+
+{{{
+#MovingPictures.general.filteredmoviecount
+#MovingPictures.general.totalmoviecount
 }}}
 
 === Standard Labels ===
@@ -89,7 +139,11 @@ There are a few controls (and their corresponding IDs) that you as a skinner sho
 === Normal Available Controls ===
   * *Facade / List View / Thumbnail View / Filmstrip View* (50) - This is the primary control for the skin. Depending on the current view this is the primary visualization for the movies displayed on the screen.
 
-  * *Backdrop (Fan-Art) Image* (1) - The plug-in will automatically hide this component when there is no backdrop available. If you setup conditional visibility for another image based on this control, you can display a normal background when there is no backdrop. You can also set up different versions of each view, one for when there is a backdrop and one for when there is not. You should not modify the visibility of this control directly.
+  * *Backdrop (Fan-Art) Image* (1) - The plug-in will automatically hide this component when there is no backdrop available. If you setup conditional visibility for another image based on this control, you can display a normal background when there is no backdrop. You can also set up different versions of each view, one for when there is a backdrop and one for when there is not. You should not modify the visibility of this control directly. 
+
+  * *Secondary Backdrop (Fan-Art) Image* (11) - If the second backdrop image control is defined in the skin file, Moving Pictures will alternate between image control #1 and image control #11, setting the visibility to false for the control not currently in use. Because of the alternating visibility, this allows for animation effects to be used when the backdrop image changes. This is currently only tested with the fading effect. 
+
+  * *Working Animation* (13) - This is a control of type "animation". If you have it defined in your skin, it will be displayed when Moving Pictures is doing work in the background (such as loading a new movie).
 
   * *Toggle View Button* (2) - When this button is clicked the current view will be cycled to the next available view.
 
