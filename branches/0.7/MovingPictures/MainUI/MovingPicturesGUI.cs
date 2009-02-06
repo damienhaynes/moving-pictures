@@ -766,6 +766,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             browser.ReloadFacade();
+            browser.Facade.SelectedListItemIndex = 0;
         }
 
         private void showChangeViewContext() {
