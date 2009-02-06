@@ -465,9 +465,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                     CurrentView = ViewMode.LIST;
                     logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
                 }
-
-                setWorkingAnimationStatus(false);
-                
             }
 
             // if we have loaded before, lets update the view to match our previous settings
@@ -476,6 +473,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 CurrentView = CurrentView;
                 previousView = tmp;
             }
+            setWorkingAnimationStatus(false);
 
             // (re)link our backdrop image controls to the backdrop image swapper
             backdrop.GUIImageOne = movieBackdropControl;
