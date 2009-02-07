@@ -365,7 +365,6 @@
     <Content Include="DataProviders\ScraperScripts\MovieMeter.xml" />
     <Content Include="DataProviders\ScraperScripts\MyMoviesItalian.xml" />
     <Content Include="DataProviders\ScraperScripts\OFDb.xml" />
-    <None Include="Resources\Help\MediaSources.html" />
     <Content Include="MainUI\Generic Skin\16x9\Media\MovingPictures\background.png" />
     <Content Include="MainUI\Generic Skin\16x9\Media\MovingPictures\dvd_frame.png" />
     <Content Include="MainUI\Generic Skin\16x9\Media\MovingPictures\greystar.png" />
@@ -396,7 +395,6 @@
     <Content Include="MainUI\Generic Skin\16x9\movingpictures.xml" />
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.facade.xml" />
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.xml" />
-    <None Include="Resources\Help\MovingPictures.chm" />
     <None Include="Properties\RevisionInfo.cs" />
     <None Include="Resources\Images\splash_small.jpg" />
     <None Include="Resources\Images\splash_large.jpg" />

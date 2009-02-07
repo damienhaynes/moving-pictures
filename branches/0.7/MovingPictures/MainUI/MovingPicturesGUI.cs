@@ -518,9 +518,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                     bool clickToDetails = (bool)MovingPicturesCore.SettingsManager["click_to_details"].Value;
 
                     switch (actionType) {
-                        case Action.ActionType.ACTION_PLAY:
-                            playSelectedMovie();
-                            break;
                         case Action.ActionType.ACTION_SELECT_ITEM:
                             if (control == facade) {
                                 if (clickToDetails)
@@ -577,8 +574,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                         GUIWindowManager.ShowPreviousWindow();
                     }
                     break;
+                case Action.ActionType.ACTION_PLAY:
                 case Action.ActionType.ACTION_MUSIC_PLAY:
-                    // don't be confused, this is the generic PLAY action
+                    // don't be confused, this in some cases is the generic PLAY action
                     playSelectedMovie();
                     break;
                 case Action.ActionType.ACTION_KEY_PRESSED:
@@ -1266,7 +1264,9 @@ namespace MediaPortal.Plugins.MovingPictures {
             // Try to grab a known video disc format
             string discPath = Utility.GetVideoDiscPath(drive);
             if (discPath == null) {
-                ShowMessage("Error", "The image file does not contain a valid video disc format", null, null, null);
+                ShowMessage("Error", "Either the image file does not contain", 
+                                     "a valid video disc format, or your Daemon", 
+                                     "Tools MediaPortal configuration is incorrect.", null);
                 return;
             }
 

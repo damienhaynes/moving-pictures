@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using MediaPortal.Plugins.MovingPictures.Properties;
+using System.Diagnostics;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class ImporterSettingsPane : UserControl {
@@ -93,6 +95,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 nfoExtTextBox.Enabled = false;
                 nfoAutoApproveCheckBox.Enabled = false;
             }
+        }
+
+        private void helpButton1_Click(object sender, EventArgs e) {
+            ProcessStartInfo processInfo = new ProcessStartInfo(Resources.ImporterSettingsHelpURL);
+            Process.Start(processInfo);
         }
 
     }
