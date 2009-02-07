@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser;
+using MediaPortal.Plugins.MovingPictures.Properties;
+using System.Diagnostics;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class GUISettingsPane : UserControl {
@@ -134,6 +136,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 watchedFilterStartsOn.Value = false;
             if (watchedComboBox.SelectedIndex == 1)
                 watchedFilterStartsOn.Value = true;
+        }
+
+        private void helpButton_Click(object sender, EventArgs e) {
+            ProcessStartInfo processInfo = new ProcessStartInfo(Resources.GuiSettingsHelpURL);
+            Process.Start(processInfo);
+        }
+
+        private void remoteFilteringHelpLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            ProcessStartInfo processInfo = new ProcessStartInfo(Resources.RemoteFilteringHelpURL);
+            Process.Start(processInfo);
         }
     }
 }

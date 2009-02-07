@@ -13,6 +13,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using NLog;
+using System.Diagnostics;
 
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
@@ -449,6 +450,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             logger.Warn("Importer removed possible matches without telling the importer!");
             DataGridViewComboBoxCell movieListCombo = (DataGridViewComboBoxCell)unapprovedGrid.Rows[e.RowIndex].Cells["unapprovedPossibleMatchesColumn"];
             movieListCombo.Items.Clear();
+        }
+
+        private void helpButton_Click(object sender, EventArgs e) {
+            ProcessStartInfo processInfo = new ProcessStartInfo(Resources.MovieImporterHelpURL);
+            Process.Start(processInfo);
         }
 
     }

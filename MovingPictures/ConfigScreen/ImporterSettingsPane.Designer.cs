@@ -54,6 +54,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.helpButton1.Size = new System.Drawing.Size(23, 23);
             this.helpButton1.TabIndex = 11;
             this.helpButton1.UseVisualStyleBackColor = true;
+            this.helpButton1.Click += new System.EventHandler(this.helpButton1_Click);
             // 
             // detailsButton
             // 

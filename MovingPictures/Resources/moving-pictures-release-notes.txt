@@ -1,0 +1,411 @@
+Moving Pictures 0.7.0
+================================================================================
+
+*** UPDATES COMING SOON FOR OFFICIAL RELEASE ***
+
+Contents
+-------------------------------------
+ * Overview
+ * Skins Supporting Moving Pictures
+ * The Generic Skin Files
+ * Upgrading From a Previous Version
+ * Installing Moving Pictures
+ * Installing the Generic Skin
+-------------------------------------
+
+
+
+Overview
+--------
+Thanks for downloading Moving Pictures. This package contains the Moving Pictures
+plug-in itself along with the 16x9 and 4x3 Generic Moving Pictures skin files. 
+If you have any problems or questions about the plug-in you can visit the 
+forums to interact with the community and developers, or you can visit the 
+(always in progress, but very new) Moving Pictures wiki for a user's guide 
+and frequently asked questions document. 
+
+Moving Pictures Forum:          http://forum.team-mediaportal.com/moving-pictures-284/
+Moving Pictures Wiki:           http://moving-pictures.tv
+Moving Pictures Project Page:   http://moving-pictures.googlecode.com
+
+
+
+Skins Supporting Moving Pictures
+--------------------------------
+For an updated list of skins supporting Moving Pictures please visit the following URL:
+http://en.moving-pictures.tv/wiki/Skins_Supporting_Moving_Pictures
+
+At the time of this release, the following skins support Moving Pictures (listed in
+alphabetical order):
+   
+   Aeon Wide
+   Download:      http://www.team-mediaportal.com/files/Download/Skins/16:9/AeonWide1.3/
+
+   Black & White
+   Download:      http://www.team-mediaportal.com/files/Download/Skins/16:9/BlackandWhite1080v0.9/
+
+   MediaStream 
+   Download:      http://forum.team-mediaportal.com/skins-50/mediastream-pilehave-48817/
+
+   Monochrome
+   Download:      http://www.team-mediaportal.com/files/Download/Skins/16:9/Monochrome2.3/
+   Update:        http://forum.team-mediaportal.com/moving-pictures-284/moving-pictures-public-beta-0-5-5c-45365/index46.html#post330531
+   
+   PureVisionHD
+   Download:      http://www.team-mediaportal.com/files/Download/Skins/16:9/PureVisionHD2.0/
+   Update:        http://forum.team-mediaportal.com/moving-pictures-284/moving-pictures-public-beta-0-5-5c-45365/index45.html#post330469
+
+   StreamedMP
+   Download:      http://code.google.com/p/streamedmp/downloads/list
+   
+   Titanium
+   Download:      http://www.team-mediaportal.com/files/Download/Skins/16:9/Titaniumv0.5/
+   
+   
+
+
+The Generic Skin Files
+----------------------
+If your skin does not support Moving Pictures, don't fret, you can still use the
+Generic Skin. But if your skin DOES supports Moving Pictures it is strongly recommended 
+you do NOT install the generic skin. The generic skin is meant to be a temporary 
+solution to allow all users to enjoy Moving Pictures even if their favorite skin has 
+not yet added support. 
+
+If you do choose to use the generic skin, there are installation 
+instructions listed below. There is now both a 16x9 and 4x3 generic skin for use. 
+If your skin does not yet support Moving Pictures, installing the Moving Pictures 
+generic skin will not affect any other aspects of your existing skin. It will not 
+overwrite any XML or image files.
+
+
+
+Upgrading from a Previous Version
+---------------------------------
+No special procedures need to be taken to upgrade from a previous version of 
+Moving Pictures. Simply copy the new DLL file into the plug-in directory as
+described in the Install Instructions below.
+
+
+
+Installing Moving Pictures
+--------------------------
+
+1) Shutdown MediaPortal.
+
+2) Find your MediaPortal install folder. Usually this is something like 
+   C:\Program Files\Team MediaPortal\MediaPortal. 
+   
+3) Copy the movingpictures.dll file to the Plugins\Windows\ folder under
+   your MediaPortal install folder.
+
+
+
+Installing the Generic Skin
+---------------------------
+
+1) Find your MediaPortal install folder. Usually this is something like 
+   C:\Program Files\Team MediaPortal\MediaPortal. Same as above.
+   
+2) Look under the skin folder. You should see a folder for each skin
+   you have installed. Open the folder for your current skin and copy 
+   the contents of either the Generic Skin\16x9\ or Generic Skin\4x3\
+   folder into it.
+
+
+
+Change Log
+================================================================================
+0.6.6
+--------------------------------------------------------------------------------
+* Fixed OFDb script.
+
+* Selecting a different version of a script will now "stick" after restarting 
+  the plug-in
+
+================================================================================
+0.6.5
+--------------------------------------------------------------------------------
+* IMPAwards has been fixed. Covers will be pulled down again.
+
+* Additional fixes were added to prevent Ignored movies from coming back.
+
+* In GUI the first selected movie will now be the first in the list.
+
+================================================================================
+0.6.4
+--------------------------------------------------------------------------------
+Issue #256: Sometimes when a movie was removed from a watch folder, it did
+            not stay deleted. If a movie was moved it became duplicated in the 
+            movie list.
+            
+Issue #267: Sometimes in the importer a movie would be approved as one movie
+            but when details were pulled, the details would be for another
+            movie or TV Show.
+            
+Artwork   : Several changes have been made to increase the stability of the 
+Scanner     background artwork scanner. This was, in some rare cases causing 
+            MediaPortal to crash.
+            
+themoviedb: Additional error handling was added to the backdrop provider for
+            themoviedb.org which was in rare cases causing MediaPortal to crash
+            if themoviedb.org failed to respond.
+
+Issue #264: Backdrops for movies with unusual characters in the title (for 
+            example, Léon) were not properly pulled from themoviedb.org.
+
+
+================================================================================
+0.6.3
+--------------------------------------------------------------------------------
+IMDb:       Corrected a bug in script causing summary information to be omitted
+            for some movies.
+            
+            Corrected bug causing IMDb ID to not be written when rescanning a 
+            movie that was originally imported by allocine.
+
+
+Issue #239: The Allocine.fr scraper script is no longer CPU intensive and will 
+            return more reliable results.
+            
+IMPAwards:  The impawards.com cover art scraper will now return better results 
+            for movies with data pulled from allocine.
+            
+MovieMeter: Fixed bug causing summary information to be omitted for some movies.
+
+OFDb:       Script will now only return movie content.
+            
+
+================================================================================
+0.6.2
+--------------------------------------------------------------------------------
+IMDb Fix:   After a change to the IMDb website, the IMDb script provided in 0.6.1
+            would not return results. Moving Pictures 0.6.2 includes an updated 
+            script to properly pull results. 
+
+
+================================================================================
+0.6.1
+--------------------------------------------------------------------------------
+Issue #204: Searching by a custom search string failed and caused the 
+            config to crash when searching for a movie sent for 
+            reprocessing by the Movie Manager.
+            
+Issue #203: Multi-part playback was broken. This caused MediaPortal to crash if the
+            user did not press stop before the second part of a to part movie ended.
+            This also caused three part movies to only play the first part.
+            
+Issue #189: Importer would fail when NFO Scanner is turned off.
+
+Issue #198: Advanced feature to load backdrops from movie folder caused importer to fail.
+
+Issue #199: In rare situations a file could be added to a watch folder but not get 
+            loaded into the importer.
+
+Issue #202: Runtime was still not always populated by the IMDb script.
+
+Issue #205: Filename patterns for backdrop and cover retrieval now properly support
+            the %filename% tag.
+
+Issue #181: When using unwatched filter, after watching a movie it was still in the list
+            until the watched filter was cycled.
+            
+Issue #187: Cover in facade did not change when cover art was cycled from the 
+            details page.
+            
+Issue #197: Fields that had no value in some situations were displayed as the skin
+            property name rather than am empty field.
+
+Issue #168: Rating stars displayed incorrectly for some locales.
+
+Issue #192: New default backdrop caused odd ghost image on thumbanil views in Generic
+            Skin.
+
+Issue #184: The rating star was not properly linked in the 4x3 Generic Skin preventing
+            ratings from being displayed.
+
+================================================================================
+0.6.0
+--------------------------------------------------------------------------------
+This is a partial list of enhancements and bug fixes. For a complete list please
+visit the following URL: 
+
+http://code.google.com/p/moving-pictures/issues/list?can=1&q=milestone:0.6.0
+
+Enhancements
+------------
+
+Watched Flags:              Moving Pictures will now track which movies you have watched 
+                            and allow you to filter by unwatched movies.
+
+Resume Playback:            If a movie is stopped before completion, when you start playback 
+                            again you have to resume playback where you left off.
+
+Additional Data Sources &   The plug-in will now optionally pull data from OFDb (German), 
+Scriptable Scraping Engine: MovieMeter.nl (Dutch) or Allocine.fr (French) in addition to 
+                            IMDb. Additionally a scriptable scraping system is now in place
+                            for future changes and new scripts.
+
+Enhanced Coverart Support:  Moving Pictures will now pull from multiple data sources to
+                            retrieve coverart. Existing providers have been enhanced and 
+                            covers from MyVideos will now be imported if no other covers are
+                            available.
+                            
+Remote Control Filtering:   You can now type out a partial name of a movie on the number pad
+                            of your remote control "cell phone style" to dynamically filter the
+                            movies listed in MediaPortal.
+
+Manual Movie Inserting:     If a match is not coming up for a file you can now manually add the 
+                            file to the database and edit the movie details in the Movie Manager.
+                            
+Unignore Files:             You can now unignore files that had been previously "permanently 
+                            ignored". This is currently a bulk feature. Additional granularity 
+                            will be added in a future version.
+
+Major Bug Fixes
+---------------
+Issue #131:    After rapidly opening and closing the config and/or the MP GUI, the plug-in will 
+               no longer corrupt the Moving Pictures database.
+
+Issue #126:    Reordering grouped files belonging to a movie is now functional and less confusing.
+
+Issue #112:    Runtime is now properly populated via the IMDb script.
+
+Issue #168:    Rating stars are now properly displayed in all locales.
+
+Plus many more...
+
+================================================================================
+0.5.5c
+--------------------------------------------------------------------------------
+Issue #132: Previously, if a movie was added to or deleted from a watch folder
+            while MediaPortal and Moving Pictures was offline, the next time 
+            MediaPortal launched, the program would crash. Relaunching 
+            MediaPortal again would work correctly. This issue has been 
+            resolved.
+
+================================================================================
+0.5.5b
+--------------------------------------------------------------------------------
+Issue #114: Fixed bug causing unhandled exception when reassigning a set of 
+            files to a new movie from the Movie Manager panel.
+
+================================================================================
+0.5.5
+--------------------------------------------------------------------------------
+Enhancements
+------------
+Issue #9:   Scanner will now pull movie details from IMDb.
+
+Issue #30:  Scanner will now pull cover artwork from impawards.com.
+
+Issue #40:  Full DVD rips are now supported.
+
+Issue #49:  DVD Images are now supported. This requires the Daemon Tools integration
+            of Media Portal to be turned on, as well as the ISO file extension to be
+            added to the list of valid video file extension.
+
+Issue #103: The movie importer will now attempt to retrieve an IMDB ID from an NFO
+            file in the folder with the movie. If found, search will be based on 
+            this rather than title and year.
+
+Issue #43:  After playback or exiting and re-entering the plug-in, the previously
+            selected movie and view will now be retained.
+            
+Issue #94:  Enhanced multi-part matcher to detect additional filename patterns. 
+
+            
+Bug Fixes
+---------
+Issue #80:  Removing and re-adding an import path in the configuration screen 
+            now works as expected, and duplicates movie entries will not be 
+            created.
+
+Issue #89:  In the importer, file extension matching is no longer case sensitive. 
+
+Issue #88:  On the movie manager tab of the configuration screen, when the user 
+            tries to manually add a cover, but clicks cancel, the cover art will 
+            no longer be loaded anyway.
+            
+Issue #78:  Movie ratings (Score) should now be loading correctly for international 
+            users.
+
+Issue #100: HD Quality sample files should no longer squeeze through the sample
+            filter.
+            
+Issue #74:  Filenames with underscores delimiting words should now be imported
+            correctly.
+
+================================================================================
+0.5.4
+--------------------------------------------------------------------------------
+Issue #75: Fixed data provider for movie backdrops (fan-art) from 
+           poseters.consumeroo.com backdrop, now known as meligrove.com.
+                      
+           Also set this data provider as the primary. Effectively this means
+           more 1080p artwork. 
+
+Issue #72: If you delete Moving Pictures artwork (covers or fanart) in the 
+           "thumbs" folder, references to this artwork will automatically be 
+           severed and new artwork will be downloaded. This combined with the
+           previous issue means you can delete your backdrop folder and do a 
+           Full Rescan to get more 1080p backdrops.
+
+Issue #82: Fixed a bug causing slow file system scans when checking network 
+           drives.
+
+================================================================================
+0.5.3
+--------------------------------------------------------------------------------
+Major Bug Fixes
+---------------
+Issue #50: MediaPortal crashed after playback in any plug-in if Moving 
+           Pictures had not yet been opened.
+  
+
+Importer Changes
+----------------
+Issue #24: Video files tagged as "samples" in their filename are now filtered
+           out, and will not be grouped or automatched.
+
+Issue #46: Year based matching has been enhanced to better parse year data
+           from a file/folder name.
+ 
+Issue #52: Created more strict rules for grouping. There should be fewer
+           incorrect groupings of sequels now.
+  
+Issue #54: The movie scanner will no longer fail when scanning a root folder
+           on a hard drive.
+    
+Issue #1:  Grouped matches no longer incorrectly use folder name for search string.
+
+Issue #56: Auto-approve threshold is now lower, meaning matches now must be 
+           closer to get auto-approved. This is user definable. Previous 
+           setting was 3, and it has been changed to 1. To get previous behavior
+           see advanced settings.
+
+Issue #37: Upon launch, the plug-in will now search for new artwork for all
+           movies currently missing cover-art or a movie backdrop.
+
+
+MediaPortal GUI Changes
+-----------------------
+Issue #44: Plug-in will now dynamically update GUI in MediaPortal when movie
+           files have been added to or deleted from an Import Path.
+
+Issue #60: Movies will now be removed from the system when corresponding import 
+           path has been removed (confirming first).
+
+Issue #34: A (configurable) delay has been added to the GUI. This increases the
+           time to load backdrops and cover-art, but dramatically improves 
+           performance when moving rapidly through a list, thumbnail view, etc.
+           Additional enhancements are upcoming for this...
+
+Issue #42: The play button no longer holds focus after exiting details view.
+
+Issue #33: Filmstrip scrolling is significantly improved.
+           
+Issue #45: Display of lists (actors, genres, etc) n GUI are now limited to 5
+           elements (configurable).
+
+Issue #51: Focus now remains on view button when cycling views.

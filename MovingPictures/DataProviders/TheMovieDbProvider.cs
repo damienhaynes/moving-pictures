@@ -83,8 +83,19 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // try to grab the xml results
             XmlNodeList xml = getXML(apiImdbLookup + movie.ImdbID.Trim());
-            if (xml == null)
-                return false;
+            if (xml == null) return false;
+
+            // IMDb search gives limited backdrop results, so switch to the proper lookup.
+            // if we for some reason (uh oh!) can't find the ID node, just fall through and check
+            // the current XML doc for backdrops
+            XmlNodeList idNodes = xml.Item(0).SelectNodes("//id");
+            if (idNodes.Count != 0) {
+                int id;
+                if (int.TryParse(idNodes[0].InnerText, out id)) {
+                    XmlNodeList newXml = getXML(apiGetInfo + id);
+                    if (newXml != null) xml = newXml;
+                }
+            }
 
             // try to grab backdrops from the resulting xml doc
             string backdropURL = string.Empty;

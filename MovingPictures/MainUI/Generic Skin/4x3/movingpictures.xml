@@ -5,6 +5,15 @@ elements that should remain on screen during all or
 multiple view modes. 
 -->
 <window>
+
+  <!--
+  ATTENTION!!!
+     If writing your own skin based on this, remove this tag
+     or your skin files will be OVERWRITTEN by the Moving Pictures
+     installation application. -->
+  <movingpictures_generic_skin>true</movingpictures_generic_skin>
+
+
   <id>96742</id>
   <defaultcontrol>50</defaultcontrol>
   <allowoverlay>yes</allowoverlay>

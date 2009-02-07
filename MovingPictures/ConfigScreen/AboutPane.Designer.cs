@@ -60,7 +60,7 @@
             // advancedSettingsButton
             // 
             this.advancedSettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.advancedSettingsButton.Location = new System.Drawing.Point(403, 488);
+            this.advancedSettingsButton.Location = new System.Drawing.Point(403, 494);
             this.advancedSettingsButton.Name = "advancedSettingsButton";
             this.advancedSettingsButton.Size = new System.Drawing.Size(122, 23);
             this.advancedSettingsButton.TabIndex = 0;
@@ -76,7 +76,7 @@
             this.groupBox1.Controls.Add(this.forumLabel);
             this.groupBox1.Controls.Add(this.websiteLabel);
             this.groupBox1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(3, 388);
+            this.groupBox1.Location = new System.Drawing.Point(3, 394);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(522, 94);
             this.groupBox1.TabIndex = 4;
@@ -177,9 +177,9 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(251, 352);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(50, 26);
+            this.label9.Size = new System.Drawing.Size(50, 39);
             this.label9.TabIndex = 11;
-            this.label9.Text = "Darre\r\nEmphatic";
+            this.label9.Text = "Darre\r\nEmphatic\r\nrolls1400";
             // 
             // label8
             // 
@@ -343,9 +343,9 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(324, 352);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(92, 26);
+            this.label10.Size = new System.Drawing.Size(92, 39);
             this.label10.TabIndex = 12;
-            this.label10.Text = "mattsk88\r\nParanoid Delusion";
+            this.label10.Text = "mattsk88\r\nParanoid Delusion\r\nmidiboy";
             // 
             // label1
             // 
@@ -402,7 +402,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(528, 520);
             this.Name = "AboutPane";
-            this.Size = new System.Drawing.Size(528, 520);
+            this.Size = new System.Drawing.Size(528, 535);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
