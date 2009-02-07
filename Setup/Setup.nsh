@@ -221,7 +221,7 @@ Function copyGenericSkin
     
     #unkown aspect ratio. implies the script has no references.xml
     unknown:
-        MessageBox MB_OK|MB_ICONSTOP "$CURR_SKIN $(INVALID_SKIN)"
+        MessageBox MB_OK|MB_ICONEXCLAMATION "$(INVALID_SKIN1)$CURR_SKIN$(INVALID_SKIN2)$CURR_SKIN."
     done:
 
 FunctionEnd
