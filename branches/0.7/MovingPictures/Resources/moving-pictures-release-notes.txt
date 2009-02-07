@@ -1,22 +1,6 @@
 Moving Pictures 0.7.0
 ================================================================================
 
-*** UPDATES COMING SOON FOR OFFICIAL RELEASE ***
-
-Contents
--------------------------------------
- * Overview
- * Skins Supporting Moving Pictures
- * The Generic Skin Files
- * Upgrading From a Previous Version
- * Installing Moving Pictures
- * Installing the Generic Skin
--------------------------------------
-
-
-
-Overview
---------
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
 plug-in itself along with the 16x9 and 4x3 Generic Moving Pictures skin files. 
 If you have any problems or questions about the plug-in you can visit the 
@@ -30,91 +14,159 @@ Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 
 
-Skins Supporting Moving Pictures
---------------------------------
-For an updated list of skins supporting Moving Pictures please visit the following URL:
-http://en.moving-pictures.tv/wiki/Skins_Supporting_Moving_Pictures
-
-At the time of this release, the following skins support Moving Pictures (listed in
-alphabetical order):
-   
-   Aeon Wide
-   Download:      http://www.team-mediaportal.com/files/Download/Skins/16:9/AeonWide1.3/
-
-   Black & White
-   Download:      http://www.team-mediaportal.com/files/Download/Skins/16:9/BlackandWhite1080v0.9/
-
-   MediaStream 
-   Download:      http://forum.team-mediaportal.com/skins-50/mediastream-pilehave-48817/
-
-   Monochrome
-   Download:      http://www.team-mediaportal.com/files/Download/Skins/16:9/Monochrome2.3/
-   Update:        http://forum.team-mediaportal.com/moving-pictures-284/moving-pictures-public-beta-0-5-5c-45365/index46.html#post330531
-   
-   PureVisionHD
-   Download:      http://www.team-mediaportal.com/files/Download/Skins/16:9/PureVisionHD2.0/
-   Update:        http://forum.team-mediaportal.com/moving-pictures-284/moving-pictures-public-beta-0-5-5c-45365/index45.html#post330469
-
-   StreamedMP
-   Download:      http://code.google.com/p/streamedmp/downloads/list
-   
-   Titanium
-   Download:      http://www.team-mediaportal.com/files/Download/Skins/16:9/Titaniumv0.5/
-   
-   
-
-
 The Generic Skin Files
 ----------------------
 If your skin does not support Moving Pictures, don't fret, you can still use the
-Generic Skin. But if your skin DOES supports Moving Pictures it is strongly recommended 
-you do NOT install the generic skin. The generic skin is meant to be a temporary 
-solution to allow all users to enjoy Moving Pictures even if their favorite skin has 
-not yet added support. 
-
-If you do choose to use the generic skin, there are installation 
-instructions listed below. There is now both a 16x9 and 4x3 generic skin for use. 
-If your skin does not yet support Moving Pictures, installing the Moving Pictures 
-generic skin will not affect any other aspects of your existing skin. It will not 
-overwrite any XML or image files.
-
-
-
-Upgrading from a Previous Version
----------------------------------
-No special procedures need to be taken to upgrade from a previous version of 
-Moving Pictures. Simply copy the new DLL file into the plug-in directory as
-described in the Install Instructions below.
-
-
-
-Installing Moving Pictures
---------------------------
-
-1) Shutdown MediaPortal.
-
-2) Find your MediaPortal install folder. Usually this is something like 
-   C:\Program Files\Team MediaPortal\MediaPortal. 
-   
-3) Copy the movingpictures.dll file to the Plugins\Windows\ folder under
-   your MediaPortal install folder.
-
-
-
-Installing the Generic Skin
----------------------------
-
-1) Find your MediaPortal install folder. Usually this is something like 
-   C:\Program Files\Team MediaPortal\MediaPortal. Same as above.
-   
-2) Look under the skin folder. You should see a folder for each skin
-   you have installed. Open the folder for your current skin and copy 
-   the contents of either the Generic Skin\16x9\ or Generic Skin\4x3\
-   folder into it.
+Moving Pictures with the Generic Skin. But if your skin DOES supports Moving 
+Pictures it is strongly recommended you do NOT use the generic skin (by default it
+will only be installed for skins not supporting Moving Pictures). The generic skin 
+is meant to be a temporary solution to allow all users to enjoy Moving Pictures 
+even if their favorite skin has not yet added support. 
 
 
 
 Change Log
+================================================================================
+0.7.0
+--------------------------------------------------------------------------------
+
+GUI Enhancements
+--------------------------------------------------------------------------------
+Issue #92:      It is now possible to sort by various fields in the GUI.
+
+Issue #36:      Backdrops will now smoothly fade from one image to another when
+                moving through your movie collection. This requires a skin update
+                if not using the Generic Skin.
+
+Issue #159:     It is now possible to permanently delete a file from your system via the
+                context menu in the GUI. Disabled by default.
+
+Issue #76:      It is now possible to define a prompt for offline Media to be 
+                displayed in the GUI when the user presses play and the media is
+                unavailable.
+                
+Issue #280:     Added option to force Moving Pictures to display only unwatched movies
+                on initial startup.
+                
+Issue #295:     There is now a working icon in the GUI when the Movie Importer is active.
+                This requires a skin change if not using the generic skin.
+
+Issue #236:     Pressing the Show Info key in the GUI now takes you to the details 
+                page of the selected movie
+
+Issue #213:     Enhanced the Remote Filtering functionality.
+
+Issue #222:     The number of movies in the collection and the number of movies 
+                currently displayed due to filtering is now available to the skin.
+
+Issue #68:      Rapidly moving through the GUI should now be slightly more responsive.
+
+Issue #273:     It is now possible to play a custom movie intro before each movie
+                (configurable from Advanced Settings).
+
+
+Importer Enhancements
+--------------------------------------------------------------------------------
+
+Issue #28:      Removable media is now automatically detected. Files deleted from
+                a removable drive will now also be removed from MediaPortal as well.
+                When a drive is simply taken offline, or unavailable, no action is
+                taken.
+
+Issue #155:     Moving Pictures now supports ripped Bluray and HD-DVD disks.
+
+Issue #262:     Partial DVD Rips (missing a video_ts.ifo) are now supported.
+
+Issue #287:     It is now possible to rename or move a file within it's watch folder
+                without requiring Moving Pictures to reimport the movie. NOTE: Currently
+                for this to function properly, Moving Pictures must be running.
+
+Issue #223:     The importer can now be set to automatically turn off when in the GUI.
+                This can be configured under Advanced Settings.
+                
+Issue #98:      It is now possible to manually enter an import path.
+                
+Issue #244:     Moving Pictures will now track the date a movie was added to your 
+                collection.
+                
+Issue #311:     Cover art is now saved as PNG files.
+
+Issue #193:     An article placed at the end of a movie title (e.g. "Matrix, The")
+                is now taken into account in the auto-approval logic.
+
+Issue #289:     Added internal tracking of recently watched movies. Not used for anything
+                right now, but useful for external plugins like movingpicturesxml
+                (see http://code.google.com/p/movingpicturesxml).
+             
+Issue #243:     If the IMDb ID of a movie is in it's filename, this will now be 
+                used for matching.
+
+
+Data Provider / Scraper Enhancements
+--------------------------------------------------------------------------------
+Issue #188:     Moving Pictures now uses themoviedb.org as a source for movie 
+                details and cover art.
+
+Issue #281:     Cover art retrieval from impawards has been signifigantly improved.
+
+Issue #316:     Added a polish scraper (FilmWeb.pl) movie details and cover art scraper.
+
+Issue #252:     Integrate user created mymovies.it scraper script (previously available
+                on the forums).
+
+Issue #309:     A scraper script can now optionally allow malformed http headers.
+
+Issue #293:     Add a "Log" element to the scripting engine.
+
+
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #238:     DVD resume data will now load properly.
+
+Issue #207:     Watched data will now be properly saved for ISOs.
+
+Issue #158:     Two Part playback now works correctly for external players.
+
+Issue #306:     The displayed backdrop will now be properly updated after marking a 
+                movie as watched from the details view, then exiting to the facade view
+                while watched flag filtering is turned on.
+
+Issue #153:     Ripped disks (ISO/IFO media) should now work better with the MediaPortal 
+                autoplay functionality.
+
+Issue #279:     If the first backdrop fails the minimum resolution test, Moving Pictures
+                will now continue looking for backdrops until an acceptable one is found.
+                
+Issue #245:     The importer will continue to monitor for file system changes on a 
+                networked drive, even when connection to the drive is temporarily lost.
+
+Issue #298:     Progress bar in importer now acts much more coherently.
+
+Issue #201:     Incorrect cover-art will no longer be picked up for odd movies like [Rec].
+
+Issue #276:     Incorrect backdrops and covers will no longer be loaded for movies with
+                similar names (for example Blade and Slingblade).
+                
+Issue #301:     Backdrops will no longer occassionally fail to save properly (for example, 
+                with the movie Hancock).
+
+Issue #261:     Importer will now confuse sequels less often (for example, X-Men and X-Men 2).
+
+Issue #249:     Backdrops stored in the movie folder of a DVD rip will now be 
+                properly loaded if this feature is enabled.
+
+Issue #185:     The importer will now properly handle a multi-part movie with files in folders
+                labeled CD1 and CD2.
+
+Issue #186:     The impawards provider should now return english language covers before
+                other langauges.
+                
+Issue #216:     In the MovieManager, selecting cover art by URL will no longer cause
+                a an unahndled error.
+                
+Issue #150:     Removed the Single Movie Importer dialog as it was quite buggy. Clicking the
+                reassign button will now send a movie back to the importer.
+
 ================================================================================
 0.6.6
 --------------------------------------------------------------------------------
