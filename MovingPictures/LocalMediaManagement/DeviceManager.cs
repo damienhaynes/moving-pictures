@@ -259,6 +259,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             lock (watcherThread) {
                 if (!watcherThread.IsAlive) {
                     logger.Info("Starting Disk Watcher");
+                    watcherThread = new Thread(new ThreadStart(WatchDisks));
+                    watcherThread.Name = "DeviceManager.WatchDisks";
                     watcherThread.Start();
                 }
             }
