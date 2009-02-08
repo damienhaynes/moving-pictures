@@ -48,7 +48,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.remoteControlCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.remoteFilteringHelpLink = new System.Windows.Forms.LinkLabel();
             this.label10 = new System.Windows.Forms.Label();
             this.watchedComboBox = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -148,6 +148,7 @@
             this.helpButton.Size = new System.Drawing.Size(23, 23);
             this.helpButton.TabIndex = 16;
             this.helpButton.UseVisualStyleBackColor = true;
+            this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
             // 
             // playMovieRadioButton
             // 
@@ -332,15 +333,16 @@
             this.remoteControlCheckBox.Text = "Use Remote Control Filtering";
             this.remoteControlCheckBox.UseVisualStyleBackColor = true;
             // 
-            // linkLabel1
+            // remoteFilteringHelpLink
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(315, 345);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(68, 13);
-            this.linkLabel1.TabIndex = 30;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "What is this?";
+            this.remoteFilteringHelpLink.AutoSize = true;
+            this.remoteFilteringHelpLink.Location = new System.Drawing.Point(315, 345);
+            this.remoteFilteringHelpLink.Name = "remoteFilteringHelpLink";
+            this.remoteFilteringHelpLink.Size = new System.Drawing.Size(68, 13);
+            this.remoteFilteringHelpLink.TabIndex = 30;
+            this.remoteFilteringHelpLink.TabStop = true;
+            this.remoteFilteringHelpLink.Text = "What is this?";
+            this.remoteFilteringHelpLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.remoteFilteringHelpLink_LinkClicked);
             // 
             // label10
             // 
@@ -460,7 +462,7 @@
             this.Controls.Add(this.label11);
             this.Controls.Add(this.watchedComboBox);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.remoteFilteringHelpLink);
             this.Controls.Add(this.remoteControlCheckBox);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -523,7 +525,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private Cornerstone.GUI.Controls.SettingCheckBox remoteControlCheckBox;
-        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.LinkLabel remoteFilteringHelpLink;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox watchedComboBox;
         private System.Windows.Forms.Label label11;

@@ -5,19 +5,18 @@ using System.IO;
 using System.Management;
 using System.Threading;
 using NLog;
+using MediaPortal.Plugins.MovingPictures.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     /// <summary>
-    /// Wrapper object for DriveInfo providing extended information using the WMI manager object.
-    /// The WMI objects are cached as long as the drive state is valid.
+    /// Supplies basic information about the attached physical drive.
     /// </summary>
     public class VolumeInfo {
 
         #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private ManagementBaseObject managementObject;
 
         #endregion
 
@@ -31,14 +30,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </remarks>
         public bool IsReady {
             get {
-                // If WMI information is not available
-                // Refresh the object
-                bool ready = driveInfo.IsReady;
-                if (ready && managementObject == null)
-                    Refresh();
-                
-                // Just relaying DriveInfo.IsReady for convience
-                return ready;
+                return driveInfo.IsReady;
             }
         }
 
@@ -57,7 +49,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <summary>
         /// Returns the DriveInfo object attached to this instance
         /// </summary>
-        public DriveInfo Drive {
+        public DriveInfo DriveInfo {
             get {
                 return driveInfo;
             }
@@ -68,9 +60,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         public string Serial {
             get {
-                if (!IsReady)
-                    serial = null;
-
                 return serial;
             }
         } private string serial;
@@ -96,13 +85,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // construct using DriveInfo object
         public VolumeInfo(DriveInfo di) {
             driveInfo = di;
-            Refresh();
+            RefreshSerial();
         }
 
         // construct using volume (drive letter)
         public VolumeInfo(string volume) {
             driveInfo = new DriveInfo(volume);
-            Refresh();
+            RefreshSerial();
         }
 
         #endregion
@@ -112,51 +101,42 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <summary>
         /// Refresh the VolumeInfo object
         /// </summary>
-        public void Refresh() {
+        public void RefreshSerial() {
             lock (driveInfo) {
                 string driveLetter = driveInfo.Name.Substring(0, 2);
-                if (driveInfo.IsReady) {
-                    logger.Debug("Querying drive information for '{0}'", driveLetter);
-                    try {
-                        // Query WMI for extra disk information
-                        SelectQuery query = new SelectQuery("select * from win32_logicaldisk where deviceid = '" + driveLetter + "'");
-                        ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
-                        // this statement should return only one row (or none)
-                        foreach (ManagementBaseObject mo in searcher.Get()) {
-                            Refresh(mo);
-                        }
 
-                        // Return so the variables won't get reset after succesful refresh
-                        return;
-                    }
-                    catch (Exception e) {
-                        // Log the WMI query exception
-                        logger.Debug("Error during query for '{0}', message: {1}", driveLetter, e.Message);
-                    }
+                // make sure the drive is ready
+                if (!driveInfo.IsReady) {
+                    logger.Debug("Drive '{0}' is not ready.", driveLetter);
+                    serial = null;
+                    return;
                 }
 
-                // reset the private variables if we make it this far
-                logger.Debug("Drive '{0}' is not ready.", driveLetter);
-                serial = null;
-                managementObject = null;
+                try {
+                    // Query WMI for extra disk information
+                    logger.Debug("Querying drive information for '{0}'", driveLetter);
+                    SelectQuery query = new SelectQuery("select * from win32_logicaldisk where deviceid = '" + driveLetter + "'");
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+
+                    // this statement should return only one row (or none)
+                    foreach (ManagementBaseObject mo in searcher.Get()) {
+                        // Update Volume Serial Number
+                        serial = null;
+                        if (mo != null)
+                            if (mo["volumeserialnumber"] != null)
+                                serial = mo["volumeserialnumber"].ToString().Trim();
+
+                        logger.Debug("Succesfully updated drive information for '{0}'", driveInfo.Name.Substring(0, 2));
+                    }
+
+                    // Return so the variables won't get reset after succesful refresh
+                    return;
+                }
+                catch (Exception e) {
+                    // Log the WMI query exception
+                    logger.Debug("Error during query for '{0}', message: {1}", driveLetter, e.Message);
+                }
             }
-        }
-
-        /// <summary>
-        /// Refresh the VolumeInfo object with ManagementBaseObject information.
-        /// </summary>
-        /// <param name="mo"></param>
-        private void Refresh(ManagementBaseObject mo) {
-            // Update WMI management object
-            managementObject = mo;
-            
-            // Update Volume Serial Number
-            serial = null;
-            if (managementObject != null)
-                if (managementObject["volumeserialnumber"] != null)
-                    serial = managementObject["volumeserialnumber"].ToString().Trim();
-
-            logger.Debug("Succesfully updated drive information for '{0}'", driveInfo.Name.Substring(0, 2));
         }
 
         #endregion       
@@ -187,6 +167,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static event DeviceManagerEvent OnVolumeInserted;
         public static event DeviceManagerEvent OnVolumeRemoved;
 
+        private static List<string> watchedDrives;
+        private static Thread watcherThread;
+        private static Dictionary<string, bool> driveStates;
+
         #endregion
 
         #region Public Properties
@@ -210,173 +194,153 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         static DeviceManager() {
             volumes = new Dictionary<string, VolumeInfo>();
+            watchedDrives = new List<string>();
+            
+            watcherThread = new Thread(new ThreadStart(WatchDisks));
+            watcherThread.Name = "DeviceManager.WatchDisks";
+            
+            driveStates = new Dictionary<string, bool>();
         }
 
         ~DeviceManager() {
-            if (monitorStarted)
-                StopMonitor();
+            StopDiskWatcher();
         }
 
         #endregion
 
-        #region Monitor
+        #region Monitoring Logic
 
-        private static void startMonitor() {
-            if (monitor == null) {
-                try {
-                    monitor = new DeviceVolumeMonitor();
-                    monitor.OnVolumeInserted += new DeviceVolumeAction(dvVolumeInserted);
-                    monitor.OnVolumeRemoved += new DeviceVolumeAction(dvVolumeRemoved);
-                    monitor.AsynchronousEvents = true;
-                    monitor.Enabled = true;
-                    monitorStarted = true;
-                }
-                catch (Exception e) {
-                    logger.Debug("DeviceVolumeMonitor Error during startup: ", e.Message);
-                    monitor = null;
-                    monitorStarted = false;
-                }
-            }           
-        }
-
-        private static void stopMonitor() {
-            if (monitor != null) {
-                try {
-                    monitor.Dispose();
-                    monitor = null;
-                    monitorStarted = false;
-                }
-                catch (Exception e) {
-                    logger.Debug("Device Volume Monitor error during shutdown: ", e.Message);
-                }
-            }
-        }
-
-        private static void dvVolumeInserted(int bitMask) {
-            // get volume letter
-            string volume = monitor.MaskToLogicalPaths(bitMask);
-
-            // get the volume information object
-            VolumeInfo volumeInfo = GetVolumeInfo(volume);
-
-            // if the volume is not ready yet wait for it
-            while (!volumeInfo.IsReady)
-                Thread.Sleep(100);
-
-            // invoke event
-            invokeOnVolumeInserted(volume, volumeInfo.Serial);
-        }
-
-        private static void dvVolumeRemoved(int bitMask) {
-            // get volume letter
-            string volume = monitor.MaskToLogicalPaths(bitMask);
-            
-            // refresh volume cache
-            VolumeInfo volumeInfo = GetVolumeInfo(volume);
-            volumeInfo.Refresh();
-
-            // invoke event
-            invokeOnVolumeRemoved(volume, null);
-        }
-
-        #endregion
-
-        #region Event Logic
-
-        /// <summary>
-        /// Invokes the OnVolumeInserted event
-        /// </summary>
-        /// <param name="volume"></param>
-        /// <param name="serial"></param>
-        private static void invokeOnVolumeInserted(string volume, string serial) {
-            logger.Debug("Event: OnVolumeInserted, Volume: {0}, Serial: {1}", volume, serial);
-            if (OnVolumeInserted != null) {
-                OnVolumeInserted(volume, serial);
-            }            
-        }
-
-        /// <summary>
-        /// Invokes the OnVolumeRemoved event
-        /// </summary>
-        /// <param name="volume"></param>
-        /// <param name="serial"></param>
-        private static void invokeOnVolumeRemoved(string volume, string serial) {
-            logger.Debug("Event: OnVolumeRemoved, Volume: {0}, Serial: {1}", volume, serial);
-            if (OnVolumeRemoved != null) {
-                OnVolumeRemoved(volume, serial);               
-            }
-
-        }
-
-        #endregion
-        
-        #region Public Methods
-
-        /// <summary>
-        /// Start monitoring volume changes
-        /// </summary>
         public static void StartMonitor() {
-            logger.Info("Starting device monitor ...");
-            startMonitor();
+            foreach (DBImportPath currPath in DBImportPath.GetAll())
+                if (currPath.IsRemovable)
+                    AddWatchDrive(currPath.FullPath);
 
-            // Check if the monitor is running
-            if (monitorStarted) {
-                // Report success
-                logger.Info("Device monitor started.");
-            }
-            else {
-                // Report failure
-                logger.Error("Device monitor failed to start.");
-            }
+            StartDiskWatcher();
         }
 
-        /// <summary>
-        /// Stop monitoring volume changes
-        /// </summary>
         public static void StopMonitor() {
-            if (!monitorStarted) {
-                logger.Debug("Device monitor was not running.");
-                return;
-            }
+            StopDiskWatcher();
+            ClearWatchDrives();
+        }
 
-            // try to stop the monitor
-            stopMonitor();
-
-            // If monitor is still running something has gone wrong
-            // detailed logging supplied by monitor object. We just report
-            // a failure here.
-            if (monitorStarted) {
-                logger.Info("Device monitor failed to stop.");
+        public static void AddWatchDrive(string path) {
+            string driveLetter = GetDriveLetter(path);
+            lock (watchedDrives) {
+                if (IsRemovable(driveLetter) && !watchedDrives.Contains(driveLetter)) {
+                    watchedDrives.Add(driveLetter);
+                    StartDiskWatcher();
+                    logger.Info("Added " + driveLetter + " to DiskWatcher");
+                }
             }
-            else {
-                logger.Info("Device monitor stopped.");
+        }
+
+        public static void RemoveWatchDrive(string path) {
+            string driveLetter = GetDriveLetter(path);
+            lock (watchedDrives) {
+                if (IsRemovable(driveLetter) && watchedDrives.Contains(driveLetter)) {
+                    watchedDrives.Remove(driveLetter);
+                    logger.Info("Removed " + driveLetter + " from DiskWatcher");
+                    if (watchedDrives.Count == 0)
+                        StopDiskWatcher();
+                }
             }
 
         }
+
+        public static void ClearWatchDrives() {
+            lock (watchedDrives) {
+                logger.Info("Clearing all drives from Disk Watcher");
+                watchedDrives.Clear();
+                StopDiskWatcher();
+            }
+        }
+
+        public static void StartDiskWatcher() {
+            lock (watcherThread) {
+                if (!watcherThread.IsAlive) {
+                    logger.Info("Starting Disk Watcher");
+                    watcherThread.Start();
+                }
+            }
+        }
+
+        public static void StopDiskWatcher() {
+            lock (watcherThread) {
+                if (watcherThread.IsAlive) {
+                    logger.Info("Stopping Disk Watcher");
+                    watcherThread.Abort();
+                }
+            }
+        }
+
+        private static void WatchDisks() {
+             while (true) {
+                lock (watchedDrives) {
+                    foreach (string currDrive in watchedDrives) {
+                        try {
+                            // check if the drive is available
+                            bool isAvailable;
+                            VolumeInfo volumeInfo = GetVolumeInfo(currDrive);
+                            if (volumeInfo == null) isAvailable = false;
+                            else isAvailable = volumeInfo.IsReady;
+
+                            // if the previous drive state is not stored, store it and continue
+                            if (!driveStates.ContainsKey(currDrive)) {
+                                driveStates[currDrive] = isAvailable;
+                                continue;
+                            }
+
+                            // if a change has occured
+                            if (driveStates[currDrive] != isAvailable) {
+
+                                // Refresh Serial
+                                GetVolumeInfo(currDrive).RefreshSerial();
+
+                                // notify any listeners
+                                if (isAvailable) {
+                                    logger.Info("Volume Inserted: " + currDrive);
+                                    if (OnVolumeInserted != null)
+                                        OnVolumeInserted(currDrive, GetDiskSerial(currDrive));
+                                }
+                                else {
+                                    logger.Info("Volume Removed: " + currDrive);
+                                    if (OnVolumeRemoved != null)
+                                        OnVolumeRemoved(currDrive, null);
+                                }
+
+                                // update our state
+                                driveStates[currDrive] = isAvailable;
+                            }
+                        }
+                        catch (Exception e) {
+                            if (e is ThreadAbortException)
+                                throw e;
+
+                            logger.ErrorException("Unexpected error in Disk Watcher thread!", e);
+                        }
+                    }
+                }
+
+                Thread.Sleep(5000);
+            }
+        }
+        
         #endregion
 
         #region Public Static Methods
-        
-        /// <summary>
-        /// Gets the volume (driveletter) of this FileSystemInfo object
-        /// </summary>
-        /// <param name="fsInfo"></param>
-        /// <returns></returns>
-        public static string GetVolume(FileSystemInfo fsInfo) {
+
+        // Grab the drive letter from a FileSystemInfo object.
+        public static string GetDriveLetter(FileSystemInfo fsInfo) {
             if (fsInfo != null)
-                return GetVolume(fsInfo.FullName);
+                return GetDriveLetter(fsInfo.FullName);
             else
                 return null;
         }
 
-        /// <summary>
-        /// Gets the volume (driveletter) of this path
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string GetVolume(string path) {
+        // Grab drive letter from string
+        public static string GetDriveLetter(string path) {
             if (path == null)
-                return path;
+                return null;
 
             // if the path is UNC return null
             if (path.StartsWith(@"/") || path.StartsWith(@"\"))
@@ -404,12 +368,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static VolumeInfo GetVolumeInfo(string path) {
-            string volume = GetVolume(path);
+            string volume = GetDriveLetter(path);
             // if volume is null then it's UNC
             if (volume == null)
                 return null;
 
-            // check if we have previously cached this instance
+            // if not loaded, load this VolumeInfo object
             if (!volumes.ContainsKey(volume)) {
                 try {
                     lock (volumes) {
@@ -521,6 +485,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static bool IsRemovable(string path) {
+            if (path == null)
+                return false;
+
             VolumeInfo volumeInfo = GetVolumeInfo(path);
             if (volumeInfo == null)
                 return true; // true because it's UNC (=network)
@@ -568,7 +535,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static string GetVolumeLabel(string path) {
             VolumeInfo volumeInfo = GetVolumeInfo(path);
             if (volumeInfo != null)
-                return volumeInfo.Drive.VolumeLabel;
+                return volumeInfo.DriveInfo.VolumeLabel;
             else
                 return null;
         }

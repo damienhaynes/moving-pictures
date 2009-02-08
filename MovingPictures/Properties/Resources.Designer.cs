@@ -186,6 +186,15 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to http://en.moving-pictures.tv/wiki/Configuration_Menu_GUI_Settings.
+        /// </summary>
+        internal static string GuiSettingsHelpURL {
+            get {
+                return ResourceManager.GetString("GuiSettingsHelpURL", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap help {
             get {
                 object obj = ResourceManager.GetObject("help", resourceCulture);
@@ -193,30 +202,19 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;html&gt;
-        ///&lt;head&gt;
-        ///    &lt;title&gt;Media Sources&lt;/title&gt;
-        ///&lt;/head&gt;
-        ///&lt;body bgcolor=&quot;FFFFE1&quot;&gt;
-        ///    &lt;h1&gt;Media Sources&lt;/h1&gt;
-        ///    &lt;h2&gt;Watch Folders&lt;/h2&gt;
-        ///    &lt;p&gt; Moving Pictures will automatically import movie content from the watch folders you
-        ///        have added in this section. As new movies are added to your watch folders they will
-        ///        also be automatically added to Moving Pictures. Likewise, when movies are deleted
-        ///        or moved from your watch folders, they will also be removed from Moving Pictures.&lt;/p&gt;
-        ///  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string Help_MediaSources {
-            get {
-                return ResourceManager.GetString("Help_MediaSources", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Bitmap ignored {
             get {
                 object obj = ResourceManager.GetObject("ignored", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://en.moving-pictures.tv/wiki/Configuration_Menu_Importer_Settings.
+        /// </summary>
+        internal static string ImporterSettingsHelpURL {
+            get {
+                return ResourceManager.GetString("ImporterSettingsHelpURL", resourceCulture);
             }
         }
         
@@ -274,6 +272,15 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to http://en.moving-pictures.tv/wiki/Media_Sources.
+        /// </summary>
+        internal static string MediaSourcesHelpURL {
+            get {
+                return ResourceManager.GetString("MediaSourcesHelpURL", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap MediaStop {
             get {
                 object obj = ResourceManager.GetObject("MediaStop", resourceCulture);
@@ -281,10 +288,12 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
-        internal static byte[] movingpictures_chm {
+        /// <summary>
+        ///   Looks up a localized string similar to http://en.moving-pictures.tv/wiki/Movie_Importer.
+        /// </summary>
+        internal static string MovieImporterHelpURL {
             get {
-                object obj = ResourceManager.GetObject("movingpictures_chm", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("MovieImporterHelpURL", resourceCulture);
             }
         }
         
@@ -306,6 +315,15 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             get {
                 object obj = ResourceManager.GetObject("pencil_add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://en.moving-pictures.tv/wiki/Remote_Control_Filter.
+        /// </summary>
+        internal static string RemoteFilteringHelpURL {
+            get {
+                return ResourceManager.GetString("RemoteFilteringHelpURL", resourceCulture);
             }
         }
         
@@ -354,6 +372,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             get {
                 object obj = ResourceManager.GetObject("script_delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;FilmWeb.pl&lt;/name&gt;
+        ///    &lt;author&gt;LRFalk01&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from FilmWeb.pl.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you should change the version [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_FilmWeb {
+            get {
+                return ResourceManager.GetString("Script_FilmWeb", resourceCulture);
             }
         }
         

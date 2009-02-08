@@ -156,7 +156,7 @@ namespace Cornerstone.ScraperEngine {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
 
-                logger.Error("Error parsing scriptable scraper XML file!");
+                logger.Error("Error parsing scriptable scraper XML file: " + e.Message);
                 loadSuccessful = false;
                 return;
             }

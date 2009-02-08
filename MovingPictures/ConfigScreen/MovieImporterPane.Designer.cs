@@ -60,6 +60,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.unapprovedMatchesBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.helpButton = new System.Windows.Forms.ToolStripButton();
             this.importerGroupBox.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).BeginInit();
@@ -133,6 +134,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.unapprovedGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.unapprovedGrid.Size = new System.Drawing.Size(636, 345);
             this.unapprovedGrid.TabIndex = 4;
+            this.unapprovedGrid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.unapprovedGrid_DataError_1);
             this.unapprovedGrid.SelectionChanged += new System.EventHandler(this.unapprovedGrid_SelectionChanged);
             // 
             // statusColumn
@@ -213,11 +215,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.toolStripSeparator1,
             this.ignoreButton,
             this.toolStripSeparator2,
-            this.settingsButton});
+            this.settingsButton,
+            this.helpButton});
             this.toolStrip1.Location = new System.Drawing.Point(3, 16);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(636, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(636, 26);
             this.toolStrip1.TabIndex = 5;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -267,7 +270,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.approveButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.tick;
             this.approveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.approveButton.Name = "approveButton";
-            this.approveButton.Size = new System.Drawing.Size(23, 22);
+            this.approveButton.Size = new System.Drawing.Size(23, 23);
             this.approveButton.Text = "toolStripButton1";
             this.approveButton.ToolTipText = "Approve Selected File(s)";
             this.approveButton.Click += new System.EventHandler(this.approveButton_Click);
@@ -278,7 +281,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.manualAssignButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.pencil_add;
             this.manualAssignButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.manualAssignButton.Name = "manualAssignButton";
-            this.manualAssignButton.Size = new System.Drawing.Size(23, 22);
+            this.manualAssignButton.Size = new System.Drawing.Size(23, 23);
             this.manualAssignButton.Text = "manualAssignButton";
             this.manualAssignButton.ToolTipText = "Manually Assign Selected File(s)";
             this.manualAssignButton.Click += new System.EventHandler(this.manualAssignButton_Click);
@@ -286,7 +289,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 26);
             // 
             // rescanButton
             // 
@@ -294,7 +297,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.rescanButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_rotate_clockwise;
             this.rescanButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rescanButton.Name = "rescanButton";
-            this.rescanButton.Size = new System.Drawing.Size(23, 22);
+            this.rescanButton.Size = new System.Drawing.Size(23, 23);
             this.rescanButton.Text = "toolStripButton1";
             this.rescanButton.ToolTipText = "Rescan Selected File(s) with Custom Search String";
             this.rescanButton.Click += new System.EventHandler(this.rescanButton_Click);
@@ -305,7 +308,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.splitJoinButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_divide;
             this.splitJoinButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.splitJoinButton.Name = "splitJoinButton";
-            this.splitJoinButton.Size = new System.Drawing.Size(23, 22);
+            this.splitJoinButton.Size = new System.Drawing.Size(23, 23);
             this.splitJoinButton.Text = "toolStripButton1";
             this.splitJoinButton.ToolTipText = "Split Selected File Group";
             this.splitJoinButton.Click += new System.EventHandler(this.splitJoinButton_Click);
@@ -313,7 +316,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 26);
             // 
             // ignoreButton
             // 
@@ -321,7 +324,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.ignoreButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cross;
             this.ignoreButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.ignoreButton.Name = "ignoreButton";
-            this.ignoreButton.Size = new System.Drawing.Size(23, 22);
+            this.ignoreButton.Size = new System.Drawing.Size(23, 23);
             this.ignoreButton.Text = "toolStripButton2";
             this.ignoreButton.ToolTipText = "Ignore Selected File(s)";
             this.ignoreButton.Click += new System.EventHandler(this.ignoreButton_Click);
@@ -329,7 +332,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
             // 
             // settingsButton
             // 
@@ -340,7 +343,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.settingsButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cog;
             this.settingsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.settingsButton.Name = "settingsButton";
-            this.settingsButton.Size = new System.Drawing.Size(32, 22);
+            this.settingsButton.Size = new System.Drawing.Size(32, 23);
             this.settingsButton.ToolTipText = "Advanced Actions";
             this.settingsButton.ButtonClick += new System.EventHandler(this.settingsButton_ButtonClick);
             // 
@@ -377,6 +380,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.unapprovedMatchesBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieMatch);
             this.unapprovedMatchesBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.unapprovedMatchesBindingSource_ListChanged);
+            // 
+            // helpButton
+            // 
+            this.helpButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.helpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.helpButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.help;
+            this.helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.helpButton.Name = "helpButton";
+            this.helpButton.Size = new System.Drawing.Size(23, 23);
+            this.helpButton.ToolTipText = "Help";
+            this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
             // 
             // MovieImporterPane
             // 
@@ -433,5 +447,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private DataGridViewTextBoxColumn unapprovedLocalMediaColumn;
         private DataGridViewComboBoxColumn unapprovedPossibleMatchesColumn;
         private Panel panel2;
+        private ToolStripButton helpButton;
     }
 }

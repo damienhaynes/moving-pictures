@@ -11,6 +11,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using Cornerstone.Database;
+using System.Diagnostics;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class ImportPathsPane : UserControl {
@@ -127,8 +128,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void helpButton_Click(object sender, EventArgs e) {
-            // show the help content fo the Media Sources section
-            Help.ShowHelp(ParentForm, MovingPicturesCore.SettingsManager["help_file"].StringValue, HelpNavigator.Topic, "2_MediaSources.htm");
+            ProcessStartInfo processInfo = new ProcessStartInfo(Resources.MediaSourcesHelpURL);
+            Process.Start(processInfo);
         }
 
         private void manuallyEnterMediaSourceToolStripMenuItem_Click(object sender, EventArgs e) {

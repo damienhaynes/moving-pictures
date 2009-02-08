@@ -58,6 +58,7 @@
             Cornerstone.GUI.Controls.FieldProperty fieldProperty33 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty34 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty35 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty36 = new Cornerstone.GUI.Controls.FieldProperty();
             this.userMovieDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.movieDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.SuspendLayout();
@@ -138,7 +139,6 @@
             fieldProperty22.Visible = false;
             fieldProperty23.DisplayName = "IMDb ID";
             fieldProperty23.FieldName = "ImdbID";
-            fieldProperty23.ReadOnly = true;
             fieldProperty24.DisplayName = "Local Media";
             fieldProperty24.FieldName = "LocalMedia";
             fieldProperty24.Visible = false;
@@ -171,6 +171,8 @@
             fieldProperty34.Visible = false;
             fieldProperty35.DisplayName = "Alternate Titles";
             fieldProperty35.FieldName = "AlternateTitles";
+            fieldProperty36.DisplayName = "Date Added";
+            fieldProperty36.FieldName = "DateAdded";
             this.movieDetailsList.FieldProperties.Add(fieldProperty7);
             this.movieDetailsList.FieldProperties.Add(fieldProperty8);
             this.movieDetailsList.FieldProperties.Add(fieldProperty9);
@@ -200,6 +202,7 @@
             this.movieDetailsList.FieldProperties.Add(fieldProperty33);
             this.movieDetailsList.FieldProperties.Add(fieldProperty34);
             this.movieDetailsList.FieldProperties.Add(fieldProperty35);
+            this.movieDetailsList.FieldProperties.Add(fieldProperty36);
             this.movieDetailsList.ForeColor = System.Drawing.SystemColors.ControlText;
             this.movieDetailsList.Location = new System.Drawing.Point(0, 0);
             this.movieDetailsList.Name = "movieDetailsList";
