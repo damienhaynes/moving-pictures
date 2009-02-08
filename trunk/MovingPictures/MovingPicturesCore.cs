@@ -285,11 +285,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             // create the backdrop thumbs folder if it doesn't already exist
             if (!Directory.Exists((string)SettingsManager["backdrop_thumbs_folder"].Value))
                 Directory.CreateDirectory((string)SettingsManager["backdrop_thumbs_folder"].Value);
-
-            // save the help file to the temp folder for later use as needed
-            SettingsManager["help_file"].Value = Path.GetTempPath() + "\\movingpictures.chm";
-            File.WriteAllBytes(SettingsManager["help_file"].StringValue, Resources.movingpictures_chm);
-
         }
 
         #endregion

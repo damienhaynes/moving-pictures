@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
@@ -12,6 +13,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using NLog;
+using System.Diagnostics;
 
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
@@ -113,7 +115,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 lastSplitJoinLocation++;
             } else 
                 rowNum = unapprovedMatchesBindingSource.IndexOf(obj);
-            
+
 
             // setup tooltip for filename
             DataGridViewTextBoxCell filenameCell = (DataGridViewTextBoxCell)unapprovedGrid.Rows[rowNum].Cells["unapprovedLocalMediaColumn"];
@@ -233,6 +235,43 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
                 MovieMatch selectedMatch = (MovieMatch)currRow.DataBoundItem;
+
+                // Check if all files belonging to the movie are available.
+                bool continueRescan = false;
+                while (!continueRescan) {
+                    continueRescan = true;
+                    foreach (DBLocalMedia localMedia in selectedMatch.LocalMedia) {
+                        // if the file is offline
+                        if (!localMedia.IsAvailable) {
+                            // do not continue
+                            continueRescan = false;
+
+                            // Prompt the user to insert the media containing the files
+                            string connect = string.Empty;
+                            if (localMedia.DriveLetter != null) {
+                                if (localMedia.ImportPath.GetDriveType() == DriveType.CDRom)
+                                    connect = "Please insert the disc labeled '" + localMedia.MediaLabel + "'.";
+                                else
+                                    connect = "Please reconnect the media labeled '" + localMedia.MediaLabel + "' to " + localMedia.DriveLetter;
+                            }
+                            else {
+                                connect = "Please make sure the network share '" + localMedia.FullPath + "' is available.";
+                            }
+
+                            // Show dialog
+                            DialogResult resultInsert = MessageBox.Show(
+                            "The file or files you want to rescan are currently not available.\n\n" + connect,
+                            "File(s) not available.", MessageBoxButtons.RetryCancel);
+
+                            // if cancel is pressed stop the rescan process.
+                            if (resultInsert == DialogResult.Cancel)
+                                return;
+
+                            // break foreach loop (and recheck condition)
+                            break;
+                        }
+                    }
+                }
 
                 SearchStringPopup popup = new SearchStringPopup(selectedMatch);
                 popup.ShowDialog(this);
@@ -405,6 +444,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     MovingPicturesCore.Importer.ManualAssign(selectedMatch);
                 }
             }
+        }
+
+        private void unapprovedGrid_DataError_1(object sender, DataGridViewDataErrorEventArgs e) {
+            logger.Warn("Importer removed possible matches without telling the importer!");
+            DataGridViewComboBoxCell movieListCombo = (DataGridViewComboBoxCell)unapprovedGrid.Rows[e.RowIndex].Cells["unapprovedPossibleMatchesColumn"];
+            movieListCombo.Items.Clear();
+        }
+
+        private void helpButton_Click(object sender, EventArgs e) {
+            ProcessStartInfo processInfo = new ProcessStartInfo(Resources.MovieImporterHelpURL);
+            Process.Start(processInfo);
         }
 
     }

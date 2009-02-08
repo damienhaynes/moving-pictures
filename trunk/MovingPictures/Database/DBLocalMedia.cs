@@ -43,11 +43,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
-        public string Volume {
+        public string DriveLetter {
             get {
-                return DeviceManager.GetVolume(fileInfo);
+                return DeviceManager.GetDriveLetter(fileInfo);
             }
-
         }
 
         /// <summary>

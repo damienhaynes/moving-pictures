@@ -250,16 +250,28 @@
   <data name="help" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\help.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Help_MediaSources" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Help\MediaSources.html;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="movingpictures_chm" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Help\MovingPictures.chm;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="Script_MyMoviesItalian" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\DataProviders\ScraperScripts\MyMoviesItalian.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="splash_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Images\splash_small.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Script_FilmWeb" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\DataProviders\ScraperScripts\FilmWeb.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="GuiSettingsHelpURL" xml:space="preserve">
+    <value>http://en.moving-pictures.tv/wiki/Configuration_Menu_GUI_Settings</value>
+  </data>
+  <data name="ImporterSettingsHelpURL" xml:space="preserve">
+    <value>http://en.moving-pictures.tv/wiki/Configuration_Menu_Importer_Settings</value>
+  </data>
+  <data name="MediaSourcesHelpURL" xml:space="preserve">
+    <value>http://en.moving-pictures.tv/wiki/Media_Sources</value>
+  </data>
+  <data name="MovieImporterHelpURL" xml:space="preserve">
+    <value>http://en.moving-pictures.tv/wiki/Movie_Importer</value>
+  </data>
+  <data name="RemoteFilteringHelpURL" xml:space="preserve">
+    <value>http://en.moving-pictures.tv/wiki/Remote_Control_Filter</value>
   </data>
 </root>

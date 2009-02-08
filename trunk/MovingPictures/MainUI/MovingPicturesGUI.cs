@@ -119,6 +119,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     ClearFocus();
                     facade.Focus = true;
                     facade.Visible = true;
+                    browser.Sync();
                 }
 
                 switch (currentView) {
@@ -147,7 +148,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
 
                 if (facade.SelectedListItem != null)
-                    updateMovieDetails(facade.SelectedListItem.TVTag as DBMovieInfo);
+                    updateMovieDetails();
 
                 SetBackdropVisibility();
                 UpdateArtwork();
@@ -344,6 +345,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 remoteFilteringIndicator.Visible = false;
         }
 
+        private void OnBrowserSelectionChanged(DBMovieInfo movie) {
+            updateMovieDetails();
+        }
+
 
 
         #region GUIWindow Methods
@@ -418,7 +423,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (startWithWatchedFilterOn)
                     watchedFilter.Active = true;
 
-                browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(updateMovieDetails);
+                browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(OnBrowserSelectionChanged);
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
 
             }
@@ -460,9 +465,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                     CurrentView = ViewMode.LIST;
                     logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
                 }
-
-                setWorkingAnimationStatus(false);
-                
             }
 
             // if we have loaded before, lets update the view to match our previous settings
@@ -471,6 +473,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 CurrentView = CurrentView;
                 previousView = tmp;
             }
+            setWorkingAnimationStatus(false);
 
             // (re)link our backdrop image controls to the backdrop image swapper
             backdrop.GUIImageOne = movieBackdropControl;
@@ -515,9 +518,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                     bool clickToDetails = (bool)MovingPicturesCore.SettingsManager["click_to_details"].Value;
 
                     switch (actionType) {
-                        case Action.ActionType.ACTION_PLAY:
-                            playSelectedMovie();
-                            break;
                         case Action.ActionType.ACTION_SELECT_ITEM:
                             if (control == facade) {
                                 if (clickToDetails)
@@ -574,8 +574,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                         GUIWindowManager.ShowPreviousWindow();
                     }
                     break;
+                case Action.ActionType.ACTION_PLAY:
                 case Action.ActionType.ACTION_MUSIC_PLAY:
-                    // don't be confused, this is the generic PLAY action
+                    // don't be confused, this in some cases is the generic PLAY action
                     playSelectedMovie();
                     break;
                 case Action.ActionType.ACTION_KEY_PRESSED:
@@ -761,6 +762,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             browser.ReloadFacade();
+            browser.Facade.SelectedListItemIndex = 0;
         }
 
         private void showChangeViewContext() {
@@ -903,7 +905,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             DBLocalMedia firstFile = browser.SelectedMovie.LocalMedia[0];
 
             // if the file is available and read only, or known to be stored on optical media, prompt to ignore.
-            if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || DeviceManager.GetVolumeInfo(firstFile.Volume).Drive.DriveType == DriveType.CDRom) {
+            if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || DeviceManager.GetVolumeInfo(firstFile.DriveLetter).DriveInfo.DriveType == DriveType.CDRom) {
                 GUIDialogYesNo ignoreDialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
                 ignoreDialog.Reset();
                 ignoreDialog.SetHeading("Moving Pictures");
@@ -993,7 +995,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (dialog.IsConfirmed && browser.SelectedMovie != null) {
                 MovingPicturesCore.DataProviderManager.Update(browser.SelectedMovie);
                 browser.SelectedMovie.Commit();
-                PublishDetails(browser.SelectedMovie, "SelectedMovie");
+                updateMovieDetails();
             }
 
 
@@ -1262,7 +1264,9 @@ namespace MediaPortal.Plugins.MovingPictures {
             // Try to grab a known video disc format
             string discPath = Utility.GetVideoDiscPath(drive);
             if (discPath == null) {
-                ShowMessage("Error", "The image file does not contain a valid video disc format", null, null, null);
+                ShowMessage("Error", "Either the image file does not contain", 
+                                     "a valid video disc format, or your Daemon", 
+                                     "Tools MediaPortal configuration is incorrect.", null);
                 return;
             }
 
@@ -1571,7 +1575,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 
             // if we are playing something from this volume stop it
             if (currentlyPlaying)
-                if (currentlyPlayingMovie.LocalMedia[currentlyPlayingPart].Volume == volume)
+                if (currentlyPlayingMovie.LocalMedia[currentlyPlayingPart].DriveLetter == volume)
                     g_Player.Stop();
 
             logger.Debug("OnVolumeRemoved" + volume);
@@ -1580,12 +1584,12 @@ namespace MediaPortal.Plugins.MovingPictures {
         #endregion
 
         #region Skin and Property Settings
-        
-        private void updateMovieDetails(DBMovieInfo movie) {
-            PublishDetails(movie, "SelectedMovie");
+
+        private void updateMovieDetails() {
+            PublishDetails(browser.SelectedMovie, "SelectedMovie");
 
             if (selectedMovieWatchedIndicator != null)
-                if (movie.UserSettings[0].Watched > 0)
+                if (browser.SelectedMovie.UserSettings[0].Watched > 0)
                     selectedMovieWatchedIndicator.Visible = true;
                 else
                     selectedMovieWatchedIndicator.Visible = false;
