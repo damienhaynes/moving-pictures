@@ -331,7 +331,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private void OnBrowserContentsChanged() {
             // update properties
             PublishViewDetails();
-
+            
             // set the global watched indicator
             if (watchedFilteringIndicator != null && watchedFilter.Active != watchedFilteringIndicator.Visible)
                 watchedFilteringIndicator.Visible = watchedFilter.Active;
@@ -341,7 +341,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 SetProperty("#MovingPictures.Filter.Label", remoteFilter.Text);
                 remoteFilteringIndicator.Visible = true;
             }
-            else
+            else if (remoteFilteringIndicator != null)
                 remoteFilteringIndicator.Visible = false;
         }
 
