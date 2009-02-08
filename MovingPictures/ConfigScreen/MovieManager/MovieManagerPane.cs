@@ -655,13 +655,4 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
     }
-
-    public class DBLocalMediaComparer : IComparer<DBLocalMedia> {
-        public int Compare(DBLocalMedia fileX, DBLocalMedia fileY) {
-            if (fileX.Part < fileY.Part)
-                return -1;
-            else
-                return 1;
-        }
-    }
 }
