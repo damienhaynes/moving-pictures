@@ -60,6 +60,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         public string Serial {
             get {
+                if (serial == null && driveInfo != null && driveInfo.IsReady)
+                    RefreshSerial();
+
                 return serial;
             }
         } private string serial;
