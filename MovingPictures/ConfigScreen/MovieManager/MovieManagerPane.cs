@@ -476,7 +476,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
 
             if (sentToImporter > 0) {
-                MessageBox.Show(this.ParentForm,
+                MessageBox.Show(
                 "There were " + sentToImporter + " movie(s) that needed to be sent to the importer to\n" +
                 "search for possible matches from the " + selectedSource.Provider.Name + " data source.\n" +
                 "You will now be taken to the Movie Importer tab to check for\n" + 
@@ -547,6 +547,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void switchToImporter() {
+            if (InvokeRequired) {
+                Invoke(new InvokeDelegate(switchToImporter));
+                return;
+            }
+
             MovingPicturesConfig configWindow = ((MovingPicturesConfig)this.TopLevelControl);
             TabControl mainTabControl = (TabControl)configWindow.Controls["mainTabControl"];
             mainTabControl.SelectedTab = (TabPage)mainTabControl.Controls["importSettingsTab"];

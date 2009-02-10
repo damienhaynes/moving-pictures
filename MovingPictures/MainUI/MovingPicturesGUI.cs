@@ -147,7 +147,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                         break;
                 }
 
-                if (facade.SelectedListItem != null)
+                if (browser.SelectedMovie != null)
                     updateMovieDetails();
 
                 SetBackdropVisibility();
@@ -542,7 +542,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 // a click on the view menu button
                 case 3:
-                    showMainContext();
+                    showChangeViewContext();
                     break;
 
                 // a click on the play button
