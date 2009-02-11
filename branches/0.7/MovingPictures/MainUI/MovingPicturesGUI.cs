@@ -1586,6 +1586,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         #region Skin and Property Settings
 
         private void updateMovieDetails() {
+            if (browser.SelectedMovie == null)
+                return;
+
             PublishDetails(browser.SelectedMovie, "SelectedMovie");
 
             if (selectedMovieWatchedIndicator != null)
@@ -1636,6 +1639,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         // this does standard object publishing for any database object.
         private void PublishDetails(DatabaseTable obj, string prefix) {
+            if (obj == null)
+                return;
+
             int maxStringListElements = (int)MovingPicturesCore.SettingsManager["max_string_list_items"].Value;
 
             Type tableType = obj.GetType();
