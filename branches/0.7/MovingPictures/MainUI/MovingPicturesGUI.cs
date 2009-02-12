@@ -1319,11 +1319,16 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void Utils_OnStartExternal(System.Diagnostics.Process proc, bool waitForExit) {
-            logger.Info("OnStartExternal");
-            currentlyPlaying = true;
+            if (currentlyPlayingMovie != null) {
+                logger.Info("OnStartExternal");
+                currentlyPlaying = true;
+            }
         }
 
         private void Utils_OnStopExternal(System.Diagnostics.Process proc, bool waitForExit) {
+            if (!currentlyPlaying)
+                return;
+
             logger.Info("OnStopExternal");
             if (currentlyPlayingPart < currentlyPlayingMovie.LocalMedia.Count) {
                 GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
