@@ -415,28 +415,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         /// <summary>
-        /// Gets a value indicating if the FileInfo object is removed from disk.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="serial">if serial is specified the result is more reliable.</param>
-        /// <returns>true if file doesn't exist but disk/root is available.</returns>
-        public static bool IsRemoved(FileInfo file, string serial) {
-            file.Refresh();
-            // If we got a volume serial then compare and judge
-            if (!String.IsNullOrEmpty(serial))
-                if ((GetDiskSerial(file) == serial) && !file.Exists && file.Directory.Root.Exists)
-                    return true;
-                else
-                    return false;
-            
-            // Backwards compatibility / UNC-only support
-            if (!file.Exists && file.Directory.Root.Exists)
-                return true;
-            else
-                return false;
-        }
-
-        /// <summary>
         /// Gets a value indicating if the FileSystemInfo object is currently available
         /// </summary>
         /// <param name="fsInfo"></param>
@@ -481,6 +459,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="fsInfo"></param>
         /// <returns></returns>
         public static bool IsRemovable(FileSystemInfo fsInfo) {
+            if ((fsInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+                return true;
             return IsRemovable(fsInfo.FullName);
         }
 
