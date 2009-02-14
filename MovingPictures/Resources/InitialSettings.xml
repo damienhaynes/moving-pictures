@@ -1,5 +1,22 @@
 <MoviesPluginSettings>
 
+  <group name="General">
+    <setting id="version_major" name="Major Version Number" type="INT">
+      <default>0</default>
+      <description>Major version number of Moving Pictures. Used for database upgrade purposes, do not change.</description>
+    </setting>
+
+    <setting id="version_minor" name="Minor Version Number" type="INT">
+      <default>0</default>
+      <description>Minor version number of Moving Pictures. Used for database upgrade purposes, do not change.</description>
+    </setting>
+
+    <setting id="version_point" name="Point Version Number" type="INT">
+      <default>0</default>
+      <description>Point version number of Moving Pictures. Used for database upgrade purposes, do not change.</description>
+    </setting>
+  </group>
+  
   <group name="MediaPortal GUI">
     <setting id="default_view" name="Default View" type="STRING">
       <default>list</default>

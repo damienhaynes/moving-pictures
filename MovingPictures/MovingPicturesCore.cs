@@ -111,6 +111,10 @@ namespace MediaPortal.Plugins.MovingPictures {
             actionDescriptions.Add(newAction, "Initializing Path Settings...");
             initActions.Add(newAction);
 
+            newAction = new WorkerDelegate(checkVersionInfo);
+            actionDescriptions.Add(newAction, "Initializing Version Information...");
+            initActions.Add(newAction);
+
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidFiles);
             actionDescriptions.Add(newAction, "Removing deleted movies...");
             initActions.Add(newAction);
@@ -285,6 +289,39 @@ namespace MediaPortal.Plugins.MovingPictures {
             // create the backdrop thumbs folder if it doesn't already exist
             if (!Directory.Exists((string)SettingsManager["backdrop_thumbs_folder"].Value))
                 Directory.CreateDirectory((string)SettingsManager["backdrop_thumbs_folder"].Value);
+        }
+
+        private static void checkVersionInfo() {
+            // check if the version changed, and update the DB accordingly
+            bool versionChanged = false;
+            Version realVer = Assembly.GetExecutingAssembly().GetName().Version;
+
+            int majorVer = (int) SettingsManager["version_major"].Value;
+            if (majorVer < realVer.Major) {
+                SettingsManager["version_major"].Value = realVer.Major;
+                SettingsManager["version_major"].Commit();
+                versionChanged = true;
+            }
+
+            int minorVer = (int)SettingsManager["version_minor"].Value;
+            if (minorVer < realVer.Minor) {
+                SettingsManager["version_minor"].Value = realVer.Minor;
+                SettingsManager["version_minor"].Commit();
+                versionChanged = true;
+            }
+
+
+            int pointVer = (int)SettingsManager["version_point"].Value;
+            if (pointVer < realVer.Build) {
+                SettingsManager["version_point"].Value = realVer.Major;
+                SettingsManager["version_point"].Commit();
+                versionChanged = true;
+            }
+
+            if (versionChanged) {
+                SettingsManager["source_manager_init_done"].Value = false;
+                SettingsManager["source_manager_init_done"].Commit();
+            }
         }
 
         #endregion

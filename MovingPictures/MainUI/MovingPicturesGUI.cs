@@ -1341,19 +1341,17 @@ namespace MediaPortal.Plugins.MovingPictures {
                     logger.Debug("Goto next part");
                     currentlyPlayingPart++;
                     playMovie(currentlyPlayingMovie, currentlyPlayingPart);
+                    return;
                 }
-                else {
-                    currentlyPlaying = false;
-                    currentlyPlayingMovie = null;
-                    currentlyPlayingPart = 0;
-                }
-                return;
             }
+
+            currentlyPlaying = false;
+            currentlyPlayingMovie = null;
+            currentlyPlayingPart = 0;
             
         }
 
         private void OnPlayBackStoppedOrChanged(g_Player.MediaType type, int timeMovieStopped, string filename) {
-            logger.Debug("OnPlayBackStoppedOrChanged");
             if (type != g_Player.MediaType.Video || !currentlyPlaying)
                 return;
 
