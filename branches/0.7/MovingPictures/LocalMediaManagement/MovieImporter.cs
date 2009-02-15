@@ -1223,6 +1223,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 userSettings.CommitNeeded = false;
             }
 
+            if (movie.LocalMedia[0].File.Extension.ToLower() == ".ifo")
+                movie.DateAdded = DateTime.Now;
+            else
+                movie.DateAdded = movie.LocalMedia[0].File.CreationTime;
+            
             movie.Commit();
         }
 

@@ -373,7 +373,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
 
                 switch (_sortField) {
                     case SortingFields.DateAdded:
-                        rtn = movieX.ID.GetValueOrDefault(0).CompareTo(movieY.ID.GetValueOrDefault(0));
+                        rtn = movieX.DateAdded.CompareTo(movieY.DateAdded);
                         break;
 
                     case SortingFields.Year:
