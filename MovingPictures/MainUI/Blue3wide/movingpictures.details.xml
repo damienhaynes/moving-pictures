@@ -11,8 +11,8 @@ This file should contain the details view
       <id>0</id>
       <posX>0</posX>
       <posY>0</posY>
-      <width>1280</width>
-      <height>721</height>
+      <width>1366</width>
+      <height>768</height>
       <texture>filmstrip_overlay.png</texture>
       <visible>!Control.IsVisible(50)</visible>
     </control>

@@ -66,8 +66,8 @@ multiple view modes.
       <id>0</id>
       <posX>0</posX>
       <posY>0</posY>
-      <width>1280</width>
-      <height>720</height>
+      <width>1366</width>
+      <height>768</height>
       <texture>Background_moving.png</texture>
     </control>
 
@@ -108,8 +108,8 @@ multiple view modes.
       <id>0</id>
       <posX>0</posX>
       <posY>0</posY>
-      <width>1280</width>
-      <height>721</height>
+      <width>1366</width>
+      <height>768</height>
       <texture>mainoverlay.png</texture>
       <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
     </control>
@@ -133,8 +133,8 @@ multiple view modes.
       <id>0</id>
       <posX>0</posX>
       <posY>0</posY>
-      <width>1280</width>
-      <height>720</height>
+      <width>1366</width>
+      <height>768</height>
       <texture>movieviewbg.png</texture>
       <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
     </control>

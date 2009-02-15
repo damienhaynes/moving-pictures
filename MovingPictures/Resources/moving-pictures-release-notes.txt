@@ -1,4 +1,4 @@
-Moving Pictures 0.7.0
+Moving Pictures 0.7.1
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -26,6 +26,26 @@ even if their favorite skin has not yet added support.
 
 
 Change Log
+================================================================================
+0.7.0
+--------------------------------------------------------------------------------
+
+Issue #331:    	Movies readded on system resume because of false empty disk serial
+Issue #330:    	Monochrome (and other?) skins dont work in 0.7
+Issue #328:    	Qucikly exiting the config and reentering causes MP to crash
+Issue #327:    	Mounted Bluray and SVCD Disks Wont Play
+Issue #326:    	Blu-Ray disc are not imported correctly
+Issue #257:    	Multiple disc movies play out of order and cannot be fixed
+Issue #336:    	Media Portal crashes instantly after entering Moving Pictures
+Issue #334:    	External/Internal Player Issue w/ M-P and TVSeries
+Issue #332:    	ButtonID: 3 is no longer invoking the Views Context Menu
+Issue #342:    	In some cases a UNC path fails to scan
+Issue #347:    	Removable Import Path system fails for external drives mounted to a folder
+Issue #344:    	New data sources distributed w/ Moving Pictures not loaded
+Issue #325:    	allocine.fr script returns no results.
+Issue #333:    	Sort movies by date created or last edited
+Issue #340:    	Add Blue3wide Skin Files to Installer
+
 ================================================================================
 0.7.0
 --------------------------------------------------------------------------------
