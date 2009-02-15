@@ -29,6 +29,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         
         public DBMovieInfo()
             : base() {
+            this.LocalMedia.Changed += new ChangedEventHandler(LocalMedia_Changed);
+        }
+
+        void LocalMedia_Changed(object sender, EventArgs e) {
+            this.LocalMedia.Sort(new DBLocalMediaComparer());
         }
 
         public override void AfterDelete() {
