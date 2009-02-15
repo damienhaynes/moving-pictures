@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 
-namespace MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser {
+namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
     public class RemoteNumpadFilter : IBrowserFilter {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 

@@ -6,9 +6,10 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Cornerstone.Database.Tables;
-using MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser;
+using MediaPortal.Plugins.MovingPictures.MainUI.Filters;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using System.Diagnostics;
+using MediaPortal.Plugins.MovingPictures.MainUI;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class GUISettingsPane : UserControl {
