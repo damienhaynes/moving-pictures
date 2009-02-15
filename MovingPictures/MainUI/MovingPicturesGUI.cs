@@ -13,17 +13,16 @@ using MediaPortal.Player;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
-using MediaPortal.Plugins.MovingPictures.MainUI.MovieBrowser;
+using MediaPortal.Plugins.MovingPictures.MainUI.Filters;
 using MediaPortal.Profile;
 using MediaPortal.Util;
 using MediaPortal.Ripper;
 using NLog;
 using System.IO;
 
-namespace MediaPortal.Plugins.MovingPictures {
-    public class MovingPicturesGUI : GUIWindow {
-        public enum ViewMode { LIST, SMALLICON, LARGEICON, FILMSTRIP, DETAILS }
 
+namespace MediaPortal.Plugins.MovingPictures.MainUI {
+    public class MovingPicturesGUI : GUIWindow {
         public enum DiskInsertedAction { PLAY, DETAILS, NOTHING }
 
         #region Private Variables
@@ -34,7 +33,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         RemoteNumpadFilter remoteFilter;
         WatchedFlagFilter watchedFilter;
 
-        Dictionary<string, string> defines;
+        MovingPicturesSkinSettings skinSettings;
+
         Dictionary<string, bool> loggedProperties;
 
         private bool currentlyPlaying = false;
@@ -102,61 +102,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
-        // Defines the current view mode. Reassign to switch modes.        
-        public ViewMode CurrentView {
-            get {
-                return currentView;
-            }
-
-            set {
-                // update the state variables
-                if (currentView != value)
-                    previousView = currentView;
-                currentView = value;
-
-                // if we are leaving details view, set focus back on the facade
-                if (previousView == ViewMode.DETAILS) {
-                    ClearFocus();
-                    facade.Focus = true;
-                    facade.Visible = true;
-                    browser.Sync();
-                }
-
-                switch (currentView) {
-                    case ViewMode.LIST:
-                        facade.View = GUIFacadeControl.ViewMode.List;
-                        break;
-                    case ViewMode.SMALLICON:
-                        facade.View = GUIFacadeControl.ViewMode.SmallIcons;
-                        break;
-                    case ViewMode.LARGEICON:
-                        facade.View = GUIFacadeControl.ViewMode.LargeIcons;
-                        break;
-                    case ViewMode.FILMSTRIP:
-                        facade.View = GUIFacadeControl.ViewMode.Filmstrip;
-                        break;
-                    case ViewMode.DETAILS:
-                        ClearFocus();
-
-                        facade.Visible = false;
-                        facade.ListView.Visible = false;
-                        facade.ThumbnailView.Visible = false;
-                        facade.FilmstripView.Visible = false;
-
-                        playButton.Focus = true;
-                        break;
-                }
-
-                if (facade.SelectedListItem != null)
-                    updateMovieDetails();
-
-                SetBackdropVisibility();
-                UpdateArtwork();
-            }
-        }
-        private ViewMode currentView;
-        private ViewMode previousView;
-
         public MovingPicturesGUI() {
             g_Player.PlayBackEnded += new g_Player.EndedHandler(OnPlayBackEnded);
             g_Player.PlayBackStopped += new g_Player.StoppedHandler(OnPlayBackStoppedOrChanged);
@@ -207,61 +152,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             backdrop.Filename = browser.SelectedMovie.BackdropFullPath;
         }
 
+        // set the backdrop visibility based on the skin settings
         private void SetBackdropVisibility() {
             if (movieBackdropControl == null)
                 return;
 
-            // grab the skin supplied setting for backdrop visibility
-            bool backdropActive = true;
-            try {
-                switch (CurrentView) {
-                    case ViewMode.FILMSTRIP:
-                        backdropActive = defines["#filmstrip.backdrop.used"].Equals("true");
-                        break;
-                    case ViewMode.LARGEICON:
-                        backdropActive = defines["#largeicons.backdrop.used"].Equals("true");
-                        break;
-                    case ViewMode.SMALLICON:
-                        backdropActive = defines["#smallicons.backdrop.used"].Equals("true");
-                        break;
-                    case ViewMode.LIST:
-                        backdropActive = defines["#list.backdrop.used"].Equals("true");
-                        break;
-                    case ViewMode.DETAILS:
-                        backdropActive = defines["#details.backdrop.used"].Equals("true");
-                        break;
-                }
-            }
-            catch (KeyNotFoundException) {
-                backdropActive = true;
-            }
-
-            // set backdrop visibility
-            backdrop.Active = backdropActive;
+            backdrop.Active = skinSettings.UseBackdrop(browser.CurrentView);
         }
 
-        private bool IsViewAvailable(ViewMode view) {
-            switch (view) {
-                case ViewMode.FILMSTRIP:
-                    logger.Debug("FILMSTRIP: " + defines["#filmstrip.available"].Equals("true"));
-                    return defines["#filmstrip.available"].Equals("true");
-                case ViewMode.LARGEICON:
-                    logger.Debug("LARGEICON: " + defines["#largeicons.available"].Equals("true"));
-                    return defines["#largeicons.available"].Equals("true");
-                case ViewMode.SMALLICON:
-                    logger.Debug("SMALLICON: " + defines["#smallicons.available"].Equals("true"));
-                    return defines["#smallicons.available"].Equals("true");
-                case ViewMode.LIST:
-                    logger.Debug("LIST: " + defines["#list.available"].Equals("true"));
-                    return defines["#list.available"].Equals("true");
-                case ViewMode.DETAILS:
-                    logger.Debug("DETAILS: " + defines["#filmstrip.available"].Equals("true"));
-                    return true;
-                default:
-                    logger.Debug("DEFAULT: false");
-                    return false;
-            }
-        }
+
 
         private void ClearFocus() {
             if (facade != null) {
@@ -346,9 +245,23 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void OnBrowserSelectionChanged(DBMovieInfo movie) {
-            updateMovieDetails();
+            UpdateMovieDetails();
         }
 
+        private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
+            logger.Debug("OnBrowserViewChanged Started");
+            
+            if (currentView == BrowserViewMode.DETAILS) {
+                ClearFocus();
+                playButton.Focus = true;
+            }
+
+            UpdateMovieDetails();
+            SetBackdropVisibility();
+            UpdateArtwork();
+
+            logger.Debug("OnBrowserViewChanged Ended");
+        }
 
 
         #region GUIWindow Methods
@@ -370,8 +283,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             if ((bool)MovingPicturesCore.SettingsManager["importer_gui_enabled"].Value)
                 MovingPicturesCore.Importer.Start();
 
-            // grab any <define> tags from the skin for later use
-            LoadDefinesFromSkin();
+            // load skin based settings from skin file
+            skinSettings = new MovingPicturesSkinSettings(_windowXmlFileName);
 
             logger.Info("GUI Initialization Complete");
             return success;
@@ -410,8 +323,9 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             if (browser == null) {
-                browser = new MovieBrowser();
+                browser = new MovieBrowser(skinSettings);
 
+                // add available filters to browser
                 remoteFilter = new RemoteNumpadFilter();
                 browser.ActiveFilters.Add(remoteFilter);
 
@@ -423,8 +337,13 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (startWithWatchedFilterOn)
                     watchedFilter.Active = true;
 
+                // give the browser a delegate to the method to clear focus from all existing controls
+                browser.ClearFocusAction = new MovieBrowser.ClearFocusDelegate(ClearFocus);
+
+                // setup browser events
                 browser.SelectionChanged += new MovieBrowser.SelectionChangedDelegate(OnBrowserSelectionChanged);
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
+                browser.ViewChanged +=new MovieBrowser.ViewChangedDelegate(OnBrowserViewChanged);
 
             }
 
@@ -451,28 +370,21 @@ namespace MediaPortal.Plugins.MovingPictures {
                 DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
                 DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
 
-                // set the default view for the facade
-                string defaultView = ((string)MovingPicturesCore.SettingsManager["default_view"].Value).Trim().ToLower();
-                if (defaultView.Equals("list")) 
-                    CurrentView = ViewMode.LIST;
-                else if (defaultView.Equals("thumbs")) 
-                    CurrentView = ViewMode.SMALLICON;
-                else if (defaultView.Equals("largethumbs")) 
-                    CurrentView = ViewMode.LARGEICON;
-                else if (defaultView.Equals("filmstrip")) 
-                    CurrentView = ViewMode.FILMSTRIP;
-                else {
-                    CurrentView = ViewMode.LIST;
-                    logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
-                }
+                browser.CurrentView = browser.DefaultView;
             }
 
             // if we have loaded before, lets update the view to match our previous settings
-            else {
-                ViewMode tmp = previousView;
-                CurrentView = CurrentView;
-                previousView = tmp;
+            else
+                browser.ReapplyView();
+            
+
+            // if we are not in details view (maybe we just came back from playing a movie)
+            // set the first item in the list as selected.
+            if (browser.CurrentView != BrowserViewMode.DETAILS) {
+                facade.SelectedListItemIndex = 0;
+                browser.SyncFromFacade();
             }
+            
             setWorkingAnimationStatus(false);
 
             // (re)link our backdrop image controls to the backdrop image swapper
@@ -521,15 +433,14 @@ namespace MediaPortal.Plugins.MovingPictures {
                         case Action.ActionType.ACTION_SELECT_ITEM:
                             if (control == facade) {
                                 if (clickToDetails)
-                                    CurrentView = ViewMode.DETAILS;
+                                    browser.CurrentView = BrowserViewMode.DETAILS;
                                 else
                                     playSelectedMovie();
                             }
                             break;
                         case Action.ActionType.ACTION_SHOW_INFO:
-                            if (control == facade)
-                            {
-                                CurrentView = ViewMode.DETAILS;
+                            if (control == facade) {
+                                browser.CurrentView = BrowserViewMode.DETAILS;
                             }
                             break;
                     }
@@ -537,7 +448,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 // a click on the rotate view button
                 case 2:
-                    cycleView();
+                    browser.CycleView();
                     break;
 
                 // a click on the view menu button
@@ -562,9 +473,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                     GUIWindowManager.ShowPreviousWindow();
                     break;
                 case Action.ActionType.ACTION_PREVIOUS_MENU:
-                    if (CurrentView == ViewMode.DETAILS)
+                    if (browser.CurrentView == BrowserViewMode.DETAILS)
                         // return to the facade screen
-                        CurrentView = previousView;
+                        browser.CurrentView = browser.PreviousView;
                     else if (remoteFilter.Active)
                         // if a remote filter is active remove it
                         remoteFilter.Clear();
@@ -580,12 +491,19 @@ namespace MediaPortal.Plugins.MovingPictures {
                     playSelectedMovie();
                     break;
                 case Action.ActionType.ACTION_KEY_PRESSED:
-                    // List Filter
+                    // if remote filtering is active, try to route the keypress through the filter
                     bool remoteFilterEnabled = (bool)MovingPicturesCore.SettingsManager["enable_rc_filter"].Value;
-                    if ((action.m_key != null) && (CurrentView != ViewMode.DETAILS) && remoteFilterEnabled) {
-                        if (!remoteFilter.KeyPress((char)action.m_key.KeyChar))
+                    if (remoteFilterEnabled && browser.CurrentView != BrowserViewMode.DETAILS) {
+                        // try to update the filter
+                        bool changedFilter = false;
+                        if (action.m_key != null)
+                            changedFilter = remoteFilter.KeyPress((char)action.m_key.KeyChar);
+                        
+                        // if update failed (an incorrect key press?) use standard key processing
+                        if (!changedFilter)
                             base.OnAction(action);
                     }
+                    // basic keypress functionality
                     else {
                         base.OnAction(action);
                     }
@@ -609,8 +527,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         protected override void OnShowContextMenu() {
             base.OnShowContextMenu();
-            switch (CurrentView) {
-                case ViewMode.DETAILS:
+            switch (browser.CurrentView) {
+                case BrowserViewMode.DETAILS:
                     showDetailsContext();
                     break;
                 default:
@@ -749,16 +667,16 @@ namespace MediaPortal.Plugins.MovingPictures {
                     break;
             }
 
-            if (browser.SortField == newSortField) {
+            if (browser.CurrentSortField == newSortField) {
                 // toggle sort direction
-                if (browser.SortDirection == GUIListItemMovieComparer.SortingDirections.Ascending)
-                    browser.SortDirection = GUIListItemMovieComparer.SortingDirections.Descending;
+                if (browser.CurrentSortDirection == GUIListItemMovieComparer.SortingDirections.Ascending)
+                    browser.CurrentSortDirection = GUIListItemMovieComparer.SortingDirections.Descending;
                 else
-                    browser.SortDirection = GUIListItemMovieComparer.SortingDirections.Ascending;
+                    browser.CurrentSortDirection = GUIListItemMovieComparer.SortingDirections.Ascending;
             }
             else {
-                browser.SortField = newSortField;
-                browser.SortDirection = defaultSortDirection;
+                browser.CurrentSortField = newSortField;
+                browser.CurrentSortDirection = defaultSortDirection;
             }
 
             browser.ReloadFacade();
@@ -766,44 +684,49 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void showChangeViewContext() {
-
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
             dialog.SetHeading("Moving Pictures - Change View");
 
-
+            int currID = 1;
             GUIListItem listItem = new GUIListItem("List View");
-            listItem.ItemId = 1;
-            dialog.Add(listItem);
+            if (skinSettings.ListViewAvailable) {
+                listItem.ItemId = currID++;
+                dialog.Add(listItem);
+            }
 
             GUIListItem thumbItem = new GUIListItem("Thumbnail View");
-            thumbItem.ItemId = 2;
-            dialog.Add(thumbItem);
+            if (skinSettings.IconViewAvailable) {
+                thumbItem.ItemId = currID++;
+                dialog.Add(thumbItem);
+            }
 
             GUIListItem largeThumbItem = new GUIListItem("Large Thumbnail View");
-            largeThumbItem.ItemId = 3;
-            dialog.Add(largeThumbItem);
+            if (skinSettings.LargeIconViewAvailable) {
+                largeThumbItem.ItemId = currID++;
+                dialog.Add(largeThumbItem);
+            }
 
             GUIListItem filmItem = new GUIListItem("Filmstrip View");
-            filmItem.ItemId = 4;
-            dialog.Add(filmItem);
+            if (skinSettings.FilmstripViewAvailable) {
+                filmItem.ItemId = currID++;
+                dialog.Add(filmItem);
+            }
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
 
-            switch (dialog.SelectedId) {
-                case 1:
-                    CurrentView = ViewMode.LIST;
-                    break;
-                case 2:
-                    CurrentView = ViewMode.SMALLICON;
-                    break;
-                case 3:
-                    CurrentView = ViewMode.LARGEICON;
-                    break;
-                case 4:
-                    CurrentView = ViewMode.FILMSTRIP;
-                    break;
+            if (dialog.SelectedId == listItem.ItemId) {
+                browser.CurrentView = BrowserViewMode.LIST;
             }
+            else if (dialog.SelectedId == thumbItem.ItemId) {
+                browser.CurrentView = BrowserViewMode.SMALLICON;
+            }
+            else if (dialog.SelectedId == largeThumbItem.ItemId) {
+                browser.CurrentView = BrowserViewMode.LARGEICON;
+            }
+            else if (dialog.SelectedId == filmItem.ItemId) {
+                browser.CurrentView = BrowserViewMode.FILMSTRIP;
+            } 
         }
 
         private void showDetailsContext() {
@@ -916,9 +839,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 if (ignoreDialog.IsConfirmed) {
                     browser.SelectedMovie.DeleteAndIgnore();
-                    if (CurrentView == ViewMode.DETAILS)
+                    if (browser.CurrentView == BrowserViewMode.DETAILS)
                         // return to the facade screen
-                        CurrentView = previousView;
+                        browser.CurrentView = browser.PreviousView;
                 }
                 return;
             }
@@ -926,10 +849,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             // if the file is offline display an error dialog
             if (!firstFile.IsAvailable) {
-                ShowMessage("Moving Pictures", "Not able to delete " + browser.SelectedMovie.Title, "because the file is offline", null, null);
+                ShowMessage("Moving Pictures", "Not able to delete " + browser.SelectedMovie.Title, " because the file is offline", null, null);
                 return;
             }
-
 
             // if the file is available and not read only, confirm delete.
             GUIDialogYesNo deleteDialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
@@ -940,43 +862,20 @@ namespace MediaPortal.Plugins.MovingPictures {
             deleteDialog.SetLine(3, "from your hard drive?");
             deleteDialog.SetDefaultToYes(false);
 
-
             deleteDialog.DoModal(GUIWindowManager.ActiveWindow);
 
             if (deleteDialog.IsConfirmed) {
                 bool deleteSuccesful = browser.SelectedMovie.DeleteFiles();
 
                 if (deleteSuccesful) {
-                    if (CurrentView == ViewMode.DETAILS)
+                    if (browser.CurrentView == BrowserViewMode.DETAILS)
                         // return to the facade screen
-                        CurrentView = previousView;
+                        browser.CurrentView = browser.PreviousView;
                 }
                 else {
                     ShowMessage("Moving Pictures", "Delete failed", null, null, null);
                 }
             }
-        }
-
-        // rotates the current view to the next available
-        private void cycleView() {
-            if (CurrentView == ViewMode.DETAILS)
-                return;
-
-            ViewMode newView = CurrentView;
-
-            do {
-                // rotate view until one is available
-                if (newView == ViewMode.FILMSTRIP)
-                    newView = ViewMode.LIST;
-                else
-                    newView++;
-
-                logger.Debug("trying " + newView.ToString());
-
-            } while (!IsViewAvailable(newView));
-
-            previousView = CurrentView;
-            CurrentView = newView;
         }
 
         // From online, updates the details of the currently selected movie.
@@ -995,7 +894,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (dialog.IsConfirmed && browser.SelectedMovie != null) {
                 MovingPicturesCore.DataProviderManager.Update(browser.SelectedMovie);
                 browser.SelectedMovie.Commit();
-                updateMovieDetails();
+                UpdateMovieDetails();
             }
 
 
@@ -1422,8 +1321,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             // if we are on the details page for the movie just marked as watched and we are filtering
             // go back to facade since this movie is no longer selectable. later need to tweak to allow 
             // movies filtered out to be displayed in details anyway.
-            if (movie == browser.SelectedMovie && CurrentView == ViewMode.DETAILS && watchedFilter.Active)
-                CurrentView = previousView;
+            if (movie == browser.SelectedMovie && browser.CurrentView == BrowserViewMode.DETAILS && watchedFilter.Active)
+                browser.CurrentView = browser.PreviousView;
         }
 
         private void clearMovieResumeState(DBMovieInfo movie) {
@@ -1470,7 +1369,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 case DiskInsertedAction.DETAILS:
                     logger.Info("HandleInsertedDisk: Showing details for video disc: '{0}'", movie.Title);
                     browser.SelectedMovie = movie;
-                    CurrentView = ViewMode.DETAILS;
+                    browser.CurrentView = BrowserViewMode.DETAILS;
                     break;
                 case DiskInsertedAction.PLAY:
                     logger.Info("HandleInsertedDisk: Starting playback for video disc: '{0}'", movie.Title);
@@ -1585,7 +1484,10 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #region Skin and Property Settings
 
-        private void updateMovieDetails() {
+        private void UpdateMovieDetails() {
+            if (browser.SelectedMovie == null)
+                return;
+
             PublishDetails(browser.SelectedMovie, "SelectedMovie");
 
             if (selectedMovieWatchedIndicator != null)
@@ -1636,6 +1538,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         // this does standard object publishing for any database object.
         private void PublishDetails(DatabaseTable obj, string prefix) {
+            if (obj == null)
+                return;
+
             int maxStringListElements = (int)MovingPicturesCore.SettingsManager["max_string_list_items"].Value;
 
             Type tableType = obj.GetType();
@@ -1737,31 +1642,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             propertyStr = "#MovingPictures.general.filteredmoviecount";
             valueStr = browser.FilteredMovies.Count.ToString();
             SetProperty(propertyStr, valueStr);
-        }
-
-        // Grabs the <define> tags from the skin for skin parameters from skinner.
-        private void LoadDefinesFromSkin() {
-            try {
-                // Load the XML file
-                XmlDocument doc = new XmlDocument();
-                logger.Info("Loading defines from skin.");
-                doc.Load(_windowXmlFileName);
-
-                // parse out the define tags and store them
-                defines = new Dictionary<string, string>();
-                foreach (XmlNode node in doc.SelectNodes("/window/define")) {
-                    string[] tokens = node.InnerText.Split(':');
-
-                    if (tokens.Length < 2)
-                        continue;
-
-                    defines[tokens[0]] = tokens[1];
-                    logger.Debug("Loaded define from skin: " + tokens[0] + ": " + tokens[1]);
-                }
-            }
-            catch (Exception e) {
-                logger.ErrorException("Unexpected error loading <define> tags from skin file.", e);
-            }
         }
 
         #endregion
