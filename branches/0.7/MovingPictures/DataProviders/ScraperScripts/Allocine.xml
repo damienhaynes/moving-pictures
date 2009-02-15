@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874930</id>
-    <version major="1" minor="1" point="0"/>
-    <published month="2" day="8" year="2009"/>
+    <version major="1" minor="1" point="1"/>
+    <published month="2" day="15" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -76,7 +76,7 @@
 
     <set name="rx_title">
       <![CDATA[
-        <title>(.+?)(?: - Allocine.fr)?</title>
+        <title>(.+?)(?: - Allocine.fr)?(?: - AlloCiné)?</title>
         ]]>
     </set>
 
