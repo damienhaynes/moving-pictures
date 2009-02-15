@@ -139,7 +139,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             get {
                 // todo: how to handle iso?
                 bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
-                if (discid == null && IsAvailable && getDiscId && (Utility.GetVideoDiscType(fileInfo.FullName) == Utility.VideoDiscType.DVD)) 
+                if (discid == null && IsAvailable && getDiscId && (Utility.GetVideoDiscFormat(fileInfo.FullName) == VideoDiscFormat.DVD)) 
                     DiscId = Utility.GetDiscIdString(fileInfo.DirectoryName);
 
                 return discid;
@@ -154,7 +154,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(Default = null)]
         public string FileHash {
             get {
-                if (fileHash == null && IsAvailable && (Utility.GetVideoDiscType(fileInfo.FullName) == Utility.VideoDiscType.UnknownFormat))
+                if (fileHash == null && IsAvailable && (Utility.GetVideoDiscFormat(fileInfo.FullName) == VideoDiscFormat.Unknown))
                     FileHash = Utility.GetMovieHashString(fileInfo.FullName);
 
                 return fileHash;

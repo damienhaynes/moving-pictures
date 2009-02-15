@@ -15,14 +15,14 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874910</id>
-    <version major="1" minor="0" point="3"/>
-    <published month="2" day="8" year="2009"/>
+    <version major="1" minor="1" point="0"/>
+    <published month="2" day="12" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
     -->
-    <type>MovieDetailsFetcher</type>
+    <type>MovieDetailsFetcher|MovieCoverFetcher</type>
     <language>nl</language>
   </details>
   
@@ -184,6 +184,27 @@
 
     <!-- Popularity -->
     <set name="movie.popularity" value="${votes[0][0]:htmldecode}"/>
+
+  </action>
+  
+  <!-- Covert Art currently only works with the native site id -->
+  <action name="get_cover_art">
+   
+    <!-- Retrieve details -->
+    <retrieve name="details_page" url="http://www.moviemeter.nl/film/${movie.site_id}"/>
+    
+    <!-- Regular Expressions--> 
+    <set name="rx_cover">
+      <![CDATA[
+      img class="poster" src="([^"]+?)"
+      ]]>
+    </set>
+    
+    <!-- Get cover url from details page -->
+    <parse name="cover_url" input="${details_page}" regex="${rx_cover}"/>
+    
+    <!-- set cover -->
+    <set name="cover_art[0].url" value="${cover_url[0][0]}" />
 
   </action>
   
