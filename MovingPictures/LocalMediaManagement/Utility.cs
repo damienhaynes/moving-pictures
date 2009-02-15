@@ -41,14 +41,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         #region Enum Helper Methods
 
-        public static List<T> EnumToList<T>() {
-            Type enumType = typeof(T);
-            if (enumType.BaseType != typeof(Enum))
-                throw new ArgumentException("T must be of type System.Enum");
-
-            return new List<T>(Enum.GetValues(enumType) as IEnumerable<T>);
-        }
-
         public static string GetEnumValueDescription(object value) {
             Type objType = value.GetType();
             FieldInfo fieldInfo = objType.GetField(Enum.GetName(objType, value));
@@ -235,6 +227,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
             }
             catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
                 logger.ErrorException("Error while retrieving files for: " + targetDir.FullName, e);
             }
             return largestFile;
@@ -444,6 +439,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
             }
             catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
                 logger.ErrorException("An error occured while validating '" + fileInfo.ToString() + "' as a video file.", e);
             }
 
@@ -457,7 +455,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static VideoDiscFormat GetVideoDiscFormat(string path) {
-            foreach (VideoDiscFormat format in EnumToList<VideoDiscFormat>()) {
+            foreach (VideoDiscFormat format in Enum.GetValues(typeof(VideoDiscFormat))) {
                 if (format != VideoDiscFormat.Unknown) {
                     if (path.EndsWith(GetEnumValueDescription(format),StringComparison.OrdinalIgnoreCase))
                         return format;
@@ -472,7 +470,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static bool IsVideoDiscPath(string path) {
-            foreach(VideoDiscFormat format in EnumToList<VideoDiscFormat>()) {
+            foreach(VideoDiscFormat format in Enum.GetValues(typeof(VideoDiscFormat))) {
                 if (format != VideoDiscFormat.Unknown)
                     if (path.EndsWith(GetEnumValueDescription(format), StringComparison.OrdinalIgnoreCase))
                         return true;
@@ -487,7 +485,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns></returns>
         public static string GetVideoDiscPath(string drive) {
            string path;
-           foreach (VideoDiscFormat format in EnumToList<VideoDiscFormat>()) {
+           foreach (VideoDiscFormat format in Enum.GetValues(typeof(VideoDiscFormat))) {
                if (format != VideoDiscFormat.Unknown) {
                    path = DeviceManager.GetDriveLetter(drive) + GetEnumValueDescription(format);
                    bool pathExists = File.Exists(path);
