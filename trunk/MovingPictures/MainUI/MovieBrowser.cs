@@ -517,15 +517,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// enum of all possible sort fields
         /// </summary>
         public enum SortingFields {
-            Title,
-            DateAdded,
-            Year,
-            Certification,
-            Language,
-            Score,
-            Popularity,
-            Runtime,
-            FilePath
+            Title = 1,
+            DateAdded = 2,
+            Year = 3,
+            Certification = 4,
+            Language = 5,
+            Score = 6,
+            Popularity = 7,
+            Runtime = 8,
+            FilePath = 9
         }
 
         public enum SortingDirections{
@@ -634,6 +634,33 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return 5;
                 default:
                     return 100;
+            }
+        }
+
+
+        public static string GetFriendlySortName(SortingFields field) {
+
+            switch (field) {
+                case SortingFields.Title:
+                    return GUILocalizeStrings.Get(369);
+                case SortingFields.DateAdded:
+                    return "Date Added";
+                case SortingFields.Year:
+                    return GUILocalizeStrings.Get(345);
+                case SortingFields.Certification:
+                    return "Certification";
+                case SortingFields.Language:
+                    return GUILocalizeStrings.Get(248);
+                case SortingFields.Score:
+                    return GUILocalizeStrings.Get(19005);
+                case SortingFields.Popularity:
+                    return "Popularity";
+                case SortingFields.Runtime:
+                    return "Runtime";
+                case SortingFields.FilePath:
+                    return "File Path";
+                default:
+                    return "";
             }
         }
     }

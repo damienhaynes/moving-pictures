@@ -345,6 +345,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
                 browser.ViewChanged +=new MovieBrowser.ViewChangedDelegate(OnBrowserViewChanged);
 
+                SetProperty("#MovingPictures.Sort.Field", GUIListItemMovieComparer.GetFriendlySortName(browser.CurrentSortField));
+                SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
             }
 
             if (recentInsertedDiskSerials == null) {              
@@ -582,90 +584,24 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             dialog.Reset();
             dialog.SetHeading("Moving Pictures - Sort By");
 
-            GUIListItem titleItem = new GUIListItem(GUILocalizeStrings.Get(369)); // "Title"
-            titleItem.ItemId = 1;
-            dialog.Add(titleItem);
-
-            GUIListItem dateAddedItem = new GUIListItem("Date Added");
-            dateAddedItem.ItemId = 2;
-            dialog.Add(dateAddedItem);
-
-            GUIListItem yearItem = new GUIListItem(GUILocalizeStrings.Get(345)); // Year
-            yearItem.ItemId = 3;
-            dialog.Add(yearItem);
-
-            GUIListItem certificationItem = new GUIListItem("Certification");
-            certificationItem.ItemId = 4;
-            dialog.Add(certificationItem);
-
-            GUIListItem languageItem = new GUIListItem(GUILocalizeStrings.Get(248)); // Language
-            languageItem.ItemId = 5;
-            dialog.Add(languageItem);
-
-            GUIListItem scoreItem = new GUIListItem(GUILocalizeStrings.Get(19005)); // Score
-            scoreItem.ItemId = 6;
-            dialog.Add(scoreItem);
-
-            GUIListItem popularityItem = new GUIListItem("Popularity");
-            popularityItem.ItemId = 8;
-            dialog.Add(popularityItem);
-
-            GUIListItem runtimeItem = new GUIListItem("Runtime");
-            runtimeItem.ItemId = 9;
-            dialog.Add(runtimeItem);
-
-            GUIListItem filePathItem = new GUIListItem("File Path");
-            filePathItem.ItemId = 10;
-            dialog.Add(filePathItem);
+            foreach (int value in Enum.GetValues(typeof(GUIListItemMovieComparer.SortingFields))) {
+                string menuCaption = GUIListItemMovieComparer.GetFriendlySortName(
+                    (GUIListItemMovieComparer.SortingFields)Enum.Parse(typeof(GUIListItemMovieComparer.SortingFields), value.ToString()));
+                GUIListItem listItem = new GUIListItem(menuCaption);
+                listItem.ItemId = value;
+                dialog.Add(listItem);
+            }
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
 
             GUIListItemMovieComparer.SortingFields newSortField = GUIListItemMovieComparer.SortingFields.Title;
             GUIListItemMovieComparer.SortingDirections defaultSortDirection = GUIListItemMovieComparer.SortingDirections.Ascending;
-
-            switch (dialog.SelectedId) {
-                case 1:
-                    newSortField = GUIListItemMovieComparer.SortingFields.Title;
-                    break;
-
-                case 2:
-                    newSortField = GUIListItemMovieComparer.SortingFields.DateAdded;
-                    defaultSortDirection = GUIListItemMovieComparer.SortingDirections.Descending;
-                    break;
-
-                case 3:
-                    newSortField = GUIListItemMovieComparer.SortingFields.Year;
-                    break;
-
-                case 4:
-                    newSortField = GUIListItemMovieComparer.SortingFields.Certification;
-                    break;
-
-                case 5:
-                    newSortField = GUIListItemMovieComparer.SortingFields.Language;
-                    break;
-
-                case 6:
-                    newSortField = GUIListItemMovieComparer.SortingFields.Score;
-                    break;
-
-                case 8:
-                    newSortField = GUIListItemMovieComparer.SortingFields.Popularity;
-                    break;
-
-                case 9:
-                    newSortField = GUIListItemMovieComparer.SortingFields.Runtime;
-                    break;
-
-                case 10:
-                    newSortField = GUIListItemMovieComparer.SortingFields.FilePath;
-                    break;
-
-                default:
-                    // do nothing
-                    return;
-                    break;
-            }
+            
+            if (dialog.SelectedId <= 0) return;  // user canceled out of menu
+            
+            newSortField = (GUIListItemMovieComparer.SortingFields)Enum.Parse(typeof(GUIListItemMovieComparer.SortingFields), dialog.SelectedId.ToString());
+            if (newSortField == GUIListItemMovieComparer.SortingFields.DateAdded)
+                defaultSortDirection = GUIListItemMovieComparer.SortingDirections.Descending;
 
             if (browser.CurrentSortField == newSortField) {
                 // toggle sort direction
@@ -680,6 +616,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             browser.ReloadFacade();
+            SetProperty("#MovingPictures.Sort.Field", GUIListItemMovieComparer.GetFriendlySortName(browser.CurrentSortField));
+            SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
             browser.Facade.SelectedListItemIndex = 0;
         }
 
