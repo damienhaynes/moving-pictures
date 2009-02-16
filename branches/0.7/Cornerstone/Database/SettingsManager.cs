@@ -116,8 +116,22 @@ namespace Cornerstone.Database {
         public SettingsManager(DatabaseManager DBManager) {
             this.DBManager = DBManager;
             List<DBSetting> settingList = DBManager.Get<DBSetting>(null);
-            foreach (DBSetting currSetting in settingList) 
-                this.Add(currSetting.Key, currSetting);
+            foreach (DBSetting currSetting in settingList) {
+                try {
+                    this.Add(currSetting.Key, currSetting);
+                }
+                catch (Exception e) {
+                    if (e is ThreadAbortException)
+                        throw e;
+
+                    if (e is ArgumentNullException) 
+                        logger.Error("Tried to load a duplicate setting (" + currSetting.Name + ")");
+                    else if (currSetting == null)
+                        logger.Error("Tried loading a null setting!");
+                    else
+                        logger.Error("Error loading setting " + currSetting.Name + " (key = " + currSetting.Key + ")");                        
+                }
+            }
 
             logger.Info("SettingsManager Created");
         }

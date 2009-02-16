@@ -1,4 +1,4 @@
-<ScriptableScraper>
+﻿<ScriptableScraper>
   <details>
     <!-- These details are for display purposes only. -->
     <name>Kinopoisk.ru</name>
@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141521</id>
-    <version major="1" minor="0" point="0"/>
-    <published month="2" day="15" year="2009"/>
+    <version major="1" minor="0" point="4"/>
+    <published month="2" day="16" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -244,7 +244,8 @@
     <!-- Plot Summary -->
     <parse name="summary" input="${details_page}" regex="${rx_description}"/>
 	<if test="${summary[0][0]!=">
-	    <set name="movie.summary" value="${summary[0][0]:striptags}" />
+	    <set name="summery_clean" value="${summary[0][0]:striptags}" />
+	    <set name="movie.summary" value="${summery_clean:htmldecode}" />
 	</if>
 	
   </action>
@@ -257,12 +258,14 @@
 	  ]]>
 	</set>
 		
-		<!-- We need to find the link to the posters page from the details page -->
-	<retrieve name="cover_page" url="http://www.kinopoisk.ru/level/17/film/${movie.site_id}" />
-	<parse name="posterLinks" input="${cover_page}" regex="${rx_covers}"/>
-	<loop name='cover_url' on='posterLinks'>
-        <set name='cover_art[${count}].url' value='http://www.kinopoisk.ru/images/poster/${cover_url[0]}.jpg'/>
-    </loop>
+		<!-- Verify that Kinopoisk was used with site_id -->
+	<if test="${movie.site_id}!=">
+		<retrieve name="cover_page" url="http://www.kinopoisk.ru/level/17/film/${movie.site_id}" />
+		<parse name="posterLinks" input="${cover_page}" regex="${rx_covers}"/>
+		<loop name='cover_url' on='posterLinks'>
+	        	<set name='cover_art[${count}].url' value='http://www.kinopoisk.ru/images/poster/${cover_url[0]}.jpg'/>
+	    	</loop>
+	</if>
 
 </action>
   

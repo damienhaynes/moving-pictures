@@ -111,12 +111,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             actionDescriptions.Add(newAction, "Initializing Path Settings...");
             initActions.Add(newAction);
 
-            newAction = new WorkerDelegate(checkVersionInfo);
-            actionDescriptions.Add(newAction, "Initializing Version Information...");
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateDateAddedFields);
+            actionDescriptions.Add(newAction, "Updating sorting metadata...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidFiles);
-            actionDescriptions.Add(newAction, "Removing deleted movies...");
+            actionDescriptions.Add(newAction, "Checking for deleted movies...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidMovies);
@@ -137,6 +137,10 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateUserSettings);
             actionDescriptions.Add(newAction, "Updating user settings...");
+            initActions.Add(newAction);
+
+            newAction = new WorkerDelegate(checkVersionInfo);
+            actionDescriptions.Add(newAction, "Initializing Version Information...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DataProviderManager.Initialize);
@@ -289,45 +293,23 @@ namespace MediaPortal.Plugins.MovingPictures {
             // create the backdrop thumbs folder if it doesn't already exist
             if (!Directory.Exists((string)SettingsManager["backdrop_thumbs_folder"].Value))
                 Directory.CreateDirectory((string)SettingsManager["backdrop_thumbs_folder"].Value);
-
-
-            // update date added fields
-            if (getDBVersionNumber() < new Version("0.7.1")) {
-                List<DBMovieInfo> movies = DBMovieInfo.GetAll();
-                movies.Sort(delegate(DBMovieInfo movieX, DBMovieInfo movieY) {
-                    return movieX.ID.GetValueOrDefault(0).CompareTo(movieY.ID.GetValueOrDefault(0));
-                });
-
-                for (int i = 0; i < movies.Count; i++) {
-                    if (movies[i].LocalMedia[0].IsAvailable && movies[i].LocalMedia[0].File.Extension.ToLower() != ".ifo") {
-                        movies[i].DateAdded = movies[i].LocalMedia[0].File.CreationTime;
-                    }
-                    else {
-                        // add 1 minute for offline media and dvds, to retain the same order
-                        if (i > 0)
-                            movies[i].DateAdded = movies[i - 1].DateAdded.AddMinutes(1);
-                    }
-
-                    movies[i].Commit();
-                }
-            }
-        }
-
-        private static Version getDBVersionNumber() {
-            return new Version((string)SettingsManager["version"].Value);
         }
 
         private static void checkVersionInfo() {
             // check if the version changed, and update the DB accordingly
             Version realVer = Assembly.GetExecutingAssembly().GetName().Version;
 
-            if (realVer > getDBVersionNumber()) {
+            if (realVer > GetDBVersionNumber()) {
                 SettingsManager["version"].Value = realVer.ToString();
                 SettingsManager["version"].Commit();
 
                 SettingsManager["source_manager_init_done"].Value = false;
                 SettingsManager["source_manager_init_done"].Commit();
             }
+        }
+
+        public static Version GetDBVersionNumber() {
+            return new Version((string)SettingsManager["version"].Value);
         }
 
         #endregion
