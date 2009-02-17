@@ -29,7 +29,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     continue;
 
                 // remove missing files or files without an import path
-                if (currFile.IsRemoved || currFile.ImportPath == null || currFile.ImportPath.ID == null) {
+                if (currFile.ImportPath == null || currFile.IsRemoved || currFile.ImportPath.ID == null) {
                     currFile.Delete();
                     cleaned++;
                     continue;
