@@ -752,6 +752,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.SelectedMovie.UserSettings[0].Commit();
                 browser.ReapplyFilters();
                 browser.ReloadFacade();
+                UpdateMovieDetails();
             }
             else if (dialog.SelectedId == watchedItem.ItemId) {
                 browser.SelectedMovie.UserSettings[0].Watched = 1;
@@ -759,6 +760,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.SelectedMovie.UserSettings[0].Commit();
                 browser.ReapplyFilters();
                 browser.ReloadFacade();
+                UpdateMovieDetails();
             }
             else if (dialog.SelectedId == deleteItem.ItemId) {
                 deleteMovie();
