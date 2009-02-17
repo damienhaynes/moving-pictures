@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- English (US) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+
+<strings>
+<string Field="ProblemLoadingSkinFile">Sorry, there was a problem loading skin file...</string>
+<string Field="NoImportPathsHeading">No Import Paths!</string>
+<string Field="NoImportPathsBody">It doesn't look like you have\ndefined any import paths. You\nshould close MediaPortal and\nlaunch the MediaPortal\nConfiguration Screen to\nconfigure Moving Pictures.</string>
+<string Field="ShowAllMovies">Show All Movies</string>
+<string Field="ShowOnlyUnwatchedMovies">Show Only Unwatched Movies</string>
+<string Field="SortBy">Sort By</string>
+<string Field="ChangeView">Change View</string>
+<string Field="ListView">List View</string>
+<string Field="ThumbnailView">Thumbnail View</string>
+<string Field="LargeThumbnailView">Large Thumbnail View</string>
+<string Field="FilmstripView">Filmstrip View</string>
+<string Field="UpdateDetailsFromOnline">Update Details from Online</string>
+<string Field="CycleCoverArt">Cycle Cover-Art</string>
+<string Field="CheckForMissingArtwork">Check for Missing Artwork Online</string>
+<string Field="MarkAsUnwatched">Mark as Unwatched</string>
+<string Field="MarkAsWatched">Mark as Watched</string>
+<string Field="DeleteMovie">Delete Movie</string>
+<string Field="CannotDeleteReadOnly">Cannot delete a read-only movie.\nWould you like Moving Pictures to ignore this movie?</string>
+<string Field="CannotDeleteOffline">Not able to delete {0}\n because the file is offline</string>
+<string Field="DoYouWantToDelete">Do you want to permanently delete\n{0}\nfrom your hard drive?</string>
+<string Field="DeleteFailed">Delete Failed</string>
+<string Field="UpdateMovieDetailsHeader">Update Movie Details</string>
+<string Field="UpdateMovieDetailsBody">You are about to refresh all movie metadata, overwriting\nany custom modifications to this film. Do you want\nto continue?</string>
+<string Field="MediaNotAvailableHeader">Media Not Available</string>
+<string Field="MediaNotAvailableBody">The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}</string>
+<string Field="Retry">Retry</string>
+<string Field="Cancel">Cancel</string>
+<string Field="Error">Error</string>
+<string Field="MediaIsMissing">The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...</string>
+<string Field="FailedMountingImage">Sorry, failed mounting DVD Image</string>
+<string Field="ResumeFromLast">Resume movie from last time?</string>
+<string Field="ResumeFrom">Resume from:</string>
+<string Field="InvalidVideoDiscFormat">Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.</string>
+<string Field="ContinueToNextPartHeader">Continue to next part?</string>
+<string Field="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>
+<string Field="Title">Title</string>
+<string Field="DateAdded">Date Added</string>
+<string Field="Year">Year</string>
+<string Field="Certification">Certification</string>
+<string Field="Language">Language</string>
+<string Field="Score">Score</string>
+<string Field="Popularity">Popularity</string>
+<string Field="Runtime">Runtime</string>
+<string Field="FilePath">File Path</string>
+</strings>

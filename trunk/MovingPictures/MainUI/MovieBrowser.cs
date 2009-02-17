@@ -642,23 +642,23 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             switch (field) {
                 case SortingFields.Title:
-                    return GUILocalizeStrings.Get(369);
+                    return Translation.Title;
                 case SortingFields.DateAdded:
-                    return "Date Added";
+                    return Translation.DateAdded;
                 case SortingFields.Year:
-                    return GUILocalizeStrings.Get(345);
+                    return Translation.Year;
                 case SortingFields.Certification:
-                    return "Certification";
+                    return Translation.Certification;
                 case SortingFields.Language:
-                    return GUILocalizeStrings.Get(248);
+                    return Translation.Language;
                 case SortingFields.Score:
-                    return GUILocalizeStrings.Get(19005);
+                    return Translation.Score;
                 case SortingFields.Popularity:
-                    return "Popularity";
+                    return Translation.Popularity;
                 case SortingFields.Runtime:
-                    return "Runtime";
+                    return Translation.Runtime;
                 case SortingFields.FilePath:
-                    return "File Path";
+                    return Translation.FilePath;
                 default:
                     return "";
             }
