@@ -178,6 +178,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (textToggleButton != null) textToggleButton.Focus = false;
         }
 
+        private void ShowMessage(string heading, string lines) {
+            string line1 = null, line2 = null, line3 = null, line4 = null;
+            string[] linesArray = lines.Split(new string[] { "\\n" }, StringSplitOptions.None);
+
+            if (linesArray.Length >= 1) line1 = linesArray[0];
+            if (linesArray.Length >= 2) line2 = linesArray[1];
+            if (linesArray.Length >= 3) line3 = linesArray[2];
+            if (linesArray.Length >= 4) line4 = linesArray[3];
+
+            ShowMessage(heading, line1, line2, line3, line4);
+        }
+
         private void ShowMessage(string heading, string line1, string line2, string line3, string line4) {
             GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
             dialog.Reset();
@@ -194,28 +206,28 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// This method may become obsolete in the future if media portal adds more dialogs
         /// </summary>
         /// <returns>True if yes was clicked, False if no was clicked</returns>
-        private bool ShowCustomYesNo(string heading, string line1, string line2, string line3, string line4, string yesLabel, string noLabel, bool defaultYes) {
+        private bool ShowCustomYesNo(string heading, string lines, string yesLabel, string noLabel, bool defaultYes) {
+            System.Diagnostics.Debugger.Launch();
             GUIDialogYesNo dialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
             try {
                 dialog.Reset();
                 dialog.SetHeading(heading);
-                if (!String.IsNullOrEmpty(line1)) dialog.SetLine(1, line1);
-                if (!String.IsNullOrEmpty(line2)) dialog.SetLine(2, line2);
-                if (!String.IsNullOrEmpty(line3)) dialog.SetLine(3, line3);
-                if (!String.IsNullOrEmpty(line4)) dialog.SetLine(4, line4);
+                string[] linesArray = lines.Split(new string[] { "\\n" }, StringSplitOptions.None);
+                if (linesArray.Length > 0) dialog.SetLine(1, linesArray[0]);
+                if (linesArray.Length > 1) dialog.SetLine(2, linesArray[1]);
+                if (linesArray.Length > 2) dialog.SetLine(3, linesArray[2]);
+                if (linesArray.Length > 3) dialog.SetLine(4, linesArray[3]);
                 dialog.SetDefaultToYes(defaultYes);
-
 
                 foreach (System.Windows.UIElement item in dialog.Children) {
                     if (item is GUIButtonControl) {
                         GUIButtonControl btn = (GUIButtonControl)item;
-                        if (btn.GetID == 11) // Yes button
+                        if (btn.GetID == 11 && !String.IsNullOrEmpty(yesLabel)) // Yes button
                             btn.Label = yesLabel;
-                        else if (btn.GetID == 10) // No button
+                        else if (btn.GetID == 10 && !String.IsNullOrEmpty(noLabel)) // No button
                             btn.Label = noLabel;
                     }
                 }
-
                 dialog.DoModal(GetID);
 
                 return dialog.IsConfirmed;
@@ -300,7 +312,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (facade == null) {
                 GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
                 dialog.Reset();
-                dialog.SetHeading("Sorry, there was a problem loading skin file...");
+                dialog.SetHeading(Translation.ProblemLoadingSkinFile);
                 dialog.DoModal(GetID);
                 GUIWindowManager.ShowPreviousWindow();
                 return;
@@ -308,16 +320,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // if the user hasn't defined any import paths they need to goto the config screen
             if (DBImportPath.GetAll().Count == 0) {
-                GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
-                dialog.Reset();
-                dialog.SetHeading("No Import Paths!");
-                dialog.SetLine(1, "It doesn't look like you have");
-                dialog.SetLine(2, "defined any import paths. You");
-                dialog.SetLine(3, "should close MediaPortal and");
-                dialog.SetLine(4, "launch the MediaPortal");
-                dialog.SetLine(5, "Configuration Screen to");
-                dialog.SetLine(6, "configure Moving Pictures.");
-                dialog.DoModal(GetID);
+                ShowMessage(Translation.NoImportPathsHeading, Translation.NoImportPathsBody);
                 GUIWindowManager.ShowPreviousWindow();
                 return;
             }
@@ -549,17 +552,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
-            dialog.SetHeading("Moving Pictures");
+            dialog.SetHeading("Moving Pictures");  // not translated because it's a proper noun
 
-            GUIListItem watchItem = new GUIListItem(watchedFilter.Active ? "Show All Movies" : "Show Only Unwatched Movies");
+            GUIListItem watchItem = new GUIListItem(watchedFilter.Active ? Translation.ShowAllMovies : Translation.ShowOnlyUnwatchedMovies);
             watchItem.ItemId = 1;
             dialog.Add(watchItem);
 
-            GUIListItem sortItem = new GUIListItem("Sort By ...");
+            GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
             sortItem.ItemId = 2;
             dialog.Add(sortItem);
 
-            GUIListItem viewItem = new GUIListItem("Change View ...");
+            GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
             viewItem.ItemId = 3;
             dialog.Add(viewItem);
 
@@ -582,7 +585,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
-            dialog.SetHeading("Moving Pictures - Sort By");
+            dialog.SetHeading("Moving Pictures - " + Translation.SortBy);
 
             foreach (int value in Enum.GetValues(typeof(GUIListItemMovieComparer.SortingFields))) {
                 string menuCaption = GUIListItemMovieComparer.GetFriendlySortName(
@@ -624,28 +627,28 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void showChangeViewContext() {
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
-            dialog.SetHeading("Moving Pictures - Change View");
+            dialog.SetHeading("Moving Pictures - " + Translation.ChangeView);
 
             int currID = 1;
-            GUIListItem listItem = new GUIListItem("List View");
+            GUIListItem listItem = new GUIListItem(Translation.ListView);
             if (skinSettings.ListViewAvailable) {
                 listItem.ItemId = currID++;
                 dialog.Add(listItem);
             }
 
-            GUIListItem thumbItem = new GUIListItem("Thumbnail View");
+            GUIListItem thumbItem = new GUIListItem(Translation.ThumbnailView);
             if (skinSettings.IconViewAvailable) {
                 thumbItem.ItemId = currID++;
                 dialog.Add(thumbItem);
             }
 
-            GUIListItem largeThumbItem = new GUIListItem("Large Thumbnail View");
+            GUIListItem largeThumbItem = new GUIListItem(Translation.LargeThumbnailView);
             if (skinSettings.LargeIconViewAvailable) {
                 largeThumbItem.ItemId = currID++;
                 dialog.Add(largeThumbItem);
             }
 
-            GUIListItem filmItem = new GUIListItem("Filmstrip View");
+            GUIListItem filmItem = new GUIListItem(Translation.FilmstripView);
             if (skinSettings.FilmstripViewAvailable) {
                 filmItem.ItemId = currID++;
                 dialog.Add(filmItem);
@@ -682,13 +685,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             int currID = 1;
 
-            detailsItem = new GUIListItem("Update Details from Online");
+            detailsItem = new GUIListItem(Translation.UpdateDetailsFromOnline);
             detailsItem.ItemId = currID;
             dialog.Add(detailsItem);
             currID++;
 
             if (browser.SelectedMovie.AlternateCovers.Count > 1) {
-                cycleArtItem = new GUIListItem("Cycle Cover-Art");
+                cycleArtItem = new GUIListItem(Translation.CycleCoverArt);
                 cycleArtItem.ItemId = currID;
                 dialog.Add(cycleArtItem);
                 currID++;
@@ -697,20 +700,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (browser.SelectedMovie.CoverFullPath.Trim().Length == 0 ||
                 browser.SelectedMovie.BackdropFullPath.Trim().Length == 0) {
 
-                retrieveArtItem = new GUIListItem("Check for Missing Artwork Online");
+                retrieveArtItem = new GUIListItem(Translation.CheckForMissingArtwork);
                 retrieveArtItem.ItemId = currID;
                 dialog.Add(retrieveArtItem);
                 currID++;
             }
 
             if (browser.SelectedMovie.UserSettings[0].Watched > 0) {
-                unwatchedItem = new GUIListItem("Mark as Unwatched");
+                unwatchedItem = new GUIListItem(Translation.MarkAsUnwatched);
                 unwatchedItem.ItemId = currID;
                 dialog.Add(unwatchedItem);
                 currID++;
             }
             else {
-                watchedItem = new GUIListItem("Mark as Watched");
+                watchedItem = new GUIListItem(Translation.MarkAsWatched);
                 watchedItem.ItemId = currID;
                 dialog.Add(watchedItem);
                 currID++;
@@ -719,7 +722,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             bool deleteEnabled = (bool)MovingPicturesCore.SettingsManager["enable_delete_movie"].Value;
 
             if (deleteEnabled) {
-                deleteItem = new GUIListItem("Delete Movie");
+                deleteItem = new GUIListItem(Translation.DeleteMovie);
                 deleteItem.ItemId = currID;
                 dialog.Add(deleteItem);
                 currID++;
@@ -767,15 +770,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // if the file is available and read only, or known to be stored on optical media, prompt to ignore.
             if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || DeviceManager.GetVolumeInfo(firstFile.DriveLetter).DriveInfo.DriveType == DriveType.CDRom) {
-                GUIDialogYesNo ignoreDialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
-                ignoreDialog.Reset();
-                ignoreDialog.SetHeading("Moving Pictures");
-                ignoreDialog.SetLine(1, "Cannot delete a read-only movie.");
-                ignoreDialog.SetLine(2, "Would you like Moving Pictures to ignore this movie?");
-                ignoreDialog.SetDefaultToYes(false);
-                ignoreDialog.DoModal(GUIWindowManager.ActiveWindow);
+                bool bIgnore = ShowCustomYesNo("Moving Pictures", Translation.CannotDeleteReadOnly, null, null, false);
 
-                if (ignoreDialog.IsConfirmed) {
+                if (bIgnore) {
                     browser.SelectedMovie.DeleteAndIgnore();
                     if (browser.CurrentView == BrowserViewMode.DETAILS)
                         // return to the facade screen
@@ -787,22 +784,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // if the file is offline display an error dialog
             if (!firstFile.IsAvailable) {
-                ShowMessage("Moving Pictures", "Not able to delete " + browser.SelectedMovie.Title, " because the file is offline", null, null);
+                ShowMessage("Moving Pictures", String.Format(Translation.CannotDeleteOffline, browser.SelectedMovie.Title));
                 return;
             }
 
             // if the file is available and not read only, confirm delete.
-            GUIDialogYesNo deleteDialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
-            deleteDialog.Reset();
-            deleteDialog.SetHeading("Moving Pictures");
-            deleteDialog.SetLine(1, "Do you want to permanently delete");
-            deleteDialog.SetLine(2, browser.SelectedMovie.Title);
-            deleteDialog.SetLine(3, "from your hard drive?");
-            deleteDialog.SetDefaultToYes(false);
+            string sDoYouWant = String.Format(Translation.DoYouWantToDelete, browser.SelectedMovie.Title);
+            bool bConfirm = ShowCustomYesNo("Moving Pictures", sDoYouWant, null, null, false);
 
-            deleteDialog.DoModal(GUIWindowManager.ActiveWindow);
-
-            if (deleteDialog.IsConfirmed) {
+            if (bConfirm) {
                 bool deleteSuccesful = browser.SelectedMovie.DeleteFiles();
 
                 if (deleteSuccesful) {
@@ -811,31 +801,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         browser.CurrentView = browser.PreviousView;
                 }
                 else {
-                    ShowMessage("Moving Pictures", "Delete failed", null, null, null);
+                    ShowMessage("Moving Pictures", Translation.DeleteFailed, null, null, null);
                 }
             }
         }
 
         // From online, updates the details of the currently selected movie.
         private void updateDetails() {
-            GUIDialogYesNo dialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
-            if (dialog == null)
-                return;
+            bool bConfirm = ShowCustomYesNo(Translation.UpdateMovieDetailsHeader, Translation.UpdateMovieDetailsBody, null, null, false);
 
-            dialog.Title = "Update Movie Details";
-            dialog.SetLine(1, "You are about to refresh all movie metadata, overwriting");
-            dialog.SetLine(2, "any custom modifications to this film. Do you want");
-            dialog.SetLine(3, "to continue?");
-            dialog.SetDefaultToYes(false);
-            dialog.DoModal(GetID);
-
-            if (dialog.IsConfirmed && browser.SelectedMovie != null) {
+            if (bConfirm && browser.SelectedMovie != null) {
                 MovingPicturesCore.DataProviderManager.Update(browser.SelectedMovie);
                 browser.SelectedMovie.Commit();
                 UpdateMovieDetails();
             }
-
-
         }
 
         // retrieves from online artwork for the currently selected movie
@@ -891,7 +870,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
 
             int part = requestedPart;
-            logger.Debug("1. part = {0}", part);
             bool resume = false;
 
             // if this is a request to start the movie from the begining, check if we should resume
@@ -899,32 +877,27 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (requestedPart == 1) {
                 // check if we should be resuming, and if not, clear resume data
                 resume = PromptUserToResume(movie);
-                logger.Debug("resume = {0}", resume);
                 if (resume)
                     part = movie.UserSettings[0].ResumePart;
                 else
                     clearMovieResumeState(movie);
 
-                logger.Debug("2. part = {0}", part);
                 // if we have a multi-part movie composed of disk images and we are not resuming 
                 // ask which part the user wants to play
                 string firstExtension = movie.LocalMedia[0].File.Extension;
                 if (!resume && movie.LocalMedia.Count > 1 && (DaemonTools.IsImageFile(firstExtension) || firstExtension.ToLower() == ".ifo")) {
-                    logger.Debug("Displaying filestacking dialog");
                     GUIDialogFileStacking dlg = (GUIDialogFileStacking)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_FILESTACKING);
                     if (null != dlg) {
                         dlg.SetNumberOfFiles(movie.LocalMedia.Count);
                         dlg.DoModal(GUIWindowManager.ActiveWindow);
                         part = dlg.SelectedFile;
                         if (part < 1) return;
-                        logger.Debug("3. part = {0}", part);
                     }
                 }
             }
 
 
             DBLocalMedia mediaToPlay = movie.LocalMedia[part - 1];
-            logger.Debug("4. part = {0} mediaToPlay= {1}", part, mediaToPlay.FullPath);
 
             // If the media is missing, this loop will ask the user to insert it.
             // This loop can exit in 2 ways:
@@ -937,11 +910,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 waitingForMedia = true;
                 waitingForMediaSerial = mediaToPlay.VolumeSerial;
 
-                bool retry = ShowCustomYesNo("Media Not Available",
-                                            "The media for the movie you have selected is not",
-                                            "currently available. Please insert or connect media",
-                                            "labeled: " + mediaToPlay.MediaLabel,
-                                            null, "Retry", GUILocalizeStrings.Get(222), true);
+
+                string bodyString = String.Format(Translation.MediaNotAvailableBody, mediaToPlay.MediaLabel);
+
+                bool retry = ShowCustomYesNo(Translation.MediaNotAvailableHeader, bodyString,
+                    Translation.Retry, Translation.Cancel, true);
 
                 waitingForMedia = false;
                 waitingForMediaSerial = "";
@@ -959,9 +932,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
 
             if (mediaToPlay.IsRemoved) {
-                ShowMessage("Error",
-                            "The media for the Movie you have selected is missing!",
-                            "Very sorry but something has gone wrong...", null, null);
+                ShowMessage("Error", Translation.MediaIsMissing);
                 return;
             }
 
@@ -1051,15 +1022,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
             }
 
-            GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
-            if (null == dlgYesNo) return false;
-            dlgYesNo.SetHeading(GUILocalizeStrings.Get(900)); 
-            dlgYesNo.SetLine(1, movie.Title);
-            dlgYesNo.SetLine(2, GUILocalizeStrings.Get(936) + " " + MediaPortal.Util.Utils.SecondsToHMSString(displayTime));
-            dlgYesNo.SetDefaultToYes(true);
-            dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
-            logger.Debug("PromptUserToResume: User chose " + dlgYesNo.IsConfirmed.ToString());
-            if (dlgYesNo.IsConfirmed)
+            string sbody = movie.Title + "\n" + Translation.ResumeFrom + " " + Util.Utils.SecondsToHMSString(displayTime);
+            bool bResume = ShowCustomYesNo(Translation.ResumeFromLast, sbody, null, null, true);
+
+            if (bResume)
                 return true;
 
             return false;
@@ -1084,7 +1050,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // if not try to mount the image
                 logger.Info("Trying to mount image.");
                 if (!DaemonTools.Mount(media, out drive)) {
-                    ShowMessage("Error", "Sorry, failed mounting DVD Image...", null, null, null);
+                    ShowMessage(Translation.Error, Translation.FailedMountingImage);
                     return;
                 }
                 // We call this method to let the (un)mount events be handled by mediaportal
@@ -1101,9 +1067,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Try to grab a known video disc format
             string discPath = Utility.GetVideoDiscPath(drive);
             if (discPath == null) {
-                ShowMessage("Error", "Either the image file does not contain", 
-                                     "a valid video disc format, or your Daemon", 
-                                     "Tools MediaPortal configuration is incorrect.", null);
+                ShowMessage(Translation.Error, Translation.InvalidVideoDiscFormat);
                 return;
             }
 
@@ -1163,13 +1127,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void Utils_OnStopExternal(System.Diagnostics.Process proc, bool waitForExit) {
             logger.Info("OnStopExternal");
             if (currentlyPlayingPart < currentlyPlayingMovie.LocalMedia.Count) {
-                GUIDialogYesNo dlgYesNo = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
-                dlgYesNo.SetHeading("Continue to next part?");
-                dlgYesNo.SetLine(1, String.Format("Do you wish to continue with part {0}?", (currentlyPlayingPart + 1)));
-                dlgYesNo.SetLine(2, currentlyPlayingMovie.Title);
-                dlgYesNo.SetDefaultToYes(true);
-                dlgYesNo.DoModal(GUIWindowManager.ActiveWindow);
-                if (dlgYesNo.IsConfirmed) {
+                string sBody = String.Format(Translation.ContinueToNextPartBody, (currentlyPlayingPart + 1)) + "\n" + currentlyPlayingMovie.Title;
+                bool bContinue = ShowCustomYesNo(Translation.ContinueToNextPartHeader, sBody, null, null, true);
+
+                if (bContinue) {
                     logger.Debug("Goto next part");
                     currentlyPlayingPart++;
                     playMovie(currentlyPlayingMovie, currentlyPlayingPart);

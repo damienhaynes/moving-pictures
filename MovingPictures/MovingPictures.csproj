@@ -244,6 +244,7 @@
     <Compile Include="MainUI\Filters\WatchedFlagFilter.cs" />
     <Compile Include="MainUI\MovingPicturesGUI.cs" />
     <Compile Include="MainUI\MovingPicturesSkinSettings.cs" />
+    <Compile Include="MainUI\Translation.cs" />
     <Compile Include="MovingPicturesCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\ImdbBuilder.cs" />
@@ -448,6 +449,7 @@
     <Content Include="Resources\Images\tick.png" />
     <Content Include="Resources\Images\world_add.png" />
     <Content Include="Resources\Images\zoom.png" />
+    <Content Include="Resources\language\en-US.xml" />
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>
