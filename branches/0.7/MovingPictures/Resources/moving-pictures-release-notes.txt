@@ -40,6 +40,9 @@ Issue #327:    	The user can now optionally configure an external player for Blu
                 
 Issue #340:    	Harley's Blue3wide skin is now distributed with Moving Pictures.
 
+Issue #263:     Spanish and Russian scrapers have been added to Moving Pictures. Please
+                be aware these are still works in progress. See the forums for support.
+                Thanks goes to LRFalk01!
 
 Importer / Configuration Screen Bug Fixes
 --------------------------------------------------------------------------------

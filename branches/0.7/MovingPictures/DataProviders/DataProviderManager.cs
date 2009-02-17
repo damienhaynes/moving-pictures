@@ -241,8 +241,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Script_Allocine);
             AddSource(typeof(ScriptableProvider), Resources.Script_MyMoviesItalian);
             AddSource(typeof(ScriptableProvider), Resources.Script_FilmWeb);
-            AddSource(typeof(ScriptableProvider), Resources.Script_Kinopoisk);  
-
+            AddSource(typeof(ScriptableProvider), Resources.Script_Kinopoisk);
+            AddSource(typeof(ScriptableProvider), Resources.Script_Alpacine);  
 
             AddSource(typeof(MyVideosProvider));
 

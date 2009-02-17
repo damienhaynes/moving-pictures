@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ScriptableScraper>
   <details>
     <!-- These details are for display purposes only. -->
@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="1" minor="0" point="7"/>
-    <published month="1" day="24" year="2009"/>
+    <version major="1" minor="0" point="8"/>
+    <published month="2" day="17" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -168,6 +168,18 @@
     <loop name='currGenre' on='genres'>
       <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
     </loop>
+	
+    <!-- Runtime -->
+    <retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+    <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+'/>
+    <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
+	
+    <!-- Tagline -->
+    <parse name="tagline" input="${details_page}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
+    <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
+
+    <!-- Set Sortby for German Articles -->
+    <replace name="movie.sortby" input="${movie.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)" with=""/>
     
   </action>
   
