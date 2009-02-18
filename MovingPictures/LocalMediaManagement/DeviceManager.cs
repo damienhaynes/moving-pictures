@@ -214,9 +214,18 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Monitoring Logic
 
         public static void StartMonitor() {
-            foreach (DBImportPath currPath in DBImportPath.GetAll())
-                if (currPath.IsRemovable)
-                    AddWatchDrive(currPath.FullPath);
+            foreach (DBImportPath currPath in DBImportPath.GetAll()) {
+                try {
+                    if (currPath.IsRemovable)
+                        AddWatchDrive(currPath.FullPath);
+                }
+                catch (Exception e) {
+                    if (e is ThreadAbortException)
+                        throw e;
+
+                    logger.FatalException("Failed adding " + currPath + " to the Disk Watcher!", e);
+                }
+            }
 
             StartDiskWatcher();
         }
@@ -227,13 +236,22 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         public static void AddWatchDrive(string path) {
-            string driveLetter = GetDriveLetter(path);
-            lock (watchedDrives) {
-                if (IsRemovable(driveLetter) && !watchedDrives.Contains(driveLetter)) {
-                    watchedDrives.Add(driveLetter);
-                    StartDiskWatcher();
-                    logger.Info("Added " + driveLetter + " to DiskWatcher");
+            logger.Debug("Adding " + path + " to DiskWatcher.");
+            try {
+                string driveLetter = GetDriveLetter(path);
+                lock (watchedDrives) {
+                    if (IsRemovable(driveLetter) && !watchedDrives.Contains(driveLetter)) {
+                        watchedDrives.Add(driveLetter);
+                        StartDiskWatcher();
+                        logger.Info("Added " + driveLetter + " to DiskWatcher");
+                    }
                 }
+            }
+            catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
+                logger.FatalException("Error adding \"" + path + "\" to Disk Watcher!!", e);
             }
         }
 
@@ -459,8 +477,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="fsInfo"></param>
         /// <returns></returns>
         public static bool IsRemovable(FileSystemInfo fsInfo) {
-            if ((fsInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
-                return true;
+            try {
+                if ((fsInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+                    return true;
+            }
+            catch (Exception e) {
+                logger.Warn("Failed check if " + fsInfo.FullName + " is a reparse point");
+            }
+
             return IsRemovable(fsInfo.FullName);
         }
 
