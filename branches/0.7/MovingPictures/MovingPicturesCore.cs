@@ -111,10 +111,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             actionDescriptions.Add(newAction, "Initializing Path Settings...");
             initActions.Add(newAction);
 
-            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateDateAddedFields);
-            actionDescriptions.Add(newAction, "Updating sorting metadata...");
-            initActions.Add(newAction);
-
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidFiles);
             actionDescriptions.Add(newAction, "Checking for deleted movies...");
             initActions.Add(newAction);
@@ -137,6 +133,10 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateUserSettings);
             actionDescriptions.Add(newAction, "Updating user settings...");
+            initActions.Add(newAction);
+
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateDateAddedFields);
+            actionDescriptions.Add(newAction, "Updating sorting metadata...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(checkVersionInfo);
