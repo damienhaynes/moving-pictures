@@ -362,7 +362,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="name"></param>
         /// <returns></returns>
         public static bool isFolderMultipart(string name) {
-            Regex expr = new Regex(@"^(cd|dvd)\s*\d+$", RegexOptions.IgnoreCase);
+            Regex expr = new Regex(@"^(cd|dvd|disc|part)\s*\d+$", RegexOptions.IgnoreCase);
             return expr.Match(name).Success;
         }
 
