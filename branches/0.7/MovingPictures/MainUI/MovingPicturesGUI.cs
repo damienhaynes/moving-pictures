@@ -1289,6 +1289,62 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             logger.Info("Image mounted: Drive={0}", drive);
 
+            // Check if the mounted drive is ready to be read
+            // or wait a maximum of 5 seconds to get ready.
+            DriveInfo mountedDrive = null;
+            bool driveReady = false;
+            int driveCheck = 0;            
+
+            // Start checking
+            while (!driveReady) {
+                driveCheck++;
+                if (driveCheck == 50) {
+                    // After 5 seconds have passed and the drive is still not ready
+                    // ask the user to retry or cancel waiting for the virtual drive 
+                    // to become ready.
+                    if (ShowCustomYesNo("Virtual drive not ready", "The virtual drive wasn't ready in time.", "Please try again or cancel playback.", null, null, "Retry", "Cancel", true)) {
+                        // User clicked retry: reset the wait counter to stay in the loop.
+                        logger.Debug("Virtual drive not available: retrying...");
+                        driveCheck = 0;
+                    } else {
+                        // User clicked cancel: cancel playback.
+                        logger.Error("Playback cancelled because virtual drive was not available.");
+                        return;
+                    }
+                }
+                else if (driveCheck == 2) {
+                    // Log message that we are waiting we log this only in the second iteration
+                    // because the first iteration is the initial check.
+                    logger.Info("Waiting for virtual drive to become available...");
+                }
+
+                // If we do not have a DriveInfo object create it
+                if (mountedDrive != null) {
+                    GUIWindowManager.Process();
+                    Thread.Sleep(100);
+                    driveReady = mountedDrive.IsReady;
+                }
+                else {
+                    try {
+                        // Try to create a DriveInfo object with the returned driveletter
+                        mountedDrive = new DriveInfo(drive);
+                        driveReady = mountedDrive.IsReady;
+                    }
+                    catch (ArgumentNullException e) {
+                        // The driveletter returned by Daemon Tools is invalid, 
+                        // we cancel playback entirely when this is the case
+                        ShowMessage("Error", "Daemon tools returned an invalid driveletter.", "The virtual drive can not be found.", "Please check your daemon tools ", "configuration and/or try again.");
+                        logger.ErrorException("Daemon Tools returned an invalid driveletter.", e);
+                        return;
+                    }
+                    catch (ArgumentException e) {
+                        // this exception happens when the driveletter is valid but the driveletter is not 
+                        // finished mounting yet (at least not known to the system). We only need to catch
+                        // this to stay in the loop
+                    }
+                }               
+            }
+
             // This line will list the complete file structure of the image
             // Output will only show when the log is set to DEBUG.
             // Purpose of method is troubleshoot different image structures.
