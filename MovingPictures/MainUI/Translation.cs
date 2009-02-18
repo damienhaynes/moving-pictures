@@ -49,6 +49,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Error = "Error";
         public static string MediaIsMissing = "The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...";
         public static string FailedMountingImage = "Sorry, failed mounting DVD Image";
+        public static string PlaybackFailedHeader = "Playback Failed";
+        public static string PlaybackFailed = "Playback is not possible because the '{0}'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.";
+        public static string MissingExternalPlayerExe = "The executable for HD playback is missing.\nPlease correct the path to the executable.";
         public static string ResumeFromLast = "Resume movie from last time?";
         public static string ResumeFrom = "Resume from:";
         public static string InvalidVideoDiscFormat = "Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.";

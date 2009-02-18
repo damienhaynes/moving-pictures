@@ -22,10 +22,28 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public bool IsAvailable {
             get {
-                if (dirInfo != null)
-                    return DeviceManager.IsAvailable(dirInfo);
-                else
+                if (dirInfo == null) 
                     return false;
+
+                // basic check to see if the path is online
+                if (!DeviceManager.IsAvailable(dirInfo))
+                    return false;
+
+                // we can get to the root folder so lets try a basic file system access
+                // to verify this information. 
+                try {
+                    dirInfo.GetDirectories();
+
+                    // directory access successful, disk is online
+                    return true;
+                }
+                catch (Exception e) {
+                    if (e is ThreadAbortException)
+                        throw e;
+
+                    // failed to look in the director, so it's not available
+                    return false;
+                }
             }
         }
 
@@ -152,7 +170,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             catch (Exception e) {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
-                logger.Error("Error scanning " + Directory.FullName, e);
+                logger.ErrorException("Error scanning " + Directory.FullName, e);
             }
 
             return rtn;

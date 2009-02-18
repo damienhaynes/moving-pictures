@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874930</id>
-    <version major="1" minor="0" point="2"/>
-    <published month="12" day="20" year="2008"/>
+    <version major="1" minor="1" point="1"/>
+    <published month="2" day="15" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -34,7 +34,7 @@
     <!-- Regular Expressions -->
     <set name="rx_results">
       <![CDATA[
-      <h1.+?>Recherche.+?<h3><b>Films <h4>.+?</h4></b></h3>(.+?)xt_mtcl  
+      <h1.+?>Recherche.+?</table><script type="text/javascript"> 
       ]]>
     </set>
     <set name="rx_verify">
@@ -76,13 +76,13 @@
 
     <set name="rx_title">
       <![CDATA[
-        <title>([^<]+?)</title>
+        <title>(.+?)(?: - Allocine.fr)?(?: - AlloCiné)?</title>
         ]]>
     </set>
 
     <set name="rx_plot">
       <![CDATA[
-      <h3><b>Synopsis</b></h3>.+?<h4>(.+?)</h4>
+      Synopsis</h2>.+?<h4>(.+?)</h4>
       ]]>
     </set>
 
@@ -94,13 +94,13 @@
 
     <set name="rx_director_block">
       <![CDATA[
-      <h4>R.alis. par .+?</h4>
+      <h3[^>]+>Réalisé par <a[^>]+>([^<]+)</a>
       ]]>
     </set>
 
     <set name="rx_actor_block">
       <![CDATA[
-      <h4>\s*?Avec(.+?)</h4>
+      <h3[^>]+>Avec(.+?)</h3>
       ]]>
     </set>
 
@@ -113,7 +113,7 @@
 
     <set name="rx_genre_block">
       <![CDATA[
-      <h4>Genre\s:\s(.+?)</h4>
+      <h3[^>]+>Genre(.+?)(.+?)</h3>
       ]]>
     </set>
 
@@ -125,7 +125,7 @@
 
     <set name="rx_runtime">
       <![CDATA[
-      <h4>Dur.e\s:\s(\d+)h(?:\s(\d+)min.*?</h4>)?
+      <h3[^>]+>Dur.e\s:\s(\d+)h(?:\s(\d+)min.*?</h3>)?
       ]]>
     </set>    
 

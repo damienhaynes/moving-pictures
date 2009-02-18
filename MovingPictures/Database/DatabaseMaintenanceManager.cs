@@ -29,7 +29,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     continue;
 
                 // remove missing files or files without an import path
-                if (currFile.IsRemoved || currFile.ImportPath == null || currFile.ImportPath.ID == null) {
+                if (currFile.ImportPath == null || currFile.IsRemoved || currFile.ImportPath.ID == null) {
                     currFile.Delete();
                     cleaned++;
                     continue;
@@ -223,6 +223,33 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             if (MaintenanceProgress != null) MaintenanceProgress("", 100);
+        }
+
+        public static void UpdateDateAddedFields() {
+            // update date added fields
+            if (MovingPicturesCore.GetDBVersionNumber() < new Version("0.7.1")) {
+                List<DBMovieInfo> movies = DBMovieInfo.GetAll();
+                movies.Sort(delegate(DBMovieInfo movieX, DBMovieInfo movieY) {
+                    return movieX.ID.GetValueOrDefault(0).CompareTo(movieY.ID.GetValueOrDefault(0));
+                });
+
+                float total = movies.Count;
+
+                for (int i = 0; i < movies.Count; i++) {
+                    if (MaintenanceProgress != null) MaintenanceProgress("", (int)(i * 100 / total));
+
+                    if (movies[i].LocalMedia[0].IsAvailable && movies[i].LocalMedia[0].File.Extension.ToLower() != ".ifo") {
+                        movies[i].DateAdded = movies[i].LocalMedia[0].File.CreationTime;
+                    }
+                    else {
+                        // add 1 minute for offline media and dvds, to retain the same order
+                        if (i > 0)
+                            movies[i].DateAdded = movies[i - 1].DateAdded.AddMinutes(1);
+                    }
+
+                    movies[i].Commit();
+                }
+            }
         }
     }
 }

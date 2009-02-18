@@ -337,11 +337,11 @@ namespace MovingPicturesUnitTest
         ///A test for GetVideoDiscType
         ///</summary>
         [TestMethod()]
-        public void GetVideoDiscTypeTest() {
+        public void GetVideoDiscFormatTest() {
             string path = @"X:\viDeo_ts\video_ts.ifo";
-            Utility.VideoDiscType expected = Utility.VideoDiscType.DVD;
-            Utility.VideoDiscType actual;
-            actual = Utility.GetVideoDiscType(path);
+            VideoDiscFormat expected = VideoDiscFormat.DVD;
+            VideoDiscFormat actual;
+            actual = Utility.GetVideoDiscFormat(path);
             Assert.AreEqual(expected, actual);
         }
 
@@ -375,7 +375,7 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void GetEnumValueDescriptionTest() {
-            object value = Utility.VideoDiscType.DVD;
+            object value = VideoDiscFormat.DVD;
             string expected = @"\video_ts\video_ts.ifo";
             string actual;
             actual = Utility.GetEnumValueDescription(value);

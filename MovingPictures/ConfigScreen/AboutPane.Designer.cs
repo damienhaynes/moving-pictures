@@ -60,7 +60,7 @@
             // advancedSettingsButton
             // 
             this.advancedSettingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.advancedSettingsButton.Location = new System.Drawing.Point(403, 494);
+            this.advancedSettingsButton.Location = new System.Drawing.Point(403, 507);
             this.advancedSettingsButton.Name = "advancedSettingsButton";
             this.advancedSettingsButton.Size = new System.Drawing.Size(122, 23);
             this.advancedSettingsButton.TabIndex = 0;
@@ -76,7 +76,7 @@
             this.groupBox1.Controls.Add(this.forumLabel);
             this.groupBox1.Controls.Add(this.websiteLabel);
             this.groupBox1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(3, 394);
+            this.groupBox1.Location = new System.Drawing.Point(3, 407);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(522, 94);
             this.groupBox1.TabIndex = 4;
@@ -175,7 +175,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(251, 352);
+            this.label9.Location = new System.Drawing.Point(251, 365);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(50, 39);
             this.label9.TabIndex = 11;
@@ -186,7 +186,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label8.Location = new System.Drawing.Point(251, 339);
+            this.label8.Location = new System.Drawing.Point(251, 352);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(49, 13);
             this.label8.TabIndex = 10;
@@ -263,7 +263,7 @@
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Location = new System.Drawing.Point(252, 327);
+            this.groupBox5.Location = new System.Drawing.Point(252, 340);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(9);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(266, 3);
@@ -334,14 +334,14 @@
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(252, 305);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(66, 13);
+            this.label20.Size = new System.Drawing.Size(66, 26);
             this.label20.TabIndex = 27;
-            this.label20.Text = "Tom Leeters";
+            this.label20.Text = "Tom Leeters\r\nHarley";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(324, 352);
+            this.label10.Location = new System.Drawing.Point(324, 365);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(92, 39);
             this.label10.TabIndex = 12;
@@ -350,7 +350,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(441, 352);
+            this.label1.Location = new System.Drawing.Point(441, 365);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 26);
             this.label1.TabIndex = 29;
@@ -400,7 +400,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.advancedSettingsButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MinimumSize = new System.Drawing.Size(528, 520);
+            this.MinimumSize = new System.Drawing.Size(528, 535);
             this.Name = "AboutPane";
             this.Size = new System.Drawing.Size(528, 535);
             this.groupBox1.ResumeLayout(false);

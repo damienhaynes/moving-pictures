@@ -1,4 +1,4 @@
-Moving Pictures 0.7.0
+Moving Pictures 0.7.1
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -26,6 +26,65 @@ even if their favorite skin has not yet added support.
 
 
 Change Log
+================================================================================
+0.7.1
+--------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+Issue #333:    	Sorting by date in the GUI will now sort by the date a movie was added
+                to your system (file creation date) rather than the date it was added
+                to Moving Pictures.
+
+Issue #327:    	The user can now optionally configure an external player for Bluray
+                and HD-DVD content.
+                
+Issue #340:    	Harley's Blue3wide skin is now distributed with Moving Pictures.
+
+Issue #263:     Spanish and Russian scrapers have been added to Moving Pictures. Please
+                be aware these are still works in progress. See the forums for support.
+                Thanks goes to LRFalk01!
+
+Importer / Configuration Screen Bug Fixes
+--------------------------------------------------------------------------------
+Issue #331:    	Movies on network drives will no longer (in rare cases) be 
+                readded to the database creating duplicate entries.
+
+Issue #342:    	File/path names that are longer than the windows maximum path length
+                will no longer cause the entire import path to fail to import. An 
+                appropriate error message is now also logged to the log file.
+                
+Issue #347:    	The removable import path logic will now work correctly for external
+                drives mounted to a folder on a fixed drive.
+
+Issue #344:    	New data sources will now automatically be correctly loaded on upgrade.
+                This includes the themoviedb.org data source which provides backdrops.
+                
+Issue #325:    	allocine.fr and moviemeter.nl scripts have been updated to return 
+                correct results after website changes.
+
+Issue #328:    	The Moving Pictures configuration screen will no longer cause a
+                crash when quickly exiting and reentering the config.
+
+--------------------------------------------------------------------------------
+MediaPortal GUI Bug Fixes
+--------------------------------------------------------------------------------
+Issue #330:    	Moving Pictures is now more tolerant of skins that do not implement
+                all "dummy" labels.
+
+Issue #326:    	Bluray and HD-DVD media will now correctly play using the currently 
+                selected player (although the menu will not be displayed).
+                
+Issue #257:    	Multi-part movies will now always be played in the correct order.
+
+Issue #336:    	Moving Pictures will no longer crash because of bad artwork (such 
+                as the old Hancock backdrop).
+
+Issue #334:    	Moving Pictures will no longer cause "double playback" problems in
+                other plug-ins such as MPTV-Series.
+
+Issue #332:    	The "Change View" button will now correctly invoke the "Change View" 
+                context menu.
+
 ================================================================================
 0.7.0
 --------------------------------------------------------------------------------

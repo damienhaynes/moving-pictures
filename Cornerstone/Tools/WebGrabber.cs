@@ -99,7 +99,6 @@ namespace Cornerstone.Tools {
                     if (_allowUnsafeHeader) 
                         SetAllowUnsafeHeaderParsing(true);
 
-
                     request.UserAgent = userAgent;
                     request.Timeout = timeout + (timeoutIncrement * tryCount);
                     request.CookieContainer = new CookieContainer();
@@ -154,6 +153,13 @@ namespace Cornerstone.Tools {
                     if (tryCount == maxRetries) {
                         logger.ErrorException("Connection failed: Reached retry limit of " + maxRetries + ". URL=" + requestUrl, e);
                         return false;
+                    }
+
+                    // If we did not experience a timeout but some other error
+                    // use the timeout value as a pause between retries
+                    if (e.Status != WebExceptionStatus.Timeout) {
+                        logger.DebugException("Connection retry: URL=" + requestUrl + ", Status=" + e.Status.ToString() + ". ", e);
+                        Thread.Sleep(timeout + (timeoutIncrement * tryCount));
                     }
                 }
                 finally { 

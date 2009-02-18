@@ -112,7 +112,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidFiles);
-            actionDescriptions.Add(newAction, "Removing deleted movies...");
+            actionDescriptions.Add(newAction, "Checking for deleted movies...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidMovies);
@@ -133,6 +133,14 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateUserSettings);
             actionDescriptions.Add(newAction, "Updating user settings...");
+            initActions.Add(newAction);
+
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateDateAddedFields);
+            actionDescriptions.Add(newAction, "Updating sorting metadata...");
+            initActions.Add(newAction);
+
+            newAction = new WorkerDelegate(checkVersionInfo);
+            actionDescriptions.Add(newAction, "Initializing Version Information...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DataProviderManager.Initialize);
@@ -285,6 +293,23 @@ namespace MediaPortal.Plugins.MovingPictures {
             // create the backdrop thumbs folder if it doesn't already exist
             if (!Directory.Exists((string)SettingsManager["backdrop_thumbs_folder"].Value))
                 Directory.CreateDirectory((string)SettingsManager["backdrop_thumbs_folder"].Value);
+        }
+
+        private static void checkVersionInfo() {
+            // check if the version changed, and update the DB accordingly
+            Version realVer = Assembly.GetExecutingAssembly().GetName().Version;
+
+            if (realVer > GetDBVersionNumber()) {
+                SettingsManager["version"].Value = realVer.ToString();
+                SettingsManager["version"].Commit();
+
+                SettingsManager["source_manager_init_done"].Value = false;
+                SettingsManager["source_manager_init_done"].Commit();
+            }
+        }
+
+        public static Version GetDBVersionNumber() {
+            return new Version((string)SettingsManager["version"].Value);
         }
 
         #endregion

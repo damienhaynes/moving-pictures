@@ -83,9 +83,21 @@ Section "Moving Pictures Plugin" SEC0000
     Call updateRegistry
 SectionEnd
 
+Section "Blue3wide Skin Support" SEC0002
+    ${If} ${FileExists} $SKIN_DIR\Blue3wide\*.*
+        SetOverwrite ifnewer
+
+        SetOutPath $SKIN_DIR\Blue3wide
+        File "..\MovingPictures\MainUI\Blue3wide\*.*"
+
+        SetOutPath $SKIN_DIR\Blue3wide\Media
+        File "..\MovingPictures\MainUI\Blue3wide\Media\*.*"  
+    ${EndIf}
+SectionEnd
+
 # Loops through each skin folder and sends them off
 # for processing and possible generic skin installation
-Section "Generic Skin" SEC0001
+Section "Generic Skin Support" SEC0001
     # loop through folders in the skin folder 
     FindFirst $0 $1 "$SKIN_DIR\*.*"
     directory_loop:
@@ -113,6 +125,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0000} $(DLL_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0001} $(GENERIC_SKIN_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC0002} $(BLUE3WIDE_SKIN_DESCRIPTION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 # startup tasks
@@ -275,8 +288,8 @@ Function backupOldSkinFiles
     ${If} ${FileExists} $SKIN_DIR\$CURR_SKIN\movingpictures.xml
         # create dir and backup existing skin files
         CreateDirectory "$SKIN_DIR\$CURR_SKIN\MovingPictures_Backup\$INSTALL_NUMBER\Media\MovingPictures"
-        CopyFiles /SILENT "$SKIN_DIR\$CURR_SKIN\movingpictures*.xml" "$SKIN_DIR\$CURR_SKIN\movpics_install_backup\$INSTALL_NUMBER\"
-        CopyFiles /SILENT "$SKIN_DIR\$CURR_SKIN\Media\MovingPictures\*.*" "$SKIN_DIR\$CURR_SKIN\movpics_install_backup\$INSTALL_NUMBER\Media\MovingPictures\"
+        CopyFiles /SILENT "$SKIN_DIR\$CURR_SKIN\movingpictures*.xml" "$SKIN_DIR\$CURR_SKIN\MovingPictures_Backup\$INSTALL_NUMBER\"
+        CopyFiles /SILENT "$SKIN_DIR\$CURR_SKIN\Media\MovingPictures\*.*" "$SKIN_DIR\$CURR_SKIN\MovingPictures_Backup\$INSTALL_NUMBER\Media\MovingPictures\"
     ${EndIf}
 FunctionEnd
 
