@@ -60,6 +60,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         public string Serial {
             get {
+                if (serial == null && driveInfo != null && driveInfo.IsReady)
+                    RefreshSerial();
+
                 return serial;
             }
         } private string serial;
@@ -211,9 +214,18 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Monitoring Logic
 
         public static void StartMonitor() {
-            foreach (DBImportPath currPath in DBImportPath.GetAll())
-                if (currPath.IsRemovable)
-                    AddWatchDrive(currPath.FullPath);
+            foreach (DBImportPath currPath in DBImportPath.GetAll()) {
+                try {
+                    if (currPath.IsRemovable)
+                        AddWatchDrive(currPath.FullPath);
+                }
+                catch (Exception e) {
+                    if (e is ThreadAbortException)
+                        throw e;
+
+                    logger.FatalException("Failed adding " + currPath + " to the Disk Watcher!", e);
+                }
+            }
 
             StartDiskWatcher();
         }
@@ -224,13 +236,22 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         public static void AddWatchDrive(string path) {
-            string driveLetter = GetDriveLetter(path);
-            lock (watchedDrives) {
-                if (IsRemovable(driveLetter) && !watchedDrives.Contains(driveLetter)) {
-                    watchedDrives.Add(driveLetter);
-                    StartDiskWatcher();
-                    logger.Info("Added " + driveLetter + " to DiskWatcher");
+            logger.Debug("Adding " + path + " to DiskWatcher.");
+            try {
+                string driveLetter = GetDriveLetter(path);
+                lock (watchedDrives) {
+                    if (IsRemovable(driveLetter) && !watchedDrives.Contains(driveLetter)) {
+                        watchedDrives.Add(driveLetter);
+                        StartDiskWatcher();
+                        logger.Info("Added " + driveLetter + " to DiskWatcher");
+                    }
                 }
+            }
+            catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
+                logger.FatalException("Error adding \"" + path + "\" to Disk Watcher!!", e);
             }
         }
 
@@ -259,6 +280,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             lock (watcherThread) {
                 if (!watcherThread.IsAlive) {
                     logger.Info("Starting Disk Watcher");
+                    watcherThread = new Thread(new ThreadStart(WatchDisks));
+                    watcherThread.Name = "DeviceManager.WatchDisks";
                     watcherThread.Start();
                 }
             }
@@ -410,28 +433,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         /// <summary>
-        /// Gets a value indicating if the FileInfo object is removed from disk.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="serial">if serial is specified the result is more reliable.</param>
-        /// <returns>true if file doesn't exist but disk/root is available.</returns>
-        public static bool IsRemoved(FileInfo file, string serial) {
-            file.Refresh();
-            // If we got a volume serial then compare and judge
-            if (!String.IsNullOrEmpty(serial))
-                if ((GetDiskSerial(file) == serial) && !file.Exists && file.Directory.Root.Exists)
-                    return true;
-                else
-                    return false;
-            
-            // Backwards compatibility / UNC-only support
-            if (!file.Exists && file.Directory.Root.Exists)
-                return true;
-            else
-                return false;
-        }
-
-        /// <summary>
         /// Gets a value indicating if the FileSystemInfo object is currently available
         /// </summary>
         /// <param name="fsInfo"></param>
@@ -476,6 +477,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="fsInfo"></param>
         /// <returns></returns>
         public static bool IsRemovable(FileSystemInfo fsInfo) {
+            try {
+                if ((fsInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+                    return true;
+            }
+            catch (Exception e) {
+                logger.Warn("Failed check if " + fsInfo.FullName + " is a reparse point");
+            }
+
             return IsRemovable(fsInfo.FullName);
         }
 

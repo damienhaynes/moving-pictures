@@ -1,5 +1,12 @@
 <MoviesPluginSettings>
 
+  <group name="General">
+    <setting id="version" name="Version Number" type="STRING">
+      <default>0.0.0</default>
+      <description>Version number of Moving Pictures. Used for database upgrade purposes, do not change.</description>
+    </setting>
+  </group>
+  
   <group name="MediaPortal GUI">
     <setting id="default_view" name="Default View" type="STRING">
       <default>list</default>
@@ -60,6 +67,25 @@
 		<default>false</default>
 		<description>Enables a delete menu item, which allows you to delete movies from your hard drive.</description>
 	</setting>
+    
+    <group name="Bluray/HD-DVD Playback">
+      
+      <setting id="playback_hd_external" name="Use External Player" type="BOOL">
+        <default>false</default>
+        <description>Enable playback for Bluray/HD-DVD using an external player, When set to false the main video stream will be played in the internal player (no menu).</description>
+      </setting>
+
+      <setting id="playback_hd_executable" name="Executable (External Player)" type="STRING">
+        <default>C:\MyExternalPlayer\MyExternalPlayer.exe</default>
+        <description>The path to the executable of the external player that you want to use for playing back BR/HD-DVD.</description>
+      </setting>
+
+      <setting id="playback_hd_arguments" name="Command-line arguments (External Player)" type="STRING">
+        <default>%filename%</default>
+        <description>The command-line arguments that should be appended when calling the executable. (the variable %filename% will be replaced with the path to the movie)</description>
+      </setting> 
+      
+    </group>
   </group>
 
   <group name="Movie Importer">

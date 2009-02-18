@@ -1223,6 +1223,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 userSettings.CommitNeeded = false;
             }
 
+            if (movie.LocalMedia[0].File.Extension.ToLower() == ".ifo")
+                movie.DateAdded = DateTime.Now;
+            else
+                movie.DateAdded = movie.LocalMedia[0].File.CreationTime;
+            
             movie.Commit();
         }
 
@@ -1408,9 +1413,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                         // If read from optical drive
                         if (currFile.ImportPath.GetDriveType() == DriveType.CDRom && displayname.Length == 3) {
-                            Utility.VideoDiscType videoDisc = Utility.GetVideoDiscType(currFile.FullPath);
+                            VideoDiscFormat videoDisc = Utility.GetVideoDiscFormat(currFile.FullPath);
                             // Add the video disc type and media label
-                            if (videoDisc != Utility.VideoDiscType.UnknownFormat)
+                            if (videoDisc != VideoDiscFormat.Unknown)
                                 displayname = String.Format("({0}) <{1}>", videoDisc.ToString(), currFile.MediaLabel);                                                      
                         }
                         _localMediaString += displayname;

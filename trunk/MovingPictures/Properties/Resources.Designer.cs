@@ -228,15 +228,17 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;MoviesPluginSettings&gt;
         ///
+        ///  &lt;group name=&quot;General&quot;&gt;
+        ///    &lt;setting id=&quot;version&quot; name=&quot;Version Number&quot; type=&quot;STRING&quot;&gt;
+        ///      &lt;default&gt;0.0.0&lt;/default&gt;
+        ///      &lt;description&gt;Version number of Moving Pictures. Used for database upgrade purposes, do not change.&lt;/description&gt;
+        ///    &lt;/setting&gt;
+        ///  &lt;/group&gt;
+        ///  
         ///  &lt;group name=&quot;MediaPortal GUI&quot;&gt;
         ///    &lt;setting id=&quot;default_view&quot; name=&quot;Default View&quot; type=&quot;STRING&quot;&gt;
         ///      &lt;default&gt;list&lt;/default&gt;
-        ///      &lt;description&gt;The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are &quot;list&quot;, &quot;thumbs&quot;, &quot;largethumbs&quot;, and &quot;filmstrip&quot;.&lt;/description&gt;
-        ///    &lt;/setting&gt;
-        ///
-        ///    &lt;setting id=&quot;click_to_details&quot; name=&quot;Click Shows Details&quot; type=&quot;BOOL&quot;&gt;
-        ///      &lt;default&gt;true&lt;/default&gt;
-        ///      &lt;description&gt;Determines behavior when a mo [rest of string was truncated]&quot;;.
+        ///      &lt;description&gt;The default view used in the MediaPortal GUI when the plug-in [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string InitialSettings {
             get {
@@ -368,6 +370,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;Alpacine.com&lt;/name&gt;
+        ///    &lt;author&gt;LRFalk01&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from Alpacine.com.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you should change the ver [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_Alpacine {
+            get {
+                return ResourceManager.GetString("Script_Alpacine", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap script_delete {
             get {
                 object obj = ResourceManager.GetObject("script_delete", resourceCulture);
@@ -439,6 +461,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;Kinopoisk.ru&lt;/name&gt;
+        ///    &lt;author&gt;LRFalk01&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from Kinopoisk.ru.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you should change the ver [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_Kinopoisk {
+            get {
+                return ResourceManager.GetString("Script_Kinopoisk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;posters.motechnet.com&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
         ///    &lt;description&gt;This script grabs cover-art from posters.motechnet.com.&lt;/description&gt;
@@ -503,12 +545,11 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;ofdb.de&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)&lt;/description&gt;
+        ///    &lt;description&gt;This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de) And reads runtime from OFDb&lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new ve [rest of string was truncated]&quot;;.
+        ///    change and should be unique (no other script should us [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Script_OFDb {
             get {

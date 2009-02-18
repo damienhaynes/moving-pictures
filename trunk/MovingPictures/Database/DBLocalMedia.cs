@@ -55,12 +55,23 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         /// </summary>
         public bool IsRemoved {
             get {
-                // if fileInfo exists then let DeviceManager figure it out
-                if (fileInfo != null)
-                    return DeviceManager.IsRemoved(fileInfo, volume_serial);
-                else
-                    // no file so yes.. it's removed
+                if (fileInfo == null)
                     return true;
+
+                fileInfo.Refresh();
+
+                // if we have a volume serial then check if the right media is inserted
+                // by verifying the volume serial number
+                bool correctMedia = true;
+                if (!String.IsNullOrEmpty(volume_serial))
+                    correctMedia = DeviceManager.GetDiskSerial(fileInfo) == volume_serial;
+
+                // if the import path is online, we have the right media inserted and the file 
+                // is not there, we assume it has been deleted, so return true
+                if (importPath.IsAvailable && correctMedia && !fileInfo.Exists) 
+                    return true;
+
+                return false;
             }
         }
 
@@ -128,7 +139,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             get {
                 // todo: how to handle iso?
                 bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
-                if (discid == null && IsAvailable && getDiscId && (Utility.GetVideoDiscType(fileInfo.FullName) == Utility.VideoDiscType.DVD)) 
+                if (discid == null && IsAvailable && getDiscId && (Utility.GetVideoDiscFormat(fileInfo.FullName) == VideoDiscFormat.DVD)) 
                     DiscId = Utility.GetDiscIdString(fileInfo.DirectoryName);
 
                 return discid;
@@ -143,7 +154,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(Default = null)]
         public string FileHash {
             get {
-                if (fileHash == null && IsAvailable && (Utility.GetVideoDiscType(fileInfo.FullName) == Utility.VideoDiscType.UnknownFormat))
+                if (fileHash == null && IsAvailable && (Utility.GetVideoDiscFormat(fileInfo.FullName) == VideoDiscFormat.Unknown))
                     FileHash = Utility.GetMovieHashString(fileInfo.FullName);
 
                 return fileHash;

@@ -19,6 +19,7 @@ using MediaPortal.Util;
 using MediaPortal.Ripper;
 using NLog;
 using System.IO;
+using System.Diagnostics;
 
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
@@ -242,7 +243,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void OnBrowserContentsChanged() {
             // update properties
             PublishViewDetails();
-
+            
             // set the global watched indicator
             if (watchedFilteringIndicator != null && watchedFilter.Active != watchedFilteringIndicator.Visible)
                 watchedFilteringIndicator.Visible = watchedFilter.Active;
@@ -252,7 +253,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.Filter.Label", remoteFilter.Text);
                 remoteFilteringIndicator.Visible = true;
             }
-            else
+            else if (remoteFilteringIndicator != null)
                 remoteFilteringIndicator.Visible = false;
         }
 
@@ -458,7 +459,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // a click on the view menu button
                 case 3:
-                    showMainContext();
+                    showChangeViewContext();
                     break;
 
                 // a click on the play button
@@ -921,15 +922,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 waitingForMedia = false;
                 waitingForMediaSerial = "";
 
-                if (retry) {
-                    // user clicked Retry,
-                    // do nothing and let the while loop
-                    // test it's condition again
-                }
-                else {
-                    // user clicked Cancel, break out of this method.
-                    return;
-                }
+                // if the user clicked cancel, return.
+                if (!retry) return;                
             }
 
 
@@ -987,7 +981,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                     // Check if the custom intro is specified by user and exists
                     if (custom_intro.Length > 0 && File.Exists(custom_intro)) {
-                        logger.Debug("Playing Custom Into: {0}", custom_intro);
+                        logger.Debug("Playing Custom Intro: {0}", custom_intro);
 
                         // start playback
                         playFile(custom_intro);
@@ -1036,6 +1030,38 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // start playback of a regular file
         private void playFile(string media) {
             logger.Debug("playFile " + media);
+            VideoDiscFormat videoFormat = Utility.GetVideoDiscFormat(media);
+            
+            // HD Playback
+            if (videoFormat == VideoDiscFormat.Bluray || videoFormat == VideoDiscFormat.HDDVD) {
+                
+                // Take proper action according to playback setting
+                bool hdExternal = (bool)MovingPicturesCore.SettingsManager["playback_hd_external"].Value;
+                
+                // Launch external player if user has configured it for HD playback.
+                if (hdExternal) {
+                    LaunchHDPlayer(media);
+                    return;
+                }
+               
+                // Alternate playback HD content (without menu)
+                string newMedia = Utility.GetMainFeatureStreamFromVideoDisc(media, videoFormat);
+                if (newMedia != null) {
+                    // Check if the stream extension is in the mediaportal extension list.
+                    if (Utility.IsMediaPortalVideoFile(newMedia)) {
+                       media = newMedia;
+                    } else {
+                       // Show a dialog to the user that explains how to configure the alternate playback
+                       string ext = (videoFormat == VideoDiscFormat.Bluray) ? ".M2TS" : ".EVO" ;
+                       logger.Info("HD Playback: extension '{0}' is missing from the mediaportal configuration.", ext);
+                       ShowMessage(Translation.PlaybackFailedHeader, String.Format(Translation.PlaybackFailed, ext));
+                       return;
+                    }
+                }
+
+                logger.Info("HD Playback: Internal, Media={0}", media);
+            }
+
             GUIGraphicsContext.IsFullScreenVideo = true;
             GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
             bool success = g_Player.Play(media, g_Player.MediaType.Video);
@@ -1050,31 +1076,97 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Check if the current image is already mounted
             if (!DaemonTools.IsMounted(media)) {
                 // if not try to mount the image
-                logger.Info("Trying to mount image.");
+                logger.Info("Mounting image...");
                 if (!DaemonTools.Mount(media, out drive)) {
                     ShowMessage(Translation.Error, Translation.FailedMountingImage);
+                    logger.Error("Mounting image failed.");
                     return;
                 }
-                // We call this method to let the (un)mount events be handled by mediaportal
-                // before we start playback. Not doing so would result in 
-                // the DVD being stopped right after we start it.
-                // todo: investigate if this is still needed with the autoplay listener stopped
-                GUIWindowManager.Process();
             }
             else {
-                logger.Info("DVD Image already mounted.");
+                logger.Info("Image was already mounted.");
                 drive = DaemonTools.GetVirtualDrive();
             }
 
-            // Try to grab a known video disc format
+            logger.Info("Image mounted: Drive={0}", drive);
+
+            // This line will list the complete file structure of the image
+            // Output will only show when the log is set to DEBUG.
+            // Purpose of method is troubleshoot different image structures.
+            Utility.LogDirectoryStructure(drive);
+            
+            // See if we can find a known entry path for a video disc format
             string discPath = Utility.GetVideoDiscPath(drive);
-            if (discPath == null) {
-                ShowMessage(Translation.Error, Translation.InvalidVideoDiscFormat);
+
+            // If we didn't find any just pass the driveletter
+            if (discPath == null)
+                discPath = drive;
+
+            // Play the file/path
+            playFile(discPath);
+        }
+
+        // This method launches an external HD player controlled by Moving Pictures
+        // Eventually when Mediaportal has a native solution for HD video disc formats
+        // this will be not needed anymore.
+        private void LaunchHDPlayer(string videoPath) {
+            logger.Info("HD Playback: Launching external player.");
+
+            // First check if the user supplied executable for the external player is valid
+            string execPath = MovingPicturesCore.SettingsManager["playback_hd_executable"].StringValue;
+            if (!File.Exists(execPath)) {
+                // if it's not show a dialog explaining the error
+                ShowMessage("Error", Translation.MissingExternalPlayerExe);
+                logger.Info("HD Playback: The external player executable '{0}' is missing.", execPath);
+                // do nothing
                 return;
             }
+            
+            // process the argument string and replace the 'filename' variable
+            string arguments = MovingPicturesCore.SettingsManager["playback_hd_arguments"].StringValue;
+            string videoRoot = Utility.GetMovieBaseDirectory(new FileInfo(videoPath).Directory).FullName;
+            string filename = Utility.IsDriveRoot(videoRoot) ? videoRoot : videoPath;
+            arguments = arguments.Replace("%filename%", filename);
 
-            // play the file
-            playFile(discPath);
+            logger.Debug("External player command: {0} {1}", execPath, arguments);
+            
+            // Setup the external player process
+            ProcessStartInfo processinfo = new ProcessStartInfo();
+            processinfo.FileName = execPath;
+            processinfo.Arguments = arguments;
+
+            Process hdPlayer = new Process();
+            hdPlayer.StartInfo = processinfo;
+            hdPlayer.Exited += OnHDPlayerExited;
+            hdPlayer.EnableRaisingEvents = true; 
+            
+            try {
+                // start external player process
+                hdPlayer.Start();
+
+                // hide mediaportal and suspend rendering to save resources for the external player
+                GUIGraphicsContext.BlankScreen = true;
+                GUIGraphicsContext.form.Hide();
+                GUIGraphicsContext.CurrentState = GUIGraphicsContext.State.SUSPENDING;                               
+
+                currentlyPlaying = true;                
+                logger.Info("HD Playback: External player started.");
+            }
+            catch (Exception e) {
+                logger.ErrorException("HD Playback: Could not start the external player process.", e);
+            }
+        }
+
+        private void OnHDPlayerExited(object obj, EventArgs e) {
+            // show mediaportal and start rendering
+            GUIGraphicsContext.BlankScreen = false;
+            GUIGraphicsContext.form.Show();
+            GUIGraphicsContext.ResetLastActivity();
+            GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_GETFOCUS, 0, 0, 0, 0, 0, null);
+            GUIWindowManager.SendThreadMessage(msg);
+            GUIGraphicsContext.CurrentState = GUIGraphicsContext.State.RUNNING;
+            currentlyPlaying = false;
+            logger.Info("HD Playback: The external player has exited.");
         }
 
         // store the duration of the file if it is not set
@@ -1122,11 +1214,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void Utils_OnStartExternal(System.Diagnostics.Process proc, bool waitForExit) {
-            logger.Info("OnStartExternal");
-            currentlyPlaying = true;
+            if (currentlyPlayingMovie != null) {
+                logger.Info("OnStartExternal");
+                currentlyPlaying = true;
+            }
         }
 
         private void Utils_OnStopExternal(System.Diagnostics.Process proc, bool waitForExit) {
+            if (!currentlyPlaying)
+                return;
+
             logger.Info("OnStopExternal");
             if (currentlyPlayingPart < currentlyPlayingMovie.LocalMedia.Count) {
                 string sBody = String.Format(Translation.ContinueToNextPartBody, (currentlyPlayingPart + 1)) + "\n" + currentlyPlayingMovie.Title;
@@ -1136,19 +1233,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     logger.Debug("Goto next part");
                     currentlyPlayingPart++;
                     playMovie(currentlyPlayingMovie, currentlyPlayingPart);
+                    return;
                 }
-                else {
-                    currentlyPlaying = false;
-                    currentlyPlayingMovie = null;
-                    currentlyPlayingPart = 0;
-                }
-                return;
             }
+
+            currentlyPlaying = false;
+            currentlyPlayingMovie = null;
+            currentlyPlayingPart = 0;
             
         }
 
         private void OnPlayBackStoppedOrChanged(g_Player.MediaType type, int timeMovieStopped, string filename) {
-            logger.Debug("OnPlayBackStoppedOrChanged");
             if (type != g_Player.MediaType.Video || !currentlyPlaying)
                 return;
 
@@ -1312,7 +1407,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlaying)
                 return;
 
-            logger.Debug("OnVolumeInserted  volume: {0}; serial: {1}", volume, serial);
+            logger.Debug("OnVolumeInserted: Volume={0}, Serial={1}", volume, serial);
 
             if (GUIWindowManager.ActiveWindow == GetID) {
 
@@ -1386,6 +1481,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Skin and Property Settings
 
         private void UpdateMovieDetails() {
+            if (browser.SelectedMovie == null)
+                return;
+
             if (browser.SelectedMovie == null)
                 return;
 
