@@ -110,9 +110,18 @@ namespace Cornerstone.Tools {
                     // Get result as stream
                     Stream resultData = response.GetResponseStream();
 
-                    // Detect or force encoding
-                    if (encoding == null)
-                        encoding = Encoding.GetEncoding(response.CharacterSet);
+                    // If encoding was not set manually try to detect it
+                    if (encoding == null) {
+                        try {
+                            // Try to get the encoding using the characterset
+                            encoding = Encoding.GetEncoding(response.CharacterSet);
+                        }
+                        catch (Exception e) {
+                            // If this fails default to the system's default encoding
+                            logger.DebugException("Encoding could not be determined, using default.", e);
+                            encoding = Encoding.Default;
+                        }
+                    }
 
                     // Debug
                     if (_debug) {
