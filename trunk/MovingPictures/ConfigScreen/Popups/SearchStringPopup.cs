@@ -10,6 +10,9 @@ using MediaPortal.Plugins.MovingPictures.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     public partial class SearchStringPopup : Form {
+        
+        private MovieMatch movieMatch;
+
         public SearchStringPopup() {
             InitializeComponent();
         }
@@ -19,12 +22,19 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             foreach (DBLocalMedia currFile in match.LocalMedia) {
                 fileListBox.Items.Add(currFile.File);
             }
-
-          searchStrTextBox.Text = match.Signature.Title + ((match.Signature.Year > 0) ? " " + match.Signature.Year : "") + ((match.Signature.ImdbId != null) ? " " + match.Signature.ImdbId : "");  
+            movieMatch = match;
+            uxTitle.Text = movieMatch.Signature.Title;
+            uxYear.Text = movieMatch.Signature.Year.ToString();
+            uxImdbId.Text = movieMatch.Signature.ImdbId;
         }
 
-        public string GetSearchString() {
-            return searchStrTextBox.Text;
+        private void okButton_Click(object sender, EventArgs e) {
+            movieMatch.Signature.Title = uxTitle.Text;
+            int year = 0;
+            if (int.TryParse(uxYear.Text, out year))
+                movieMatch.Signature.Year = year;
+            movieMatch.Signature.ImdbId = uxImdbId.Text;
         }
+      
     }
 }
