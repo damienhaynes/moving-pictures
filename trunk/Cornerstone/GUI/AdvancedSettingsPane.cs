@@ -22,6 +22,7 @@ namespace Cornerstone.GUI {
 
             invalidColor = Color.Red;
             validColor = setValueTextBox.ForeColor;
+
             // if we are in designer, break to prevent errors with rendering, it cant access the DB...
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
@@ -36,7 +37,7 @@ namespace Cornerstone.GUI {
 
             // loop through all settings and add nodes for groups and settings accordingly.
             // maintain a dictionary of groups to ensure on one listing per group.
-            foreach (DBSetting currSetting in settings.Values) {
+            foreach (DBSetting currSetting in settings.AllSettings) {
                 string groupKey = "";
                 TreeNode parentNode = null;
 
@@ -52,10 +53,6 @@ namespace Cornerstone.GUI {
                         else
                             parentNode.Nodes.Add(newNode);
 
-                        newNode.BackColor = Color.LightGray;
-                        newNode.NodeFont = new Font(this.Font.Name, this.Font.Size,
-                                                    this.Font.Style, this.Font.Unit);
-
                         // update parentNode var (*since we arer walking up group chain), 
                         // and store node in our dictionary.
                         parentNode = newNode;
@@ -67,6 +64,9 @@ namespace Cornerstone.GUI {
                 // create a node for this setting an place it under it's parent group
                 TreeNode settingNode = new TreeNode(currSetting.Name);
                 settingNode.Tag = currSetting;
+                settingNode.NodeFont = new Font(this.Font.Name, this.Font.Size,
+                                                FontStyle.Regular, this.Font.Unit);
+
                 
                 if (parentNode == null)
                     advancedSettingsTreeView.Nodes.Add(settingNode);

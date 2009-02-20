@@ -15,7 +15,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
-            advancedSettingsWarningPane1.SettingsPane.populateTree(MovingPicturesCore.SettingsManager);
+            //for production replace following statement with ==> advancedSettingsWarningPane1.SettingsPane.populateTree(MovingPicturesCore.SettingsManager);
+            advancedSettingsWarningPane1.SettingsPane.populateTree(MovingPicturesCore.Settings);
         }
 
         private void AdvancedSettingsPopup_Load(object sender, EventArgs e) {

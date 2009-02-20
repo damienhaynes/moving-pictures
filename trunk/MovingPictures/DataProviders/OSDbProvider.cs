@@ -254,8 +254,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     if (response.results.GetType() != typeof(XmlRpcStruct))
                         return results;
 
-                    XmlRpcStruct hashList = (XmlRpcStruct)response.results;
-                    int osdbSeenTreshold = (int)MovingPicturesCore.SettingsManager["importer_lookup_hash_seencount"].Value;
+                        XmlRpcStruct hashList = (XmlRpcStruct) response.results;
+                        int osdbSeenTreshold = MovingPicturesCore.Settings.HashConfirmedLimit;
 
                     // Get movie for each hash given
                     foreach (string hash in hashList.Keys) {

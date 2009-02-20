@@ -24,7 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 return SignatureBuilderResult.INCONCLUSIVE;
 
             DirectoryInfo dir = new DirectoryInfo(signature.Path);
-            bool preferFolder = (bool)MovingPicturesCore.SettingsManager["importer_prefer_foldername"].Value;
+            bool preferFolder = MovingPicturesCore.Settings.PreferFolderName;
             int filecount = signature.LocalMedia.Count;
 
             string source;
@@ -76,7 +76,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
 
         // Filters "noise" from the input string
         private static string removeNoise(string input) {
-            Regex expr = new Regex(MovingPicturesCore.SettingsManager["importer_filter"].Value.ToString(), RegexOptions.IgnoreCase);
+            Regex expr = new Regex(MovingPicturesCore.Settings.NoiseFilter, RegexOptions.IgnoreCase);
             string denoisedTitle = expr.Replace(input, "");
             denoisedTitle = Utility.trimSpaces(denoisedTitle);
             return denoisedTitle;

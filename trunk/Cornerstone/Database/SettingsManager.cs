@@ -8,114 +8,161 @@ using System.ComponentModel;
 using NLog;
 using Cornerstone.Database.Tables;
 using System.Threading;
+using System.Reflection;
+using Cornerstone.Database.CustomTypes;
+using System.Collections.ObjectModel;
 
 namespace Cornerstone.Database {
-    public class SettingsManager: Dictionary<string, DBSetting> {
+    public abstract class SettingsManager: Dictionary<string, DBSetting> {
         #region Private Variables
 
-        private DatabaseManager DBManager;
-
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        
-        #endregion
 
-        #region Private Methods
+        private DatabaseManager dbManager;
+        private Dictionary<string, PropertyInfo> propertyLookup;
+        private Dictionary<PropertyInfo, CornerstoneSettingAttribute> attributeLookup;
 
-        private void commit() {
-            foreach (DBSetting currSetting in this.Values) {
-                if (currSetting.CommitNeeded) 
-                    DBManager.Commit(currSetting);
-            }
-        }
-
-        private void processChildNodes(XmlNode parentNode, List<string> parentGroups) {
-            if (parentGroups == null)
-                parentGroups = new List<string>();
-
-            int newSettingCount = 0;
-            foreach (XmlNode currNode in parentNode.ChildNodes) {
-                try {
-                    if (currNode.Name == "group") {
-                        parentGroups.Add(currNode.Attributes["name"].Value);
-                        processChildNodes(currNode, parentGroups);
-                        parentGroups.Remove(currNode.Attributes["name"].Value);
-                    }
-
-                    if (currNode.Name == "setting") {
-                        string idString = "";
-                        string name = "";
-                        string description = "";
-                        string value = "";
-                        string type = "";
-
-                        // try to load via inline values
-
-                        if (currNode.Attributes["id"] != null)
-                            idString = currNode.Attributes["id"].Value;
-
-                        if (currNode.Attributes["name"] != null)
-                            name = currNode.Attributes["name"].Value;
-
-                        if (currNode.Attributes["description"] != null)
-                            description = currNode.Attributes["description"].Value;
-
-                        if (currNode.Attributes["default"] != null)
-                            value = currNode.Attributes["default"].Value;
-
-                        if (currNode.Attributes["type"] != null)
-                            type = currNode.Attributes["type"].Value;
-
-                        //try to load via sub nodes
-                        
-                        foreach (XmlNode subNode in currNode.ChildNodes) {
-                            if (subNode.Name == "id")
-                                idString = subNode.InnerText;
-
-                            if (subNode.Name == "name")
-                                name = subNode.InnerText;
-
-                            if (subNode.Name == "description")
-                                description = subNode.InnerText;
-
-                            if (subNode.Name == "default")
-                                value = subNode.InnerText;
-
-                            if (subNode.Name == "type")
-                                type = subNode.InnerText;
-                        }
-
-                        if (idString == "" || name == "" || type == "") 
-                            throw new Exception("Critical fields for DBSetting object not specified");
-                        
-                        // try to add the setting
-                        bool wasNewSetting;
-                        wasNewSetting = AddSetting(idString, parentGroups, name, description, value, type);
-
-                        if (wasNewSetting)
-                            newSettingCount++;
-                    }
-                }
-                catch (Exception e) {
-                    if (e.GetType() == typeof(ThreadAbortException))
-                        throw e;
-
-                    string settingName = "???";
-                    if (currNode != null && currNode.Attributes != null && currNode.Attributes["name"] != null)
-                        settingName = currNode.Attributes["name"].Value;
-
-                    logger.Error("Internal Error loading initial setting \"" + settingName + "\"");
-                }
-            }
-
-            if (newSettingCount > 0)
-                logger.Info("Added " + newSettingCount + " new setting(s) to the database.");
-        }
+        private bool initializing;
 
         #endregion
 
-        public SettingsManager(DatabaseManager DBManager) {
-            this.DBManager = DBManager;
-            List<DBSetting> settingList = DBManager.Get<DBSetting>(null);
+        public ReadOnlyCollection<DBSetting> AllSettings {
+            get {
+                return _allSettings.AsReadOnly();
+            }
+        } protected List<DBSetting> _allSettings;
+
+        /// <summary>
+        /// Fires every time a settings value has been changed.
+        /// </summary>
+        public event SettingChangedDelegate SettingChanged;
+
+        public SettingsManager(DatabaseManager dbManager) {
+            this.dbManager = dbManager;
+
+            //generate();
+
+            initializing = true;
+            
+            BuildPropertyLookup();
+            LoadSettingsFromDatabase();
+            UpdateAndSyncSettings();
+
+            initializing = false;
+
+            logger.Info("SettingsManager Created");
+        }
+
+        protected void Sync(SettingsManager otherSettings) {
+            _allSettings.AddRange(otherSettings.AllSettings);
+
+            foreach(DBSetting currSetting in otherSettings.Values) {
+                if (!this.ContainsKey(currSetting.Key))
+                    Add(currSetting.Key, currSetting);
+            }
+        }
+
+        private void generate() {
+            string settings = "\n\n";
+            string settings2 = "\n\n";
+
+            foreach (DBSetting currSetting in dbManager.Get<DBSetting>(null)) {
+                string def;
+
+                if (currSetting.Type == "String") {
+                    def = "\"" + currSetting.Value + "\"";
+                }
+                else
+                    def = currSetting.Value.ToString();
+
+                string propertyName = currSetting.Name;
+                while (propertyName.Contains(" ")) 
+                    propertyName = currSetting.Name.Replace(" ", "");
+
+                string privateName = propertyName.Substring(1);
+                privateName = "_" + char.ToLower(propertyName[0]) + privateName;
+
+
+                settings += "        [CornerstoneSetting(\n";
+                settings += "            Name = \"" + currSetting.Name + "\",\n";
+                settings += "            Description = \"" + currSetting.Description + "\",\n";
+                settings += "            Groups = \"" + currSetting.Grouping.ToString() + "\",\n";
+                settings += "            Identifier = \"" + currSetting.Key + "\",\n";
+                settings += "            Default = \"" + def + "\")]\n";
+                settings += "        public " + currSetting.Type.ToString().ToLower() + " " + propertyName + " {\n";
+                settings += "            get { return " + privateName + "; }\n";
+                settings += "            set {\n";
+                settings += "                " + privateName + " = value;\n";
+                settings += "                OnSettingChanged(\"" + currSetting.Key + "\");\n";
+                settings += "            }\n";
+                settings += "        }\n";
+                settings += "        private " + currSetting.Type.ToString().ToLower() + " " + privateName + ";\n\n\n";
+
+                settings2 += currSetting.Grouping.ToString() + "\t" + currSetting.Name + " (" + currSetting.Key + ")\n";
+            }
+            logger.Info(settings);
+            logger.Info(settings2);
+
+        }
+
+
+        /// <summary>
+        /// This method should be called by the super class when a setting has been changed.
+        /// </summary>
+        /// <param name="settingIdentifier">
+        /// The identifier as defined in the attribute for the setting property in the 
+        /// super class.
+        /// </param>
+        protected void OnSettingChanged(string settingIdentifier) {
+            // if we are intializing, ignore all changes
+            if (initializing)
+                return;
+            
+            // make sure we have been passed a valid identifier
+            if (!propertyLookup.ContainsKey(settingIdentifier)) {
+                logger.Error("Invalid call to OnSettingChanged with \"" + settingIdentifier + "\" identifier!");
+                return;
+            }
+
+            // grab property and setting info
+            PropertyInfo property = propertyLookup[settingIdentifier];
+            DBSetting setting = this[settingIdentifier];
+
+            // update the setting and commit
+            object oldValue = setting.Value;
+            setting.Value = property.GetGetMethod().Invoke(this, null);
+            setting.Commit();
+
+            // notify any listeners of the value change
+            if (SettingChanged != null)
+                SettingChanged(setting, oldValue);
+        }
+
+        /// <summary>
+        /// Stores property and attribute info from the super class for quick lookup later.
+        /// </summary>
+        private void BuildPropertyLookup() {
+            propertyLookup = new Dictionary<string, PropertyInfo>();
+            attributeLookup = new Dictionary<PropertyInfo, CornerstoneSettingAttribute>();
+
+            foreach (PropertyInfo currProperty in GetType().GetProperties()) {
+                // make sure this property is intended to be a setting
+                object[] attributes = currProperty.GetCustomAttributes(typeof(CornerstoneSettingAttribute), true);
+                if (attributes.Length == 0)
+                    continue;
+
+                // and store it's info for quick access later
+                CornerstoneSettingAttribute attribute = attributes[0] as CornerstoneSettingAttribute;
+                propertyLookup[attribute.Identifier] = currProperty;
+                attributeLookup[currProperty] = attribute;
+            }
+        }
+
+        /// <summary>
+        /// Loads all existing settings from the database.
+        /// </summary>
+        private void LoadSettingsFromDatabase() {
+            List<DBSetting> settingList = dbManager.Get<DBSetting>(null);
             foreach (DBSetting currSetting in settingList) {
                 try {
                     this.Add(currSetting.Key, currSetting);
@@ -124,73 +171,95 @@ namespace Cornerstone.Database {
                     if (e is ThreadAbortException)
                         throw e;
 
-                    if (e is ArgumentNullException) 
-                        logger.Error("Tried to load a duplicate setting (" + currSetting.Name + ")");
-                    else if (currSetting == null)
-                        logger.Error("Tried loading a null setting!");
-                    else
-                        logger.Error("Error loading setting " + currSetting.Name + " (key = " + currSetting.Key + ")");                        
+                    logger.Error("Error loading setting " + currSetting.Name + " (key = " + currSetting.Key + ")");
                 }
             }
-
-            logger.Info("SettingsManager Created");
         }
 
-        ~SettingsManager() {
-            Shutdown();
-        }
+        /// <summary>
+        /// Populates properties in super class from data in the database, and adds new properties 
+        /// defined in the super class to the database.
+        /// </summary>
+        private void UpdateAndSyncSettings() {
+            _allSettings = new List<DBSetting>();
 
-        public void Shutdown() {
-            if (DBManager != null) {
-                logger.Info("SettingsManager Shutting Down");
-                commit();
-                DBManager = null;
+            foreach (PropertyInfo currProperty in propertyLookup.Values) {
+                try {
+                    SyncSetting(currProperty);
+                    
+                    CornerstoneSettingAttribute attribute = attributeLookup[currProperty];
+                    DBSetting setting = this[attribute.Identifier];
+
+                    currProperty.GetSetMethod().Invoke(this, new Object[] { setting.Value });
+
+                    _allSettings.Add(setting);
+                }
+                catch (Exception e) {
+                    if (e is ThreadAbortException)
+                        throw e;
+
+                    logger.ErrorException("Failed loading setting data for " + currProperty.Name + ".", e);
+                }
             }
         }
 
-        public void LoadSettingsFile(string settingsXML, bool overwriteExistingSettings) {
-            // attempts to convert the provided string into an XmlDocument
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(settingsXML);
-            
-            processChildNodes(xml.DocumentElement, null);
-        }
+        private void SyncSetting(PropertyInfo property) {
+            CornerstoneSettingAttribute attribute = attributeLookup[property];
+            StringList groups = new StringList(attribute.Groups);
 
-        public bool AddSetting(string key, List<string> groups, String name, String description, String value, String type) {
-
-            if (!this.ContainsKey(key)) {
+            if (!this.ContainsKey(attribute.Identifier)) {
                 DBSetting newSetting = new DBSetting();
-                newSetting.Key = key;
-                newSetting.Name = name;
-                newSetting.Value = value;
-                newSetting.Type = type;
-                newSetting.Description = description;
+                newSetting.Key = attribute.Identifier;
+                newSetting.Name = attribute.Name;
+                newSetting.Value = attribute.Default;
+                newSetting.Type = DBSetting.TypeLookup(property.PropertyType);
+                newSetting.Description = attribute.Description;
                 newSetting.Grouping.AddRange(groups);
+                newSetting.DBManager = this.dbManager;
+                newSetting.Commit();
 
-                this.Add(key, newSetting);
-                return true;
+                this[attribute.Identifier] = newSetting;
             } else {
-                DBSetting existingSetting = this[key];
+                DBSetting existingSetting = this[attribute.Identifier];
                 
                 // update name if neccisary
-                if (!existingSetting.Name.Equals(name))
-                    existingSetting.Name = name;
+                if (!existingSetting.Name.Equals(attribute.Name))
+                    existingSetting.Name = attribute.Name;
 
                 // update description if neccisary
-                if (!existingSetting.Description.Equals(description))
-                    existingSetting.Description = description;
+                if (!existingSetting.Description.Equals(attribute.Description))
+                    existingSetting.Description = attribute.Description;
                 
                 // update groups if neccisary
-                for(int i = 0; i < existingSetting.Grouping.Count; i++) {
-                    if (i >= groups.Count || !existingSetting.Grouping[i].Equals(groups[i])) {
-                        existingSetting.Grouping.Clear();
-                        existingSetting.Grouping.AddRange(groups);
-                        break;
+                bool reloadGrouping = false;
+                if (existingSetting.Grouping.Count != groups.Count)
+                    reloadGrouping = true;
+                else
+                    for (int i = 0; i < existingSetting.Grouping.Count; i++) {
+                        if (i >= groups.Count || !existingSetting.Grouping[i].Equals(groups[i])) {
+                            reloadGrouping = true;
+                            break;
+                        }
                     }
+
+                if (reloadGrouping) {
+                    existingSetting.Grouping.Clear();
+                    existingSetting.Grouping.AddRange(groups);
                 }
 
-                return false;
+                existingSetting.Commit();
             }
         }
+    }
+
+    public delegate void SettingChangedDelegate(DBSetting setting, object oldValue);
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public sealed class CornerstoneSettingAttribute : Attribute {
+        public string Identifier { get; set; }
+        public string Groups { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public object Default { get; set; }
     }
 }

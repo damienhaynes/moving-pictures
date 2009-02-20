@@ -84,7 +84,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public BrowserViewMode DefaultView {
             get {
-                string defaultView = ((string)MovingPicturesCore.SettingsManager["default_view"].Value).Trim().ToLower();
+                string defaultView = MovingPicturesCore.Settings.DefaultView.Trim().ToLower();
                 if (defaultView.Equals("list"))
                     return BrowserViewMode.LIST;
                 else if (defaultView.Equals("thumbs"))
@@ -324,8 +324,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // Sets the initial settings for how movies should be sorted on launch.
         private void initSortingDefaults() {
             // set default sort method
-            string defaultSortField = ((string)MovingPicturesCore.SettingsManager["default_sort_field"].Value).Trim();
-            string defaultSortDirection = ((string)MovingPicturesCore.SettingsManager["default_sort_direction"].Value).Trim();
+            string defaultSortField = MovingPicturesCore.Settings.DefaultSortField.Trim();
+            string defaultSortDirection = MovingPicturesCore.Settings.DefaultSortDirection.Trim();
 
             try {
                 CurrentSortField = (GUIListItemMovieComparer.SortingFields)Enum.Parse(typeof(GUIListItemMovieComparer.SortingFields), defaultSortField, true);

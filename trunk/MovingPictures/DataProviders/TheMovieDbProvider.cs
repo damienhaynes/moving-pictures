@@ -283,8 +283,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return false;
 
             // grab coverart loading settings
-            int maxCovers = (int)MovingPicturesCore.SettingsManager["max_covers_per_movie"].Value;
-            int maxCoversInSession = (int)MovingPicturesCore.SettingsManager["max_covers_per_session"].Value;
+            int maxCovers = MovingPicturesCore.Settings.MaxCoversPerMovie;
+            int maxCoversInSession = MovingPicturesCore.Settings.MaxCoversPerSession;
 
             // if we have already hit our limit for the number of covers to load, quit
             if (movie.AlternateCovers.Count >= maxCovers)
@@ -328,9 +328,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         // given a url, retrieves the xml result set and returns the nodelist of Item objects
         private XmlNodeList getXML(string url) {
             WebGrabber grabber = new WebGrabber(url);
-            grabber.MaxRetries = (int)MovingPicturesCore.SettingsManager["tmdb_max_timeouts"].Value;
-            grabber.Timeout = (int)MovingPicturesCore.SettingsManager["tmdb_timeout_length"].Value;
-            grabber.TimeoutIncrement = (int)MovingPicturesCore.SettingsManager["tmdb_timeout_increment"].Value;
+            grabber.MaxRetries = MovingPicturesCore.Settings.MaxTimeouts;
+            grabber.Timeout = MovingPicturesCore.Settings.TimeoutLength;
+            grabber.TimeoutIncrement = MovingPicturesCore.Settings.TimeoutIncrement;
             grabber.Encoding = Encoding.UTF8;
 
             if (grabber.GetResponse())

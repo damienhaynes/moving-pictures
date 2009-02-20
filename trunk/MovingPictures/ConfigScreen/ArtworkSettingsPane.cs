@@ -17,15 +17,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
-            coverFromMovieFolderCheckBox.Setting = MovingPicturesCore.SettingsManager["local_cover_from_movie_folder"];
+            coverFromMovieFolderCheckBox.Setting = MovingPicturesCore.Settings["local_cover_from_movie_folder"];
             coverFromMovieFolderCheckBox.IgnoreSettingName = true;
-            coverPatternTextBox.Setting = MovingPicturesCore.SettingsManager["local_moviefolder_coverart_pattern"];
+            coverPatternTextBox.Setting = MovingPicturesCore.Settings["local_moviefolder_coverart_pattern"];
 
-            backdropFromMovieFolderCheckBox.Setting = MovingPicturesCore.SettingsManager["local_backdrop_from_movie_folder"];
+            backdropFromMovieFolderCheckBox.Setting = MovingPicturesCore.Settings["local_backdrop_from_movie_folder"];
             backdropFromMovieFolderCheckBox.IgnoreSettingName = true;
-            backdropPatternTextBox.Setting = MovingPicturesCore.SettingsManager["local_moviefolder_backdrop_pattern"];
+            backdropPatternTextBox.Setting = MovingPicturesCore.Settings["local_moviefolder_backdrop_pattern"];
 
-            coverCountTextBox.Setting = MovingPicturesCore.SettingsManager["max_covers_per_movie"];
+            coverCountTextBox.Setting = MovingPicturesCore.Settings["max_covers_per_movie"];
         }
 
         private void ArtworkSettingsPane_Load(object sender, EventArgs e) {

@@ -100,7 +100,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// <returns>true  : plugin needs its own button on home                                                                               
         ///          false : plugin does not need its own button on home</returns>                                                             
         public bool GetHome(out string strButtonText, out string strButtonImage, out string strButtonImageFocus, out string strPictureImage) {
-            strButtonText = (string)MovingPicturesCore.SettingsManager["home_name"].Value;
+            strButtonText = MovingPicturesCore.Settings.HomeScreenName;
             strButtonImage = String.Empty;
             strButtonImageFocus = String.Empty;
             strPictureImage = "hover_moving pictures.png";

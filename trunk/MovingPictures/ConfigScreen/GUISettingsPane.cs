@@ -26,21 +26,21 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
-            homeScreenTextBox.Setting = MovingPicturesCore.SettingsManager["home_name"];
-            watchedPercentTextBox.Setting = MovingPicturesCore.SettingsManager["gui_watch_percentage"];
-            remoteControlCheckBox.Setting = MovingPicturesCore.SettingsManager["enable_rc_filter"];
-            enableDeleteCheckBox.Setting = MovingPicturesCore.SettingsManager["enable_delete_movie"];
+            homeScreenTextBox.Setting = MovingPicturesCore.Settings["home_name"];
+            watchedPercentTextBox.Setting = MovingPicturesCore.Settings["gui_watch_percentage"];
+            remoteControlCheckBox.Setting = MovingPicturesCore.Settings["enable_rc_filter"];
+            enableDeleteCheckBox.Setting = MovingPicturesCore.Settings["enable_delete_movie"];
 
-            sortFieldComboBox.Setting = MovingPicturesCore.SettingsManager["default_sort_field"];
+            sortFieldComboBox.Setting = MovingPicturesCore.Settings["default_sort_field"];
             sortFieldComboBox.EnumType = typeof(GUIListItemMovieComparer.SortingFields);
 
-            sortDirComboBox.Setting = MovingPicturesCore.SettingsManager["default_sort_direction"];
+            sortDirComboBox.Setting = MovingPicturesCore.Settings["default_sort_direction"];
             sortDirComboBox.EnumType = typeof(GUIListItemMovieComparer.SortingDirections);
 
-            clickGoesToDetails = MovingPicturesCore.SettingsManager["click_to_details"];
-            dvdInsertedAction = MovingPicturesCore.SettingsManager["on_disc_loaded"];
-            defaultView = MovingPicturesCore.SettingsManager["default_view"];
-            watchedFilterStartsOn = MovingPicturesCore.SettingsManager["start_watched_filter_on"];
+            clickGoesToDetails = MovingPicturesCore.Settings["click_to_details"];
+            dvdInsertedAction = MovingPicturesCore.Settings["on_disc_loaded"];
+            defaultView = MovingPicturesCore.Settings["default_view"];
+            watchedFilterStartsOn = MovingPicturesCore.Settings["start_watched_filter_on"];
         }
 
         private void GUISettingsPane_Load(object sender, EventArgs e) {

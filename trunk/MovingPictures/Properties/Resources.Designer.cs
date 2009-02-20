@@ -225,27 +225,6 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;MoviesPluginSettings&gt;
-        ///
-        ///  &lt;group name=&quot;General&quot;&gt;
-        ///    &lt;setting id=&quot;version&quot; name=&quot;Version Number&quot; type=&quot;STRING&quot;&gt;
-        ///      &lt;default&gt;0.0.0&lt;/default&gt;
-        ///      &lt;description&gt;Version number of Moving Pictures. Used for database upgrade purposes, do not change.&lt;/description&gt;
-        ///    &lt;/setting&gt;
-        ///  &lt;/group&gt;
-        ///  
-        ///  &lt;group name=&quot;MediaPortal GUI&quot;&gt;
-        ///    &lt;setting id=&quot;default_view&quot; name=&quot;Default View&quot; type=&quot;STRING&quot;&gt;
-        ///      &lt;default&gt;list&lt;/default&gt;
-        ///      &lt;description&gt;The default view used in the MediaPortal GUI when the plug-in [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string InitialSettings {
-            get {
-                return ResourceManager.GetString("InitialSettings", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Bitmap list_add {
             get {
                 object obj = ResourceManager.GetObject("list_add", resourceCulture);
@@ -545,11 +524,12 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;ofdb.de&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp)&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de) And reads runtime from OFDb&lt;/description&gt;
+        ///    &lt;description&gt;This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)&lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should us [rest of string was truncated]&quot;;.
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new ve [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Script_OFDb {
             get {

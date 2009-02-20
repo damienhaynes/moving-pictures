@@ -21,7 +21,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region ISignatureBuilder Members
 
         public SignatureBuilderResult UpdateSignature(MovieSignature signature) {
-            bool imdbLookup = (bool)MovingPicturesCore.SettingsManager["importer_lookup_imdb"].Value;
+            bool imdbLookup = MovingPicturesCore.Settings.EnableImdbPreSearch;
 
             // If there's no ImdbId in the signature return the signature immediatly
             if (!imdbLookup | String.IsNullOrEmpty(signature.ImdbId))

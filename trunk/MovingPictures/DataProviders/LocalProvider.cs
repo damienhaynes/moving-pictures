@@ -83,11 +83,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return false;
 
             // grab a list of possible filenames for the backdrop based on the user pattern
-            string pattern = MovingPicturesCore.SettingsManager["local_backdrop_pattern"].StringValue;
+            string pattern = MovingPicturesCore.Settings.BackdropFilenamePattern;
             List<string> filenames = getPossibleNamesFromPattern(pattern, movie);
 
             // check the backdrop folder for the user patterned backdrops
-            string backdropFolderPath = MovingPicturesCore.SettingsManager["backdrop_folder"].StringValue;
+            string backdropFolderPath = MovingPicturesCore.Settings.BackdropFolder;
             FileInfo newBackdrop = getFirstFileFromFolder(backdropFolderPath, filenames);
             if (newBackdrop != null && newBackdrop.Exists) {
                 movie.BackdropFullPath = newBackdrop.FullName;
@@ -107,8 +107,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             bool found = false;
 
-            bool useMovieFolderBackdrops = (bool)MovingPicturesCore.SettingsManager["local_backdrop_from_movie_folder"].Value;
-            string pattern = MovingPicturesCore.SettingsManager["local_moviefolder_backdrop_pattern"].StringValue;
+            bool useMovieFolderBackdrops = MovingPicturesCore.Settings.SearchMovieFolderForBackdrops;
+            string pattern = MovingPicturesCore.Settings.MovieFolderBackdropFilenamePattern;
 
             if (useMovieFolderBackdrops) {
                 List<string> movieFolderFilenames = getPossibleNamesFromPattern(pattern, movie);
@@ -126,8 +126,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         // check for backdrops in the backdrop folder loaded from previous installs
         private bool getOldBackdrops(DBMovieInfo movie) {
             bool found = false;
-            
-            string backdropFolderPath = MovingPicturesCore.SettingsManager["backdrop_folder"].StringValue;
+
+            string backdropFolderPath = MovingPicturesCore.Settings.BackdropFolder;
             DirectoryInfo backdropFolder = new DirectoryInfo(backdropFolderPath);
 
             string safeName = Utility.CreateFilename(movie.Title.Replace(' ', '.'));
@@ -164,12 +164,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         private bool getCoversFromCoverFolder(DBMovieInfo movie) {
             // grab a list of possible filenames for the coverart based on the user pattern
-            string pattern = MovingPicturesCore.SettingsManager["local_coverart_pattern"].StringValue;
+            string pattern = MovingPicturesCore.Settings.CoverArtworkFilenamePattern;
             List<string> coverFolderFilenames = getPossibleNamesFromPattern(pattern, movie);
 
 
             // check the coverart folder for the user patterned covers
-            string coverartFolderPath = MovingPicturesCore.SettingsManager["cover_art_folder"].StringValue;
+            string coverartFolderPath = MovingPicturesCore.Settings.CoverArtFolder;
             FileInfo newCover = getFirstFileFromFolder(coverartFolderPath, coverFolderFilenames);
             if (newCover != null && newCover.Exists) {
                 return movie.AddCoverFromFile(newCover.FullName);
@@ -182,8 +182,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         private bool getCoversFromMovieFolder(DBMovieInfo movie) {
             bool found = false;
 
-            bool useMovieFolderCovers = (bool)MovingPicturesCore.SettingsManager["local_cover_from_movie_folder"].Value;
-            string pattern = MovingPicturesCore.SettingsManager["local_moviefolder_coverart_pattern"].StringValue;
+            bool useMovieFolderCovers = MovingPicturesCore.Settings.SearchMovieFolderForCoverArt;
+            string pattern = MovingPicturesCore.Settings.MovieFolderCoverArtworkFilenamePattern;
 
             if (useMovieFolderCovers) {
                 List<string> movieFolderFilenames = getPossibleNamesFromPattern(pattern, movie);
@@ -200,8 +200,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         // check for coverart in the coverfolder loaded from previous installs
         private bool getOldCovers(DBMovieInfo movie) {
             bool found = false;
-            
-            string coverartFolderPath = MovingPicturesCore.SettingsManager["cover_art_folder"].StringValue;
+
+            string coverartFolderPath = MovingPicturesCore.Settings.CoverArtFolder;
             DirectoryInfo coverFolder = new DirectoryInfo(coverartFolderPath);
             
             string safeName = Utility.CreateFilename(movie.Title.Replace(' ', '.'));

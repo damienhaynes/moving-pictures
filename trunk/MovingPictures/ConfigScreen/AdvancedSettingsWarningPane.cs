@@ -18,7 +18,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void AdvancedSettingsWarningPane_Load(object sender, EventArgs e) {
             if (!DesignMode) {
-                if (!(bool)MovingPicturesCore.SettingsManager["config_advanced_nag"].Value)
+                if (!MovingPicturesCore.Settings.ShowAdvancedSettingsWarning)
                     warningPanel.Visible = false;
             }
         }

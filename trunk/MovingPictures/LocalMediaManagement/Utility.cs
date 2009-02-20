@@ -541,9 +541,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns>True if file is a sample file</returns>
         public static bool isSampleFile(FileInfo file) {
             // Set sample max size in bytes
-            long sampleMaxSize = long.Parse(MovingPicturesCore.SettingsManager["importer_sample_maxsize"].Value.ToString()) * 1024 * 1024;
+            long sampleMaxSize = MovingPicturesCore.Settings.MaxSampleFilesize * 1024 * 1024;
             // Create the sample filter regular expression
-            Regex expr = new Regex(MovingPicturesCore.SettingsManager["importer_sample_keyword"].Value.ToString(), RegexOptions.IgnoreCase);
+            Regex expr = new Regex(MovingPicturesCore.Settings.SampleRegExFilter, RegexOptions.IgnoreCase);
             // Return result of given conditions         
             return ((file.Length < sampleMaxSize) && expr.Match(file.Name).Success);
         }

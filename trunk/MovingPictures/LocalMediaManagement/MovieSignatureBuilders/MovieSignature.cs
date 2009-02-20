@@ -152,7 +152,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         // todo: this logic was moved from the importer but this is not the final form
         public int MatchScore(MovieSignature signature) {
 
-            bool imdbBoost = (bool)MovingPicturesCore.SettingsManager["importer_autoimdb"].Value;
+            bool imdbBoost = MovingPicturesCore.Settings.AutoApproveOnIMDBMatch;
             bool hasImdb = (imdb_id != null);
             bool hasYear = (Year > 0);
             string strYear = (hasYear) ? Year.ToString() : null;

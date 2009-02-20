@@ -51,11 +51,11 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.advancedSettingsTreeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.advancedSettingsTreeView.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.advancedSettingsTreeView.FullRowSelect = true;
             this.advancedSettingsTreeView.Indent = 0;
             this.advancedSettingsTreeView.Location = new System.Drawing.Point(7, 13);
             this.advancedSettingsTreeView.Name = "advancedSettingsTreeView";
-            this.advancedSettingsTreeView.ShowLines = false;
             this.advancedSettingsTreeView.ShowPlusMinus = false;
             this.advancedSettingsTreeView.ShowRootLines = false;
             this.advancedSettingsTreeView.Size = new System.Drawing.Size(408, 263);

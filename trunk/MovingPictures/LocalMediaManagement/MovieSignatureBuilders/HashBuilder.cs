@@ -14,7 +14,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region ISignatureBuilder Members
 
         public SignatureBuilderResult UpdateSignature(MovieSignature signature) {
-            bool hashLookup = (bool)MovingPicturesCore.SettingsManager["importer_lookup_hash"].Value;
+            bool hashLookup = MovingPicturesCore.Settings.EnableHashLookup;
 
             if (!hashLookup || String.IsNullOrEmpty(signature.MovieHash))
                 return SignatureBuilderResult.INCONCLUSIVE;

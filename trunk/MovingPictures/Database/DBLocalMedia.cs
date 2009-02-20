@@ -138,7 +138,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public string DiscId {
             get {
                 // todo: how to handle iso?
-                bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
+                bool getDiscId = MovingPicturesCore.Settings.UseDiscID;
                 if (discid == null && IsAvailable && getDiscId && (Utility.GetVideoDiscFormat(fileInfo.FullName) == VideoDiscFormat.DVD)) 
                     DiscId = Utility.GetDiscIdString(fileInfo.DirectoryName);
 

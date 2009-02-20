@@ -151,5 +151,18 @@ namespace Cornerstone.Database.Tables {
             logger.Warn("Unknown Setting Type (" + Type + "), can not validate...");
             return false;
         }
+
+        public static string TypeLookup(Type type) {
+            if (type == typeof(int)) 
+                return "INT";
+            else if (type == typeof(float)) 
+                return "FLOAT";
+            else if (type == typeof(bool)) 
+                return "BOOL";
+            else if (type == typeof(string)) 
+                return "STRING";
+
+            return null;
+        }
     }
 }
