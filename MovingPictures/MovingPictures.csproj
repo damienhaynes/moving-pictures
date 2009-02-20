@@ -246,6 +246,7 @@
     <Compile Include="MainUI\MovingPicturesSkinSettings.cs" />
     <Compile Include="MainUI\Translation.cs" />
     <Compile Include="MovingPicturesCore.cs" />
+    <Compile Include="MovingPicturesSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\ImdbBuilder.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\ISignatureBuilder.cs" />
@@ -413,7 +414,6 @@
     <None Include="Properties\RevisionInfo.cs" />
     <None Include="Resources\Images\splash_small.jpg" />
     <None Include="Resources\Images\splash_large.jpg" />
-    <Content Include="Resources\InitialSettings.xml" />
     <Content Include="Resources\Images\accept.png" />
     <Content Include="Resources\Images\approved.png" />
     <Content Include="Resources\Images\arrow_cross.png" />

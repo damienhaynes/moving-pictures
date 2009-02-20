@@ -150,7 +150,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Public Methods
 
         public void Start() {
-            int maxThreadCount = (int)MovingPicturesCore.SettingsManager["importer_thread_count"].Value;
+            int maxThreadCount = MovingPicturesCore.Settings.ThreadCount;
 
             if (mediaScannerThreads.Count == 0) {
                 for (int i = 0; i < maxThreadCount; i++) {
@@ -823,7 +823,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return;
 
             List<DBLocalMedia> currFileSet = new List<DBLocalMedia>();
-            bool alwaysGroup = (bool)MovingPicturesCore.SettingsManager["importer_groupfolder"].Value;
+            bool alwaysGroup = MovingPicturesCore.Settings.AlwaysGroupByFolder;
 
             foreach (DBLocalMedia currFile in importFileList) {
 
@@ -1162,7 +1162,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // if the best match is exact or very close, place it in the accepted queue
             // otherwise place it in the pending queue for approval
-            int threshold = (int)MovingPicturesCore.SettingsManager["importer_autoapprove"].Value;
+            int threshold = MovingPicturesCore.Settings.AutoApproveThreshold;
             if (mediaMatch.Selected != null && mediaMatch.Selected.MatchValue <= threshold) {
                 if (mediaMatch.HighPriority) priorityApprovedMatches.Add(mediaMatch);
                 else approvedMatches.Add(mediaMatch);
@@ -1336,7 +1336,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             else
                 movieList = MovingPicturesCore.DataProviderManager.Get(signature);
 
-            bool strictYear = (bool)MovingPicturesCore.SettingsManager["importer_strict_year"].Value;
+            bool strictYear = MovingPicturesCore.Settings.StrictYear;
 
             foreach (DBMovieInfo currMovie in movieList) {
 

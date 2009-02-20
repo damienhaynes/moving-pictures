@@ -101,7 +101,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             sorters[DataType.COVERS] = new DBSourceInfoComparer(DataType.COVERS);
             sorters[DataType.BACKDROPS] = new DBSourceInfoComparer(DataType.BACKDROPS);
 
-            debugMode = (bool) MovingPicturesCore.SettingsManager["source_manager_debug"].Value;
+            debugMode = MovingPicturesCore.Settings.DataSourceDebugActive;
 
             logger.Info("DataProviderManager Starting");
             loadProvidersFromDatabase();
@@ -109,16 +109,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             // if we have already done an initial load, set an internal flag to do updates only
             // when loading internal scripts. We dont want to load in previously deleted scripts
             // during the internal provider loading process.
-            DBSetting alreadyInitedSetting = MovingPicturesCore.SettingsManager["source_manager_init_done"];
-            updateOnly = (bool)alreadyInitedSetting.Value;
+            updateOnly = MovingPicturesCore.Settings.DataProvidersInitialized;
             LoadInternalProviders();
             updateOnly = false;
 
-            if (!(bool)alreadyInitedSetting.Value) {
-                alreadyInitedSetting.Value = true;
-                alreadyInitedSetting.Commit();
-            }
-
+            MovingPicturesCore.Settings.DataProvidersInitialized = true;
         }
 
         #endregion

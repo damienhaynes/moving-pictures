@@ -121,13 +121,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // Get Moving Pictures specific autoplay setting
             try {
-                diskInsertedAction = (DiskInsertedAction) Enum.Parse(typeof(DiskInsertedAction), MovingPicturesCore.SettingsManager["on_disc_loaded"].StringValue);
+                diskInsertedAction = (DiskInsertedAction) Enum.Parse(typeof(DiskInsertedAction), MovingPicturesCore.Settings.DiskInsertionBehavior);
             } catch {
                 diskInsertedAction = DiskInsertedAction.DETAILS;
             }
 
             // setup the image resources for cover and backdrop display
-            int artworkDelay = (int)MovingPicturesCore.SettingsManager["gui_artwork_delay"].Value;
+            int artworkDelay = MovingPicturesCore.Settings.ArtworkLoadingDelay;
 
             backdrop = new ImageSwapper();
             backdrop.ImageResource.Delay = artworkDelay;
@@ -293,7 +293,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             MovingPicturesCore.Initialize();
 
             // start the background importer
-            if ((bool)MovingPicturesCore.SettingsManager["importer_gui_enabled"].Value)
+            if (MovingPicturesCore.Settings.EnableImporterInGUI)
                 MovingPicturesCore.Importer.Start();
 
             // load skin based settings from skin file
@@ -337,8 +337,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ActiveFilters.Add(watchedFilter);
 
                 // if option is set, turn on the watched movies filter by default
-                bool startWithWatchedFilterOn = (bool)MovingPicturesCore.SettingsManager["start_watched_filter_on"].Value;
-                if (startWithWatchedFilterOn)
+                if (MovingPicturesCore.Settings.ShowUnwatchedOnStartup)
                     watchedFilter.Active = true;
 
                 // give the browser a delegate to the method to clear focus from all existing controls
@@ -433,7 +432,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             switch (controlId) {
                 // a click from the facade
                 case 50:
-                    bool clickToDetails = (bool)MovingPicturesCore.SettingsManager["click_to_details"].Value;
+                    bool clickToDetails = MovingPicturesCore.Settings.ClickShowsDetails;
 
                     switch (actionType) {
                         case Action.ActionType.ACTION_SELECT_ITEM:
@@ -498,7 +497,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     break;
                 case Action.ActionType.ACTION_KEY_PRESSED:
                     // if remote filtering is active, try to route the keypress through the filter
-                    bool remoteFilterEnabled = (bool)MovingPicturesCore.SettingsManager["enable_rc_filter"].Value;
+                    bool remoteFilterEnabled = MovingPicturesCore.Settings.UseRemoteControlFiltering;
                     if (remoteFilterEnabled && browser.CurrentView != BrowserViewMode.DETAILS) {
                         // try to update the filter
                         bool changedFilter = false;
@@ -720,9 +719,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currID++;
             }
 
-            bool deleteEnabled = (bool)MovingPicturesCore.SettingsManager["enable_delete_movie"].Value;
-
-            if (deleteEnabled) {
+            if (MovingPicturesCore.Settings.AllowDelete) {
                 deleteItem = new GUIListItem(Translation.DeleteMovie);
                 deleteItem.ItemId = currID;
                 dialog.Add(deleteItem);
@@ -977,7 +974,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (!customIntroPlayed) {
                 // Only play custom intro for we are not resuming
                 if (browser.SelectedMovie.UserSettings == null || browser.SelectedMovie.UserSettings.Count == 0 || browser.SelectedMovie.UserSettings[0].ResumeTime == 0) {
-                    string custom_intro = (string)MovingPicturesCore.SettingsManager["custom_intro_location"].Value;
+                    string custom_intro = MovingPicturesCore.Settings.CustomIntroLocation;
 
                     // Check if the custom intro is specified by user and exists
                     if (custom_intro.Length > 0 && File.Exists(custom_intro)) {
@@ -1036,7 +1033,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (videoFormat == VideoDiscFormat.Bluray || videoFormat == VideoDiscFormat.HDDVD) {
                 
                 // Take proper action according to playback setting
-                bool hdExternal = (bool)MovingPicturesCore.SettingsManager["playback_hd_external"].Value;
+                bool hdExternal = MovingPicturesCore.Settings.UseExternalPlayer;
                 
                 // Launch external player if user has configured it for HD playback.
                 if (hdExternal) {
@@ -1113,7 +1110,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             logger.Info("HD Playback: Launching external player.");
 
             // First check if the user supplied executable for the external player is valid
-            string execPath = MovingPicturesCore.SettingsManager["playback_hd_executable"].StringValue;
+            string execPath = MovingPicturesCore.Settings.ExternalPlayerExecutable;
             if (!File.Exists(execPath)) {
                 // if it's not show a dialog explaining the error
                 ShowMessage("Error", Translation.MissingExternalPlayerExe);
@@ -1123,7 +1120,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             
             // process the argument string and replace the 'filename' variable
-            string arguments = MovingPicturesCore.SettingsManager["playback_hd_arguments"].StringValue;
+            string arguments = MovingPicturesCore.Settings.ExternalPlayerArguements;
             string videoRoot = Utility.GetMovieBaseDirectory(new FileInfo(videoPath).Directory).FullName;
             string filename = Utility.IsDriveRoot(videoRoot) ? videoRoot : videoPath;
             arguments = arguments.Replace("%filename%", filename);
@@ -1258,7 +1255,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 updateMediaDuration(playingFile);
             }
 
-            int requiredWatchedPercent = (int)MovingPicturesCore.SettingsManager["gui_watch_percentage"].Value;
+            int requiredWatchedPercent = MovingPicturesCore.Settings.MinimumWatchPercentage;
             logger.Debug("Percentage: " + currentlyPlayingMovie.GetPercentage(currentlyPlayingPart, timeMovieStopped) + " Required: " + requiredWatchedPercent);
 
             // if enough of the movie has been watched, hit the watched flag
@@ -1540,7 +1537,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (obj == null)
                 return;
 
-            int maxStringListElements = (int)MovingPicturesCore.SettingsManager["max_string_list_items"].Value;
+            int maxStringListElements = MovingPicturesCore.Settings.MaxElementsToDisplay;
 
             Type tableType = obj.GetType();
             foreach (DBField currField in DBField.GetFieldList(tableType)) {

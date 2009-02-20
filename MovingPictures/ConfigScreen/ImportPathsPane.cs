@@ -43,7 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             pathsGridView.DataSource = pathBindingSource;
 
             // link the checkbox to db settings
-            importDvdCheckBox.Setting = MovingPicturesCore.SettingsManager["importer_disc_enabled"];
+            importDvdCheckBox.Setting = MovingPicturesCore.Settings["importer_disc_enabled"];
 
             this.HandleDestroyed += new EventHandler(ImportPathsPane_HandleDestroyed);
 

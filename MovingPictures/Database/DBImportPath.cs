@@ -75,7 +75,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (this.GetDriveType() != DriveType.CDRom)
                     return true;
                 else // If CDRom type check the configuration setting 
-                    return (bool)MovingPicturesCore.SettingsManager["importer_disc_enabled"].Value;
+                    return MovingPicturesCore.Settings.AutomaticallyImportDVDs;
              }
         }
 

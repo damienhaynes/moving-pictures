@@ -113,7 +113,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void updateDebugModeMenuItem() {
-            bool debugActive = (bool)MovingPicturesCore.SettingsManager["source_manager_debug"].Value;
+            bool debugActive = MovingPicturesCore.Settings.DataSourceDebugActive;
             if (debugActive) {
                 debugIcon.Visible = true;
                 enableDebugModeToolStripMenuItem.Text = "Disable Debug Mode";
@@ -173,8 +173,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void toggleDebugModeToolStripMenuItem_Click(object sender, EventArgs e) {
-            DBSetting setting = MovingPicturesCore.SettingsManager["source_manager_debug"];
-            setting.Value = !((bool)setting.Value);
+            MovingPicturesCore.Settings.DataSourceDebugActive = !MovingPicturesCore.Settings.DataSourceDebugActive;
             updateDebugModeMenuItem();
 
             Thread newThread = new Thread(new ThreadStart(reinitScrapers));
@@ -182,7 +181,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void reinitScrapers() {
-            DBSetting setting = MovingPicturesCore.SettingsManager["source_manager_debug"];
+            DBSetting setting = MovingPicturesCore.Settings["source_manager_debug"];
             MovingPicturesCore.DataProviderManager.DebugMode = (bool)setting.Value;
         }
 

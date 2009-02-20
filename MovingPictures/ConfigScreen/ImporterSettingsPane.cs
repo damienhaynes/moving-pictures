@@ -22,17 +22,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
 
-            autoApproval = MovingPicturesCore.SettingsManager["importer_autoapprove"];
+            autoApproval = MovingPicturesCore.Settings["importer_autoapprove"];
 
-            strictYearCheckBox.Setting = MovingPicturesCore.SettingsManager["importer_strict_year"];
-            preferFolderCheckBox.Setting = MovingPicturesCore.SettingsManager["importer_prefer_foldername"];
-            folderGroupingCheckBox.Setting = MovingPicturesCore.SettingsManager["importer_groupfolder"];
-            nfoExtTextBox.Setting = MovingPicturesCore.SettingsManager["importer_nfoext"];
+            strictYearCheckBox.Setting = MovingPicturesCore.Settings["importer_strict_year"];
+            preferFolderCheckBox.Setting = MovingPicturesCore.Settings["importer_prefer_foldername"];
+            folderGroupingCheckBox.Setting = MovingPicturesCore.Settings["importer_groupfolder"];
+            nfoExtTextBox.Setting = MovingPicturesCore.Settings["importer_nfoext"];
 
-            nfoScannerCheckBox.Setting = MovingPicturesCore.SettingsManager["importer_nfoscan"]; 
+            nfoScannerCheckBox.Setting = MovingPicturesCore.Settings["importer_nfoscan"]; 
             nfoScannerCheckBox.IgnoreSettingName = true;
 
-            nfoAutoApproveCheckBox.Setting = MovingPicturesCore.SettingsManager["importer_autoimdb"];
+            nfoAutoApproveCheckBox.Setting = MovingPicturesCore.Settings["importer_autoimdb"];
             nfoAutoApproveCheckBox.IgnoreSettingName = true;
         }
 

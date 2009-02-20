@@ -519,9 +519,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public bool AddCoverFromFile(string filename) {
-            int minWidth = (int)MovingPicturesCore.SettingsManager["min_cover_width"].Value;
-            int minHeight = (int)MovingPicturesCore.SettingsManager["min_cover_height"].Value;
-            string artFolder = (string)MovingPicturesCore.SettingsManager["cover_art_folder"].Value;
+            int minWidth = MovingPicturesCore.Settings.MinimumCoverWidth;
+            int minHeight = MovingPicturesCore.Settings.MinimumCoverHeight;
+            string artFolder = MovingPicturesCore.Settings.CoverArtFolder;
             
             Image newCover = Image.FromFile(filename);
 
@@ -568,11 +568,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         // Attempts to load cover art for this movie from a given URL. Optionally
         // ignores minimum resolution restrictions
         public ArtworkLoadStatus AddCoverFromURL(string url, bool ignoreRestrictions) {
-            int minWidth = (int)MovingPicturesCore.SettingsManager["min_cover_width"].Value;
-            int minHeight = (int)MovingPicturesCore.SettingsManager["min_cover_height"].Value;
-            string artFolder = (string)MovingPicturesCore.SettingsManager["cover_art_folder"].Value;
-            string thumbsFolder = (String)MovingPicturesCore.SettingsManager["cover_thumbs_folder"].Value;
-            bool redownloadCovers = (bool)MovingPicturesCore.SettingsManager["redownload_coverart"].Value;
+            int minWidth = MovingPicturesCore.Settings.MinimumCoverWidth;
+            int minHeight = MovingPicturesCore.Settings.MinimumCoverHeight;
+            string artFolder = MovingPicturesCore.Settings.CoverArtFolder;
+            string thumbsFolder = MovingPicturesCore.Settings.CoverArtThumbsFolder;
+            bool redownloadCovers = MovingPicturesCore.Settings.RedownloadCoverArtwork;
 
             // genrate a filename for a movie. should be unique based on the url hash
             string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
@@ -637,12 +637,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public ArtworkLoadStatus AddBackdropFromURL(string url, bool ignoreRestrictions) {
-            int minWidth = (int)MovingPicturesCore.SettingsManager["min_backdrop_width"].Value;
-            int minHeight = (int)MovingPicturesCore.SettingsManager["min_backdrop_height"].Value;
-            string artFolder = (string)MovingPicturesCore.SettingsManager["backdrop_folder"].Value;
-            string thumbsFolder = (String)MovingPicturesCore.SettingsManager["backdrop_thumbs_folder"].Value;
-            bool redownloadBackdrops = (bool)MovingPicturesCore.SettingsManager["redownload_backdrops"].Value;
-
+            int minWidth = MovingPicturesCore.Settings.MinimumBackdropWidth;
+            int minHeight = MovingPicturesCore.Settings.MinimumBackdropHeight;
+            string artFolder = MovingPicturesCore.Settings.BackdropFolder;
+            string thumbsFolder = MovingPicturesCore.Settings.BackdropThumbsFolder;
+            bool redownloadBackdrops = MovingPicturesCore.Settings.RedownloadBackdrops;
+            
             // generate a filename for a movie. should be unique based on the url hash
             string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
             string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].jpg";
@@ -702,9 +702,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public bool AddBackdropFromFile(string filename) {
-            int minWidth = (int)MovingPicturesCore.SettingsManager["min_backdrop_width"].Value;
-            int minHeight = (int)MovingPicturesCore.SettingsManager["min_backdrop_height"].Value;
-            string artFolder = (string)MovingPicturesCore.SettingsManager["backdrop_folder"].Value;
+            int minWidth = MovingPicturesCore.Settings.MinimumBackdropWidth;
+            int minHeight = MovingPicturesCore.Settings.MinimumBackdropHeight;
+            string artFolder = MovingPicturesCore.Settings.BackdropFolder;
 
             Image newBackdrop = Image.FromFile(filename);
 
@@ -748,9 +748,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // pull in timeout settings
             int tryCount = 0;
-            int maxRetries = (int)MovingPicturesCore.SettingsManager["tmdb_max_timeouts"].Value;
-            int timeout = (int)MovingPicturesCore.SettingsManager["tmdb_timeout_length"].Value;
-            int timeoutIncrement = (int)MovingPicturesCore.SettingsManager["tmdb_timeout_increment"].Value;
+            int maxRetries = MovingPicturesCore.Settings.MaxTimeouts;
+            int timeout = MovingPicturesCore.Settings.TimeoutLength;
+            int timeoutIncrement = MovingPicturesCore.Settings.TimeoutIncrement;
 
             while (rtn == null && tryCount < maxRetries) {
                 try {
@@ -802,7 +802,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (CoverFullPath.Trim().Length == 0)
                 return;
 
-            string thumbsFolder = (String)MovingPicturesCore.SettingsManager["cover_thumbs_folder"].Value;
+            string thumbsFolder = MovingPicturesCore.Settings.CoverArtThumbsFolder;
             string filename = new FileInfo(CoverFullPath).Name;
             string fullname = thumbsFolder + '\\' + filename;
 

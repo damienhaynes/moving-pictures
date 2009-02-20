@@ -15,7 +15,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public SignatureBuilderResult UpdateSignature(MovieSignature signature) {
-            bool scanNFO = (bool)MovingPicturesCore.SettingsManager["importer_nfoscan"].Value;
+            bool scanNFO = MovingPicturesCore.Settings.NfoScannerEnabled;
 
             // Scan for NFO files 
             if (scanNFO && signature.Path != null && signature.LocalMedia != null) {
@@ -51,7 +51,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         /// <param name="filename">* or filename without extension</param>
         /// <returns>ImdbID or empty</returns>
         public static string fileScanner(DirectoryInfo dir, string filename) {
-            string nfoExt = MovingPicturesCore.SettingsManager["importer_nfoext"].Value.ToString();
+            string nfoExt = MovingPicturesCore.Settings.NfoScannerFileExtensions;
             Char[] splitters = new Char[] { ',', ';' };
             string[] extensions = nfoExt.Split(splitters);
             string[] mask = new string[extensions.Length];

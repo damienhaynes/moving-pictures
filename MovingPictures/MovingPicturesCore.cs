@@ -56,15 +56,15 @@ namespace MediaPortal.Plugins.MovingPictures {
         }  private static DatabaseManager databaseManager;
 
         // The SettingsManager that should be used by all components of the plugin.
-        public static SettingsManager SettingsManager {
+        public static MovingPicturesSettings Settings {
             get {
-                if (settingsManager == null)
-                    initSettings();
+                if (_settings == null)
+                    _settings = new MovingPicturesSettings(DatabaseManager);
 
-                return settingsManager;
+                return _settings;
             }
-        } private static SettingsManager settingsManager;
-
+        } private static MovingPicturesSettings _settings = null;
+        
         public static DataProviderManager DataProviderManager {
             get {
                 return DataProviderManager.GetInstance();
@@ -74,9 +74,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         // Settings from Media Portal
         // Instead of calling this line whenever we need some MP setting we only define it once
         // There isn't really a central MePo settings manager (or is there?)
-        public static Settings MediaPortalSettings {
+        public static MediaPortal.Profile.Settings MediaPortalSettings {
             get {
-                Settings mpSettings = new Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"));
+                MediaPortal.Profile.Settings mpSettings = new MediaPortal.Profile.Settings(Config.GetFile(Config.Dir.Config, "MediaPortal.xml"));
                 return mpSettings;
             }
         }
@@ -174,10 +174,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         public static void Shutdown() {
             DeviceManager.StopMonitor();
             importer.Stop();
-            settingsManager.Shutdown();
 
             importer = null;
-            settingsManager = null;
+            _settings = null;
             databaseManager = null;
 
             logger.Info("Plugin Closed");
@@ -202,13 +201,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 defaultUser.Name = "Default User";
                 defaultUser.Commit();
             }
-        }
-
-        // Initiallizes the SettingsManager and adds any settings that do not already exist
-        private static void initSettings() {
-            settingsManager = new SettingsManager(DatabaseManager);
-
-            settingsManager.LoadSettingsFile(Properties.Resources.InitialSettings, false);
         }
 
         private static void initLogger() {
@@ -238,7 +230,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             // Get current Log Level from MediaPortal 
             LogLevel logLevel;
-            Settings xmlreader = MediaPortalSettings;
+            MediaPortal.Profile.Settings xmlreader = MediaPortalSettings;
             switch ((Level)xmlreader.GetValueAsInt("general", "loglevel", 0)) {
                 case Level.Error:
                     logLevel = LogLevel.Error;
@@ -265,34 +257,35 @@ namespace MediaPortal.Plugins.MovingPictures {
             LogManager.Configuration = config;
         }
 
+        //for production, replace all references in this method from "SettingsManagerNew" to "SettingsManager"
         private static void initAdditionalSettings() {
-            if (((String)SettingsManager["cover_art_folder"].Value).Trim().Equals(""))
-                SettingsManager["cover_art_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Covers\\FullSize";
+            if (Settings.CoverArtFolder.Trim() == "")
+                Settings.CoverArtFolder = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Covers\\FullSize";
 
             // create the covers folder if it doesn't already exist
-            if (!Directory.Exists((string)SettingsManager["cover_art_folder"].Value))
-                Directory.CreateDirectory((string)SettingsManager["cover_art_folder"].Value);
+            if (!Directory.Exists(Settings.CoverArtFolder))
+                Directory.CreateDirectory(Settings.CoverArtFolder);
 
-            if (((String)SettingsManager["cover_thumbs_folder"].Value).Trim().Equals(""))
-                SettingsManager["cover_thumbs_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Covers\\Thumbs";
+            if (Settings.CoverArtThumbsFolder.Trim() == "")
+                Settings.CoverArtThumbsFolder = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Covers\\Thumbs";
 
             // create the thumbs folder if it doesn't already exist
-            if (!Directory.Exists((string)SettingsManager["cover_thumbs_folder"].Value))
-                Directory.CreateDirectory((string)SettingsManager["cover_thumbs_folder"].Value);
+            if (!Directory.Exists(Settings.CoverArtThumbsFolder))
+                Directory.CreateDirectory(Settings.CoverArtThumbsFolder);
 
-            if (((String)SettingsManager["backdrop_folder"].Value).Trim().Equals(""))
-                SettingsManager["backdrop_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Backdrops\\FullSize";
+            if (Settings.BackdropFolder.Trim() == "")
+                Settings.BackdropFolder = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Backdrops\\FullSize";
 
             // create the backdrop folder if it doesn't already exist
-            if (!Directory.Exists((string)SettingsManager["backdrop_folder"].Value))
-                Directory.CreateDirectory((string)SettingsManager["backdrop_folder"].Value);
+            if (!Directory.Exists(Settings.BackdropFolder))
+                Directory.CreateDirectory(Settings.BackdropFolder);
 
-            if (((String)SettingsManager["backdrop_thumbs_folder"].Value).Trim().Equals(""))
-                SettingsManager["backdrop_thumbs_folder"].Value = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Backdrops\\Thumbs";
+            if (Settings.BackdropThumbsFolder.Trim() == "")
+                Settings.BackdropThumbsFolder = Config.GetFolder(Config.Dir.Thumbs) + "\\MovingPictures\\Backdrops\\Thumbs";
 
             // create the backdrop thumbs folder if it doesn't already exist
-            if (!Directory.Exists((string)SettingsManager["backdrop_thumbs_folder"].Value))
-                Directory.CreateDirectory((string)SettingsManager["backdrop_thumbs_folder"].Value);
+            if (!Directory.Exists(Settings.BackdropThumbsFolder))
+                Directory.CreateDirectory(Settings.BackdropThumbsFolder);
         }
 
         private static void checkVersionInfo() {
@@ -300,16 +293,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             Version realVer = Assembly.GetExecutingAssembly().GetName().Version;
 
             if (realVer > GetDBVersionNumber()) {
-                SettingsManager["version"].Value = realVer.ToString();
-                SettingsManager["version"].Commit();
-
-                SettingsManager["source_manager_init_done"].Value = false;
-                SettingsManager["source_manager_init_done"].Commit();
+                Settings.Version = realVer.ToString();
+                Settings.DataProvidersInitialized = false;
             }
         }
 
         public static Version GetDBVersionNumber() {
-            return new Version((string)SettingsManager["version"].Value);
+            return new Version(Settings.Version);
         }
 
         #endregion

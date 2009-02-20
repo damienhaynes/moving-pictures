@@ -97,7 +97,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool Load(string script) {
-            bool debugMode = (bool)MovingPicturesCore.SettingsManager["source_manager_debug"].Value;
+            bool debugMode = MovingPicturesCore.Settings.DataSourceDebugActive;
             scraper = new ScriptableScraper(script, debugMode);
 
             if (!scraper.LoadSuccessful) {
@@ -216,8 +216,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             Dictionary<string, string> results;
 
             // grab coverart loading settings
-            int maxCovers = (int)MovingPicturesCore.SettingsManager["max_covers_per_movie"].Value;
-            int maxCoversInSession = (int)MovingPicturesCore.SettingsManager["max_covers_per_session"].Value;
+            int maxCovers = MovingPicturesCore.Settings.MaxCoversPerMovie;
+            int maxCoversInSession = MovingPicturesCore.Settings.MaxCoversPerSession;
 
             // if we have already hit our limit for the number of covers to load, quit
             if (movie.AlternateCovers.Count >= maxCovers)
