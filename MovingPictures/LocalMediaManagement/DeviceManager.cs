@@ -216,8 +216,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static void StartMonitor() {
             foreach (DBImportPath currPath in DBImportPath.GetAll()) {
                 try {
-                    if (currPath.IsRemovable)
-                        AddWatchDrive(currPath.FullPath);
+                    AddWatchDrive(currPath.FullPath);
                 }
                 catch (Exception e) {
                     if (e is ThreadAbortException)
