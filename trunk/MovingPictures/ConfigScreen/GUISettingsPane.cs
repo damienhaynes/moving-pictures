@@ -32,10 +32,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             enableDeleteCheckBox.Setting = MovingPicturesCore.Settings["enable_delete_movie"];
 
             sortFieldComboBox.Setting = MovingPicturesCore.Settings["default_sort_field"];
-            sortFieldComboBox.EnumType = typeof(GUIListItemMovieComparer.SortingFields);
-
-            sortDirComboBox.Setting = MovingPicturesCore.Settings["default_sort_direction"];
-            sortDirComboBox.EnumType = typeof(GUIListItemMovieComparer.SortingDirections);
+            sortFieldComboBox.EnumType = typeof(SortingFields);
 
             clickGoesToDetails = MovingPicturesCore.Settings["click_to_details"];
             dvdInsertedAction = MovingPicturesCore.Settings["on_disc_loaded"];

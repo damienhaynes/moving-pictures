@@ -208,7 +208,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <returns>True if yes was clicked, False if no was clicked</returns>
         private bool ShowCustomYesNo(string heading, string lines, string yesLabel, string noLabel, bool defaultYes) {
-            System.Diagnostics.Debugger.Launch();
             GUIDialogYesNo dialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
             try {
                 dialog.Reset();
@@ -348,7 +347,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
                 browser.ViewChanged +=new MovieBrowser.ViewChangedDelegate(OnBrowserViewChanged);
 
-                SetProperty("#MovingPictures.Sort.Field", GUIListItemMovieComparer.GetFriendlySortName(browser.CurrentSortField));
+                SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
                 SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
             }
 
@@ -587,39 +586,34 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             dialog.Reset();
             dialog.SetHeading("Moving Pictures - " + Translation.SortBy);
 
-            foreach (int value in Enum.GetValues(typeof(GUIListItemMovieComparer.SortingFields))) {
-                string menuCaption = GUIListItemMovieComparer.GetFriendlySortName(
-                    (GUIListItemMovieComparer.SortingFields)Enum.Parse(typeof(GUIListItemMovieComparer.SortingFields), value.ToString()));
+            foreach (int value in Enum.GetValues(typeof(SortingFields))) {
+                string menuCaption = Sort.GetFriendlySortName(
+                    (SortingFields)Enum.Parse(typeof(SortingFields), value.ToString()));
                 GUIListItem listItem = new GUIListItem(menuCaption);
                 listItem.ItemId = value;
                 dialog.Add(listItem);
             }
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
-
-            GUIListItemMovieComparer.SortingFields newSortField = GUIListItemMovieComparer.SortingFields.Title;
-            GUIListItemMovieComparer.SortingDirections defaultSortDirection = GUIListItemMovieComparer.SortingDirections.Ascending;
-            
             if (dialog.SelectedId <= 0) return;  // user canceled out of menu
-            
-            newSortField = (GUIListItemMovieComparer.SortingFields)Enum.Parse(typeof(GUIListItemMovieComparer.SortingFields), dialog.SelectedId.ToString());
-            if (newSortField == GUIListItemMovieComparer.SortingFields.DateAdded)
-                defaultSortDirection = GUIListItemMovieComparer.SortingDirections.Descending;
+
+            SortingFields newSortField =
+                (SortingFields)Enum.Parse(typeof(SortingFields), dialog.SelectedId.ToString());
 
             if (browser.CurrentSortField == newSortField) {
                 // toggle sort direction
-                if (browser.CurrentSortDirection == GUIListItemMovieComparer.SortingDirections.Ascending)
-                    browser.CurrentSortDirection = GUIListItemMovieComparer.SortingDirections.Descending;
+                if (browser.CurrentSortDirection == SortingDirections.Ascending)
+                    browser.CurrentSortDirection = SortingDirections.Descending;
                 else
-                    browser.CurrentSortDirection = GUIListItemMovieComparer.SortingDirections.Ascending;
+                    browser.CurrentSortDirection = SortingDirections.Ascending;
             }
             else {
                 browser.CurrentSortField = newSortField;
-                browser.CurrentSortDirection = defaultSortDirection;
+                browser.CurrentSortDirection = Sort.GetLastSortDirection(newSortField);
             }
 
             browser.ReloadFacade();
-            SetProperty("#MovingPictures.Sort.Field", GUIListItemMovieComparer.GetFriendlySortName(browser.CurrentSortField));
+            SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
             SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
             browser.Facade.SelectedListItemIndex = 0;
         }

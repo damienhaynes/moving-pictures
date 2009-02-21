@@ -71,7 +71,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #endregion
 
         private static string path = string.Empty;
-        private static Dictionary<string, string> TranslatedStrings = new Dictionary<string, string>();
+        
 
         static Translation() {
             string lang = GUILocalizeStrings.GetCultureName(GUILocalizeStrings.CurrentLanguage());
@@ -88,9 +88,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         public static int loadTranslations(string lang) {
             XmlDocument doc = new XmlDocument();
-            TranslatedStrings = new Dictionary<string, string>();
-            Type TransType = typeof(Translation);
-            FieldInfo[] fieldInfos = TransType.GetFields(BindingFlags.Public | BindingFlags.Static);
+            Dictionary<string, string> TranslatedStrings = new Dictionary<string, string>();
 
             try {
                 string langPath = Path.Combine(path, lang + ".xml");
@@ -113,14 +111,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
             }
 
+            Type TransType = typeof(Translation);
+            FieldInfo[] fieldInfos = TransType.GetFields(BindingFlags.Public | BindingFlags.Static);
             foreach (FieldInfo fi in fieldInfos) {
                 if (TranslatedStrings != null && TranslatedStrings.ContainsKey(fi.Name))
                 TransType.InvokeMember(fi.Name, BindingFlags.SetField, null, TransType,
                     new object[] { TranslatedStrings[fi.Name] });
             }
-            int count = TranslatedStrings.Count;
-            TranslatedStrings = null; // free up
-            return count;
+            return TranslatedStrings.Count;
         }
     }
 
