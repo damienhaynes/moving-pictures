@@ -729,22 +729,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         [CornerstoneSetting(
-            Name = "Default Sort Direction",
-            Description = "The default sort direction used in the MediaPortal GUI when the plug-in is first opened. Valid options are \"ascending\" and \"descending\".",
-            Groups = "|MediaPortal GUI|Interface Options|",
-            Identifier = "default_sort_direction",
-            Default = "Ascending")]
-        public string DefaultSortDirection {
-            get { return _defaultSortDirection; }
-            set {
-                _defaultSortDirection = value;
-                OnSettingChanged("default_sort_direction");
-            }
-        }
-        private string _defaultSortDirection;
-
-
-        [CornerstoneSetting(
             Name = "Show Only Unwatched Movies on Startup",
             Description = "When Moving Pictures starts up, if this option is set to true only Unwatched movies will be displayed until the user changes the filtering options.",
             Groups = "|MediaPortal GUI|Interface Options|",

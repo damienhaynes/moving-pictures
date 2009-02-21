@@ -54,9 +54,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.sortFieldComboBox = new Cornerstone.GUI.Controls.SettingsComboBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.sortDirComboBox = new Cornerstone.GUI.Controls.SettingsComboBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.enableDeleteCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.panel1.SuspendLayout();
@@ -394,37 +391,8 @@
             this.sortFieldComboBox.Location = new System.Drawing.Point(227, 307);
             this.sortFieldComboBox.Name = "sortFieldComboBox";
             this.sortFieldComboBox.Setting = null;
-            this.sortFieldComboBox.Size = new System.Drawing.Size(93, 21);
+            this.sortFieldComboBox.Size = new System.Drawing.Size(121, 21);
             this.sortFieldComboBox.TabIndex = 36;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(326, 310);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(15, 13);
-            this.label12.TabIndex = 37;
-            this.label12.Text = "in";
-            // 
-            // sortDirComboBox
-            // 
-            this.sortDirComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sortDirComboBox.EnumType = null;
-            this.sortDirComboBox.FormattingEnabled = true;
-            this.sortDirComboBox.Location = new System.Drawing.Point(347, 307);
-            this.sortDirComboBox.Name = "sortDirComboBox";
-            this.sortDirComboBox.Setting = null;
-            this.sortDirComboBox.Size = new System.Drawing.Size(82, 21);
-            this.sortDirComboBox.TabIndex = 38;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(435, 310);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(37, 13);
-            this.label13.TabIndex = 39;
-            this.label13.Text = "order.";
             // 
             // enableDeleteCheckBox
             // 
@@ -454,9 +422,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.enableDeleteCheckBox);
-            this.Controls.Add(this.label13);
-            this.Controls.Add(this.sortDirComboBox);
-            this.Controls.Add(this.label12);
             this.Controls.Add(this.sortFieldComboBox);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.label11);
@@ -531,9 +496,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.GroupBox groupBox5;
         private Cornerstone.GUI.Controls.SettingsComboBox sortFieldComboBox;
-        private System.Windows.Forms.Label label12;
-        private Cornerstone.GUI.Controls.SettingsComboBox sortDirComboBox;
-        private System.Windows.Forms.Label label13;
         private Cornerstone.GUI.Controls.SettingCheckBox enableDeleteCheckBox;
         private System.Windows.Forms.GroupBox groupBox6;
     }
