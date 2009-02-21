@@ -1095,7 +1095,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             // 1. the user clicked "retry" and the media is now available
             // 2. the user clicked "cancel" and we break out of the method
             while (!mediaToPlay.IsAvailable) {
-
+                
+                // Special debug line to troubleshoot availability issues
+                logger.Debug("Media not available: Path={0}, Exists={1}, DriveType={2}, DriveAvailable={3}, Serial={4}, ExpectedSerial={5}",
+                    mediaToPlay.FullPath, mediaToPlay.File.Exists.ToString(), 
+                    mediaToPlay.ImportPath.GetDriveType().ToString(), DeviceManager.GetVolumeInfo(mediaToPlay.FullPath).IsReady, 
+                    mediaToPlay.ImportPath.GetDiskSerial(), mediaToPlay.VolumeSerial);
+                
                 // the waiting for variables are set so that
                 // we can auto play in the OnVolumeInserted event handler.
                 waitingForMedia = true;
@@ -1109,6 +1115,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 waitingForMedia = false;
                 waitingForMediaSerial = "";
+                logger.Info("Media not available: ", mediaToPlay.FullPath);
 
                 // if the user clicked cancel, return.
                 if (!retry) return;                
