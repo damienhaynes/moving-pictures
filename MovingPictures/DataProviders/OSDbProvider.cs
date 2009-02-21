@@ -154,6 +154,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 }
             }
             catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
                 logger.ErrorException("Error: ", e);
             }
 
@@ -220,6 +223,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 }
             }
             catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
                 logger.ErrorException("Error: ", e);
             }
 
@@ -278,6 +284,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 }
             }
             catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
                 logger.ErrorException("Error: ", e);
             }
             return results;
