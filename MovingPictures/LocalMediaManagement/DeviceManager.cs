@@ -355,11 +355,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         
         // Listens for new import paths and adds them to the DiskWatcher
         private static void onPathAdded(DatabaseTable obj) {
-            // if this is not a movie object, break
+            // If this is not an import path object break
             if (obj.GetType() != typeof(DBImportPath))
                 return;
 
-            // add the new import path to the watched drives
+            // Add the new import path to the watched drives
             AddWatchDrive(((DBImportPath)obj).FullPath);
         }
 
