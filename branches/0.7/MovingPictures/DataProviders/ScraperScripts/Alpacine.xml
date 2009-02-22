@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141517</id>
-    <version major="1" minor="0" point="0"/>
-    <published month="2" day="12" year="2009"/>
+    <version major="1" minor="0" point="1"/>
+    <published month="2" day="22" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -208,22 +208,24 @@
   
 <action name="get_cover_art">
 		
-<set name="rx_poster_link">
-  <![CDATA[
-  src="http://img.alpacine.com/carteles/(?<posterLink>[^-]+)
-  ]]>
-</set>
+  <set name="rx_poster_link">
+    <![CDATA[
+    src="http://img.alpacine.com/carteles/(?<posterLink>[^-]+)
+    ]]>
+  </set>
+
+  <!-- We need to find the link to the posters page from the alpacine details page -->
+
+  <if test="${movie.site_id}!=">
+    <retrieve name="details_page_cover" url="http://alpacine.com/pelicula/${movie.site_id}/carteles/" />
 		
-	<!-- We need to find the link to the posters page from the details page -->
-	<retrieve name="details_page_cover" url="${movie.details_url}carteles/" />
-	
-	
 		<parse name="posterLinks" input="${details_page_cover}" regex="${rx_poster_link}"/>
 		<!-- If link found, continue -->
-		
-			<loop name='cover_url' on='posterLinks'>
-		        <set name='cover_art[${count}].url' value='http://img.alpacine.com/carteles/${cover_url[0]}.jpg'/>
-		    </loop>
+		<loop name='cover_url' on='posterLinks'>
+		  <set name='cover_art[${count}].url' value='http://img.alpacine.com/carteles/${cover_url[0]}.jpg'/>
+		</loop>
+    
+  </if>
 		
 	
 </action>
