@@ -6,6 +6,8 @@ using System.Management;
 using System.Threading;
 using NLog;
 using MediaPortal.Plugins.MovingPictures.Database;
+using Cornerstone.Database;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
@@ -214,6 +216,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Monitoring Logic
 
         public static void StartMonitor() {
+            
+            // Setup listener for added ImportPaths
+            MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onPathAdded);
+            
             foreach (DBImportPath currPath in DBImportPath.GetAll()) {
                 try {
                     AddWatchDrive(currPath.FullPath);
@@ -347,6 +353,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         }
         
+        // Listens for new import paths and adds them to the DiskWatcher
+        private static void onPathAdded(DatabaseTable obj) {
+            // if this is not a movie object, break
+            if (obj.GetType() != typeof(DBImportPath))
+                return;
+
+            // add the new import path to the watched drives
+            AddWatchDrive(((DBImportPath)obj).FullPath);
+        }
+
         #endregion
 
         #region Public Static Methods
