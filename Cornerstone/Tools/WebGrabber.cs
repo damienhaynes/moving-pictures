@@ -124,12 +124,9 @@ namespace Cornerstone.Tools {
                     }
 
                     // Debug
-                    if (_debug) {
-                        logger.Debug("URL: {0}", requestUrl);
-                        logger.Debug("UserAgent: {0}", userAgent);
-                        logger.Debug("CookieHeader: {0}", cookieHeader);
-                        logger.Debug("Encoding: {0}", encoding.EncodingName);
-                    }
+                    if (_debug)
+                        logger.Debug("GetResponse: URL={0}, UserAgent={1}, Encoding={2}, CookieHeader={3}",
+                            requestUrl, userAgent, encoding.EncodingName, cookieHeader);
 
                     // Converts the stream to a string
                     StreamReader reader = new StreamReader(resultData, encoding, true);
@@ -163,11 +160,13 @@ namespace Cornerstone.Tools {
                         logger.ErrorException("Connection failed: Reached retry limit of " + maxRetries + ". URL=" + requestUrl, e);
                         return false;
                     }
+                    else {
+                        logger.DebugException("Connection retry: URL=" + requestUrl + ", Status=" + e.Status.ToString() + ". ", e);
+                    }               
 
                     // If we did not experience a timeout but some other error
                     // use the timeout value as a pause between retries
                     if (e.Status != WebExceptionStatus.Timeout) {
-                        logger.DebugException("Connection retry: URL=" + requestUrl + ", Status=" + e.Status.ToString() + ". ", e);
                         Thread.Sleep(timeout + (timeoutIncrement * tryCount));
                     }
                 }
