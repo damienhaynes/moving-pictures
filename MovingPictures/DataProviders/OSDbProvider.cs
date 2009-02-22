@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using System.Threading;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using MediaPortal.Plugins.MovingPictures.DataProviders.OpenSubtitles;
