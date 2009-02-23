@@ -28,7 +28,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 return SignatureBuilderResult.CONCLUSIVE;
             }
             else {
-                logger.Debug("Lookup Hash={0}: Missing data or failed minimum confirmation value.", signature.MovieHash);
+                logger.Debug("Lookup Hash={0}: No proper match found.", signature.MovieHash);
                 return SignatureBuilderResult.INCONCLUSIVE;
             }
 

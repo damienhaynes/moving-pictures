@@ -161,7 +161,7 @@ namespace Cornerstone.Tools {
                         return false;
                     }
                     else {
-                        logger.DebugException("Connection retry: URL=" + requestUrl + ", Status=" + e.Status.ToString() + ". ", e);
+                        logger.DebugException("Connection retry (" + tryCount.ToString() + "): URL=" + requestUrl + ", Status=" + e.Status.ToString() + ". ", e);
                     }               
 
                     // If we did not experience a timeout but some other error
