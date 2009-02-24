@@ -241,9 +241,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         public static void AddWatchDrive(string path) {
-            logger.Debug("Adding " + path + " to DiskWatcher.");
             try {
                 string driveLetter = GetDriveLetter(path);
+                if (driveLetter == null)
+                    return;
+
                 lock (watchedDrives) {
                     if (!watchedDrives.Contains(driveLetter)) {
                         watchedDrives.Add(driveLetter);
@@ -262,6 +264,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         public static void RemoveWatchDrive(string path) {
             string driveLetter = GetDriveLetter(path);
+            if (driveLetter == null)
+                return;
+
             lock (watchedDrives) {
                 if (watchedDrives.Contains(driveLetter)) {
                     watchedDrives.Remove(driveLetter);
