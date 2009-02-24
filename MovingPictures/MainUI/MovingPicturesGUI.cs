@@ -52,8 +52,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private DiskInsertedAction diskInsertedAction;
         Dictionary<string, string> recentInsertedDiskSerials;
 
-        private bool waitingForMedia = false;
-        private string waitingForMediaSerial;
+        private bool dialogActive = false;
 
         #endregion
 
@@ -297,6 +296,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         /// </summary>
         /// <returns>True if yes was clicked, False if no was clicked</returns>
         private bool ShowCustomYesNo(string heading, string line1, string line2, string line3, string line4, string yesLabel, string noLabel, bool defaultYes) {
+            dialogActive = true;
             GUIDialogYesNo dialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
             try {
                 dialog.Reset();
@@ -306,7 +306,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (!String.IsNullOrEmpty(line3)) dialog.SetLine(3, line3);
                 if (!String.IsNullOrEmpty(line4)) dialog.SetLine(4, line4);
                 dialog.SetDefaultToYes(defaultYes);
-
 
                 foreach (System.Windows.UIElement item in dialog.Children) {
                     if (item is GUIButtonControl) {
@@ -319,13 +318,16 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
 
                 dialog.DoModal(GetID);
-
+                dialogActive = false;
                 return dialog.IsConfirmed;
             }
             finally {
+                dialogActive = false;
+
                 // set the standard yes/no dialog back to it's original state (yes/no buttons)
-                if (dialog != null)
+                if (dialog != null) {
                     dialog.ClearAll();
+                }
             }
         }
 
@@ -1097,25 +1099,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             while (!mediaToPlay.IsAvailable) {
                 
                 // Special debug line to troubleshoot availability issues
-                logger.Debug("Media not available: Path={0}, Exists={1}, DriveType={2}, DriveAvailable={3}, Serial={4}, ExpectedSerial={5}",
-                    mediaToPlay.FullPath, mediaToPlay.File.Exists.ToString(), 
-                    mediaToPlay.ImportPath.GetDriveType().ToString(), DeviceManager.GetVolumeInfo(mediaToPlay.FullPath).IsReady, 
+                logger.Debug("Media not available: Path={0}, DriveType={1}, Serial={2}, ExpectedSerial={3}",
+                    mediaToPlay.FullPath, mediaToPlay.ImportPath.GetDriveType().ToString(),  
                     mediaToPlay.ImportPath.GetDiskSerial(), mediaToPlay.VolumeSerial);
-                
-                // the waiting for variables are set so that
-                // we can auto play in the OnVolumeInserted event handler.
-                waitingForMedia = true;
-                waitingForMediaSerial = mediaToPlay.VolumeSerial;
 
                 bool retry = ShowCustomYesNo("Media Not Available",
                                             "The media for the movie you have selected is not",
                                             "currently available. Please insert or connect media",
                                             "labeled: " + mediaToPlay.MediaLabel,
                                             null, "Retry", GUILocalizeStrings.Get(222), true);
-
-                waitingForMedia = false;
-                waitingForMediaSerial = "";
-                logger.Info("Media not available: ", mediaToPlay.FullPath);
 
                 // if the user clicked cancel, return.
                 if (!retry) return;                
@@ -1544,7 +1536,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             
             // If we or stopping in another windows enable native auto-play again
             // This will most of the time be the fullscreen playback window, 
-            // if we would re-enter the plugin, autoplay be disabled again.
+            // if we would re-enter the plugin, autoplay will be disabled again.
             if (GetID != GUIWindowManager.ActiveWindow)
                 enableNativeAutoplay();
         }
@@ -1669,7 +1661,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void OnVolumeInserted(string volume, string serial) {
             // only respond when the plugin (or it's playback) is active
-            if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlaying)
+            // and there's no active dialog waiting for user input
+            if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlaying && !dialogActive)
                 return;
 
             logger.Debug("OnVolumeInserted: Volume={0}, Serial={1}", volume, serial);
@@ -1678,22 +1671,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 // Clear recent disc information
                 logger.Debug("Resetting Recent Disc Information.");
-                recentInsertedDiskSerials.Clear();
-
-
-                if (waitingForMedia) {
-                    if (waitingForMediaSerial == serial) {
-                        // Correct volume inserted.  Starting playback.
-                        waitingForMedia = false;
-                        waitingForMediaSerial = "";
-                        playSelectedMovie();
-
-                        // Why is the following needed?  For some reason, playSelectedMovie() isn't 
-                        // playing in full screen.  I have to manually switch to fullscreen here. - Z6
-                        GUIGraphicsContext.IsFullScreenVideo = true;
-                        return;
-                    }
-                }
+                recentInsertedDiskSerials.Clear();                
 
                 // DVD / Blu-ray 
                 // Try to grab a valid video path from the disc
