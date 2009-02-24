@@ -807,9 +807,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             logger.Info("File: " + e.FullPath + " " + e.ChangeType);
         }
 
-
-
-
         // Grabs the files from the DBImportPath and add them to the queue for use
         // by the ScanMedia thread.
         private void ScanPath(DBImportPath importPath) {
@@ -1162,8 +1159,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // if the best match is exact or very close, place it in the accepted queue
             // otherwise place it in the pending queue for approval
-            int threshold = MovingPicturesCore.Settings.AutoApproveThreshold;
-            if (mediaMatch.Selected != null && mediaMatch.Selected.MatchValue <= threshold) {
+            if (mediaMatch.Selected != null && mediaMatch.Selected.Result.AutoApprove()) {
                 if (mediaMatch.HighPriority) priorityApprovedMatches.Add(mediaMatch);
                 else approvedMatches.Add(mediaMatch);
 
@@ -1223,7 +1219,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 userSettings.CommitNeeded = false;
             }
 
-            if (movie.LocalMedia[0].File.Extension.ToLower() == ".ifo")
+            if (movie.LocalMedia[0].ImportPath.GetDriveType() == DriveType.CDRom)
                 movie.DateAdded = DateTime.Now;
             else
                 movie.DateAdded = movie.LocalMedia[0].File.CreationTime;
@@ -1336,14 +1332,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             else
                 movieList = MovingPicturesCore.DataProviderManager.Get(signature);
 
-            bool strictYear = MovingPicturesCore.Settings.StrictYear;
-
             foreach (DBMovieInfo currMovie in movieList) {
-
-                // Skip this movie if the strict year setting is on and the years don't match
-                if (strictYear) // todo: refactor / rethink / relocate
-                    if ((currMovie.Year != signature.Year) && (currMovie.Year != 0) && (signature.Year != 0))
-                        continue;
 
                 // Create a Possible Match object
                 PossibleMatch currMatch = new PossibleMatch();
@@ -1352,7 +1341,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 currMatch.Movie = currMovie;
 
                 // Get the matching score for this movie
-                currMatch.MatchValue = signature.MatchScore(currMovie);
+                currMatch.Result = signature.GetMatchResult(currMovie);
 
                 // Add the match to the ranked movie list
                 rankedMovieList.Add(currMatch);
@@ -1483,14 +1472,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     public class PossibleMatch : IComparable {
         private DBMovieInfo movie;
-        private int matchValue = int.MaxValue;
+        private MatchResult matchValue;
 
         public DBMovieInfo Movie {
             get { return movie; }
             set { movie = value; }
         }
 
-        public int MatchValue {
+        public MatchResult Result {
             get { return matchValue; }
             set { matchValue = value; }
         }
@@ -1503,26 +1492,62 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // see previous comment
         public String DisplayMember {
             get {
+                string displayTitle = ToString();
+                if (this.Result.AlternateTitleUsed())
+                    displayTitle += " (as \"" + this.Result.AlternateTitle + "\")";
+
                 if (this.movie.Year > 0) {
                     // if we have a year value for the possible match include it in the display member
-                    return ToString() + " (" + this.movie.Year.ToString() + ")";
+                    displayTitle += " (" + this.movie.Year.ToString() + ")";
                 }
-                else {
-                    return ToString();
-                }
+
+                return displayTitle;
             }
         }
-
+        
         public int CompareTo(object o) {
             if (o.GetType() != typeof(PossibleMatch))
                 return 0;
 
-            if (this.matchValue < ((PossibleMatch)o).matchValue)
+            MatchResult otherResult = ((PossibleMatch)o).Result;
+            
+            // Auto-Approval candidates are ranked on top
+            if (this.Result.AutoApprove() && !otherResult.AutoApprove())
                 return -1;
-            if (this.matchValue == ((PossibleMatch)o).matchValue)
-                return ((PossibleMatch)o).movie.Popularity.CompareTo(this.movie.Popularity);
-            else
+
+            if (!this.Result.AutoApprove() && otherResult.AutoApprove())
                 return 1;
+
+            // IMDB Score - matching id's rank higher
+            if (this.Result.ImdbMatch && !otherResult.ImdbMatch)
+                return -1;
+
+            if (!this.Result.ImdbMatch && otherResult.ImdbMatch)
+                return 1;
+
+            // Title Score - lower scores rank higher
+            if (this.Result.TitleScore < otherResult.TitleScore)
+                return -1;
+
+            if (this.Result.TitleScore > otherResult.TitleScore)
+                return 1;
+
+            // Alternate title score will rank lower
+            if (!this.Result.AlternateTitleUsed() && otherResult.AlternateTitleUsed())
+                return -1;
+
+            if (this.Result.AlternateTitleUsed() && !otherResult.AlternateTitleUsed())
+                return 1;            
+
+            // Year score (less distance between the actual year will rank higher)
+            if (this.Result.YearScore < otherResult.YearScore)
+                return -1;
+
+            if (this.Result.YearScore > otherResult.YearScore)
+                return 1;
+            
+            // If we are still equal judge by popularity
+            return ((PossibleMatch)o).movie.Popularity.CompareTo(this.movie.Popularity);
         }
 
         public override string ToString() {

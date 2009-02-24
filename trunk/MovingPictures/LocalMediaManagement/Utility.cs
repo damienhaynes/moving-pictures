@@ -684,6 +684,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 dvdInfo.GetDiscID(path, out discID);
             }
             catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Error while retrieving disc id for: " + path, e);
             }
             return discID;

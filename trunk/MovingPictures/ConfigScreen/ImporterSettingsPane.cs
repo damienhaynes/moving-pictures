@@ -24,7 +24,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             autoApproval = MovingPicturesCore.Settings["importer_autoapprove"];
 
-            strictYearCheckBox.Setting = MovingPicturesCore.Settings["importer_strict_year"];
+            settingAutoApproveAlternateTitle.Setting = MovingPicturesCore.Settings["importer_autoapprove_alternate_titles"];
+            settingAutoApproveAlternateTitle.IgnoreSettingName = true;
+
             preferFolderCheckBox.Setting = MovingPicturesCore.Settings["importer_prefer_foldername"];
             folderGroupingCheckBox.Setting = MovingPicturesCore.Settings["importer_groupfolder"];
             nfoExtTextBox.Setting = MovingPicturesCore.Settings["importer_nfoext"];

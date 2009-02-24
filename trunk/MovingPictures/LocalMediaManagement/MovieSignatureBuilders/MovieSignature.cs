@@ -16,24 +16,58 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private string baseTitle = null;
 
         #endregion
 
         #region Public properties
 
+        /// <summary>
+        /// The full movie title
+        /// </summary>
         public string Title { // ex. "Pirates of Silicon Valley"
             get { return title; }
             set {
                 if (value != null)
                     title = value.Trim();
-                if (title == string.Empty)
+
+                if (!String.IsNullOrEmpty(title)) {
+                    keywords = Utility.TitleToKeywords(title);
+                    baseTitle = Utility.normalizeTitle(title);
+                } else {
                     title = null;
+                    keywords = null;
+                    baseTitle = null;
+                } 
+
             }
-        } private string title = null;
+        } 
 
-        public int? Year = null; // ex. 1999
+        private string title = null;        
 
-        public string ImdbId { // ex. "tt0168122"
+        /// <summary>
+        /// Keywords derived from the full movie title, can be used
+        /// by a data provider for better results.
+        /// </summary>
+        public string Keywords {
+            get { return keywords; }
+        } private string keywords = null;
+
+        /// <summary>
+        /// Year / Release Date 
+        /// </summary>
+        /// <example>
+        /// 1999
+        /// </example>
+        public int? Year = null;
+
+        /// <summary>
+        /// The IMDB Id including the "tt" prefix
+        /// </summary>
+        /// <example>
+        /// "tt0168122"
+        /// </example>
+        public string ImdbId {
             get { return imdb_id; }
             set {
                 if (value != null)
@@ -43,7 +77,10 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             }
         } private string imdb_id = null;
 
-        public string DiscId { // ex. (16 character hash of a DVD)
+        /// <summary>
+        /// String version of the Disc ID (16 character hash of a DVD)
+        /// </summary>
+        public string DiscId {
             get {
                 if (LocalMedia != null)
                     discid = LocalMedia[0].DiscId;
@@ -52,7 +89,10 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             set { discid = value; }
         } private string discid = null;
 
-        public string MovieHash { // ex. (16 character hash of a movie file)
+        /// <summary>
+        /// String version of the filehash of the first movie file (16 characters)
+        /// </summary>
+        public string MovieHash {
             get {
                 if (LocalMedia != null)
                     filehash = LocalMedia[0].FileHash;
@@ -65,7 +105,9 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
 
         #region Read-only
 
-        // base folder
+        /// <summary>
+        /// The base foldername of the movie
+        /// </summary>
         public string Folder {
             get {
                 if (folder == null)
@@ -75,7 +117,9 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             }
         } private string folder = null;
 
-        // base file
+        /// <summary>
+        /// The filename of the movie
+        /// </summary>
         public string File {
             get {
                 if (file == null)
@@ -85,7 +129,9 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             }
         } private string file = null;
 
-        // path of base folder
+        /// <summary>
+        /// Complete path to the base folder
+        /// </summary>
         public string Path {
             get {
                 if (path == null)
@@ -124,74 +170,59 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
 
         #region Public methods
 
-        // todo: this logic was moved from the importer but this is not the final form
-        public int MatchScore(DBMovieInfo movie) {
+        public MatchResult GetMatchResult(DBMovieInfo movie) {
+            
+            // Create a new score card
+            MatchResult result = new MatchResult();
 
-            // Create Signature From Movie
-            MovieSignature movieSignature = new MovieSignature(movie);
+            // Get the default scores for this movie
+            result.TitleScore = matchTitle(movie.Title);
+            result.YearScore = matchYear(movie.Year);
+            result.ImdbMatch = matchImdb(movie.ImdbID);
 
-            // Get the default score for this movie
-            int bestScore = MatchScore(movieSignature);
-
-            // If we have alternative titles iterate through these titles and check
-            // for a better score
-            foreach (string altTitle in movie.AlternateTitles.ToArray()) {
-                movieSignature.Title = altTitle;
-                int score = MatchScore(movieSignature);
-                // if this match is better than the previous one save the score
-                if (score < bestScore)
-                    bestScore = score;
-                // if the best score is 0 (the best possible score) then stop score checking
-                if (bestScore == 0) break;
+            // If we don't have a perfect score on the original title
+            // iterate through the available alternate titles and check
+            // them to lower the score if possible
+            if (result.TitleScore > 0) {
+                foreach (string alternateTitle in movie.AlternateTitles.ToArray()) {
+                    int score = matchTitle(alternateTitle);
+                    // if this match is better than the previous one save the score
+                    if (score < result.TitleScore) {
+                        result.TitleScore = score;
+                        result.AlternateTitle = alternateTitle;
+                    }
+                    // if the best score is 0 (the best possible score) then stop score checking
+                    if (result.TitleScore == 0) break;
+                }
             }
 
-            // return the best score for this movie
-            return bestScore;
+            // return the result
+            logger.Debug("Final MatchResult for '{0}': {1}", movie.Title, result.ToString());
+            return result;
         }
 
-        // todo: this logic was moved from the importer but this is not the final form
-        public int MatchScore(MovieSignature signature) {
-
-            bool imdbBoost = MovingPicturesCore.Settings.AutoApproveOnIMDBMatch;
-            bool hasImdb = (imdb_id != null);
-            bool hasYear = (Year > 0);
-            string strYear = (hasYear) ? Year.ToString() : null;
-
-            string compareThis = Utility.normalizeTitle(title); // normalize title
-            string compareOther = Utility.normalizeTitle(signature.Title); // normalize title
-
-            // Account for Year when criteria is met
-            // this should give the match a higher priority
-            if (hasYear && signature.Year > 0) {
-                compareThis += ' ' + strYear;
-                compareOther += ' ' + signature.Year.ToString();
-            }
-
-            // Account for IMDB when criteria is met
-            if (hasImdb && signature.ImdbId != null) {
-                if (imdbBoost && (ImdbId == signature.ImdbId)) {
-                    // If IMDB Auto-Approval is active
-                    // and the we have an ImdbId match,
-                    // cheat the current match system into
-                    // an auto-match
-                    compareThis = ImdbId;
-                    compareOther = signature.ImdbId;
-                }
-                else {
-                    // add the imdb id tot the complete matching string
-                    // this should improve priority
-                    compareThis += ' ' + ImdbId;
-                    compareOther += ' ' + signature.ImdbId;
-                }
-            }
-
-            // get the Levenshtein distance between the two string and use them 
-            // for as score for now
-            int score = AdvancedStringComparer.Levenshtein(compareThis, compareOther);
-
-            // uncomment this line to log matching process
-            logger.Debug("Compare: '{0}', With: '{1}', Result: {2}", compareThis, compareOther, score);
+        private int matchTitle(string title) {
+            string otherTitle = Utility.normalizeTitle(title);
+            int score = AdvancedStringComparer.Levenshtein(baseTitle, otherTitle);
+            logger.Debug("Compare: '{0}', With: '{1}', Result: {2}", baseTitle, otherTitle, score);
             return score;
+        }
+
+        private int matchYear(int year) {
+            if (Year > 0 && year > 0) {
+                int score = ((int)Year - year);
+                score = (score < 0) ? score * -1 : score;
+                return score;
+            } else {
+                return 0;
+            }
+        }
+
+        private bool matchImdb(string imdbid) {
+            if (imdb_id == null || imdbid == null)
+                return false;
+          
+            return (imdb_id == imdbid);
         }
 
         #endregion
@@ -215,11 +246,73 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region Overrides
 
         public override string ToString() {
-            return String.Format("Path= \"{0}\", Folder= \"{1}\", File= \"{2}\", Title= \"{3}\", Year= {4}, DiscId= \"{5}\", MovieHash= \"{6}\", ImdbId= \"{7}\"",
-            this.Path, this.Folder, this.File, this.Title, this.Year.ToString(), this.DiscId, this.MovieHash, this.ImdbId);
+            return String.Format("Path= \"{0}\", Folder= \"{1}\", File= \"{2}\", Keywords= \"{3}\", Title= \"{4}\", Year= {5}, DiscId= \"{6}\", MovieHash= \"{7}\", ImdbId= \"{8}\"",
+            this.Path, this.Folder, this.File, this.Keywords, this.Title, this.Year.ToString(), this.DiscId, this.MovieHash, this.ImdbId);
         }
 
         #endregion
 
+    }
+
+    /// <summary>
+    /// This struct represents a score card that is the result of
+    /// comparing a signature with movie information. The value can 
+    /// be used to rank a list of possible matches and to determine 
+    /// if they can be auto-approved.
+    /// </summary>
+    public struct MatchResult {
+        
+        #region Public Properties
+
+        public int TitleScore;
+        public int YearScore;
+        public bool ImdbMatch;
+        public string AlternateTitle;
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Get a value indicating if an alternate title was used for the title score
+        /// </summary>
+        /// <returns>True if an alternate title was used for the title score</returns>
+        public bool AlternateTitleUsed() {
+            return (!String.IsNullOrEmpty(AlternateTitle));
+        }
+
+        /// <summary>
+        /// Get a value indicating wether this result can be auto-approved because
+        /// it meets the minimal requirements
+        /// </summary>
+        /// <returns>True, if the result can be auto-approved</returns>
+        public bool AutoApprove() {
+            
+            // IMDB Auto-Approval
+            if (ImdbMatch && MovingPicturesCore.Settings.AutoApproveOnIMDBMatch)
+                return true;
+
+            // Alternate Title Auto-Approve Limitation
+            if (!MovingPicturesCore.Settings.AutoApproveOnAlternateTitle && AlternateTitleUsed())
+                return false;
+
+            // Title + Year Auto-Approval
+            if (TitleScore <= MovingPicturesCore.Settings.AutoApproveThreshold)
+                if (YearScore <= MovingPicturesCore.Settings.AutoApproveYearDifference)
+                    return true;   
+
+            return false;
+        }
+
+        #endregion
+
+        #region Overrides
+
+        public override string ToString() {
+            return String.Format("TitleScore={0}, YearScore={1}, ImdbMatch={2}, AlternateTitleUsed={3}, AlternateTitle='{4}', AutoApprove={5}",
+            TitleScore, YearScore, ImdbMatch, AlternateTitleUsed().ToString(), AlternateTitle, AutoApprove().ToString());
+        }
+
+        #endregion
     }
 }

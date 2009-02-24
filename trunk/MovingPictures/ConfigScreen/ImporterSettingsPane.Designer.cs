@@ -36,10 +36,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.autoApproveTrackBar = new System.Windows.Forms.TrackBar();
             this.nfoAutoApproveCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.nfoExtTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
-            this.strictYearCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.nfoScannerCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.folderGroupingCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.preferFolderCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.settingAutoApproveAlternateTitle = new Cornerstone.GUI.Controls.SettingCheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.autoApproveTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -163,19 +163,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.nfoExtTextBox.Size = new System.Drawing.Size(158, 21);
             this.nfoExtTextBox.TabIndex = 8;
             // 
-            // strictYearCheckBox
-            // 
-            this.strictYearCheckBox.AutoSize = true;
-            this.strictYearCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.strictYearCheckBox.IgnoreSettingName = false;
-            this.strictYearCheckBox.Location = new System.Drawing.Point(128, 48);
-            this.strictYearCheckBox.Name = "strictYearCheckBox";
-            this.strictYearCheckBox.Setting = null;
-            this.strictYearCheckBox.Size = new System.Drawing.Size(237, 17);
-            this.strictYearCheckBox.TabIndex = 2;
-            this.strictYearCheckBox.Text = "Ignore Possible Matches with Incorrect Year";
-            this.strictYearCheckBox.UseVisualStyleBackColor = true;
-            // 
             // nfoScannerCheckBox
             // 
             this.nfoScannerCheckBox.AutoSize = true;
@@ -216,10 +203,24 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.preferFolderCheckBox.Text = "Prefer Folder Name for Movie Matching";
             this.preferFolderCheckBox.UseVisualStyleBackColor = true;
             // 
+            // settingAutoApproveAlternateTitle
+            // 
+            this.settingAutoApproveAlternateTitle.AutoSize = true;
+            this.settingAutoApproveAlternateTitle.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.settingAutoApproveAlternateTitle.IgnoreSettingName = false;
+            this.settingAutoApproveAlternateTitle.Location = new System.Drawing.Point(128, 48);
+            this.settingAutoApproveAlternateTitle.Name = "settingAutoApproveAlternateTitle";
+            this.settingAutoApproveAlternateTitle.Setting = null;
+            this.settingAutoApproveAlternateTitle.Size = new System.Drawing.Size(184, 17);
+            this.settingAutoApproveAlternateTitle.TabIndex = 15;
+            this.settingAutoApproveAlternateTitle.Text = "Auto Approve on Alternate Titles";
+            this.settingAutoApproveAlternateTitle.UseVisualStyleBackColor = true;
+            // 
             // ImporterSettingsPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.settingAutoApproveAlternateTitle);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -231,7 +232,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.Controls.Add(this.nfoAutoApproveCheckBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.nfoExtTextBox);
-            this.Controls.Add(this.strictYearCheckBox);
             this.Controls.Add(this.nfoScannerCheckBox);
             this.Controls.Add(this.folderGroupingCheckBox);
             this.Controls.Add(this.preferFolderCheckBox);
@@ -249,7 +249,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private TrackBar autoApproveTrackBar;
         private System.Windows.Forms.Label label1;
-        private Cornerstone.GUI.Controls.SettingCheckBox strictYearCheckBox;
         private Cornerstone.GUI.Controls.SettingCheckBox preferFolderCheckBox;
         private Cornerstone.GUI.Controls.SettingCheckBox folderGroupingCheckBox;
         private Cornerstone.GUI.Controls.SettingCheckBox nfoScannerCheckBox;
@@ -262,5 +261,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
+        private SettingCheckBox settingAutoApproveAlternateTitle;
     }
 }
