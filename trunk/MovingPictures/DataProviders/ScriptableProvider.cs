@@ -249,8 +249,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
                 // get url for cover and load it via the movie object
                 string coverPath = results["cover_art[" + count + "].url"];
-                if (movie.AddCoverFromURL(coverPath) == ArtworkLoadStatus.SUCCESS)
-                    coversAdded++;
+                if (coverPath.Trim() != string.Empty)
+                    if (movie.AddCoverFromURL(coverPath) == ArtworkLoadStatus.SUCCESS)
+                        coversAdded++;
 
                 count++;
             }
