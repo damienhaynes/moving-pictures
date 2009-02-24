@@ -66,22 +66,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         #region Matching and Importing
 
         [CornerstoneSetting(
-            Name = "Ignore Possible Matches with Incorrect Year",
-            Description = "If a year keyword is detected and no exact match is found only show the results from the same year or blank year. (experimental)",
-            Groups = "|Movie Importer|Matching and Importing|",
-            Identifier = "importer_strict_year",
-            Default = false)]
-        public bool StrictYear {
-            get { return _strictYear; }
-            set {
-                _strictYear = value;
-                OnSettingChanged("importer_strict_year");
-            }
-        }
-        private bool _strictYear;
-
-
-        [CornerstoneSetting(
             Name = "Title Auto-Approve Threshold",
             Description = "This is the maximum value for the levenshtein distance that is used for triggering auto-approval on close matching titles.",
             Groups = "|Movie Importer|Matching and Importing|",
@@ -96,6 +80,35 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private int _autoApproveThreshold;
 
+        [CornerstoneSetting(
+            Name = "Year Auto-Approve Distance",
+            Description = "This is the maximum of years the release date may be differ before triggering auto-approval on close matches.",
+            Groups = "|Movie Importer|Matching and Importing|",
+            Identifier = "importer_autoapprove_year",
+            Default = 1)]
+        public int AutoApproveYearDifference {
+            get { return _autoApproveYearDifference; }
+            set {
+                _autoApproveYearDifference = value;
+                OnSettingChanged("importer_autoapprove_year");
+            }
+        }
+        private int _autoApproveYearDifference;
+
+        [CornerstoneSetting(
+            Name = "Auto-approve on alternate titles",
+            Description = "When enabled this option will auto-approve matches using alternate titles.",
+            Groups = "|Movie Importer|Matching and Importing|",
+            Identifier = "importer_autoapprove_alternate_titles",
+            Default = true)]
+        public bool AutoApproveOnAlternateTitle {
+            get { return _autoApproveOnAlternateTitle; }
+            set {
+                _autoApproveOnAlternateTitle = value;
+                OnSettingChanged("importer_autoapprove_alternate_titles");
+            }
+        }
+        private bool _autoApproveOnAlternateTitle;
 
         [CornerstoneSetting(
             Name = "Always Group Files In The Same Folder",

@@ -424,7 +424,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     // update the match
                     PossibleMatch selectedMovie = new PossibleMatch();
                     selectedMovie.Movie = movie;
-                    selectedMovie.MatchValue = 0;
+
+                    MatchResult result = new MatchResult();
+                    result.TitleScore = 0;
+                    result.YearScore = 0;
+                    result.ImdbMatch = true;
+
+                    selectedMovie.Result = result;
                     
                     selectedMatch.PossibleMatches.Add(selectedMovie);
                     selectedMatch.Selected = selectedMovie;
