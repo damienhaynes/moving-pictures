@@ -106,38 +106,34 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         public void RefreshSerial() {
             lock (driveInfo) {
+                
                 string driveLetter = driveInfo.Name.Substring(0, 2);
 
-                // make sure the drive is ready
+                // Before we do request information check if the drive is ready.
                 if (!driveInfo.IsReady) {
-                    logger.Debug("Drive '{0}' is not ready.", driveLetter);
+                    logger.Debug("Drive Information Update Failed: Drive {0} is not ready.", driveLetter);
                     serial = null;
                     return;
                 }
 
+                // Get Volume Serial Number Using WMI
                 try {
-                    // Query WMI for extra disk information
-                    logger.Debug("Querying drive information for '{0}'", driveLetter);
-                    SelectQuery query = new SelectQuery("select * from win32_logicaldisk where deviceid = '" + driveLetter + "'");
-                    ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
-
-                    // this statement should return only one row (or none)
-                    foreach (ManagementBaseObject mo in searcher.Get()) {
-                        // Update Volume Serial Number
-                        serial = null;
-                        if (mo != null)
-                            if (mo["volumeserialnumber"] != null)
-                                serial = mo["volumeserialnumber"].ToString().Trim();
-
-                        logger.Debug("Succesfully updated drive information for '{0}'", driveInfo.Name.Substring(0, 2));
+                    ManagementObject disk = new ManagementObject("Win32_LogicalDisk.DeviceID='" + driveLetter + "'");
+                    foreach (PropertyData diskProperty in disk.Properties) {
+                        if (diskProperty.Name == "VolumeSerialNumber") {
+                            serial = diskProperty.Value.ToString();
+                            logger.Debug("Drive Information Updated: Drive={0}, Serial={1}", driveLetter, serial);
+                            return;
+                        }
                     }
-
-                    // Return so the variables won't get reset after succesful refresh
-                    return;
+                    
+                    logger.Debug("Drive Information Update Failed: No Volume Serial Number Found. Drive={0}", driveLetter, serial);
+                    serial = null;
                 }
                 catch (Exception e) {
-                    // Log the WMI query exception
-                    logger.Debug("Error during query for '{0}', message: {1}", driveLetter, e.Message);
+                    // Catch Exceptions
+                    logger.DebugException("Drive Information Update Failed: Drive=" + driveLetter, e);
+                    serial = null;
                 }
             }
         }
