@@ -29,10 +29,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (!DeviceManager.IsAvailable(dirInfo))
                     return false;
 
-                // we can get to the root folder so lets try a basic file system access
-                // to verify this information. 
+                // we can get to the root folder, if this is a reparse point make sure the 
+                // contents are currently accessible 
                 try {
-                    dirInfo.GetDirectories();
+                    if ((dirInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+                        dirInfo.GetDirectories();
 
                     // directory access successful, disk is online
                     return true;
