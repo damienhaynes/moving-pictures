@@ -63,11 +63,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool IsOpticalDrive {
             get {
                 if (_isOpticalDrive == null) {
-                    DriveInfo info = DeviceManager.GetVolumeInfo(this.FullPath).DriveInfo;
-                    if (info == null)
-                        _isOpticalDrive = false;
+                    VolumeInfo volInfo = DeviceManager.GetVolumeInfo(this.FullPath);
+                    if (volInfo != null) {
+                        DriveInfo driveInfo = volInfo.DriveInfo;
+                        if (driveInfo == null)
+                            _isOpticalDrive = false;
+                        else
+                            _isOpticalDrive = driveInfo.DriveType == DriveType.CDRom;
+                    }
                     else
-                        _isOpticalDrive = info.DriveType == DriveType.CDRom;
+                        _isOpticalDrive = false;
                 }
 
                 return (bool) _isOpticalDrive;
