@@ -245,7 +245,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Enables pre-search lookup for title, year and imdbid by using the hash/movie match.",
             Groups = "|Movie Importer|Preprocessing|",
             Identifier = "importer_lookup_hash",
-            Default = true)]
+            Default = false)]
         public bool EnableHashLookup {
             get { return _enableHashLookup; }
             set {
