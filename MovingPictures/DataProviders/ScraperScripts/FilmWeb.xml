@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141516</id>
-    <version major="0" minor="0" point="3"/>
-    <published month="1" day="28" year="2009"/>
+    <version major="1" minor="0" point="0"/>
+    <published month="2" day="25" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -82,7 +82,7 @@
     </set>
 
     <!-- Retrieve results using Title -->
-    <retrieve name="search_page" url="http://www.filmweb.pl/szukaj?c=film&amp;q=${search.title:safe}" allow_unsafe_header="true" />
+    <retrieve name="search_page" url="http://www.filmweb.pl/szukaj?source=opensearch&amp;alias=film&amp;q=${search.title:safe}" allow_unsafe_header="true" />
  
     <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
     <parse name="details_page_block" input="${search_page}" regex="${rx_search_results}"/>
@@ -321,18 +321,19 @@
 </set>
 		
 		<!-- We need to find the link to the posters page from the details page -->
-	<retrieve name="details_page_cover" url="${movie.details_url}" allow_unsafe_header="true" />
-	<parse name="posterLink" input="${details_page_cover}" regex="${rx_poster_link}"/>
-	<!-- If link found, continue -->
-	<if test="${posterLink[0][0]}!=">
-		<set name="posterPage" value="${posterLink[0][0]}" />
-		<retrieve name="cover_page" url="${posterPage}" allow_unsafe_header="true" />
-		<parse name="posterLinks" input="${cover_page}" regex="${rx_covers}"/>
-		<loop name='cover_url' on='posterLinks'>
-	        <set name='cover_art[${count}].url' value='http://gfx.filmweb.pl/po/${cover_url[0]}'/>
-	      </loop>
+	<if test="${movie.site_id}!=">	
+		<retrieve name="details_page_cover" url="http://www.filmweb.pl/Film?id=${movie.site_id}" allow_unsafe_header="true" />
+		<parse name="posterLink" input="${details_page_cover}" regex="${rx_poster_link}"/>
+		<!-- If link found, continue -->
+		<if test="${posterLink[0][0]}!=">
+			<set name="posterPage" value="${posterLink[0][0]}" />
+			<retrieve name="cover_page" url="${posterPage}" allow_unsafe_header="true" />
+			<parse name="posterLinks" input="${cover_page}" regex="${rx_covers}"/>
+			<loop name='cover_url' on='posterLinks'>
+				<set name='cover_art[${count}].url' value='http://gfx.filmweb.pl/po/${cover_url[0]}'/>
+			  </loop>
+		</if>
 	</if>
-	
 
 
 </action>
