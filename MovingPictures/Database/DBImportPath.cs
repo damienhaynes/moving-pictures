@@ -57,6 +57,24 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
+        /// <summary>
+        /// Returns true if this import path represents an otpical drive.
+        /// </summary>
+        public bool IsOpticalDrive {
+            get {
+                if (_isOpticalDrive == null) {
+                    DriveInfo info = DeviceManager.GetVolumeInfo(this.FullPath).DriveInfo;
+                    if (info == null)
+                        _isOpticalDrive = false;
+                    else
+                        _isOpticalDrive = info.DriveType == DriveType.CDRom;
+                }
+
+                return (bool) _isOpticalDrive;
+            }
+        }
+        private bool? _isOpticalDrive = null;
+
         public DirectoryInfo Directory {
             get { return dirInfo; }
 

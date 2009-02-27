@@ -908,7 +908,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             DBLocalMedia firstFile = browser.SelectedMovie.LocalMedia[0];
 
             // if the file is available and read only, or known to be stored on optical media, prompt to ignore.
-            if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || DeviceManager.GetVolumeInfo(firstFile.DriveLetter).DriveInfo.DriveType == DriveType.CDRom) {
+            if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || firstFile.ImportPath.IsOpticalDrive) {
                 GUIDialogYesNo ignoreDialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
                 ignoreDialog.Reset();
                 ignoreDialog.SetHeading("Moving Pictures");
@@ -1742,9 +1742,19 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (property == null)
                 return;
 
-            if (!loggedProperties.ContainsKey(property)) {
-                logger.Debug(property + " = \"" + value + "\"");
-                loggedProperties[property] = true;
+            try {
+                lock (loggedProperties) {
+                    if (!loggedProperties.ContainsKey(property)) {
+                        logger.Debug(property + " = \"" + value + "\"");
+                        loggedProperties[property] = true;
+                    }
+                }
+            }
+            catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
+                logger.Warn("Internal .NET error from dictionary class!");
             }
 
             // If the value is empty always add a space
