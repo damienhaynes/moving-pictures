@@ -3,8 +3,8 @@
   <details>
     <!-- These details are for display purposes only. -->
     <name>ofdb.de</name>
-    <author>Armand Pondman (armandp)</author>
-    <description>This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)</description>
+    <author>Armand Pondman (armandp) and Schenk2302</author>
+    <description>This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de) And reads runtime from OFDb</description>
 
     <!-- 
     These two fields uniquely identify the script. The ID should never 
@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="1" minor="0" point="8"/>
-    <published month="2" day="17" year="2009"/>
+    <version major="1" minor="0" point="9"/>
+    <published month="2" day="28" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -123,7 +123,12 @@
     </set>
     <set name="rx_details">
       <![CDATA[
-      <titel>(.+?)</titel>\s*<jahr>(.+?)</jahr>.*<imdbid>(.+?)</imdbid>.*<note>(.+?)</note>.*<stimmen>(.+?)</stimmen>.*<regie>(.+?)</regie>.*<genre>(.+?)</genre>.+<kurzbeschreibung>(.+?)</kurzbeschreibung>.*<beschreibung>(.+?)</beschreibung>.*<besetzung>(.+?)</besetzung>.*<alternativ>(.+?)</alternativ>
+      <titel>(.+?)</titel>\s*<jahr>(.+?)</jahr>.*<imdbid>(.+?)</imdbid>.*<note>(.+?)</note>.*<stimmen>(.+?)</stimmen>.*<regie>(.+?)</regie>.*<genre>(.+?)</genre>.*<besetzung>(.+?)</besetzung>.*<alternativ>(.+?)</alternativ>
+      ]]>
+    </set>
+        <set name="rx_summary">
+      <![CDATA[
+      </genre>.*<kurzbeschreibung>(.+?)</kurzbeschreibung>.*<beschreibung>(.+?)</beschreibung>.*<besetzung>
       ]]>
     </set>    
     
@@ -133,7 +138,7 @@
 
     <!-- Titles -->
     <replace name="title" input="${details[0][0]:htmldecode}" pattern="${rx_title_clean}" with="" />
-    <replace name="aka" input="${details[0][10]:htmldecode}" pattern="${rx_title_clean}" with="" />
+    <replace name="aka" input="${details[0][8]:htmldecode}" pattern="${rx_title_clean}" with="" />
     <parse name="title" input="${title}" regex="${rx_title}"/>
     <parse name="aka" input="${aka}" regex="${rx_title}"/>
     <set name="movie.alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
@@ -142,11 +147,15 @@
     <!-- IMDB ID -->
     <set name="movie.imdb_id" value="tt${details[0][2]}" />
     
-    <!-- Year, Summary, Score and Votes-->
+    <!-- Year, Score and Votes-->
     <set name="movie.year" value="${details[0][1]}"/>
-    <set name="movie.summary" value="${details[0][8]:htmldecode}"/>
     <set name="movie.score" value="${details[0][3]}"/>
     <set name="movie.popularity" value="${details[0][4]}"/>
+
+    <!-- Summary -->
+    <retrieve name="summary_page" url="${site}${movie.site_id}" encoding="UTF-8" />
+    <parse name="summary" input="${summary_page}" regex="${rx_summary}"/>
+    <set name='movie.summary' value="${summary[0][1]:htmldecode}"/>
     
     <!-- Directors -->
     <parse name="directors" input="${details[0][5]}" regex="${rx_person}"/>
@@ -156,7 +165,7 @@
     </loop>
 
     <!-- Actors -->
-    <parse name='actors' input='${details[0][9]}' regex="${rx_person}"/>
+    <parse name='actors' input='${details[0][7]}' regex="${rx_person}"/>
     <set name='movie.actors' value=''/>
     <loop name='currActor' on='actors'>
       <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
@@ -169,17 +178,32 @@
       <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
     </loop>
 	
-    <!-- Runtime -->
-    <retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+	<!-- Runtime -->
+	<retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
     <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+'/>
     <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
 	
-    <!-- Tagline -->
+	<!-- Tagline -->
+	
     <parse name="tagline" input="${details_page}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
     <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
 
-    <!-- Set Sortby for German Articles -->
-    <replace name="movie.sortby" input="${movie.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)" with=""/>
+	 <!-- Certification -->
+	<retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+    <parse name="certification" input="${details_page}" regex='&gt;\s+Germany:((?:12)|(?:16)|(?:18)|(?:6)|(?:o.Al.))&lt;/a&gt;'/>
+    <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
+
+	<!-- Writers -->
+	<retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+    <parse name="writers_block" input="${details_page}" regex='&lt;div class="info"&gt;\s+&lt;h5&gt;Writer[s]?(?: &lt;a href="[^"]+"&gt;\([^)]+\)&lt;/a&gt;)?:&lt;/h5&gt;.+?&lt;/div&gt;'/>
+    <parse name='writers' input="${writers_block}" regex='&lt;a href="/name/nm\d+/"&gt;([^&lt;]+)&lt;/a&gt;'/>
+    <set name='movie.writers' value=''/>
+    <loop name='currWriter' on='writers'>
+      <set name='movie.writers' value='${movie.writers}|${currWriter[0]:htmldecode}'/>
+    </loop>
+ 
+	<!-- Set Sortby for German Articles -->
+	<replace name="movie.sortby" input="${movie.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)" with=""/>
     
   </action>
   
