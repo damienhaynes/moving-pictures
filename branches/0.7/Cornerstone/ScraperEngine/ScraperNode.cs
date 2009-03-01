@@ -126,7 +126,7 @@ namespace Cornerstone.ScraperEngine {
             StringBuilder output = new StringBuilder(input);
             int offset = 0;
 
-            Regex variablePattern = new Regex(@"\${([^:}]+)(?::([^}\(]+))?(?:\(([^\)]+)\))?}");
+            Regex variablePattern = new Regex(@"\${([^:{}]+)(?::([^}\(]+))?(?:\(([^\)]+)\))?}");
             MatchCollection matches = variablePattern.Matches(input);
             foreach (Match currMatch in matches) {
                 string varName = "";
