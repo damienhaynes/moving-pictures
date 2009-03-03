@@ -6,6 +6,8 @@ using System.Management;
 using System.Threading;
 using NLog;
 using MediaPortal.Plugins.MovingPictures.Database;
+using Cornerstone.Database;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
@@ -210,10 +212,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Monitoring Logic
 
         public static void StartMonitor() {
+            
+            // Setup listener for added ImportPaths
+            MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onPathAdded);
+            
             foreach (DBImportPath currPath in DBImportPath.GetAll()) {
                 try {
-                    if (currPath.IsRemovable)
-                        AddWatchDrive(currPath.FullPath);
+                    AddWatchDrive(currPath.FullPath);
                 }
                 catch (Exception e) {
                     if (e is ThreadAbortException)
@@ -232,11 +237,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         public static void AddWatchDrive(string path) {
-            logger.Debug("Adding " + path + " to DiskWatcher.");
             try {
                 string driveLetter = GetDriveLetter(path);
+                if (driveLetter == null)
+                    return;
+
                 lock (watchedDrives) {
-                    if (IsRemovable(driveLetter) && !watchedDrives.Contains(driveLetter)) {
+                    if (!watchedDrives.Contains(driveLetter)) {
                         watchedDrives.Add(driveLetter);
                         StartDiskWatcher();
                         logger.Info("Added " + driveLetter + " to DiskWatcher");
@@ -253,8 +260,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         public static void RemoveWatchDrive(string path) {
             string driveLetter = GetDriveLetter(path);
+            if (driveLetter == null)
+                return;
+
             lock (watchedDrives) {
-                if (IsRemovable(driveLetter) && watchedDrives.Contains(driveLetter)) {
+                if (watchedDrives.Contains(driveLetter)) {
                     watchedDrives.Remove(driveLetter);
                     logger.Info("Removed " + driveLetter + " from DiskWatcher");
                     if (watchedDrives.Count == 0)
@@ -344,6 +354,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         }
         
+        // Listens for new import paths and adds them to the DiskWatcher
+        private static void onPathAdded(DatabaseTable obj) {
+            // If this is not an import path object break
+            if (obj.GetType() != typeof(DBImportPath))
+                return;
+
+            // Add the new import path to the watched drives
+            AddWatchDrive(((DBImportPath)obj).FullPath);
+        }
+
         #endregion
 
         #region Public Static Methods

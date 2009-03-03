@@ -29,10 +29,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (!DeviceManager.IsAvailable(dirInfo))
                     return false;
 
-                // we can get to the root folder so lets try a basic file system access
-                // to verify this information. 
+                // we can get to the root folder, if this is a reparse point make sure the 
+                // contents are currently accessible 
                 try {
-                    dirInfo.GetDirectories();
+                    if ((dirInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+                        dirInfo.GetDirectories();
 
                     // directory access successful, disk is online
                     return true;
@@ -55,6 +56,29 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     return false;
             }
         }
+
+        /// <summary>
+        /// Returns true if this import path represents an otpical drive.
+        /// </summary>
+        public bool IsOpticalDrive {
+            get {
+                if (_isOpticalDrive == null) {
+                    VolumeInfo volInfo = DeviceManager.GetVolumeInfo(this.FullPath);
+                    if (volInfo != null) {
+                        DriveInfo driveInfo = volInfo.DriveInfo;
+                        if (driveInfo == null)
+                            _isOpticalDrive = false;
+                        else
+                            _isOpticalDrive = driveInfo.DriveType == DriveType.CDRom;
+                    }
+                    else
+                        _isOpticalDrive = false;
+                }
+
+                return (bool) _isOpticalDrive;
+            }
+        }
+        private bool? _isOpticalDrive = null;
 
         public DirectoryInfo Directory {
             get { return dirInfo; }

@@ -52,8 +52,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private DiskInsertedAction diskInsertedAction;
         Dictionary<string, string> recentInsertedDiskSerials;
 
-        private bool waitingForMedia = false;
-        private string waitingForMediaSerial;
+        private bool dialogActive = false;
 
         #endregion
 
@@ -208,6 +207,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <returns>True if yes was clicked, False if no was clicked</returns>
         private bool ShowCustomYesNo(string heading, string lines, string yesLabel, string noLabel, bool defaultYes) {
+            dialogActive = true;
             GUIDialogYesNo dialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
             try {
                 dialog.Reset();
@@ -229,13 +229,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                 }
                 dialog.DoModal(GetID);
-
+                dialogActive = false;
                 return dialog.IsConfirmed;
             }
             finally {
+                dialogActive = false;
+
                 // set the standard yes/no dialog back to it's original state (yes/no buttons)
-                if (dialog != null)
+                if (dialog != null) {
                     dialog.ClearAll();
+                }
             }
         }
 
@@ -763,7 +766,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             DBLocalMedia firstFile = browser.SelectedMovie.LocalMedia[0];
 
             // if the file is available and read only, or known to be stored on optical media, prompt to ignore.
-            if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || DeviceManager.GetVolumeInfo(firstFile.DriveLetter).DriveInfo.DriveType == DriveType.CDRom) {
+            if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || firstFile.ImportPath.IsOpticalDrive) {
                 bool bIgnore = ShowCustomYesNo("Moving Pictures", Translation.CannotDeleteReadOnly, null, null, false);
 
                 if (bIgnore) {
@@ -898,20 +901,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // 1. the user clicked "retry" and the media is now available
             // 2. the user clicked "cancel" and we break out of the method
             while (!mediaToPlay.IsAvailable) {
-
-                // the waiting for variables are set so that
-                // we can auto play in the OnVolumeInserted event handler.
-                waitingForMedia = true;
-                waitingForMediaSerial = mediaToPlay.VolumeSerial;
+                
+                // Special debug line to troubleshoot availability issues
+                logger.Debug("Media not available: Path={0}, DriveType={1}, Serial={2}, ExpectedSerial={3}",
+                    mediaToPlay.FullPath, mediaToPlay.ImportPath.GetDriveType().ToString(),  
+                    mediaToPlay.ImportPath.GetDiskSerial(), mediaToPlay.VolumeSerial);
 
 
                 string bodyString = String.Format(Translation.MediaNotAvailableBody, mediaToPlay.MediaLabel);
 
                 bool retry = ShowCustomYesNo(Translation.MediaNotAvailableHeader, bodyString,
                     Translation.Retry, Translation.Cancel, true);
-
-                waitingForMedia = false;
-                waitingForMediaSerial = "";
 
                 // if the user clicked cancel, return.
                 if (!retry) return;                
@@ -1080,6 +1080,62 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             logger.Info("Image mounted: Drive={0}", drive);
+
+            // Check if the mounted drive is ready to be read
+            // or wait a maximum of 5 seconds to get ready.
+            DriveInfo mountedDrive = null;
+            bool driveReady = false;
+            int driveCheck = 0;            
+
+            // Start checking
+            while (!driveReady) {
+                driveCheck++;
+                if (driveCheck == 50) {
+                    // After 5 seconds have passed and the drive is still not ready
+                    // ask the user to retry or cancel waiting for the virtual drive 
+                    // to become ready.
+                    if (ShowCustomYesNo(Translation.VirtualDriveHeader, Translation.VirtualDriveMessage, Translation.Retry, Translation.Cancel, true)) {
+                        // User clicked retry: reset the wait counter to stay in the loop.
+                        logger.Debug("Virtual drive not available: retrying...");
+                        driveCheck = 0;
+                    } else {
+                        // User clicked cancel: cancel playback.
+                        logger.Error("Playback cancelled because virtual drive was not available.");
+                        return;
+                    }
+                }
+                else if (driveCheck == 2) {
+                    // Log message that we are waiting we log this only in the second iteration
+                    // because the first iteration is the initial check.
+                    logger.Info("Waiting for virtual drive to become available...");
+                }
+
+                // If we do not have a DriveInfo object create it
+                if (mountedDrive != null) {
+                    GUIWindowManager.Process();
+                    Thread.Sleep(100);
+                    driveReady = mountedDrive.IsReady;
+                }
+                else {
+                    try {
+                        // Try to create a DriveInfo object with the returned driveletter
+                        mountedDrive = new DriveInfo(drive);
+                        driveReady = mountedDrive.IsReady;
+                    }
+                    catch (ArgumentNullException e) {
+                        // The driveletter returned by Daemon Tools is invalid, 
+                        // we cancel playback entirely when this is the case
+                        ShowMessage("Error", "Daemon tools returned an invalid driveletter.", "The virtual drive can not be found.", "Please check your daemon tools ", "configuration and/or try again.");
+                        logger.ErrorException("Daemon Tools returned an invalid driveletter.", e);
+                        return;
+                    }
+                    catch (ArgumentException e) {
+                        // this exception happens when the driveletter is valid but the driveletter is not 
+                        // finished mounting yet (at least not known to the system). We only need to catch
+                        // this to stay in the loop
+                    }
+                }               
+            }
 
             // This line will list the complete file structure of the image
             // Output will only show when the log is set to DEBUG.
@@ -1270,7 +1326,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             
             // If we or stopping in another windows enable native auto-play again
             // This will most of the time be the fullscreen playback window, 
-            // if we would re-enter the plugin, autoplay be disabled again.
+            // if we would re-enter the plugin, autoplay will be disabled again.
             if (GetID != GUIWindowManager.ActiveWindow)
                 enableNativeAutoplay();
         }
@@ -1395,7 +1451,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void OnVolumeInserted(string volume, string serial) {
             // only respond when the plugin (or it's playback) is active
-            if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlaying)
+            // and there's no active dialog waiting for user input
+            if (GUIWindowManager.ActiveWindow != GetID && !currentlyPlaying && !dialogActive)
                 return;
 
             logger.Debug("OnVolumeInserted: Volume={0}, Serial={1}", volume, serial);
@@ -1404,22 +1461,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // Clear recent disc information
                 logger.Debug("Resetting Recent Disc Information.");
-                recentInsertedDiskSerials.Clear();
-
-
-                if (waitingForMedia) {
-                    if (waitingForMediaSerial == serial) {
-                        // Correct volume inserted.  Starting playback.
-                        waitingForMedia = false;
-                        waitingForMediaSerial = "";
-                        playSelectedMovie();
-
-                        // Why is the following needed?  For some reason, playSelectedMovie() isn't 
-                        // playing in full screen.  I have to manually switch to fullscreen here. - Z6
-                        GUIGraphicsContext.IsFullScreenVideo = true;
-                        return;
-                    }
-                }
+                recentInsertedDiskSerials.Clear();                
 
                 // DVD / Blu-ray 
                 // Try to grab a valid video path from the disc
@@ -1493,9 +1535,19 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (property == null)
                 return;
 
-            if (!loggedProperties.ContainsKey(property)) {
-                logger.Debug(property + " = \"" + value + "\"");
-                loggedProperties[property] = true;
+            try {
+                lock (loggedProperties) {
+                    if (!loggedProperties.ContainsKey(property)) {
+                        logger.Debug(property + " = \"" + value + "\"");
+                        loggedProperties[property] = true;
+                    }
+                }
+            }
+            catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
+                logger.Warn("Internal .NET error from dictionary class!");
             }
 
             // If the value is empty always add a space

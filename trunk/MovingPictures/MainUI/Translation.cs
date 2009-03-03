@@ -44,6 +44,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string UpdateMovieDetailsBody = "You are about to refresh all movie metadata, overwriting\nany custom modifications to this film. Do you want\nto continue?";
         public static string MediaNotAvailableHeader = "Media Not Available";
         public static string MediaNotAvailableBody = "The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}";
+        public static string VirtualDriveHeader = "Virtual drive not ready";
+        public static string VirtualDriveMessage = "The virtual drive wasn't ready in time.\nPlease try again or cancel playback.";
         public static string Retry = "Retry";
         public static string Cancel = "Cancel";
         public static string Error = "Error";
