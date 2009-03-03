@@ -1,4 +1,4 @@
-Moving Pictures 0.7.1
+Moving Pictures 0.7.2
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -26,6 +26,40 @@ even if their favorite skin has not yet added support.
 
 
 Change Log
+================================================================================
+0.7.2
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #371:     Rare crashes occuring near startup of the plug-in in the GUI 
+                have been eliminated.
+                
+Issue #364:     Allowing playback to end (without pressing stop) while in "show 
+                only unwatched movies" mode will no longer crash MediaPortal.
+                
+Issue #372:     MediaPortal will now startup much faster when the movie library 
+                contains a large number of movies stored on network based import
+                paths.
+                
+Issue #349:     When playing an image file (mounted via Daemon tools) playback 
+                will now always start rather than the user having to sometimes
+                press play twice.
+                
+Issue #366:     Focus will now consistently switch to the playback window when 
+                playing mounted media.
+                
+Issue #361:     Removable SATA drives will now be properly detected as removable.
+                
+Issue #375:     Deleteing files located on a drive referenced by a UNC path through
+                the MediaPortal context menu now works correctly.
+                
+Issue #370:     Minor enhancements to the filmweb.pl scraper have been made. Thanks 
+                LRFalk01!
+
+Issue #377:     Updated OFDb scrapper with changes to now pull certification and 
+                writers. Also corrects a bug in the script causing limited results
+                for some movies. Thanks Schenk2302!
+
 ================================================================================
 0.7.1
 --------------------------------------------------------------------------------

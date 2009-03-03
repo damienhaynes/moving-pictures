@@ -126,12 +126,13 @@ namespace Cornerstone.ScraperEngine {
             StringBuilder output = new StringBuilder(input);
             int offset = 0;
 
-            Regex variablePattern = new Regex("\\${([^\\$}:]+)(?::([^}]+))?}");
+            Regex variablePattern = new Regex(@"\${([^:{}]+)(?::([^}\(]+))?(?:\(([^\)]+)\))?}");
             MatchCollection matches = variablePattern.Matches(input);
             foreach (Match currMatch in matches) {
                 string varName = "";
                 string modifier = string.Empty;
                 string value = string.Empty;
+                string encodingStr = string.Empty;
 
                 // get rid of the escaped variable string
                 output.Remove(currMatch.Index + offset, currMatch.Length);
@@ -141,6 +142,8 @@ namespace Cornerstone.ScraperEngine {
                 variables.TryGetValue(varName, out value);
                 if (currMatch.Groups.Count >= 3)
                     modifier = currMatch.Groups[2].Value.ToLower();
+                if (currMatch.Groups.Count >= 4)
+                    encodingStr = currMatch.Groups[3].Value.ToLower();
 
                 // if there is no variable for what was passed in we are done
                 if (value == string.Empty || value == null) {
@@ -149,11 +152,26 @@ namespace Cornerstone.ScraperEngine {
                 }
 
                 // handle any modifiers
-                if (modifier.Equals("safe"))
-                  value = HttpUtility.UrlEncode(value).Replace("+","%20");
-                if (modifier.Equals("htmldecode"))
+                if (modifier.Equals("safe")) {
+                    // if we have an encoding string try to build an encoding object
+                    Encoding encoding = null;
+                    if (encodingStr != string.Empty) {
+                        try { encoding = Encoding.GetEncoding(encodingStr); }
+                        catch (ArgumentException e) {
+                            encoding = null;
+                            logger.Error("Scraper script tried to use an invalid encoding for \"safe\" modifier");
+                        }
+                    }
+
+                    if (encoding != null)
+                        value = HttpUtility.UrlEncode(value, encoding).Replace("+", "%20");
+                    else
+                        value = HttpUtility.UrlEncode(value).Replace("+", "%20");
+
+                }
+                else if (modifier.Equals("htmldecode"))
                     value = HttpUtility.HtmlDecode(value);
-                 if (modifier.Equals("striptags"))
+                else if (modifier.Equals("striptags"))
                   value = Regex.Replace(value, @"<.+?>", string.Empty);
 
                 output.Insert(currMatch.Index + offset, value);

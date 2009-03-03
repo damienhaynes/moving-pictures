@@ -460,6 +460,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public void SyncFromFacade() {
             if (facade == null)
                 return;
+            
+            // if nothing is slected in the facade, exit
+            if (facade.SelectedListItem == null)
+                return;
 
             // if we already are on this movie, exit
             if (selectedMovie == facade.SelectedListItem.TVTag as DBMovieInfo)

@@ -1317,12 +1317,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             List<DBMovieInfo> movieList;
             List<PossibleMatch> rankedMovieList = new List<PossibleMatch>();
 
-            // Get the MovieSignature
-            MovieSignature signature = mediaMatch.Signature;
-
             // notify any listeners we are checking for matches
             if (MovieStatusChanged != null)
                 MovieStatusChanged(mediaMatch, MovieImporterAction.GETTING_MATCHES);
+
+            // Get the MovieSignature
+            MovieSignature signature = mediaMatch.Signature;
 
             // grab a list of movies from our dataProvider and rank each returned movie on 
             // how close a match it is
