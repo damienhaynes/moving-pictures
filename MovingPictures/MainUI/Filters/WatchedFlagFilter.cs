@@ -24,7 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
             if (active) {
 
                 Predicate<DBMovieInfo> unwatched = delegate(DBMovieInfo item) {
-                    return item.UserSettings[0].Watched == 0;
+                    return item.ActiveUserSettings.Watched == 0;
                 };
 
                 // Filter the list with the specified critera

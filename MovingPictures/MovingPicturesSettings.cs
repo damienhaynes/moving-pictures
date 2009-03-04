@@ -772,6 +772,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _allowDelete;
 
+        [CornerstoneSetting(
+            Name = "Auto-Prompt For User Rating",
+            Description = "Moving Pictures will prompt you for your rating of a movie after the movie ends",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "auto_prompt_for_rating",
+            Default = false)]
+        public bool AutoPromptForRating {
+            get { return _autoPromptForRating; }
+            set {
+                _autoPromptForRating = value;
+                OnSettingChanged("enable_delete_movie");
+            }
+        }
+        private bool _autoPromptForRating;
+
         #endregion
 
         #region Tweaks
