@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- Danish (da) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+
+<strings>
+<string Field="ProblemLoadingSkinFile">Desværre, der var et problem med at indlæse skinfilen...</string>
+<string Field="NoImportPathsHeading">Ingen import stier!</string>
+<string Field="NoImportPathsBody">Det ser ud som, at du ikke har defineret\ndefined nogle import stier. Du\nskal lukke MediaPortal og\nstarte MediaPortal\nKonfiguration vinduet for\nat konfigurere Moving Pictures.</string>
+<string Field="ShowAllMovies">Vis alle film</string>
+<string Field="ShowOnlyUnwatchedMovies">Vis ikke-sete film</string>
+<string Field="SortBy">Sorter efter</string>
+<string Field="ChangeView">Skift overblik</string>
+<string Field="ListView">Liste overblik</string>
+<string Field="ThumbnailView">Miniatureportræt overblik</string>
+<string Field="LargeThumbnailView">Stor miniatureportræt overblik</string>
+<string Field="FilmstripView">Filmrulle overblik</string>
+<string Field="UpdateDetailsFromOnline">Opdater oplysninger fra nettet</string>
+<string Field="CycleCoverArt">Roter Cover-billedet</string>
+<string Field="CheckForMissingArtwork">Check for manglende illustrationer på nettet</string>
+<string Field="MarkAsUnwatched">Marker som uset</string>
+<string Field="MarkAsWatched">Marker som set</string>
+<string Field="DeleteMovie">Slet film</string>
+<string Field="CannotDeleteReadOnly">Kan ikke slette en skrivebeskyttet film.\nVil du have Moving Pictures til ignorere denne film?</string>
+<string Field="CannotDeleteOffline">Det er ikke muligt at slette {0}\n fordi filen er offline</string>
+<string Field="DoYouWantToDelete">Ønsker du at slette \n{0}\npermanent fra din harddisk?</string>
+<string Field="DeleteFailed">Sletningen fejlede</string>
+<string Field="UpdateMovieDetailsHeader">Opdater film oplysningerne</string>
+<string Field="UpdateMovieDetailsBody">Du er ved at opdatere alle film opslyninger\n overskrivning vil fjerne dine egne ændringer af denne film.\nVil du fortsætte?</string>
+<string Field="MediaNotAvailableHeader">Mediet er ikke tilgængelig</string>
+<string Field="MediaNotAvailableBody">Mediet for den valgte film er ikke tilgængelig\nIndsæt eller forbind til medie: {0}</string>
+<string Field="Retry">Prøv igen</string>
+<string Field="Cancel">Annuler</string>
+<string Field="Error">Fejl</string>
+<string Field="MediaIsMissing">Mediet for den film du har valgt mangler!\nDesværre noget er gået galt...</string>
+<string Field="FailedMountingImage">Desværre mounting af DVD Imagen lykkedes ikke</string>
+<string Field="PlaybackFailedHeader">Afspilnings fejl</string>
+<string Field="PlaybackFailed">Afspilning var ikke mulig på grund af, at '{0}'\nfiletypenavn ikke er listet i mediaportal konfigurationen.\nTilføj dette filetypenavn eller sæt en ekstern afspiller op\nog prøv igen.</string>
+<string Filed="MissingExternalPlayerExe">Den eksekverbare fil til HD afspilning mangler.\nVælg en korrekt sti til den eksekverbare fil.</string>
+<string Field="ResumeFromLast">Forsæt film fra sidst gang?</string>
+<string Field="ResumeFrom">Forsæt fra:</string>
+<string Field="InvalidVideoDiscFormat">Enten indeholdet image-filen ikke et\n korrekt videoformat, ellers er din opsæning i\nTools MediaPortal konfiguration forkert.</string>
+<string Field="ContinueToNextPartHeader">Forsæt til næste del?</string>
+<string Field="ContinueToNextPartBody">Ønsker du at fortsætte med del {0}?</string>
+<string Field="Title">Title</string>
+<string Field="DateAdded">Dato tilføjet</string>
+<string Field="Year">År</string>
+<string Field="Certification">Certificering</string>
+<string Field="Language">Sprog</string>
+<string Field="Score">Score</string>
+<string Field="Popularity">Popularitet</string>
+<string Field="Runtime">Spilletid</string>
+<string Field="FilePath">File sti</string>
+</strings>
