@@ -37,7 +37,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public int? UserRating {
             get { return _userRating; }
             set {
-                _userRating = value;
+                if (value > 5)
+                    _userRating = 5;
+                else if (value < 1)
+                    _userRating = 1;
+                else
+                    _userRating = value;
                 commitNeeded = true;
             }
         } private int? _userRating;

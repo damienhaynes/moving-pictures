@@ -44,6 +44,8 @@
   <string Field="InvalidVideoDiscFormat">Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.</string>
   <string Field="ContinueToNextPartHeader">Continue to next part?</string>
   <string Field="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>
+  <string Field="Rate">Rate</string>
+  <string Field="SelectYourRating">Select your rating for {0}</string>
   <string Field="Title">Title</string>
   <string Field="DateAdded">Date Added</string>
   <string Field="Year">Year</string>

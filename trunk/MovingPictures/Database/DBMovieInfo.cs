@@ -380,6 +380,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _detailsUrl;
 
+        public DBUserMovieSettings ActiveUserSettings {
+            get {
+                return UserSettings[0];
+            }
+        }
+
         #endregion
 
         #region General Management Methods

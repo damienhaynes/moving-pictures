@@ -59,6 +59,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string InvalidVideoDiscFormat = "Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.";
         public static string ContinueToNextPartHeader = "Continue to next part?";
         public static string ContinueToNextPartBody = "Do you wish to continue with part {0}?";
+        public static string Rate = "Rate";
+        public static string SelectYourRating = "Select your rating for {0}";
+
 
         // friendly names for sorting
         public static string Title = "Title";

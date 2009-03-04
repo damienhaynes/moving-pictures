@@ -54,6 +54,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private bool dialogActive = false;
 
+        private DBMovieInfo awaitingUserRatingMovie;
+
         #endregion
 
         #region GUI Controls
@@ -405,6 +407,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // Take control and disable MediaPortal AutoPlay when the plugin has focus
             disableNativeAutoplay();
+
+
+            if (awaitingUserRatingMovie != null) {
+                GetUserRating(awaitingUserRatingMovie);
+                awaitingUserRatingMovie = null;
+            }
         }
 
         protected override void OnPageDestroy(int new_windowId) {
@@ -679,6 +687,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIListItem unwatchedItem = new GUIListItem();
             GUIListItem watchedItem = new GUIListItem();
             GUIListItem deleteItem = new GUIListItem();
+            GUIListItem rateItem = new GUIListItem();
 
             int currID = 1;
 
@@ -703,7 +712,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currID++;
             }
 
-            if (browser.SelectedMovie.UserSettings[0].Watched > 0) {
+            if (browser.SelectedMovie.ActiveUserSettings.Watched > 0) {
                 unwatchedItem = new GUIListItem(Translation.MarkAsUnwatched);
                 unwatchedItem.ItemId = currID;
                 dialog.Add(unwatchedItem);
@@ -722,6 +731,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 dialog.Add(deleteItem);
                 currID++;
             }
+
+            rateItem = new GUIListItem(Translation.Rate);
+            rateItem.ItemId = currID;
+            dialog.Add(rateItem);
+            currID++;
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             if (dialog.SelectedId == detailsItem.ItemId) {
@@ -742,17 +756,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 retrieveMissingArt();
             }
             else if (dialog.SelectedId == unwatchedItem.ItemId) {
-                browser.SelectedMovie.UserSettings[0].Watched = 0;
+                browser.SelectedMovie.ActiveUserSettings.Watched = 0;
 
-                browser.SelectedMovie.UserSettings[0].Commit();
+                browser.SelectedMovie.ActiveUserSettings.Commit();
                 browser.ReapplyFilters();
                 browser.ReloadFacade();
                 UpdateMovieDetails();
             }
             else if (dialog.SelectedId == watchedItem.ItemId) {
-                browser.SelectedMovie.UserSettings[0].Watched = 1;
+                browser.SelectedMovie.ActiveUserSettings.Watched = 1;
 
-                browser.SelectedMovie.UserSettings[0].Commit();
+                browser.SelectedMovie.ActiveUserSettings.Commit();
                 browser.ReapplyFilters();
                 browser.ReloadFacade();
                 UpdateMovieDetails();
@@ -760,6 +774,25 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else if (dialog.SelectedId == deleteItem.ItemId) {
                 deleteMovie();
             }
+            else if (dialog.SelectedId == rateItem.ItemId) {
+                if (GetUserRating(browser.SelectedMovie)) {
+                    UpdateMovieDetails();
+                }
+            }
+        }
+
+        private bool GetUserRating(DBMovieInfo movie) {
+            GUIGeneralRating ratingDlg = (GUIGeneralRating)GUIWindowManager.GetWindow(GUIGeneralRating.ID);
+            ratingDlg.Reset();
+            ratingDlg.Text = String.Format(Translation.SelectYourRating, browser.SelectedMovie.Title);
+            DBUserMovieSettings userMovieSettings = movie.ActiveUserSettings;
+            ratingDlg.Rating = userMovieSettings.UserRating.GetValueOrDefault(3);
+            ratingDlg.DoModal(GetID);
+            if (ratingDlg.IsSubmitted) {
+                userMovieSettings.UserRating = ratingDlg.Rating;
+                userMovieSettings.Commit();
+            }
+            return ratingDlg.IsSubmitted;
         }
 
         private void deleteMovie() {
@@ -875,7 +908,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // check if we should be resuming, and if not, clear resume data
                 resume = PromptUserToResume(movie);
                 if (resume)
-                    part = movie.UserSettings[0].ResumePart;
+                    part = movie.ActiveUserSettings.ResumePart;
                 else
                     clearMovieResumeState(movie);
 
@@ -951,12 +984,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // and jump to our resume position if necessary
                 if (resume && g_Player.Playing) {
                     logger.Debug("jumping to resume point");
-                    if (g_Player.IsDVD) 
-                        g_Player.Player.SetResumeState(movie.UserSettings[0].ResumeData.Data);
+                    if (g_Player.IsDVD)
+                        g_Player.Player.SetResumeState(movie.ActiveUserSettings.ResumeData.Data);
                     else {
-                        logger.Debug("ResumeTime = {0}", movie.UserSettings[0].ResumeTime);
+                        logger.Debug("ResumeTime = {0}", movie.ActiveUserSettings.ResumeTime);
                         GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SEEK_POSITION, 0, 0, 0, 0, 0, null);
-                        msg.Param1 = movie.UserSettings[0].ResumeTime;
+                        msg.Param1 = movie.ActiveUserSettings.ResumeTime;
                         GUIGraphicsContext.SendMessage(msg);
                     }
                 }
@@ -967,7 +1000,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Check if we have already played a custom intro
             if (!customIntroPlayed) {
                 // Only play custom intro for we are not resuming
-                if (browser.SelectedMovie.UserSettings == null || browser.SelectedMovie.UserSettings.Count == 0 || browser.SelectedMovie.UserSettings[0].ResumeTime == 0) {
+                if (browser.SelectedMovie.UserSettings == null || browser.SelectedMovie.UserSettings.Count == 0 || browser.SelectedMovie.ActiveUserSettings.ResumeTime == 0) {
                     string custom_intro = MovingPicturesCore.Settings.CustomIntroLocation;
 
                     // Check if the custom intro is specified by user and exists
@@ -995,15 +1028,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private bool PromptUserToResume(DBMovieInfo movie) {
-            if (movie.UserSettings == null || movie.UserSettings.Count == 0 || movie.UserSettings[0].ResumeTime <= 30)
+            if (movie.UserSettings == null || movie.UserSettings.Count == 0 || movie.ActiveUserSettings.ResumeTime <= 30)
                 return false;
 
-            logger.Debug("PromptUserToResume {0} ResumeTime {1} ResumePart {2}", movie.Title, movie.UserSettings[0].ResumeTime, movie.UserSettings[0].ResumePart);
+            logger.Debug("PromptUserToResume {0} ResumeTime {1} ResumePart {2}", movie.Title, movie.ActiveUserSettings.ResumeTime, movie.ActiveUserSettings.ResumePart);
 
             // figure out the resume time to display to the user
-            int displayTime = movie.UserSettings[0].ResumeTime;
+            int displayTime = movie.ActiveUserSettings.ResumeTime;
             if (movie.LocalMedia.Count > 1) {
-                for (int i = 0; i < movie.UserSettings[0].ResumePart - 1; i++) {
+                for (int i = 0; i < movie.ActiveUserSettings.ResumePart - 1; i++) {
                     if (movie.LocalMedia[i].Duration > 0)
                         displayTime += movie.LocalMedia[i].Duration;
                 }
@@ -1248,6 +1281,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else {
                 updateMovieWatchedCounter(currentlyPlayingMovie);
+                if (MovingPicturesCore.Settings.AutoPromptForRating)
+                    awaitingUserRatingMovie = currentlyPlayingMovie;
                 currentlyPlayingPart = 0;
                 currentlyPlaying = false;
                 currentlyPlayingMovie = null;
@@ -1312,6 +1347,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (currentlyPlayingMovie.GetPercentage(currentlyPlayingPart, timeMovieStopped) >= requiredWatchedPercent) {
                 updateMovieWatchedCounter(currentlyPlayingMovie);
                 clearMovieResumeState(currentlyPlayingMovie);
+                if (MovingPicturesCore.Settings.AutoPromptForRating)
+                    awaitingUserRatingMovie = currentlyPlayingMovie;
             }
             // otherwise, store resume data.
             else {
@@ -1354,7 +1391,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
 
             // get the user settings for the default profile (for now)
-            DBUserMovieSettings userSetting = movie.UserSettings[0];
+            DBUserMovieSettings userSetting = movie.ActiveUserSettings;
             userSetting.Watched++; // increment watch counter
             userSetting.Commit();
             DBWatchedHistory.AddWatchedHistory(movie, userSetting.User);
@@ -1379,7 +1416,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
 
             // get the user settings for the default profile (for now)
-            DBUserMovieSettings userSetting = movie.UserSettings[0];
+            DBUserMovieSettings userSetting = movie.ActiveUserSettings;
 
             if (timePlayed > 0) {
                 // set part and time data 
@@ -1521,9 +1558,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
 
             PublishDetails(browser.SelectedMovie, "SelectedMovie");
+            PublishDetails(browser.SelectedMovie.ActiveUserSettings, "UserMovieSettings");
 
             if (selectedMovieWatchedIndicator != null)
-                if (browser.SelectedMovie.UserSettings[0].Watched > 0)
+                if (browser.SelectedMovie.ActiveUserSettings.Watched > 0)
                     selectedMovieWatchedIndicator.Visible = true;
                 else
                     selectedMovieWatchedIndicator.Visible = false;
@@ -1592,7 +1630,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // for string lists, lets do some nice formating
                 object value = currField.GetValue(obj);
-                if (value.GetType() == typeof(StringList)) {
+                if (value == null) {
+                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
+                    SetProperty(propertyStr, "");
+                }
+
+                else if (value.GetType() == typeof(StringList)) {
 
                     // make sure we dont go overboard with listing elements :P
                     StringList valueStrList = (StringList)value;
