@@ -480,6 +480,7 @@
     <Content Include="Resources\Images\tick.png" />
     <Content Include="Resources\Images\world_add.png" />
     <Content Include="Resources\Images\zoom.png" />
+    <Content Include="Resources\language\da.xml" />
     <Content Include="Resources\language\en-US.xml" />
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
