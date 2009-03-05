@@ -120,8 +120,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             FieldInfo[] fieldInfos = TransType.GetFields(BindingFlags.Public | BindingFlags.Static);
             foreach (FieldInfo fi in fieldInfos) {
                 if (TranslatedStrings != null && TranslatedStrings.ContainsKey(fi.Name))
-                TransType.InvokeMember(fi.Name, BindingFlags.SetField, null, TransType,
-                    new object[] { TranslatedStrings[fi.Name] });
+                    TransType.InvokeMember(fi.Name, BindingFlags.SetField, null, TransType, new object[] { TranslatedStrings[fi.Name] });
+                else
+                    logger.Info("Translation not found for field: {0}.  Using hard-coded English default.", fi.Name);
             }
             return TranslatedStrings.Count;
         }
