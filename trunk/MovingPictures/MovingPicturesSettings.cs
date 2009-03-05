@@ -782,7 +782,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             get { return _autoPromptForRating; }
             set {
                 _autoPromptForRating = value;
-                OnSettingChanged("enable_delete_movie");
+                OnSettingChanged("auto_prompt_for_rating");
             }
         }
         private bool _autoPromptForRating;
