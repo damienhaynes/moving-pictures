@@ -410,6 +410,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             ReapplyFilters();
             ReloadFacade();
 
+            // in case the current movie is no longer in the list
+            SyncFromFacade();
+
             if (ContentsChanged != null)
                 ContentsChanged();
         }
