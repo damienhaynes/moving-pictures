@@ -14,14 +14,14 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="1" point="5"/>
-    <published month="2" day="23" year="2009"/>
+    <version major="1" minor="2" point="0"/>
+    <published month="3" day="9" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
     -->
-    <type>MovieDetailsFetcher</type>
+    <type>MovieDetailsFetcher|MovieCoverFetcher</type>
     <language>en</language>
 
    </details>
@@ -236,6 +236,46 @@
     <loop name="currAka" on="akas" limit="50">
       <set name="movie.alternate_titles" value="${movie.alternate_titles}|${currAka[0]:htmldecode}"/>
     </loop>
+    
+  </action>
+
+  <!-- Covert Art currently only works with the native site id -->
+  <action name="get_cover_art">
+
+    <if test="${movie.imdb_id}!=">
+
+      <!-- Retrieve details -->
+      <retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+
+      <!-- Regular Expressions-->
+      <set name="rx_cover_url">
+        <![CDATA[
+      <a name="poster" href="([^"]+)"
+      ]]>
+      </set>
+
+      <set name="rx_cover">
+        <![CDATA[
+      principal.+?src="([^"]+)"
+      ]]>
+      </set>
+
+      <!-- Get cover url from details page -->
+      <parse name="cover_url" input="${details_page}" regex="${rx_cover_url}"/>
+
+      <if test="${cover_url}!=">
+
+        <!-- Retrieve the cover page  -->
+        <retrieve name="cover_page" url="http://www.imdb.com${cover_url[0][0]}"/>
+
+        <!-- Get cover source from the cover page -->
+        <parse name="cover_src" input="${cover_page}" regex="${rx_cover}"/>
+
+        <!-- set cover -->
+        <set name="cover_art[0].url" value="${cover_src[0][0]}" />
+        
+      </if>
+    </if>
     
   </action>
   
