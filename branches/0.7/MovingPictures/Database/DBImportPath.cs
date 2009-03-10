@@ -176,9 +176,22 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 foreach (FileInfo videoFile in fileList) {
                     DBLocalMedia newFile = DBLocalMedia.Get(videoFile.FullName, serial);
 
-                    // if this file is in the database continue if we only want new files
-                    if (newFile.ID != null && returnOnlyNew)
-                        continue;
+                    // The file is in the database
+                    if (newFile.ID != null) {
+
+                        // for optical paths + DVDs we have to check the actual DiscId
+                        if (IsOpticalDrive) {
+                            if (newFile.IsDVD && !newFile.IsAvailable) {
+                                string discId = Utility.GetDiscIdString(videoFile.FullName);
+                                // Create/get a DBLocalMedia object using the the DiscID
+                                newFile = DBLocalMedia.GetDVD(videoFile.FullName, discId);
+                            }
+                        }
+
+                        // If the file is still in the database continue if we only want new new files
+                        if (newFile.ID != null && returnOnlyNew)
+                            continue;
+                    }
 
                     logger.Debug("Pulling new file " + videoFile.Name + " from import path.");
                     newFile.ImportPath = this;
