@@ -31,15 +31,42 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         #region read-only properties
 
         /// <summary>
+        /// Checks wether the file is a DVD.
+        /// </summary>
+        public bool IsDVD {
+            get {
+                if (GetVideoDiscFormat() == VideoDiscFormat.DVD)
+                    return true;
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Checks if the file is currently available.
         /// Online returns true, offline returns false)
         /// </summary>
         public bool IsAvailable {
             get {
-                if (fileInfo != null)
-                    return DeviceManager.IsAvailable(fileInfo, volume_serial);
-                else
+                if (fileInfo != null) {
+                    bool available = DeviceManager.IsAvailable(fileInfo, volume_serial);
+
+                    // If this media is a DVD in an optical drive
+                    // double check the DiscID to make sure we are looking
+                    // at the same disc. 
+                    if (available && !String.IsNullOrEmpty(DiscId) && (ImportPath.GetDriveType() == DriveType.CDRom)) {
+                        // Grab the current DiscID and compare it to the stored DiscID
+                        string currentDiscID = Utility.GetDiscIdString(fileInfo.DirectoryName);
+                        // If the id's don't match the media is not available
+                        if (currentDiscID != DiscId)
+                            return false;
+                    }
+
+                    return available;
+                }
+                else {
                     return false;
+                }
             }
         }
 
@@ -55,6 +82,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         /// </summary>
         public bool IsRemoved {
             get {
+                // Skip this check for CDRom drives
+                if (ImportPath.GetDriveType() == DriveType.CDRom)
+                    return false;
+                
                 if (fileInfo == null)
                     return true;
 
@@ -86,7 +117,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     return false;
             }
         }
-
+        
         #endregion
 
         #region Database Fields
@@ -137,11 +168,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(Default = null)]
         public string DiscId {
             get {
-                // todo: how to handle iso?
-                bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
-                if (discid == null && IsAvailable && getDiscId && (Utility.GetVideoDiscFormat(fileInfo.FullName) == VideoDiscFormat.DVD)) 
-                    DiscId = Utility.GetDiscIdString(fileInfo.DirectoryName);
-
+                if (discid == null) {
+                    // todo: handle iso's?
+                    // todo: drop setting?
+                    bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
+                    if (IsAvailable && getDiscId && IsDVD)
+                        DiscId = Utility.GetDiscIdString(fileInfo.DirectoryName);
+                }
                 return discid;
             }
             set {
@@ -154,8 +187,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(Default = null)]
         public string FileHash {
             get {
-                if (fileHash == null && IsAvailable && (Utility.GetVideoDiscFormat(fileInfo.FullName) == VideoDiscFormat.Unknown))
-                    FileHash = Utility.GetMovieHashString(fileInfo.FullName);
+                if (fileHash == null) {
+                    if (IsAvailable && (GetVideoDiscFormat() == VideoDiscFormat.Unknown))
+                        FileHash = Utility.GetMovieHashString(fileInfo.FullName);
+                }
 
                 return fileHash;
             }
@@ -163,8 +198,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 fileHash = value;
                 commitNeeded = true;
             }
-        }
-        private string fileHash;
+        } private string fileHash;
 
         [DBFieldAttribute(Default = "1")]
         public int Part {
@@ -219,6 +253,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
 
         #region Public methods
+
+        public VideoDiscFormat GetVideoDiscFormat() {
+            if (fileInfo != null)
+                return Utility.GetVideoDiscFormat(fileInfo.FullName);
+            else
+                return VideoDiscFormat.Unknown;
+        }
 
         public bool UpdateDiskProperties() {
             // This will overwrite/update the label and serial field with the current 
@@ -294,6 +335,20 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public static DBLocalMedia Get(string fullPath) {
             return Get(fullPath, null);
+        }
+
+        public static DBLocalMedia GetDVD(string fullPath, string discId) {
+            DBField discIdField = DBField.GetField(typeof(DBLocalMedia), "DiscId");
+            ICriteria criteria = new BaseCriteria(discIdField, "=", discId);
+            List<DBLocalMedia> resultSet = MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(criteria);
+            if (resultSet.Count > 0)
+                return resultSet[0];
+
+            DBLocalMedia newFile = new DBLocalMedia();
+            newFile.FullPath = fullPath;
+            newFile.DiscId = discId;
+
+            return newFile;
         }
 
         public static DBLocalMedia Get(string fullPath, string diskSerial) {
