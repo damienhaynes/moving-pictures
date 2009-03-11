@@ -28,7 +28,13 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
 
-                logLevel = LogLevel.Debug;
+                try { logLevel = LogLevel.FromString(xmlNode.Attributes["log_level"].Value); }
+                catch (Exception e2) {
+                    if (e2.GetType() == typeof(ThreadAbortException))
+                        throw e2;
+
+                    logLevel = LogLevel.Debug;
+                }
             }
 
             try { message = xmlNode.Attributes["Message"].Value; }
@@ -36,9 +42,15 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
 
-                logger.Error("Missing MESSAGE attribute on: " + xmlNode.OuterXml);
-                loadSuccess = false;
-                return;
+                try { message = xmlNode.Attributes["message"].Value; }
+                catch (Exception e2) {
+                    if (e2.GetType() == typeof(ThreadAbortException))
+                        throw e2;
+
+                    logger.Error("Missing MESSAGE attribute on: " + xmlNode.OuterXml);
+                    loadSuccess = false;
+                    return;
+                }
             }
 
             loadSuccess = true;
