@@ -1690,7 +1690,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     // media file, a simple availability check will point out 
                     // if we should requery the database using the discid
                     if (!localMedia.IsAvailable)
-                        localMedia = DBLocalMedia.GetDVD(moviePath, Utility.GetDiscIdString(moviePath));   
+                        localMedia = DBLocalMedia.GetDVD(moviePath, Utility.GetDiscIdString(Directory.GetParent(moviePath).FullName));   
                     
                     if (localMedia.ID != null) {
 
