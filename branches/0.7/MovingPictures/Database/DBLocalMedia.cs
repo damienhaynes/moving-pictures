@@ -168,21 +168,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(Default = null)]
         public string DiscId {
             get {
-                if (discid == null) {
+                if (_discid == null && IsDVD) {
                     // todo: handle iso's?
                     // todo: drop setting?
                     bool getDiscId = (bool)MovingPicturesCore.SettingsManager["importer_discid"].Value;
-                    if (IsAvailable && getDiscId && IsDVD)
-                        DiscId = Utility.GetDiscIdString(fileInfo.DirectoryName);
+                    if (getDiscId) 
+                        _discid = Utility.GetDiscIdString(fileInfo.DirectoryName);
                 }
-                return discid;
+                return _discid;
             }
             set {
-                discid = value;
+                _discid = value;
                 commitNeeded = true;
             }
         }
-        private string discid;
+        private string _discid;
 
         [DBFieldAttribute(Default = null)]
         public string FileHash {
