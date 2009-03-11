@@ -95,7 +95,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // by verifying the volume serial number
                 bool correctMedia = true;
                 if (!String.IsNullOrEmpty(volume_serial))
-                    correctMedia = DeviceManager.GetDiskSerial(fileInfo) == volume_serial;
+                    correctMedia = DeviceManager.GetDiskSerial(fileInfo.DirectoryName) == volume_serial;
 
                 // if the import path is online, we have the right media inserted and the file 
                 // is not there, we assume it has been deleted, so return true
@@ -295,12 +295,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (this.VolumeSerial != otherLocalMedia.VolumeSerial)
                 return false;
 
+            // if we have a Disc Id for either both, make sure they are equal
+            if (IsDVD) {
+                if (this.DiscId != otherLocalMedia.DiscId)
+                    return false;
+            }
+
             return true;
         }
 
         public override int GetHashCode() {
             if (File != null)
-                return (VolumeSerial + "|" + File.FullName).GetHashCode();
+                return (VolumeSerial + "|" + File.FullName + "|" + DiscId).GetHashCode();
 
             return base.GetHashCode();
         }
@@ -346,7 +352,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             DBLocalMedia newFile = new DBLocalMedia();
             newFile.FullPath = fullPath;
-            newFile.DiscId = discId;
 
             return newFile;
         }
