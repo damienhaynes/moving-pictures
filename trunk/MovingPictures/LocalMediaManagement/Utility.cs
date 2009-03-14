@@ -15,16 +15,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
     public enum VideoDiscFormat
     {
-        [Description(@"\vcd\entries.vcd")]
-        SVCD,
+        [Description("")]
+        Unknown,
         [Description(@"\video_ts\video_ts.ifo")]
         DVD,
         [Description(@"\bdmv\index.bdmv")]
         Bluray,
         [Description(@"\adv_obj\discid.dat")] // or adv_obj\vplst000.xpl ?
         HDDVD,
-        [Description("")]
-        Unknown
+        [Description(@"\vcd\entries.vcd")]
+        SVCD       
     }
     
     class Utility {
@@ -142,33 +142,54 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return rtFilename;
         }
 
+        #region Multi-part / Stacking
+
+        // Regular expression patterns used by the multipart detection and cleaning methods
+        private const string rxStackKeywords = @"(cd|dvd|dis[ck]|part)";
+        private const string rxStackPatterns = @"(\W*" + rxStackKeywords + @"\W*([a-c]|\d+|i+))|[\(\[]\d(of|-)\d[\)\]]$";
+
+        
+
         /// <summary>
-        /// Removes the extension from a filename
-        /// @todo: remove this method
+        /// Checks if a filename has stack markers (and is multi-part)
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns>filename without extension</returns>
-        public static string RemoveFileExtension(FileInfo file) {
-            return Path.GetFileNameWithoutExtension(file.Name);
+        /// <param name="filename"></param>
+        /// <returns>true if multipart, false if not</returns>
+        public static bool isFileMultiPart(string fileName) {
+            fileName = Path.GetFileNameWithoutExtension(fileName);
+            Regex expr = new Regex(rxStackPatterns + @"|[^\s\d](\d+)$|([a-c])$", RegexOptions.IgnoreCase);
+            return expr.Match(fileName).Success;
         }
 
-        public static string RemoveFileExtension(string filename) {
-            return RemoveFileExtension(new FileInfo(filename));
+        public static bool isFileMultiPart(FileInfo file) {
+            return isFileMultiPart(file.Name);
+        }
+
+        /// <summary>
+        /// Checks if the foldername is a multipart marker.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static bool isFolderMultipart(string name) {
+            Regex expr = new Regex(@"^" + rxStackKeywords + @"\W*\d+$", RegexOptions.IgnoreCase);
+            return expr.Match(name).Success;
         }
 
         /// <summary>
         /// Remove extension and stackmarkers from a filename
         /// </summary>
-        /// <param name="file">target file</param>
+        /// <param name="fileName">filename</param>
         /// <returns>the filename without stackmarkers and extension</returns>
-        public static string RemoveFileStackMarkers(FileInfo file) {
-            // Remove the file extension from the filename
-            string fileName = RemoveFileExtension(file);
-
+        public static string RemoveFileStackMarkers(string fileName) {
             // If file is classified as multipart clean the stack markers.
             if (isFileMultiPart(fileName)) {
-                Regex expr = new Regex(rxFileStackMarkers, RegexOptions.IgnoreCase);
+
+                // Remove the file extension from the filename
+                fileName = Path.GetFileNameWithoutExtension(fileName);
+
+                Regex expr = new Regex(rxStackPatterns, RegexOptions.IgnoreCase);
                 Match match = expr.Match(fileName);
+
                 // if we have a match on this expression we will remove the complete match.
                 if (match.Success)
                     fileName = expr.Replace(fileName, "");
@@ -181,31 +202,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return fileName;
         }
 
-        public static string RemoveFileStackMarkers(string filename) {
-            return RemoveFileStackMarkers(new FileInfo(filename));
+        public static string RemoveFileStackMarkers(FileInfo fileInfo) {
+            return RemoveFileStackMarkers(fileInfo.Name);
         }
 
-        // Regular expression patterns used by the multipart detection and cleaning methods
-        private const string rxFileStackMarkers = @"([\s\-]*(cd|disk|disc|part)[\s\-]*([a-c]|\d+|i+))|[\(\[]\d(of|-)\d[\)\]]$";
-
-        /// <summary>
-        /// Checks if a file has stack markers (and is multi-part)
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns>true if multipart, false if not</returns>
-        public static bool isFileMultiPart(FileInfo file) {
-            return isFileMultiPart(RemoveFileExtension(file));
-        }
-
-        /// <summary>
-        /// Checks if a filename has stack markers (and is multi-part)
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns>true if multipart, false if not</returns>
-        public static bool isFileMultiPart(string filename) {
-            Regex expr = new Regex(rxFileStackMarkers + @"|[^\s\d](\d+)$|([a-c])$", RegexOptions.IgnoreCase);
-            return expr.Match(filename).Success;
-        }
+#endregion
 
         /// <summary>
         /// Get the largest file from a directory matching the specified file mask
@@ -244,7 +245,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private const string rxMatchArticles = "(the|a|an|ein|das|die|der|les|la|le|el|une|de|het)";
         
         // Regular expression pattern that matches a selection of non-word characters
-        //private const string rxMatchNonWordCharacters = @"[\.:;\+\-\–\—\―\˜\*\(\)\[\]'`,""\#\$\?]";
         private const string rxMatchNonWordCharacters = @"[^\w&]";
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = Regex.Replace(newTitle, rxMatchNonWordCharacters, " ");
 
             // Remove double spaces and trim
-            newTitle = trimSpaces(newTitle);
+            newTitle = TrimSpaces(newTitle);
 
             // return the keywords
             return newTitle;
@@ -301,7 +301,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         /// <param name="title">the original title</param>
         /// <returns>the normalized title</returns>
-        public static string normalizeTitle(string title) {
+        public static string NormalizeTitle(string title) {
             if (title == null)
                 return "";
 
@@ -335,7 +335,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             newTitle = Regex.Replace(newTitle, @"\s(1)$","");
 
             // Remove double spaces and trim
-            newTitle = trimSpaces(newTitle);
+            newTitle = TrimSpaces(newTitle);
 
             // return the cleaned title
             return newTitle;
@@ -371,24 +371,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string trimSpaces(string input) {
+        public static string TrimSpaces(string input) {
             return Regex.Replace(input, @"\s{2,}", " ").Trim();
         }
 
         #endregion
 
         #region General Methods (Unsorted)
-
-
-        /// <summary>
-        /// Checks if the foldername is a multipart marker.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static bool isFolderMultipart(string name) {
-            Regex expr = new Regex(@"^(cd|dvd|disc|part)\s*\d+$", RegexOptions.IgnoreCase);
-            return expr.Match(name).Success;
-        }
 
         /// <summary>
         /// Checks if the foldername is ambigious (non descriptive)

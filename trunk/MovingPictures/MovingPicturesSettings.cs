@@ -161,22 +161,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         #region Preprocessing
 
         [CornerstoneSetting(
-            Name = "Check Disc ID for Optical Media",
-            Description = "Calculate Disc ID for DVD media. This enables better matching for DVD discs.",
-            Groups = "|Movie Importer|Preprocessing|",
-            Identifier = "importer_discid",
-            Default = true)]
-        public bool UseDiscID {
-            get { return _useDiscID; }
-            set {
-                _useDiscID = value;
-                OnSettingChanged("importer_discid");
-            }
-        }
-        private bool _useDiscID;
-
-
-        [CornerstoneSetting(
             Name = "Enable NFO Scanner",
             Description = "Scan for NFO file and if available parse out the IMDB id.",
             Groups = "|Movie Importer|Preprocessing|",
@@ -223,6 +207,20 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _autoApproveOnImdbMatch;
 
+        [CornerstoneSetting(
+            Name = "Enable DiscID Lookup for DVDs",
+            Description = "Enables pre-search lookup for title by using the unique disc id of the DVD.",
+            Groups = "|Movie Importer|Preprocessing|",
+            Identifier = "importer_lookup_discid",
+            Default = false)]
+        public bool EnableDiscIdLookup {
+            get { return _enableDiscIdLookup; }
+            set {
+                _enableDiscIdLookup = value;
+                OnSettingChanged("importer_lookup_discid");
+            }
+        }
+        private bool _enableDiscIdLookup;
 
         [CornerstoneSetting(
             Name = "Enable IMDB Lookup",

@@ -6,24 +6,28 @@ using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
     class MetaServicesBuilder : ISignatureBuilder {
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static string urlWindowsMetaServicesQueryDiscId = "http://movie.metaservices.microsoft.com/pas_movie_B/template/GetMDRDVDByCRC.xml?CRC=";
 
         public SignatureBuilderResult UpdateSignature(MovieSignature signature) {
-            if (signature.DiscId != null && signature.DiscId != "0") {
-                XmlNodeList mdrDVD = getMDRDVDByCRC(signature.DiscId);
-                if (mdrDVD != null) {
-                    // todo: include more information?
-                    XmlNode nodeTitle = mdrDVD.Item(0).SelectSingleNode("dvdTitle");
-                    if (nodeTitle != null) {
-                        string title = removeSuffix(nodeTitle.InnerText);
-                        logger.Debug("Lookup DiscId={0}: Title= '{1}'", signature.DiscId, title);
-                        signature.Title = removeSuffix(title);
-                    }
-                    else {
-                        logger.Debug("Lookup DiscId={0}: no data available", signature.DiscId);
-                    }
+            if (MovingPicturesCore.Settings.EnableDiscIdLookup || signature.DiscId == null)
+                return SignatureBuilderResult.INCONCLUSIVE;
+
+            XmlNodeList mdrDVD = GetMovieMetaData(signature.DiscId);
+            if (mdrDVD != null) {
+                // todo: include more information?
+                XmlNode nodeTitle = mdrDVD.Item(0).SelectSingleNode("dvdTitle");
+                if (nodeTitle != null) {
+                    string title = removeSuffix(nodeTitle.InnerText);
+                    logger.Debug("Lookup DiscId={0}: Title= '{1}'", signature.DiscId, title);
+                    signature.Title = removeSuffix(title);
+                }
+                else {
+                    logger.Debug("Lookup DiscId={0}: no data available", signature.DiscId);
                 }
             }
+
             return SignatureBuilderResult.INCONCLUSIVE;
         }
 
@@ -37,8 +41,14 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             return expr.Replace(title, "").Trim();
         }
 
-        private static XmlNodeList getMDRDVDByCRC(string DiscID) {
-            WebGrabber grabber = new WebGrabber("http://movie.metaservices.microsoft.com/pas_movie_B/template/GetMDRDVDByCRC.xml?CRC=" + DiscID);
+        /// <summary>
+        /// Grabs the movie meta data from the Windows Meta Services webservice
+        /// using the DiscID
+        /// </summary>
+        /// <param name="DiscID"></param>
+        /// <returns>Metadata in XML format</returns>
+        private static XmlNodeList GetMovieMetaData(string DiscID) {
+            WebGrabber grabber = new WebGrabber(urlWindowsMetaServicesQueryDiscId + DiscID);
             grabber.Encoding = Encoding.UTF8;
             if (grabber.GetResponse())
                 return grabber.GetXML("METADATA");

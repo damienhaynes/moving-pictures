@@ -1512,7 +1512,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                     // Try to grab the movie from our DB
                     DBLocalMedia localMedia = DBLocalMedia.Get(moviePath, serial);
+                    
+                    // For DVDs we have to make sure this is the correct
+                    // media file, a simple availability check will point out 
+                    // if we should requery the database using the discid
+                    if (!localMedia.IsAvailable)
+                        localMedia = DBLocalMedia.GetDVD(moviePath, Utility.GetDiscIdString(Directory.GetParent(moviePath).FullName));   
+                    
                     if (localMedia.ID != null) {
+
                         if (localMedia.AttachedMovies.Count > 0) {
                             // movie already exists in the database, so lets handle it
                             movie = localMedia.AttachedMovies[0];
