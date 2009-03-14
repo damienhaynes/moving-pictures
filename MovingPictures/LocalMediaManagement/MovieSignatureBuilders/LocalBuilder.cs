@@ -24,16 +24,14 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 return SignatureBuilderResult.INCONCLUSIVE;
 
             DirectoryInfo dir = new DirectoryInfo(signature.Path);
+            string fullPath = signature.LocalMedia[0].FullPath; 
             bool preferFolder = MovingPicturesCore.Settings.PreferFolderName;
             int filecount = signature.LocalMedia.Count;
 
             string source;
             int year;
 
-            if ((Utility.isFolderDedicated(dir, filecount) && (preferFolder || (filecount > 1)) ||
-                signature.File.ToLower() == "video_ts.ifo" || // DVD
-                signature.File.ToLower() == "index.bdmv" // Blu-Ray
-                )) {
+            if ((Utility.isFolderDedicated(dir, filecount) && (preferFolder || (filecount > 1))) || signature.LocalMedia[0].IsVideoDisc) {
                 
                 // Use foldername
                 source = signature.Folder;
@@ -47,7 +45,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 if (filecount > 1)
                     source = Utility.RemoveFileStackMarkers(signature.File);
                 else
-                    source = Utility.RemoveFileExtension(signature.File);
+                    source = Path.GetFileNameWithoutExtension(signature.File);
             }
 
             // If there are periods or underscores, 
@@ -78,7 +76,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         private static string removeNoise(string input) {
             Regex expr = new Regex(MovingPicturesCore.Settings.NoiseFilter, RegexOptions.IgnoreCase);
             string denoisedTitle = expr.Replace(input, "");
-            denoisedTitle = Utility.trimSpaces(denoisedTitle);
+            denoisedTitle = Utility.TrimSpaces(denoisedTitle);
             return denoisedTitle;
         }
 

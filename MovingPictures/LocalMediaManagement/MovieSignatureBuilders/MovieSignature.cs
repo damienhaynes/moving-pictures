@@ -33,7 +33,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
 
                 if (!String.IsNullOrEmpty(title)) {
                     keywords = Utility.TitleToKeywords(title);
-                    baseTitle = Utility.normalizeTitle(title);
+                    baseTitle = Utility.NormalizeTitle(title);
                 } else {
                     title = null;
                     keywords = null;
@@ -84,6 +84,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             get {
                 if (LocalMedia != null)
                     discid = LocalMedia[0].DiscId;
+
                 return discid;
             }
             set { discid = value; }
@@ -96,6 +97,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             get {
                 if (LocalMedia != null)
                     filehash = LocalMedia[0].FileHash;
+
                 return filehash;
             }
             set { filehash = value; }
@@ -197,12 +199,12 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             }
 
             // return the result
-            logger.Debug("Final MatchResult for '{0}': {1}", movie.Title, result.ToString());
+            logger.Debug("Best MatchResult for '{0}': {1}", movie.Title, result.ToString());
             return result;
         }
 
         private int matchTitle(string title) {
-            string otherTitle = Utility.normalizeTitle(title);
+            string otherTitle = Utility.NormalizeTitle(title);
             int score = AdvancedStringComparer.Levenshtein(baseTitle, otherTitle);
             logger.Debug("Compare: '{0}', With: '{1}', Result: {2}", baseTitle, otherTitle, score);
             return score;
