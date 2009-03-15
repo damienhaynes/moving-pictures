@@ -127,7 +127,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             actionDescriptions.Add(newAction, "Updating import paths...");
             initActions.Add(newAction);
 
-            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateMissingDiskInfoProperties);
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateDiskInfoProperties);
             actionDescriptions.Add(newAction, "Updating disk information...");
             initActions.Add(newAction);
 
