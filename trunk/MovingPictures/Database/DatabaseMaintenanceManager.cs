@@ -111,7 +111,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         // create/update otpical drive import paths
-        public static void UpdateMissingDiskInfoProperties() {
+        public static void UpdateDiskInfoProperties() {
             float count = 0;
             float total = DBLocalMedia.GetAll().Count; 
 
@@ -120,11 +120,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 count++;
 
                 DriveType type = currFile.ImportPath.GetDriveType();
-                if (String.IsNullOrEmpty(currFile.VolumeSerial) && type != DriveType.Unknown && type != DriveType.CDRom) {
-                    if (currFile.IsAvailable) {
+                if (type != DriveType.Unknown && type != DriveType.CDRom) {
+                    // Update serial and label information only when this 
+                    // information is missing or the user has moved the import
+                    // path to another disk (rare)
+                    bool fileAvailable = currFile.IsAvailable;
+                    if ((String.IsNullOrEmpty(currFile.VolumeSerial) && fileAvailable) || (!fileAvailable && File.Exists(currFile.FullPath))) {
                         currFile.UpdateDiskProperties();
                         currFile.Commit();
-                        logger.Info("Added missing disk info to: {0} (serial: {1}, label: {2})", currFile.FullPath, currFile.VolumeSerial, currFile.MediaLabel);
+                        logger.Info("Updating disk information for '{0}': Serial={1}, Label={2}", currFile.FullPath, currFile.VolumeSerial, currFile.MediaLabel);
                     }
                 }
             }
