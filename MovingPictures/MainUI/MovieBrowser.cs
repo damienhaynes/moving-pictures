@@ -67,6 +67,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currentView = value;
 
                 ReapplyView();
+                ReloadFacade();
             }
         }
         private BrowserViewMode currentView;
@@ -439,6 +440,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // sort it using our basic sorter
             facade.Sort(new GUIListItemMovieComparer(this.CurrentSortField, this.CurrentSortDirection));
 
+            if (MovingPicturesCore.Settings.AllowGrouping && CurrentView == BrowserViewMode.LIST) {
+                GroupHeaders.AddGroupHeaders(this);
+            }
+
             // reapply the current selection
             SyncToFacade();
         }
@@ -497,12 +502,39 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             facade.Add(listItems[newMovie]);
         }
 
+
+        private int previouslySelectedIndex = 0;
+
         // triggered when a selection change was made on the facade
-        private void onFacadeItemSelected(GUIListItem item, GUIControl parent) {
+        public void onFacadeItemSelected(GUIListItem item, GUIControl parent) {
             // if this is not a message from the facade, exit
             if (parent != facade && parent != facade.FilmstripView &&
                 parent != facade.ThumbnailView && parent != facade.ListView)
                 return;
+
+            // we landed on a group header
+            if (facade.SelectedListItem.TVTag == null) {
+
+                bool jumpDown;
+                if (facade.SelectedListItemIndex + 1 == previouslySelectedIndex)
+                    jumpDown = false;
+                else
+                    jumpDown = true;
+
+
+                if (jumpDown) {
+                    
+                    facade.SelectedListItemIndex += 1;
+                }
+                else {
+                    if (facade.SelectedListItemIndex <= 0)
+                        facade.SelectedListItemIndex = facade.Count - 1;
+                    else
+                        facade.SelectedListItemIndex -= 1;
+                }
+            }
+            previouslySelectedIndex = facade.SelectedListItemIndex;
+
 
             SyncFromFacade();
         }

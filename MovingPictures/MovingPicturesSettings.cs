@@ -785,6 +785,20 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _autoPromptForRating;
 
+        [CornerstoneSetting(
+            Name = "Allow Grouping",
+            Description = "Show group headers when sorting the movies",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "allow_grouping",
+            Default = true)]
+        public bool AllowGrouping {
+            get { return _allow_grouping; }
+            set {
+                _allow_grouping = value;
+                OnSettingChanged("allow_grouping");
+            }
+        }
+        private bool _allow_grouping;
         #endregion
 
         #region Tweaks

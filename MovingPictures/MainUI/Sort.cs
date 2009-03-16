@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using MediaPortal.Plugins.MovingPictures.Database;
 using System.Collections;
-using System.Reflection;
 using NLog;
 using MediaPortal.GUI.Library;
 
@@ -19,9 +18,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         Certification = 4,
         Language = 5,
         Score = 6,
-        Popularity = 7,
-        Runtime = 8,
-        FilePath = 9
+        Runtime = 7,
+        FilePath = 8
     }
 
     public enum SortingDirections {
@@ -44,8 +42,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return Translation.Language;
                 case SortingFields.Score:
                     return Translation.Score;
-                case SortingFields.Popularity:
-                    return Translation.Popularity;
                 case SortingFields.Runtime:
                     return Translation.Runtime;
                 case SortingFields.FilePath:
@@ -76,9 +72,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     break;
                 case SortingFields.Score:
                     ascending = DBSortPreferences.Instance.SortScoreAscending;
-                    break;
-                case SortingFields.Popularity:
-                    ascending = DBSortPreferences.Instance.SortPopularityAscending;
                     break;
                 case SortingFields.Runtime:
                     ascending = DBSortPreferences.Instance.SortRuntimeAscending;
@@ -122,10 +115,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 case SortingFields.Score:
                     DBSortPreferences.Instance.SortScoreAscending = isAscending;
-                    break;
-
-                case SortingFields.Popularity:
-                    DBSortPreferences.Instance.SortPopularityAscending = isAscending;
                     break;
 
                 case SortingFields.Runtime:
@@ -196,10 +185,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                     case SortingFields.Score:
                         rtn = movieX.Score.CompareTo(movieY.Score);
-                        break;
-
-                    case SortingFields.Popularity:
-                        rtn = movieX.Popularity.CompareTo(movieY.Popularity);
                         break;
 
                     case SortingFields.Runtime:

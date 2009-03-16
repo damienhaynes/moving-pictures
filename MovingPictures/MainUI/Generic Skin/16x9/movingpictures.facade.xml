@@ -24,6 +24,7 @@ This file should contain the facade view
         <textXOff2>510</textXOff2>
         <IconXOff>1980</IconXOff>
         <textcolor>ffffff</textcolor>
+        <remoteColor>ff148489</remoteColor> <!-- remoteColor is currently being used for the group headers -->
       </control>
       <control>
         <description>Thumbnail Panel</description>
