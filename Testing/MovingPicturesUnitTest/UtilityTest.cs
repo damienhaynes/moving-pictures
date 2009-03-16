@@ -5,16 +5,14 @@ using System.IO;
 
 namespace MovingPicturesUnitTest
 {
-    
-    
+  
     /// <summary>
     ///This is a test class for UtilityTest and is intended
     ///to contain all UtilityTest Unit Tests
     ///</summary>
     [TestClass()]
     public class UtilityTest {
-
-
+        
         private TestContext testContextInstance;
         private FileInfo fileTest;
 
@@ -71,7 +69,7 @@ namespace MovingPicturesUnitTest
             string input = "A  B   C";
             string expected = "A B C";
             string actual;
-            actual = Utility.trimSpaces(input);
+            actual = Utility.TrimSpaces(input);
             Assert.AreEqual(expected, actual);
         }
 
@@ -124,30 +122,6 @@ namespace MovingPicturesUnitTest
         }
 
         /// <summary>
-        ///A test for RemoveFileExtension
-        ///</summary>
-        [TestMethod()]
-        public void RemoveFileExtensionTest1() {
-            string filename = fileTest.Name;
-            string expected = "The Big Movie cd2";
-            string actual;
-            actual = Utility.RemoveFileExtension(filename);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for RemoveFileExtension
-        ///</summary>
-        [TestMethod()]
-        public void RemoveFileExtensionTest() {
-            FileInfo file = fileTest; 
-            string expected = "The Big Movie cd2";
-            string actual;
-            actual = Utility.RemoveFileExtension(file);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
         ///A test for normalizeTitle
         ///</summary>
         [TestMethod()]
@@ -155,7 +129,7 @@ namespace MovingPicturesUnitTest
             string title = "Star Wars: Episode IV – A New Hope";
             string expected = "star wars episode 4 a new hope";
             string actual;
-            actual = Utility.normalizeTitle(title);
+            actual = Utility.NormalizeTitle(title);
             Assert.AreEqual(expected, actual);
         }
 
@@ -167,7 +141,7 @@ namespace MovingPicturesUnitTest
             string title = "Spïdér-Man I";
             string expected = "spider man";
             string actual;
-            actual = Utility.normalizeTitle(title);
+            actual = Utility.NormalizeTitle(title);
             Assert.AreEqual(expected, actual);
         }
 
