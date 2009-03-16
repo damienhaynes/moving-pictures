@@ -70,9 +70,30 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Certification = "Certification";
         public static string Language = "Language";
         public static string Score = "Score";
-        public static string Popularity = "Popularity";
         public static string Runtime = "Runtime";
         public static string FilePath = "File Path";
+
+        // group names for the date added sorting
+        public static string Future = "Future";
+        public static string Today = "Today";
+        public static string Yesterday = "Yesterday";
+        public static string Sunday = "Sunday";
+        public static string Monday = "Monday";
+        public static string Tuesday = "Tuesday";
+        public static string Wednesday = "Wednesday";
+        public static string Thursday = "Thursday";
+        public static string Friday = "Friday";
+        public static string Saturday = "Saturday";
+        public static string LastWeek = "Last Week";
+        public static string TwoWeeksAgo = "Two Weeks Ago";
+        public static string ThreeWeeksAgo = "Three Weeks Ago";
+        public static string LastMonth = "Last Month";
+        public static string TwoMonthsAgo = "Two Months Ago";
+        public static string ThreeMonthsAgo = "Three Months Ago";
+        public static string EarlierThisYear = "Earlier This Year";
+        public static string LastYear = "Last Year";
+        public static string Older = "Older";
+
         #endregion
 
         private static string path = string.Empty;
@@ -125,6 +146,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     logger.Info("Translation not found for field: {0}.  Using hard-coded English default.", fi.Name);
             }
             return TranslatedStrings.Count;
+        }
+
+        public static string GetByName(string name)
+        {
+            Type TransType = typeof(Translation);
+            FieldInfo fi = TransType.GetField(name, BindingFlags.Public | BindingFlags.Static);
+            return fi.GetValue(TransType).ToString();
         }
     }
 

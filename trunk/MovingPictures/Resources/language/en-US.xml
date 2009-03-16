@@ -46,13 +46,35 @@
   <string Field="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>
   <string Field="Rate">Rate</string>
   <string Field="SelectYourRating">Select your rating for {0}</string>
+
+  <!-- friendly names for sorting -->
   <string Field="Title">Title</string>
   <string Field="DateAdded">Date Added</string>
   <string Field="Year">Year</string>
   <string Field="Certification">Certification</string>
   <string Field="Language">Language</string>
   <string Field="Score">Score</string>
-  <string Field="Popularity">Popularity</string>
   <string Field="Runtime">Runtime</string>
   <string Field="FilePath">File Path</string>
+  
+  <!-- Group names for the date added sorting -->
+  <string Field="Future">Future</string>
+  <string Field="Today">Today</string>
+  <string Field="Yesterday">Yesterday</string>
+  <string Field="Sunday">Sunday</string>
+  <string Field="Monday">Monday</string>
+  <string Field="Tuesday">Tuesday</string>
+  <string Field="Wednesday">Wednesday</string>
+  <string Field="Thursday">Thursday</string>
+  <string Field="Friday">Friday</string>
+  <string Field="Saturday">Saturday</string>
+  <string Field="LastWeek">Last Week</string>
+  <string Field="TwoWeeksAgo">Two Weeks Ago</string>
+  <string Field="ThreeWeeksAgo">Three Weeks Ago</string>
+  <string Field="LastMonth">Last Month</string>
+  <string Field="TwoMonthsAgo">Two Months Ago</string>
+  <string Field="ThreeMonthsAgo">Three Months Ago</string>
+  <string Field="EarlierThisYear">Earlier This Year</string>
+  <string Field="LastYear">Last Year</string>
+  <string Field="Older">Older</string>
 </strings>

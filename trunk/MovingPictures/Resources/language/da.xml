@@ -48,7 +48,6 @@
 <string Field="Certification">Certificering</string>
 <string Field="Language">Sprog</string>
 <string Field="Score">Score</string>
-<string Field="Popularity">Popularitet</string>
 <string Field="Runtime">Spilletid</string>
 <string Field="FilePath">File sti</string>
 </strings>
