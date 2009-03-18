@@ -13,15 +13,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             for (int i = Browser.Facade.Count - 1; i >= 0; i--) {
                 string priorGroupName = "";
                 string thisGroupName = "";
-                DBMovieInfo priorMovie;
+                
                 DBMovieInfo thisMovie = ((DBMovieInfo)Browser.Facade[i].TVTag);
-                if (i > 0)
-                    priorMovie = ((DBMovieInfo)Browser.Facade[i - 1].TVTag);
-                else
-                    priorMovie = new DBMovieInfo();
-
-                priorGroupName = DetermineGroupName(priorMovie);
                 thisGroupName = DetermineGroupName(thisMovie);
+
+                if (i > 0) {
+                    DBMovieInfo priorMovie = ((DBMovieInfo)Browser.Facade[i - 1].TVTag);
+                    priorGroupName = DetermineGroupName(priorMovie);
+                }
+                else {
+                    priorGroupName = "";
+                }
                 
                 if (priorGroupName != thisGroupName) {
                     // if this movie's group differs from the prior, insert a group header
