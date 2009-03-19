@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- Swedish (SV) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<!-- Contributed by jorgen.sjolander in Issue#20 -->
+
+<strings>
+  <string Field="ProblemLoadingSkinFile">Det verkar tyvärr vara något fel i koden på skin-filen...</string>
+  <string Field="NoImportPathsHeading">Inga sökvägar är angivna!</string>
+  <string Field="NoImportPathsBody">Det verkar inte finnas några sökvägar angivna.\n Stäng MediaPortal och konfigurera denna plugin ordentligt \nmed konfigurations-verktyget.</string>
+  <string Field="ShowAllMovies">Visa alla filmer</string>
+  <string Field="ShowOnlyUnwatchedMovies">Visa endast ej sedda filmer</string>
+  <string Field="SortBy">Sortera efter</string>
+  <string Field="ChangeView">Ändra vy</string>
+  <string Field="ListView">List-vy</string>
+  <string Field="ThumbnailView">Tumnagel-vy</string>
+  <string Field="LargeThumbnailView">Större tumnagel-vy</string>
+  <string Field="FilmstripView">Filmstrip-vy</string>
+  <string Field="UpdateDetailsFromOnline">Uppdatera filmens detaljer från Internet</string>
+  <string Field="CycleCoverArt">Bläddra till nästa omslagsbild</string>
+  <string Field="CheckForMissingArtwork">Se om det finns bakgrundsbild på Internet</string>
+  <string Field="MarkAsUnwatched">Märk denna film som ej sedd</string>
+  <string Field="MarkAsWatched">Märk denna film som sedd</string>
+  <string Field="DeleteMovie">Ta bort denna film</string>
+  <string Field="CannotDeleteReadOnly">Skrivskyddade filmer kan inte tas bort.\nSkall Moving Pictures hoppa över detta val?</string>
+  <string Field="CannotDeleteOffline">Kunde inte radera {0}\n eftersom filen inte är tillgänglig</string>
+  <string Field="DoYouWantToDelete">Vill du verkligen ta bort \n{0}\nfrån hårddisken?</string>
+  <string Field="DeleteFailed">Borttagning misslyckades</string>
+  <string Field="UpdateMovieDetailsHeader">Uppdatera filmdetaljer</string>
+  <string Field="UpdateMovieDetailsBody">All information om filmen kommer att uppdateras, alla ändringar\ngjorda kommer att skrivas över. Vill du \nfortsätta?</string>
+  <string Field="MediaNotAvailableHeader">Disken är inte tillgänlig</string>
+  <string Field="MediaNotAvailableBody">Disken där den valda filmen bör finnas är inte tillgänglig \nför tillfället. Stoppa i skivan eller anslut det media som saknas \nmed etiketten: {0}</string>
+  <string Field="VirtualDriveHeader">Virtual drive not ready</string>
+  <string Field="VirtualDriveMessage">Den virtuella enheten var inte redo i tid. \nFörsök igen eller avsluta uppspelningen.</string>
+  <string Field="Retry">Försök igen</string>
+  <string Field="Cancel">Avbryt</string>
+  <string Field="Error">Fel</string>
+  <string Field="MediaIsMissing">Disken som den valda filmen bör finnas på saknas! \nEtt fel har tyvärr uppstått...</string>
+  <string Field="FailedMountingImage">Det gick tyvärr inte att montera image-filen.</string>
+  <string Field="PlaybackFailedHeader">Uppspelning misslyckades</string>
+  <string Field="PlaybackFailed">Uppspelning av är tyvärr ej möjligt då '{0}'\n-filer inte är tillagda i MediaPortals lista över kända format\nLägg till filändelsen eller välj en extern uppspelare \noch försök på nytt.</string>
+  <string Filed="MissingExternalPlayerExe">Programfilen för uppspelning av HD-material saknas.\nVar god rätta till sökvägen.</string>
+  <string Field="ResumeFromLast">Återuppta uppspelning där filmen senast stoppades?</string>
+  <string Field="ResumeFrom">Återuppta från:</string>
+  <string Field="InvalidVideoDiscFormat">Antingen är skivavbilden i ett felaktigt format, eller så är Daemon \nTools inkorrekt inställt i MediaPortals konfiguration.</string>
+  <string Field="ContinueToNextPartHeader">Fortsätt till nästa del?</string>
+  <string Field="ContinueToNextPartBody">Spela upp del {0}?</string>
+  <string Field="Rate">Ranka</string>
+  <string Field="SelectYourRating">Välj rankning {0}</string>
+
+  <!-- friendly names for sorting -->
+  <string Field="Title">Titel</string>
+  <string Field="DateAdded">Lades till</string>
+  <string Field="Year">År</string>
+  <string Field="Certification">Åldersrekommendation</string>
+  <string Field="Language">Språk</string>
+  <string Field="Score">Betyg</string>
+  <string Field="Runtime">Speltid</string>
+  <string Field="FilePath">Sökväg</string>
+  
+  <!-- Group names for the date added sorting -->
+  <string Field="Future">Framtida</string>
+  <string Field="Today">Idag</string>
+  <string Field="Yesterday">Igår</string>
+  <string Field="Sunday">Söndag</string>
+  <string Field="Monday">Måndag</string>
+  <string Field="Tuesday">Tisdag</string>
+  <string Field="Wednesday">Onsdag</string>
+  <string Field="Thursday">Torsdag</string>
+  <string Field="Friday">Fredag</string>
+  <string Field="Saturday">Lördag</string>
+  <string Field="LastWeek">Förra veckan</string>
+  <string Field="TwoWeeksAgo">Två veckor sedan</string>
+  <string Field="ThreeWeeksAgo">Tre veckor sedan</string>
+  <string Field="LastMonth">Förra månaden</string>
+  <string Field="TwoMonthsAgo">Två månader sedan</string>
+  <string Field="ThreeMonthsAgo">Tre månader sedan</string>
+  <string Field="EarlierThisYear">Tidigare i år</string>
+  <string Field="LastYear">Förra året</string>
+  <string Field="Older">Äldre</string>
+</strings>
