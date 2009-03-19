@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- Spanish (ES) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<!-- Contributed by joarreba in Issue#20 -->
+
+<strings>
+  <string Field="ProblemLoadingSkinFile">Lo siento, hubo un problema cargando el archivo del skin...</string>
+  <string Field="NoImportPathsHeading">¡No hay rutas de importación!</string>
+  <string Field="NoImportPathsBody">No parece que haya definido\n ninguna ruta de importación. \nDeberá cerrar MediaPortal y\nlanzar la pantalla de \nConfiguración para\nconfigurar Moving Pictures.</string>
+  <string Field="ShowAllMovies">Mostrar todas las Películas</string>
+  <string Field="ShowOnlyUnwatchedMovies">Mostrar sólo Películas No Vistas</string>
+  <string Field="SortBy">Ordenar Por</string>
+  <string Field="ChangeView">Cambiar Vista</string>
+  <string Field="ListView">Vista de Lista</string>
+  <string Field="ThumbnailView">Vista de Miniaturas</string>
+  <string Field="LargeThumbnailView">Vista de Miniaturas Grandes</string>
+  <string Field="FilmstripView">Vista de Diapositivas</string>
+  <string Field="UpdateDetailsFromOnline">Actualizar Detalles Online</string>
+  <string Field="CycleCoverArt">Alternar Portada</string>
+  <string Field="CheckForMissingArtwork">Comprobar Online fondos ausentes (Artwork)</string>
+  <string Field="MarkAsUnwatched">Marcar como no Visto</string>
+  <string Field="MarkAsWatched">Marcar como Visto</string>
+  <string Field="DeleteMovie">Borrar Película</string>
+  <string Field="CannotDeleteReadOnly">No se puede borrar una película de sólo lectura.\n¿Quiere que Moving Pictures ignore esta película?</string>
+  <string Field="CannotDeleteOffline">No se pudo borrar {0}\n porque el archivo está offline</string>
+  <string Field="DoYouWantToDelete">¿Quiere borrar permanentemente\n{0}\nde su disco duro?</string>
+  <string Field="DeleteFailed">No se pudo Borrar</string>
+  <string Field="UpdateMovieDetailsHeader">Actualizar Detalles de Película</string>
+  <string Field="UpdateMovieDetailsBody">Va a refrescar todos los datos de la película, sobreescribiendo\ncualquier modificación a este film. ¿Quiere\ncontinuar?</string>
+  <string Field="MediaNotAvailableHeader">Medio no disponible</string>
+  <string Field="MediaNotAvailableBody">El medio de la película que ha seleccionado no está\ndisponible actualmente. Por favor, inserte o conecte el medio\netiquetado como: {0}</string>
+  <string Field="VirtualDriveHeader">Unidad Virtual no preparada</string>
+  <string Field="VirtualDriveMessage">La unida virtual no estuvo lista a tiempo.\nInténtelo de nuevo o cancele la reproducción.</string>
+  <string Field="Retry">Reintentar</string>
+  <string Field="Cancel">Cancelar</string>
+  <string Field="Error">Error</string>
+  <string Field="MediaIsMissing">No se encuentra el medio de la película seleccionada\nLo siento pero algo ha ido mal...</string>
+  <string Field="FailedMountingImage">Lo siento, no se pudo montar la Imagen de DVD</string>
+  <string Field="PlaybackFailedHeader">Fallo en la reproducción</string>
+  <string Field="PlaybackFailed">No es posible la reproducción porque la extensión '{0}'\nno está listada en la configuración de MediaPortal.\nPor favor, añada la extensión o configure un reproductor externo\ne inténtelo de nuevo.</string>
+  <string Filed="MissingExternalPlayerExe">No se encuentra el ejecutable para la reproducción HD.\nPor favor, corrija la ruta al ejecutable.</string>
+  <string Field="ResumeFromLast">¿Reanudar desde el último punto?</string>
+  <string Field="ResumeFrom">Reanudar desde:</string>
+  <string Field="InvalidVideoDiscFormat">O el archivo de imagen no contiene\nun formato de disco válido, o su configuración\nde Daemon Tools en MediaPortal es incorrecta.</string>
+  <string Field="ContinueToNextPartHeader">¿Continuar en la siguiente parte?</string>
+  <string Field="ContinueToNextPartBody">¿Quiere continuar con la parte {0}?</string>
+  <string Field="Rate">Puntuar</string>
+  <string Field="SelectYourRating">Seleccione su puntuación para {0}</string>
+  <!-- friendly names for sorting -->
+  <string Field="Title">Título</string>
+  <string Field="DateAdded">Añadido</string>
+  <string Field="Year">Año</string>
+  <string Field="Certification">Certificación</string>
+  <string Field="Language">Idioma</string>
+  <string Field="Score">Puntuación</string>
+  <string Field="Popularity">Popularidad</string>
+  <string Field="Runtime">Duración</string>
+  <string Field="FilePath">Ruta de Archivo</string>
+  <!-- Group names for the date added sorting -->
+  <string Field="Future">Futuro</string>
+  <string Field="Today">Hoy</string>
+  <string Field="Yesterday">Ayer</string>
+  <string Field="Sunday">Domingo</string>
+  <string Field="Monday">Lunes</string>
+  <string Field="Tuesday">Tuesday</string>
+  <string Field="Wednesday">Miércoles</string>
+  <string Field="Thursday">Jueves</string>
+  <string Field="Friday">Viernes</string>
+  <string Field="Saturday">Sábado</string>
+  <string Field="LastWeek">La Semana Pasada</string>
+  <string Field="TwoWeeksAgo">Hace Dos Semanas</string>
+  <string Field="ThreeWeeksAgo">Hace Tres Semanas</string>
+  <string Field="LastMonth">El Mes Pasado</string>
+  <string Field="TwoMonthsAgo">Hace Dos Meses</string>
+  <string Field="ThreeMonthsAgo">Hace Tres Meses</string>
+  <string Field="EarlierThisYear">Al Comienzo del Año</string>
+  <string Field="LastYear">El Año Pasado</string>
+  <string Field="Older">Más Antiguo</string>
+</strings>

@@ -482,7 +482,12 @@
     <Content Include="Resources\Images\world_add.png" />
     <Content Include="Resources\Images\zoom.png" />
     <Content Include="Resources\language\da.xml" />
+    <Content Include="Resources\language\de.xml" />
     <Content Include="Resources\language\en-US.xml" />
+    <Content Include="Resources\language\es.xml" />
+    <Content Include="Resources\language\fr.xml" />
+    <Content Include="Resources\language\ru.xml" />
+    <Content Include="Resources\language\sv.xml" />
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>

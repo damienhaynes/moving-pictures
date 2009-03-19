@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- German (DE) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<!-- Contributed by hullebulle in Issue#20 -->
+
+<strings>
+  <string Field="ProblemLoadingSkinFile">Leider gab es ein Problem beim Laden der Skin-Datei ...</string>
+  <string Field="NoImportPathsHeading">Keine Importpfade!</string>
+  <string Field="NoImportPathsBody">Du hast scheinbar keine Importpfade definiert.\nDu solltest Mediaportal schließen und\ndie Konfiguration von Mediaportal öffnen,\num Moving Pictures zu konfigurieren.</string>
+  <string Field="ShowAllMovies">Zeige alle Filme</string>
+  <string Field="ShowOnlyUnwatchedMovies">Zeige nur noch nicht gesehene Filme</string>
+  <string Field="SortBy">Sortiere nach</string>
+  <string Field="ChangeView">Ändere Ansicht</string>
+  <string Field="ListView">Liste</string>
+  <string Field="ThumbnailView">Kleine Vorschaubilder</string>
+  <string Field="LargeThumbnailView">Grosse Vorschaubilder</string>
+  <string Field="FilmstripView">Filmstrip</string>
+  <string Field="UpdateDetailsFromOnline">Aktualisiere Daten</string>
+  <string Field="CycleCoverArt">Wechsle Cover/Poster</string>
+  <string Field="CheckForMissingArtwork">Suche online nach fehlendem Cover/Poster</string>
+  <string Field="MarkAsUnwatched">als 'nicht gesehen' markieren</string>
+  <string Field="MarkAsWatched">als 'gesehen' markieren</string>
+  <string Field="DeleteMovie">Film löschen</string>
+  <string Field="CannotDeleteReadOnly">Film kann nicht gelöscht werden (schreibgeschützt).\nSoll Moving Pictures den Film ignorieren?</string>
+  <string Field="CannotDeleteOffline">Löschen von {0} nicht möglich,\nda die Datei offline ist.</string>
+  <string Field="DoYouWantToDelete">Soll der Film\n{0}\ndauerhaft von der Festplatte gelöscht werden?</string>
+  <string Field="DeleteFailed">Löschen fehlgeschlagen</string>
+  <string Field="UpdateMovieDetailsHeader">Aktualisiere Filmdetails</string>
+  <string Field="UpdateMovieDetailsBody">Du bist im Begriff alle Film-Metadaten zu aktualisieren.\nDies wird alle benutzerdefinierten Änderungen überschreiben.\nWillst du fortfahren?</string>
+  <string Field="MediaNotAvailableHeader">Medium nicht verfügbar</string>
+  <string Field="MediaNotAvailableBody">Das Medium für den gewählten Film ist zur Zeit\nnicht verfügbar. Bitte verbinde oder lege folgenden\nDatenträger ein: {0}</string>
+  <string Field="VirtualDriveHeader">Virtuelles Laufwerk ist nicht verfügbar</string>
+  <string Field="VirtualDriveMessage">Das virtuelle Laufwerk stand nicht rechtzeitig zur Verfügung.\nBitte erneut versuchen oder die Wiedergabe abbrechen.</string>
+  <string Field="Retry">Wiederholen</string>
+  <string Field="Cancel">Abbrechen</string>
+  <string Field="Error">Fehler</string>
+  <string Field="MediaIsMissing">Das Medium für den gewählten Film ist nicht vorhanden!\nLeider ging irgendetwas schief...</string>
+  <string Field="FailedMountingImage">Leider konnte das DVD-Image nicht eingebunden werden.</string>
+  <string Field="PlaybackFailedHeader">Wiedergabe fehlgeschlagen</string>
+  <string Field="PlaybackFailed">Wiedergabe nicht möglich, weil die Erweiterung '{0}' nicht in der Mediaportalkonfiguration aufgeführt ist.\nBitte diese Dateierweiterung hinzufügen oder einen externen Player\neinrichten und noch einmal versuchen.</string>
+  <string Filed="MissingExternalPlayerExe">Die Anwendung für HD-Wiedergabe ist nicht vorhanden.\nBitte den Pfad zu der Anwendung angeben/korrigieren.</string>
+  <string Field="ResumeFromLast">Wiedergabe an letzter Position fortsetzen?</string>
+  <string Field="ResumeFrom">Fortsetzen bei:</string>
+  <string Field="InvalidVideoDiscFormat">Entweder das Image-File enthält kein\ngültiges Videodiscformat oder deine Daemon Tools\nMediaportal Konfiguration ist nicht korrekt.</string>
+  <string Field="ContinueToNextPartHeader">Mit nächstem Teil fortfahren?</string>
+  <string Field="ContinueToNextPartBody">Möchtest du mit Teil {0} fortfahren?</string>
+  <string Field="Rate">bewerten</string>
+  <string Field="SelectYourRating">Wähle deine Bewertung für {0}</string>
+
+
+  <!-- friendly names for sorting -->
+  <string Field="Title">Titel</string>
+  <string Field="DateAdded">hinzugefügt am</string>
+  <string Field="Year">Jahr</string>
+  <string Field="Certification">Altersfreigabe</string>
+  <string Field="Language">Sprache</string>
+  <string Field="Score">Punktzahl</string>
+  <string Field="Runtime">Laufzeit</string>
+  <string Field="FilePath">Dateipfad</string>
+    
+  <!-- Group names for the date added sorting -->
+  <string Field="Future">Zukunft</string>
+  <string Field="Today">Heute</string>
+  <string Field="Yesterday">Gestern</string>
+  <string Field="Sunday">Sonntag</string>
+  <string Field="Monday">Montag</string>
+  <string Field="Tuesday">Dienstag</string>
+  <string Field="Wednesday">Mittwoch</string>
+  <string Field="Thursday">Donnerstag</string>
+  <string Field="Friday">Freitag</string>
+  <string Field="Saturday">Samstag</string>
+  <string Field="LastWeek">Letzte Woche</string>
+  <string Field="TwoWeeksAgo">Vor 2 Wochen</string>
+  <string Field="ThreeWeeksAgo">Vor 3 Wochen</string>
+  <string Field="LastMonth">Letzten Monat</string>
+  <string Field="TwoMonthsAgo">Vor 2 Monaten</string>
+  <string Field="ThreeMonthsAgo">Vor 3 Monaten</string>
+  <string Field="EarlierThisYear">Anfang des Jahres</string>
+  <string Field="LastYear">Letztes Jahr</string>
+  <string Field="Older">Älter</string>
+</strings>
