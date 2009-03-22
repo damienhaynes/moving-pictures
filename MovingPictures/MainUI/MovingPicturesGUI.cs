@@ -598,10 +598,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             dialog.SetHeading("Moving Pictures - " + Translation.SortBy);
 
             foreach (int value in Enum.GetValues(typeof(SortingFields))) {
-                string menuCaption = Sort.GetFriendlySortName(
-                    (SortingFields)Enum.Parse(typeof(SortingFields), value.ToString()));
+                SortingFields field = (SortingFields)Enum.Parse(typeof(SortingFields), value.ToString());
+                string menuCaption = Sort.GetFriendlySortName(field);
                 GUIListItem listItem = new GUIListItem(menuCaption);
                 listItem.ItemId = value;
+
+                if (field == browser.CurrentSortField) {
+                    if (browser.CurrentSortDirection == SortingDirections.Ascending)
+                        listItem.Label2 = "▼";
+                    else
+                        listItem.Label2 = "▲";
+                }
                 dialog.Add(listItem);
             }
 
