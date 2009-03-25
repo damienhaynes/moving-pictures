@@ -4,7 +4,9 @@
     <!-- These details are for display purposes only. -->
     <name>ofdb.de</name>
     <author>Armand Pondman (armandp) and Schenk2302</author>
-    <description>This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de) And reads runtime from OFDb</description>
+    <description>
+    This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)
+    Missing information is pulled from imdb.com</description>
 
     <!-- 
     These two fields uniquely identify the script. The ID should never 
@@ -15,8 +17,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="1" minor="0" point="9"/>
-    <published month="2" day="28" year="2009"/>
+    <version major="1" minor="1" point="0"/>
+    <published month="3" day="25" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -27,11 +29,13 @@
 
   </details>
   
+  
+  <!-- Search -->
   <action name="search">
-    
+
     <!-- Variables -->
     <set name="site" value="http://xml.n4rf.net/ofdbgw/" />
-        
+
     <!-- Regular Expressions -->
     <set name="rx_title_clean" value="\[(TV-Mini-Serie|Kurzfilm)\]" />
     <set name="rx_title" value="(.+?)(?:, (The|A|Ein|Das|Die|Der|Les|Une))?\s*$" />
@@ -75,7 +79,7 @@
 
     <!-- Retrieve the search results -->
     <retrieve name="search_page" url="${site}search/${search.title:safe}" encoding="UTF-8"/>
-    
+
     <!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop.-->
     <parse name="search_results_block" input="${search_page}" regex="${rx_page}" />
     <loop name="search_results_verified" on="search_results_block">
@@ -101,9 +105,10 @@
         </if>
       </loop>
     </loop>
-    
+
   </action>
 
+  <!-- Details -->
   <action name="get_details">
 
     <set name="site" value="http://xml.n4rf.net/ofdbgw/movie/" />
@@ -111,100 +116,184 @@
     <!-- Regular Expressions -->
     <set name="rx_title_clean" value="\[(TV-Mini-Serie|Kurzfilm)\]" />
     <set name="rx_title" value="(.+?)(?:, (The|A|Ein|Das|Die|Der|Les|Une))?\s*$" />
+    
     <set name="rx_person">
       <![CDATA[
-      <person>(.+?)</person>
+      <name>([^<]+)</name>
       ]]>
     </set>
+
     <set name="rx_genre">
       <![CDATA[
       <titel>(.+?)</titel>
       ]]>
-    </set>
+    </set>    
+
     <set name="rx_details">
       <![CDATA[
-      <titel>(.+?)</titel>\s*<jahr>(.+?)</jahr>.*<imdbid>(.+?)</imdbid>.*<note>(.+?)</note>.*<stimmen>(.+?)</stimmen>.*<regie>(.+?)</regie>.*<genre>(.+?)</genre>.*<besetzung>(.+?)</besetzung>.*<alternativ>(.+?)</alternativ>
+      <resultat>(.+?)</resultat>
+       ]]>
+    </set>
+
+    <set name="rx_details_titel">
+      <![CDATA[
+      <titel>([^<]+)</titel>
+       ]]>
+    </set>
+    
+    <set name="rx_details_alternativ">
+      <![CDATA[
+      <alternativ>([^<]+)</alternativ>
+       ]]>
+    </set>
+    
+    <set name="rx_details_jahr">
+      <![CDATA[
+      <jahr>([^<]+)</jahr>
+       ]]>
+    </set>
+    
+    <set name="rx_details_imdbid">
+      <![CDATA[
+      <imdbid>([^<]+)</imdbid>
+       ]]>
+    </set>
+    
+    <set name="rx_details_note">
+      <![CDATA[
+      <note>([^<]+)</note>
+       ]]>
+    </set>
+    
+    <set name="rx_details_stimmen">
+      <![CDATA[
+      <stimmen>([^<]+)</stimmen>
+       ]]>
+    </set>
+    
+    <set name="rx_details_regie">
+      <![CDATA[
+      <regie>(.+?)</regie>
+       ]]>
+    </set>
+
+    <set name="rx_details_drehbuch">
+      <![CDATA[
+      <drehbuch>(.+?)</drehbuch>
+       ]]>
+    </set>   
+
+    <set name="rx_details_genre">
+      <![CDATA[
+      <genre>(.+?)</genre>
+       ]]>
+    </set>
+    
+    <set name="rx_details_besetzung">
+      <![CDATA[
+      <besetzung>(.+?)</besetzung>
+       ]]>
+    </set>
+
+    <set name="rx_details_kurzbeschreibung">
+      <![CDATA[
+      <kurzbeschreibung>([^<]+)</kurzbeschreibung>
       ]]>
     </set>
-        <set name="rx_summary">
-      <![CDATA[
-      </genre>.*<kurzbeschreibung>(.+?)</kurzbeschreibung>.*<beschreibung>(.+?)</beschreibung>.*<besetzung>
-      ]]>
-    </set>    
     
-    <!-- Details -->
+    <set name="rx_details_beschreibung">
+      <![CDATA[
+      <beschreibung>([^<]+)</beschreibung>
+      ]]>
+    </set>
+    
+    <!-- OFDB Details -->
+    
     <retrieve name="details_page" url="${site}${movie.site_id}" encoding="UTF-8" />
     <parse name="details" input="${details_page}" regex="${rx_details}"/>
 
     <!-- Titles -->
-    <replace name="title" input="${details[0][0]:htmldecode}" pattern="${rx_title_clean}" with="" />
-    <replace name="aka" input="${details[0][8]:htmldecode}" pattern="${rx_title_clean}" with="" />
-    <parse name="title" input="${title}" regex="${rx_title}"/>
-    <parse name="aka" input="${aka}" regex="${rx_title}"/>
-    <set name="movie.alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
-    <set name="movie.title" value="${title[0][1]} ${title[0][0]}"/>
+      
+      <parse name="details_titel" input="${details[0][0]}" regex="${rx_details_titel}"/>
+      <parse name="details_alternativ" input="${details[0][0]}" regex="${rx_details_alternativ}"/>
+      
+      <replace name="title" input="${details_titel[0][0]:htmldecode}" pattern="${rx_title_clean}" with="" />
+      <replace name="aka" input="${details_alternativ[0][0]:htmldecode}" pattern="${rx_title_clean}" with="" />
+      
+      <parse name="title" input="${title}" regex="${rx_title}"/>
+      <parse name="aka" input="${aka}" regex="${rx_title}"/>
+      
+      <set name="movie.alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
+      <set name="movie.title" value="${title[0][1]} ${title[0][0]}"/>
+
+      <!-- IMDB ID -->
+      <parse name="details_imdb" input="${details[0][0]}" regex="${rx_details_imdbid}"/>
+      <set name="movie.imdb_id" value="tt${details_imdb[0][0]}" />
+
+      <!-- Year, Score and Votes-->
+      <parse name="jahr" input="${details[0][0]}" regex="${rx_details_jahr}"/>
+      <parse name="note" input="${details[0][0]}" regex="${rx_details_note}"/>
+      <parse name="stimmen" input="${details[0][0]}" regex="${rx_details_stimmen}"/>
+
+      <set name="movie.year" value="${jahr[0][0]}" />
+      <set name="movie.score" value="${note[0][0]}" />
+      <set name="movie.popularity" value="${stimmen[0][0]}" />
     
-    <!-- IMDB ID -->
-    <set name="movie.imdb_id" value="tt${details[0][2]}" />
-    
-    <!-- Year, Score and Votes-->
-    <set name="movie.year" value="${details[0][1]}"/>
-    <set name="movie.score" value="${details[0][3]}"/>
-    <set name="movie.popularity" value="${details[0][4]}"/>
+      <!-- Summary -->
+      <parse name="summary" input="${details[0]}" regex="${rx_details_beschreibung}"/>
+      <set name="movie.summary" value="${summary[0][0]:htmldecode}"/>
 
-    <!-- Summary -->
-    <retrieve name="summary_page" url="${site}${movie.site_id}" encoding="UTF-8" />
-    <parse name="summary" input="${summary_page}" regex="${rx_summary}"/>
-    <set name='movie.summary' value="${summary[0][1]:htmldecode}"/>
-    
-    <!-- Directors -->
-    <parse name="directors" input="${details[0][5]}" regex="${rx_person}"/>
-    <set name='movie.directors' value=''/>
-    <loop name='currDirector' on='directors'>
-      <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
-    </loop>
+      <!-- Directors -->
+      <parse name="regie" input="${details[0][0]}" regex="${rx_details_regie}"/>
+      <parse name="directors" input="${regie[0][0]}" regex="${rx_person}"/>
+      <set name="movie.directors" value=""/>
+      <loop name="currDirector" on="directors">
+        <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
+      </loop>
 
-    <!-- Actors -->
-    <parse name='actors' input='${details[0][7]}' regex="${rx_person}"/>
-    <set name='movie.actors' value=''/>
-    <loop name='currActor' on='actors'>
-      <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
-    </loop>
+      <!-- Writers -->
+      <parse name="drehbuch" input="${details[0][0]}" regex="${rx_details_drehbuch}"/>
+      <parse name="writers" input="${drehbuch[0][0]}" regex="${rx_person}"/>
+      <set name="movie.writers" value=""/>
+      <loop name="currWriter" on="writers">
+        <set name="movie.writers" value="${movie.writers}|${currWriter[0]:htmldecode}"/>
+      </loop>  
 
-    <!-- Genres -->
-    <parse name='genres' input='${details[0][6]}' regex="${rx_genre}"/>
-    <set name='movie.genres' value=''/>
-    <loop name='currGenre' on='genres'>
-      <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
-    </loop>
-	
-	<!-- Runtime -->
-	<retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
-    <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+'/>
-    <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
-	
-	<!-- Tagline -->
-	
-    <parse name="tagline" input="${details_page}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
-    <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
+      <!-- Actors -->
+      <parse name="besetzung" input="${details[0]}" regex="${rx_details_besetzung}"/>
+      <parse name="actors" input="${besetzung}" regex="${rx_person}" />
+      <set name="movie.actors" value="" />
+      <loop name="currActor" on="actors">
+        <set name="movie.actors" value="${movie.actors}|${currActor[0]:htmldecode}"/>
+      </loop>
 
-	 <!-- Certification -->
-	<retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
-    <parse name="certification" input="${details_page}" regex='&gt;\s+Germany:((?:12)|(?:16)|(?:18)|(?:6)|(?:o.Al.))&lt;/a&gt;'/>
-    <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
+      <!-- Genres -->
+      <parse name="details_genre" input="${details[0]}" regex="${rx_details_genre}"/>
+      <parse name="genres" input="${details_genre[0]}" regex="${rx_genre}"/>
+      <set name="movie.genres" value=""/>
+      <loop name="currGenre" on="genres">
+        <set name="movie.genres" value="${movie.genres}|${currGenre[0]:htmldecode}"/>
+      </loop>
 
-	<!-- Writers -->
-	<retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
-    <parse name="writers_block" input="${details_page}" regex='&lt;div class="info"&gt;\s+&lt;h5&gt;Writer[s]?(?: &lt;a href="[^"]+"&gt;\([^)]+\)&lt;/a&gt;)?:&lt;/h5&gt;.+?&lt;/div&gt;'/>
-    <parse name='writers' input="${writers_block}" regex='&lt;a href="/name/nm\d+/"&gt;([^&lt;]+)&lt;/a&gt;'/>
-    <set name='movie.writers' value=''/>
-    <loop name='currWriter' on='writers'>
-      <set name='movie.writers' value='${movie.writers}|${currWriter[0]:htmldecode}'/>
-    </loop>
- 
-	<!-- Set Sortby for German Articles -->
-	<replace name="movie.sortby" input="${movie.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)" with=""/>
-    
+      <!-- Runtime (IMDB) -->
+      <retrieve name="imdb_details" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+      
+      <parse name="runtime" input="${imdb_details}" regex="&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+"/>
+      <set name='movie.runtime' value="${runtime[0][0]:htmldecode}"/>
+
+      <!-- Tagline (IMDB) -->
+
+      <parse name="tagline" input="${imdb_details}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
+      <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
+
+      <!-- Certification (IMDB) -->
+      <retrieve name="imdb_details" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+      <parse name="certification" input="${imdb_details}" regex='&gt;\s+Germany:((?:12)|(?:16)|(?:18)|(?:6)|(?:o.Al.))&lt;/a&gt;'/>
+      <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
+
+      <!-- Set Sortby for German Articles -->
+      <replace name="movie.sortby" input="${movie.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)" with=""/>
+
   </action>
-  
+
 </ScriptableScraper>
