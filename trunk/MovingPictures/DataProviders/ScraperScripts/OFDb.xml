@@ -4,7 +4,10 @@
     <!-- These details are for display purposes only. -->
     <name>ofdb.de</name>
     <author>Armand Pondman (armandp) and Schenk2302</author>
-    <description>This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de) And reads runtime from OFDb</description>
+    <description>
+      This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)
+      Missing information is pulled from imdb.com
+    </description>
 
     <!-- 
     These two fields uniquely identify the script. The ID should never 
@@ -15,8 +18,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="1" minor="0" point="9"/>
-    <published month="2" day="28" year="2009"/>
+    <version major="2" minor="0" point="0"/>
+    <published month="3" day="26" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -26,48 +29,42 @@
     <language>de</language>
 
   </details>
-  
+
+
+  <!-- Search -->
   <action name="search">
-    
+
     <!-- Variables -->
     <set name="site" value="http://xml.n4rf.net/ofdbgw/" />
-        
+
     <!-- Regular Expressions -->
     <set name="rx_title_clean" value="\[(TV-Mini-Serie|Kurzfilm)\]" />
     <set name="rx_title" value="(.+?)(?:, (The|A|Ein|Das|Die|Der|Les|Une))?\s*$" />
-    <set name="rx_page">
+    
+    <set name="rx_titles">
       <![CDATA[
-      <resultat>.+</resultat>
+      (.+?)(\s/\s(.+?))?\((\d{4})\)
       ]]>
     </set>
-    <set name="rx_imdb_results">
-      <![CDATA[
-     <resultat>[^<]*?<titel>(.+?)(\s/\s(.+?))?\((\d{4})\)</titel>[^<]*?<imdbid>(.+?)</imdbid>[^<]*?<ofdbid>(.+?)</ofdbid>[^<]*?</resultat>
-      ]]>
-    </set>
-    <set name="rx_results">
-      <![CDATA[
-      <eintrag>[^<]*?<id>([^<]+?)</id>[^<]*?<titel>([^<]+?)</titel>[^<]*?<titel_orig>([^<]+?)</titel_orig>[^<]*?<jahr>([^<]+?)</jahr>[^<]*?</eintrag>
-      ]]>
-    </set>
-
+    
     <set name="offset" value="0" />
 
     <!-- Retrieve IMDB result if we have an imdb id to search on -->
     <if test='${search.imdb_id}!='>
       <retrieve name="search_imdb" url="${site}imdb2ofdb/${search.imdb_id}" encoding="UTF-8"/>
-      <parse name="imdb_details" input="${search_imdb}" regex="${rx_imdb_results}" />
+      <parse name="resultat" input="${search_imdb}" xpath="//resultat" />
       <if test="${imdb_details}!=">
-        <replace name="title" input="${imdb_details[0][0]:htmldecode}" pattern="${rx_title_clean}" with="" />
-        <replace name="aka" input="${imdb_details[0][2]:htmldecode}" pattern="${rx_title_clean}" with="" />
+        <parse name="title_year" input="${resultat[0].titel}" regex="${rx_titles}" />
+        <replace name="title" input="${title_year[0]:htmldecode}" pattern="${rx_title_clean}" with="" />
+        <replace name="aka" input="${title_year[1]:htmldecode}" pattern="${rx_title_clean}" with="" />
         <parse name="title" input="${title}" regex="${rx_title}"/>
         <parse name="aka" input="${aka}" regex="${rx_title}"/>
         <set name="movie[0].title" value="${title[0][1]} ${title[0][0]}"/>
         <set name="movie[0].alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
-        <set name="movie[0].year" value="${imdb_details[0][3]:htmldecode}"/>
-        <set name="movie[0].imdb_id" value="${imdb_details[0][4]}" />
-        <set name="movie[0].details_url" value="${site}movie/${imdb_details[0][5]}"/>
-        <set name="movie[0].site_id" value="${imdb_details[0][5]}"/>
+        <set name="movie[0].year" value="${title_year[2]}"/>
+        <set name="movie[0].imdb_id" value="${resultat[0].imdbid}" />
+        <set name="movie[0].details_url" value="${site}movie/${resultat[0].ofdbid}"/>
+        <set name="movie[0].site_id" value="${resultat[0].ofdbid}"/>
         <set name="movie[0].popularity" value="100"/>
         <set name="offset" value="1" />
       </if>
@@ -75,35 +72,34 @@
 
     <!-- Retrieve the search results -->
     <retrieve name="search_page" url="${site}search/${search.title:safe}" encoding="UTF-8"/>
-    
+
     <!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop.-->
-    <parse name="search_results_block" input="${search_page}" regex="${rx_page}" />
-    <loop name="search_results_verified" on="search_results_block">
-      <parse name="movie_details" input="${search_results_verified}" regex="${rx_results}" />
-      <loop name="curr_details" on="movie_details">
-        <set name="tvserie" value="" />
-        <parse name="tvserie" input="${curr_details[1]}" regex="(TV-Mini-Serie|TV-Serie)" />
-        <if test="${tvserie}!=">
-          <subtract name="offset" value1="${offset}" value2="1" />
-        </if>
-        <if test="${tvserie}=">
-          <add name="counter" value1="${count}" value2="${offset}" />
-          <replace name="title" input="${curr_details[1]:htmldecode}" pattern="${rx_title_clean}" with="" />
-          <replace name="aka" input="${curr_details[2]:htmldecode}" pattern="${rx_title_clean}" with="" />
-          <parse name="title" input="${title}" regex="${rx_title}"/>
-          <parse name="aka" input="${aka}" regex="${rx_title}"/>
-          <set name="movie[${counter}].title" value="${title[0][1]} ${title[0][0]}"/>
-          <set name="movie[${counter}].alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
-          <set name="movie[${counter}].year" value="${curr_details[3]:htmldecode}"/>
-          <set name="movie[${counter}].details_url" value="${site}movie/${curr_details[0]}"/>
-          <set name="movie[${counter}].site_id" value="${curr_details[0]}"/>
-          <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
-        </if>
-      </loop>
-    </loop>
+    <parse name="movies" input="${search_page}" xpath="//eintrag" />
     
+    <loop name="movienode" on="movies">
+      <set name="tvserie" value="" />
+      <parse name="tvserie" input="${movies[${count}].titel}" regex="(TV-Mini-Serie|TV-Serie)" />
+      <if test="${tvserie}!=">
+        <subtract name="offset" value1="${offset}" value2="1" />
+      </if>
+      <if test="${tvserie}=">
+        <add name="counter" value1="${count}" value2="${offset}" />
+        <replace name="title" input="${movies[${count}].titel:htmldecode}" pattern="${rx_title_clean}" with="" />
+        <replace name="aka" input="${movies[${count}].titel_orig:htmldecode}" pattern="${rx_title_clean}" with="" />
+        <parse name="title" input="${title}" regex="${rx_title}"/>
+        <parse name="aka" input="${aka}" regex="${rx_title}"/>
+        <set name="movie[${counter}].title" value="${title[0][1]} ${title[0][0]}"/>
+        <set name="movie[${counter}].alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
+        <set name="movie[${counter}].year" value="${movies[${count}].jahr}"/>
+        <set name="movie[${counter}].details_url" value="${site}movie/${movies[${count}].id}"/>
+        <set name="movie[${counter}].site_id" value="${movies[${count}].id}"/>
+        <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
+      </if>
+    </loop>
+
   </action>
 
+  <!-- Details -->
   <action name="get_details">
 
     <set name="site" value="http://xml.n4rf.net/ofdbgw/movie/" />
@@ -111,100 +107,83 @@
     <!-- Regular Expressions -->
     <set name="rx_title_clean" value="\[(TV-Mini-Serie|Kurzfilm)\]" />
     <set name="rx_title" value="(.+?)(?:, (The|A|Ein|Das|Die|Der|Les|Une))?\s*$" />
-    <set name="rx_person">
-      <![CDATA[
-      <person>(.+?)</person>
-      ]]>
-    </set>
-    <set name="rx_genre">
-      <![CDATA[
-      <titel>(.+?)</titel>
-      ]]>
-    </set>
-    <set name="rx_details">
-      <![CDATA[
-      <titel>(.+?)</titel>\s*<jahr>(.+?)</jahr>.*<imdbid>(.+?)</imdbid>.*<note>(.+?)</note>.*<stimmen>(.+?)</stimmen>.*<regie>(.+?)</regie>.*<genre>(.+?)</genre>.*<besetzung>(.+?)</besetzung>.*<alternativ>(.+?)</alternativ>
-      ]]>
-    </set>
-        <set name="rx_summary">
-      <![CDATA[
-      </genre>.*<kurzbeschreibung>(.+?)</kurzbeschreibung>.*<beschreibung>(.+?)</beschreibung>.*<besetzung>
-      ]]>
-    </set>    
-    
-    <!-- Details -->
+
+    <!-- OFDB Details -->
+
     <retrieve name="details_page" url="${site}${movie.site_id}" encoding="UTF-8" />
-    <parse name="details" input="${details_page}" regex="${rx_details}"/>
+    <parse name="details" input="${details_page}" xpath="//resultat"/>
 
     <!-- Titles -->
-    <replace name="title" input="${details[0][0]:htmldecode}" pattern="${rx_title_clean}" with="" />
-    <replace name="aka" input="${details[0][8]:htmldecode}" pattern="${rx_title_clean}" with="" />
+
+    <replace name="title" input="${details[0].titel:htmldecode}" pattern="${rx_title_clean}" with="" />
+    <replace name="aka" input="${details[0].alternativ:htmldecode}" pattern="${rx_title_clean}" with="" />
+
     <parse name="title" input="${title}" regex="${rx_title}"/>
     <parse name="aka" input="${aka}" regex="${rx_title}"/>
+
     <set name="movie.alternate_titles" value="|${aka[0][1]} ${aka[0][0]}|"/>
     <set name="movie.title" value="${title[0][1]} ${title[0][0]}"/>
-    
+
     <!-- IMDB ID -->
-    <set name="movie.imdb_id" value="tt${details[0][2]}" />
-    
+    <set name="movie.imdb_id" value="tt${details[0].imdbid}" />
+
     <!-- Year, Score and Votes-->
-    <set name="movie.year" value="${details[0][1]}"/>
-    <set name="movie.score" value="${details[0][3]}"/>
-    <set name="movie.popularity" value="${details[0][4]}"/>
+    <set name="movie.year" value="${details[0].jahr}" />
+
+    <parse name="bewertung" input="${details[0].bewertung}" xpath="*"/>
+    <set name="movie.score" value="${bewertung[0].note}" />
+    <set name="movie.popularity" value="${bewertung[0].stimmen}" />
 
     <!-- Summary -->
-    <retrieve name="summary_page" url="${site}${movie.site_id}" encoding="UTF-8" />
-    <parse name="summary" input="${summary_page}" regex="${rx_summary}"/>
-    <set name='movie.summary' value="${summary[0][1]:htmldecode}"/>
-    
+    <set name="movie.summary" value="${details[0].beschreibung}"/>
+
     <!-- Directors -->
-    <parse name="directors" input="${details[0][5]}" regex="${rx_person}"/>
-    <set name='movie.directors' value=''/>
-    <loop name='currDirector' on='directors'>
-      <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
+    <parse name="directors" input="${details[0].regie}" xpath="//name"/>
+    <set name="movie.directors" value=""/>
+    <loop name="director" on="directors">
+      <set name="movie.directors" value="${movie.directors}|${director:htmldecode}"/>
+    </loop>
+
+    <!-- Writers -->
+    <parse name="writers" input="${details[0].drehbuch}" xpath="//name"/>
+    <set name="movie.writers" value=""/>
+    <loop name="writer" on="writers">
+      <set name="movie.writers" value="${movie.writers}|${writer:htmldecode}"/>
     </loop>
 
     <!-- Actors -->
-    <parse name='actors' input='${details[0][7]}' regex="${rx_person}"/>
-    <set name='movie.actors' value=''/>
-    <loop name='currActor' on='actors'>
-      <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
+    <parse name="actors" input="${details[0].besetzung}" xpath="//name"/>
+    <set name="movie.actors" value="" />
+    <loop name="actor" on="actors">
+      <set name="movie.actors" value="${movie.actors}|${actor:htmldecode}"/>
     </loop>
 
     <!-- Genres -->
-    <parse name='genres' input='${details[0][6]}' regex="${rx_genre}"/>
-    <set name='movie.genres' value=''/>
-    <loop name='currGenre' on='genres'>
-      <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
+    <parse name="genres" input="${details[0].genre}" xpath="//titel"/>
+    <set name="movie.genres" value=""/>
+    <loop name="genre" on="genres">
+      <set name="movie.genres" value="${movie.genres}|${genre:htmldecode}"/>
     </loop>
-	
-	<!-- Runtime -->
-	<retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
-    <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+'/>
-    <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
-	
-	<!-- Tagline -->
-	
-    <parse name="tagline" input="${details_page}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
+
+    <!-- Runtime (IMDB) -->
+    <retrieve name="imdb_details" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+
+    <parse name="runtime" input="${imdb_details}" regex="&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+"/>
+    <set name='movie.runtime' value="${runtime[0][0]:htmldecode}"/>
+
+    <!-- Tagline (IMDB) -->
+
+    <parse name="tagline" input="${imdb_details}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
     <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
 
-	 <!-- Certification -->
-	<retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
-    <parse name="certification" input="${details_page}" regex='&gt;\s+Germany:((?:12)|(?:16)|(?:18)|(?:6)|(?:o.Al.))&lt;/a&gt;'/>
+    <!-- Certification (IMDB) -->
+    <retrieve name="imdb_details" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+    <parse name="certification" input="${imdb_details}" regex='&gt;\s+Germany:((?:12)|(?:16)|(?:18)|(?:6)|(?:o.Al.))&lt;/a&gt;'/>
     <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
 
-	<!-- Writers -->
-	<retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
-    <parse name="writers_block" input="${details_page}" regex='&lt;div class="info"&gt;\s+&lt;h5&gt;Writer[s]?(?: &lt;a href="[^"]+"&gt;\([^)]+\)&lt;/a&gt;)?:&lt;/h5&gt;.+?&lt;/div&gt;'/>
-    <parse name='writers' input="${writers_block}" regex='&lt;a href="/name/nm\d+/"&gt;([^&lt;]+)&lt;/a&gt;'/>
-    <set name='movie.writers' value=''/>
-    <loop name='currWriter' on='writers'>
-      <set name='movie.writers' value='${movie.writers}|${currWriter[0]:htmldecode}'/>
-    </loop>
- 
-	<!-- Set Sortby for German Articles -->
-	<replace name="movie.sortby" input="${movie.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)" with=""/>
-    
+    <!-- Set Sortby for German Articles -->
+    <replace name="movie.sortby" input="${movie.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)" with=""/>
+
   </action>
-  
+
 </ScriptableScraper>
