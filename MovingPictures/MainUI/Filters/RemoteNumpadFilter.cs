@@ -20,9 +20,24 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
         private string _listFilterString; // List Filter String
         private FilterAction _listFilterAction; // List Filter Action
 
+        private Dictionary<string, string> _keyMap;
+
         public RemoteNumpadFilter() {
             _listFilterString = string.Empty;
             _listFilterAction = FilterAction.Default;
+            loadKeyMap();            
+        }
+
+        private void loadKeyMap() {
+            _keyMap = new Dictionary<string, string>();
+            _keyMap.Add("2","abc");
+            _keyMap.Add("3","def");
+            _keyMap.Add("4","ghi");
+            _keyMap.Add("5","jkl");
+            _keyMap.Add("6","mno");
+            _keyMap.Add("7","pqrs");
+            _keyMap.Add("8","tuv");
+            _keyMap.Add("9","wxyz");
         }
 
         public List<DBMovieInfo> Filter(List<DBMovieInfo> input) {
@@ -143,38 +158,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
             return false;
         }
 
-
-        public static string NumPadNext(string current, string requested) {
+        public string NumPadNext(string current, string requested) {
             string newValue;
-            switch (requested) {
-                case "2":
-                    newValue = getNextFromRange("abc2", current);
-                    break;
-                case "3":
-                    newValue = getNextFromRange("def3", current);
-                    break;
-                case "4":
-                    newValue = getNextFromRange("ghi4", current);
-                    break;
-                case "5":
-                    newValue = getNextFromRange("jkl5", current);
-                    break;
-                case "6":
-                    newValue = getNextFromRange("mno6", current);
-                    break;
-                case "7":
-                    newValue = getNextFromRange("pqrs7", current);
-                    break;
-                case "8":
-                    newValue = getNextFromRange("tuv8", current);
-                    break;
-                case "9":
-                    newValue = getNextFromRange("wxyz9", current);
-                    break;
-                default:
-                    newValue = requested;
-                    break;
-            }
+
+            if (_keyMap.ContainsKey(requested))
+                newValue = getNextFromRange(_keyMap[requested] + requested, current);
+            else
+                newValue = requested;
+
             return newValue;
         }
 
@@ -189,16 +180,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
                 return range[0].ToString();
         }
 
-        public static string NumPadEncode(string input) {
+        public string NumPadEncode(string input) {
             string rtn = input.Trim();
-            rtn = Regex.Replace(rtn, @"[abc]", "2", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[def]", "3", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[ghi]", "4", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[jkl]", "5", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[mno]", "6", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[pqrs]", "7", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[tuv]", "8", RegexOptions.IgnoreCase);
-            rtn = Regex.Replace(rtn, @"[wxyz]", "9", RegexOptions.IgnoreCase);
+            foreach (string key in _keyMap.Keys)
+                rtn = Regex.Replace(rtn, "[" + _keyMap[key] + "]", key, RegexOptions.IgnoreCase);
+
             rtn = Regex.Replace(rtn, @"[\s]", "0", RegexOptions.IgnoreCase);
             return rtn;
         }
