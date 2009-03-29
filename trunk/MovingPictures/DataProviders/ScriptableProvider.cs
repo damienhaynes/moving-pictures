@@ -124,9 +124,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             Dictionary<string, string> results;
 
             if (movieSignature.Title != null) paramList["search.title"] = movieSignature.Title;
+            if (movieSignature.Keywords != null) paramList["search.keywords"] = movieSignature.Keywords;
             if (movieSignature.Year != null) paramList["search.year"] = movieSignature.Year.ToString();
             if (movieSignature.ImdbId != null) paramList["search.imdb_id"] = movieSignature.ImdbId;
             if (movieSignature.DiscId != null) paramList["search.disc_id"] = movieSignature.DiscId;
+            if (movieSignature.MovieHash != null) paramList["search.moviehash"] = movieSignature.MovieHash;
+            if (movieSignature.Path != null) paramList["search.basepath"] = movieSignature.Path;
+            if (movieSignature.Folder != null) paramList["search.foldername"] = movieSignature.Folder;
+            if (movieSignature.File != null) paramList["search.filename"] = movieSignature.File;
 
             results = scraper.Execute("search", paramList);
             if (results == null) {
