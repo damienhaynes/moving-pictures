@@ -59,7 +59,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             // Load attributes
             foreach (XmlAttribute attr in xmlNode.Attributes) {
                 switch (attr.Name) {
-                    case "input":
+                    case "url":
                         url = attr.Value;
                         break;
                     case "file":
