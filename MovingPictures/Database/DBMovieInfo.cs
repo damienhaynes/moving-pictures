@@ -442,10 +442,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         /// Deletes all of the video files associated with this movie from disk
         /// If the movie is stored in a dedicated folder, this will delete
         /// the folder.
-        /// 
-        /// This does not delete movies from the database, as that will be done
-        /// by the scanner when the scanner detects that the video files have 
-        /// been deleted.
         /// </summary>
         /// <returns>true for success, false for failure</returns>
         public bool DeleteFiles() {
@@ -461,6 +457,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         File.Delete(item.FullPath);
                     }
                 }
+
+                this.Delete();
                 return true;
             }
             catch (Exception ex) {
