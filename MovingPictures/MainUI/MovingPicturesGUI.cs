@@ -413,6 +413,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 GetUserRating(awaitingUserRatingMovie);
                 awaitingUserRatingMovie = null;
             }
+
+            SetProperty("#MovingPictures.Settings.HomeScreenName", MovingPicturesCore.Settings.HomeScreenName);
         }
 
         protected override void OnPageDestroy(int new_windowId) {
@@ -1574,6 +1576,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             PublishDetails(browser.SelectedMovie, "SelectedMovie");
             PublishDetails(browser.SelectedMovie.ActiveUserSettings, "UserMovieSettings");
+            SetProperty("#MovingPictures.SelectedIndex", browser.Facade.SelectedListItemIndex.ToString());
 
             if (selectedMovieWatchedIndicator != null)
                 if (browser.SelectedMovie.ActiveUserSettings.Watched > 0)
