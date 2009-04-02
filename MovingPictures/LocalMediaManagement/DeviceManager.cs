@@ -157,8 +157,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Volume Information Cache
         private static Dictionary<string, VolumeInfo> volumes;
         
-        // Monitor
-        private static DeviceVolumeMonitor monitor;
 
         #endregion
 
