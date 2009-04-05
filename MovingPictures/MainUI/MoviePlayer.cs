@@ -23,6 +23,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private MovingPicturesGUI _gui;
         private bool customIntroPlayed = false;
+        private bool mountedPlayback = false;
         private DBLocalMedia _queuedMedia;
         private int _activePart;
 
@@ -346,8 +347,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Start checking
             while (!driveReady) {
                 driveCheck++;
-                if (driveCheck == 50) {
-                    // After 5 seconds have passed and the drive is still not ready
+                if (driveCheck == 100) {
+                    // After 10 seconds have passed and the drive is still not ready
                     // ask the user to retry or cancel waiting for the virtual drive 
                     // to become ready.
                     if (_gui.ShowCustomYesNo(Translation.VirtualDriveHeader, Translation.VirtualDriveMessage, Translation.Retry, Translation.Cancel, true)) {
@@ -393,6 +394,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                 }
             }
+
+            // Flag that we are playing back mounted media
+            mountedPlayback = true;
 
             // This line will list the complete file structure of the image
             // Output will only show when the log is set to DEBUG.
@@ -511,7 +515,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 updateMovieResumeState(_activeMovie, _activePart, timeMovieStopped, resumeData);
                 // run movie stopped logic
                 onMovieStopped(_activeMovie);
-            }            
+            }
+
+            
         }
 
         private void OnPlayBackEnded(g_Player.MediaType type, string filename) {
@@ -630,10 +636,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// <summary>
         /// Resets player variables
         /// </summary>
-        private void resetPlayer() {   
+        private void resetPlayer() {
+
+            // reset variables
             activeMedia = null;
             _queuedMedia = null;
             _playbackActive = false;
+
+            // If we mounted an image, unmount it
+            if (mountedPlayback) {
+                DaemonTools.UnMount();
+                mountedPlayback = false;
+            }
+
+            
         }
 
         #endregion
