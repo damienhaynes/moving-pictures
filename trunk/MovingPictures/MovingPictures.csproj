@@ -223,7 +223,6 @@
     <Compile Include="DataProviders\DataProviderManager.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
     <Compile Include="DataProviders\LocalProvider.cs" />
-    <Compile Include="DataProviders\MovieMeter.cs" />
     <Compile Include="DataProviders\OpenSubtitles.cs" />
     <Compile Include="DataProviders\OSDbProvider.cs">
       <SubType>Code</SubType>
