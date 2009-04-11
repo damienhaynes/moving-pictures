@@ -132,14 +132,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             groupItem.Label = labelText;
             groupItem.IsRemote = true;
 
-            // todo: remove the add / MoveItemUp, and replace it with Facde.Insert
-            // once MP adds insert functionality.  This will have an impact on speed
-            Browser.Facade.Add(groupItem);
-            int iPosition = Browser.Facade.Count - 1;
-            while (iPosition > index) {
-                iPosition = Browser.Facade.MoveItemUp(iPosition, false);
-            }
-            //facade.Insert(index, groupItem);
+            Browser.Facade.Insert(index, groupItem);
 
             groupItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(Browser.onFacadeItemSelected);
         }

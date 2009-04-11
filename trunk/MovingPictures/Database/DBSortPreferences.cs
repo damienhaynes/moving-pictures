@@ -13,8 +13,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool SortTitleAscending {
             get { return _sortTitleAscending; }
             set {
-                _sortTitleAscending = value;
-                commitNeeded = true;
+                if (_sortTitleAscending != value) {
+                    _sortTitleAscending = value;
+                    commitNeeded = true;
+                }
             }
         } private bool _sortTitleAscending;
 
@@ -22,8 +24,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool SortDateAddedAscending {
             get { return _sortDateAddedAscending; }
             set {
-                _sortDateAddedAscending = value;
-                commitNeeded = true;
+                if (_sortDateAddedAscending != value) {
+                    _sortDateAddedAscending = value;
+                    commitNeeded = true;
+                }
             }
         } private bool _sortDateAddedAscending;
 
@@ -31,8 +35,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool SortYearAscending {
             get { return _sortYearAscending; }
             set {
-                _sortYearAscending = value;
-                commitNeeded = true;
+                if (_sortYearAscending != value) {
+                    _sortYearAscending = value;
+                    commitNeeded = true;
+                }
             }
         } private bool _sortYearAscending;
 
@@ -40,8 +46,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool SortCertificationAscending {
             get { return _sortCertificationAscending; }
             set {
-                _sortCertificationAscending = value;
-                commitNeeded = true;
+                if (_sortCertificationAscending != value) {
+                    _sortCertificationAscending = value;
+                    commitNeeded = true;
+                }
             }
         } private bool _sortCertificationAscending;
 
@@ -49,8 +57,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool SortLanguageAscending {
             get { return _sortLanguageAscending; }
             set {
-                _sortLanguageAscending = value;
-                commitNeeded = true;
+                if (_sortLanguageAscending != value) {
+                    _sortLanguageAscending = value;
+                    commitNeeded = true;
+                }
             }
         } private bool _sortLanguageAscending;
 
@@ -58,8 +68,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool SortScoreAscending {
             get { return _sortScoreAscending; }
             set {
-                _sortScoreAscending = value;
-                commitNeeded = true;
+                if (_sortScoreAscending != value) {
+                    _sortScoreAscending = value;
+                    commitNeeded = true;
+                }
             }
         } private bool _sortScoreAscending;
 
@@ -67,8 +79,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool SortPopularityAscending {
             get { return _sortPopularityAscending; }
             set {
-                _sortPopularityAscending = value;
-                commitNeeded = true;
+                if (_sortPopularityAscending != value) {
+                    _sortPopularityAscending = value;
+                    commitNeeded = true;
+                }
             }
         } private bool _sortPopularityAscending;
 
@@ -76,8 +90,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool SortRuntimeAscending {
             get { return _sortRuntimeAscending; }
             set {
-                _sortRuntimeAscending = value;
-                commitNeeded = true;
+                if (_sortRuntimeAscending != value) {
+                    _sortRuntimeAscending = value;
+                    commitNeeded = true;
+                }
             }
         } private bool _sortRuntimeAscending;
 
@@ -85,8 +101,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool SortFilePathAscending {
             get { return _sortFilePathAscending; }
             set {
-                _sortFilePathAscending = value;
-                commitNeeded = true;
+                if (_sortFilePathAscending != value) {
+                    _sortFilePathAscending = value;
+                    commitNeeded = true;
+                }
             }
         } private bool _sortFilePathAscending;
 
