@@ -128,7 +128,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 default:
                     break;
             }
-            DBSortPreferences.Instance.Commit();
+            if (DBSortPreferences.Instance.CommitNeeded)
+                DBSortPreferences.Instance.Commit();
         }
 
     }
