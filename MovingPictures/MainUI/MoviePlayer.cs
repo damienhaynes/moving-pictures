@@ -25,7 +25,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private MovingPicturesGUI _gui;
         private bool customIntroPlayed = false;
         private bool mountedPlayback = false;
-        private DBLocalMedia _queuedMedia;
+        private bool listenToExternalPlayerEvents = true;
+        private DBLocalMedia _queuedMedia;        
         private int _activePart;
 
         #endregion
@@ -43,8 +44,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public MoviePlayer(MovingPicturesGUI gui) {
             _gui = gui;
 
-            Util.Utils.OnStartExternal += new Util.Utils.UtilEventHandler(Utils_OnStartExternal);
-            Util.Utils.OnStopExternal += new Util.Utils.UtilEventHandler(Utils_OnStopExternal);
+            Util.Utils.OnStartExternal += new Util.Utils.UtilEventHandler(OnStartExternal);
+            Util.Utils.OnStopExternal += new Util.Utils.UtilEventHandler(OnStopExternal);
 
             g_Player.PlayBackEnded += new g_Player.EndedHandler(OnPlayBackEnded);
             g_Player.PlayBackStopped += new g_Player.StoppedHandler(OnPlayBackStoppedOrChanged);
@@ -186,6 +187,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             DBLocalMedia mediaToPlay = movie.LocalMedia[part - 1];
+            _queuedMedia = mediaToPlay;
 
             // If the media is missing, this loop will ask the user to insert it.
             // This loop can exit in 2 ways:
@@ -243,7 +245,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
 
                 // Trigger Movie started
-                onMediaStarted(mediaToPlay);
+                onMediaStarted(_queuedMedia);
             }
         }
 
@@ -313,7 +315,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             GUIGraphicsContext.IsFullScreenVideo = true;
             GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
-            bool success = g_Player.Play(media, g_Player.MediaType.Video);
+
+            // Play the file using the mediaportal player
+            // We start listening to external player events
+            listenToExternalPlayerEvents = true;
+
+            bool success = g_Player.Play(media);
+
+            // We stop listening to external player events
+            listenToExternalPlayerEvents = false;
+
             _playbackActive = success;
         }
 
@@ -559,18 +570,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region External Player Event Handlers
 
-        private void Utils_OnStartExternal(System.Diagnostics.Process proc, bool waitForExit) {
-            if (CurrentMedia != null) {
-                logger.Info("OnStartExternal");
-                onMediaStarted(CurrentMedia);
+        private void OnStartExternal(Process proc, bool waitForExit) {
+            // If we were listening for external player events
+            if (_queuedMedia != null && listenToExternalPlayerEvents) {
+                logger.Debug("Handling: OnStartExternal()");
+                onMediaStarted(_queuedMedia);
             }
         }
 
-        private void Utils_OnStopExternal(System.Diagnostics.Process proc, bool waitForExit) {
-            if (!_playbackActive)
+        private void OnStopExternal(Process proc, bool waitForExit) {
+            if (!listenToExternalPlayerEvents || _activeMovie == null)
                 return;
 
-            logger.Info("OnStopExternal");
+            logger.Debug("Handling: OnStopExternal()");
+
             if (_activePart < _activeMovie.LocalMedia.Count) {
                 string sBody = String.Format(Translation.ContinueToNextPartBody, (_activePart + 1)) + "\n" + _activeMovie.Title;
                 bool bContinue = _gui.ShowCustomYesNo(Translation.ContinueToNextPartHeader, sBody, null, null, true);
@@ -588,7 +601,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else {
                 // movie ended
                 onMovieEnded(_activeMovie);
-            }            
+            }
         }
 
         #endregion
@@ -650,6 +663,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             activeMedia = null;
             _queuedMedia = null;
             _playbackActive = false;
+            listenToExternalPlayerEvents = false;
 
             // If we mounted an image, unmount it
             if (mountedPlayback) {
