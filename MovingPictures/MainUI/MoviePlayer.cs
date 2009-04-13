@@ -9,6 +9,7 @@ using MediaPortal.Player;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Util;
+using MediaPortal.InputDevices;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
@@ -455,6 +456,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             try {
                 // start external player process
                 hdPlayer.Start();
+                
+                // disable mediaportal input devices
+                InputDevices.InputDevices.Stop();
 
                 // hide mediaportal and suspend rendering to save resources for the external player
                 GUIGraphicsContext.BlankScreen = true;
@@ -470,6 +474,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void OnHDPlayerExited(object obj, EventArgs e) {
+            
+            // enable mediaportal input devices
+            InputDevices.InputDevices.Init();
+
             // show mediaportal and start rendering
             GUIGraphicsContext.BlankScreen = false;
             GUIGraphicsContext.form.Show();
