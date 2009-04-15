@@ -248,15 +248,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     if (custom_intro.Length > 0 && File.Exists(custom_intro)) {
                         logger.Debug("Playing Custom Intro: {0}", custom_intro);
 
+                        // we set this variable before we start the actual playback
+                        // because playFile to account for the blocking nature of the
+                        // mediaportal external player logic
+                        customIntroPlayed = true;
+
                         // start playback
                         playFile(custom_intro);
-
-                        // if playback started
-                        if (_playbackActive) {
-                            // set class level variables to track what is playing
-                            customIntroPlayed = true;
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
@@ -560,17 +559,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void onPlayBackEnded(g_Player.MediaType type, string filename) {
             logger.Debug("OnPlayBackEnded");
 
-            if (customIntroPlayed) {
-                // If a custom intro was just played, we need to play the selected movie
-                playMovie(_queuedMedia.AttachedMovies[0], _queuedMedia.Part);
-
-                // Set custom intro played back to false so it will play again on next movie selection
-                customIntroPlayed = false;
-                _queuedMedia = null;
-                return;
-            }
-
             if (type != g_Player.MediaType.Video || !_playbackActive)
+                return;
+
+            if (handleCustomIntroEnded())
                 return;
 
             logger.Debug("OnPlayBackEnded filename={0} currentMovie={1} currentPart={2}", filename, _activeMovie.Title, _activePart);
@@ -610,7 +602,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region Player Events
 
+        private bool handleCustomIntroEnded() {
+            if (customIntroPlayed) {
+                // If a custom intro was just played, we need to play the selected movie
+                playMovie(_queuedMedia.AttachedMovies[0], _queuedMedia.Part);
+                return true;
+            }
+
+            return false;
+        }
+
         private void onExternalExit() {
+            if (handleCustomIntroEnded())
+                return;
+
             if (CurrentMovie == null)
                 return;
 
@@ -635,8 +640,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void onMediaStarted(DBLocalMedia localMedia) {
-            _playbackActive = true;
-
+           _playbackActive = true;         
+           
            DBMovieInfo previousMovie = CurrentMovie;
            activeMedia = localMedia;
 
@@ -691,6 +696,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             _playbackActive = false;
             _resumeActive = false;
             listenToExternalPlayerEvents = false;
+            customIntroPlayed = false;
 
             // If we have an image mounted, unmount it
             if (mountedPlayback) {
