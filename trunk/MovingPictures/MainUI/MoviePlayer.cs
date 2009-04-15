@@ -604,6 +604,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private bool handleCustomIntroEnded() {
             if (customIntroPlayed) {
+
+                // Set custom intro played back to false
+                customIntroPlayed = false;
+
                 // If a custom intro was just played, we need to play the selected movie
                 playMovie(_queuedMedia.AttachedMovies[0], _queuedMedia.Part);
                 return true;
