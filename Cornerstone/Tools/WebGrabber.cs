@@ -129,12 +129,20 @@ namespace Cornerstone.Tools {
                             requestUrl, userAgent, encoding.EncodingName, cookieHeader);
 
                     // Converts the stream to a string
-                    StreamReader reader = new StreamReader(resultData, encoding, true);
-                    data = reader.ReadToEnd();
+                    try {
+                        StreamReader reader = new StreamReader(resultData, encoding, true);
+                        data = reader.ReadToEnd();
+                        reader.Close();
+                    }
+                    catch (Exception e) {
+                        if (e.GetType() == typeof(ThreadAbortException))
+                            throw e;
+
+                        logger.DebugException("Error while trying to read stream data: ", e);
+                    }
 
                     // Close stream and response objects
                     resultData.Close();
-                    reader.Close();
                     response.Close();
                 }
                 catch (WebException e) {
