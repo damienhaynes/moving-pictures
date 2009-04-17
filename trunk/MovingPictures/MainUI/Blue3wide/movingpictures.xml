@@ -749,6 +749,7 @@ multiple view modes.
     </control>
 
     <control>
+      <id>0</id>	
       <type>textbox</type>
       <label>#MovingPictures.SelectedMovie.directors</label>
       <posX>875</posX>
@@ -772,6 +773,7 @@ multiple view modes.
     </control>
 
     <control>
+      <id>0</id>
       <type>textbox</type>
       <label>#MovingPictures.SelectedMovie.writers</label>
       <posX>875</posX>
