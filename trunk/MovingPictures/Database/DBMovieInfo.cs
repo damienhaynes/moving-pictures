@@ -385,53 +385,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return UserSettings[0];
             }
         }
-
-
-        #region Read only fileds to be exposed to the GUI skin
-
-        public int VideoWidth {
-            get {
-                return LocalMedia[0].VideoWidth;
-            }
-        }
-        public int VideoHeight {
-            get {
-                return LocalMedia[0].VideoHeight;
-            }
-        }
-        public string VideoCodec {
-            get {
-                return LocalMedia[0].VideoCodec;
-            }
-        }
-        public string VideoBitrate {
-            get {
-                return LocalMedia[0].VideoBitrate;
-            }
-        }
-        public string VideoFrameRate {
-            get {
-                return LocalMedia[0].VideoFrameRate;
-            }
-        }
-        public string VideoAspectRatio {
-            get {
-                return LocalMedia[0].VideoAspectRatio;
-            }
-        }
-        public string AudioCodec {
-            get {
-                return LocalMedia[0].AudioCodec;
-            }
-        }
-        public string AudioBitrate {
-            get {
-                return LocalMedia[0].AudioBitrate;
-            }
-        }
-
-        #endregion
-
         #endregion
 
         #region General Management Methods

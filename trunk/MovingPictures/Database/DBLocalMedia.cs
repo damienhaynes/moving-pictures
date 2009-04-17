@@ -230,13 +230,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         [DBFieldAttribute(Default = "0")]
         public int Duration {
-            get { return duration; }
+            get { return _duration; }
             set {
-                duration = value;
+                _duration = value;
                 commitNeeded = true;
             }
         }
-        private int duration;
+        private int _duration;
 
         [DBFieldAttribute(Default = "false")]
         public bool Ignored {
@@ -287,6 +287,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private int _videoHeight;
 
         [DBFieldAttribute]
+        public string VideoResolution {
+            get { return _videoResolution; }
+            set {
+                _videoResolution = value;
+                commitNeeded = true;
+            }
+        } private string _videoResolution;
+
+        [DBFieldAttribute]
         public string VideoCodec {
             get { return _videoCodec; }
             set {
@@ -296,22 +305,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _videoCodec;
 
         [DBFieldAttribute]
-        public string VideoBitrate {
-            get { return _videoBitrate; }
-            set {
-                _videoBitrate = value;
-                commitNeeded = true;
-            }
-        } private string _videoBitrate;
-
-        [DBFieldAttribute]
-        public string VideoFrameRate {
+        public double VideoFrameRate {
             get { return _videoFrameRate; }
             set {
                 _videoFrameRate = value;
                 commitNeeded = true;
             }
-        } private string _videoFrameRate;
+        } private double _videoFrameRate;
 
         [DBFieldAttribute]
         public string VideoAspectRatio {
@@ -332,15 +332,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _audioCodec;
 
         [DBFieldAttribute]
-        public string AudioBitrate {
-            get { return _audioBitrate; }
-            set {
-                _audioBitrate = value;
-                commitNeeded = true;
-            }
-        } private string _audioBitrate;
-
-        [DBFieldAttribute]
         public int AudioChannels {
             get { return _audioChannels; }
             set {
@@ -349,7 +340,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _audioChannels;
 
-
+        [DBFieldAttribute]
+        public bool HasSubtitles {
+            get { return _hasSubtitles; }
+            set {
+                _hasSubtitles = value;
+                commitNeeded = true;
+            }
+        } private bool _hasSubtitles;
 
         #endregion
 
@@ -378,36 +376,76 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public bool UpdateMediaInfo() {
+            MediaInfoWrapper mInfoWrapper = new MediaInfoWrapper(this.FullPath);
+            this.VideoWidth = mInfoWrapper.Width;
+            this.VideoHeight = mInfoWrapper.Height;
+            this.VideoFrameRate = mInfoWrapper.Framerate;
+            this.VideoAspectRatio = mInfoWrapper.AspectRatio;
+            this.HasSubtitles = mInfoWrapper.HasSubtitles;
+
+            // this does't currently work for me in the wrapper.  using MediaInfo direct instead
+            //this.AudioChannels = mInfoWrapper.Audiochannels;
+            
+
+            if (mInfoWrapper.IsDIVX)
+                this.VideoCodec = "DIVX";
+            else if (mInfoWrapper.IsXVID)
+                this.VideoCodec = "XVID";
+            else if (mInfoWrapper.IsH264)
+                this.VideoCodec = "H264";
+            else if (mInfoWrapper.IsMP1V)
+                this.VideoCodec = "MP1V";
+            else if (mInfoWrapper.IsMP2V)
+                this.VideoCodec = "MP2V";
+            else if (mInfoWrapper.IsWMV)
+                this.VideoCodec = "WMV";
+            else
+                this.VideoCodec = mInfoWrapper.VideoCodec;
+
+            if (mInfoWrapper.IsAC3)
+                this.AudioCodec = "AC3";
+            else if (mInfoWrapper.IsMP3)
+                this.AudioCodec = "MP3";
+            else if (mInfoWrapper.IsMP2A)
+                this.AudioCodec = "MP2A";
+            else if (mInfoWrapper.IsDTS)
+                this.AudioCodec = "DTS";
+            else if (mInfoWrapper.IsOGG)
+                this.AudioCodec = "OGG";
+            else if (mInfoWrapper.IsAAC)
+                this.AudioCodec = "AAC";
+            else if (mInfoWrapper.IsWMA)
+                this.AudioCodec = "WMA";
+            else if (mInfoWrapper.IsPCM)
+                this.AudioCodec = "PCM";
+            else
+                this.AudioCodec = mInfoWrapper.AudioCodec;
+
+            if (mInfoWrapper.Is1080P)
+                this.VideoResolution = "1080P";
+            else if (mInfoWrapper.Is1080I)
+                this.VideoResolution = "1080I";
+            else if (mInfoWrapper.Is720P)
+                this.VideoResolution = "720P";
+            else if (mInfoWrapper.IsHDTV)
+                this.VideoResolution = "HDTV";
+            else
+                this.VideoResolution = "SDTV";
+                
+
             MediaInfo mInfo = new MediaInfo();
             try {
-                mInfo.Open(this.FullPath);
                 int intValue;
+                mInfo.Open(this.FullPath);
                 if (int.TryParse(mInfo.Get(StreamKind.Video, 0, "PlayTime"), out intValue))
                     this.Duration = intValue;
-
-                if (int.TryParse(mInfo.Get(StreamKind.Video, 0, "Width"), out intValue))
-                    this.VideoWidth = intValue;
-
-                if (int.TryParse(mInfo.Get(StreamKind.Video, 0, "Height"), out intValue))
-                    this.VideoHeight = intValue;
-
-
-                this.VideoCodec = mInfo.Get(StreamKind.Video, 0, "Codec");
-                this.VideoBitrate = mInfo.Get(StreamKind.Video, 0, "BitRate");
-                this.VideoFrameRate = mInfo.Get(StreamKind.Video, 0, "FrameRate");
-                this.VideoAspectRatio = mInfo.Get(StreamKind.Video, 0, "AspectRatio");
-                this.AudioCodec = mInfo.Get(StreamKind.Audio, 0, "Codec");
-                this.AudioBitrate = mInfo.Get(StreamKind.Audio, 0, "BitRate");
-
                 if (int.TryParse(mInfo.Get(StreamKind.Audio, 0, "Channel(s)"), out intValue))
                     this.AudioChannels = intValue;
             }
-            catch (Exception ex) {
-                logger.ErrorException("MediaInfo error", ex);
-                return false;
-            }
-            finally {
-                mInfo.Close();
+            finally
+            {
+                if (mInfo != null)
+                    mInfo.Close();
             }
             return true;
         }
