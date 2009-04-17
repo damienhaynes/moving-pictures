@@ -255,5 +255,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 }
             }
         }
+
+        public static void UpdateMediaInfo() {
+            List<DBLocalMedia> localMedias = DBLocalMedia.GetAll();
+            foreach (DBLocalMedia lm in localMedias) {
+                if (!lm.HasMediaInfo) {
+                    logger.Info("Updating media info for " + lm.FullPath);
+                    if (lm.UpdateMediaInfo())
+                        lm.Commit();
+                }
+            }
+        }
     }
 }

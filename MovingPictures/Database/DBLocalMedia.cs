@@ -6,6 +6,7 @@ using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
+using MediaPortal.Player;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("local_media")]
@@ -266,6 +267,90 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } RelationList<DBLocalMedia, DBMovieInfo> _attachedMovies;
 
+
+        [DBFieldAttribute]
+        public int VideoWidth {
+            get { return _videoWidth; }
+            set {
+                _videoWidth = value;
+                commitNeeded = true;
+            }
+        } private int _videoWidth;
+
+        [DBFieldAttribute]
+        public int VideoHeight {
+            get { return _videoHeight; }
+            set {
+                _videoHeight = value;
+                commitNeeded = true;
+            }
+        } private int _videoHeight;
+
+        [DBFieldAttribute]
+        public string VideoCodec {
+            get { return _videoCodec; }
+            set {
+                _videoCodec = value;
+                commitNeeded = true;
+            }
+        } private string _videoCodec;
+
+        [DBFieldAttribute]
+        public string VideoBitrate {
+            get { return _videoBitrate; }
+            set {
+                _videoBitrate = value;
+                commitNeeded = true;
+            }
+        } private string _videoBitrate;
+
+        [DBFieldAttribute]
+        public string VideoFrameRate {
+            get { return _videoFrameRate; }
+            set {
+                _videoFrameRate = value;
+                commitNeeded = true;
+            }
+        } private string _videoFrameRate;
+
+        [DBFieldAttribute]
+        public string VideoAspectRatio {
+            get { return _videoAspectRatio; }
+            set {
+                _videoAspectRatio = value;
+                commitNeeded = true;
+            }
+        } private string _videoAspectRatio;
+
+        [DBFieldAttribute]
+        public string AudioCodec {
+            get { return _audioCodec; }
+            set {
+                _audioCodec = value;
+                commitNeeded = true;
+            }
+        } private string _audioCodec;
+
+        [DBFieldAttribute]
+        public string AudioBitrate {
+            get { return _audioBitrate; }
+            set {
+                _audioBitrate = value;
+                commitNeeded = true;
+            }
+        } private string _audioBitrate;
+
+        [DBFieldAttribute]
+        public int AudioChannels {
+            get { return _audioChannels; }
+            set {
+                _audioChannels = value;
+                commitNeeded = true;
+            }
+        } private int _audioChannels;
+
+
+
         #endregion
 
 
@@ -284,6 +369,47 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             else {
                 return false; 
             }
+        }
+
+        public bool HasMediaInfo {
+            get {
+                return this.VideoCodec.Trim().Length > 0;
+            }
+        }
+
+        public bool UpdateMediaInfo() {
+            MediaInfo mInfo = new MediaInfo();
+            try {
+                mInfo.Open(this.FullPath);
+                int intValue;
+                if (int.TryParse(mInfo.Get(StreamKind.Video, 0, "PlayTime"), out intValue))
+                    this.Duration = intValue;
+
+                if (int.TryParse(mInfo.Get(StreamKind.Video, 0, "Width"), out intValue))
+                    this.VideoWidth = intValue;
+
+                if (int.TryParse(mInfo.Get(StreamKind.Video, 0, "Height"), out intValue))
+                    this.VideoHeight = intValue;
+
+
+                this.VideoCodec = mInfo.Get(StreamKind.Video, 0, "Codec");
+                this.VideoBitrate = mInfo.Get(StreamKind.Video, 0, "BitRate");
+                this.VideoFrameRate = mInfo.Get(StreamKind.Video, 0, "FrameRate");
+                this.VideoAspectRatio = mInfo.Get(StreamKind.Video, 0, "AspectRatio");
+                this.AudioCodec = mInfo.Get(StreamKind.Audio, 0, "Codec");
+                this.AudioBitrate = mInfo.Get(StreamKind.Audio, 0, "BitRate");
+
+                if (int.TryParse(mInfo.Get(StreamKind.Audio, 0, "Channel(s)"), out intValue))
+                    this.AudioChannels = intValue;
+            }
+            catch (Exception ex) {
+                logger.ErrorException("MediaInfo error", ex);
+                return false;
+            }
+            finally {
+                mInfo.Close();
+            }
+            return true;
         }
 
         #endregion
