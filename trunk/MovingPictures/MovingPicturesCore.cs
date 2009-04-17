@@ -139,6 +139,10 @@ namespace MediaPortal.Plugins.MovingPictures {
             actionDescriptions.Add(newAction, "Updating sorting metadata...");
             initActions.Add(newAction);
 
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateMediaInfo);
+            actionDescriptions.Add(newAction, "Updating media info...");
+            initActions.Add(newAction);
+
             newAction = new WorkerDelegate(checkVersionInfo);
             actionDescriptions.Add(newAction, "Initializing Version Information...");
             initActions.Add(newAction);
@@ -151,16 +155,22 @@ namespace MediaPortal.Plugins.MovingPictures {
             actionDescriptions.Add(newAction, "Starting Device Monitor...");
             initActions.Add(newAction);
 
-
             // load all the above actions and notify any listeners of our progress
             loadingProgress = 0;
             loadingTotal = initActions.Count;
             foreach (WorkerDelegate currAction in initActions) {
-                if (InitializeProgress != null) InitializeProgress(actionDescriptions[currAction], (int)(loadingProgress * 100 / loadingTotal));
-                loadingProgressDescription = actionDescriptions[currAction];
+                try {
+                    if (InitializeProgress != null) InitializeProgress(actionDescriptions[currAction], (int)(loadingProgress * 100 / loadingTotal));
+                    loadingProgressDescription = actionDescriptions[currAction];
 
-                currAction();
-                loadingProgress++;
+                    currAction();
+                }
+                catch (Exception ex) {
+                    logger.ErrorException("Error: ", ex);
+                }
+                finally {
+                    loadingProgress++;
+                }
             }
 
             if (InitializeProgress != null) InitializeProgress("Done!", 100);

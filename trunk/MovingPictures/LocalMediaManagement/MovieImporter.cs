@@ -1183,8 +1183,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return;
 
             // loop through the local media files and clear out any movie assignments
-            foreach (DBLocalMedia currFile in localMedia)
+            foreach (DBLocalMedia currFile in localMedia) {
                 RemoveCommitedRelations(currFile);
+                currFile.UpdateMediaInfo();
+            }
 
             // write the file(s) to the DB
             int count = 1;

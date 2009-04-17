@@ -1052,6 +1052,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             PublishDetails(browser.SelectedMovie, "SelectedMovie");
             PublishDetails(browser.SelectedMovie.ActiveUserSettings, "UserMovieSettings");
+            PublishDetails(browser.SelectedMovie.LocalMedia[0], "LocalMedia");
             SetProperty("#MovingPictures.SelectedIndex", browser.Facade.SelectedListItemIndex.ToString());
 
             if (selectedMovieWatchedIndicator != null)
