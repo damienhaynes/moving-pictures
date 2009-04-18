@@ -17,14 +17,14 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="1" minor="1" point="0"/>
-    <published month="3" day="25" year="2009"/>
+    <version major="1" minor="2" point="0"/>
+    <published month="4" day="18" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
     -->
-    <type>MovieDetailsFetcher</type>
+    <type>MovieDetailsFetcher|MovieCoverFetcher</type>
     <language>de</language>
 
   </details>
@@ -293,6 +293,24 @@
 
       <!-- Set Sortby for German Articles -->
       <replace name="movie.sortby" input="${movie.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)" with=""/>
+
+  </action>
+
+  <!-- Covert Art only works with the native site id -->
+  <action name="get_cover_art">
+    <set name="searchcmd" value="allinurl:artikel fid=${movie.site_id} vid site:ofdb.de" />
+
+    <if test="${movie.site_id}!=">
+
+      <set name="rx_coverid"><![CDATA[thumbnail\.php\?cover=images%2Ffassung%2F(\d+)%2F(\d+)]]></set>
+      <retrieve name="ofdb_results" url="http://www.ofdb.de/film/${movie.site_id},"/>
+
+      <parse name="coverids" input="${ofdb_results}" regex="${rx_coverid}" />
+      <loop name="coverid" on="coverids">
+        <set name="cover_art[${count}].url" value="http://img.ofdb.de/fassung/${coverid[0]}/${coverid[1]}_f.jpg" />
+      </loop>
+
+    </if>
 
   </action>
 
