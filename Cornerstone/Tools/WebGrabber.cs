@@ -135,8 +135,19 @@ namespace Cornerstone.Tools {
                     catch (Exception e) {
                         if (e.GetType() == typeof(ThreadAbortException))
                             throw e;
-
-                        logger.DebugException("Error while trying to read stream data: ", e);
+                        
+                        // Return when hitting maximum retries.
+                        if (tryCount == maxRetries) {
+                            logger.ErrorException("Error while trying to read stream data: ", e);
+                            return false;
+                        }
+                        else {
+                            // if we encountered a stream error use the timeout 
+                            // value as a pause between retries
+                            Thread.Sleep(timeout + (timeoutIncrement * tryCount));
+                            logger.DebugException("Error while trying to read stream data: ", e);
+                        }
+                        
                     }
 
                     // Close stream and response objects
