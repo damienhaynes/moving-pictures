@@ -3,15 +3,14 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Xml;
-using System.Reflection;
-using NLog;
 using System.Threading;
+using System.Xml;
+using NLog;
 
 namespace Cornerstone.Tools {
 
     public class WebGrabber {
-        
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private static int unsafeHeaderUserCount;
@@ -49,7 +48,7 @@ namespace Cornerstone.Tools {
 
         public Encoding Encoding {
             get { return encoding; }
-            set { encoding = value; }            
+            set { encoding = value; }
         } private Encoding encoding;
 
         public int MaxRetries {
@@ -82,8 +81,7 @@ namespace Cornerstone.Tools {
             set { _debug = value; }
         } private bool _debug = false;
 
-        public bool AllowUnsafeHeader
-        {
+        public bool AllowUnsafeHeader {
             get { return _allowUnsafeHeader; }
             set { _allowUnsafeHeader = value; }
         } private bool _allowUnsafeHeader = false;
@@ -96,7 +94,7 @@ namespace Cornerstone.Tools {
             while (data == string.Empty) {
                 tryCount++;
                 try {
-                    if (_allowUnsafeHeader) 
+                    if (_allowUnsafeHeader)
                         SetAllowUnsafeHeaderParsing(true);
 
                     request.UserAgent = userAgent;
@@ -170,7 +168,7 @@ namespace Cornerstone.Tools {
                     }
                     else {
                         logger.DebugException("Connection retry (" + tryCount.ToString() + "): URL=" + requestUrl + ", Status=" + e.Status.ToString() + ". ", e);
-                    }               
+                    }
 
                     // If we did not experience a timeout but some other error
                     // use the timeout value as a pause between retries
@@ -178,9 +176,9 @@ namespace Cornerstone.Tools {
                         Thread.Sleep(timeout + (timeoutIncrement * tryCount));
                     }
                 }
-                finally { 
-                    if (_allowUnsafeHeader) 
-                        SetAllowUnsafeHeaderParsing(false); 
+                finally {
+                    if (_allowUnsafeHeader)
+                        SetAllowUnsafeHeaderParsing(false);
                 }
             }
             return true;
@@ -217,7 +215,7 @@ namespace Cornerstone.Tools {
             catch (XmlException e) {
                 logger.ErrorException("XML Parse error: URL=" + requestUrl, e);
                 return null;
-            }          
+            }
         }
 
         //Method to change the AllowUnsafeHeaderParsing property of HttpWebRequest.
