@@ -47,6 +47,8 @@
   <string Field="ContinueToNextPartBody">Хотите продолжить со части {0}?</string>
   <string Field="Rate">Оценить</string>
   <string Field="SelectYourRating">Поставить оценку для {0}</string>
+  
+      <!-- friendly names for sorting -->
   <string Field="Title">Название</string>
   <string Field="DateAdded">Добавлено</string>
   <string Field="Year">Год</string>
@@ -55,4 +57,25 @@
   <string Field="Score">Рейтинг</string>
   <string Field="Runtime">Время</string>
   <string Field="FilePath">Путь</string>
+  
+	  <!-- Group names for the date added sorting -->
+  <string Field="Future">В будущем</string>
+  <string Field="Today">Сегодня</string>
+  <string Field="Yesterday">Вчера</string>
+  <string Field="Sunday">Воскресенье</string>
+  <string Field="Monday">Понедельник</string>
+  <string Field="Tuesday">Вторник</string>
+  <string Field="Wednesday">Среда</string>
+  <string Field="Thursday">Четверг</string>
+  <string Field="Friday">Пятница</string>
+  <string Field="Saturday">Суббота</string>
+  <string Field="LastWeek">Неделю назад</string>
+  <string Field="TwoWeeksAgo">Две недели назад</string>
+  <string Field="ThreeWeeksAgo">Три недели назад</string>
+  <string Field="LastMonth">Месяц назад</string>
+  <string Field="TwoMonthsAgo">Два месяца назад</string>
+  <string Field="ThreeMonthsAgo">Три месяца назад</string>
+  <string Field="EarlierThisYear">В этом году</string>
+  <string Field="LastYear">В прошлом году</string>
+  <string Field="Older">Старше</string>
 </strings>
