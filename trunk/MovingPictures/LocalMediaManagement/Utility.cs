@@ -148,8 +148,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private const string rxStackKeywords = @"(cd|dvd|dis[ck]|part)";
         private const string rxStackPatterns = @"(\W*" + rxStackKeywords + @"\W*([a-c]|\d+|i+))|[\(\[]\d(of|-)\d[\)\]]$";
 
-        
-
         /// <summary>
         /// Checks if a filename has stack markers (and is multi-part)
         /// </summary>
@@ -181,11 +179,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="fileName">filename</param>
         /// <returns>the filename without stackmarkers and extension</returns>
         public static string RemoveFileStackMarkers(string fileName) {
+            // Remove the file extension from the filename
+            fileName = Path.GetFileNameWithoutExtension(fileName);
+            
             // If file is classified as multipart clean the stack markers.
-            if (isFileMultiPart(fileName)) {
-
-                // Remove the file extension from the filename
-                fileName = Path.GetFileNameWithoutExtension(fileName);
+            if (isFileMultiPart(fileName)) {                
 
                 Regex expr = new Regex(rxStackPatterns, RegexOptions.IgnoreCase);
                 Match match = expr.Match(fileName);
