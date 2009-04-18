@@ -265,5 +265,66 @@ This file should contain the details view
       <visible>!Control.IsVisible(50)</visible>
     </control>
 
+    <!-- Media logos -->
+    <control>
+      <description>Video Codec</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>360</posX>
+      <posY>660</posY>
+      <width>111</width>
+      <height>63</height>
+      <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
+      <visible>!Control.IsVisible(50)</visible>
+    </control>
+
+    <control>
+      <description>Video Resolution</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>461</posX>
+      <posY>660</posY>
+      <width>111</width>
+      <height>63</height>
+      <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
+      <visible>!Control.IsVisible(50)</visible>
+    </control>
+
+    <control>
+      <description>Video Aspect Ratio</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>562</posX>
+      <posY>660</posY>
+      <width>111</width>
+      <height>63</height>
+      <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
+      <visible>!Control.IsVisible(50)</visible>
+    </control>
+
+    <control>
+      <description>Audio Codec</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>663</posX>
+      <posY>660</posY>
+      <width>111</width>
+      <height>63</height>
+      <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
+      <visible>!Control.IsVisible(50)</visible>
+    </control>
+
+    <control>
+      <description>Subtitles</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>764</posX>
+      <posY>660</posY>
+      <width>111</width>
+      <height>63</height>
+      <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
+      <visible>!Control.IsVisible(50)</visible>
+    </control>
+
   </controls>
 </window>
