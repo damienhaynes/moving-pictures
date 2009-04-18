@@ -371,7 +371,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public bool HasMediaInfo {
             get {
-                return this.VideoCodec.Trim().Length > 0;
+                // check for invalid data
+                if (this.VideoCodec.Trim().Length == 0)
+                    return false;
+                if (this.VideoAspectRatio != "16_9" && this.VideoAspectRatio != "4_3")
+                    return false;
+
+                return true;
             }
         }
 
@@ -380,8 +386,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             this.VideoWidth = mInfoWrapper.Width;
             this.VideoHeight = mInfoWrapper.Height;
             this.VideoFrameRate = mInfoWrapper.Framerate;
-            this.VideoAspectRatio = mInfoWrapper.AspectRatio;
             this.HasSubtitles = mInfoWrapper.HasSubtitles;
+
+            if ((float)mInfoWrapper.Width / (float)mInfoWrapper.Height >= 1.3)
+                this.VideoAspectRatio = "16_9";
+            else
+                this.VideoAspectRatio = "4_3";
 
             // this does't currently work for me in the wrapper.  using MediaInfo direct instead
             //this.AudioChannels = mInfoWrapper.Audiochannels;
@@ -402,7 +412,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             else
                 this.VideoCodec = mInfoWrapper.VideoCodec;
 
-            if (mInfoWrapper.IsAC3)
+            if (mInfoWrapper.IsAC3 || mInfoWrapper.AudioCodec.ToLower().Contains("ac-3"))
                 this.AudioCodec = "AC3";
             else if (mInfoWrapper.IsMP3)
                 this.AudioCodec = "MP3";
@@ -428,9 +438,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             else if (mInfoWrapper.Is720P)
                 this.VideoResolution = "720P";
             else if (mInfoWrapper.IsHDTV)
-                this.VideoResolution = "HDTV";
+                this.VideoResolution = "HD";
             else
-                this.VideoResolution = "SDTV";
+                this.VideoResolution = "SD";
                 
 
             MediaInfo mInfo = new MediaInfo();
