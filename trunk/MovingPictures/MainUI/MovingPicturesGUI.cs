@@ -1056,9 +1056,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             PublishDetails(browser.SelectedMovie, "SelectedMovie");
             PublishDetails(browser.SelectedMovie.ActiveUserSettings, "UserMovieSettings");
-            PublishDetails(browser.SelectedMovie.LocalMedia[0], "LocalMedia");
+            PublishDetails(browser.SelectedMovie.LocalMedia[0], "LocalMedia", true);
             SetProperty("#MovingPictures.SelectedIndex", browser.Facade.SelectedListItemIndex.ToString());
-            SetProperty("#MovingPictures.LocalMedia.Subtitles", browser.SelectedMovie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles");
+            SetProperty("#MovingPictures.LocalMedia.Subtitles", browser.SelectedMovie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles", true);
             if (selectedMovieWatchedIndicator != null)
                 if (browser.SelectedMovie.ActiveUserSettings.Watched > 0)
                     selectedMovieWatchedIndicator.Visible = true;
@@ -1069,12 +1069,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public void SetProperty(string property, string value) {
+            SetProperty(property, value, false);
+        }
+
+        public void SetProperty(string property, string value, bool forceLogging) {
             if (property == null)
                 return;
 
             try {
                 lock (loggedProperties) {
-                    if (!loggedProperties.ContainsKey(property)) {
+                    if (!loggedProperties.ContainsKey(property) || forceLogging) {
                         logger.Debug(property + " = \"" + value + "\"");
                         loggedProperties[property] = true;
                     }
@@ -1098,6 +1102,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // this does standard object publishing for any database object.
         private void PublishDetails(DatabaseTable obj, string prefix) {
+            PublishDetails(obj, prefix, false);
+        }
+
+        private void PublishDetails(DatabaseTable obj, string prefix, bool forceLogging) {
             if (obj == null)
                 return;
 
@@ -1112,7 +1120,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 object value = currField.GetValue(obj);
                 if (value == null) {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
-                    SetProperty(propertyStr, "");
+                    SetProperty(propertyStr, "", forceLogging);
                 }
 
                 else if (value.GetType() == typeof(StringList)) {
@@ -1126,14 +1134,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     // add the coma seperated string
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = valueStrList.ToPrettyString(max);
-                    SetProperty(propertyStr, valueStr);
+                    SetProperty(propertyStr, valueStr, forceLogging);
 
                     // add each value individually
                     for (int i = 0; i < max; i++) {
                         // note, the "extra" in the middle is needed due to a bug in skin parser
                         propertyStr = "#MovingPictures." + prefix + ".extra." + currField.FieldName + "." + (i + 1);
                         valueStr = valueStrList[i];
-                        SetProperty(propertyStr, valueStr);
+                        SetProperty(propertyStr, valueStr, forceLogging);
                     }
 
                     // for floats we need to make sure we use english style printing or imagelist controls
@@ -1142,22 +1150,26 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 else if (value.GetType() == typeof(float)) {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = ((float)currField.GetValue(obj)).ToString(CultureInfo.CreateSpecificCulture("en-US"));
-                    SetProperty(propertyStr, valueStr);
+                    SetProperty(propertyStr, valueStr, forceLogging);
 
                     // vanilla publication
                 }
                 else {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = currField.GetValue(obj).ToString().Trim();
-                    SetProperty(propertyStr, valueStr);
+                    SetProperty(propertyStr, valueStr, forceLogging);
                 }
             }
 
-            PublishBonusDetails(obj, prefix);
+            PublishBonusDetails(obj, prefix, forceLogging);
         }
 
         // publishing for special fields not specifically in the database
         private void PublishBonusDetails(DatabaseTable obj, string prefix) {
+            PublishBonusDetails(obj, prefix, false);
+        }
+
+        private void PublishBonusDetails(DatabaseTable obj, string prefix, bool forceLogging) {
             string propertyStr;
             string valueStr;
 
@@ -1169,17 +1181,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // hour component of runtime
                 propertyStr = "#MovingPictures." + prefix + ".extra.runtime.hour";
                 hourValue = (movie.Runtime / 60);
-                SetProperty(propertyStr, hourValue.ToString());
+                SetProperty(propertyStr, hourValue.ToString(), forceLogging);
 
                 // minute component of runtime
                 propertyStr = "#MovingPictures." + prefix + ".extra.runtime.minute";
                 minValue = (movie.Runtime % 60);
-                SetProperty(propertyStr, minValue.ToString());
+                SetProperty(propertyStr, minValue.ToString(), forceLogging);
 
                 // give short runtime string 0:00
                 propertyStr = "#MovingPictures." + prefix + ".extra.runtime.short";
                 valueStr = string.Format("{0}:{1:00}", hourValue, minValue);
-                SetProperty(propertyStr, valueStr);
+                SetProperty(propertyStr, valueStr, forceLogging);
 
                 // give pretty runtime string
                 propertyStr = "#MovingPictures." + prefix + ".extra.runtime.en.pretty";
@@ -1188,7 +1200,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     valueStr = string.Format("{0} hour{1}", hourValue, hourValue != 1 ? "s" : string.Empty);
                 if (minValue > 0)
                     valueStr = valueStr + string.Format(", {0} minute{1}", minValue, minValue != 1 ? "s" : string.Empty);
-                SetProperty(propertyStr, valueStr);
+                SetProperty(propertyStr, valueStr, forceLogging);
             }
 
         }
