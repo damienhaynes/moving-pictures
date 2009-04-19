@@ -18,8 +18,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="2" minor="1" point="0"/>
-    <published month="4" day="18" year="2009"/>
+    <version major="2" minor="2" point="0"/>
+    <published month="4" day="19" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -53,7 +53,7 @@
     <if test='${search.imdb_id}!='>
       <retrieve name="search_imdb" url="${site}imdb2ofdb/${search.imdb_id}" encoding="UTF-8"/>
       <parse name="resultat" input="${search_imdb}" xpath="//resultat" />
-      <if test="${imdb_details}!=">
+      <if test="${resultat[0]}!=">
         <parse name="title_year" input="${resultat[0].titel}" regex="${rx_titles}" />
         <replace name="title" input="${title_year[0]:htmldecode}" pattern="${rx_title_clean}" with="" />
         <replace name="aka" input="${title_year[1]:htmldecode}" pattern="${rx_title_clean}" with="" />
@@ -186,10 +186,25 @@
 
   </action>
 
-  <!-- Covert Art only works with the native site id -->
+  <!-- Covert Art Scraper Only Works with IMDB or OFDB id -->
   <action name="get_cover_art">
-    <set name="searchcmd" value="allinurl:artikel fid=${movie.site_id} vid site:ofdb.de" />
-
+    
+    <set name="imdb2ofdb" value="http://xml.n4rf.net/ofdbgw/imdb2ofdb/" />
+   
+    <if test="${movie.site_id}=">
+      <!-- If OFDB id is missing -->
+      <if test='${movie.imdb_id}!='>
+        <!-- but we have an IMDB id -->
+        <retrieve name="imdb_lookup" url="${imdb2ofdb}${movie.imdb_id}" encoding="UTF-8"/>
+        <parse name="resultat" input="${imdb_lookup}" xpath="//resultat" />
+        <if test="${resultat[0]}!=">
+          <!-- try to lookup the OFDB id -->
+          <set name="movie.site_id" value="${resultat[0].ofdbid}"/>
+        </if>
+      </if>
+    </if>
+    
+    <!-- Get the covers using the OFDB id -->
     <if test="${movie.site_id}!=">
 
       <set name="rx_coverid"><![CDATA[thumbnail\.php\?cover=images%2Ffassung%2F(\d+)%2F(\d+)]]></set>
@@ -200,8 +215,8 @@
         <set name="cover_art[${count}].url" value="http://img.ofdb.de/fassung/${coverid[0]}/${coverid[1]}_f.jpg" />
       </loop>
       
-    </if>
-    
+    </if> 
+  
   </action>  
   
 
