@@ -8,6 +8,7 @@ using Cornerstone.Database;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Reflection;
 using System.Globalization;
 using NLog;
@@ -132,7 +133,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movieSignature.Path != null) paramList["search.basepath"] = movieSignature.Path;
             if (movieSignature.Folder != null) paramList["search.foldername"] = movieSignature.Folder;
             if (movieSignature.File != null) paramList["search.filename"] = movieSignature.File;
-            //if (!String.IsNullOrEmpty(movieSignature.File)) paramList["search.filenamewithoutextension"] = Path.GetFileNameWithoutExtension(movieSignature.File);
+            
+            // this variable is the filename without extension and stackmarkers, this will allow 
+            // script makers to easily look for local metadata files.
+            if (!String.IsNullOrEmpty(movieSignature.File)) paramList["search.clean_filename"] = Utility.RemoveFileStackMarkers(movieSignature.File);
 
             results = scraper.Execute("search", paramList);
             if (results == null) {
