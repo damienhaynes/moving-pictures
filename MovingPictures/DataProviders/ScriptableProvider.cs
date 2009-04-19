@@ -132,6 +132,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movieSignature.Path != null) paramList["search.basepath"] = movieSignature.Path;
             if (movieSignature.Folder != null) paramList["search.foldername"] = movieSignature.Folder;
             if (movieSignature.File != null) paramList["search.filename"] = movieSignature.File;
+            //if (!String.IsNullOrEmpty(movieSignature.File)) paramList["search.filenamewithoutextension"] = Path.GetFileNameWithoutExtension(movieSignature.File);
 
             results = scraper.Execute("search", paramList);
             if (results == null) {
@@ -271,6 +272,45 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (scraper == null)
                 return false;
 
+            Dictionary<string, string> paramList = new Dictionary<string, string>();
+            Dictionary<string, string> results;
+
+            // if we already have a backdrop move on for now
+            if (movie.BackdropFullPath.Trim().Length > 0)
+                return true;
+
+            // try to load the id for the movie for this script
+            DBSourceMovieInfo idObj = movie.GetSourceMovieInfo(ScriptID);
+            if (idObj != null && idObj.Identifier != null)
+                paramList["movie.site_id"] = idObj.Identifier;
+
+            // load params for scraper
+            foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo)))
+                if (currField.GetValue(movie) != null)
+                    paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
+
+            // run the scraper
+            results = scraper.Execute("get_backdrop", paramList);
+            if (results == null) {
+                logger.Error(Name + " scraper script failed to execute \"get_backdrop\" node.");
+                return false;
+            }
+
+            int count = 0;
+            string backdropURL = string.Empty;
+
+            // Loop through all the results until a valid backdrop is found
+            // todo: support multiple backdrops
+            while (results.ContainsKey("backdrop[" + count + "].url")) {
+                backdropURL = results["backdrop[" + count + "].url"]; 
+                if (backdropURL.Trim().Length > 0)
+                    if (movie.AddBackdropFromURL(backdropURL) == ArtworkLoadStatus.SUCCESS)
+                            return true;
+
+                count++;
+            }
+            
+            // no valid backdrop found
             return false;
         }
 
