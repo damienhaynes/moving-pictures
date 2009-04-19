@@ -15,7 +15,7 @@ using NLog;
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
     public delegate void MoviePlayerEvent(DBMovieInfo movie);
-    
+
     public class MoviePlayer {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -130,7 +130,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public void Play(DBMovieInfo movie, int part) {
-            
             // queue the local media object in case we first need to play the custom intro
             // we can get back to it later.
             _queuedMedia = movie.LocalMedia[part-1];
@@ -145,7 +144,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public void Stop() {
-            if (IsPlaying) g_Player.Stop();
+            if (g_Player.Playing)
+                g_Player.Stop();
+            
+            resetPlayer();
         }
 
         #endregion
@@ -265,9 +267,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // start playback of a regular file
         private void playFile(string media) {
+
             logger.Debug("playFile " + media);
             VideoDiscFormat videoFormat = Utility.GetVideoDiscFormat(media);
-
+                        
             // HD Playback
             if (videoFormat == VideoDiscFormat.Bluray || videoFormat == VideoDiscFormat.HDDVD) {
 
@@ -466,8 +469,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 GUIGraphicsContext.form.Hide();
                 GUIGraphicsContext.CurrentState = GUIGraphicsContext.State.SUSPENDING;
 
-                _playbackActive = true;
                 logger.Info("HD Playback: External player started.");
+                onMediaStarted(_queuedMedia);
             }
             catch (Exception e) {
                 logger.ErrorException("HD Playback: Could not start the external player process.", e);
@@ -498,27 +501,33 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Internal Player Event Handlers
 
         private void onPlaybackStarted(g_Player.MediaType type, string filename) {
-            // get the duration of the media 
-            updateMediaDuration(_queuedMedia);
 
-            // get the movie
-            DBMovieInfo movie = _queuedMedia.AttachedMovies[0];
-            
-            // and jump to our resume position if necessary
-            if (_resumeActive && g_Player.Playing) {
-                if (g_Player.IsDVD) {
-                    logger.Debug("Resume: DVD state.");
-                    g_Player.Player.SetResumeState(movie.ActiveUserSettings.ResumeData.Data);
-                } else {
-                    logger.Debug("Resume: Time={0}", movie.ActiveUserSettings.ResumeTime);
-                    GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SEEK_POSITION, 0, 0, 0, 0, 0, null);
-                    msg.Param1 = movie.ActiveUserSettings.ResumeTime;
-                    GUIGraphicsContext.SendMessage(msg);
+            if (_queuedMedia != null) {
+
+                // get the duration of the media 
+                updateMediaDuration(_queuedMedia);
+
+                // get the movie
+                DBMovieInfo movie = _queuedMedia.AttachedMovies[0];
+
+                // and jump to our resume position if necessary
+                if (_resumeActive && g_Player.Playing) {
+                    if (g_Player.IsDVD) {
+                        logger.Debug("Resume: DVD state.");
+                        g_Player.Player.SetResumeState(movie.ActiveUserSettings.ResumeData.Data);
+                    }
+                    else {
+                        logger.Debug("Resume: Time={0}", movie.ActiveUserSettings.ResumeTime);
+                        GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_SEEK_POSITION, 0, 0, 0, 0, 0, null);
+                        msg.Param1 = movie.ActiveUserSettings.ResumeTime;
+                        GUIGraphicsContext.SendMessage(msg);
+                    }
                 }
+
+                // Trigger Movie started
+                onMediaStarted(_queuedMedia);
             }
 
-            // Trigger Movie started
-            onMediaStarted(_queuedMedia);
         }
 
         private void onPlayBackStoppedOrChanged(g_Player.MediaType type, int timeMovieStopped, string filename) {
@@ -644,6 +653,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void onMediaStarted(DBLocalMedia localMedia) {
+           // set playback active
            _playbackActive = true;         
            
            DBMovieInfo previousMovie = CurrentMovie;
@@ -693,7 +703,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Resets player variables
         /// </summary>
         private void resetPlayer() {
-
+           
             // reset player variables
             activeMedia = null;
             _queuedMedia = null;
@@ -707,7 +717,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 DaemonTools.UnMount();
                 mountedPlayback = false;
             }
-
+            
             logger.Debug("Reset");
         }
 
