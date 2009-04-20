@@ -261,8 +261,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             foreach (DBLocalMedia lm in localMedias) {
                 if (!lm.HasMediaInfo) {
                     logger.Info("Updating media info for " + lm.FullPath);
-                    if (lm.UpdateMediaInfo())
-                        lm.Commit();
+                    lm.UpdateMediaInfo();
+                    lm.Commit();
                 }
             }
         }

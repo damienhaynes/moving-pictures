@@ -40,7 +40,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } 
 
         /// <summary>
-        /// Checks wether the file is a DVD.
+        /// Checks whether the file is a DVD.
         /// </summary>
         public bool IsDVD {
             get {
@@ -49,10 +49,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 return false;
             }
-        }        
+        }
 
         /// <summary>
-        /// Checks wether the file is an entry path for a video disc.
+        /// Checks whether the file is an entry path for a video disc.
         /// </summary>
         public bool IsVideoDisc {
             get {
@@ -106,7 +106,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // Skip this check for CDRom drives
                 if (ImportPath.GetDriveType() == DriveType.CDRom)
                     return false;
-                
+
                 if (fileInfo == null)
                     return true;
 
@@ -138,7 +138,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     return false;
             }
         }
-        
+
         #endregion
 
         #region Database Fields
@@ -340,6 +340,23 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _audioChannels;
 
+        public string AudioChannelsFriendly {
+            get {
+                switch (this.AudioChannels) {
+                    case 8:
+                        return "7.1";
+                    case 6:
+                        return "5.1";
+                    case 2:
+                        return "stereo";
+                    case 1:
+                        return "mono";
+                    default:
+                        return this.AudioChannels.ToString();
+                }
+            }
+        }
+
         [DBFieldAttribute]
         public bool HasSubtitles {
             get { return _hasSubtitles; }
@@ -362,10 +379,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (importPath != null) {
                 VolumeSerial = importPath.GetDiskSerial();
                 MediaLabel = importPath.GetVolumeLabel();
-                return true; 
+                return true;
             }
             else {
-                return false; 
+                return false;
             }
         }
 
@@ -381,21 +398,22 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
-        public bool UpdateMediaInfo() {
-            MediaInfoWrapper mInfoWrapper = new MediaInfoWrapper(this.FullPath);
+        public void UpdateMediaInfo() {
+            string mediaPath = this.FullPath;
+            if (this.IsDVD) {
+                mediaPath = Path.Combine(Path.GetDirectoryName(mediaPath), "VTS_01_0.IFO");
+            }
+
+            MediaInfoWrapper mInfoWrapper = new MediaInfoWrapper(mediaPath);
             this.VideoWidth = mInfoWrapper.Width;
             this.VideoHeight = mInfoWrapper.Height;
             this.VideoFrameRate = mInfoWrapper.Framerate;
             this.HasSubtitles = mInfoWrapper.HasSubtitles;
 
-            if ((float)mInfoWrapper.Width / (float)mInfoWrapper.Height >= 1.3)
+            if ((float)mInfoWrapper.Width / (float)mInfoWrapper.Height >= 1.4)
                 this.VideoAspectRatio = "16_9";
             else
                 this.VideoAspectRatio = "4_3";
-
-            // this does't currently work for me in the wrapper.  using MediaInfo direct instead
-            //this.AudioChannels = mInfoWrapper.Audiochannels;
-            
 
             if (mInfoWrapper.IsDIVX)
                 this.VideoCodec = "DIVX";
@@ -432,36 +450,69 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 this.AudioCodec = mInfoWrapper.AudioCodec;
 
             if (mInfoWrapper.Is1080P)
-                this.VideoResolution = "1080P";
+                this.VideoResolution = "1080p";
             else if (mInfoWrapper.Is1080I)
-                this.VideoResolution = "1080I";
+                this.VideoResolution = "1080i";
             else if (mInfoWrapper.Is720P)
-                this.VideoResolution = "720P";
+                this.VideoResolution = "720p";
             else if (mInfoWrapper.IsHDTV)
                 this.VideoResolution = "HD";
             else
                 this.VideoResolution = "SD";
-                
 
+
+            // get duration
+            // duration is not currently included in the MediaInfoWrapper,
+            // so we must call MediaInfo directly.
             MediaInfo mInfo = new MediaInfo();
             try {
                 int intValue;
-                mInfo.Open(this.FullPath);
+                mInfo.Open(mediaPath);
                 if (int.TryParse(mInfo.Get(StreamKind.Video, 0, "PlayTime"), out intValue))
                     this.Duration = intValue;
-                if (int.TryParse(mInfo.Get(StreamKind.Audio, 0, "Channel(s)"), out intValue))
-                    this.AudioChannels = intValue;
             }
-            finally
-            {
+            finally {
                 if (mInfo != null)
                     mInfo.Close();
             }
-            return true;
+
+
+            // Get audio channel count.
+            // because dvds have multiple files with multiple audio streams
+            // we must build a list of all files, and loop through them.
+            // the stream with the highest number of audio channels wins.
+
+            // build list of files
+            List<string> files = new List<string>();
+            if (this.IsDVD) {
+                files.AddRange(Directory.GetFiles(Path.GetDirectoryName(mediaPath), "*.ifo"));
+            }
+            else {
+                files.Add(mediaPath);
+            }
+
+            // get highest audio channel count
+            foreach (var file in files) {
+                try {
+                    int intValue;
+                    mInfo.Open(file);
+
+                    int iAudioStreams = mInfo.Count_Get(StreamKind.Audio);
+                    for (int i = 0; i < iAudioStreams - 1; i++) {
+                        if (int.TryParse(mInfo.Get(StreamKind.Audio, i, "Channel(s)"), out intValue)
+                            && intValue > this.AudioChannels)
+                            this.AudioChannels = intValue;
+                    }
+                }
+                finally {
+                    if (mInfo != null)
+                        mInfo.Close();
+                }
+            }
         }
 
         #endregion
-        
+
         #region Overrides
         public override bool Equals(object obj) {
             // make sure we have a dblocalmedia object
@@ -476,7 +527,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // make sure we have the same file
             if (!this.File.FullName.Equals(otherLocalMedia.File.FullName))
                 return false;
-            
+
             // if we have a volume serial for either both, make sure they are equal
             if (this.VolumeSerial != otherLocalMedia.VolumeSerial)
                 return false;
@@ -578,7 +629,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #endregion
     }
-    
+
     public class DBLocalMediaComparer : IComparer<DBLocalMedia> {
         public int Compare(DBLocalMedia fileX, DBLocalMedia fileY) {
             if (fileX.Part < fileY.Part)
