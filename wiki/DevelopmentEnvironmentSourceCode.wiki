@@ -18,11 +18,11 @@ http://moving-pictures.googlecode.com/svn/wiki/Images/checkout_popup.png http://
 
 The only thing you need to change on this popup is the "URL of Repository" field. You have a choice though, you can go with the latest, greatest source code from the !MediaPortal project (sometimes called the SVN version), or you can go with the source code from the most recent release. If you want the latest, greatest (and possibly buggy) !MediaPortal code, cut and paste the first URL listed below into the "URL of Repository" field, then click OK. 
 
-Using the very latest code base from !MediaPortal, may not be the best idea though. Most of the users of Moving Pictures are going to be running the plug-in against the _latest release_ of !MediaPortal, not the SVN version, so it may be a better idea to go with the code from the latest release. If this is the route you want to go (I recommend this) then cut and paste the second URL below into the "URL of Repository" field. *Don't hit OK yet though!* Click the "..." button to pop up the repository browser, *right click and refresh the "tags" node* and pick the most recent version. At the time of writing, the latest version is 1.0.0.0 RC1, but there may be a newer release by now. Pick the newest. 
+Using the very latest code base from !MediaPortal, may not be the best idea though. Most of the users of Moving Pictures are going to be running the plug-in against the _latest release_ of !MediaPortal, not the SVN version, so it may be a better idea to go with the code from the latest release. If this is the route you want to go (I recommend this) then cut and paste the second URL below into the "URL of Repository" field. *Don't hit OK yet though!* Click the "..." button to pop up the repository browser, *right click and refresh the "tags" node* and pick the most recent version. At the time of writing, the latest version is 1.0.1, but there may be a newer release by now. Pick the newest. 
 
 {{{
 https://mediaportal.svn.sourceforge.net/svnroot/mediaportal/trunk
-https://mediaportal.svn.sourceforge.net/svnroot/mediaportal/tags/Version 1.0.0.0 RC1/
+https://mediaportal.svn.sourceforge.net/svnroot/mediaportal/tags/MediaPortal%201.0.1/
 }}}
 
 http://moving-pictures.googlecode.com/svn/wiki/Images/tags.png
