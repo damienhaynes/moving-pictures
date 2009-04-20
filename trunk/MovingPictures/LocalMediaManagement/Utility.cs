@@ -176,35 +176,36 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <summary>
         /// Remove extension and stackmarkers from a filename
         /// </summary>
-        /// <param name="fileName">filename</param>
+        /// <param name="fileName">Filename including the extension</param>
         /// <returns>the filename without stackmarkers and extension</returns>
-        public static string RemoveFileStackMarkers(string fileName) {
+        public static string GetFileNameWithoutExtensionAndStackMarkers(string fileName) {
+            
             // Remove the file extension from the filename
-            fileName = Path.GetFileNameWithoutExtension(fileName);
+            string cleanFileName = Path.GetFileNameWithoutExtension(fileName);
             
             // If file is classified as multipart clean the stack markers.
             if (isFileMultiPart(fileName)) {                
 
                 Regex expr = new Regex(rxStackPatterns, RegexOptions.IgnoreCase);
-                Match match = expr.Match(fileName);
+                Match match = expr.Match(cleanFileName);
 
                 // if we have a match on this expression we will remove the complete match.
                 if (match.Success)
-                    fileName = expr.Replace(fileName, "");
+                    cleanFileName = expr.Replace(cleanFileName, "");
                 // no match means we just remove one character
                 else
-                    fileName = fileName.Substring(0, (fileName.Length - 1));
+                    cleanFileName = cleanFileName.Substring(0, (cleanFileName.Length - 1));
             }
 
-            // Return the cleaned filename
-            return fileName;
+            // Return cleanFileName cleaned filename
+            return cleanFileName;
         }
 
-        public static string RemoveFileStackMarkers(FileInfo fileInfo) {
-            return RemoveFileStackMarkers(fileInfo.Name);
+        public static string GetFileNameWithoutExtensionAndStackMarkers(FileInfo fileInfo) {
+            return GetFileNameWithoutExtensionAndStackMarkers(fileInfo.Name);
         }
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Get the largest file from a directory matching the specified file mask

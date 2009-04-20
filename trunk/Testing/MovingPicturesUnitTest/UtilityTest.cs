@@ -105,7 +105,7 @@ namespace MovingPicturesUnitTest
             FileInfo file = fileTest;
             string expected = "The Big Movie";
             string actual;
-            actual = Utility.RemoveFileStackMarkers(file);
+            actual = Utility.GetFileNameWithoutExtensionAndStackMarkers(file);
             Assert.AreEqual(expected, actual);
         }
 
@@ -117,7 +117,7 @@ namespace MovingPicturesUnitTest
             string filename = fileTest.Name; 
             string expected = "The Big Movie";
             string actual;
-            actual = Utility.RemoveFileStackMarkers(filename);
+            actual = Utility.GetFileNameWithoutExtensionAndStackMarkers(filename);
             Assert.AreEqual(expected, actual);
         }
 
