@@ -391,10 +391,17 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             List<DBSourceInfo> sources;
             lock (detailSources) sources = new List<DBSourceInfo>(detailSources);
 
-            if (sources.Count > 0)
-                return sources[0].Provider.Get(movieSignature);
-            else
-                return new List<DBMovieInfo>();
+            List<DBMovieInfo> results = new List<DBMovieInfo>();
+            // Try each datasource (ordered by their priority) to get results
+            foreach (DBSourceInfo currSource in sources) {
+                logger.Debug("Search: Title={0}, Provider={1}, Version={2}", movieSignature.Title, currSource.Provider.Name, currSource.Provider.Version);
+                results = currSource.Provider.Get(movieSignature);
+                // if we have results break the loop
+                if (results.Count > 0) break;
+            }
+
+            // return results;
+            return results;
         }
 
         public void Update(DBMovieInfo movie) {
