@@ -26,7 +26,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 }
                 else {
                     // Scans base directory for specific filenames (Shared Folder)
-                    string fileName = Utility.RemoveFileStackMarkers(signature.File);
+                    string fileName = Utility.GetFileNameWithoutExtensionAndStackMarkers(signature.File);
                     signature.ImdbId = fileScanner(dir, fileName);
                 }
             }

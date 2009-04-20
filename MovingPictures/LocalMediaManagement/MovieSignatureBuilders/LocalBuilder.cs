@@ -43,7 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             else {
                 // Use filename
                 if (filecount > 1)
-                    source = Utility.RemoveFileStackMarkers(signature.File);
+                    source = Utility.GetFileNameWithoutExtensionAndStackMarkers(signature.File);
                 else
                     source = Path.GetFileNameWithoutExtension(signature.File);
             }

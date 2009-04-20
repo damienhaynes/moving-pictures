@@ -136,7 +136,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             
             // this variable is the filename without extension and stackmarkers, this will allow 
             // script makers to easily look for local metadata files.
-            if (!String.IsNullOrEmpty(movieSignature.File)) paramList["search.clean_filename"] = Utility.RemoveFileStackMarkers(movieSignature.File);
+            if (!String.IsNullOrEmpty(movieSignature.File)) paramList["search.clean_filename"] = Utility.GetFileNameWithoutExtensionAndStackMarkers(movieSignature.File);
 
             results = scraper.Execute("search", paramList);
             if (results == null) {
