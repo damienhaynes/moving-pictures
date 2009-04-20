@@ -30,9 +30,12 @@ PluginDev\MovingPictures\MovingPicturesConfigTester\MovingPicturesConfigTester.c
 
 PluginDev\MediaPortal\Core\Core.csproj
 PluginDev\MediaPortal\Database\Database.csproj
-PluginDev\MediaPortal\Utils\Utils.csproj
+PluginDev\MediaPortal\Dialogs\Dialogs.csproj
 PluginDev\MediaPortal\DirectShowLib\DirectShowLib.csproj
 PluginDev\MediaPortal\MediaPortal.Support\MediaPortal.Support.csproj
+PluginDev\MediaPortal\RemotePlugins\RemotePlugins.csproj
+PluginDev\MediaPortal\TVCapture\TVCapture.csproj
+PluginDev\MediaPortal\Utils\Utils.csproj
 }}}
 
 Once you have these projects added to your environment your References for the !MovingPictures project should be free of warning icons, like the image below. If you see any warnings, this probably means additional dependencies have been added since the time of this writing. Don't panic, just browse through the !MediaPortal folder structure and find the project Visual Studio is complaining about. You might also want to double check the references for the other !MediaPortal projects. Again, at the time of this writing, the projects listed above are all that is required, but additional dependencies may have been added to any of these projects over the last few months.
