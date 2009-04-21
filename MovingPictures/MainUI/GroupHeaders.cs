@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.Database;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class GroupHeaders {
         private static MovieBrowser Browser;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public static void AddGroupHeaders(MovieBrowser browser) {
             Browser = browser;
@@ -41,9 +44,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     string groupName = "";
                     if (movie.SortBy.Trim().Length > 0)
                         groupName = movie.SortBy.Trim().Substring(0, 1).ToUpper();
+
+                    // group all non-word characters together
+                    if (!Regex.Match(groupName, @"\w").Success)
+                        groupName = "#";
+
+                    // numeric group
                     int iTemp;
                     if (int.TryParse(groupName, out iTemp))
-                        groupName = "Numeric";
+                        groupName = "0-9";
+
                     return groupName;
 
                 case SortingFields.DateAdded:
@@ -58,7 +68,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return movie.Score.ToString();
                 case SortingFields.Runtime:
                     return "";
-                    break;
                 case SortingFields.FilePath:
                     if (movie.LocalMedia.Count > 0)
                         return movie.LocalMedia[0].File.Directory.ToString();
@@ -134,7 +143,33 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             Browser.Facade.Insert(index, groupItem);
 
-            groupItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(Browser.onFacadeItemSelected);
+            groupItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(onGroupHeaderSelected);
+        }
+
+        // triggered when a group header was selected on the facade
+        private static void onGroupHeaderSelected(GUIListItem item, GUIControl parent) {
+            // if this is not a message from the facade, exit
+            if (parent != Browser.Facade && parent != Browser.Facade.FilmstripView && parent != Browser.Facade.ThumbnailView &&
+                parent != Browser.Facade.ListView) return;
+
+            int currentIndex = Browser.Facade.SelectedListItemIndex;
+            int lastIndex = Browser.Facade.Count - 1;
+            int moveToIndex = 0;
+
+            if (currentIndex < Browser.SelectedIndex && currentIndex != Browser.SelectedIndex && Browser.SelectedIndex != lastIndex) {
+                // MOVE UP
+                moveToIndex = currentIndex - 1;
+                if (moveToIndex == -1) moveToIndex = lastIndex;
+            }
+            else {
+                // MOVE DOWN
+                moveToIndex = currentIndex + 1;
+                if (moveToIndex > lastIndex) moveToIndex = 0;
+            }
+
+            // jump to index
+            Browser.Facade.SelectedListItemIndex = moveToIndex;
+            logger.Debug("GroupHeaderSelected: Header={0}, Index={1}, MoveToIndex={2}", item.Label, currentIndex, moveToIndex);
         }
     }
 }
