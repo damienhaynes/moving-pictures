@@ -19,6 +19,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class MoviePlayer {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        public enum MoviePlayerState { Idle, Processing, Playing }
 
         #region Private variables
 
@@ -76,16 +77,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         
         public bool IsPlaying {
             get {
-                return _playbackActive;
+                return (_playerState != MoviePlayerState.Idle);
             }
-        } private bool _playbackActive = false;
+        } 
+
+        public MoviePlayerState State {
+            get {
+                return _playerState;
+            }
+        } private MoviePlayerState _playerState = MoviePlayerState.Idle;
 
         /// <summary>
         /// Gets the currently playing movie
         /// </summary>
         public DBMovieInfo CurrentMovie {
             get {
-                if (_activeMovie != null && _playbackActive)
+                if (_activeMovie != null && _playerState == MoviePlayerState.Playing)
                     return _activeMovie;
 
                 return null;
@@ -97,7 +104,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public DBLocalMedia CurrentMedia {
             get {
-                if (_activeMedia != null && _playbackActive)
+                if (_activeMedia != null && _playerState == MoviePlayerState.Playing)
                     return _activeMedia;
 
                 return null;
@@ -130,6 +137,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public void Play(DBMovieInfo movie, int part) {
+            // set player state working
+            _playerState = MoviePlayerState.Processing;
+            
             // queue the local media object in case we first need to play the custom intro
             // we can get back to it later.
             _queuedMedia = movie.LocalMedia[part-1];
@@ -144,7 +154,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public void Stop() {
-            if (g_Player.Playing)
+            if (g_Player.Player.Playing)
                 g_Player.Stop();
             
             resetPlayer();
@@ -156,6 +166,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void playMovie(DBMovieInfo movie, int requestedPart) {
             logger.Debug("playMovie()");
+            _playerState = MoviePlayerState.Processing;
 
             if (movie == null || requestedPart > movie.LocalMedia.Count || requestedPart < 1) {
                 resetPlayer();
@@ -267,8 +278,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // start playback of a regular file
         private void playFile(string media) {
-
-            logger.Debug("playFile " + media);
+            logger.Debug("Processing media for playback: File={0}", media);
             VideoDiscFormat videoFormat = Utility.GetVideoDiscFormat(media);
                         
             // HD Playback
@@ -311,10 +321,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             listenToExternalPlayerEvents = true;
             
             // Play the file using the mediaportal player
-            g_Player.Play(media);
+            bool success = g_Player.Play(media);
 
             // We stop listening to external player events
             listenToExternalPlayerEvents = false;
+
+            // if the playback did not happen, reset the player
+            if (!success) {
+                logger.Info("Playback failed: Media={0}", media);
+                resetPlayer();
+            }
         }
 
         // start playback of an image file (ISO)
@@ -501,8 +517,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Internal Player Event Handlers
 
         private void onPlaybackStarted(g_Player.MediaType type, string filename) {
-
-            if (_queuedMedia != null) {
+            if (_playerState == MoviePlayerState.Processing && g_Player.Player.Playing) {
+                logger.Info("Playback Started: Internal, File={0}", filename);
 
                 // get the duration of the media 
                 updateMediaDuration(_queuedMedia);
@@ -511,7 +527,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 DBMovieInfo movie = _queuedMedia.AttachedMovies[0];
 
                 // and jump to our resume position if necessary
-                if (_resumeActive && g_Player.Playing) {
+                if (_resumeActive) {
                     if (g_Player.IsDVD) {
                         logger.Debug("Resume: DVD state.");
                         g_Player.Player.SetResumeState(movie.ActiveUserSettings.ResumeData.Data);
@@ -527,14 +543,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // Trigger Movie started
                 onMediaStarted(_queuedMedia);
             }
-
         }
 
         private void onPlayBackStoppedOrChanged(g_Player.MediaType type, int timeMovieStopped, string filename) {
-            if (type != g_Player.MediaType.Video || !_playbackActive)
+            if (type != g_Player.MediaType.Video || _playerState != MoviePlayerState.Playing)
                 return;
 
-            logger.Debug("OnPlayBackStoppedOrChanged: filename={1} currentMovie={1} currentPart={2} timeMovieStopped={3} ", filename, _activeMovie.Title, _activePart, timeMovieStopped);
+            logger.Debug("OnPlayBackStoppedOrChanged: File={0}, Movie={1}, Part={2}, TimeStopped={3}", filename, _activeMovie.Title, _activePart, timeMovieStopped);
 
             // Because we can't get duration for DVD's at start like with normal files
             // we are getting the duration when the DVD is stopped. If the duration of 
@@ -546,7 +561,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             int requiredWatchedPercent = MovingPicturesCore.Settings.MinimumWatchPercentage;
-            logger.Debug("Percentage: " + _activeMovie.GetPercentage(_activePart, timeMovieStopped) + " Required: " + requiredWatchedPercent);
+            logger.Debug("Watched: Percentage=" + _activeMovie.GetPercentage(_activePart, timeMovieStopped) + ", Required=" + requiredWatchedPercent);
 
             // if enough of the movie has been watched
             if (_activeMovie.GetPercentage(_activePart, timeMovieStopped) >= requiredWatchedPercent) {
@@ -560,15 +575,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 updateMovieResumeState(_activeMovie, _activePart, timeMovieStopped, resumeData);
                 // run movie stopped logic
                 onMovieStopped(_activeMovie);
-            }
-
-            
+            }            
         }
 
         private void onPlayBackEnded(g_Player.MediaType type, string filename) {
-            logger.Debug("OnPlayBackEnded");
-
-            if (type != g_Player.MediaType.Video || !_playbackActive)
+            if (type != g_Player.MediaType.Video || _playerState != MoviePlayerState.Playing)
                 return;
 
             if (handleCustomIntroEnded())
@@ -591,14 +602,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void onStartExternal(Process proc, bool waitForExit) {
             // If we were listening for external player events
-            if (_queuedMedia != null && listenToExternalPlayerEvents) {
-                logger.Debug("Handling: OnStartExternal()");
+            if (_playerState == MoviePlayerState.Processing && listenToExternalPlayerEvents) {
+                logger.Info("Playback Started: External");
                 onMediaStarted(_queuedMedia);
             }
         }
 
         private void onStopExternal(Process proc, bool waitForExit) {
-            if (!listenToExternalPlayerEvents)
+            if (_playerState != MoviePlayerState.Playing || !listenToExternalPlayerEvents)
                 return;
 
             logger.Debug("Handling: OnStopExternal()");
@@ -654,7 +665,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void onMediaStarted(DBLocalMedia localMedia) {
            // set playback active
-           _playbackActive = true;         
+           _playerState = MoviePlayerState.Playing;
            
            DBMovieInfo previousMovie = CurrentMovie;
            activeMedia = localMedia;
@@ -707,7 +718,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // reset player variables
             activeMedia = null;
             _queuedMedia = null;
-            _playbackActive = false;
+            _playerState = MoviePlayerState.Idle;
             _resumeActive = false;
             listenToExternalPlayerEvents = false;
             customIntroPlayed = false;
@@ -718,7 +729,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 mountedPlayback = false;
             }
             
-            logger.Debug("Reset");
+            logger.Debug("Reset.");
         }
 
         #endregion
