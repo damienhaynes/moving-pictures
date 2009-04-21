@@ -593,9 +593,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 if (field == browser.CurrentSortField) {
                     if (browser.CurrentSortDirection == SortingDirections.Ascending)
-                        listItem.Label2 = "▼";
+                        listItem.Label2 = Translation.DownAbbreviation;
                     else
-                        listItem.Label2 = "▲";
+                        listItem.Label2 = Translation.UpAbbreviation;
                 }
                 dialog.Add(listItem);
             }
