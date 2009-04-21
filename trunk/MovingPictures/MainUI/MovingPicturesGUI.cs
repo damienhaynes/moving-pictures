@@ -396,7 +396,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Take control and disable MediaPortal AutoPlay when the plugin has focus
             disableNativeAutoplay();
 
-
             if (awaitingUserRatingMovie != null) {
                 GetUserRating(awaitingUserRatingMovie);
                 awaitingUserRatingMovie = null;
@@ -407,20 +406,26 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         protected override void OnPageDestroy(int new_windowId) {
             // Enable autoplay again when we are leaving the plugin
-            // But only when the new window is NOT the fullscreen window.
-            if (new_windowId != (int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO)
+            // But only when we are not playing something
+            if (!moviePlayer.IsPlaying)                
                 enableNativeAutoplay();
 
             base.OnPageDestroy(new_windowId);
         }
 
         // Disable MediaPortal's AutoPlay
+
+        /// <summary>
+        /// Disable MediaPortal AutoPlay
+        /// </summary>
         private void disableNativeAutoplay() {
             logger.Info("Disabling native autoplay.");
             AutoPlay.StopListening();
         }
 
-        // Enable MediaPortal's AutoPlay
+        /// <summary>
+        /// Enable MediaPortal AutoPlay
+        /// </summary>
         private void enableNativeAutoplay() {
             if (GUIGraphicsContext.CurrentState == GUIGraphicsContext.State.RUNNING) {
                 logger.Info("Re-enabling native autoplay.");
@@ -621,7 +626,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             browser.ReloadFacade();
             SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
             SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
-            browser.Facade.SelectedListItemIndex = 0;
         }
 
         private void showChangeViewContext() {
@@ -752,19 +756,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (dialog.SelectedId == unwatchedItem.ItemId) {
                 browser.SelectedMovie.ActiveUserSettings.Watched = 0;
-
                 browser.SelectedMovie.ActiveUserSettings.Commit();
-                browser.ReapplyFilters();
-                browser.ReloadFacade();
                 UpdateMovieDetails();
+                browser.ReapplyFilters();               
             }
             else if (dialog.SelectedId == watchedItem.ItemId) {
                 browser.SelectedMovie.ActiveUserSettings.Watched = 1;
-
                 browser.SelectedMovie.ActiveUserSettings.Commit();
-                browser.ReapplyFilters();
-                browser.ReloadFacade();
                 UpdateMovieDetails();
+                browser.ReapplyFilters();            
             }
             else if (dialog.SelectedId == deleteItem.ItemId) {
                 deleteMovie();
@@ -915,6 +915,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         workingAnimation.AllocResources();
                     else
                         workingAnimation.FreeResources();
+
                     workingAnimation.Visible = visible;
                 }
             }
@@ -1030,11 +1031,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         }
 
-        private void OnVolumeRemoved(string volume, string serial) {
-            // only respond when the plugin (or it's playback) is active
-            if (GUIWindowManager.ActiveWindow != GetID && !moviePlayer.IsPlaying)
-                return;
-                
+        private void OnVolumeRemoved(string volume, string serial) {            
             // if we are playing something from this volume stop it
             if (moviePlayer.IsPlaying)
                 if (moviePlayer.CurrentMedia.DriveLetter == volume)
@@ -1048,9 +1045,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Skin and Property Settings
 
         private void UpdateMovieDetails() {
-            if (browser.SelectedMovie == null)
-                return;
-
             if (browser.SelectedMovie == null)
                 return;
 
