@@ -394,6 +394,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             List<DBMovieInfo> results = new List<DBMovieInfo>();
             // Try each datasource (ordered by their priority) to get results
             foreach (DBSourceInfo currSource in sources) {
+                if (currSource.IsDisabled(DataType.DETAILS))
+                    continue;
+
                 logger.Debug("Search: Title={0}, Provider={1}, Version={2}", movieSignature.Title, currSource.Provider.Name, currSource.Provider.Version);
                 results = currSource.Provider.Get(movieSignature);
                 // if we have results break the loop
