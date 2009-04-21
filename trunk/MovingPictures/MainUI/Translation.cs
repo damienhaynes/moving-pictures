@@ -61,6 +61,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string ContinueToNextPartBody = "Do you wish to continue with part {0}?";
         public static string Rate = "Rate";
         public static string SelectYourRating = "Select your rating for {0}";
+        public static string DownAbbreviation = "(dn)";
+        public static string UpAbbreviation = "(up)";
 
 
         // friendly names for sorting
