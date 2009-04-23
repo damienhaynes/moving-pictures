@@ -523,8 +523,24 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // add the listitem
             facade.Add(listItems[newMovie]);
-        }       
+        }
 
+        /// <summary>
+        /// Navigates the selected movie to the first movie in the list.
+        /// </summary>
+        public void JumpToBeginningOfList() {
+            if (CurrentView == BrowserViewMode.LIST) {
+                // go to the first item that is not a group header
+                for (int i = 0; i < Facade.ListView.ListItems.Count; i++) {
+                    if (Facade.ListView.ListItems[i].TVTag != null) {
+                        Facade.SelectedListItemIndex = i;
+                        break;
+                    }
+                }
+            }
+            else
+                Facade.SelectedListItemIndex = 0;
+        }
         #endregion
 
     }
