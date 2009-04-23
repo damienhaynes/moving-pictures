@@ -515,7 +515,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns>True if this is a root</returns>
         public static bool IsDriveRoot(string path) {
-            if (path.Length < 4)
+            if (path.Length > 1 && path.Length < 4)
                 return (path.Substring(1, 1) == ":");
             
             return false;
@@ -528,7 +528,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns>the base directory for the movie files</returns>
         public static DirectoryInfo GetMovieBaseDirectory(DirectoryInfo directory) {
             DirectoryInfo dirLevel = directory;
-            while (isFolderAmbiguous(dirLevel.Name) && dirLevel.Root != dirLevel)
+            while (isFolderAmbiguous(dirLevel.Name) && dirLevel.Parent != null)
                 dirLevel = dirLevel.Parent;
 
             return dirLevel;
