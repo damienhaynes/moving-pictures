@@ -20,6 +20,7 @@ using MediaPortal.Ripper;
 using NLog;
 using System.IO;
 using System.Diagnostics;
+using System.Windows.Media.Animation;
 
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
@@ -50,7 +51,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private DBMovieInfo awaitingUserRatingMovie;
         private MoviePlayer moviePlayer;
-
+        double _lastCommandTime = 0;
         #endregion
 
         #region GUI Controls
@@ -100,8 +101,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #endregion
 
         public MovingPicturesGUI() {
-            
-
             MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(Importer_Progress);
 
             // Get Moving Pictures specific autoplay setting
@@ -378,7 +377,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // if we are not in details view (maybe we just came back from playing a movie)
             // set the first item in the list as selected.
             if (browser.CurrentView != BrowserViewMode.DETAILS) {
-                facade.SelectedListItemIndex = 0;
+                browser.JumpToBeginningOfList();
                 browser.SyncFromFacade();
             }
             
@@ -516,9 +515,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         base.OnAction(action);
                     }
                     break;
-                case Action.ActionType.ACTION_MOVE_RIGHT:
-                case Action.ActionType.ACTION_MOVE_LEFT:
                 case Action.ActionType.ACTION_MOVE_UP:
+                    int _loopDelay = 100; // wait at the last item this amount of msec until loop to the last item
+
+                    // if the user is holding the up key, don't go past index 1
+                    // we need to do this ourselves because the GUIListControl is hard coded to stop at index 0
+                    // index 0 is a group header in our case, so we want to stop at 1 instead
+                    if (!(browser.CurrentView == BrowserViewMode.LIST
+                        && MovingPicturesCore.Settings.AllowGrouping
+                        && browser.Facade.SelectedListItemIndex == 1
+                        && AnimationTimer.TickCount - _lastCommandTime < _loopDelay
+                        )) {
+                        base.OnAction(action);
+                    }
+                    _lastCommandTime = AnimationTimer.TickCount;
+                    break;
+
                 default:
                     base.OnAction(action);
                     break;
@@ -624,6 +636,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             browser.ReloadFacade();
+            browser.JumpToBeginningOfList();
             SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
             SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
         }

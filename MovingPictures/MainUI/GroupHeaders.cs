@@ -149,27 +149,26 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // triggered when a group header was selected on the facade
         private static void onGroupHeaderSelected(GUIListItem item, GUIControl parent) {
             // if this is not a message from the facade, exit
-            if (parent != Browser.Facade && parent != Browser.Facade.FilmstripView && parent != Browser.Facade.ThumbnailView &&
-                parent != Browser.Facade.ListView) return;
+            if (parent != Browser.Facade && parent != Browser.Facade.ListView) return;
 
-            int currentIndex = Browser.Facade.SelectedListItemIndex;
+            int newIndex = Browser.Facade.SelectedListItemIndex;
+            int oldIndex = Browser.SelectedIndex;
             int lastIndex = Browser.Facade.Count - 1;
-            int moveToIndex = 0;
+            logger.Debug("onGroupHeaderSelected CurrentIndex {0} OldIndex {1}", newIndex, oldIndex);
 
-            if (currentIndex < Browser.SelectedIndex && currentIndex != Browser.SelectedIndex && Browser.SelectedIndex != lastIndex) {
+            if (newIndex < oldIndex && !(newIndex == 0 && oldIndex == lastIndex)) {
                 // MOVE UP
-                moveToIndex = currentIndex - 1;
-                if (moveToIndex == -1) moveToIndex = lastIndex;
+                logger.Debug("Jumping Up");
+                if (newIndex == 0)
+                    Browser.Facade.SelectedListItemIndex = lastIndex;
+                else
+                    Browser.Facade.OnAction(new Action(Action.ActionType.ACTION_MOVE_UP, 0, 0));
             }
             else {
                 // MOVE DOWN
-                moveToIndex = currentIndex + 1;
-                if (moveToIndex > lastIndex) moveToIndex = 0;
+                logger.Debug("Jumping Down");
+                Browser.Facade.OnAction(new Action(Action.ActionType.ACTION_MOVE_DOWN, 0, 0));
             }
-
-            // jump to index
-            Browser.Facade.SelectedListItemIndex = moveToIndex;
-            logger.Debug("GroupHeaderSelected: Header={0}, Index={1}, MoveToIndex={2}", item.Label, currentIndex, moveToIndex);
         }
     }
 }
