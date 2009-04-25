@@ -707,9 +707,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (Utility.IsVideoFile(file))
                     filesCreated.Add(file);
             }
-            else {
+            else if (Directory.Exists(e.FullPath)) {
                 // This is a directory so scan it and add create the (video) filelist
                 filesCreated = Utility.GetVideoFilesRecursive(new DirectoryInfo(e.FullPath));
+            }
+            else {
+                return;
             }
 
             // If we have a list of video files process them
@@ -725,16 +728,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     if (newFile.ID != null) {
                         // if this file is already in the system, ignore and log a message.
                         if (importPath.IsRemovable)
-                            logger.Info("Removable file " + newFile.File.Name + " brought online.");
+                            logger.Info("Removable file {0} brought online.", newFile.File.Name);
                         else
-                            logger.Warn("Watcher tried to add a pre-existing file: " + newFile.File.Name);
+                            logger.Warn("Watcher tried to add a pre-existing file: {0}", newFile.File.Name);
                         continue;
                     }
                     // We have a new file so add it to the filesAdded list
                     newFile.ImportPath = importPath;
                     newFile.UpdateDiskProperties();
                     lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
-                    logger.Info("Watcher queued " + newFile.File.Name + " for processing.");
+                    logger.Info("Watcher queued {0} for processing.", newFile.File.Name);
                 }
             }
         }
@@ -743,20 +746,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void OnFileDeleted(Object source, FileSystemEventArgs e) {
             List<DBLocalMedia> localMediaRemoved = new List<DBLocalMedia>();
 
-            if (File.Exists(e.FullPath)) {
-                // This is just one file so add it to the list
-                localMediaRemoved.Add(DBLocalMedia.Get(e.FullPath, DeviceManager.GetDiskSerial(e.FullPath)));
-            }
-            else {
-                // This is a directory so we are going to get all localmedia that uses 
-                // this directory we can do this by adding a % character to the end of 
-                // the path as the sqlite query behind it uses LIKE as operator.
-                localMediaRemoved = DBLocalMedia.GetAll(e.FullPath + '%', DeviceManager.GetDiskSerial(e.FullPath));
-            }
+            // we are going to get all localmedia that IS this file or
+            // this directory we can do this by adding a % character to the end of 
+            // the path as the sqlite query behind it uses LIKE as operator.
+            localMediaRemoved = DBLocalMedia.GetAll(e.FullPath + '%', DeviceManager.GetDiskSerial(e.FullPath));
 
             // Loop through the remove files list and process
             foreach (DBLocalMedia removedFile in localMediaRemoved) {
-                logger.Info("Watcher flagged " + removedFile.File.Name + " for removal from the database.");
+                logger.Info("Watcher flagged {0} for removal from the database.", removedFile.File.Name);
                 
                 // if the file is not in our system anymore there's nothing to do
                 // todo: this is not entirely true because the file could be sitting in the match system
@@ -766,7 +763,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                 // Check if the file is really removed
                 if (!removedFile.IsRemoved) {
-                    logger.Info("Removable file " + removedFile.File.Name + " taken offline.");
+                    logger.Info("Removable file {0} taken offline.", removedFile.File.Name);
                     continue;
                 }
 
@@ -779,16 +776,30 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             List<DBLocalMedia> localMediaRenamed = new List<DBLocalMedia>();
 
             if (File.Exists(e.FullPath)) {
-                // This is just one file so add it to the list
-                localMediaRenamed.Add(DBLocalMedia.Get(e.OldFullPath, DeviceManager.GetDiskSerial(e.FullPath)));
+                DBLocalMedia localMedia = DBLocalMedia.Get(e.OldFullPath, DeviceManager.GetDiskSerial(e.FullPath));
+                
+                // if this file is not in our database, return
+                if (localMedia.ID == null)
+                    return;
+
+                // Add the localmedia object for this file to the rename list
+                localMediaRenamed.Add(localMedia);
                 logger.Info("Watched file '{0}' was renamed to '{1}'", e.OldFullPath, e.FullPath);
             }
-            else {
+            else if (Directory.Exists(e.FullPath)) {
                 // This is a directory so we are going to get all localmedia that uses 
                 // this directory we can do this by adding a % character to the end of 
                 // the path as the sqlite query behind it uses LIKE as operator.
                 localMediaRenamed = DBLocalMedia.GetAll(e.OldFullPath + '%', DeviceManager.GetDiskSerial(e.FullPath));
+
+                // if this folder isn't related to any file in our database, return
+                if (localMediaRenamed.Count == 0)
+                    return;
+
                 logger.Info("Watched folder '{0}' was renamed to '{1}'", e.OldFullPath, e.FullPath);
+            }
+            else {
+                return;
             }
 
             // Loop through the renamed files list and process
@@ -798,13 +809,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 renamedFile.Commit();
                 renamed++;
             }
-
+            
             logger.Info("Watcher updated {0} local media records that were affected by a rename event.", renamed);
-        }
-
-        private void OnFileChanged(object source, FileSystemEventArgs e) {
-            // Specify what is done when a file is changed, created, or deleted.
-            logger.Info("File: " + e.FullPath + " " + e.ChangeType);
         }
 
         // Grabs the files from the DBImportPath and add them to the queue for use
