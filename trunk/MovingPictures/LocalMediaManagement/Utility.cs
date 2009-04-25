@@ -72,7 +72,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
 
-                logger.Error("Error while retrieving files/directories for: " + directory.FullName, e);
+                logger.Debug("Error while retrieving files/directories for: {0} {1}", directory.FullName, e);
             }
 
             foreach (DirectoryInfo subdirectory in subdirectories) {
@@ -80,12 +80,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     if ((subdirectory.Attributes & FileAttributes.System) == 0)
                         fileList.AddRange(GetFilesRecursive(subdirectory));
                     else
-                        logger.Debug("Rejecting directory " + subdirectory.FullName + " because it is flagged as a System folder.");
+                        logger.Debug("Rejecting directory {0} because it is flagged as a System folder.", subdirectory.FullName);
                 }
                 catch (Exception e) {
                     if (e.GetType() == typeof(ThreadAbortException))
                         throw e;
-                    logger.Error("Error during attribute check for: " + subdirectory.FullName, e);
+
+                    logger.Debug("Error during attribute check for: {0} {1}", subdirectory.FullName, e);
                 }
             }
 
