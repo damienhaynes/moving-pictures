@@ -384,14 +384,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static bool isFolderAmbiguous(string name) {
+        public static bool isKnownSubFolder(string name) {
             string[] folders = new string[] { 
                 "video_ts", "hvdvd_ts", "adv_obj", "bdmv", "vcd", "cdda", "ext", "cdi",
                 "stream", "playlist", "clipinf", "backup", "mpegav"
             };
 
-            // Name is too short or is marked as being multi-part
-            if (name.Length == 1 || isFolderMultipart(name))
+            // Name is marked as being multi-part
+            if (isFolderMultipart(name))
                 return true;
 
             // Ignore specific names
@@ -541,7 +541,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns>the base directory for the movie files</returns>
         public static DirectoryInfo GetMovieBaseDirectory(DirectoryInfo directory) {
             DirectoryInfo dirLevel = directory;
-            while (isFolderAmbiguous(dirLevel.Name) && dirLevel.Parent != null)
+            while (isKnownSubFolder(dirLevel.Name) && dirLevel.Parent != null)
                 dirLevel = dirLevel.Parent;
 
             return dirLevel;
