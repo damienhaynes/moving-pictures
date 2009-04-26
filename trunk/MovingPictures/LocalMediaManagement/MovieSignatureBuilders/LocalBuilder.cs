@@ -25,24 +25,21 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
 
             DirectoryInfo dir = new DirectoryInfo(signature.Path);
             string fullPath = signature.LocalMedia[0].FullPath; 
-            bool preferFolder = MovingPicturesCore.Settings.PreferFolderName;
-            int filecount = signature.LocalMedia.Count;
+            int fileCount = signature.LocalMedia.Count;
+            string source = string.Empty;
 
-            string source;
-            int year;
-
-            if ((Utility.isFolderDedicated(dir, filecount) && (preferFolder || (filecount > 1))) || signature.LocalMedia[0].IsVideoDisc) {
+            if (Utility.isFolderDedicated(dir, fileCount) && (MovingPicturesCore.Settings.PreferFolderName || fileCount > 1) && signature.Folder.Length > 1 || signature.LocalMedia[0].IsVideoDisc) {
                 
                 // Use foldername
                 source = signature.Folder;
-      
+                
                 // If the foldername is a volume use the media label                
                 if (Utility.IsDriveRoot(source))
                     source = signature.LocalMedia[0].MediaLabel;
-            }
-            else {
+
+            } else {
                 // Use filename
-                if (filecount > 1)
+                if (fileCount > 1)
                     source = Utility.GetFileNameWithoutExtensionAndStackMarkers(signature.File);
                 else
                     source = Path.GetFileNameWithoutExtension(signature.File);
@@ -56,6 +53,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             source = removeNoise(source);
 
             // Phase #3: Year detection
+            int year;
             signature.Title = extractYearFromTitle(source, out year);
             signature.Year = year;
 

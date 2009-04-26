@@ -225,8 +225,8 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void isFolderDedicatedTest() {
-            DirectoryInfo folder = null; // TODO: Initialize to an appropriate value
-            int expectedCount = 0; // TODO: Initialize to an appropriate value
+            //DirectoryInfo folder = null; // TODO: Initialize to an appropriate value
+            //int expectedCount = 0; // TODO: Initialize to an appropriate value
             bool expected = false; // TODO: Initialize to an appropriate value
             bool actual = false;
             //actual = Utility.isFolderDedicated(folder, expectedCount);
@@ -235,14 +235,14 @@ namespace MovingPicturesUnitTest
         }
 
         /// <summary>
-        ///A test for isFolderAmbiguous
+        ///A test for isKnownSubFolder
         ///</summary>
         [TestMethod()]
-        public void isFolderAmbiguousTest() {
+        public void isKnownSubFolderTest() {
             string name = "video_ts"; // TODO: Initialize to an appropriate value
             bool expected = true; // TODO: Initialize to an appropriate value
             bool actual;
-            actual = Utility.isFolderAmbiguous(name);
+            actual = Utility.isKnownSubFolder(name);
             Assert.AreEqual(expected, actual);
         }
 
@@ -299,7 +299,7 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void GetVideoFileCountTest() {
-            DirectoryInfo folder = null; // TODO: Initialize to an appropriate value
+            //DirectoryInfo folder = null; // TODO: Initialize to an appropriate value
             int expected = 0; // TODO: Initialize to an appropriate value
             int actual = 0;
             //actual = Utility.GetVideoFileCount(folder);
@@ -336,7 +336,7 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void GetMovieBaseDirectoryTest() {
-            DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
+            //DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
             DirectoryInfo expected = null; // TODO: Initialize to an appropriate value
             DirectoryInfo actual = null;
             //actual = Utility.GetMovieBaseDirectory(directory);
@@ -415,7 +415,7 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void GetFilesRecursiveTest() {
-            DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
+            //DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
             List<FileInfo> expected = null; // TODO: Initialize to an appropriate value
             List<FileInfo> actual = null;
             //actual = Utility.GetFilesRecursive(directory);
@@ -428,7 +428,7 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void GetVideoFilesRecursiveTest() {
-            DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
+            //DirectoryInfo directory = null; // TODO: Initialize to an appropriate value
             List<FileInfo> expected = null; // TODO: Initialize to an appropriate value
             List<FileInfo> actual = null;
             //actual = Utility.GetVideoFilesRecursive(directory);
