@@ -377,8 +377,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 "stream", "playlist", "clipinf", "backup", "mpegav"
             };
 
-            // Name is too short or is marked as being multi-part
-            if (name.Length == 1 || isFolderMultipart(name))
+            // Name is matched as being multi-part
+            if (isFolderMultipart(name))
                 return true;
 
             // Ignore specific names
