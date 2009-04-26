@@ -1,5 +1,5 @@
 #summary Primary source of information for all things involving software development for the Moving Pictures project.
-#labels Phase-Implementation,Featured
+#labels Phase-Implementation
 
 = Introduction =
 These wiki pages are intended to get you up to speed on how to work with the Moving Pictures source code and how to work within our development process. These documents are not complete (they will probably always be a work in progress), and they are not gospel. They _are_ a good set of guidelines on how we do things around here though. For development with a group of people to go smoothly, everyone needs to be on the same page, and that is the purpose of this guide.
