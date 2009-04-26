@@ -68,5 +68,33 @@ namespace Cornerstone.Database.CustomTypes {
 
             return prettyStr.ToString();
         }
+
+        public override bool Equals(System.Object obj) {
+            if (obj == null) {
+                return false;
+            }
+
+            StringList p = obj as StringList;
+            if ((System.Object)p == null) {
+                return false;
+            }
+
+            return p.ToString() == ToString();
+        }
+
+        public bool Equals(StringList p) {
+            if ((object)p == null) {
+                return false;
+            }
+            else {
+                return p.ToString() == ToString();
+            }
+        }
+
+        public override int GetHashCode() {
+            return ToString().GetHashCode();
+        }
+
+
     }
 }

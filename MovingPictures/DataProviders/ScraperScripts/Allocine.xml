@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874930</id>
-    <version major="1" minor="1" point="1"/>
-    <published month="2" day="15" year="2009"/>
+    <version major="1" minor="2" point="0"/>
+    <published month="4" day="24" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -56,7 +56,6 @@
         <set name="movie[${count}].title" value="${title:striptags}"/>
         <set name="movie[${count}].alternate_titles" value="|${aka:striptags}|"/>
         <set name="movie[${count}].year" value="${curr_details[4]:htmldecode}"/>
-        <set name="movie[${count}].details_url" value="${site}film/fichefilm_gen_cfilm=${curr_details[0]}.html"/>
         <set name="movie[${count}].site_id" value="${curr_details[0]}"/>
         <subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
       </loop>
@@ -64,80 +63,83 @@
   </action>
 
   <action name="get_details">
-    <!-- Variables -->
-    <set name="site" value="http://www.allocine.fr/" />
+    
+    <if test="${movie.site_id}!=">
 
-    <!-- Regular Expressions -->
-    <set name="rx_details">
-      <![CDATA[
+      <!-- Variables -->
+      <set name="site" value="http://www.allocine.fr/" />
+
+      <!-- Regular Expressions -->
+      <set name="rx_details">
+        <![CDATA[
         <table[^>]+>.+?<h4>Genre.+?</table> 
       ]]>
-    </set>
+      </set>
 
-    <set name="rx_title">
-      <![CDATA[
+      <set name="rx_title">
+        <![CDATA[
         <title>(.+?)(?: - Allocine.fr)?(?: - AlloCiné)?</title>
         ]]>
-    </set>
+      </set>
 
-    <set name="rx_plot">
-      <![CDATA[
+      <set name="rx_plot">
+        <![CDATA[
       Synopsis</h2>.+?<h4>(.+?)</h4>
       ]]>
-    </set>
+      </set>
 
-    <set name="rx_year">
-      <![CDATA[
+      <set name="rx_year">
+        <![CDATA[
       <h4>Date de sortie\s:\s<b>[^<]+?(\d{4})\s*?</
       ]]>
-    </set>
+      </set>
 
-    <set name="rx_director_block">
-      <![CDATA[
+      <set name="rx_director_block">
+        <![CDATA[
       <h3[^>]+>Réalisé par <a[^>]+>([^<]+)</a>
       ]]>
-    </set>
+      </set>
 
-    <set name="rx_actor_block">
-      <![CDATA[
+      <set name="rx_actor_block">
+        <![CDATA[
       <h3[^>]+>Avec(.+?)</h3>
       ]]>
-    </set>
+      </set>
 
-    
-    <set name="rx_get_person_from_anchor_text">
-      <![CDATA[
+
+      <set name="rx_get_person_from_anchor_text">
+        <![CDATA[
       <a[^>]+personne[^>]+>\s*?([^<]+)\s*?</a>
       ]]>
-    </set>
+      </set>
 
-    <set name="rx_genre_block">
-      <![CDATA[
+      <set name="rx_genre_block">
+        <![CDATA[
       <h3[^>]+>Genre(.+?)(.+?)</h3>
       ]]>
-    </set>
+      </set>
 
-    <set name="rx_get_genre_from_anchor_text">
-      <![CDATA[
+      <set name="rx_get_genre_from_anchor_text">
+        <![CDATA[
       <a[^>]+genre[^>]+>\s*?([^<]+)\s*?</a>
       ]]>
-    </set>
+      </set>
 
-    <set name="rx_runtime">
-      <![CDATA[
+      <set name="rx_runtime">
+        <![CDATA[
       <h3[^>]+>Dur.e\s:\s(\d+)h(?:\s(\d+)min.*?</h3>)?
       ]]>
-    </set>    
+      </set>
 
-    <set name="rx_score">
-      <![CDATA[
+      <set name="rx_score">
+        <![CDATA[
       Spectateurs</a></h5>.+?class="etoile_(\d)
       ]]>
-    </set>
+      </set>      
 
-    <set name="success" value="false"/>
-    <if test="${movie.site_id}!=">
-      <retrieve name="details_page" url="${site}film/fichefilm_gen_cfilm=${movie.site_id}.html"/>
+      <set name="movie.details_url" value="${site}film/fichefilm_gen_cfilm=${movie.site_id}.html"/>
+
+      <retrieve name="details_page" url="${movie.details_url}"/>
 
       <!-- Title -->
       <parse name="title" input="${details_page}" regex="${rx_title}"/>
@@ -187,8 +189,7 @@
       <parse name="score" input="${details_page}" regex="${rx_score}"/>
       <multiply name="score" value1="${score[0][0]}" value2="25" />
       <divide name="movie.score" value1="${score}" value2="10" />
-
-      <set name="success" value="true"/>
+      
     </if>
     
   </action>

@@ -452,8 +452,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 // if the user specified a specific source, try to update, and if failed
                 // send to the importer
                 if (selectedSource != null) {
+                    
+                    // make existing values overwritable
+                    currItem.ProtectExistingValuesFromCopy(false); 
+                    
                     UpdateResults result =  selectedSource.Provider.Update(currItem);
                     if (result == UpdateResults.FAILED_NEED_ID) {
+                        currItem.ProtectExistingValuesFromCopy(false);
                         MovingPicturesCore.Importer.Update(currItem, selectedSource);
                         sentToImporter++;
                     }
@@ -461,6 +466,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 // just use the regular update logic
                 else {
+                    // make existing values overwritable
+                    currItem.ProtectExistingValuesFromCopy(false); 
                     MovingPicturesCore.DataProviderManager.Update(currItem);
                 }
 

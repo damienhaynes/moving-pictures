@@ -156,6 +156,22 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private bool _automaticallyImportInsertedDVDs;
+
+        [CornerstoneSetting(
+            Name = "Dataprovider Request Limit",
+            Description = "The maximum of dataproviders used to update/search movie details in order of priority. Searches will stop after the first dataprovider that returns relevant results, but updating details will stop only after this limit has been reached to allow it to fill missing fields using different providers. Set this to 0 to have it try ALL enabled dataproviders (slower).",
+            Groups = "|Movie Importer|Matching and Importing|",
+            Identifier = "importer_dataprovider_request_limit",
+            Default = 3)]
+        public int DataProviderRequestLimit {
+            get { return _dataProviderRequestLimit; }
+            set {
+                _dataProviderRequestLimit = value;
+                OnSettingChanged("importer_dataprovider_request_limit");
+            }
+        }
+        private int _dataProviderRequestLimit;
+
         #endregion
 
         #region Preprocessing
