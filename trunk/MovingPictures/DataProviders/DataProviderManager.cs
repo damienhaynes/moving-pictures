@@ -392,15 +392,24 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             lock (detailSources) sources = new List<DBSourceInfo>(detailSources);
 
             List<DBMovieInfo> results = new List<DBMovieInfo>();
+            int count = 0;
             // Try each datasource (ordered by their priority) to get results
             foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.DETAILS))
                     continue;
 
-                logger.Debug("Search: Title={0}, Provider={1}, Version={2}", movieSignature.Title, currSource.Provider.Name, currSource.Provider.Version);
-                results = currSource.Provider.Get(movieSignature);
-                // if we have results break the loop
-                if (results.Count > 0) break;
+                count++;
+                // If we have not reached our dataprovider request limit make a search
+                if (count <= MovingPicturesCore.Settings.DataProviderRequestLimit || MovingPicturesCore.Settings.DataProviderRequestLimit == 0) {
+                    logger.Debug("Search: Title={0}, Provider={1}, Version={2}", movieSignature.Title, currSource.Provider.Name, currSource.Provider.Version);
+                    results = currSource.Provider.Get(movieSignature);
+                    // if we have results break the loop
+                    if (results.Count > 0) break;
+                }
+                else {
+                    // limit has been reached so stop
+                    break;
+                }
             }
 
             // return results;
@@ -411,13 +420,22 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             List<DBSourceInfo> sources;
             lock (detailSources) sources = new List<DBSourceInfo>(detailSources);
 
+            int count = 0;
             foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.DETAILS))
                     continue;
 
-                UpdateResults result = currSource.Provider.Update(movie);
-                if (result == UpdateResults.SUCCESS)
+                count++;
+
+                if (count <= MovingPicturesCore.Settings.DataProviderRequestLimit || MovingPicturesCore.Settings.DataProviderRequestLimit == 0) {
+                    UpdateResults result = currSource.Provider.Update(movie);
+                    logger.Debug("Update: Title={0}, Provider={1}, Version={2}, Result={3}", movie.Title, currSource.Provider.Name, currSource.Provider.Version, result.ToString());
+                }
+                else {
+                    // stop update
                     break;
+                }
+
             }
         }
 
@@ -447,7 +465,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 bool success = currSource.Provider.GetBackdrop(movie);
                 if (success) return true;
             }
-            
 
             return false;
         }

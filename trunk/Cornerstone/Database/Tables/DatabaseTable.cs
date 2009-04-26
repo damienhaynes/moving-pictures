@@ -79,6 +79,13 @@ namespace Cornerstone.Database.Tables {
             commitNeeded = false;
         }
 
+
+        // This method protects all non-default values from getting overwritten by the next call to CopyUpdatableValues
+        // todo: overload this method to specify fields that should be protected
+        public void ProtectExistingValuesFromCopy(bool protect) {
+            protectExistingValuesFromCopy = protect;
+        } private bool protectExistingValuesFromCopy = true;
+
         // Updates the current object with all fields in the newData object that are
         // not set to default.
         public void CopyUpdatableValues(DatabaseTable newData) {
@@ -89,11 +96,12 @@ namespace Cornerstone.Database.Tables {
                 object newValue = currField.GetValue(newData);
                 object oldValue = currField.GetValue(this);
                 if (currField.AutoUpdate) {
+
                     if (newValue == null) {
                         currField.SetValue(this, newValue);
                         continue;
                     }
-                    
+
                     // if the updated value is just the default, don't update. 
                     // something is better than nothing
                     if (newValue.Equals(currField.Default))
@@ -103,13 +111,19 @@ namespace Cornerstone.Database.Tables {
                     if (newValue.GetType() == typeof(string) && ((string)newValue).Trim() == ((string)oldValue).Trim())
                         continue;
 
-                    // finally if the value just hasn't changed, dont update
+                    // if the value just hasn't changed, dont update
                     if (newValue.Equals(oldValue))
+                        continue;
+
+                    // finally check if we are protecting values from getting overwritten
+                    if (protectExistingValuesFromCopy && !oldValue.Equals(currField.Default))
                         continue;
 
                     currField.SetValue(this, newValue);
                 }
             }
+            // reset the value protection to true again
+            protectExistingValuesFromCopy = true;
         }
 
         // initialize all values of the given object. essentially makes the object a new refernece

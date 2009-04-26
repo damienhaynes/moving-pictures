@@ -117,7 +117,7 @@ namespace Cornerstone.Database {
                             return int.Parse(attribute.Default);
                     case DBDataType.REAL:
                         if (attribute.Default == "")
-                            return 0.0;
+                            return (float)0.0;
                         else
                             return float.Parse(attribute.Default);
                     case DBDataType.BOOL:

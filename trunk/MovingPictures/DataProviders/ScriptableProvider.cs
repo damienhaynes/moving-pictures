@@ -118,9 +118,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return null;
 
             List<DBMovieInfo> rtn = new List<DBMovieInfo>();
-
-            Dictionary<string, DBMovieInfo> addedMovies = new Dictionary<string, DBMovieInfo>();
-
             Dictionary<string, string> paramList = new Dictionary<string, string>();
             Dictionary<string, string> results;
 
@@ -145,32 +142,40 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
 
             int count = 0;
-            while (results.ContainsKey("movie[" + count + "].title")) {
+            // The movie result is only valid if the script supplies a unique site
+            while (results.ContainsKey("movie[" + count + "].site_id")) {
+                string siteId;
                 string prefix = "movie[" + count + "].";
-                DBMovieInfo newMovie = new DBMovieInfo();
+                count++;
+
+                // if the result does not yield a site id it's not valid so skip it
+                if (!results.TryGetValue(prefix + "site_id", out siteId))
+                    continue;
+
+                // if this movie was already added skip it
+                if (rtn.Exists(delegate(DBMovieInfo item) { return item.GetSourceMovieInfo(ScriptID).Identifier == siteId; }))
+                    continue;
+
+                // if this movie does not have a valid title, don't bother
+                if (!results.ContainsKey(prefix + "title"))
+                    continue;
                 
+                // We passed all checks so create a new movie object
+                DBMovieInfo newMovie = new DBMovieInfo();
+
+                // store the site id in the new movie object
+                newMovie.GetSourceMovieInfo(ScriptID).Identifier = siteId;
+
+                // Try to store all other fields in the new movie object
                 foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo))) {
                     string value;
-                    bool success = results.TryGetValue(prefix + currField.FieldName, out value);
-
-                    if (success)
+                    if (results.TryGetValue(prefix + currField.FieldName, out value))
                         currField.SetValue(newMovie, value.Trim());
                 }
 
-                // try to store the site id
-                string siteId;
-                bool success2 = results.TryGetValue(prefix + "site_id", out siteId);
-                if (success2) newMovie.GetSourceMovieInfo(ScriptID).Identifier = siteId;
-
-                count++;
-
-                // check if the movie has already been added, if not, add it
-                if (!addedMovies.ContainsKey(newMovie.DetailsURL)) {
-                    rtn.Add(newMovie);
-                    addedMovies[newMovie.DetailsURL] = newMovie;
-                }
+                // add the movie to our movie results list
+                rtn.Add(newMovie);              
             }
-
 
             return rtn;
         }
@@ -181,13 +186,16 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             Dictionary<string, string> paramList = new Dictionary<string, string>();
             Dictionary<string, string> results;
+            bool hasSiteId = false;
 
             // try to load the id for the movie for this script
+            // if we have no site id still continue as we might still
+            // be able to grab details using another identifier such as imdb_id
             DBSourceMovieInfo idObj = movie.GetSourceMovieInfo(ScriptID);
-            if (idObj != null && idObj.Identifier != null)
+            if (idObj != null && idObj.Identifier != null) {
                 paramList["movie.site_id"] = idObj.Identifier;
-            else
-                return UpdateResults.FAILED_NEED_ID;
+                hasSiteId = true;
+            }
 
             // load params
             foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo))) {
@@ -200,8 +208,18 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (results == null) {
                 logger.Error(Name + " scraper script failed to execute \"get_details\" node.");
                 return UpdateResults.FAILED;
+            }            
+            
+            if (!hasSiteId) {
+                // if we started out without a site id
+                // try to get it from the details response
+                string siteId;
+                if (results.TryGetValue("movie.site_id", out siteId))
+                    movie.GetSourceMovieInfo(ScriptID).Identifier = siteId;
+                else
+                    // still no site id, so we are returning
+                    return UpdateResults.FAILED_NEED_ID;
             }
-
 
             // get our new movie details
             DBMovieInfo newMovie = new DBMovieInfo();
@@ -215,6 +233,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // and update as neccisary
             movie.CopyUpdatableValues(newMovie);
+
             return UpdateResults.SUCCESS;
         }
 
