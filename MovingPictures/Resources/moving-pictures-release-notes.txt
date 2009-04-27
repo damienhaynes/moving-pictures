@@ -1,4 +1,4 @@
-Moving Pictures 0.7.2
+Moving Pictures 0.7.3
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -26,6 +26,34 @@ even if their favorite skin has not yet added support.
 
 
 Change Log
+================================================================================
+0.7.3
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #428:     Multiple movies located in a folder having only one character in 
+                the name will no longer use the folder name for importation.
+
+Issue #427:     Importer will now properly handle movies contained in the root of 
+                a share that has a one character name.
+
+Issue #419:     Added advanced setting to turn off the DeviceManager which for at 
+                least one user was causing sound distortion during playback.
+
+Issue #385:     Fixed a rarely occuring bug causing a DVD to be misatched to an
+                existing DVD in the database.
+--------------------------------------------------------------------------------
+Scraper Script Updates
+--------------------------------------------------------------------------------
+Issue #406:     OFDb scraper script will now properly pull results and cover art 
+                will be retrieved (previously available on the forum).
+
+Issue #384:     Updated to new version of russian scraper (previously available on
+                the forum).
+
+**********:     Updated scraper script for mymovies.it (previously available on the
+                forum).
+
 ================================================================================
 0.7.2
 --------------------------------------------------------------------------------
