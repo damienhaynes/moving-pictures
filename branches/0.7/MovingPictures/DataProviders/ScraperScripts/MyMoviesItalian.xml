@@ -3,7 +3,7 @@
     <!-- These details are for display purposes only. -->
     <name>mymovies.it</name>
     <author>Ricciolo</author>
-    <description>test</description>
+    <description>Pulls details from mymovies.it.</description>
 
     <!-- 
     These two fields uniquely identify the script. The ID should never 
@@ -14,15 +14,15 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="0" minor="1" point="3"/>
-    <published month="12" day="18" year="2008"/>
+    <version major="0" minor="2" point="3"/>
+    <published month="04" day="27" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
     -->
-    <type>MovieDetailsFetcher</type>
-    <language>it-IT</language>
+    <type>MovieDetailsFetcher|MovieCoverFetcher</type>
+    <language>it</language>
 
     <!-- If set to true, additional logging will be displayed during script execution. -->
     <debug>false</debug>
@@ -40,7 +40,7 @@
         <parse name="movie_year" input="${curr_details}" regex='\((\d{4})\)(?!\()' />
 
         <set name="movie[${count}].site_id" value="${curr_details[0]:htmldecode}"/>
-        <replace name='movie[${count}].title' input='${curr_details[1]:htmldecode}' pattern='(&lt;[^&gt;]+?&gt;)|(\s*\((\d{4})\)(?!\())' with='' />
+        <replace name='movie[${count}].title' input='${curr_details[1]:htmldecode}' pattern='(&lt;[^&gt;]+?&gt;)|(\s*\((\d{4})\)(?!\())\s\|\sMYmovies' with='' />
         <set name="movie[${count}].year" value="${movie_year[0][0]}" />
         <set name="movie[${count}].details_url" value='http://www.mymovies.it/dizionario/recensione.asp?id=${curr_details[0]}'/>
 
@@ -144,12 +144,26 @@
 
     <retrieve name="details_page" url="${movie.details_url}"/>
 
+    <set name="it_summary">
+      <![CDATA[
+      <p style="text-align:justify;">.*?</p>
+      ]]>
+    </set>
+
+    <set name="strippat">
+      <![CDATA[
+      <p style="text-align:justify;">
+      ]]>
+    </set>
+
     <if test='${movie.movie.actors}='>
       <!-- Actors -->
       <parse name='actors' input='${details_page}' regex='&lt;a\s+href="http://www.mymovies.it/biografia/?[^"]+"&gt;(.+?)(?=(&lt;/a&gt;))'/>
       <set name='movie.actors' value=''/>
       <loop name='currActor' on='actors'>
-        <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
+        <if test='${currActor[0]:htmldecode}!=${actors[0][0]:htmldecode}'>
+			<set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
+		</if>
       </loop>
       <set name="movie.directors" value="|${actors[0][0]:htmldecode}|" />
     </if>
@@ -168,7 +182,7 @@
 
     <if test='${movie.score}='>
       <!-- Score -->
-      <parse name="score" input="${details_page}" regex='&lt;i&gt;mymonetro&lt;/i&gt;\s+(.+?)(?=\s*stelle)'/>
+      <parse name="score" input="${details_page}" regex='valutazione media tra critica e pubblico:\s*stelle'/>
       <!--<set name='movie.score' value='${score[0][0]:htmldecode}'/>-->
       <replace name='movie.score' input='${score[0][0]:htmldecode}' pattern=',' with='.' />
       <multiply name="movie.score" value1="${movie.score}" value2="10" resultType="FLOAT" />
@@ -176,9 +190,30 @@
     </if>
 
     <!-- Plot Summary -->
-    <parse name='summary' input ='${details_page}' regex='&lt;div\s+id="recensione"&gt;\s*&lt;p[^&gt;]*&gt;(.+)(?=&lt;/p&gt;\s*&lt;/div&gt;)'/>
-    <replace name='movie.summary' input='${summary[0][0]:htmldecode}' pattern='&lt;[^&gt;]+?&gt;' with='' />
+    <parse name='summaryit' input ='${details_page}' regex='${it_summary}'/>
+    <replace name='movie.summary' input='${summaryit[0]:striptags}' pattern='${strippat}' with='' />
 
+  </action>
+
+  <!-- Covert Art currently only works with the native site id -->
+  <action name="get_cover_art">
+    
+      <!-- Retrieve details -->
+      <retrieve name="details_page" url="http://www.mymovies.it/poster/0/?id=${movie.site_id}"/>
+
+      <!-- Regular Expressions-->
+      <set name="rx_cover">
+        <![CDATA[
+        <div id="poster">.+?<img[^>]+src=\"([^\"]+?)"
+        ]]>
+      </set>
+
+      <!-- Get cover url from details page -->
+      <parse name="cover_url" input="${details_page}" regex="${rx_cover}"/>
+
+      <!-- set cover -->
+     <set name="cover_art[0].url" value="${cover_url[0][0]}" />
+    
   </action>
 
 </ScriptableScraper>

@@ -125,9 +125,9 @@
             this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(250, 148);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(91, 13);
+            this.label4.Size = new System.Drawing.Size(91, 26);
             this.label4.TabIndex = 16;
-            this.label4.Text = "Armand Pondman";
+            this.label4.Text = "Armand Pondman\r\nTravis Collins";
             this.toolTip.SetToolTip(this.label4, "a.k.a armandp");
             // 
             // label2
@@ -145,7 +145,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(10, 182);
+            this.label13.Location = new System.Drawing.Point(12, 201);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(141, 13);
             this.label13.TabIndex = 15;
@@ -197,7 +197,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label6.Location = new System.Drawing.Point(250, 182);
+            this.label6.Location = new System.Drawing.Point(252, 201);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(137, 13);
             this.label6.TabIndex = 8;
@@ -209,9 +209,9 @@
             this.label5.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(10, 148);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(98, 13);
+            this.label5.Size = new System.Drawing.Size(104, 13);
             this.label5.TabIndex = 18;
-            this.label5.Text = "Lead Developer:";
+            this.label5.Text = "Lead Developers:";
             // 
             // label3
             // 
@@ -239,7 +239,7 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Location = new System.Drawing.Point(10, 170);
+            this.groupBox2.Location = new System.Drawing.Point(12, 183);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(9);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(508, 3);
@@ -287,28 +287,28 @@
             this.label15.ForeColor = System.Drawing.SystemColors.ControlDark;
             this.label15.Location = new System.Drawing.Point(347, 148);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(57, 13);
+            this.label15.Size = new System.Drawing.Size(103, 26);
             this.label15.TabIndex = 24;
-            this.label15.Text = "(armandp)";
+            this.label15.Text = "(armandp)\r\n(travistx, ZealotSix)";
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(249, 195);
+            this.label16.Location = new System.Drawing.Point(251, 214);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(71, 52);
+            this.label16.Size = new System.Drawing.Size(71, 39);
             this.label16.TabIndex = 25;
-            this.label16.Text = "Travis Collins\r\nGrant Shipley\r\nMartin Guillon\r\ncyberfix";
+            this.label16.Text = "Grant Shipley\r\nMartin Guillon\r\ncyberfix";
             // 
             // label17
             // 
             this.label17.AutoSize = true;
             this.label17.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label17.Location = new System.Drawing.Point(324, 195);
+            this.label17.Location = new System.Drawing.Point(326, 214);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(103, 26);
+            this.label17.Size = new System.Drawing.Size(54, 13);
             this.label17.TabIndex = 26;
-            this.label17.Text = "(travistx, ZealotSix)\r\n(gshipley)";
+            this.label17.Text = "(gshipley)";
             // 
             // label18
             // 

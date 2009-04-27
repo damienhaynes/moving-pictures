@@ -8,6 +8,7 @@ using NLog;
 using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using System.Windows.Forms;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
@@ -287,8 +288,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         public static void StartDiskWatcher() {
+            bool enabled = (bool)MovingPicturesCore.SettingsManager["disk_monitor_enabled"].Value;
+            
             lock (watcherThread) {
-                if (!watcherThread.IsAlive) {
+                if (enabled && !watcherThread.IsAlive) {
                     logger.Info("Starting Disk Watcher");
                     watcherThread = new Thread(new ThreadStart(WatchDisks));
                     watcherThread.Name = "DeviceManager.WatchDisks";
@@ -353,7 +356,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         }
                     }
                 }
-
                 Thread.Sleep(5000);
             }
         }

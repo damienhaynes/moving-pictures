@@ -115,6 +115,11 @@
         <default>true</default>
         <description>Enables importation of media from all available optical drives. This can include CDs, DVDs, HD-DVDs, and Bluray disks. This also applies to "loose video files" on a data CD/DVD.</description>
       </setting>
+
+      <setting id="disk_monitor_enabled" name="Allow Disk Monitor to Watch for Drive Changes" type="BOOL">
+        <default>true</default>
+        <description>If disabled the disk monitor will not notify other aspects of the plug-in about disk events such as DVD insertions and newly connected network drives. Do not disable unless you are experiencing problems with the Disk Monitor.</description>
+      </setting>
       
       <setting id="importer_gui_enabled" name="Enable Importer While In GUI" type="BOOL">
         <default>true</default>
