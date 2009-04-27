@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="0" minor="2" point="2"/>
-    <published month="04" day="18" year="2009"/>
+    <version major="0" minor="3" point="0"/>
+    <published month="04" day="27" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -42,7 +42,6 @@
         <set name="movie[${count}].site_id" value="${curr_details[0]:htmldecode}"/>
         <replace name='movie[${count}].title' input='${curr_details[1]:htmldecode}' pattern='(&lt;[^&gt;]+?&gt;)|(\s*\((\d{4})\)(?!\())\s\|\sMYmovies' with='' />
         <set name="movie[${count}].year" value="${movie_year[0][0]}" />
-        <set name="movie[${count}].details_url" value='http://www.mymovies.it/dizionario/recensione.asp?id=${curr_details[0]}'/>
 
         <subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
       </loop>
@@ -52,145 +51,68 @@
   </action>
 
   <action name="get_details">
-    <retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.title:safe}+(${movie.year:safe})" />
-    <parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
 
-    <set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
+    <if test="${movie.site_id}!=">
 
-    <if test='${movie.imdb_id}!='>
-      <retrieve name="details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+      <set name="movie.details_url" value='http://www.mymovies.it/dizionario/recensione.asp?id=${movie.site_id}'/>
+      
+      <retrieve name="details_page" url="${movie.details_url}"/>
 
-      <!-- Directors -->
-      <parse name="directors_block" input="${details_page}" regex='&lt;h5&gt;Director[s]?:&lt;/h5&gt;.*?&lt;/div&gt;'/>
-      <parse name="directors" input="${directors_block}" regex='&lt;a href="/name/nm\d{7}/"&gt;([^&lt;]+)&lt;/a&gt;'/>
-      <set name='movie.directors' value=''/>
-      <loop name='currDirector' on='directors'>
-        <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
-      </loop>
-
-      <!-- Writers -->
-      <parse name="writers_block" input="${details_page}" regex='&lt;div class="info"&gt;\s+&lt;h5&gt;Writer[s]?(?: &lt;a href="[^"]+"&gt;\([^)]+\)&lt;/a&gt;)?:&lt;/h5&gt;.+?&lt;/div&gt;'/>
-      <parse name='writers' input="${writers_block}" regex='&lt;a href="/name/nm\d+/"&gt;([^&lt;]+)&lt;/a&gt;'/>
-      <set name='movie.writers' value=''/>
-      <loop name='currWriter' on='writers'>
-        <set name='movie.writers' value='${movie.writers}|${currWriter[0]:htmldecode}'/>
-      </loop>
-
-      <!-- Actors -->
-      <parse name="actors_block" input="${details_page}" regex='&lt;div class="headerinline"&gt;&lt;h3&gt;Cast&lt;/h3&gt;.+?&lt;h3&gt;Additional Details&lt;/h3&gt;'/>
-      <parse name='actors' input='"${actors_block}' regex='&lt;td class="nm"&gt;&lt;a href="/name/nm\d{7}/"&gt;(.+?)&lt;/a&gt;'/>
-      <set name='movie.actors' value=''/>
-      <loop name='currActor' on='actors'>
-        <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
-      </loop>
-
-      <!-- Genres -->
-      <parse name="genres_block" input="${details_page}" regex='&lt;h5&gt;Genre:&lt;/h5&gt;.+?&lt;/div&gt;'/>
-      <parse name='genres' input='"${genres_block}' regex='&lt;a href="/Sections/Genres/[^/]+/"&gt;(.+?)&lt;/a&gt;'/>
-      <set name='movie.genres' value=''/>
-      <loop name='currGenre' on='genres'>
-        <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
-      </loop>
-
-      <!-- Certification -->
-      <parse name="certification" input="${details_page}" regex='&gt;\s+USA:((?:G)|(?:PG)|(?:PG-13)|(?:R)|(?:X)|(?:NC-17))&lt;/a&gt;'/>
-      <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
-
-      <!-- Runtime -->
-      <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+'/>
-      <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
-
-      <!-- Tagline -->
-      <parse name="tagline" input="${details_page}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
-      <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
-
-      <!-- Score -->
-      <parse name="score" input="${details_page}" regex='&lt;div class="meta"&gt;\s+&lt;b&gt;(\d+.\d+)/10&lt;/b&gt; '/>
-      <set name='movie.score' value='${score[0][0]:htmldecode}'/>
-
-      <!-- Popularity -->
-      <parse name="votes" input="${details_page}" regex='"ratings"&gt;([^\s]+) votes&lt;/a&gt;'/>
-      <set name='movie.popularity' value='${votes[0][0]:htmldecode}'/>
-
-      <!-- Language -->
-      <parse name="language" input="${details_page}" regex='&lt;h5&gt;Language:&lt;/h5&gt;\s+&lt;a href="/Sections/Languages/[^/]+/"&gt;\s+([^&lt;]+)&lt;/a&gt;'/>
-      <set name='movie.language' value='${language[0][0]:htmldecode}'/>
-
-      <set name="rx_aka">
+      <set name="it_summary">
         <![CDATA[
-      <tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
-       ]]>
-      </set>
-      <set name="rx_plot">
-        <![CDATA[
-      <p class="plotpar">\s*(.+?)<i>.*?</i>.*?</p>
-      ]]>
-      </set>
-
-      <!-- Plot Summary -->
-      <retrieve name='summary_page' url='http://www.imdb.com/title/${movie.imdb_id}/plotsummary'/>
-      <parse name="summary" input="${summary_page}" regex="${rx_plot}"/>
-      <set name="summary_clean" value="${summary[0][0]:striptags}" />
-      <set name="movie.summary" value="${summary_clean:htmldecode}" />
-
-      <!-- AKA page -->
-      <retrieve name="aka_page" url='http://www.imdb.com/title/${movie.imdb_id}/releaseinfo'/>
-      <parse name="akas" input="${aka_page}" regex="${rx_aka}"/>
-      <set name="movie.alternate_titles" value=""/>
-      <loop name="currAka" on="akas" limit="50">
-        <set name="movie.alternate_titles" value="${movie.alternate_titles}|${currAka[0]:htmldecode}"/>
-      </loop>
-    </if>
-
-    <retrieve name="details_page" url="${movie.details_url}"/>
-
-    <set name="it_summary">
-      <![CDATA[
       <p style="text-align:justify;">.*?</p>
       ]]>
-    </set>
+      </set>
 
-    <set name="strippat">
-      <![CDATA[
+      <set name="strippat">
+        <![CDATA[
       <p style="text-align:justify;">
       ]]>
-    </set>
+      </set>
 
-    <if test='${movie.movie.actors}='>
-      <!-- Actors -->
-      <parse name='actors' input='${details_page}' regex='&lt;a\s+href="http://www.mymovies.it/biografia/?[^"]+"&gt;(.+?)(?=(&lt;/a&gt;))'/>
-      <set name='movie.actors' value=''/>
-      <loop name='currActor' on='actors'>
-        <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
-      </loop>
-      <set name="movie.directors" value="|${actors[0][0]:htmldecode}|" />
+      <if test='${movie.movie.actors}='>
+        <!-- Actors -->
+        <parse name='actors' input='${details_page}' regex='&lt;a\s+href="http://www.mymovies.it/biografia/?[^"]+"&gt;(.+?)(?=(&lt;/a&gt;))'/>
+        <set name='movie.actors' value=''/>
+        <loop name='currActor' on='actors'>
+          <if test="${currActor[0]:htmldecode}!=${actors[0][0]:htmldecode}">
+            <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
+          </if>
+        </loop>
+        <set name="movie.directors" value="|${actors[0][0]:htmldecode}|" />
+      </if>
+
+      <if test='${movie.genres}='>
+        <!-- Genres -->
+        <parse name='genres' input='${details_page}' regex='&lt;a\s+title="Film[^"]+"\s+href="[^"]+"&gt;([^&lt;]+)&lt;/a&gt;'/>
+        <set name='movie.genres' value='|${genres[0][0]:htmldecode}|'/>
+      </if>
+
+      <if test='${movie.runtime}='>
+        <!-- Runtime -->
+        <parse name="runtime" input="${details_page}" regex='durata\s+(\d+)\smin'/>
+        <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
+      </if>
+
+      <if test='${movie.score}='>
+        <!-- Score -->
+        <parse name="score" input="${details_page}" regex='valutazione media tra critica e pubblico:\s*stelle'/>
+        <replace name='movie.score' input='${score[0][0]:htmldecode}' pattern=',' with='.' />
+        <multiply name="movie.score" value1="${movie.score}" value2="10" resultType="FLOAT" />
+        <divide name="movie.score" value1="${movie.score}" value2="5" resultType="INT"/>
+      </if>
+
+      <!-- Plot Summary -->
+      <parse name='summaryit' input ='${details_page}' regex='${it_summary}'/>
+      <replace name='movie.summary' input='${summaryit[0]:striptags}' pattern='${strippat}' with='' />
+      
+      <!-- IMDB id -->
+
+      <retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.title:safe}+(${movie.year:safe})" />
+      <parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
+      <set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
+
     </if>
-
-    <if test='${movie.genres}='>
-      <!-- Genres -->
-      <parse name='genres' input='${details_page}' regex='&lt;a\s+title="Film[^"]+"\s+href="[^"]+"&gt;([^&lt;]+)&lt;/a&gt;'/>
-      <set name='movie.genres' value='|${genres[0][0]:htmldecode}|'/>
-    </if>
-
-    <if test='${movie.runtime}='>
-      <!-- Runtime -->
-      <parse name="runtime" input="${details_page}" regex='durata\s+(\d+)\smin'/>
-      <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
-    </if>
-
-    <if test='${movie.score}='>
-      <!-- Score -->
-      <parse name="score" input="${details_page}" regex='valutazione media tra critica e pubblico:\s*stelle'/>
-      <!--<set name='movie.score' value='${score[0][0]:htmldecode}'/>-->
-      <replace name='movie.score' input='${score[0][0]:htmldecode}' pattern=',' with='.' />
-      <multiply name="movie.score" value1="${movie.score}" value2="10" resultType="FLOAT" />
-      <divide name="movie.score" value1="${movie.score}" value2="5" resultType="INT"/>
-    </if>
-
-    <!-- Plot Summary -->
-    <parse name='summaryit' input ='${details_page}' regex='${it_summary}'/>
-    <replace name='movie.summary' input='${summaryit[0]:striptags}' pattern='${strippat}' with='' />
-
   </action>
 
   <!-- Covert Art currently only works with the native site id -->
