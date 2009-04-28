@@ -449,16 +449,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             else
                 this.AudioCodec = mInfoWrapper.AudioCodec;
 
-            if (mInfoWrapper.Is1080P)
-                this.VideoResolution = "1080p";
-            else if (mInfoWrapper.Is1080I)
-                this.VideoResolution = "1080i";
-            else if (mInfoWrapper.Is720P)
-                this.VideoResolution = "720p";
-            else if (mInfoWrapper.IsHDTV)
-                this.VideoResolution = "HD";
-            else
-                this.VideoResolution = "SD";
+            //if (mInfoWrapper.Is1080P)
+            //    this.VideoResolution = "1080p";
+            //else if (mInfoWrapper.Is1080I)
+            //    this.VideoResolution = "1080i";
+            //else if (mInfoWrapper.Is720P)
+            //    this.VideoResolution = "720p";
+            //else if (mInfoWrapper.IsHDTV)
+            //    this.VideoResolution = "HD";
+            //else
+            //    this.VideoResolution = "SD";
 
 
             // get duration
@@ -496,6 +496,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 try {
                     int intValue;
                     mInfo.Open(file);
+
+                    bool _isInterlaced = mInfo.Get(StreamKind.Video, 0, "ScanType").ToLower().Contains("interlaced");
+                    if ((mInfoWrapper.Width == 1920 || mInfoWrapper.Height == 1080) && !_isInterlaced)
+                        this.VideoResolution = "1080p";
+                    else if ((mInfoWrapper.Width == 1920 || mInfoWrapper.Height == 1080) && _isInterlaced)
+                        this.VideoResolution = "1080i";
+                    else if ((mInfoWrapper.Width == 1280 || mInfoWrapper.Height == 720) && !_isInterlaced)
+                        this.VideoResolution = "720p";
+                    else if (mInfoWrapper.Height >= 720)
+                        this.VideoResolution = "HD";
+                    else
+                        this.VideoResolution = "SD";
 
                     int iAudioStreams = mInfo.Count_Get(StreamKind.Audio);
                     for (int i = 0; i < iAudioStreams - 1; i++) {
