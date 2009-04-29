@@ -8,6 +8,7 @@ using NLog;
 using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using System.Windows.Forms;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
@@ -282,7 +283,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         public static void StartDiskWatcher() {
             lock (watcherThread) {
-                if (!watcherThread.IsAlive) {
+                if (MovingPicturesCore.Settings.DeviceManagerEnabled && !watcherThread.IsAlive) {
                     logger.Info("Starting Disk Watcher");
                     watcherThread = new Thread(new ThreadStart(WatchDisks));
                     watcherThread.Name = "DeviceManager.WatchDisks";
@@ -347,7 +348,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         }
                     }
                 }
-
                 Thread.Sleep(5000);
             }
         }
@@ -495,7 +495,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if ((fsInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
                     return true;
             }
-            catch (Exception e) {
+            catch (Exception) {
                 logger.Warn("Failed check if " + fsInfo.FullName + " is a reparse point");
             }
 

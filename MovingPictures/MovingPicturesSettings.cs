@@ -1021,6 +1021,23 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _versionNumber;
 
+        [CornerstoneSetting(
+            Name = "Allow Disk Monitor to Watch for Drive Changes",
+            Description = "If disabled the disk monitor will not notify other aspects of the plug-in about disk events such as DVD insertions and newly connected network drives. Do not disable unless you are experiencing problems with the Disk Monitor.",
+            Groups = "|Internal|",
+            Identifier = "disk_monitor_enabled",
+            Default = true)]
+        public bool DeviceManagerEnabled
+        {
+            get { return _deviceManagerEnabled; }
+            set
+            {
+                _deviceManagerEnabled = value;
+                OnSettingChanged("disk_monitor_enabled");
+            }
+        }
+        private bool _deviceManagerEnabled;
+
         #endregion
     }
 }
