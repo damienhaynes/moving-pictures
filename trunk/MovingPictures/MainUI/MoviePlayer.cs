@@ -407,7 +407,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         resetPlayer();
                         return;
                     }
-                    catch (ArgumentException e) {
+                    catch (ArgumentException) {
                         // this exception happens when the driveletter is valid but the driveletter is not 
                         // finished mounting yet (at least not known to the system). We only need to catch
                         // this to stay in the loop

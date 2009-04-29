@@ -27,8 +27,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private List<DBLocalMedia> processingFiles;
         private List<DBMovieInfo> processingMovies;
         private DBSourceInfo selectedSource;
-
-        private Image coverThumb;
         
         private delegate void InvokeDelegate();
         private delegate DBMovieInfo DBMovieInfoDelegate();
@@ -222,7 +220,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 coverNumLabel.Text = (CurrentMovie.AlternateCovers.IndexOf(CurrentMovie.CoverFullPath) + 1) +
                                      " / " + CurrentMovie.AlternateCovers.Count;
             }
-            catch (Exception e) {
+            catch (Exception) {
                 coverImage.Image = null;
                 resolutionLabel.Text = "";
                 coverNumLabel.Text = "";
