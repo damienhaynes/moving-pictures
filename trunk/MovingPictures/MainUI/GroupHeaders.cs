@@ -151,23 +151,28 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // if this is not a message from the facade, exit
             if (parent != Browser.Facade && parent != Browser.Facade.ListView) return;
 
-            int newIndex = Browser.Facade.SelectedListItemIndex;
-            int oldIndex = Browser.SelectedIndex;
-            int lastIndex = Browser.Facade.Count - 1;
-            logger.Debug("onGroupHeaderSelected CurrentIndex {0} OldIndex {1}", newIndex, oldIndex);
+            lock (Browser) {
 
-            if (newIndex < oldIndex && !(newIndex == 0 && oldIndex == lastIndex)) {
-                // MOVE UP
-                logger.Debug("Jumping Up");
-                if (newIndex == 0)
-                    Browser.Facade.SelectedListItemIndex = lastIndex;
-                else
-                    Browser.Facade.OnAction(new Action(Action.ActionType.ACTION_MOVE_UP, 0, 0));
-            }
-            else {
-                // MOVE DOWN
-                logger.Debug("Jumping Down");
-                Browser.Facade.OnAction(new Action(Action.ActionType.ACTION_MOVE_DOWN, 0, 0));
+                if (Browser.Facade.SelectedListItem != item) return;
+
+                int newIndex = Browser.Facade.SelectedListItemIndex;
+                int oldIndex = Browser.SelectedIndex;
+                int lastIndex = Browser.Facade.Count - 1;
+                logger.Debug("onGroupHeaderSelected CurrentIndex {0} OldIndex {1}", newIndex, oldIndex);
+
+                if (newIndex < oldIndex && !(newIndex == 0 && oldIndex == lastIndex)) {
+                    // MOVE UP
+                    logger.Debug("Jumping Up");
+                    if (newIndex == 0)
+                        Browser.Facade.SelectedListItemIndex = lastIndex;
+                    else
+                        Browser.Facade.OnAction(new Action(Action.ActionType.ACTION_MOVE_UP, 0, 0));
+                }
+                else {
+                    // MOVE DOWN
+                    logger.Debug("Jumping Down");
+                    Browser.Facade.OnAction(new Action(Action.ActionType.ACTION_MOVE_DOWN, 0, 0));
+                }
             }
         }
     }

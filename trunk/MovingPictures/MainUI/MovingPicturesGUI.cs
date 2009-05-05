@@ -531,6 +531,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     _lastCommandTime = AnimationTimer.TickCount;
                     break;
 
+                case Action.ActionType.ACTION_PAGE_UP:
+                    lock (browser) {
+                        base.OnAction(action);
+
+                        if ((browser.CurrentView == BrowserViewMode.LIST
+                            && MovingPicturesCore.Settings.AllowGrouping
+                            && browser.Facade.SelectedListItemIndex == 0
+                            )) {
+                            browser.Facade.SelectedListItemIndex = 1;
+                        }
+                    }
+                    break;
                 default:
                     base.OnAction(action);
                     break;
