@@ -278,7 +278,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                                 movie.Year = int.Parse((string)movieResult["MovieYear"]);
                                 string imdbid = (string)movieResult["MovieImdbID"];
                                 movie.ImdbID = "tt" + imdbid.PadLeft(7, '0');
-                                results.Add(hash, movie);
+                                
+                                // If the title doesn't start with a " it's a valid
+                                // movie else it's a TV-Show (and we ignore them). 
+                                if (!movie.Title.StartsWith("\""))
+                                    results.Add(hash, movie);
                             }
                         }
                     }
