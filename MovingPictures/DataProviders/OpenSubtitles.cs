@@ -63,9 +63,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.OpenSubtitles {
         public string status;
         public double seconds;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public bool IsOK {
             get {
                 if (GetStatus() == ResponseStatus.OK)
@@ -280,6 +277,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.OpenSubtitles {
             proxy = XmlRpcProxyGen.Create<IOpenSubtitles>();
             proxy.KeepAlive = false;
             proxy.UserAgent = userAgent;
+            proxy.Timeout = 5000;
             logger.Debug("OSDb Proxy created: UserAgent={0}", userAgent);
         }
 
@@ -321,15 +319,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.OpenSubtitles {
             }
 
             // Process the login response
-            if (response != null) {
-                if (response.IsOK) {
-                    if (response.token != null) {
-                        _token = response.token;
-                        logger.Info("Login Success: Username={0}, Language={1}, Token={2} ", username, language, _token);
-                        return true;
-                    }
+            if (response.IsOK) {
+                if (response.token != null) {
+                    _token = response.token;
+                    logger.Info("Login Success: Username={0}, Language={1}, Token={2} ", username, language, _token);
+                    return true;
                 }
             }
+
             logger.Error("Login Failed: Username={1}, Language={2}", username, language);
             return false;
         }
@@ -411,14 +408,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.OpenSubtitles {
         /// <param name="query">keyword/title</param>
         /// <returns></returns>
         public SearchResponse SearchMoviesOnIMDB(string query) {
-            SearchResponse response = new SearchResponse();
-            string token = getToken();
+            SearchResponse response = new SearchResponse();         
             int retryCount = 0;
-            if (token != null) {
+            if (_token != null) {
                 while (true) {
                     retryCount++;
                     try {
-                        response = proxy.SearchMoviesOnIMDB(token, query);
+                        response = proxy.SearchMoviesOnIMDB(_token, query);
                         break;
                     }
                     catch (WebException e) {

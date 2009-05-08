@@ -226,12 +226,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             logger.Info("Checking internal scripts for updates...");
 
             AddSource(typeof(LocalProvider));
-
             AddSource(typeof(ScriptableProvider), Resources.Script_IMPAwards);          
-
             AddSource(typeof(ScriptableProvider), Resources.Script_IMDb);
-            AddSource(typeof(TheMovieDbProvider));
-            AddSource(typeof(OSDbProvider));
+            AddSource(typeof(TheMovieDbProvider));            
             AddSource(typeof(ScriptableProvider), Resources.Script_MovieMeter);
             AddSource(typeof(ScriptableProvider), Resources.Script_OFDb);
             AddSource(typeof(ScriptableProvider), Resources.Script_Allocine);
@@ -239,8 +236,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Script_FilmWeb);
             AddSource(typeof(ScriptableProvider), Resources.Script_Kinopoisk);
             AddSource(typeof(ScriptableProvider), Resources.Script_Alpacine);  
-
             AddSource(typeof(MyVideosProvider));
+            
+            // OpenSubtitles provider disabled untill further notice
+            // AddSource(typeof(OSDbProvider));
 
             normalizePriorities();
         }

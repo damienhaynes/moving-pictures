@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
@@ -11,11 +12,43 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
     /// </summary>
     class LocalBuilder : ISignatureBuilder {
 
-        #region Private Variables
-
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Dictionary<string, string> replacements;
 
-        #endregion
+        static LocalBuilder() {
+            // todo: design logic to reload these strings when there's a configurable setting for the user
+            replacements = new Dictionary<string, string>();
+            replacements.Add(@"(?<!\b\w)\.", " ");  // Replace dots that are not part of acronyms with spaces
+            replacements.Add(@"_", " ");  // Replace underscores with spaces
+            replacements.Add(@"tt\d{7}", ""); // Removes imdb numbers
+        }
+
+        // Filters "noise" from the input string
+        private static string removeNoise(string input) {
+            Regex expr = new Regex(MovingPicturesCore.Settings.NoiseFilter, RegexOptions.IgnoreCase);
+            string denoisedTitle = expr.Replace(input, "");
+            denoisedTitle = Utility.TrimSpaces(denoisedTitle);
+            return denoisedTitle;
+        }
+
+        // Separates the year from the title string (if applicable)
+        private static string extractYearFromTitle(string input, out int year) {
+            string rtn = input;
+            year = 0;
+
+            // if there is a four digit number that looks like a year, parse it out
+            Regex expr = new Regex(@"^(.*)[\[\(]?(19\d{2}|20\d{2})[\]\)]?($|.+)");
+            Match match = expr.Match(rtn);
+            if (match.Success) {
+                rtn = match.Groups[1].Value.TrimEnd('(', '['); // leading title string
+                year = int.Parse(match.Groups[2].Value);
+                if (rtn.Trim() == string.Empty)
+                    rtn = match.Groups[3].Value.TrimEnd('(', '['); // trailing title string
+            }
+
+            // trim and return the title
+            return rtn.Trim();
+        }
 
         #region ISignatureBuilder Members
 
@@ -45,58 +78,27 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                     source = Path.GetFileNameWithoutExtension(signature.File);
             }
 
-            // If there are periods or underscores, 
-            // assume the period is replacement for spaces.
-            source = Regex.Replace(source, @"[\._]", " ");
+            // Detect IMDB ID in the source string, and put it in the signature on success
+            Match match = Regex.Match(source, @"tt\d{7}", RegexOptions.IgnoreCase);
+            if (match.Success) signature.ImdbId = match.Value;
 
-            // Phase #2: Cleaning (remove noise)
+            // Execute configured string replacements
+            foreach (KeyValuePair<string, string> replacement in replacements)
+                source = Regex.Replace(source, replacement.Key, replacement.Value);
+
+            // Remove noise characters/words
+            // todo: combine this into replacements when there's a configurable setting for the user
             source = removeNoise(source);
 
-            // Phase #3: Year detection
+            // Detect year in a title string
             int year;
             signature.Title = extractYearFromTitle(source, out year);
-            signature.Year = year;
-
-            // Phase #4: See if an IMDB id could be read from the source string
-            Match match = Regex.Match(source, @"tt\d{7}", RegexOptions.IgnoreCase);
-
-            // Set the IMDB id in the signature if succes
-            if (match.Success) signature.ImdbId = match.Value;
+            signature.Year = year;      
 
             return SignatureBuilderResult.INCONCLUSIVE;
         }
 
         #endregion
 
-        #region Static Methods
-
-        // Filters "noise" from the input string
-        private static string removeNoise(string input) {
-            Regex expr = new Regex(MovingPicturesCore.Settings.NoiseFilter, RegexOptions.IgnoreCase);
-            string denoisedTitle = expr.Replace(input, "");
-            denoisedTitle = Utility.TrimSpaces(denoisedTitle);
-            return denoisedTitle;
-        }
-
-        // Separates the year from the title string (if applicable)
-        private static string extractYearFromTitle(string input, out int year) {
-            string rtn = input;
-            year = 0;
-
-            // if there is a four digit number that looks like a year, parse it out
-            Regex expr = new Regex(@"^(.*)[\[\(]?(19\d{2}|20\d{2})[\]\)]?($|.+)");
-            Match match = expr.Match(rtn);
-            if (match.Success) {
-                rtn = match.Groups[1].Value.TrimEnd('(', '['); // leading title string
-                year = int.Parse(match.Groups[2].Value);
-                if (rtn.Trim() == string.Empty)
-                    rtn = match.Groups[3].Value.TrimEnd('(', '['); // trailing title string
-            }
-
-            // trim and return the title
-            return rtn.Trim();
-        }
-
-        #endregion
     }
 }
