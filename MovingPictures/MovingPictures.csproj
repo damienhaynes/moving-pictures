@@ -444,6 +444,8 @@
     <None Include="Properties\RevisionInfo.cs" />
     <None Include="Resources\Images\splash_small.jpg" />
     <None Include="Resources\Images\splash_large.jpg" />
+    <Content Include="Resources\Images\eye.png" />
+    <Content Include="Resources\Images\eye_grey.png" />
     <Content Include="Resources\Images\accept.png" />
     <Content Include="Resources\Images\approved.png" />
     <Content Include="Resources\Images\arrow_cross.png" />
@@ -488,6 +490,7 @@
     <Content Include="Resources\language\fr.xml" />
     <Content Include="Resources\language\ru.xml" />
     <Content Include="Resources\language\sv.xml" />
+    <Content Include="Resources\Images\page_gear.png" />
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>
