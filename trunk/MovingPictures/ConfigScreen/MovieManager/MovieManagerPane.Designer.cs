@@ -47,14 +47,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.detailsViewDropDown = new System.Windows.Forms.ToolStripDropDownButton();
             this.movieDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.advancedButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.updateMediaInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendToImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteMovieButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.refreshMovieButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.reassignMovieButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.watchedButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.watchedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.markAsUnwatchedToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.unwatchedToggleButton = new System.Windows.Forms.ToolStripButton();
+            this.watchedToggleButton = new System.Windows.Forms.ToolStripButton();
             this.playMovieButton = new System.Windows.Forms.ToolStripButton();
             this.movieListBox = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
@@ -214,7 +216,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.loadCoverArtFromFileToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.folder_image;
             this.loadCoverArtFromFileToolStripMenuItem.Name = "loadCoverArtFromFileToolStripMenuItem";
-            this.loadCoverArtFromFileToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.loadCoverArtFromFileToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.loadCoverArtFromFileToolStripMenuItem.Text = "Load Cover Art From File";
             this.loadCoverArtFromFileToolStripMenuItem.Click += new System.EventHandler(this.loadCoverArtFromFileToolStripMenuItem_Click);
             // 
@@ -222,7 +224,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.loadCoverArtFromURLToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.world_add;
             this.loadCoverArtFromURLToolStripMenuItem.Name = "loadCoverArtFromURLToolStripMenuItem";
-            this.loadCoverArtFromURLToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.loadCoverArtFromURLToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.loadCoverArtFromURLToolStripMenuItem.Text = "Load Cover Art From URL";
             this.loadCoverArtFromURLToolStripMenuItem.Click += new System.EventHandler(this.loadCoverArtFromURLToolStripMenuItem_Click);
             // 
@@ -255,12 +257,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.movieToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.detailsViewDropDown,
+            this.advancedButton,
+            this.toolStripSeparator6,
             this.deleteMovieButton,
             this.toolStripSeparator5,
             this.refreshMovieButton,
-            this.reassignMovieButton,
             this.toolStripSeparator4,
-            this.watchedButton,
+            this.unwatchedToggleButton,
+            this.watchedToggleButton,
             this.playMovieButton});
             this.movieToolStrip.Location = new System.Drawing.Point(192, 33);
             this.movieToolStrip.Name = "movieToolStrip";
@@ -284,16 +288,52 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // movieDetailsToolStripMenuItem
             // 
             this.movieDetailsToolStripMenuItem.Name = "movieDetailsToolStripMenuItem";
-            this.movieDetailsToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
+            this.movieDetailsToolStripMenuItem.Size = new System.Drawing.Size(171, 24);
             this.movieDetailsToolStripMenuItem.Text = "Movie Details";
             this.movieDetailsToolStripMenuItem.Click += new System.EventHandler(this.movieDetailsToolStripMenuItem_Click);
             // 
             // fileDetailsToolStripMenuItem
             // 
             this.fileDetailsToolStripMenuItem.Name = "fileDetailsToolStripMenuItem";
-            this.fileDetailsToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
+            this.fileDetailsToolStripMenuItem.Size = new System.Drawing.Size(171, 24);
             this.fileDetailsToolStripMenuItem.Text = "File Details";
             this.fileDetailsToolStripMenuItem.Click += new System.EventHandler(this.fileDetailsToolStripMenuItem_Click);
+            // 
+            // advancedButton
+            // 
+            this.advancedButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.advancedButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.advancedButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.updateMediaInfoToolStripMenuItem,
+            this.sendToImporterToolStripMenuItem});
+            this.advancedButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cog;
+            this.advancedButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.advancedButton.Name = "advancedButton";
+            this.advancedButton.Size = new System.Drawing.Size(29, 22);
+            this.advancedButton.Text = "toolStripDropDownButton1";
+            this.advancedButton.ToolTipText = "Advanced Tools";
+            // 
+            // updateMediaInfoToolStripMenuItem
+            // 
+            this.updateMediaInfoToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.page_gear;
+            this.updateMediaInfoToolStripMenuItem.Name = "updateMediaInfoToolStripMenuItem";
+            this.updateMediaInfoToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.updateMediaInfoToolStripMenuItem.Text = "Update MediaInfo";
+            this.updateMediaInfoToolStripMenuItem.Click += new System.EventHandler(this.updateMediaInfoToolStripMenuItem_Click);
+            // 
+            // sendToImporterToolStripMenuItem
+            // 
+            this.sendToImporterToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_down;
+            this.sendToImporterToolStripMenuItem.Name = "sendToImporterToolStripMenuItem";
+            this.sendToImporterToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.sendToImporterToolStripMenuItem.Text = "Send To Importer";
+            this.sendToImporterToolStripMenuItem.Click += new System.EventHandler(this.sendToImporterToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
             // 
             // deleteMovieButton
             // 
@@ -325,52 +365,35 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.refreshMovieButton.ToolTipText = "Refresh Movie Info From Internet";
             this.refreshMovieButton.ButtonClick += new System.EventHandler(this.refreshMovieButton_Click);
             // 
-            // reassignMovieButton
-            // 
-            this.reassignMovieButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.reassignMovieButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.reassignMovieButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_down;
-            this.reassignMovieButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.reassignMovieButton.Name = "reassignMovieButton";
-            this.reassignMovieButton.Size = new System.Drawing.Size(23, 22);
-            this.reassignMovieButton.Text = "toolStripButton1";
-            this.reassignMovieButton.ToolTipText = "Reassign Files to New Movie";
-            this.reassignMovieButton.Click += new System.EventHandler(this.reassignMovieButton_Click);
-            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
-            // watchedButton
+            // unwatchedToggleButton
             // 
-            this.watchedButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.watchedButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.watchedButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.watchedToolStripMenuItem,
-            this.markAsUnwatchedToolStripMenuItem1});
-            this.watchedButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.television;
-            this.watchedButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.watchedButton.Name = "watchedButton";
-            this.watchedButton.Size = new System.Drawing.Size(32, 22);
-            this.watchedButton.Text = "toolStripSplitButton1";
-            this.watchedButton.ToolTipText = "Set Watched Flag";
-            this.watchedButton.ButtonClick += new System.EventHandler(this.watchedToolStripMenuItem_Click);
+            this.unwatchedToggleButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.unwatchedToggleButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.unwatchedToggleButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.eye_grey;
+            this.unwatchedToggleButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.unwatchedToggleButton.Name = "unwatchedToggleButton";
+            this.unwatchedToggleButton.Size = new System.Drawing.Size(23, 22);
+            this.unwatchedToggleButton.Text = "toolStripButton1";
+            this.unwatchedToggleButton.ToolTipText = "Mark Selected Movies As Unwatched";
+            this.unwatchedToggleButton.Click += new System.EventHandler(this.unwatchedToggleButton_Click);
             // 
-            // watchedToolStripMenuItem
+            // watchedToggleButton
             // 
-            this.watchedToolStripMenuItem.Name = "watchedToolStripMenuItem";
-            this.watchedToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
-            this.watchedToolStripMenuItem.Text = "Mark Selected Movies as Watched";
-            this.watchedToolStripMenuItem.Click += new System.EventHandler(this.watchedToolStripMenuItem_Click);
-            // 
-            // markAsUnwatchedToolStripMenuItem1
-            // 
-            this.markAsUnwatchedToolStripMenuItem1.Name = "markAsUnwatchedToolStripMenuItem1";
-            this.markAsUnwatchedToolStripMenuItem1.Size = new System.Drawing.Size(259, 22);
-            this.markAsUnwatchedToolStripMenuItem1.Text = "Mark Selected Movies as Unwatched";
-            this.markAsUnwatchedToolStripMenuItem1.Click += new System.EventHandler(this.markAsUnwatchedToolStripMenuItem_Click);
+            this.watchedToggleButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.watchedToggleButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.watchedToggleButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.eye;
+            this.watchedToggleButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.watchedToggleButton.Name = "watchedToggleButton";
+            this.watchedToggleButton.Size = new System.Drawing.Size(23, 22);
+            this.watchedToggleButton.Text = "toolStripButton1";
+            this.watchedToggleButton.ToolTipText = "Mark Selected Movies As Watched";
+            this.watchedToggleButton.Click += new System.EventHandler(this.watchedToggleButton_Click);
             // 
             // playMovieButton
             // 
@@ -490,21 +513,23 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.ToolStripButton deleteCoverButton;
         private System.Windows.Forms.ToolStrip movieToolStrip;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripButton reassignMovieButton;
         private System.Windows.Forms.ToolStripButton playMovieButton;
         private System.Windows.Forms.ToolStripButton deleteMovieButton;
         private ColumnHeader columnHeader1;
         private ProgressBar artworkProgressBar;
         private ToolStripSplitButton refreshMovieButton;
-        private ToolStripSplitButton watchedButton;
-        private ToolStripMenuItem watchedToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator5;
-        private ToolStripMenuItem markAsUnwatchedToolStripMenuItem1;
         private ToolStripDropDownButton detailsViewDropDown;
         private ToolStripMenuItem movieDetailsToolStripMenuItem;
         private ToolStripMenuItem fileDetailsToolStripMenuItem;
         private Label titleLabel;
         private MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager.MovieDetailsSubPane movieDetailsSubPane;
         private MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager.FileDetailsSubPane fileDetailsSubPane;
+        private ToolStripDropDownButton advancedButton;
+        private ToolStripMenuItem updateMediaInfoToolStripMenuItem;
+        private ToolStripMenuItem sendToImporterToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripButton watchedToggleButton;
+        private ToolStripButton unwatchedToggleButton;
     }
 }

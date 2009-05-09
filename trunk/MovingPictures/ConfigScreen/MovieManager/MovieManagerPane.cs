@@ -199,14 +199,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 coverNumLabel.Text = "";
 
                 if (movieListBox.SelectedItems.Count > 1) {
-                    reassignMovieButton.Enabled = false;
+                    advancedButton.Enabled = false;
                     playMovieButton.Enabled = false;
                 }
                
                 return;
             }
 
-            reassignMovieButton.Enabled = true;
+            advancedButton.Enabled = true;
             playMovieButton.Enabled = true;
             
             // update cover artwork
@@ -248,6 +248,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             
             // populate movie details fields
             titleLabel.Text = CurrentMovie.Title;
+
+            if (CurrentMovie.UserSettings[0].Watched == 0) {
+                watchedToggleButton.Visible = true;
+                unwatchedToggleButton.Visible = false;
+            }
+            else {
+                watchedToggleButton.Visible = false;
+                unwatchedToggleButton.Visible = true;
+            }
         }
 
         private void updateFilePanel() {
@@ -491,7 +500,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         }
 
-        private void reassignMovieButton_Click(object sender, EventArgs e) {
+        private void sendToImporterToolStripMenuItem_Click(object sender, EventArgs e) {
             if (CurrentMovie == null)
                 return;
 
@@ -622,14 +631,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             artworkProgressBar.Visible = false;
         }
 
-        private void markAsUnwatchedToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void unwatchedToggleButton_Click(object sender, EventArgs e) {
             foreach (ListViewItem currItem in movieListBox.SelectedItems)
                 ((DBMovieInfo)currItem.Tag).UserSettings[0].Watched = 0;
 
             updateMoviePanel();
         }
 
-        private void watchedToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void watchedToggleButton_Click(object sender, EventArgs e) {
             foreach (ListViewItem currItem in movieListBox.SelectedItems)
                 if (((DBMovieInfo)currItem.Tag).UserSettings[0].Watched == 0)
                     ((DBMovieInfo)currItem.Tag).UserSettings[0].Watched = 1;
@@ -647,6 +656,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             detailsViewDropDown.Text = fileDetailsToolStripMenuItem.Text;
             movieDetailsSubPane.Visible = false;
             fileDetailsSubPane.Visible = true;
+        }
+
+        private void updateMediaInfoToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (CurrentMovie == null) return;
+
+            foreach (DBLocalMedia localMedia in CurrentMovie.LocalMedia) {
+                localMedia.UpdateMediaInfo();
+            }
+            updateFilePanel();
         }
 
     }
