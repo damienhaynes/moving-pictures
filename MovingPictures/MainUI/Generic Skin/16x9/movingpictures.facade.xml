@@ -22,9 +22,16 @@ This file should contain the facade view
         <textureNoFocus>dialog_button_nofocus.png</textureNoFocus>
         <textXOff>-20</textXOff>
         <textXOff2>510</textXOff2>
+        <textXOff3>30</textXOff3>
         <IconXOff>1980</IconXOff>
-        <textcolor>ffffff</textcolor>
-        <remoteColor>ff148489</remoteColor> <!-- remoteColor is currently being used for the group headers -->
+        <!-- group headers -->
+        <textcolor3>ff148489</textcolor3>
+        <!-- unwatched movies -->
+        <textcolor>ffffffff</textcolor>
+        <!-- watched movies -->
+        <playedColor>ff444444</playedColor>
+        <!-- offline movies -->
+        <remoteColor>ff880000</remoteColor>
       </control>
       <control>
         <description>Thumbnail Panel</description>

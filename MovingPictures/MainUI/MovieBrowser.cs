@@ -518,11 +518,30 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currItem.IconImageBig = newMovie.CoverThumbFullPath.Trim();
                 currItem.TVTag = newMovie;
                 currItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(onMovieItemSelected);
+
                 listItems[newMovie] = currItem;
             }
 
             // add the listitem
             facade.Add(listItems[newMovie]);
+            UpdateListColors(newMovie);
+        }
+
+        public void UpdateListColors(DBMovieInfo movie) {
+            if (!listItems.ContainsKey(movie)) return;
+
+            GUIListItem currItem = listItems[movie];
+            currItem.IsRemote = false;
+            currItem.IsPlayed = false;
+
+            if (!movie.LocalMedia[0].IsAvailable) {
+                // remoteColor
+                currItem.IsRemote = true;
+            }
+            else if (movie.ActiveUserSettings.Watched > 0) {
+                // playedColor
+                currItem.IsPlayed = true;
+            }            
         }
 
         /// <summary>

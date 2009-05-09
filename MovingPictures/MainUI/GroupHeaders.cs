@@ -138,9 +138,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             labelText = labelText.Substring(0, labelText.Length - 1);
 
             GUIListItem groupItem = new GUIListItem();
-            groupItem.Label = labelText;
-            groupItem.IsRemote = true;
-
+            groupItem.Label3 = labelText;  // use the textColor3
+            
             Browser.Facade.Insert(index, groupItem);
 
             groupItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(onGroupHeaderSelected);

@@ -783,13 +783,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.SelectedMovie.ActiveUserSettings.Watched = 0;
                 browser.SelectedMovie.ActiveUserSettings.Commit();
                 UpdateMovieDetails();
-                browser.ReapplyFilters();               
+                browser.UpdateListColors(browser.SelectedMovie);
+                browser.ReapplyFilters();
             }
             else if (dialog.SelectedId == watchedItem.ItemId) {
                 browser.SelectedMovie.ActiveUserSettings.Watched = 1;
                 browser.SelectedMovie.ActiveUserSettings.Commit();
                 UpdateMovieDetails();
-                browser.ReapplyFilters();            
+                browser.UpdateListColors(browser.SelectedMovie);
+                browser.ReapplyFilters();
             }
             else if (dialog.SelectedId == deleteItem.ItemId) {
                 deleteMovie();
@@ -922,6 +924,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 awaitingUserRatingMovie = movie;
             
             // Reapply Filters
+            browser.UpdateListColors(movie);
             browser.ReapplyFilters();
 
             // if we are on the details page for the movie just marked as watched and we are filtering
