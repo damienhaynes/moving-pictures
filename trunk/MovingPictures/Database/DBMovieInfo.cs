@@ -14,6 +14,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using System.Text.RegularExpressions;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public enum ArtworkLoadStatus {
@@ -869,18 +870,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         private void populateSortBy() {
+            SortBy = Regex.Replace(_title, @"^[^\da-z]+", "", RegexOptions.IgnoreCase);
+
             // loop through and try to remove a preposition
             string[] prepositions = { "the", "a", "an" };
             foreach (string currWord in prepositions) {
                 string word = currWord + " ";
-                if (_title.ToLower().IndexOf(word) == 0) {
-                    SortBy = _title.Substring(word.Length) + ", " + _title.Substring(0, currWord.Length);
+                if (_sortBy.ToLower().IndexOf(word) == 0) {
+                    SortBy = _sortBy.Substring(word.Length) + ", " + _sortBy.Substring(0, currWord.Length);
                     return;
                 }
             }
-
-            // if no preposition to remove, just use the name
-            SortBy = _title;
         }
     }
 }
