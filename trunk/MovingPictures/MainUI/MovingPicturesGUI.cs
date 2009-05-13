@@ -26,7 +26,7 @@ using System.Windows.Media.Animation;
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class MovingPicturesGUI : GUIWindow {
         public enum DiskInsertedAction { PLAY, DETAILS, NOTHING }
-
+		
         #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -806,16 +806,29 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private bool GetUserRating(DBMovieInfo movie) {
             GUIGeneralRating ratingDlg = (GUIGeneralRating)GUIWindowManager.GetWindow(GUIGeneralRating.ID);
             ratingDlg.Reset();
-            ratingDlg.Text = String.Format(Translation.SelectYourRating, browser.SelectedMovie.Title);
-            DBUserMovieSettings userMovieSettings = movie.ActiveUserSettings;
+			ratingDlg.SetHeading(Translation.RateHeading);
+            ratingDlg.SetLine(1, String.Format(Translation.SelectYourRating, browser.SelectedMovie.Title));
+            DBUserMovieSettings userMovieSettings = movie.ActiveUserSettings;			
             ratingDlg.Rating = userMovieSettings.UserRating.GetValueOrDefault(3);
-            ratingDlg.DoModal(GetID);
+			ratingDlg.DisplayStars = GUIGeneralRating.StarDisplay.FIVE_STARS;
+			SetRatingDescriptions(ratingDlg);
+
+			ratingDlg.DoModal(GetID);
             if (ratingDlg.IsSubmitted) {
                 userMovieSettings.UserRating = ratingDlg.Rating;
                 userMovieSettings.Commit();
             }
             return ratingDlg.IsSubmitted;
         }
+
+		private void SetRatingDescriptions(GUIGeneralRating ratingDlg) {
+			ratingDlg.FiveStarRateOneDesc = Translation.RateFiveStarOne;
+			ratingDlg.FiveStarRateTwoDesc = Translation.RateFiveStarTwo;
+			ratingDlg.FiveStarRateThreeDesc = Translation.RateFiveStarThree;
+			ratingDlg.FiveStarRateFourDesc = Translation.RateFiveStarFour;
+			ratingDlg.FiveStarRateFiveDesc = Translation.RateFiveStarFive;
+			return;
+		}
 
         private void deleteMovie() {
             DBLocalMedia firstFile = browser.SelectedMovie.LocalMedia[0];
@@ -1079,7 +1092,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             PublishDetails(browser.SelectedMovie, "SelectedMovie");
             PublishDetails(browser.SelectedMovie.ActiveUserSettings, "UserMovieSettings");
             PublishDetails(browser.SelectedMovie.LocalMedia[0], "LocalMedia", true);
-            SetProperty("#MovingPictures.SelectedIndex", browser.Facade.SelectedListItemIndex.ToString());
+
+            int selectedIndex = browser.Facade.SelectedListItemIndex;
+            for (int i = 0; i < browser.Facade.SelectedListItemIndex; i++) {
+                if (browser.facade.ListView.ListItems[i].TVTag == null)
+                    selectedIndex--;
+            }
+            selectedIndex++; // make this one-based
+            SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
+
             SetProperty("#MovingPictures.LocalMedia.Subtitles", browser.SelectedMovie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles", true);
             SetProperty("#MovingPictures.LocalMedia.AudioChannelsFriendly", browser.SelectedMovie.LocalMedia[0].AudioChannelsFriendly, true);
 

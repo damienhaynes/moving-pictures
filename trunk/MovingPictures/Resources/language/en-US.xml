@@ -46,6 +46,7 @@
   <string Field="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>
   <string Field="Rate">Rate</string>
   <string Field="SelectYourRating">Select your rating for {0}</string>
+  <string Field="RateHeading">Rate Movie</string>
   <string Field="DownAbbreviation">(dn)</string>
   <string Field="UpAbbreviation">(up)</string>
 
@@ -79,4 +80,11 @@
   <string Field="EarlierThisYear">Earlier This Year</string>
   <string Field="LastYear">Last Year</string>
   <string Field="Older">Older</string>
+  
+  <!-- Rate Movie Descriptions - 5 Stars-->
+  <string Field="RateFiveStarOne">Terrible</string>
+  <string Field="RateFiveStarTwo">Mediocre</string>
+  <string Field="RateFiveStarThree">Good</string>
+  <string Field="RateFiveStarFour">Superb</string>
+  <string Field="RateFiveStarFive">Perfect</string> 
 </strings>
