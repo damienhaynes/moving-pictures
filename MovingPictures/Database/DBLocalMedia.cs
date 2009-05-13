@@ -7,6 +7,7 @@ using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 using MediaPortal.Player;
+using MediaPortal.Util;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("local_media")]
@@ -403,6 +404,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (this.IsDVD) {
                 mediaPath = Path.Combine(Path.GetDirectoryName(mediaPath), "VTS_01_0.IFO");
             }
+            else if (DaemonTools.IsMounted(mediaPath)) {
+                mediaPath = Path.Combine(DaemonTools.GetVirtualDrive(), @"VIDEO_TS\VTS_01_0.IFO");
+            }
+            else if (DaemonTools.IsImageFile(Path.GetExtension(mediaPath))) {
+                // if it's an image file and it's not mounted
+                // we can't get the media info
+                return;
+            }
 
             MediaInfoWrapper mInfoWrapper = new MediaInfoWrapper(mediaPath);
             this.VideoWidth = mInfoWrapper.Width;
@@ -484,7 +493,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // build list of files
             List<string> files = new List<string>();
-            if (this.IsDVD) {
+            if (this.IsDVD || DaemonTools.IsMounted(this.FullPath)) {
                 files.AddRange(Directory.GetFiles(Path.GetDirectoryName(mediaPath), "*.ifo"));
             }
             else {
