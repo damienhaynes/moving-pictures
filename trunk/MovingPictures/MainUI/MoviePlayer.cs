@@ -243,8 +243,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             logger.Info("Playing {0} ({1})", movie.Title, mediaToPlay.FullPath);
             string filename = mediaToPlay.FullPath;
             string extension = mediaToPlay.File.Extension;
-            if (DaemonTools.IsImageFile(extension))
+            if (DaemonTools.IsImageFile(extension)) {
                 playImage(filename);
+                if (!mediaToPlay.HasMediaInfo) {
+                    mediaToPlay.UpdateMediaInfo();
+                    mediaToPlay.Commit();
+                }
+            }
             else
                 playFile(filename);
         }
