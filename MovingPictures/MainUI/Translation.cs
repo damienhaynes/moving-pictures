@@ -61,6 +61,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string ContinueToNextPartBody = "Do you wish to continue with part {0}?";
         public static string Rate = "Rate";
         public static string SelectYourRating = "Select your rating for {0}";
+		public static string RateHeading = "Rate Movie";
         public static string DownAbbreviation = "(dn)";
         public static string UpAbbreviation = "(up)";
 
@@ -95,6 +96,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string EarlierThisYear = "Earlier This Year";
         public static string LastYear = "Last Year";
         public static string Older = "Older";
+		
+		// Rate Movie Descriptions - 5 Stars
+		public static string RateFiveStarOne = "Terrible";
+		public static string RateFiveStarTwo = "Mediocre";
+		public static string RateFiveStarThree = "Good";
+		public static string RateFiveStarFour = "Superb";
+		public static string RateFiveStarFive = "Perfect";
 
         #endregion
 
