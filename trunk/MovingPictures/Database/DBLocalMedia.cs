@@ -38,7 +38,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                
                 return VideoDiscFormat.Unknown;
             }
-        } 
+        }
 
         /// <summary>
         /// Checks whether the file is a DVD.
@@ -53,6 +53,24 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         /// <summary>
+        /// Checks whether the file is a HD-DVD.
+        /// </summary>
+        public bool IsHDDVD {
+            get {
+                return (VideoDiscFormat == VideoDiscFormat.HDDVD);
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the file is a Bluray.
+        /// </summary>
+        public bool IsBluray {
+            get {
+                return (VideoDiscFormat == VideoDiscFormat.Bluray);
+            }
+        }
+
+        /// <summary>
         /// Checks whether the file is an entry path for a video disc.
         /// </summary>
         public bool IsVideoDisc {
@@ -63,6 +81,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return false;
             }
         }
+
+        /// <summary>
+        /// Checks whether the file is an entry path for a video disc.
+        /// </summary>
+        public bool IsImageFile {
+            get {
+                if (File != null)
+                    return DaemonTools.IsImageFile(Path.GetExtension(File.FullName));
+
+                return false;
+            }
+        }
+        
 
         /// <summary>
         /// Checks if the file is currently available.
@@ -399,18 +430,25 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
-        public void UpdateMediaInfo() {
+        public UpdateMediaInfoResults UpdateMediaInfo() {
+            if (!this.IsAvailable) return UpdateMediaInfoResults.MediaNotAvailable;
+
+            VideoDiscFormat mountedVideoDiscFormat = VideoDiscFormat.Unknown;
             string mediaPath = this.FullPath;
-            if (this.IsDVD) {
-                mediaPath = Path.Combine(Path.GetDirectoryName(mediaPath), "VTS_01_0.IFO");
+
+            if (this.IsDVD || this.IsHDDVD || this.IsBluray) {
+                mediaPath = Utility.GetMainFeatureStreamFromVideoDisc(mediaPath, this.VideoDiscFormat);
+                logger.Debug("Updating mediainfo for a {0} video disc.  mediapath={1}", this.VideoDiscFormat.ToString(), mediaPath);
             }
-            else if (DaemonTools.IsMounted(mediaPath)) {
-                mediaPath = Path.Combine(DaemonTools.GetVirtualDrive(), @"VIDEO_TS\VTS_01_0.IFO");
+            else if (this.IsImageFile && DaemonTools.IsMounted(mediaPath)) {
+                string videoDiscPath = Utility.GetVideoDiscPath(DaemonTools.GetVirtualDrive());
+                mountedVideoDiscFormat = Utility.GetVideoDiscFormat(videoDiscPath);
+                mediaPath = Utility.GetMainFeatureStreamFromVideoDisc(videoDiscPath, mountedVideoDiscFormat);
             }
-            else if (DaemonTools.IsImageFile(Path.GetExtension(mediaPath))) {
+            else if (this.IsImageFile) {
                 // if it's an image file and it's not mounted
                 // we can't get the media info
-                return;
+                return UpdateMediaInfoResults.ImageFileNotMounted;
             }
 
             MediaInfoWrapper mInfoWrapper = new MediaInfoWrapper(mediaPath);
@@ -493,7 +531,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // build list of files
             List<string> files = new List<string>();
-            if (this.IsDVD || DaemonTools.IsMounted(this.FullPath)) {
+            if (this.IsDVD || (this.IsImageFile && mountedVideoDiscFormat == VideoDiscFormat.DVD)) {
                 files.AddRange(Directory.GetFiles(Path.GetDirectoryName(mediaPath), "*.ifo"));
             }
             else {
@@ -530,6 +568,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         mInfo.Close();
                 }
             }
+            return UpdateMediaInfoResults.Success;
         }
 
         #endregion
@@ -660,4 +699,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
     }
 
+    public enum UpdateMediaInfoResults {
+        Success,
+        ImageFileNotMounted,
+        MediaNotAvailable
+    }
 }
