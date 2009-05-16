@@ -483,12 +483,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static bool IsVideoDiscPath(string path) {
-            foreach(VideoDiscFormat format in Enum.GetValues(typeof(VideoDiscFormat))) {
-                if (format != VideoDiscFormat.Unknown)
-                    if (path.EndsWith(GetEnumValueDescription(format), StringComparison.OrdinalIgnoreCase))
-                        return true;
-            }
-            return false;
+            return GetVideoDiscFormat(path) != VideoDiscFormat.Unknown;
         }
 
         /// <summary>
@@ -622,6 +617,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 case VideoDiscFormat.HDDVD:
                     dir = entryPath.ToLower().Replace(@"adv_obj\discid.dat", @"HVDVD_TS\");
                     return GetLargestFileInDirectory(new DirectoryInfo(dir), "*.evo");
+                case VideoDiscFormat.DVD:
+                    return Path.Combine(Path.GetPathRoot(entryPath), @"VIDEO_TS\VTS_01_0.IFO");
                 default:
                     return null;
             }

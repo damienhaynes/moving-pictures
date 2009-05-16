@@ -662,7 +662,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (CurrentMovie == null) return;
 
             foreach (DBLocalMedia localMedia in CurrentMovie.LocalMedia) {
-                localMedia.UpdateMediaInfo();
+                UpdateMediaInfoResults result = localMedia.UpdateMediaInfo();
+                if (result == UpdateMediaInfoResults.MediaNotAvailable) 
+                {
+                    MessageBox.Show("MediaInfo could not be updated because the media is not available. Please insert the media and try again.");
+                    break;
+                }
+                else if (result == UpdateMediaInfoResults.ImageFileNotMounted) {
+                     MessageBox.Show("MediaInfo for image files can only be updated when the movie is played");
+                    break;
+                }
             }
             updateFilePanel();
         }
