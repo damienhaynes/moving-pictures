@@ -98,6 +98,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         [SkinControl(13)]
         protected GUIAnimation workingAnimation = null;
 
+        [SkinControl(14)]
+        protected GUIButtonControl sortMenuButton = null;
+
         #endregion
 
         public MovingPicturesGUI() {
@@ -140,6 +143,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // update resources with new files
             cover.Filename = browser.SelectedMovie.CoverFullPath;
             backdrop.Filename = browser.SelectedMovie.BackdropFullPath;
+
+            if (browser.CurrentView != BrowserViewMode.DETAILS)
+                browser.facade.SelectedListItem.RefreshCoverArt();
         }
 
         // set the backdrop visibility based on the skin settings
@@ -166,6 +172,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (settingsButton != null) settingsButton.Focus = false;
             if (playButton != null) playButton.Focus = false;
             if (textToggleButton != null) textToggleButton.Focus = false;
+            if (sortMenuButton != null) sortMenuButton.Focus = false;
         }
 
         public void ShowMessage(string heading, string lines) {
@@ -469,6 +476,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case 6:
                     playSelectedMovie();
                     break;
+
+                // a click on the sort menu button
+                case 14:
+                    showSortContext();
+                    break;
             }
 
             base.OnClicked(controlId, control, actionType);
@@ -593,6 +605,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             viewItem.ItemId = 3;
             dialog.Add(viewItem);
 
+            GUIListItem movieOptionsItem = new GUIListItem(Translation.MovieOptions + " ...");
+            movieOptionsItem.ItemId = 4;
+            dialog.Add(movieOptionsItem);
+
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             switch (dialog.SelectedId) {
                 case 1:
@@ -604,8 +620,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case 3:
                     showChangeViewContext();
                     break;
+                case 4:
+                    showDetailsContext();
+                    break;
             }
-
         }
 
         private void showSortContext() {
@@ -813,7 +831,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 			ratingDlg.DisplayStars = GUIGeneralRating.StarDisplay.FIVE_STARS;
 			SetRatingDescriptions(ratingDlg);
 
-			ratingDlg.DoModal(GetID);
+            try {
+                ratingDlg.DoModal(GetID);
+            }
+            catch (ArgumentNullException) {
+                ShowMessage(Translation.Error, Translation.SkinDoesNotSupportRatingDialog);
+                return false;
+            }
             if (ratingDlg.IsSubmitted) {
                 userMovieSettings.UserRating = ratingDlg.Rating;
                 userMovieSettings.Commit();

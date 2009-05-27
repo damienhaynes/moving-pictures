@@ -19,7 +19,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// if that also fails it will use the hardcoded strings as a last resort.
         /// </summary>
         #region Translatable Fields
-        public static string ProblemLoadingSkinFile = "Sorry, there was a problem loading skin file...";
+        public static string ProblemLoadingSkinFile = "Sorry, there was a problem loading the skin file";
+        public static string SkinDoesNotSupportRatingDialog = "This skin does not support the rating dialog";
         public static string NoImportPathsHeading = "No Import Paths!";
         public static string NoImportPathsBody = "It doesn't look like you have\ndefined any import paths. You\nshould close MediaPortal and\nlaunch the MediaPortal\nConfiguration Screen to\nconfigure Moving Pictures.";
         public static string ShowAllMovies = "Show All Movies";
@@ -36,6 +37,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string MarkAsUnwatched = "Mark as Unwatched";
         public static string MarkAsWatched = "Mark as Watched";
         public static string DeleteMovie = "Delete Movie";
+        public static string MovieOptions = "Movie Options";
         public static string CannotDeleteReadOnly = "Cannot delete a read-only movie.\nWould you like Moving Pictures to ignore this movie?";
         public static string CannotDeleteOffline = "Not able to delete {0}\n because the file is offline";
         public static string DoYouWantToDelete = "Do you want to permanently delete\n{0}\nfrom your hard drive?";

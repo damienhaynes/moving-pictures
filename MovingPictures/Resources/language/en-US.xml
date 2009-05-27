@@ -4,7 +4,8 @@
 <!-- Note: English is the fallback for any strings not found in other languages -->
 
 <strings>
-  <string Field="ProblemLoadingSkinFile">Sorry, there was a problem loading skin file...</string>
+  <string Field="ProblemLoadingSkinFile">Sorry, there was a problem loading the skin file</string>
+  <string Field="SkinDoesNotSupportRatingDialog">This skin does not support the rating dialog</string>
   <string Field="NoImportPathsHeading">No Import Paths!</string>
   <string Field="NoImportPathsBody">It doesn't look like you have\ndefined any import paths. You\nshould close MediaPortal and\nlaunch the MediaPortal\nConfiguration Screen to\nconfigure Moving Pictures.</string>
   <string Field="ShowAllMovies">Show All Movies</string>
@@ -21,6 +22,7 @@
   <string Field="MarkAsUnwatched">Mark as Unwatched</string>
   <string Field="MarkAsWatched">Mark as Watched</string>
   <string Field="DeleteMovie">Delete Movie</string>
+  <string Field="MovieOptions">Movie Options</string>
   <string Field="CannotDeleteReadOnly">Cannot delete a read-only movie.\nWould you like Moving Pictures to ignore this movie?</string>
   <string Field="CannotDeleteOffline">Not able to delete {0}\n because the file is offline</string>
   <string Field="DoYouWantToDelete">Do you want to permanently delete\n{0}\nfrom your hard drive?</string>
