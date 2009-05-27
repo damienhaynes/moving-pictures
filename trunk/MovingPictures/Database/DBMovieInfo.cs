@@ -421,7 +421,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         private int actualRuntime = 0;
 
         // given a part number and the number of seconds into that part,
-        // returns the percentage 0.0-1.0 through the whole movie.
+        // returns the percentage 1 - 100 through the whole movie.
         public int GetPercentage(int part, int time) {
             if (part > LocalMedia.Count)
                 return 0;
@@ -433,7 +433,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 tally += LocalMedia[i].Duration;
             }
-
+            tally *= 1000; // conver to milliseconds
             return (int)(100 *(tally / (float) ActualRuntime));
         }
 
