@@ -83,7 +83,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         /// <summary>
-        /// Checks whether the file is an entry path for a video disc.
+        /// Checks whether the file is an image file.
         /// </summary>
         public bool IsImageFile {
             get {
