@@ -12,9 +12,16 @@ namespace Cornerstone.Database.Tables {
     public class DBSetting : DatabaseTable {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
+        private bool updating = false;
+
         public DBSetting():
             base() {
         }
+
+        public SettingsManager SettingsManager {
+            get { return _settingsManager; }
+            set { _settingsManager = value; }
+        } private SettingsManager _settingsManager;
 
         public override void AfterDelete() {
         }
@@ -73,8 +80,7 @@ namespace Cornerstone.Database.Tables {
         {
             get { return _value; }
 
-            set
-            {
+            set {
                 _value = value;
                 commitNeeded = true;
             }
@@ -118,7 +124,13 @@ namespace Cornerstone.Database.Tables {
             }
 
             set {
+                if (updating) return;
+
                 StringValue = value.ToString();
+                updating = true;
+                SettingsManager.OnSettingChanged(_key);
+                updating = false;
+
             }
         }
 

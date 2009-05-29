@@ -88,6 +88,9 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 matches = regEx.Matches(parsedInput);
             }
             catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
                 logger.Error("Regex expression failed!", e);
                 return;
             }

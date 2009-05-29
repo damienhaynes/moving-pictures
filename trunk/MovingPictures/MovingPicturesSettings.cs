@@ -172,6 +172,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private int _dataProviderRequestLimit;
 
+        [CornerstoneSetting(
+            Name = "Aquire MediaInfo Details From Movies",
+            Description = "If set to true, Moving Pictures will scan files for various statistics including video file resolution and audio settings. If this option is turned off, this information will not be available to the skin, but the import process will be faster.",
+            Groups = "|Movie Importer|Matching and Importing|",
+            Identifier = "importer_use_mediainfo",
+            Default = true)]
+        public bool UseMediaInfo {
+            get { return _useMediaInfo; }
+            set {
+                _useMediaInfo = value;
+                OnSettingChanged("importer_use_mediainfo");
+            }
+        }
+        private bool _useMediaInfo;
+
         #endregion
 
         #region Preprocessing
@@ -951,6 +966,40 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private string _externalPlayerArguements;
+
+        #endregion
+
+        #region Parental Controls
+
+        [CornerstoneSetting(
+            Name = "Enable Parental Controls",
+            Description = "Enables the Paretal Controls feature in the GUI.",
+            Groups = "|MediaPortal GUI|Parental Controls|",
+            Identifier = "enable_parental_controls",
+            Default = false)]
+        public bool ParentalControlsEnabled {
+            get { return _useRemoteControlFiltering; }
+            set {
+                _parentalControlsEnabled = value;
+                OnSettingChanged("enable_parental_controls");
+            }
+        }
+        private bool? _parentalControlsEnabled;
+
+        [CornerstoneSetting(
+            Name = "Parental Controls Filter ID",
+            Description = "The filter attached to the Parental Controls functionality.",
+            Groups = "|MediaPortal GUI|Parental Controls|",
+            Identifier = "parental_controls_filter_id",
+            Default = "null")]
+        public string ParentalContolsFilterID {
+            get { return _parentalContolsFilterID; }
+            set {
+                _parentalContolsFilterID = value;
+                OnSettingChanged("parental_controls_filter_id");
+            }
+        }
+        private string _parentalContolsFilterID;
 
         #endregion
 
