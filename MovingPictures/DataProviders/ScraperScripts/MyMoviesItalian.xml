@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="0" minor="3" point="0"/>
-    <published month="04" day="27" year="2009"/>
+    <version major="0" minor="3" point="1"/>
+    <published month="05" day="03" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -70,7 +70,7 @@
       ]]>
       </set>
 
-      <if test='${movie.movie.actors}='>
+      <if test='${movie.actors}='>
         <!-- Actors -->
         <parse name='actors' input='${details_page}' regex='&lt;a\s+href="http://www.mymovies.it/biografia/?[^"]+"&gt;(.+?)(?=(&lt;/a&gt;))'/>
         <set name='movie.actors' value=''/>

@@ -40,8 +40,6 @@ namespace Cornerstone.Database {
         public SettingsManager(DatabaseManager dbManager) {
             this.dbManager = dbManager;
 
-            //generate();
-
             initializing = true;
             
             BuildPropertyLookup();
@@ -113,7 +111,7 @@ namespace Cornerstone.Database {
         /// The identifier as defined in the attribute for the setting property in the 
         /// super class.
         /// </param>
-        protected void OnSettingChanged(string settingIdentifier) {
+        public void OnSettingChanged(string settingIdentifier) {
             // if we are intializing, ignore all changes
             if (initializing)
                 return;
@@ -166,6 +164,7 @@ namespace Cornerstone.Database {
             foreach (DBSetting currSetting in settingList) {
                 try {
                     this.Add(currSetting.Key, currSetting);
+                    currSetting.SettingsManager = this;
                 }
                 catch (Exception e) {
                     if (e is ThreadAbortException)

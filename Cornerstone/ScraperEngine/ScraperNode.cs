@@ -157,7 +157,7 @@ namespace Cornerstone.ScraperEngine {
                     Encoding encoding = null;
                     if (encodingStr != string.Empty) {
                         try { encoding = Encoding.GetEncoding(encodingStr); }
-                        catch (ArgumentException e) {
+                        catch (ArgumentException) {
                             encoding = null;
                             logger.Error("Scraper script tried to use an invalid encoding for \"safe\" modifier");
                         }

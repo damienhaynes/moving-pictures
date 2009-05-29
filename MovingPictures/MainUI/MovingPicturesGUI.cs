@@ -383,6 +383,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // if we are not in details view (maybe we just came back from playing a movie)
             // set the first item in the list as selected.
+            // TODO: Why is this like this?
             if (browser.CurrentView != BrowserViewMode.DETAILS) {
                 browser.JumpToBeginningOfList();
                 browser.SyncFromFacade();

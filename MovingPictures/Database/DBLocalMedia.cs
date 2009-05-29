@@ -434,6 +434,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (!this.IsAvailable) return UpdateMediaInfoResults.MediaNotAvailable;
 
             VideoDiscFormat mountedVideoDiscFormat = VideoDiscFormat.Unknown;
+            if (!MovingPicturesCore.Settings.UseMediaInfo)
+                return UpdateMediaInfoResults.Success;
+
             string mediaPath = this.FullPath;
 
             if (this.IsDVD || this.IsHDDVD || this.IsBluray) {
