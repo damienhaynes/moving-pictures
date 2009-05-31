@@ -128,7 +128,7 @@ namespace Cornerstone.Database.Tables {
 
                 StringValue = value.ToString();
                 updating = true;
-                SettingsManager.OnSettingChanged(_key);
+                if (SettingsManager != null) SettingsManager.OnSettingChanged(_key);
                 updating = false;
 
             }

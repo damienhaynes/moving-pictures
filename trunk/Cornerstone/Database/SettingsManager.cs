@@ -215,6 +215,7 @@ namespace Cornerstone.Database {
                 newSetting.Description = attribute.Description;
                 newSetting.Grouping.AddRange(groups);
                 newSetting.DBManager = this.dbManager;
+                newSetting.SettingsManager = this;
                 newSetting.Commit();
 
                 this[attribute.Identifier] = newSetting;
