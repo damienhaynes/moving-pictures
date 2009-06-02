@@ -488,6 +488,7 @@
     <Content Include="Resources\language\en-US.xml" />
     <Content Include="Resources\language\es.xml" />
     <Content Include="Resources\language\fr.xml" />
+    <Content Include="Resources\language\he.xml" />
     <Content Include="Resources\language\ru.xml" />
     <Content Include="Resources\language\sv.xml" />
     <Content Include="Resources\Images\page_gear.png" />
