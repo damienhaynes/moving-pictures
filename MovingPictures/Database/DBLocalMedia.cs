@@ -431,147 +431,153 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public UpdateMediaInfoResults UpdateMediaInfo() {
-            if (!this.IsAvailable) return UpdateMediaInfoResults.MediaNotAvailable;
-
-            VideoDiscFormat mountedVideoDiscFormat = VideoDiscFormat.Unknown;
-            if (!MovingPicturesCore.Settings.UseMediaInfo)
-                return UpdateMediaInfoResults.Success;
-
-            string mediaPath = this.FullPath;
-
-            if (this.IsDVD || this.IsHDDVD || this.IsBluray) {
-                mediaPath = Utility.GetMainFeatureStreamFromVideoDisc(mediaPath, this.VideoDiscFormat);
-                logger.Debug("Updating mediainfo for a {0} video disc.  mediapath={1}", this.VideoDiscFormat.ToString(), mediaPath);
-            }
-            else if (this.IsImageFile && DaemonTools.IsMounted(mediaPath)) {
-                string videoDiscPath = Utility.GetVideoDiscPath(DaemonTools.GetVirtualDrive());
-                mountedVideoDiscFormat = Utility.GetVideoDiscFormat(videoDiscPath);
-                mediaPath = Utility.GetMainFeatureStreamFromVideoDisc(videoDiscPath, mountedVideoDiscFormat);
-            }
-            else if (this.IsImageFile) {
-                // if it's an image file and it's not mounted
-                // we can't get the media info
-                return UpdateMediaInfoResults.ImageFileNotMounted;
-            }
-
-            MediaInfoWrapper mInfoWrapper = new MediaInfoWrapper(mediaPath);
-            this.VideoWidth = mInfoWrapper.Width;
-            this.VideoHeight = mInfoWrapper.Height;
-            this.VideoFrameRate = mInfoWrapper.Framerate;
-            this.HasSubtitles = mInfoWrapper.HasSubtitles;
-
-            if ((float)mInfoWrapper.Width / (float)mInfoWrapper.Height >= 1.4)
-                this.VideoAspectRatio = "16_9";
-            else
-                this.VideoAspectRatio = "4_3";
-
-            if (mInfoWrapper.IsDIVX)
-                this.VideoCodec = "DIVX";
-            else if (mInfoWrapper.IsXVID)
-                this.VideoCodec = "XVID";
-            else if (mInfoWrapper.IsH264)
-                this.VideoCodec = "H264";
-            else if (mInfoWrapper.IsMP1V)
-                this.VideoCodec = "MP1V";
-            else if (mInfoWrapper.IsMP2V)
-                this.VideoCodec = "MP2V";
-            else if (mInfoWrapper.IsWMV)
-                this.VideoCodec = "WMV";
-            else
-                this.VideoCodec = mInfoWrapper.VideoCodec;
-
-            if (mInfoWrapper.IsAC3 || mInfoWrapper.AudioCodec.ToLower().Contains("ac-3"))
-                this.AudioCodec = "AC3";
-            else if (mInfoWrapper.IsMP3)
-                this.AudioCodec = "MP3";
-            else if (mInfoWrapper.IsMP2A)
-                this.AudioCodec = "MP2A";
-            else if (mInfoWrapper.IsDTS)
-                this.AudioCodec = "DTS";
-            else if (mInfoWrapper.IsOGG)
-                this.AudioCodec = "OGG";
-            else if (mInfoWrapper.IsAAC)
-                this.AudioCodec = "AAC";
-            else if (mInfoWrapper.IsWMA)
-                this.AudioCodec = "WMA";
-            else if (mInfoWrapper.IsPCM)
-                this.AudioCodec = "PCM";
-            else
-                this.AudioCodec = mInfoWrapper.AudioCodec;
-
-            //if (mInfoWrapper.Is1080P)
-            //    this.VideoResolution = "1080p";
-            //else if (mInfoWrapper.Is1080I)
-            //    this.VideoResolution = "1080i";
-            //else if (mInfoWrapper.Is720P)
-            //    this.VideoResolution = "720p";
-            //else if (mInfoWrapper.IsHDTV)
-            //    this.VideoResolution = "HD";
-            //else
-            //    this.VideoResolution = "SD";
-
-
-            // get duration
-            // duration is not currently included in the MediaInfoWrapper,
-            // so we must call MediaInfo directly.
-            MediaInfo mInfo = new MediaInfo();
             try {
-                int intValue;
-                mInfo.Open(mediaPath);
-                if (int.TryParse(mInfo.Get(StreamKind.Video, 0, "PlayTime"), out intValue))
-                    this.Duration = intValue;
-            }
-            finally {
-                if (mInfo != null)
-                    mInfo.Close();
-            }
+                if (!this.IsAvailable) return UpdateMediaInfoResults.MediaNotAvailable;
+
+                VideoDiscFormat mountedVideoDiscFormat = VideoDiscFormat.Unknown;
+                if (!MovingPicturesCore.Settings.UseMediaInfo)
+                    return UpdateMediaInfoResults.Success;
+
+                string mediaPath = this.FullPath;
+
+                if (this.IsDVD || this.IsHDDVD || this.IsBluray) {
+                    mediaPath = Utility.GetMainFeatureStreamFromVideoDisc(mediaPath, this.VideoDiscFormat);
+                    logger.Debug("Updating mediainfo for a {0} video disc.  mediapath={1}", this.VideoDiscFormat.ToString(), mediaPath);
+                }
+                else if (this.IsImageFile && DaemonTools.IsMounted(mediaPath)) {
+                    string videoDiscPath = Utility.GetVideoDiscPath(DaemonTools.GetVirtualDrive());
+                    mountedVideoDiscFormat = Utility.GetVideoDiscFormat(videoDiscPath);
+                    mediaPath = Utility.GetMainFeatureStreamFromVideoDisc(videoDiscPath, mountedVideoDiscFormat);
+                }
+                else if (this.IsImageFile) {
+                    // if it's an image file and it's not mounted
+                    // we can't get the media info
+                    return UpdateMediaInfoResults.ImageFileNotMounted;
+                }
+
+                MediaInfoWrapper mInfoWrapper = new MediaInfoWrapper(mediaPath);
+                this.VideoWidth = mInfoWrapper.Width;
+                this.VideoHeight = mInfoWrapper.Height;
+                this.VideoFrameRate = mInfoWrapper.Framerate;
+                this.HasSubtitles = mInfoWrapper.HasSubtitles;
+
+                if ((float)mInfoWrapper.Width / (float)mInfoWrapper.Height >= 1.4)
+                    this.VideoAspectRatio = "16_9";
+                else
+                    this.VideoAspectRatio = "4_3";
+
+                if (mInfoWrapper.IsDIVX)
+                    this.VideoCodec = "DIVX";
+                else if (mInfoWrapper.IsXVID)
+                    this.VideoCodec = "XVID";
+                else if (mInfoWrapper.IsH264)
+                    this.VideoCodec = "H264";
+                else if (mInfoWrapper.IsMP1V)
+                    this.VideoCodec = "MP1V";
+                else if (mInfoWrapper.IsMP2V)
+                    this.VideoCodec = "MP2V";
+                else if (mInfoWrapper.IsWMV)
+                    this.VideoCodec = "WMV";
+                else
+                    this.VideoCodec = mInfoWrapper.VideoCodec;
+
+                if (mInfoWrapper.IsAC3 || mInfoWrapper.AudioCodec.ToLower().Contains("ac-3"))
+                    this.AudioCodec = "AC3";
+                else if (mInfoWrapper.IsMP3)
+                    this.AudioCodec = "MP3";
+                else if (mInfoWrapper.IsMP2A)
+                    this.AudioCodec = "MP2A";
+                else if (mInfoWrapper.IsDTS)
+                    this.AudioCodec = "DTS";
+                else if (mInfoWrapper.IsOGG)
+                    this.AudioCodec = "OGG";
+                else if (mInfoWrapper.IsAAC)
+                    this.AudioCodec = "AAC";
+                else if (mInfoWrapper.IsWMA)
+                    this.AudioCodec = "WMA";
+                else if (mInfoWrapper.IsPCM)
+                    this.AudioCodec = "PCM";
+                else
+                    this.AudioCodec = mInfoWrapper.AudioCodec;
+
+                //if (mInfoWrapper.Is1080P)
+                //    this.VideoResolution = "1080p";
+                //else if (mInfoWrapper.Is1080I)
+                //    this.VideoResolution = "1080i";
+                //else if (mInfoWrapper.Is720P)
+                //    this.VideoResolution = "720p";
+                //else if (mInfoWrapper.IsHDTV)
+                //    this.VideoResolution = "HD";
+                //else
+                //    this.VideoResolution = "SD";
 
 
-            // Get audio channel count.
-            // because dvds have multiple files with multiple audio streams
-            // we must build a list of all files, and loop through them.
-            // the stream with the highest number of audio channels wins.
-
-            // build list of files
-            List<string> files = new List<string>();
-            if (this.IsDVD || (this.IsImageFile && mountedVideoDiscFormat == VideoDiscFormat.DVD)) {
-                files.AddRange(Directory.GetFiles(Path.GetDirectoryName(mediaPath), "*.ifo"));
-            }
-            else {
-                files.Add(mediaPath);
-            }
-
-            // get highest audio channel count
-            foreach (var file in files) {
+                // get duration
+                // duration is not currently included in the MediaInfoWrapper,
+                // so we must call MediaInfo directly.
+                MediaInfo mInfo = new MediaInfo();
                 try {
                     int intValue;
-                    mInfo.Open(file);
-
-                    bool _isInterlaced = mInfo.Get(StreamKind.Video, 0, "ScanType").ToLower().Contains("interlaced");
-                    if ((mInfoWrapper.Width == 1920 || mInfoWrapper.Height == 1080) && !_isInterlaced)
-                        this.VideoResolution = "1080p";
-                    else if ((mInfoWrapper.Width == 1920 || mInfoWrapper.Height == 1080) && _isInterlaced)
-                        this.VideoResolution = "1080i";
-                    else if ((mInfoWrapper.Width == 1280 || mInfoWrapper.Height == 720) && !_isInterlaced)
-                        this.VideoResolution = "720p";
-                    else if (mInfoWrapper.Height >= 720)
-                        this.VideoResolution = "HD";
-                    else
-                        this.VideoResolution = "SD";
-
-                    int iAudioStreams = mInfo.Count_Get(StreamKind.Audio);
-                    for (int i = 0; i < iAudioStreams - 1; i++) {
-                        if (int.TryParse(mInfo.Get(StreamKind.Audio, i, "Channel(s)"), out intValue)
-                            && intValue > this.AudioChannels)
-                            this.AudioChannels = intValue;
-                    }
+                    mInfo.Open(mediaPath);
+                    if (int.TryParse(mInfo.Get(StreamKind.Video, 0, "PlayTime"), out intValue))
+                        this.Duration = intValue;
                 }
                 finally {
                     if (mInfo != null)
                         mInfo.Close();
                 }
+
+
+                // Get audio channel count.
+                // because dvds have multiple files with multiple audio streams
+                // we must build a list of all files, and loop through them.
+                // the stream with the highest number of audio channels wins.
+
+                // build list of files
+                List<string> files = new List<string>();
+                if (this.IsDVD || (this.IsImageFile && mountedVideoDiscFormat == VideoDiscFormat.DVD)) {
+                    files.AddRange(Directory.GetFiles(Path.GetDirectoryName(mediaPath), "*.ifo"));
+                }
+                else {
+                    files.Add(mediaPath);
+                }
+
+                // get highest audio channel count
+                foreach (var file in files) {
+                    try {
+                        int intValue;
+                        mInfo.Open(file);
+
+                        bool _isInterlaced = mInfo.Get(StreamKind.Video, 0, "ScanType").ToLower().Contains("interlaced");
+                        if ((mInfoWrapper.Width == 1920 || mInfoWrapper.Height == 1080) && !_isInterlaced)
+                            this.VideoResolution = "1080p";
+                        else if ((mInfoWrapper.Width == 1920 || mInfoWrapper.Height == 1080) && _isInterlaced)
+                            this.VideoResolution = "1080i";
+                        else if ((mInfoWrapper.Width == 1280 || mInfoWrapper.Height == 720) && !_isInterlaced)
+                            this.VideoResolution = "720p";
+                        else if (mInfoWrapper.Height >= 720)
+                            this.VideoResolution = "HD";
+                        else
+                            this.VideoResolution = "SD";
+
+                        int iAudioStreams = mInfo.Count_Get(StreamKind.Audio);
+                        for (int i = 0; i < iAudioStreams - 1; i++) {
+                            if (int.TryParse(mInfo.Get(StreamKind.Audio, i, "Channel(s)"), out intValue)
+                                && intValue > this.AudioChannels)
+                                this.AudioChannels = intValue;
+                        }
+                    }
+                    finally {
+                        if (mInfo != null)
+                            mInfo.Close();
+                    }
+                }
+                return UpdateMediaInfoResults.Success;
             }
-            return UpdateMediaInfoResults.Success;
+            catch (Exception ex) {
+                logger.DebugException("", ex);
+                return UpdateMediaInfoResults.GeneralError;
+            }
         }
 
         #endregion
@@ -705,6 +711,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
     public enum UpdateMediaInfoResults {
         Success,
         ImageFileNotMounted,
-        MediaNotAvailable
+        MediaNotAvailable,
+        GeneralError
     }
 }
