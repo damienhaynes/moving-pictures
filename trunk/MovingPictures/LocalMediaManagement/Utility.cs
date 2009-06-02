@@ -618,7 +618,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     dir = entryPath.ToLower().Replace(@"adv_obj\discid.dat", @"HVDVD_TS\");
                     return GetLargestFileInDirectory(new DirectoryInfo(dir), "*.evo");
                 case VideoDiscFormat.DVD:
-                    return Path.Combine(Path.GetPathRoot(entryPath), @"VIDEO_TS\VTS_01_0.IFO");
+                    return entryPath.ToLower().Replace(@"\video_ts.ifo", @"\vts_01_0.ifo");
                 default:
                     return null;
             }
