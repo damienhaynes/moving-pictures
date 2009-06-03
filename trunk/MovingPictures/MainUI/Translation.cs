@@ -127,16 +127,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static int loadTranslations(string lang) {
             XmlDocument doc = new XmlDocument();
             Dictionary<string, string> TranslatedStrings = new Dictionary<string, string>();
-
+            string langPath = "";
             try {
-                string langPath = Path.Combine(path, lang + ".xml");
+                langPath = Path.Combine(path, lang + ".xml");
                 doc.Load(langPath);
             }
             catch (Exception e) {
                 if (lang == "en")
-                    return 0; // othwerise we are in an endless loop!
-                logger.ErrorException("Cannot find Translation File (or error in xml): " + lang, e);
-                logger.Error("Falling back to English");
+                    return 0; // otherwise we are in an endless loop!
+
+                if (e.GetType() == typeof(FileNotFoundException))
+                    logger.Warn("Cannot find translation file {0}.  Failing back to English", langPath);
+                else
+                    logger.ErrorException(String.Format("Error in translation xml file: {0}. Failing back to English", lang), e);
+
                 return loadTranslations("en");
             }
             foreach (XmlNode stringEntry in doc.DocumentElement.ChildNodes) {
