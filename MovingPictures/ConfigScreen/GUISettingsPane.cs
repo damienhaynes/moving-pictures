@@ -10,6 +10,8 @@ using MediaPortal.Plugins.MovingPictures.MainUI.Filters;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using System.Diagnostics;
 using MediaPortal.Plugins.MovingPictures.MainUI;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using MediaPortal.Plugins.MovingPictures.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class GUISettingsPane : UserControl {
@@ -30,6 +32,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             watchedPercentTextBox.Setting = MovingPicturesCore.Settings["gui_watch_percentage"];
             remoteControlCheckBox.Setting = MovingPicturesCore.Settings["enable_rc_filter"];
             enableDeleteCheckBox.Setting = MovingPicturesCore.Settings["enable_delete_movie"];
+            parentalControlsCheckBox.Setting = MovingPicturesCore.Settings["enable_parental_controls"];
+            passwordTextBox.Setting = MovingPicturesCore.Settings["parental_controls_password"];
+
+            passwordTextBox.Enabled = parentalControlsCheckBox.Checked;
+            parentalContolsButton.Enabled = parentalControlsCheckBox.Checked;
 
             sortFieldComboBox.Setting = MovingPicturesCore.Settings["default_sort_field"];
             sortFieldComboBox.EnumType = typeof(SortingFields);
@@ -38,6 +45,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             dvdInsertedAction = MovingPicturesCore.Settings["on_disc_loaded"];
             defaultView = MovingPicturesCore.Settings["default_view"];
             watchedFilterStartsOn = MovingPicturesCore.Settings["start_watched_filter_on"];
+
+
         }
 
         private void GUISettingsPane_Load(object sender, EventArgs e) {
@@ -144,6 +153,33 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void remoteFilteringHelpLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             ProcessStartInfo processInfo = new ProcessStartInfo(Resources.RemoteFilteringHelpURL);
             Process.Start(processInfo);
+        }
+
+        private void parentalControlsButton_Click(object sender, EventArgs e) {
+            FilterConfigPopup popup = new FilterConfigPopup();
+
+            // grab or create the filter object attached to the parental controls
+            DBFilter<DBMovieInfo> filter;
+            string filterID = MovingPicturesCore.Settings.ParentalContolsFilterID;
+            if (filterID == "null") {
+                filter = new DBFilter<DBMovieInfo>();
+                filter.Name = "Parental Controls Filter";
+                MovingPicturesCore.DatabaseManager.Commit(filter);
+                MovingPicturesCore.Settings.ParentalContolsFilterID = filter.ID.ToString();
+            }
+            else {
+                filter = MovingPicturesCore.DatabaseManager.Get<DBFilter<DBMovieInfo>>(int.Parse(filterID));
+            }
+
+            // attach the filter, show the popup, and if necisarry, save the results
+            popup.FilterPane.AttachedFilter = filter;
+            popup.ShowDialog();
+            filter.Commit();
+        }
+
+        private void parentalControlsCheckBox_CheckedChanged(object sender, EventArgs e) {
+            passwordTextBox.Enabled = parentalControlsCheckBox.Checked;
+            parentalContolsButton.Enabled = parentalControlsCheckBox.Checked;
         }
     }
 }

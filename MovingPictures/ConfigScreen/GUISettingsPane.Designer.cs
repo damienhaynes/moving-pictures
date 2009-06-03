@@ -28,7 +28,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.defaultViewComboBox = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.homeScreenTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.helpButton = new System.Windows.Forms.Button();
             this.playMovieRadioButton = new System.Windows.Forms.RadioButton();
@@ -44,18 +43,25 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.watchedPercentTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.remoteControlCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.remoteFilteringHelpLink = new System.Windows.Forms.LinkLabel();
             this.label10 = new System.Windows.Forms.Label();
             this.watchedComboBox = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.sortFieldComboBox = new Cornerstone.GUI.Controls.SettingsComboBox();
-            this.enableDeleteCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.parentalContolsButton = new System.Windows.Forms.Button();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.passwordTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
+            this.parentalControlsCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.enableDeleteCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.sortFieldComboBox = new Cornerstone.GUI.Controls.SettingsComboBox();
+            this.remoteControlCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.watchedPercentTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
+            this.homeScreenTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -112,16 +118,6 @@
             this.label4.Size = new System.Drawing.Size(147, 13);
             this.label4.TabIndex = 4;
             this.label4.Text = "Plug-in name in home screen:";
-            // 
-            // homeScreenTextBox
-            // 
-            this.homeScreenTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.homeScreenTextBox.Location = new System.Drawing.Point(296, 28);
-            this.homeScreenTextBox.Name = "homeScreenTextBox";
-            this.homeScreenTextBox.Setting = null;
-            this.homeScreenTextBox.Size = new System.Drawing.Size(173, 21);
-            this.homeScreenTextBox.TabIndex = 5;
             // 
             // groupBox3
             // 
@@ -291,14 +287,6 @@
             this.label7.TabIndex = 25;
             this.label7.Text = "Mark movie as watched after viewing";
             // 
-            // watchedPercentTextBox
-            // 
-            this.watchedPercentTextBox.Location = new System.Drawing.Point(319, 213);
-            this.watchedPercentTextBox.Name = "watchedPercentTextBox";
-            this.watchedPercentTextBox.Setting = null;
-            this.watchedPercentTextBox.Size = new System.Drawing.Size(29, 21);
-            this.watchedPercentTextBox.TabIndex = 26;
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -317,18 +305,6 @@
             this.label9.Size = new System.Drawing.Size(56, 13);
             this.label9.TabIndex = 28;
             this.label9.Text = "Filtering:";
-            // 
-            // remoteControlCheckBox
-            // 
-            this.remoteControlCheckBox.AutoSize = true;
-            this.remoteControlCheckBox.IgnoreSettingName = false;
-            this.remoteControlCheckBox.Location = new System.Drawing.Point(128, 343);
-            this.remoteControlCheckBox.Name = "remoteControlCheckBox";
-            this.remoteControlCheckBox.Setting = null;
-            this.remoteControlCheckBox.Size = new System.Drawing.Size(163, 17);
-            this.remoteControlCheckBox.TabIndex = 29;
-            this.remoteControlCheckBox.Text = "Use Remote Control Filtering";
-            this.remoteControlCheckBox.UseVisualStyleBackColor = true;
             // 
             // remoteFilteringHelpLink
             // 
@@ -383,16 +359,80 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "groupBox5";
             // 
-            // sortFieldComboBox
+            // groupBox6
             // 
-            this.sortFieldComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sortFieldComboBox.EnumType = null;
-            this.sortFieldComboBox.FormattingEnabled = true;
-            this.sortFieldComboBox.Location = new System.Drawing.Point(227, 307);
-            this.sortFieldComboBox.Name = "sortFieldComboBox";
-            this.sortFieldComboBox.Setting = null;
-            this.sortFieldComboBox.Size = new System.Drawing.Size(121, 21);
-            this.sortFieldComboBox.TabIndex = 36;
+            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox6.Location = new System.Drawing.Point(120, 240);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(380, 3);
+            this.groupBox6.TabIndex = 24;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "groupBox2";
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox7.Location = new System.Drawing.Point(10, 366);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(492, 3);
+            this.groupBox7.TabIndex = 17;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "groupBox4";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(4, 378);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(108, 13);
+            this.label12.TabIndex = 41;
+            this.label12.Text = "Parental Controls:";
+            // 
+            // parentalContolsButton
+            // 
+            this.parentalContolsButton.Location = new System.Drawing.Point(128, 410);
+            this.parentalContolsButton.Name = "parentalContolsButton";
+            this.parentalContolsButton.Size = new System.Drawing.Size(144, 23);
+            this.parentalContolsButton.TabIndex = 43;
+            this.parentalContolsButton.Text = "Define Restricted Movies";
+            this.parentalContolsButton.UseVisualStyleBackColor = true;
+            this.parentalContolsButton.Click += new System.EventHandler(this.parentalControlsButton_Click);
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox8.Location = new System.Drawing.Point(122, 401);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(380, 3);
+            this.groupBox8.TabIndex = 25;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "groupBox8";
+            // 
+            // passwordTextBox
+            // 
+            this.passwordTextBox.Location = new System.Drawing.Point(432, 376);
+            this.passwordTextBox.Name = "passwordTextBox";
+            this.passwordTextBox.PasswordChar = '●';
+            this.passwordTextBox.Setting = null;
+            this.passwordTextBox.Size = new System.Drawing.Size(51, 21);
+            this.passwordTextBox.TabIndex = 44;
+            // 
+            // parentalControlsCheckBox
+            // 
+            this.parentalControlsCheckBox.AutoSize = true;
+            this.parentalControlsCheckBox.IgnoreSettingName = true;
+            this.parentalControlsCheckBox.Location = new System.Drawing.Point(128, 378);
+            this.parentalControlsCheckBox.Name = "parentalControlsCheckBox";
+            this.parentalControlsCheckBox.Setting = null;
+            this.parentalControlsCheckBox.Size = new System.Drawing.Size(284, 17);
+            this.parentalControlsCheckBox.TabIndex = 42;
+            this.parentalControlsCheckBox.Text = "Require following password to view restricted movies:";
+            this.parentalControlsCheckBox.UseVisualStyleBackColor = true;
+            this.parentalControlsCheckBox.CheckedChanged += new System.EventHandler(this.parentalControlsCheckBox_CheckedChanged);
             // 
             // enableDeleteCheckBox
             // 
@@ -406,21 +446,57 @@
             this.enableDeleteCheckBox.Text = "Allow user to delete files from the GUI context menu";
             this.enableDeleteCheckBox.UseVisualStyleBackColor = true;
             // 
-            // groupBox6
+            // sortFieldComboBox
             // 
-            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sortFieldComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.sortFieldComboBox.EnumType = null;
+            this.sortFieldComboBox.FormattingEnabled = true;
+            this.sortFieldComboBox.Location = new System.Drawing.Point(227, 307);
+            this.sortFieldComboBox.Name = "sortFieldComboBox";
+            this.sortFieldComboBox.Setting = null;
+            this.sortFieldComboBox.Size = new System.Drawing.Size(121, 21);
+            this.sortFieldComboBox.TabIndex = 36;
+            // 
+            // remoteControlCheckBox
+            // 
+            this.remoteControlCheckBox.AutoSize = true;
+            this.remoteControlCheckBox.IgnoreSettingName = false;
+            this.remoteControlCheckBox.Location = new System.Drawing.Point(128, 343);
+            this.remoteControlCheckBox.Name = "remoteControlCheckBox";
+            this.remoteControlCheckBox.Setting = null;
+            this.remoteControlCheckBox.Size = new System.Drawing.Size(163, 17);
+            this.remoteControlCheckBox.TabIndex = 29;
+            this.remoteControlCheckBox.Text = "Use Remote Control Filtering";
+            this.remoteControlCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // watchedPercentTextBox
+            // 
+            this.watchedPercentTextBox.Location = new System.Drawing.Point(319, 213);
+            this.watchedPercentTextBox.Name = "watchedPercentTextBox";
+            this.watchedPercentTextBox.Setting = null;
+            this.watchedPercentTextBox.Size = new System.Drawing.Size(29, 21);
+            this.watchedPercentTextBox.TabIndex = 26;
+            // 
+            // homeScreenTextBox
+            // 
+            this.homeScreenTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox6.Location = new System.Drawing.Point(120, 240);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(380, 3);
-            this.groupBox6.TabIndex = 24;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "groupBox2";
+            this.homeScreenTextBox.Location = new System.Drawing.Point(296, 28);
+            this.homeScreenTextBox.Name = "homeScreenTextBox";
+            this.homeScreenTextBox.Setting = null;
+            this.homeScreenTextBox.Size = new System.Drawing.Size(173, 21);
+            this.homeScreenTextBox.TabIndex = 5;
             // 
             // GUISettingsPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.passwordTextBox);
+            this.Controls.Add(this.groupBox8);
+            this.Controls.Add(this.parentalContolsButton);
+            this.Controls.Add(this.parentalControlsCheckBox);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.enableDeleteCheckBox);
             this.Controls.Add(this.sortFieldComboBox);
             this.Controls.Add(this.groupBox5);
@@ -452,7 +528,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(460, 100);
             this.Name = "GUISettingsPane";
-            this.Size = new System.Drawing.Size(512, 446);
+            this.Size = new System.Drawing.Size(512, 461);
             this.Load += new System.EventHandler(this.GUISettingsPane_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -498,5 +574,11 @@
         private Cornerstone.GUI.Controls.SettingsComboBox sortFieldComboBox;
         private Cornerstone.GUI.Controls.SettingCheckBox enableDeleteCheckBox;
         private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Label label12;
+        private Cornerstone.GUI.Controls.SettingCheckBox parentalControlsCheckBox;
+        private System.Windows.Forms.Button parentalContolsButton;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private Cornerstone.GUI.Controls.SettingsTextBox passwordTextBox;
     }
 }

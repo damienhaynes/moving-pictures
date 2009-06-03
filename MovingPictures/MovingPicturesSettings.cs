@@ -1001,6 +1001,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _parentalContolsFilterID;
 
+        [CornerstoneSetting(
+            Name = "Parental Controls Password",
+            Description = "The password required to access movies restricted by parental controls.",
+            Groups = "|MediaPortal GUI|Parental Controls|",
+            Identifier = "parental_controls_password",
+            Default = "null")]
+        public string ParentalContolsPassword {
+            get { return _parentalContolsPassword; }
+            set {
+                _parentalContolsPassword = value;
+                OnSettingChanged("parental_controls_password");
+            }
+        }
+        private string _parentalContolsPassword;
+
         #endregion
 
         #endregion

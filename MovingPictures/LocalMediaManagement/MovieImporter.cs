@@ -231,11 +231,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (artworkUpdaterThread != null) {
                     if (artworkUpdaterThread.IsAlive) {
                         logger.Info("Shutting Down Artwork Updater Thread...");
-                        artworkUpdaterThread.Abort();
 
                         // wait for the path scanner to shut down
-                        while (artworkUpdaterThread.IsAlive)
-                            Thread.Sleep(100);
+                        while (artworkUpdaterThread.IsAlive) {
+                            artworkUpdaterThread.Abort();
+                            Thread.Sleep(300);
+                        }
 
                         stoppedSomething = true;
                     }

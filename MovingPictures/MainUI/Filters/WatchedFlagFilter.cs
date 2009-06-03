@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using MediaPortal.Plugins.MovingPictures.Database;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
-    public class WatchedFlagFilter: IBrowserFilter {
-        public event FilterUpdatedDelegate Updated;
+    public class WatchedFlagFilter: IFilter<DBMovieInfo> {
+        public event FilterUpdatedDelegate<DBMovieInfo> Updated;
 
         public bool Active {
             get { return active; }

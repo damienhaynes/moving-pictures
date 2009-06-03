@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Cornerstone.Database.Tables;
+using System.ComponentModel;
 
 namespace Cornerstone.GUI.Controls {
     public interface IDBBackedControl {

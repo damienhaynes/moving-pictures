@@ -124,6 +124,12 @@
     <Compile Include="ConfigScreen\Popups\AdvancedSettingsPopup.Designer.cs">
       <DependentUpon>AdvancedSettingsPopup.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\Popups\FilterConfigPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\FilterConfigPopup.Designer.cs">
+      <DependentUpon>FilterConfigPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\Popups\LoadingPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -238,7 +244,6 @@
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
     <Compile Include="LocalMediaManagement\Utility.cs" />
     <Compile Include="MainUI\ConfigConnector.cs" />
-    <Compile Include="MainUI\Filters\IBrowserFilter.cs" />
     <Compile Include="MainUI\GroupHeaders.cs" />
     <Compile Include="MainUI\MovieBrowser.cs" />
     <Compile Include="MainUI\Filters\RemoteNumpadFilter.cs" />
@@ -314,6 +319,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\DataSourcesPopup.resx">
       <DependentUpon>DataSourcesPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\FilterConfigPopup.resx">
+      <DependentUpon>FilterConfigPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\LoadingPopup.resx">
