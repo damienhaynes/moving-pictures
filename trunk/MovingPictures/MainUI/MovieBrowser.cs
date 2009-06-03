@@ -132,20 +132,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// <summary>
         /// All filters that are active on the movie browser.
         /// </summary>
-        public DynamicList<IBrowserFilter> ActiveFilters {
+        public DynamicList<IFilter<DBMovieInfo>> ActiveFilters {
             get {
                 if (activeFilters == null) {
-                    activeFilters = new DynamicList<IBrowserFilter>();
+                    activeFilters = new DynamicList<IFilter<DBMovieInfo>>();
                     activeFilters.Changed += new ChangedEventHandler(onActiveFiltersChanged);
 
-                    watchedFilters = new DynamicList<IBrowserFilter>();
+                    watchedFilters = new DynamicList<IFilter<DBMovieInfo>>();
 
                 }
                 return activeFilters; 
             }
         }
-        private DynamicList<IBrowserFilter> activeFilters = null;
-        private DynamicList<IBrowserFilter> watchedFilters = null;
+        private DynamicList<IFilter<DBMovieInfo>> activeFilters = null;
+        private DynamicList<IFilter<DBMovieInfo>> watchedFilters = null;
 
         public SortingFields CurrentSortField { get; set; }
         public SortingDirections CurrentSortDirection { get; set; }
@@ -284,7 +284,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             filteredMovies.AddRange(allMovies);
 
             // trim it down to satisfy the filters.
-            foreach (IBrowserFilter currFilter in ActiveFilters)
+            foreach (IFilter<DBMovieInfo> currFilter in ActiveFilters)
                 filteredMovies = currFilter.Filter(filteredMovies);
         }
 
@@ -368,13 +368,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // When a new filter is added to or removed update our listeners and reload the facade
         private void onActiveFiltersChanged(object sender, EventArgs e) {
-            foreach (IBrowserFilter currFilter in watchedFilters) 
-                currFilter.Updated -= new FilterUpdatedDelegate(onFilterUpdated);
+            foreach (IFilter<DBMovieInfo> currFilter in watchedFilters)
+                currFilter.Updated -= new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
 
-            foreach (IBrowserFilter currFilter in activeFilters)
-                currFilter.Updated += new FilterUpdatedDelegate(onFilterUpdated);
+            foreach (IFilter<DBMovieInfo> currFilter in activeFilters)
+                currFilter.Updated += new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
 
-            watchedFilters = new DynamicList<IBrowserFilter>();
+            watchedFilters = new DynamicList<IFilter<DBMovieInfo>>();
             watchedFilters.AddRange(activeFilters);
             
             ReapplyFilters();
@@ -382,7 +382,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             onContentsChanged();
         }
 
-        private void onFilterUpdated(IBrowserFilter obj) {
+        private void onFilterUpdated(IFilter<DBMovieInfo> obj) {
             logger.Debug("OnFilterUpdated: " + obj);
             ReapplyFilters();
             ReloadFacade();

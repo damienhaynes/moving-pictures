@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{14201B8D-31C3-4FB5-9356-9485676C147B}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -60,7 +60,11 @@
     <Compile Include="Database\SettingsManager.cs" />
     <Compile Include="Database\Tables\DatabaseTable.cs" />
     <Compile Include="Database\Tables\DBAttribute.cs" />
+    <Compile Include="Database\Tables\DBFilter.cs" />
     <Compile Include="Database\Tables\DBSetting.cs" />
+    <Compile Include="Database\Tables\DBCriteria.cs" />
+    <Compile Include="Database\Tables\IFilter.cs" />
+    <Compile Include="Database\Tables\GenericDatabaseTable.cs" />
     <Compile Include="GUI\AdvancedSettingsPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -73,11 +77,16 @@
     <Compile Include="GUI\Controls\AttributesEditor.Designer.cs">
       <DependentUpon>AttributesEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Controls\FieldDisplaySettings.cs">
+    </Compile>
     <Compile Include="GUI\Controls\DBComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Controls\DBObjectEditor.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\DBObjectListEditor.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\Controls\DBTextBox.cs">
       <SubType>Component</SubType>
@@ -93,11 +102,11 @@
     </Compile>
     <Compile Include="GUI\DesignMode\DatabaseTableTypeConverter.cs" />
     <Compile Include="GUI\DesignMode\DBFieldTypeConverter.cs" />
-    <Compile Include="GUI\DesignMode\DBObjectListFieldEditor.cs">
+    <Compile Include="GUI\DesignMode\DBObjectFieldEditorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\DesignMode\DBObjectListFieldEditor.Designer.cs">
-      <DependentUpon>DBObjectListFieldEditor.cs</DependentUpon>
+    <Compile Include="GUI\DesignMode\DBObjectFieldEditorDialog.Designer.cs">
+      <DependentUpon>DBObjectFieldEditorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Controls\IDBBackedControl.cs" />
     <Compile Include="GUI\Controls\IDBFieldBackedControl.cs" />
@@ -106,6 +115,46 @@
     </Compile>
     <Compile Include="GUI\Dialogs\AttributeTypeEditor.Designer.cs">
       <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\CategorySettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\CategorySettingsPanel.Designer.cs">
+      <DependentUpon>CategorySettingsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\CriteriaInputField.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\CriteriaListPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericCriteriaListPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericCriteriaListPanel.Designer.cs">
+      <DependentUpon>GenericCriteriaListPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\CriteriaPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\CriteriaPanel.Designer.cs">
+      <DependentUpon>CriteriaPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\FilterEditorPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericFilterEditorPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericFilterEditorPane.Designer.cs">
+      <DependentUpon>GenericFilterEditorPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\IFilterEditorPane.cs" />
+    <Compile Include="GUI\Filtering\ItemSelectionPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\ItemSelectionPopup.Designer.cs">
+      <DependentUpon>ItemSelectionPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -148,13 +197,36 @@
       <DependentUpon>DBObjectEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\DesignMode\DBObjectListFieldEditor.resx">
-      <DependentUpon>DBObjectListFieldEditor.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\Controls\DBObjectListEditor.resx">
+      <DependentUpon>DBObjectListEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DesignMode\DBObjectFieldEditorDialog.resx">
+      <DependentUpon>DBObjectFieldEditorDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Dialogs\AttributeTypeEditor.resx">
       <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\CategorySettingsPanel.resx">
+      <DependentUpon>CategorySettingsPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\GenericCriteriaListPanel.resx">
+      <DependentUpon>GenericCriteriaListPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\CriteriaPanel.resx">
+      <DependentUpon>CriteriaPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\GenericFilterEditorPane.resx">
+      <DependentUpon>GenericFilterEditorPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\ItemSelectionPopup.resx">
+      <DependentUpon>ItemSelectionPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -14,6 +14,7 @@ using NLog.Config;
 using NLog.Targets;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public delegate void WorkerDelegate();
@@ -174,6 +175,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             if (InitializeProgress != null) InitializeProgress("Done!", 100);
+
+            //DBCriteria<DBMovieInfo> testCriteria = new DBCriteria<DBMovieInfo>();
+            //testCriteria.Field = DBField.GetField(typeof(DBMovieInfo), "Year");
+            //testCriteria.Value = 1998;
+            //DatabaseManager.Commit(testCriteria);
+
+            List<DBCriteria<DBMovieInfo>> list = DatabaseManager.Get<DBCriteria<DBMovieInfo>>(null);
         }
 
         static void DatabaseMaintenanceManager_MaintenanceProgress(string actionName, int percentDone) {

@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Cornerstone.Database {
     public class DBField {
-        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, TYPE, ENUM, DATE_TIME, DB_OBJECT }
+        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, TYPE, ENUM, DATE_TIME, DB_OBJECT, DB_FIELD }
 
         #region Private Variables
         
@@ -65,6 +65,8 @@ namespace Cornerstone.Database {
                 type = DBDataType.ENUM;
             else if (DatabaseManager.IsDatabaseTableType(propertyInfo.PropertyType))
                 type = DBDataType.DB_OBJECT;
+            else if(propertyInfo.PropertyType == typeof(DBField))
+                type = DBDataType.DB_FIELD;    
             else {
                 // check for string object types
                 foreach (Type currInterface in propertyInfo.PropertyType.GetInterfaces())
@@ -87,6 +89,15 @@ namespace Cornerstone.Database {
             get { return propertyInfo.Name; }
         }
 
+        public string FriendlyName {
+            get {
+                if (_friendlyName == null) 
+                    _friendlyName = DBField.MakeFriendlyName(Name);
+
+                return _friendlyName;
+            }
+        } private string _friendlyName = null;
+
         // Returns the name of this field in the database. Generally the same as Name,
         // but this is not gauranteed.
         public string FieldName {
@@ -98,9 +109,21 @@ namespace Cornerstone.Database {
             }
         }
 
+        // Returns the Type of database object this field belongs to.
+        public Type OwnerType {
+            get {
+                return propertyInfo.DeclaringType;
+            }
+        }
+
         // Returns the type the field will be stored as in the database.
         public DBDataType DBType {
             get { return type; }
+        }
+
+        // Returns the C# type for the field.
+        public Type Type {
+            get { return propertyInfo.PropertyType; }
         }
 
         // Returns the default value for the field. Currently always returns in type string.
@@ -176,66 +199,14 @@ namespace Cornerstone.Database {
                     return;
                 }
 
-                switch (DBType) {
-                    case DBDataType.INTEGER:
-                        string valStr = value.ToString();
-                        while  (valStr.Contains(","))
-                            valStr = valStr.Remove(valStr.IndexOf(','), 1);
+                if (value is string) 
+                    propertyInfo.GetSetMethod().Invoke(owner, new object[] { ConvertString(owner.DBManager, (string)value) });
 
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { int.Parse(valStr) });
-                        break;
-                    case DBDataType.REAL:
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { float.Parse(value.ToString(), new CultureInfo("en-US", false)) });
-                        break;
-                    case DBDataType.BOOL:
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { (value.ToString() == "true" || value.ToString() == "1") });
-                        break;
-                    case DBDataType.STRING_OBJECT:
-                        // create a new object and populate it
-                        IStringSourcedObject newObj = (IStringSourcedObject)propertyInfo.PropertyType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
-                        newObj.LoadFromString(value.ToString());
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { newObj });
-                        break;
-                    case DBDataType.TYPE:
-                        Type newTypeObj = Type.GetType(value.ToString());
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { newTypeObj });
-                        break;
-                    case DBDataType.ENUM:
-                        if (value.ToString().Trim().Length != 0) {
-                            Type enumType = propertyInfo.PropertyType;
-                            if (Nullable.GetUnderlyingType(enumType) != null)
-                                enumType = Nullable.GetUnderlyingType(enumType);
-
-                            object enumVal = Enum.Parse(enumType, value.ToString());
-                            propertyInfo.GetSetMethod().Invoke(owner, new object[] { enumVal });
-                        }
-                        break;
-                    case DBDataType.DATE_TIME:
-                        DateTime newDateTimeObj = DateTime.Now;
-                        if (value.ToString().Trim().Length != 0)
-                            try {
-                                newDateTimeObj = DateTime.Parse(value.ToString());
-                            }
-                            catch { }
-
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { newDateTimeObj });
-                        break;
-                    case DBDataType.DB_OBJECT:
-                        DatabaseTable newDBObj;
-                        if (value.ToString().Trim().Length == 0)
-                            newDBObj = null;
-                        else newDBObj = owner.DBManager.Get(propertyInfo.PropertyType, int.Parse(value.ToString()));
-
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { newDBObj });
-                        break;
-                    default:
-                        propertyInfo.GetSetMethod().Invoke(owner, new object[] { value.ToString() });
-                        break;
-                }
             }
             catch (Exception e) {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
+                
                 logger.Error("Error writing to " + owner.GetType().Name + "." + this.Name +
                                 " Property: " + e.Message);
             }
@@ -246,11 +217,80 @@ namespace Cornerstone.Database {
             return propertyInfo.GetGetMethod().Invoke(owner, null);
         }
 
+        public object ConvertString(DatabaseManager dbManager, string strVal) {
+            try {
+                switch (DBType) {
+                    case DBDataType.INTEGER:
+                        string tmp = strVal.ToString();
+                        while (tmp.Contains(","))
+                            tmp = tmp.Remove(tmp.IndexOf(','), 1);
+
+                        return int.Parse(tmp);
+                    case DBDataType.REAL:
+                        return float.Parse(strVal, new CultureInfo("en-US", false));
+                    case DBDataType.BOOL:
+                        return (strVal.ToString() == "true" || strVal.ToString() == "1");
+                    case DBDataType.STRING_OBJECT:
+                        // create a new object and populate it
+                        IStringSourcedObject newObj = (IStringSourcedObject)propertyInfo.PropertyType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
+                        newObj.LoadFromString(strVal);
+                        return newObj;
+                    case DBDataType.TYPE:
+                        return Type.GetType(strVal);
+                    case DBDataType.ENUM:
+                        if (strVal.Trim().Length != 0) {
+                            Type enumType = propertyInfo.PropertyType;
+                            if (Nullable.GetUnderlyingType(enumType) != null)
+                                enumType = Nullable.GetUnderlyingType(enumType);
+
+                            return Enum.Parse(enumType, strVal);
+                        }
+                        break;
+                    case DBDataType.DATE_TIME:
+                        DateTime newDateTimeObj = DateTime.Now;
+                        if (strVal.Trim().Length != 0)
+                            try {
+                                newDateTimeObj = DateTime.Parse(strVal);
+                            }
+                            catch { }
+
+                        return newDateTimeObj;
+                    case DBDataType.DB_OBJECT:
+                        DatabaseTable newDBObj;
+                        if (strVal.Trim().Length == 0)
+                            newDBObj = null;
+                        else newDBObj = dbManager.Get(propertyInfo.PropertyType, int.Parse(strVal));
+
+                        return newDBObj;
+                    case DBDataType.DB_FIELD:
+                        string[] values = strVal.Split(new string[] { "|||" }, StringSplitOptions.None);
+                        if (values.Length != 2)
+                            break;
+
+                        return DBField.GetFieldByDBName(Type.GetType(values[0]), values[1]);
+                    default:
+                        return strVal;
+                }
+            }
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
+                logger.Error("Error parsing " + propertyInfo.DeclaringType.Name + "." + this.Name +
+                                " Property: " + e.Message);
+            }
+
+            return null;
+        }
+
         // sets the default value based on the datatype.
         public void InitializeValue(DatabaseTable owner) {
             SetValue(owner, Default);
         }
 
+        public override string ToString() {
+            return FriendlyName;
+        }
 
         #endregion
 
@@ -319,6 +359,21 @@ namespace Cornerstone.Database {
             }
 
             return null;
+        }
+
+        public static string MakeFriendlyName(string input) {
+            string friendlyName = "";
+            
+            char prevChar = char.MinValue;
+            foreach (char currChar in input) {
+                if (prevChar != char.MinValue && char.IsLower(prevChar) && char.IsUpper(currChar))
+                    friendlyName += " ";
+
+                friendlyName += currChar;
+                prevChar = currChar;
+            }
+
+            return friendlyName;
         }
 
         #endregion

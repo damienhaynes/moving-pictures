@@ -19,7 +19,6 @@ namespace Cornerstone.Database {
         private Dictionary<Type, bool> isVerified;
         private Dictionary<Type, bool> doneFullRetrieve;
 
-
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         #endregion
@@ -236,6 +235,8 @@ namespace Cornerstone.Database {
             return false;
         }
 
+
+
         #endregion
 
         #region Private Methods
@@ -389,8 +390,14 @@ namespace Cornerstone.Database {
             } else if (IsDatabaseTableType(value.GetType()))
                 strVal = ((DatabaseTable)value).ID.ToString();
 
+            // if field represents metadata about another dbfield
+            else if (value is DBField) {
+                DBField field = (DBField) value;
+                strVal = field.OwnerType.AssemblyQualifiedName + "|||" + field.FieldName;                
+            }
+
             // handle C# Types, Need full qualified name to load types from other aseemblies
-            else if (value is Type) 
+            else if (value is Type)
                 strVal = ((Type)value).AssemblyQualifiedName;
 
             else if (value is DateTime) {
@@ -619,9 +626,6 @@ namespace Cornerstone.Database {
     }
 
     public class BaseCriteria: ICriteria {
-        // this should be used later for automated gui stuff, but for general use, would just complicate the code
-        public enum Operator { EQUALS, LESS_THAN, LESS_THAN_OR_EQUAL, GREATER_THAN, GREATER_THAN_OR_EQUAL }
-
         private DBField field;
         private object value;
         private string op;
@@ -644,5 +648,44 @@ namespace Cornerstone.Database {
             return GetWhereClause();
         }
     }
+
+    public class ListCriteria: ICriteria {
+
+        List<DatabaseTable> list;
+        private bool exclude;
+
+        public ListCriteria(List<DatabaseTable> list, bool exclude) {
+            this.list = list;
+            this.exclude = exclude;
+        }
+
+        public string GetWhereClause() {
+            return " where " + GetClause();
+        }
+
+        public string GetClause() {
+            if (list == null) return "1=1";
+
+            string rtn = " ID" + (exclude ? " not " : " ") +"in ( ";
+            bool first = true;
+            foreach (DatabaseTable currItem in list) {
+                if (currItem.ID == null) continue;
+
+                if (first) first = false;
+                else rtn += ", ";
+
+                rtn += currItem.ID;
+            }
+
+            rtn += ")";
+
+            return rtn;
+        }
+
+        public override string ToString() {
+            return GetWhereClause();
+        }
+    }
+    
     #endregion
 }

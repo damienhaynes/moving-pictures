@@ -59,16 +59,16 @@ namespace Cornerstone.GUI.Dialogs {
             fieldProperty4.FieldName = "SelectionMode";
             fieldProperty5.DisplayName = "Default";
             fieldProperty5.FieldName = "Default";
-            this.attrDescrList.FieldProperties.Add(fieldProperty1);
-            this.attrDescrList.FieldProperties.Add(fieldProperty2);
-            this.attrDescrList.FieldProperties.Add(fieldProperty3);
-            this.attrDescrList.FieldProperties.Add(fieldProperty4);
-            this.attrDescrList.FieldProperties.Add(fieldProperty5);
+            this.attrDescrList.FieldDisplaySettings.FieldProperties.Add(fieldProperty1);
+            this.attrDescrList.FieldDisplaySettings.FieldProperties.Add(fieldProperty2);
+            this.attrDescrList.FieldDisplaySettings.FieldProperties.Add(fieldProperty3);
+            this.attrDescrList.FieldDisplaySettings.FieldProperties.Add(fieldProperty4);
+            this.attrDescrList.FieldDisplaySettings.FieldProperties.Add(fieldProperty5);
             this.attrDescrList.Location = new System.Drawing.Point(13, 13);
             this.attrDescrList.Name = "attrDescrList";
             this.attrDescrList.Size = new System.Drawing.Size(311, 93);
             this.attrDescrList.TabIndex = 0;
-            this.attrDescrList.Table = typeof(DBAttrDescription);
+            this.attrDescrList.FieldDisplaySettings.Table = typeof(DBAttrDescription);
             // 
             // AttributeTypeEditor
             // 

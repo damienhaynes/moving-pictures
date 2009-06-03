@@ -145,20 +145,20 @@
             fieldProperty25.FieldName = "FileHash";
             fieldProperty25.ReadOnly = true;
             fieldProperty25.Visible = false;
-            this.fileDetailsList.FieldProperties.Add(fieldProperty17);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty18);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty19);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty20);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty21);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty22);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty23);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty24);
-            this.fileDetailsList.FieldProperties.Add(fieldProperty25);
+            this.fileDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty17);
+            this.fileDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty18);
+            this.fileDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty19);
+            this.fileDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty20);
+            this.fileDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty21);
+            this.fileDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty22);
+            this.fileDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty23);
+            this.fileDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty24);
+            this.fileDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty25);
             this.fileDetailsList.Location = new System.Drawing.Point(0, 111);
             this.fileDetailsList.Name = "fileDetailsList";
             this.fileDetailsList.Size = new System.Drawing.Size(408, 320);
             this.fileDetailsList.TabIndex = 15;
-            this.fileDetailsList.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBLocalMedia);
+            this.fileDetailsList.FieldDisplaySettings.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBLocalMedia);
             // 
             // FileDetailsSubPane
             // 

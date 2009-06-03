@@ -8,11 +8,13 @@ using System.Windows.Forms.Design;
 using System.Reflection;
 using System.Globalization;
 using Cornerstone.Database.Tables;
+using Cornerstone.Database;
 
 namespace Cornerstone.GUI.DesignMode {
     internal class DatabaseTableTypeConverter : TypeConverter {
-        List<Type> validTypeList = new List<Type>();
-        List<Assembly> loadedAssemblies = new List<Assembly>();
+
+        private List<Type> validTypeList = new List<Type>();
+        private List<Assembly> loadedAssemblies = new List<Assembly>();
 
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
             if (sourceType == typeof(string)) {
@@ -29,14 +31,14 @@ namespace Cornerstone.GUI.DesignMode {
 
         // Returns a StandardValuesCollection of standard value objects.
         public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) {
-            return new StandardValuesCollection(getTypeList());
+            return new StandardValuesCollection(GetAllTables());
         }
         
 
         // Overrides the ConvertFrom method of TypeConverter.
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
             if (value is string) {
-                List<Type> typeList = getTypeList();
+                List<Type> typeList = GetAllTables();
                 foreach (Type currType in typeList) 
                     if (currType.Name.Equals((string)value)) 
                         return currType;
@@ -52,18 +54,22 @@ namespace Cornerstone.GUI.DesignMode {
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        private List<Type> getTypeList() {
+        public List<Type> GetAllTables()
+        {
             // loop through all types in all loaded assemblies and see which have
             // been tagged by our custom database attribute
             Assembly[] assemblyList = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (Assembly currAssembly in assemblyList) {
-                if (!currAssembly.GlobalAssemblyCache)
-                    if (!loadedAssemblies.Contains(currAssembly)) {
+            foreach (Assembly currAssembly in assemblyList)
+            {
+                if (true) //!currAssembly.GlobalAssemblyCache)
+                    if (!loadedAssemblies.Contains(currAssembly))
+                    {
                         Type[] typeList = currAssembly.GetTypes();
-                        foreach (Type currType in typeList) {
+                        foreach (Type currType in typeList)
+                        {
                             object[] customAttrArray = currType.GetCustomAttributes(true);
-                            foreach (object currAttr in customAttrArray) 
-                                if (currAttr.GetType() == typeof(DBTableAttribute)) 
+                            foreach (object currAttr in customAttrArray)
+                                if (currAttr.GetType() == typeof(DBTableAttribute))
                                     validTypeList.Add(currType);
                         }
                     }

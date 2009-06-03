@@ -18,7 +18,7 @@ namespace Cornerstone.GUI.Controls {
                 _setting = value;
 
                 // Update the control to reflect the setting
-                if (_ignoreSettingName) Text = _setting.Name;
+                if (!_ignoreSettingName) Text = _setting.Name;
                 Checked = (bool)_setting.Value;
            }
         }

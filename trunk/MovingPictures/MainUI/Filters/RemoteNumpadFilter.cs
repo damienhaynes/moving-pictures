@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
+using Cornerstone.Database.Tables;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
-    public class RemoteNumpadFilter : IBrowserFilter {
+    public class RemoteNumpadFilter : IFilter<DBMovieInfo> {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public event FilterUpdatedDelegate Updated;
+        public event FilterUpdatedDelegate<DBMovieInfo> Updated;
 
         private enum FilterAction {
             Default,
@@ -53,18 +54,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
 
                 // Starts with (sortby)
                 Predicate<DBMovieInfo> titleStartsWith = delegate(DBMovieInfo item) {
-                    return (item.SortBy.ToLower().StartsWith(_listFilterString));
+                    return item.SortBy.ToLower().StartsWith(_listFilterString);
                 };
 
                 // By Year
                 Predicate<DBMovieInfo> byYear = delegate(DBMovieInfo item) {
-                    return (item.Year.ToString() == _listFilterString);
+                    return item.Year.ToString() == _listFilterString;
                 };
 
                 // By Decade
                 Predicate<DBMovieInfo> byDecade = delegate(DBMovieInfo item) {
                     int start = int.Parse(_listFilterString + "0");
-                    return ((item.Year >= start) && (item.Year < (start + 10)));
+                    return (item.Year >= start) && (item.Year < (start + 10));
                 };
 
                 // Filter the list with the specified critera
