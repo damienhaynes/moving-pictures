@@ -561,7 +561,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                             this.VideoResolution = "SD";
 
                         int iAudioStreams = mInfo.Count_Get(StreamKind.Audio);
-                        for (int i = 0; i < iAudioStreams - 1; i++) {
+                        for (int i = 0; i < iAudioStreams; i++) {
                             if (int.TryParse(mInfo.Get(StreamKind.Audio, i, "Channel(s)"), out intValue)
                                 && intValue > this.AudioChannels)
                                 this.AudioChannels = intValue;
