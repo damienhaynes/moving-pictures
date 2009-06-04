@@ -40,7 +40,7 @@
   <string Field="FailedMountingImage">Sorry, failed mounting DVD Image</string>
   <string Field="PlaybackFailedHeader">Playback Failed</string>
   <string Field="PlaybackFailed">Playback is not possible because the '{0}'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.</string>
-  <string Filed="MissingExternalPlayerExe">The executable for HD playback is missing.\nPlease correct the path to the executable.</string>
+  <string Field="MissingExternalPlayerExe">The executable for HD playback is missing.\nPlease correct the path to the executable.</string>
   <string Field="ResumeFromLast">Resume movie from last time?</string>
   <string Field="ResumeFrom">Resume from:</string>
   <string Field="InvalidVideoDiscFormat">Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.</string>
