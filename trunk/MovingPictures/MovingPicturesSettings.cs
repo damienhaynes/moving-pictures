@@ -70,7 +70,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "This is the maximum value for the levenshtein distance that is used for triggering auto-approval on close matching titles.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_autoapprove",
-            Default = 1)]
+            Default = 1,
+            Hidden = true)]
         public int AutoApproveThreshold {
             get { return _autoApproveThreshold; }
             set {
@@ -100,7 +101,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "When enabled this option will auto-approve matches using alternate titles.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_autoapprove_alternate_titles",
-            Default = true)]
+            Default = true,
+            Hidden = true)]
         public bool AutoApproveOnAlternateTitle {
             get { return _autoApproveOnAlternateTitle; }
             set {
@@ -115,7 +117,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "When enabled this option will ALWAYS group multiple files in one folder together (assuming a multi-part movie).",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_groupfolder",
-            Default = false)]
+            Default = false,
+            Hidden = true)]
         public bool AlwaysGroupByFolder {
             get { return _alwaysGroupByFolder; }
             set {
@@ -131,7 +134,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If a folder contains just one movie file it will use the folder name for matching. If you are sure that the filenames are more accurate than the folder name disable this setting.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_prefer_foldername",
-            Default = true)]
+            Default = true,
+            Hidden = true)]
         public bool PreferFolderName {
             get { return _preferFolderName; }
             set {
@@ -147,7 +151,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Enables importation of media from all available optical drives. This can include CDs, DVDs, HD-DVDs, and Bluray disks. This also applies to \"loose video files\" on a data CD/DVD.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_disc_enabled",
-            Default = true)]
+            Default = true,
+            Hidden = true)]
         public bool AutomaticallyImportDVDs {
             get { return _automaticallyImportInsertedDVDs; }
             set {
@@ -196,7 +201,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Scan for NFO file and if available parse out the IMDB id.",
             Groups = "|Movie Importer|Preprocessing|",
             Identifier = "importer_nfoscan",
-            Default = true)]
+            Default = true,
+            Hidden = true)]
         public bool NfoScannerEnabled {
             get { return _nfoScannerEnabled; }
             set {
@@ -212,7 +218,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The extensions that are used when scanning for nfo files. Seperate multiple extensions with , or ;",
             Groups = "|Movie Importer|Preprocessing|",
             Identifier = "importer_nfoext",
-            Default = "nfo;txt")]
+            Default = "nfo;txt",
+            Hidden = true)]
         public string NfoScannerFileExtensions {
             get { return _fileExtensions; }
             set {
@@ -228,7 +235,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If we found a match on IMDB id always auto-approve this match even if the other criteria doesn't match closely enough. ",
             Groups = "|Movie Importer|Preprocessing|",
             Identifier = "importer_autoimdb",
-            Default = true)]
+            Default = true,
+            Hidden = true)]
         public bool AutoApproveOnIMDBMatch {
             get { return _autoApproveOnImdbMatch; }
             set {
@@ -393,7 +401,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "When the movie importer automatically downloads cover art, it will not retrieve more than the given number of covers for a movie.",
             Groups = "|Movie Importer|Cover Art|",
             Identifier = "max_covers_per_movie",
-            Default = 9)]
+            Default = 9,
+            Hidden = true)]
         public int MaxCoversPerMovie {
             get { return _maxCoversperMovie; }
             set {
@@ -473,7 +482,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If set to true the local media data provider will use files matching a specified pattern for cover artwork. This setting should only be used if you have all movies in their own folders.",
             Groups = "|Movie Importer|Cover Art|",
             Identifier = "local_cover_from_movie_folder",
-            Default = false)]
+            Default = false,
+            Hidden = true)]
         public bool SearchMovieFolderForCoverArt {
             get { return _searchMovieFolderforCoverArt; }
             set {
@@ -489,7 +499,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The importer will look in the folder the given movie was found in, and try to find a file that matches this pattern. If one is found, it will be used as a cover. DB field names can be used, surrounded by % symbols. e.g. %imdb_id%.jpg",
             Groups = "|Movie Importer|Cover Art|",
             Identifier = "local_moviefolder_coverart_pattern",
-            Default = "folder.jpg|folder.png|folder.bmp")]
+            Default = "folder.jpg|folder.png|folder.bmp",
+            Hidden = true)]
         public string MovieFolderCoverArtworkFilenamePattern {
             get { return _movieFolderCoverArtworkFilenamePattern; }
             set {
@@ -604,7 +615,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If set to true the local media data provider will use files matching a specified pattern for backdrops. This setting should only be used if you have all movies in their own folders.",
             Groups = "|Movie Importer|Backdrops|",
             Identifier = "local_backdrop_from_movie_folder",
-            Default = false)]
+            Default = false,
+            Hidden = true)]
         public bool SearchMovieFolderForBackdrops {
             get { return _searchMovieFolderforBackdrops; }
             set {
@@ -620,7 +632,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The importer will look in the folder the given movie was found in, and try to find a file that matches this pattern. If one is found, it will be used as a cover. DB field names can be used, surrounded by % symbols. e.g. %imdb_id%.jpg",
             Groups = "|Movie Importer|Backdrops|",
             Identifier = "local_moviefolder_backdrop_pattern",
-            Default = "backdrop.jpg|backdrop.png|backdrop.bmp")]
+            Default = "backdrop.jpg|backdrop.png|backdrop.bmp",
+            Hidden = true)]
         public string MovieFolderBackdropFilenamePattern {
             get { return _movieFolderBackdropFilenamePattern; }
             set {
@@ -695,7 +708,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are \"list\", \"thumbs\", \"largethumbs\", and \"filmstrip\".",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "default_view",
-            Default = "list")]
+            Default = "list",
+            Hidden = true)]
         public string DefaultView {
             get { return _defaultView; }
             set {
@@ -711,7 +725,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Determines behavior when a movie in the movie browser is clicked. If true, the details view appears. If false the movie starts playback.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "click_to_details",
-            Default = true)]
+            Default = true,
+            Hidden = true)]
         public bool ClickShowsDetails {
             get { return _clickShowsDetails; }
             set {
@@ -743,7 +758,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The name that appears on the home screen for the plugin.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "home_name",
-            Default = "Moving Pictures")]
+            Default = "Moving Pictures",
+            Hidden = true)]
         public string HomeScreenName {
             get { return _homeScreenName; }
             set {
@@ -759,7 +775,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The default sort field used in the MediaPortal GUI when the plug-in is first opened. Valid options are \"title\", \"dateadded\", \"year\", \"certification\", \"language\", \"score\", \"userscore\", \"popularity\", \"runtime\", \"filepath\".",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "default_sort_field",
-            Default = "Title")]
+            Default = "Title",
+            Hidden = true)]
         public string DefaultSortField {
             get { return _defaultSortField; }
             set {
@@ -775,7 +792,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "When Moving Pictures starts up, if this option is set to true only Unwatched movies will be displayed until the user changes the filtering options.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "start_watched_filter_on",
-            Default = false)]
+            Default = false,
+            Hidden = true)]
         public bool ShowUnwatchedOnStartup {
             get { return _showOnlyUnwatchedMoviesonStartup; }
             set {
@@ -791,7 +809,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Enables a delete menu item, which allows you to delete movies from your hard drive.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "enable_delete_movie",
-            Default = false)]
+            Default = false,
+            Hidden = true)]
         public bool AllowDelete {
             get { return _allowDelete; }
             set {
@@ -855,7 +874,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Enables the Remote Controle Filter, set to false if you want to use the default mediaportal remote control functionality.",
             Groups = "|MediaPortal GUI|Tweaks|",
             Identifier = "enable_rc_filter",
-            Default = true)]
+            Default = true,
+            Hidden = true)]
         public bool UseRemoteControlFiltering {
             get { return _useRemoteControlFiltering; }
             set {
@@ -874,7 +894,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The percentage of a movie that must be watched before it will be flagged as watched. This also affects whether resume data is stored.",
             Groups = "|MediaPortal GUI|Playback Options|",
             Identifier = "gui_watch_percentage",
-            Default = 90)]
+            Default = 90,
+            Hidden = true)]
         public int MinimumWatchPercentage {
             get { return _minimumWatchPercentage; }
             set {
@@ -890,7 +911,8 @@ namespace MediaPortal.Plugins.MovingPictures {
              Description = "Action to take when a DVD, Bluray, or HDDVD disk is inserted. (\"DETAILS\": Goto the details page for the DVD. \"PLAY\": Start playback immediately. \"NOTHING\": Take no action).",
              Groups = "|MediaPortal GUI|Playback Options|",
              Identifier = "on_disc_loaded",
-             Default = "DETAILS")]
+             Default = "DETAILS",
+             Hidden = true)]
         public string DiskInsertionBehavior {
             get { return _diskInsertionBehavior; }
             set {
@@ -976,7 +998,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Enables the Paretal Controls feature in the GUI.",
             Groups = "|MediaPortal GUI|Parental Controls|",
             Identifier = "enable_parental_controls",
-            Default = false)]
+            Default = false,
+            Hidden = true)]
         public bool ParentalControlsEnabled {
             get { return _useRemoteControlFiltering; }
             set {
@@ -991,7 +1014,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The filter attached to the Parental Controls functionality.",
             Groups = "|MediaPortal GUI|Parental Controls|",
             Identifier = "parental_controls_filter_id",
-            Default = "null")]
+            Default = "null",
+            Hidden = true)]
         public string ParentalContolsFilterID {
             get { return _parentalContolsFilterID; }
             set {
@@ -1006,7 +1030,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The password required to access movies restricted by parental controls.",
             Groups = "|MediaPortal GUI|Parental Controls|",
             Identifier = "parental_controls_password",
-            Default = "null")]
+            Default = "null",
+            Hidden = true)]
         public string ParentalContolsPassword {
             get { return _parentalContolsPassword; }
             set {
@@ -1027,7 +1052,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If set to true, additional logging will be written by the Scriptable Scraping Engine when the entire plug-in is in debug mode. Internal scripts stored in the DLL will also be reloaded on launch regardless of version number.",
             Groups = "|Internal|",
             Identifier = "source_manager_debug",
-            Default = false)]
+            Default = false,
+            Hidden = true)]
         public bool DataSourceDebugActive {
             get { return _dataSourceManagerEnhancedDebugMode; }
             set {
@@ -1043,7 +1069,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "An internal flag to determine if an initial load of the Data Source Manager has been preformed.",
             Groups = "|Internal|",
             Identifier = "source_manager_init_done",
-            Default = "True")]
+            Default = "True",
+            Hidden = true)]
         public bool DataProvidersInitialized {
             get { return _dataProviderManagerInitialized; }
             set {
@@ -1059,7 +1086,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If set to false, the Advanced Settings warning screen will no longer be displayed when first clicking on the Advanced Settings tab.",
             Groups = "|Internal|",
             Identifier = "config_advanced_nag",
-            Default = true)]
+            Default = true,
+            Hidden = true)]
         public bool ShowAdvancedSettingsWarning {
             get { return _showAdvancedSettingsWarning; }
             set {
@@ -1075,7 +1103,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Version number of Moving Pictures. Used for database upgrade purposes, do not change.",
             Groups = "|Internal|",
             Identifier = "version",
-            Default = "0.0.0.0")]
+            Default = "0.0.0.0",
+            Hidden = true)]
         public string Version {
             get { return _versionNumber; }
             set {
@@ -1090,7 +1119,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If disabled the disk monitor will not notify other aspects of the plug-in about disk events such as DVD insertions and newly connected network drives. Do not disable unless you are experiencing problems with the Disk Monitor.",
             Groups = "|Internal|",
             Identifier = "disk_monitor_enabled",
-            Default = true)]
+            Default = true,
+            Hidden = true)]
         public bool DeviceManagerEnabled
         {
             get { return _deviceManagerEnabled; }

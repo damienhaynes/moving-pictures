@@ -38,6 +38,8 @@ namespace Cornerstone.GUI {
             // loop through all settings and add nodes for groups and settings accordingly.
             // maintain a dictionary of groups to ensure on one listing per group.
             foreach (DBSetting currSetting in settings.AllSettings) {
+                if (currSetting.Hidden) continue;
+
                 string groupKey = "";
                 TreeNode parentNode = null;
 
