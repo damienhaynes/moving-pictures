@@ -231,7 +231,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     currField.SetValue(newMovie, value.Trim());
             }
 
-            // and update as neccisary
+            // and update as necessary
             movie.CopyUpdatableValues(newMovie);
 
             return UpdateResults.SUCCESS;

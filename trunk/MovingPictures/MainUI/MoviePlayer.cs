@@ -794,7 +794,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region GUI/OSD
 
         // Updates the movie metadata on the playback screen (for when the user clicks info). 
-        // The delay is neccisary because Player tries to use metadata from the MyVideos database.
+        // The delay is necessary because Player tries to use metadata from the MyVideos database.
         // We want to update this after that happens so the correct info is there.
         private void UpdatePlaybackInfo() {
             Thread.Sleep(2000);

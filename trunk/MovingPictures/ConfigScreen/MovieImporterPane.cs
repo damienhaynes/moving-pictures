@@ -97,7 +97,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
 
 
-            // add the match if neccisary and grab the row number
+            // add the match if necessary and grab the row number
             int rowNum;
             if (action == MovieImporterAction.ADDED)
                 rowNum = unapprovedMatchesBindingSource.Add(obj);
