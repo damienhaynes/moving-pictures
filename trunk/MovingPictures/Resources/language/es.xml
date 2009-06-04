@@ -39,7 +39,7 @@
   <string Field="FailedMountingImage">Lo siento, no se pudo montar la Imagen de DVD</string>
   <string Field="PlaybackFailedHeader">Fallo en la reproducción</string>
   <string Field="PlaybackFailed">No es posible la reproducción porque la extensión '{0}'\nno está listada en la configuración de MediaPortal.\nPor favor, añada la extensión o configure un reproductor externo\ne inténtelo de nuevo.</string>
-  <string Filed="MissingExternalPlayerExe">No se encuentra el ejecutable para la reproducción HD.\nPor favor, corrija la ruta al ejecutable.</string>
+  <string Field="MissingExternalPlayerExe">No se encuentra el ejecutable para la reproducción HD.\nPor favor, corrija la ruta al ejecutable.</string>
   <string Field="ResumeFromLast">¿Reanudar desde el último punto?</string>
   <string Field="ResumeFrom">Reanudar desde:</string>
   <string Field="InvalidVideoDiscFormat">O el archivo de imagen no contiene\nun formato de disco válido, o su configuración\nde Daemon Tools en MediaPortal es incorrecta.</string>

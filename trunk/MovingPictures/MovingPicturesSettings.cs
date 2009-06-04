@@ -1086,8 +1086,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If set to false, the Advanced Settings warning screen will no longer be displayed when first clicking on the Advanced Settings tab.",
             Groups = "|Internal|",
             Identifier = "config_advanced_nag",
-            Default = true,
-            Hidden = true)]
+            Default = true)]
         public bool ShowAdvancedSettingsWarning {
             get { return _showAdvancedSettingsWarning; }
             set {
@@ -1119,8 +1118,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If disabled the disk monitor will not notify other aspects of the plug-in about disk events such as DVD insertions and newly connected network drives. Do not disable unless you are experiencing problems with the Disk Monitor.",
             Groups = "|Internal|",
             Identifier = "disk_monitor_enabled",
-            Default = true,
-            Hidden = true)]
+            Default = true)]
         public bool DeviceManagerEnabled
         {
             get { return _deviceManagerEnabled; }

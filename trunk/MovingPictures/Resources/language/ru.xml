@@ -39,7 +39,7 @@
   <string Field="FailedMountingImage">Ошибка при сборке образа DVD</string>
   <string Field="PlaybackFailedHeader">Ошибка при воспроизведении</string>
   <string Field="PlaybackFailed">Воспроизведение не возможно, т.к. '{0}'\n расширение не записано в конфигурации Mediaportal.\nДобавьте расширение или используйте внешний плейер.</string>
-  <string Filed="MissingExternalPlayerExe">Внешний плейер не найден.\nИсправьте путь к файлу плейера.</string>
+  <string Field="MissingExternalPlayerExe">Внешний плейер не найден.\nИсправьте путь к файлу плейера.</string>
   <string Field="ResumeFromLast">Воспроизвести, где остановились?</string>
   <string Field="ResumeFrom">Воспроизведение с:</string>
   <string Field="InvalidVideoDiscFormat">Либо файл образа записан неправильно,\n либо конфигурация Daemon Tools\nв MediaPortal не корректна.</string>

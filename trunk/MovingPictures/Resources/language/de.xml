@@ -39,7 +39,7 @@
   <string Field="FailedMountingImage">Leider konnte das DVD-Image nicht eingebunden werden.</string>
   <string Field="PlaybackFailedHeader">Wiedergabe fehlgeschlagen</string>
   <string Field="PlaybackFailed">Wiedergabe nicht möglich, weil die Erweiterung '{0}' nicht in der Mediaportalkonfiguration aufgeführt ist.\nBitte diese Dateierweiterung hinzufügen oder einen externen Player\neinrichten und noch einmal versuchen.</string>
-  <string Filed="MissingExternalPlayerExe">Die Anwendung für HD-Wiedergabe ist nicht vorhanden.\nBitte den Pfad zu der Anwendung angeben/korrigieren.</string>
+  <string Field="MissingExternalPlayerExe">Die Anwendung für HD-Wiedergabe ist nicht vorhanden.\nBitte den Pfad zu der Anwendung angeben/korrigieren.</string>
   <string Field="ResumeFromLast">Wiedergabe an letzter Position fortsetzen?</string>
   <string Field="ResumeFrom">Fortsetzen bei:</string>
   <string Field="InvalidVideoDiscFormat">Entweder das Image-File enthält kein\ngültiges Videodiscformat oder deine Daemon Tools\nMediaportal Konfiguration ist nicht korrekt.</string>

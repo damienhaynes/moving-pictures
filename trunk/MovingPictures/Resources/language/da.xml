@@ -41,7 +41,7 @@
   <string Field="FailedMountingImage">Mountningen af DVD imaget fejlede desværre.</string>
   <string Field="PlaybackFailedHeader">Afspilningen mislykkedes</string>
   <string Field="PlaybackFailed">Afspilning var ikke mulig på grund af, at '{0}'\nfiletypenavn ikke er listet i mediaportal konfigurationen.\nTilføj dette filetypenavn eller sæt en ekstern afspiller op\nog prøv igen.</string>
-  <string Filed="MissingExternalPlayerExe">Den eksekverbare fil til HD afspilning mangler.\nVælg en korrekt sti til den eksekverbare fil.</string>
+  <string Field="MissingExternalPlayerExe">Den eksekverbare fil til HD afspilning mangler.\nVælg en korrekt sti til den eksekverbare fil.</string>
   <string Field="ResumeFromLast">Forsæt film fra sidste afspilning?</string>
   <string Field="ResumeFrom">Forsæt fra:</string>
   <string Field="InvalidVideoDiscFormat">Enten indeholdet image-filen ikke et\n korrekt videoformat, ellers er din opsæning i\nTools MediaPortal konfiguration forkert.</string>

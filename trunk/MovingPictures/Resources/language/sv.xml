@@ -39,7 +39,7 @@
   <string Field="FailedMountingImage">Det gick tyvärr inte att montera image-filen.</string>
   <string Field="PlaybackFailedHeader">Uppspelning misslyckades</string>
   <string Field="PlaybackFailed">Uppspelning av är tyvärr ej möjligt då '{0}'\n-filer inte är tillagda i MediaPortals lista över kända format\nLägg till filändelsen eller välj en extern uppspelare \noch försök på nytt.</string>
-  <string Filed="MissingExternalPlayerExe">Programfilen för uppspelning av HD-material saknas.\nVar god rätta till sökvägen.</string>
+  <string Field="MissingExternalPlayerExe">Programfilen för uppspelning av HD-material saknas.\nVar god rätta till sökvägen.</string>
   <string Field="ResumeFromLast">Återuppta uppspelning där filmen senast stoppades?</string>
   <string Field="ResumeFrom">Återuppta från:</string>
   <string Field="InvalidVideoDiscFormat">Antingen är skivavbilden i ett felaktigt format, eller så är Daemon \nTools inkorrekt inställt i MediaPortals konfiguration.</string>

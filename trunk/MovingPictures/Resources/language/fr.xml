@@ -39,7 +39,7 @@
   <string Field="FailedMountingImage">Désolé, impossible de monter l'image du DVD</string>
   <string Field="PlaybackFailedHeader">Erreur lors de la lecture</string>
   <string Field="PlaybackFailed">La lecture est impossible parce que l'extension '{0}'\nn'est pas listée dans votre configuration MediaPortal.</string>
-  <string Filed="MissingExternalPlayerExe">L'exécutable du lecteur externe est introuvable.\nMerci de corriger le chemin vers l'exécutable.</string>
+  <string Field="MissingExternalPlayerExe">L'exécutable du lecteur externe est introuvable.\nMerci de corriger le chemin vers l'exécutable.</string>
   <string Field="ResumeFromLast">Reprendre le film depuis la dernière lecture ?</string>
   <string Field="ResumeFrom">Reprendre depuis :</string>
   <string Field="InvalidVideoDiscFormat">Soit le fichier image ne contient\npas un format de disque vidéo valide, soit votre configuration\nde Daemon Tools dans MediaPortal est incorrecte.</string>
