@@ -102,6 +102,8 @@ namespace Cornerstone.Database.Tables {
 
         #endregion
 
+        public bool Hidden { get; set; }
+
         public object Value {
             get {
                 try {

@@ -213,6 +213,7 @@ namespace Cornerstone.Database {
                 newSetting.Value = attribute.Default;
                 newSetting.Type = DBSetting.TypeLookup(property.PropertyType);
                 newSetting.Description = attribute.Description;
+                newSetting.Hidden = attribute.Hidden;
                 newSetting.Grouping.AddRange(groups);
                 newSetting.DBManager = this.dbManager;
                 newSetting.SettingsManager = this;
@@ -221,16 +222,18 @@ namespace Cornerstone.Database {
                 this[attribute.Identifier] = newSetting;
             } else {
                 DBSetting existingSetting = this[attribute.Identifier];
-                
-                // update name if neccisary
+
+                // update name if necessary 
                 if (!existingSetting.Name.Equals(attribute.Name))
                     existingSetting.Name = attribute.Name;
 
-                // update description if neccisary
+                // update description if necessary
                 if (!existingSetting.Description.Equals(attribute.Description))
                     existingSetting.Description = attribute.Description;
-                
-                // update groups if neccisary
+
+                existingSetting.Hidden = attribute.Hidden;
+
+                // update groups if necessary
                 bool reloadGrouping = false;
                 if (existingSetting.Grouping.Count != groups.Count)
                     reloadGrouping = true;
@@ -261,5 +264,6 @@ namespace Cornerstone.Database {
         public string Name { get; set; }
         public string Description { get; set; }
         public object Default { get; set; }
+        public bool Hidden { get; set; }
     }
 }
