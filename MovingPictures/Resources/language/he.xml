@@ -39,7 +39,7 @@
   <string Field="FailedMountingImage">נכשל בניגון DVD מקובץ תמונה</string>
   <string Field="PlaybackFailedHeader">ניגון נכשל</string>
   <string Field="PlaybackFailed">ניגון לא אפשרי בגלל '{0}'\nשסיומת הקובץ לא הוגדרה\nהוסף סיומת זו או הגדר נגן חיצוני</string>
-  <string Filed="MissingExternalPlayerExe">קובץ הרצה עבור ניגון HD חסר.\nאנא עדכן את מיקום קובץ ההרצה.</string>
+  <string Field="MissingExternalPlayerExe">קובץ הרצה עבור ניגון HD חסר.\nאנא עדכן את מיקום קובץ ההרצה.</string>
   <string Field="ResumeFromLast">המשך סרט מפעם קודמת?</string>
   <string Field="ResumeFrom">המשך מ:</string>
   <string Field="InvalidVideoDiscFormat">קובץ תמונה אינו תקין או שהגדרות\nDaemon Tools אינן נכונות.</string>
