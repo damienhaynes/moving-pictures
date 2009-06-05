@@ -471,6 +471,7 @@
     <Content Include="Resources\Images\cog.png" />
     <Content Include="Resources\Images\cross.png" />
     <Content Include="Resources\Images\exclamation.png" />
+    <None Include="Resources\Images\find.png" />
     <Content Include="Resources\Images\folder_image.png" />
     <Content Include="Resources\Images\grey_bug.png" />
     <Content Include="Resources\Images\help.png" />
@@ -478,11 +479,14 @@
     <Content Include="Resources\Images\information.png" />
     <Content Include="Resources\Images\list-add.png" />
     <Content Include="Resources\Images\list-remove.png" />
+    <None Include="Resources\Images\logo.ico" />
     <Content Include="Resources\Images\MediaPause.png" />
     <Content Include="Resources\Images\MediaPlay.png" />
     <Content Include="Resources\Images\MediaStop.png" />
+    <None Include="Resources\Images\mp_config_icon.png" />
     <Content Include="Resources\Images\noatunplay.png" />
     <Content Include="Resources\Images\noatunstop.png" />
+    <None Include="Resources\Images\page_white_edit.png" />
     <Content Include="Resources\Images\pencil_add.png" />
     <Content Include="Resources\Images\resultset_next.png" />
     <Content Include="Resources\Images\resultset_previous.png" />

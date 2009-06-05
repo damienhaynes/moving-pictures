@@ -24,7 +24,6 @@
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManualAssignPopup));
-            this.descriptionLabel = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.uxTitle = new System.Windows.Forms.TextBox();
@@ -32,21 +31,8 @@
             this.uxYear = new System.Windows.Forms.TextBox();
             this.lblYear = new System.Windows.Forms.Label();
             this.fileListBox = new System.Windows.Forms.ListBox();
+            this.descriptionLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // descriptionLabel
-            // 
-            this.descriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.descriptionLabel.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.descriptionLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.descriptionLabel.Location = new System.Drawing.Point(12, 12);
-            this.descriptionLabel.Multiline = true;
-            this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.ReadOnly = true;
-            this.descriptionLabel.Size = new System.Drawing.Size(459, 48);
-            this.descriptionLabel.TabIndex = 8;
-            this.descriptionLabel.Text = resources.GetString("descriptionLabel.Text");
             // 
             // okButton
             // 
@@ -55,7 +41,7 @@
             this.okButton.Location = new System.Drawing.Point(316, 183);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 10;
+            this.okButton.TabIndex = 3;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             // 
@@ -66,7 +52,7 @@
             this.cancelButton.Location = new System.Drawing.Point(397, 183);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 9;
+            this.cancelButton.TabIndex = 4;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
@@ -77,7 +63,7 @@
             this.uxTitle.Location = new System.Drawing.Point(12, 141);
             this.uxTitle.Name = "uxTitle";
             this.uxTitle.Size = new System.Drawing.Size(409, 20);
-            this.uxTitle.TabIndex = 11;
+            this.uxTitle.TabIndex = 1;
             // 
             // lblTitle
             // 
@@ -96,7 +82,7 @@
             this.uxYear.Location = new System.Drawing.Point(427, 141);
             this.uxYear.Name = "uxYear";
             this.uxYear.Size = new System.Drawing.Size(45, 20);
-            this.uxYear.TabIndex = 13;
+            this.uxYear.TabIndex = 2;
             // 
             // lblYear
             // 
@@ -123,12 +109,21 @@
             this.fileListBox.Size = new System.Drawing.Size(461, 44);
             this.fileListBox.TabIndex = 15;
             // 
+            // descriptionLabel
+            // 
+            this.descriptionLabel.Location = new System.Drawing.Point(11, 13);
+            this.descriptionLabel.Name = "descriptionLabel";
+            this.descriptionLabel.Size = new System.Drawing.Size(461, 50);
+            this.descriptionLabel.TabIndex = 16;
+            this.descriptionLabel.Text = resources.GetString("descriptionLabel.Text");
+            // 
             // ManualAssignPopup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(483, 211);
             this.ControlBox = false;
+            this.Controls.Add(this.descriptionLabel);
             this.Controls.Add(this.fileListBox);
             this.Controls.Add(this.lblYear);
             this.Controls.Add(this.uxYear);
@@ -136,7 +131,6 @@
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.descriptionLabel);
             this.Name = "ManualAssignPopup";
             this.ShowInTaskbar = false;
             this.Text = "Manual Movie Import";
@@ -147,7 +141,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox descriptionLabel;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.TextBox uxTitle;
@@ -155,5 +148,6 @@
         private System.Windows.Forms.TextBox uxYear;
         private System.Windows.Forms.Label lblYear;
         private System.Windows.Forms.ListBox fileListBox;
+        private System.Windows.Forms.Label descriptionLabel;
     }
 }

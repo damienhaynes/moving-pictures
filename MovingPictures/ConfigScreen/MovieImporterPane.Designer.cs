@@ -57,10 +57,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.settingsButton = new System.Windows.Forms.ToolStripSplitButton();
             this.unignoreAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restartImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpButton = new System.Windows.Forms.ToolStripButton();
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.unapprovedMatchesBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.helpButton = new System.Windows.Forms.ToolStripButton();
             this.importerGroupBox.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).BeginInit();
@@ -243,25 +243,25 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // allMatchesToolStripMenuItem
             // 
             this.allMatchesToolStripMenuItem.Name = "allMatchesToolStripMenuItem";
-            this.allMatchesToolStripMenuItem.Size = new System.Drawing.Size(336, 24);
+            this.allMatchesToolStripMenuItem.Size = new System.Drawing.Size(320, 24);
             this.allMatchesToolStripMenuItem.Text = "All Matches";
             // 
             // processingMatchesToolStripMenuItem
             // 
             this.processingMatchesToolStripMenuItem.Name = "processingMatchesToolStripMenuItem";
-            this.processingMatchesToolStripMenuItem.Size = new System.Drawing.Size(336, 24);
+            this.processingMatchesToolStripMenuItem.Size = new System.Drawing.Size(320, 24);
             this.processingMatchesToolStripMenuItem.Text = "Processing Matches";
             // 
             // unapprovedMatchesToolStripMenuItem
             // 
             this.unapprovedMatchesToolStripMenuItem.Name = "unapprovedMatchesToolStripMenuItem";
-            this.unapprovedMatchesToolStripMenuItem.Size = new System.Drawing.Size(336, 24);
+            this.unapprovedMatchesToolStripMenuItem.Size = new System.Drawing.Size(320, 24);
             this.unapprovedMatchesToolStripMenuItem.Text = "Unapproved Matches";
             // 
             // approvedCommitedMatchesToolStripMenuItem
             // 
             this.approvedCommitedMatchesToolStripMenuItem.Name = "approvedCommitedMatchesToolStripMenuItem";
-            this.approvedCommitedMatchesToolStripMenuItem.Size = new System.Drawing.Size(336, 24);
+            this.approvedCommitedMatchesToolStripMenuItem.Size = new System.Drawing.Size(320, 24);
             this.approvedCommitedMatchesToolStripMenuItem.Text = "Approved/Commited Matches";
             // 
             // approveButton
@@ -278,12 +278,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // manualAssignButton
             // 
             this.manualAssignButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.manualAssignButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.pencil_add;
+            this.manualAssignButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.page_white_edit;
             this.manualAssignButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.manualAssignButton.Name = "manualAssignButton";
             this.manualAssignButton.Size = new System.Drawing.Size(23, 23);
             this.manualAssignButton.Text = "manualAssignButton";
-            this.manualAssignButton.ToolTipText = "Manually Assign Selected File(s)";
+            this.manualAssignButton.ToolTipText = "Add as Blank (Editable) Movie";
             this.manualAssignButton.Click += new System.EventHandler(this.manualAssignButton_Click);
             // 
             // toolStripSeparator3
@@ -294,7 +294,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // rescanButton
             // 
             this.rescanButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.rescanButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_rotate_clockwise;
+            this.rescanButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.find;
             this.rescanButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rescanButton.Name = "rescanButton";
             this.rescanButton.Size = new System.Drawing.Size(23, 23);
@@ -361,6 +361,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.restartImporterToolStripMenuItem.Text = "Restart Importer";
             this.restartImporterToolStripMenuItem.Click += new System.EventHandler(this.restartImporterToolStripMenuItem_Click);
             // 
+            // helpButton
+            // 
+            this.helpButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.helpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.helpButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.help;
+            this.helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.helpButton.Name = "helpButton";
+            this.helpButton.Size = new System.Drawing.Size(23, 23);
+            this.helpButton.ToolTipText = "Help";
+            this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
+            // 
             // dataGridViewComboBoxColumn1
             // 
             this.dataGridViewComboBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -380,17 +391,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.unapprovedMatchesBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieMatch);
             this.unapprovedMatchesBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.unapprovedMatchesBindingSource_ListChanged);
-            // 
-            // helpButton
-            // 
-            this.helpButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.helpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.helpButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.help;
-            this.helpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.helpButton.Name = "helpButton";
-            this.helpButton.Size = new System.Drawing.Size(23, 23);
-            this.helpButton.ToolTipText = "Help";
-            this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
             // 
             // MovieImporterPane
             // 
