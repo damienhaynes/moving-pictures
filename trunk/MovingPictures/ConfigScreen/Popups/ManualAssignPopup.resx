@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="descriptionLabel.Text" xml:space="preserve">
-    <value>Please enter the movie details for the following file(s). You can edit full details through the movie manager after you click OK. If these files do not belong together you should click "Cancel" and split them using the Split button on the Media Importer.</value>
+    <value>You are about to add these files as a custom and blank movie. You can edit full details through the Movie Manager after you click OK. If these files do not belong together you should click "Cancel" and split them using the Split button on the Media Importer.</value>
   </data>
 </root>
