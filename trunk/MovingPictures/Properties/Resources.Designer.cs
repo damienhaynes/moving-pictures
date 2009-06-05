@@ -588,6 +588,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;sratim.co.il&lt;/name&gt;
+        ///    &lt;author&gt;erezr&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from sratim.co.il.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you should change the versio [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_Sratim {
+            get {
+                return ResourceManager.GetString("Script_Sratim", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap splash_small {
             get {
                 object obj = ResourceManager.GetObject("splash_small", resourceCulture);
