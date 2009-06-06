@@ -240,12 +240,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         #region String Modification / Regular Expressions Methods
 
-        // Regular expression pattern that matches an "article" that need to be moved for title conversions
-        // todo: the articles should really be a user definable setting in the future
-        private const string rxMatchArticles = "(the|a|an|ein|das|die|der|les|la|le|el|une|de|het)";
-        
         // Regular expression pattern that matches a selection of non-word characters
-        private const string rxMatchNonWordCharacters = @"[^\w&]";
+        private const string rxMatchNonWordCharacters = "[\\~`!@#$%^&*\\(\\)_\\+-={}|\\[\\]\\\\:\";'<>?,./]";
 
         /// <summary>
         /// Filters non descriptive words/characters from a title so that only keywords remain.
@@ -254,13 +250,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns>keywords string</returns>
         public static string TitleToKeywords(string title) {
 
-            // Remove articles
-            string newTitle = Regex.Replace(title, @"\b" + rxMatchArticles + @"\b", "", RegexOptions.IgnoreCase);
-
-            // Remove non-descriptive words
+            // Remove articles and non-descriptive words
+            string newTitle = Regex.Replace(title, @"\b(" + MovingPicturesCore.Settings.ArticlesForRemoval + @")\b", "", RegexOptions.IgnoreCase);
             newTitle = Regex.Replace(newTitle, @"\b(and|or|of|und|en|et|y)\b", "", RegexOptions.IgnoreCase);
 
-            // Replace non-descriptive characters with spaces
+            // Replace non-word characters with spaces
             newTitle = Regex.Replace(newTitle, rxMatchNonWordCharacters, " ");
 
             // Remove double spaces and trim
@@ -279,7 +273,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="title"></param>
         /// <returns>display name</returns>
         public static string TitleToDisplayName(string title) {
-            Regex expr = new Regex(@"(.+?)(?:, " + rxMatchArticles + @")?\s*$", RegexOptions.IgnoreCase);
+            Regex expr = new Regex(@"(.+?)(?:, (" + MovingPicturesCore.Settings.ArticlesForRemoval + @"))?\s*$", RegexOptions.IgnoreCase);
             return expr.Replace(title, "$2 $1").Trim();
         }
 
@@ -292,7 +286,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="title"></param>
         /// <returns>archive name</returns>
         public static string TitleToArchiveName(string title) {
-            Regex expr = new Regex(@"^" + rxMatchArticles + @"\s(.+)", RegexOptions.IgnoreCase);
+            Regex expr = new Regex(@"^{" + MovingPicturesCore.Settings.ArticlesForRemoval + @")\s(.+)", RegexOptions.IgnoreCase);
             return expr.Replace(title, "$2, $1").Trim();
         }
 

@@ -125,11 +125,25 @@ namespace Cornerstone.Database {
             // grab property and setting info
             PropertyInfo property = propertyLookup[settingIdentifier];
             DBSetting setting = this[settingIdentifier];
+            object oldValue;
 
-            // update the setting and commit
-            object oldValue = setting.Value;
-            setting.Value = property.GetGetMethod().Invoke(this, null);
-            setting.Commit();
+            // if we are already in the process of updating things just return
+            if (setting.ManagerModifyingValue) return;
+            setting.ManagerModifyingValue = true;
+
+            if (setting.UpdatingFromObject) {
+                // update the property in the settings manager to reflect the change in the object
+                oldValue = property.GetGetMethod().Invoke(this, null);
+                property.GetSetMethod().Invoke(this, new object[] {setting.Value});
+            }
+            else {
+                // update the actual setting object and commit
+                oldValue = setting.Value;
+                setting.Value = property.GetGetMethod().Invoke(this, null);
+                setting.Commit();
+            }
+
+            setting.ManagerModifyingValue = false;
 
             // notify any listeners of the value change
             if (SettingChanged != null)
