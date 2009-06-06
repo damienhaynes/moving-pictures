@@ -12,11 +12,19 @@ namespace Cornerstone.Database.Tables {
     public class DBSetting : DatabaseTable {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        private bool updating = false;
-
         public DBSetting():
             base() {
         }
+
+        public bool UpdatingFromObject {
+            get { return _updatingFromObject; }
+        } private bool _updatingFromObject = false;
+
+        public bool ManagerModifyingValue {
+            get { return _managerModifyingValue; }
+            set { _managerModifyingValue = value; }
+        } private bool _managerModifyingValue = false;
+        
 
         public SettingsManager SettingsManager {
             get { return _settingsManager; }
@@ -126,12 +134,12 @@ namespace Cornerstone.Database.Tables {
             }
 
             set {
-                if (updating) return;
+                if (_updatingFromObject) return;
 
                 StringValue = value.ToString();
-                updating = true;
+                _updatingFromObject = true;
                 if (SettingsManager != null) SettingsManager.OnSettingChanged(_key);
-                updating = false;
+                _updatingFromObject = false;
 
             }
         }

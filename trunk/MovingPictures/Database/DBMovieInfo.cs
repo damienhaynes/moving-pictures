@@ -55,7 +55,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             set {
                 _title = value;
-                populateSortBy();
+                PopulateSortBy();
 
                 commitNeeded = true;
             }
@@ -75,7 +75,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public string SortBy {
             get {
                 if (_sortBy.Trim().Length == 0)
-                    populateSortBy();
+                    PopulateSortBy();
 
                 return _sortBy; 
             }
@@ -869,16 +869,20 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return Title;
         }
 
-        private void populateSortBy() {
-            SortBy = Regex.Replace(_title, @"^[^\da-z]+", "", RegexOptions.IgnoreCase);
+        public void PopulateSortBy() {
+            // remove all punctuation and make lowercase
+            SortBy = Regex.Replace(_title, "[\\~`!@#$%^&*\\(\\)_\\+-={}|\\[\\]\\\\:\";'<>?,./]", "", RegexOptions.IgnoreCase).ToLower();
+
 
             // loop through and try to remove a preposition
-            string[] prepositions = { "the", "a", "an" };
-            foreach (string currWord in prepositions) {
-                string word = currWord + " ";
-                if (_sortBy.ToLower().IndexOf(word) == 0) {
-                    SortBy = _sortBy.Substring(word.Length) + ", " + _sortBy.Substring(0, currWord.Length);
-                    return;
+            if (MovingPicturesCore.Settings.RemoveTitleArticles) {
+                string[] prepositions = MovingPicturesCore.Settings.ArticlesForRemoval.Split('|');
+                foreach (string currWord in prepositions) {
+                    string word = currWord + " ";
+                    if (_sortBy.ToLower().IndexOf(word) == 0) {
+                        SortBy = _sortBy.Substring(word.Length) + " " + _sortBy.Substring(0, currWord.Length);
+                        return;
+                    }
                 }
             }
         }

@@ -199,7 +199,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 coverNumLabel.Text = "";
 
                 if (movieListBox.SelectedItems.Count > 1) {
-                    advancedButton.Enabled = false;
+                    sendToImporterToolStripMenuItem.Enabled = false;
                     playMovieButton.Enabled = false;
                 }
                
@@ -659,21 +659,45 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void updateMediaInfoToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (CurrentMovie == null) return;
+            processingMovies = new List<DBMovieInfo>();
+            foreach (ListViewItem currItem in movieListBox.SelectedItems)
+                processingMovies.Add((DBMovieInfo)currItem.Tag);
 
-            foreach (DBLocalMedia localMedia in CurrentMovie.LocalMedia) {
-                UpdateMediaInfoResults result = localMedia.UpdateMediaInfo();
-                if (result == UpdateMediaInfoResults.MediaNotAvailable) 
-                {
-                    MessageBox.Show("MediaInfo could not be updated because the media is not available. Please insert the media and try again.");
-                    break;
-                }
-                else if (result == UpdateMediaInfoResults.ImageFileNotMounted) {
-                     MessageBox.Show("MediaInfo for image files can only be updated when the movie is played");
-                    break;
+            ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(updateMediaInfoWorker));
+            popup.Owner = this.ParentForm;
+            popup.ShowDialog();
+
+            processingMovies.Clear();
+
+            updateFilePanel();
+        }
+
+        private void updateMediaInfoWorker(ProgressDelegate progress) {
+            int count = 0;
+            foreach (DBMovieInfo currMovie in processingMovies) {
+                foreach (DBLocalMedia localMedia in currMovie.LocalMedia) {
+                    count++;
+                    progress("", (int)((count / (processingMovies.Count + 1.0))*100));
+
+                    UpdateMediaInfoResults result = localMedia.UpdateMediaInfo();
+                    if (result == UpdateMediaInfoResults.MediaNotAvailable) {
+                        MessageBox.Show("MediaInfo could not be updated for " + currMovie.Title + " because the media is not available. Please insert the media and try again.");
+                        break;
+                    }
+                    else if (result == UpdateMediaInfoResults.ImageFileNotMounted) {
+                        MessageBox.Show("MediaInfo for " + currMovie.Title + " can only be updated during playback because the media is a disk image.");
+                        break;
+                    }
                 }
             }
-            updateFilePanel();
+        }
+
+        private void updateTitleSortingMenuItem_Click(object sender, EventArgs e) {
+            foreach (DBMovieInfo currItem in listItems.Keys)
+                currItem.PopulateSortBy();
+
+            updateMoviePanel();
+            MessageBox.Show("Title sorting values (the \"Sort By\" field) has been updated.");
         }
 
     }

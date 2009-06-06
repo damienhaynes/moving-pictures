@@ -104,10 +104,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             Dictionary<WorkerDelegate, string> actionDescriptions = new Dictionary<WorkerDelegate, string>();
             WorkerDelegate newAction;
 
-            newAction = new WorkerDelegate(initDB);
-            actionDescriptions.Add(newAction, "Initializing Database...");
-            initActions.Add(newAction);
-
             newAction = new WorkerDelegate(initAdditionalSettings);
             actionDescriptions.Add(newAction, "Initializing Path Settings...");
             initActions.Add(newAction);

@@ -991,6 +991,40 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
+        #region Sorting
+
+        [CornerstoneSetting(
+            Name = "Remove Title Articles",
+            Description = "If enabled, articles such as \"the\", \"a\", and \"an\" will not be considered when sorting by title. This affects the Sort By field and for a change to take effect you must refresh your Sort By values from the Movie Manager.",
+            Groups = "|MediaPortal GUI|Sorting|",
+            Identifier = "remove_title_articles",
+            Default = true)]
+        public bool RemoveTitleArticles {
+            get { return _removeTitleArticles; }
+            set {
+                _removeTitleArticles = value;
+                OnSettingChanged("remove_title_articles");
+            }
+        }
+        private bool _removeTitleArticles;
+
+        [CornerstoneSetting(
+            Name = "Articles for Removal",
+            Description = "The articles that will be removed from a title when found at the beginning of a title for sorting purposes. Seperate articles with a pipe \"|\". See the \"Remove Title Articles\" setting.",
+            Groups = "|MediaPortal GUI|Sorting|",
+            Identifier = "articles_for_removal",
+            Default = "the|a|an|ein|das|die|der|les|la|le|el|une|de|het")]
+        public string ArticlesForRemoval {
+            get { return _articlesForRemoval; }
+            set {
+                _articlesForRemoval = value;
+                OnSettingChanged("articles_for_removal");
+            }
+        }
+        private string _articlesForRemoval;
+
+        #endregion
+
         #region Parental Controls
 
         [CornerstoneSetting(
