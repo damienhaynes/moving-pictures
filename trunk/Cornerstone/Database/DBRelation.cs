@@ -13,6 +13,7 @@ namespace Cornerstone.Database {
 
         private static Dictionary<Type, List<DBRelation>> relations;
         private MethodInfo getRelationListMethod;
+        private PropertyInfo _propertyInfo;
 
         #endregion
 
@@ -49,6 +50,9 @@ namespace Cornerstone.Database {
             get { return _autoRetrieve; }
         } private bool _autoRetrieve;
 
+        public bool Filterable {
+            get { return _filterable; }
+        } private bool _filterable;
 
         /// <summary>
         /// The name of the table this relationship data is stored in.
@@ -84,13 +88,9 @@ namespace Cornerstone.Database {
 
         #region Public Static Methods
 
-        public static ReadOnlyCollection<DBRelation> GetRelationList(Type primaryType) {
+        public static ReadOnlyCollection<DBRelation> GetRelations(Type primaryType) {
             loadRelations(primaryType);
             return relations[primaryType].AsReadOnly();
-        }
-
-        public static DBRelation GetRelation(Type primaryType, Type secondaryType) {
-            return GetRelation(primaryType, secondaryType, "");
         }
 
         public static DBRelation GetRelation(Type primaryType, Type secondaryType, string identifier) {
@@ -128,7 +128,9 @@ namespace Cornerstone.Database {
                         newRelation._primaryType = primaryType;
                         newRelation._secondaryType = currProperty.PropertyType.GetGenericArguments()[1];
                         newRelation._identifier = ((DBRelationAttribute)currAttr).Identifier;
+                        newRelation._propertyInfo = currProperty;
                         newRelation._autoRetrieve = ((DBRelationAttribute)currAttr).AutoRetrieve;
+                        newRelation._filterable = ((DBRelationAttribute)currAttr).Filterable; 
                         newRelation.getRelationListMethod = currProperty.GetGetMethod();
 
                         newRelations.Add(newRelation);
@@ -149,9 +151,15 @@ namespace Cornerstone.Database {
             get { return _identifier; }
             set { _identifier = value; }
         } string _identifier = "";
+
         public bool AutoRetrieve {
             get { return _autoRetrieve; }
             set { _autoRetrieve = value; }
         } private bool _autoRetrieve = false;
+
+        public bool Filterable {
+            get { return _filterable; }
+            set { _filterable = value; }
+        } private bool _filterable = true;
     }
 }

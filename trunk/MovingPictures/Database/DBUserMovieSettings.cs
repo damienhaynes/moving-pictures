@@ -14,7 +14,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #region Database Fields
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(Filterable=false)]
         public DBUser User {
             get { return user; }
             set {
@@ -48,7 +48,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private int? _userRating;
 
         [DBFieldAttribute(FieldName = "watched")]
-        public int Watched {
+        public int WatchedCount {
             get { return _watched; }
             set {
                 if (_watched != value) {
@@ -57,8 +57,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 }
             }
         } private int _watched;
-        
-        [DBFieldAttribute(FieldName = "resume_part")]
+
+        [DBFieldAttribute(FieldName = "resume_part", Filterable = false)]
         public int ResumePart {
           get { return _resumePart; }
 
@@ -69,7 +69,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private int _resumePart;
 
 
-        [DBFieldAttribute(FieldName = "resume_time")]
+        [DBFieldAttribute(FieldName = "resume_time", Filterable = false)]
         public int ResumeTime {
           get { return _resumeTime; }
 
@@ -79,7 +79,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
         } private int _resumeTime;
 
-        [DBFieldAttribute(FieldName = "resume_data", Default = null)]
+        [DBFieldAttribute(FieldName = "resume_data", Default = null, Filterable = false)]
         public ByteArray ResumeData {
           get { return _resumeData; }
 
@@ -89,7 +89,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
         } private ByteArray _resumeData;
 
-        [DBRelation(AutoRetrieve = true)]
+        [DBRelation(AutoRetrieve = true, Filterable = false)]
         public RelationList<DBUserMovieSettings, DBMovieInfo> AttachedMovies {
           get {
             if (_attachedMovies == null) {

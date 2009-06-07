@@ -314,7 +314,7 @@ namespace Cornerstone.Database {
         }
 
         private void verifyRelationTables(Type primaryType) {
-            foreach (DBRelation currRelation in DBRelation.GetRelationList(primaryType)) {
+            foreach (DBRelation currRelation in DBRelation.GetRelations(primaryType)) {
                 try {
                     // check if the table exists in the database, if not, create it
                     SQLiteResultSet resultSet = dbClient.Execute("select * from sqlite_master where type='table' and name = '" + currRelation.TableName + "'");
@@ -394,6 +394,14 @@ namespace Cornerstone.Database {
             else if (value is DBField) {
                 DBField field = (DBField) value;
                 strVal = field.OwnerType.AssemblyQualifiedName + "|||" + field.FieldName;                
+            }
+
+            // if field represents metadata about a relation (subtable)
+            else if (value is DBRelation) {
+                DBRelation relation = (DBRelation)value;
+                strVal = relation.PrimaryType.AssemblyQualifiedName + "|||" + 
+                         relation.SecondaryType.AssemblyQualifiedName + "|||" +
+                         relation.Identifier;
             }
 
             // handle C# Types, Need full qualified name to load types from other aseemblies
@@ -504,7 +512,7 @@ namespace Cornerstone.Database {
         /// <param name="dbObject">The primary object owning the RelationList to be populated.</param>
         /// <param name="forceRetrieval">Determines if ALL relations will be retrieved.</param>
         private void updateRelationTables(DatabaseTable dbObject) {
-            foreach (DBRelation currRelation in DBRelation.GetRelationList(dbObject.GetType())) {
+            foreach (DBRelation currRelation in DBRelation.GetRelations(dbObject.GetType())) {
                 updateRelationTable(dbObject, currRelation);
             }            
         }
@@ -536,7 +544,7 @@ namespace Cornerstone.Database {
 
         // deletes all subtable data for the given object.
         private void deleteAllRelationData(DatabaseTable dbObject) {
-            foreach (DBRelation currRelation in DBRelation.GetRelationList(dbObject.GetType()))
+            foreach (DBRelation currRelation in DBRelation.GetRelations(dbObject.GetType()))
                 deleteRelationData(dbObject, currRelation);
         }
 
@@ -551,7 +559,7 @@ namespace Cornerstone.Database {
         }
 
         private void getAllRelationData(DatabaseTable dbObject) {
-            foreach (DBRelation currRelation in DBRelation.GetRelationList(dbObject.GetType())) {
+            foreach (DBRelation currRelation in DBRelation.GetRelations(dbObject.GetType())) {
                 if (currRelation.AutoRetrieve)
                     getRelationData(dbObject, currRelation);
             }

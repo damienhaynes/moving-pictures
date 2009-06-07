@@ -89,11 +89,14 @@
             // 
             // valueInputField
             // 
+            this.valueInputField.AutoSize = true;
+            this.valueInputField.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.valueInputField.Dock = System.Windows.Forms.DockStyle.Fill;
             this.valueInputField.InputType = Cornerstone.GUI.Filtering.CriteriaInputType.STRING;
-            this.valueInputField.Location = new System.Drawing.Point(272, 3);
+            this.valueInputField.Location = new System.Drawing.Point(271, 2);
+            this.valueInputField.Margin = new System.Windows.Forms.Padding(2);
             this.valueInputField.Name = "valueInputField";
-            this.valueInputField.Size = new System.Drawing.Size(174, 19);
+            this.valueInputField.Size = new System.Drawing.Size(176, 21);
             this.valueInputField.TabIndex = 2;
             // 
             // CriteriaPanel
@@ -107,6 +110,7 @@
             this.Leave += new System.EventHandler(this.CriteriaPanel_Leave);
             this.Enter += new System.EventHandler(this.CriteriaPanel_Enter);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }

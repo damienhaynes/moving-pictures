@@ -206,7 +206,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
-        [DBFieldAttribute(Default = null, FieldName = "volume_serial")]
+        [DBFieldAttribute(Default = null, FieldName = "volume_serial", Filterable = false)]
         public string VolumeSerial {
             get {
                 return volume_serial;
@@ -218,7 +218,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private string volume_serial;
 
-        [DBFieldAttribute(Default = null)]
+        [DBFieldAttribute(Default = null, Filterable = false)]
         public string DiscId {
             get {
                 // todo: how to handle iso's?
@@ -234,7 +234,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private string _discid;
 
-        [DBFieldAttribute(Default = null)]
+        [DBFieldAttribute(Default = null, Filterable = false)]
         public string FileHash {
             get {
                 if (fileHash == null) {
@@ -250,7 +250,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string fileHash;
 
-        [DBFieldAttribute(Default = "1")]
+        [DBFieldAttribute(Default = "1", Filterable = false)]
         public int Part {
             get { return part; }
             set {
@@ -260,7 +260,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private int part;
 
-        [DBFieldAttribute(Default = "0")]
+        [DBFieldAttribute(Default = "0", Filterable = false)]
         public int Duration {
             get { return _duration; }
             set {
@@ -270,7 +270,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private int _duration;
 
-        [DBFieldAttribute(Default = "false")]
+        [DBFieldAttribute(Default = "false", Filterable = false)]
         public bool Ignored {
             get { return ignored; }
             set {
@@ -280,7 +280,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private bool ignored;
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(Filterable=false)]
         public DBImportPath ImportPath {
             get { return importPath; }
             set {
@@ -289,7 +289,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private DBImportPath importPath;
 
-        [DBRelation(AutoRetrieve = true)]
+        [DBRelation(AutoRetrieve = true, Filterable = false)]
         public RelationList<DBLocalMedia, DBMovieInfo> AttachedMovies {
             get {
                 if (_attachedMovies == null) {
@@ -318,7 +318,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _videoHeight;
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowManualFilterInput = false)]
         public string VideoResolution {
             get { return _videoResolution; }
             set {
@@ -327,7 +327,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _videoResolution;
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowManualFilterInput=false)]
         public string VideoCodec {
             get { return _videoCodec; }
             set {
@@ -336,7 +336,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _videoCodec;
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowManualFilterInput = false)]
         public double VideoFrameRate {
             get { return _videoFrameRate; }
             set {
@@ -345,7 +345,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private double _videoFrameRate;
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowManualFilterInput = false)]
         public string VideoAspectRatio {
             get { return _videoAspectRatio; }
             set {
@@ -354,7 +354,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _videoAspectRatio;
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowManualFilterInput=false)]
         public string AudioCodec {
             get { return _audioCodec; }
             set {
@@ -423,7 +423,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // check for invalid data
                 if (this.VideoCodec.Trim().Length == 0)
                     return false;
-                if (this.VideoAspectRatio != "16_9" && this.VideoAspectRatio != "4_3")
+                if (this.VideoAspectRatio != "widescreen" && this.VideoAspectRatio != "fullscreen")
                     return false;
 
                 return true;
@@ -462,9 +462,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 this.HasSubtitles = mInfoWrapper.HasSubtitles;
 
                 if ((float)mInfoWrapper.Width / (float)mInfoWrapper.Height >= 1.4)
-                    this.VideoAspectRatio = "16_9";
+                    this.VideoAspectRatio = "widescreen";
                 else
-                    this.VideoAspectRatio = "4_3";
+                    this.VideoAspectRatio = "fullscreen";
 
                 if (mInfoWrapper.IsDIVX)
                     this.VideoCodec = "DIVX";

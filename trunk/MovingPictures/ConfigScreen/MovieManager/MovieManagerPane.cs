@@ -249,7 +249,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // populate movie details fields
             titleLabel.Text = CurrentMovie.Title;
 
-            if (CurrentMovie.UserSettings[0].Watched == 0) {
+            if (CurrentMovie.UserSettings[0].WatchedCount == 0) {
                 watchedToggleButton.Visible = true;
                 unwatchedToggleButton.Visible = false;
             }
@@ -633,15 +633,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void unwatchedToggleButton_Click(object sender, EventArgs e) {
             foreach (ListViewItem currItem in movieListBox.SelectedItems)
-                ((DBMovieInfo)currItem.Tag).UserSettings[0].Watched = 0;
+                ((DBMovieInfo)currItem.Tag).UserSettings[0].WatchedCount = 0;
 
             updateMoviePanel();
         }
 
         private void watchedToggleButton_Click(object sender, EventArgs e) {
             foreach (ListViewItem currItem in movieListBox.SelectedItems)
-                if (((DBMovieInfo)currItem.Tag).UserSettings[0].Watched == 0)
-                    ((DBMovieInfo)currItem.Tag).UserSettings[0].Watched = 1;
+                if (((DBMovieInfo)currItem.Tag).UserSettings[0].WatchedCount == 0)
+                    ((DBMovieInfo)currItem.Tag).UserSettings[0].WatchedCount = 1;
 
             updateMoviePanel();
         }

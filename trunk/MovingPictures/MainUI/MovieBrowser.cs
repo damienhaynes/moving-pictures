@@ -538,7 +538,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // remoteColor
                 currItem.IsRemote = true;
             }
-            else if (movie.ActiveUserSettings.Watched > 0) {
+            else if (movie.ActiveUserSettings.WatchedCount > 0) {
                 // playedColor
                 currItem.IsPlayed = true;
             }            
