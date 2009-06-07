@@ -21,7 +21,7 @@ namespace Cornerstone.Database.CustomTypes {
         #region Properties
         public DBRelation MetaData {
             get {
-                ReadOnlyCollection<DBRelation> metadataList = DBRelation.GetRelationList(typeof(T1));
+                ReadOnlyCollection<DBRelation> metadataList = DBRelation.GetRelations(typeof(T1));
                 foreach (DBRelation currData in metadataList)
                     if (currData.GetRelationList(_owner) == this) {
                         _metaData = currData;

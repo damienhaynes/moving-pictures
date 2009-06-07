@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Cornerstone.Database {
     public class DBField {
-        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, TYPE, ENUM, DATE_TIME, DB_OBJECT, DB_FIELD }
+        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, TYPE, ENUM, DATE_TIME, DB_OBJECT, DB_FIELD, DB_RELATION }
 
         #region Private Variables
         
@@ -65,8 +65,10 @@ namespace Cornerstone.Database {
                 type = DBDataType.ENUM;
             else if (DatabaseManager.IsDatabaseTableType(propertyInfo.PropertyType))
                 type = DBDataType.DB_OBJECT;
-            else if(propertyInfo.PropertyType == typeof(DBField))
-                type = DBDataType.DB_FIELD;    
+            else if (propertyInfo.PropertyType == typeof(DBField))
+                type = DBDataType.DB_FIELD;
+            else if (propertyInfo.PropertyType == typeof(DBRelation))
+                type = DBDataType.DB_RELATION;
             else {
                 // check for string object types
                 foreach (Type currInterface in propertyInfo.PropertyType.GetInterfaces())
@@ -180,6 +182,21 @@ namespace Cornerstone.Database {
             get { return attribute.AllowAutoUpdate; }
         }
 
+        // Returns true if this field should be available to the user for filtering purposes.
+        public bool Filterable {
+            get { return attribute.Filterable; }
+        }
+
+        // returns true if the user should be able to manually enter a value for filtering
+        public bool AllowManualFilterInput {
+            get {
+                if (this.Type == typeof(bool))
+                    return false;
+
+                return attribute.AllowManualFilterInput;
+            }
+        }
+
         #endregion
 
         #region Public Methods
@@ -226,17 +243,22 @@ namespace Cornerstone.Database {
                             tmp = tmp.Remove(tmp.IndexOf(','), 1);
 
                         return int.Parse(tmp);
+                    
                     case DBDataType.REAL:
                         return float.Parse(strVal, new CultureInfo("en-US", false));
+                    
                     case DBDataType.BOOL:
                         return (strVal.ToString() == "true" || strVal.ToString() == "1");
+                    
                     case DBDataType.STRING_OBJECT:
                         // create a new object and populate it
                         IStringSourcedObject newObj = (IStringSourcedObject)propertyInfo.PropertyType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
                         newObj.LoadFromString(strVal);
                         return newObj;
+                    
                     case DBDataType.TYPE:
                         return Type.GetType(strVal);
+                    
                     case DBDataType.ENUM:
                         if (strVal.Trim().Length != 0) {
                             Type enumType = propertyInfo.PropertyType;
@@ -246,6 +268,7 @@ namespace Cornerstone.Database {
                             return Enum.Parse(enumType, strVal);
                         }
                         break;
+                    
                     case DBDataType.DATE_TIME:
                         DateTime newDateTimeObj = DateTime.Now;
                         if (strVal.Trim().Length != 0)
@@ -255,6 +278,7 @@ namespace Cornerstone.Database {
                             catch { }
 
                         return newDateTimeObj;
+                    
                     case DBDataType.DB_OBJECT:
                         DatabaseTable newDBObj;
                         if (strVal.Trim().Length == 0)
@@ -262,12 +286,23 @@ namespace Cornerstone.Database {
                         else newDBObj = dbManager.Get(propertyInfo.PropertyType, int.Parse(strVal));
 
                         return newDBObj;
+                    
                     case DBDataType.DB_FIELD:
-                        string[] values = strVal.Split(new string[] { "|||" }, StringSplitOptions.None);
-                        if (values.Length != 2)
+                        string[] fieldValues = strVal.Split(new string[] { "|||" }, StringSplitOptions.None);
+                        if (fieldValues.Length != 2)
                             break;
 
-                        return DBField.GetFieldByDBName(Type.GetType(values[0]), values[1]);
+                        return DBField.GetFieldByDBName(Type.GetType(fieldValues[0]), fieldValues[1]);
+
+                    case DBDataType.DB_RELATION:
+                        string[] relationValues = strVal.Split(new string[] { "|||" }, StringSplitOptions.None);
+                        if (relationValues.Length != 3)
+                            break;
+
+                        return DBRelation.GetRelation(Type.GetType(relationValues[0]),
+                                                      Type.GetType(relationValues[1]),
+                                                      relationValues[2]);
+
                     default:
                         return strVal;
                 }
@@ -386,6 +421,8 @@ namespace Cornerstone.Database {
         private string description = string.Empty;
         private string defaultValue = string.Empty;
         private bool allowAutoUpdate = true;
+        private bool _filterable = true;
+        private bool _allowManualFilterInput = true;
         #endregion
 
         #region Properties
@@ -393,11 +430,6 @@ namespace Cornerstone.Database {
         public string FieldName {
             get { return fieldName; }
             set { fieldName = value; }
-        }
-
-        public string Description {
-            get { return description; }
-            set { description = value; }
         }
 
         public string Default {
@@ -409,6 +441,17 @@ namespace Cornerstone.Database {
             get { return allowAutoUpdate; }
             set { allowAutoUpdate = value; }
         }
+
+        public bool Filterable {
+            get { return _filterable; }
+            set { _filterable = value; }
+        }
+
+        public bool AllowManualFilterInput {
+            get { return _allowManualFilterInput; }
+            set { _allowManualFilterInput = value; }
+        }
+
         #endregion
 
         public DBFieldAttribute() {

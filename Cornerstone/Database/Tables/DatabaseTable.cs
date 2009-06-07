@@ -142,7 +142,7 @@ namespace Cornerstone.Database.Tables {
                     ((IDynamic) defaultVal).Changed += new ChangedEventHandler(commitNeededEventHandler);
             }
 
-            ReadOnlyCollection<DBRelation> relationList = DBRelation.GetRelationList(this.GetType());
+            ReadOnlyCollection<DBRelation> relationList = DBRelation.GetRelations(this.GetType());
             foreach (DBRelation currRelation in relationList) {
                 try {
                     currRelation.GetRelationList(this).Changed += new ChangedEventHandler(commitNeededEventHandler);
@@ -170,16 +170,10 @@ namespace Cornerstone.Database.Tables {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class DBTableAttribute : System.Attribute {
         private string tableName;
-        private string description = string.Empty;
 
         public string TableName {
             get { return tableName; }
             set { tableName = value; }
-        }
-
-        public string Description {
-            get { return description; }
-            set { description = value; }
         }
 
         public DBTableAttribute(string tableName) {

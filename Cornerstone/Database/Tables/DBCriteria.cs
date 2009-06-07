@@ -56,133 +56,147 @@ namespace Cornerstone.Database.Tables {
             List<T> results = new List<T>();
 
             foreach (T currItem in input) {
-                object currItemVal = Field.GetValue(currItem);
-                switch (Operator) {
-                    case OperatorEnum.EQUAL:
-                        if (Field.Type == typeof(StringList)) {
-                            if (((StringList)currItemVal).Contains(Value.ToString()))
-                                results.Add(currItem);
-                        }
-                        else if (Field.Type == typeof(string)) {
-                            if (currItemVal.ToString().ToLower().Equals(Value.ToString().ToLower()))
-                                results.Add(currItem);
-                        }
-                        else {
-                            if (currItemVal.Equals(Value))
-                                results.Add(currItem);
-                        }
-                        break;
-
-                    case OperatorEnum.NOT_EQUAL:
-                        if (Field.Type == typeof(StringList)) {
-                            if (!((StringList)currItemVal).Contains(Value.ToString()))
-                                results.Add(currItem);
-                        }
-                        else if (Field.Type == typeof(string)) {
-                            if (!currItemVal.ToString().ToLower().Equals(Value.ToString().ToLower()))
-                                results.Add(currItem);
-                        }
-                        else {
-                            if (!currItemVal.Equals(Value))
-                                results.Add(currItem);
-                        }
-                        break;
-
-                    case OperatorEnum.CONTAINS:
-                        if (currItemVal.ToString().ToLower().Contains(Value.ToString().ToLower()))
+                if (Relation == null) {
+                    if (isIncluded(Field.GetValue(currItem)))
+                        results.Add(currItem);
+                }
+                else {
+                    foreach (DatabaseTable currSubItem in Relation.GetRelationList(currItem))
+                        if (isIncluded(Field.GetValue(currSubItem))) {
                             results.Add(currItem);
-                        break;
-
-                    case OperatorEnum.NOT_CONTAIN:
-                        if (!currItemVal.ToString().ToLower().Contains(Value.ToString().ToLower()))
-                            results.Add(currItem);
-                        break;
-
-                    case OperatorEnum.GREATER_THAN:
-                        if (currItemVal is int) {
-                            if ((int)currItemVal > (int)Value)
-                                results.Add(currItem);
+                            break;
                         }
-                        else if (currItemVal is float) {
-                            if ((float)currItemVal > (float)Value)
-                                results.Add(currItem);
-                        }
-                        break;
-
-                    case OperatorEnum.LESS_THAN:
-                        if (currItemVal is int) {
-                            if ((int)currItemVal < (int)Value)
-                                results.Add(currItem);
-                        } 
-                        else if (currItemVal is float) {
-                            if ((float)currItemVal < (float)Value)
-                                results.Add(currItem);
-                        }
-                        break;
-
-                    case OperatorEnum.BEGINS_WITH:
-                        if (Field.Type == typeof(StringList)) {
-                            foreach (string currStr in (StringList)currItemVal) {
-                                if (currStr.ToLower().StartsWith(Value.ToString().ToLower())) {
-                                    results.Add(currItem);
-                                    break;
-                                }
-                            }
-                        }
-                        else {
-                            if (currItemVal.ToString().ToLower().StartsWith(Value.ToString().ToLower()))
-                                results.Add(currItem);
-                        }
-                        break;
-
-                    case OperatorEnum.NOT_BEGIN_WITH:
-                        if (Field.Type == typeof(StringList)) {
-                            foreach (string currStr in (StringList)currItemVal) {
-                                if (!currStr.ToLower().StartsWith(Value.ToString().ToLower())) {
-                                    results.Add(currItem);
-                                    break;
-                                }
-                            }
-                        }
-                        else {
-                            if (!currItemVal.ToString().ToLower().StartsWith(Value.ToString().ToLower()))
-                                results.Add(currItem);
-                        }
-                        break;
-
-                    case OperatorEnum.ENDS_WITH:
-                        if (Field.Type == typeof(StringList)) {
-                            foreach (string currStr in (StringList)currItemVal) {
-                                if (currStr.ToLower().EndsWith(Value.ToString().ToLower())) {
-                                    results.Add(currItem);
-                                    break;
-                                }
-                            }
-                        }
-                        else {
-                            if (currItemVal.ToString().ToLower().EndsWith(Value.ToString().ToLower()))
-                                results.Add(currItem);
-                        }
-                        break;
-                    
-                    case OperatorEnum.NOT_ENDS_WITH:
-                        if (Field.Type == typeof(StringList)) {
-                            foreach (string currStr in (StringList)currItemVal) {
-                                if (!currStr.ToLower().EndsWith(Value.ToString().ToLower())) {
-                                    results.Add(currItem);
-                                    break;
-                                }
-                            }
-                        }
-                        else {
-                            if (!currItemVal.ToString().ToLower().EndsWith(Value.ToString().ToLower()))
-                                results.Add(currItem);
-                        }
-                        break;
                 }
             }
 
             return results;
+        }
+
+        private bool isIncluded(object value) {
+            switch (Operator) {
+                case OperatorEnum.EQUAL:
+                    if (Field.Type == typeof(StringList)) {
+                        if (((StringList)value).Contains(Value.ToString()))
+                            return true;
+                    }
+                    else if (Field.Type == typeof(string)) {
+                        if (value.ToString().ToLower().Equals(Value.ToString().ToLower()))
+                            return true;
+                    }
+                    else {
+                        if (value.Equals(Value))
+                            return true;
+                    }
+                    break;
+
+                case OperatorEnum.NOT_EQUAL:
+                    if (Field.Type == typeof(StringList)) {
+                        if (!((StringList)value).Contains(Value.ToString()))
+                            return true;
+                    }
+                    else if (Field.Type == typeof(string)) {
+                        if (!value.ToString().ToLower().Equals(Value.ToString().ToLower()))
+                            return true;
+                    }
+                    else {
+                        if (!value.Equals(Value))
+                            return true;
+                    }
+                    break;
+
+                case OperatorEnum.CONTAINS:
+                    if (value.ToString().ToLower().Contains(Value.ToString().ToLower()))
+                        return true;
+                    break;
+
+                case OperatorEnum.NOT_CONTAIN:
+                    if (!value.ToString().ToLower().Contains(Value.ToString().ToLower()))
+                        return true;
+                    break;
+
+                case OperatorEnum.GREATER_THAN:
+                    if (value is int) {
+                        if ((int)value > (int)Value)
+                            return true;
+                    }
+                    else if (value is float) {
+                        if ((float)value > (float)Value)
+                            return true;
+                    }
+                    break;
+
+                case OperatorEnum.LESS_THAN:
+                    if (value is int) {
+                        if ((int)value < (int)Value)
+                            return true;
+                    }
+                    else if (value is float) {
+                        if ((float)value < (float)Value)
+                            return true;
+                    }
+                    break;
+
+                case OperatorEnum.BEGINS_WITH:
+                    if (Field.Type == typeof(StringList)) {
+                        foreach (string currStr in (StringList)value) {
+                            if (currStr.ToLower().StartsWith(Value.ToString().ToLower())) {
+                                return true;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        if (value.ToString().ToLower().StartsWith(Value.ToString().ToLower()))
+                            return true;
+                    }
+                    break;
+
+                case OperatorEnum.NOT_BEGIN_WITH:
+                    if (Field.Type == typeof(StringList)) {
+                        foreach (string currStr in (StringList)value) {
+                            if (!currStr.ToLower().StartsWith(Value.ToString().ToLower())) {
+                                return true;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        if (!value.ToString().ToLower().StartsWith(Value.ToString().ToLower()))
+                            return true;
+                    }
+                    break;
+
+                case OperatorEnum.ENDS_WITH:
+                    if (Field.Type == typeof(StringList)) {
+                        foreach (string currStr in (StringList)value) {
+                            if (currStr.ToLower().EndsWith(Value.ToString().ToLower())) {
+                                return true;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        if (value.ToString().ToLower().EndsWith(Value.ToString().ToLower()))
+                            return true;
+                    }
+                    break;
+
+                case OperatorEnum.NOT_ENDS_WITH:
+                    if (Field.Type == typeof(StringList)) {
+                        foreach (string currStr in (StringList)value) {
+                            if (!currStr.ToLower().EndsWith(Value.ToString().ToLower())) {
+                                return true;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        if (!value.ToString().ToLower().EndsWith(Value.ToString().ToLower()))
+                            return true;
+                    }
+                    break;
+            }
+            return false;
         }
 
         public bool Active {
@@ -211,6 +225,16 @@ namespace Cornerstone.Database.Tables {
                 commitNeeded = true;
             }
         } private DBField _field = null;
+
+        [DBField]
+        public DBRelation Relation {
+            get { return _subTableRelationship; }
+
+            set {
+                _subTableRelationship = value;
+                commitNeeded = true;
+            }
+        } private DBRelation _subTableRelationship;
 
         [DBField]
         public OperatorEnum Operator {
@@ -250,6 +274,13 @@ namespace Cornerstone.Database.Tables {
 
         public List<OperatorEnum> GetOperators(DBField field) {
             List<OperatorEnum> rtn = new List<OperatorEnum>();
+            
+            if (!field.AllowManualFilterInput) {
+                rtn.Add(DBCriteria<T>.OperatorEnum.EQUAL);
+                rtn.Add(DBCriteria<T>.OperatorEnum.NOT_EQUAL);
+                return rtn;
+            }
+
             switch (field.DBType) {
                 case DBField.DBDataType.ENUM:
                 case DBField.DBDataType.BOOL:

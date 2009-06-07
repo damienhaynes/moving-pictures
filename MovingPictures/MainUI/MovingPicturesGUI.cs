@@ -755,7 +755,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currID++;
             }
 
-            if (browser.SelectedMovie.ActiveUserSettings.Watched > 0) {
+            if (browser.SelectedMovie.ActiveUserSettings.WatchedCount > 0) {
                 unwatchedItem = new GUIListItem(Translation.MarkAsUnwatched);
                 unwatchedItem.ItemId = currID;
                 dialog.Add(unwatchedItem);
@@ -799,14 +799,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 retrieveMissingArt();
             }
             else if (dialog.SelectedId == unwatchedItem.ItemId) {
-                browser.SelectedMovie.ActiveUserSettings.Watched = 0;
+                browser.SelectedMovie.ActiveUserSettings.WatchedCount = 0;
                 browser.SelectedMovie.ActiveUserSettings.Commit();
                 UpdateMovieDetails();
                 browser.UpdateListColors(browser.SelectedMovie);
                 browser.ReapplyFilters();
             }
             else if (dialog.SelectedId == watchedItem.ItemId) {
-                browser.SelectedMovie.ActiveUserSettings.Watched = 1;
+                browser.SelectedMovie.ActiveUserSettings.WatchedCount = 1;
                 browser.SelectedMovie.ActiveUserSettings.Commit();
                 UpdateMovieDetails();
                 browser.UpdateListColors(browser.SelectedMovie);
@@ -1130,7 +1130,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             SetProperty("#MovingPictures.LocalMedia.AudioChannelsFriendly", browser.SelectedMovie.LocalMedia[0].AudioChannelsFriendly, true);
 
             if (selectedMovieWatchedIndicator != null)
-                if (browser.SelectedMovie.ActiveUserSettings.Watched > 0)
+                if (browser.SelectedMovie.ActiveUserSettings.WatchedCount > 0)
                     selectedMovieWatchedIndicator.Visible = true;
                 else
                     selectedMovieWatchedIndicator.Visible = false;

@@ -14,6 +14,8 @@ namespace Cornerstone.GUI.Filtering {
     public partial class CriteriaPanel<T> : UserControl where T: DatabaseTable {
         public event SelectedDelegate<T> Selected;
 
+        private Dictionary<DBField, ComboFieldWrapper> wrapperLookup = new Dictionary<DBField, ComboFieldWrapper>();
+
         [Browsable(false)]
         public DatabaseManager DBManager {
             get {
@@ -56,14 +58,32 @@ namespace Cornerstone.GUI.Filtering {
         }
 
         private void populateFieldCombo() {
+            // add fields from primary type
             fieldComboBox.Items.Clear();
             foreach(DBField currField in DBField.GetFieldList(typeof(T))) {
-                //if (_criteria.GetOperators(currField).Count != 0)
-                    fieldComboBox.Items.Add(currField);
+                if (currField.Filterable) {
+                    ComboFieldWrapper wrapper = new ComboFieldWrapper(currField);
+                    wrapperLookup[currField] = wrapper;
+                    fieldComboBox.Items.Add(wrapper);
+                }
             }
 
-            if (Criteria != null && Criteria.Field != null)
-                fieldComboBox.SelectedItem = Criteria.Field;
+            // add fields from secondary types
+            foreach (DBRelation currRelation in DBRelation.GetRelations(typeof(T))) {
+                if (!currRelation.Filterable)
+                    continue;
+
+                foreach (DBField currField in DBField.GetFieldList(currRelation.SecondaryType)) {
+                    if (currField.Filterable) {
+                        ComboFieldWrapper wrapper = new ComboFieldWrapper(currField, currRelation);
+                        wrapperLookup[currField] = wrapper;
+                        fieldComboBox.Items.Add(wrapper);
+                    }
+                }
+            }
+
+            if (Criteria != null && Criteria.Field != null && wrapperLookup.ContainsKey(Criteria.Field))
+                fieldComboBox.SelectedItem = wrapperLookup[Criteria.Field];
             else
                 fieldComboBox.SelectedIndex = 0;
 
@@ -90,65 +110,95 @@ namespace Cornerstone.GUI.Filtering {
             if (Criteria == null || DBManager == null) 
                 return;
 
-            if (Criteria.Field.Type == typeof(StringList)) {
-                valueInputField.InputType = CriteriaInputType.COMBO;
+            // grab the list of possible values for this field
+            List<string> values = getValues(Criteria.Field, Criteria.Relation);
 
-                // loop through all items in the DB and grab all existing values for this field
-                // use a dictionary because there is no Set class in .NET 2.0 :(
-                Dictionary<string, bool> uniqueStrings = new Dictionary<string, bool>();
-                List<T> items = DBManager.Get<T>(null);
-                foreach (T currItem in items) {
-                    StringList values = (StringList)Criteria.Field.GetValue(currItem);
-                    foreach (string currValue in values) {
-                        uniqueStrings[currValue] = true;
+            // if we have possible values, set displaymode to a combo box
+            if (values.Count > 0) {
+                valueInputField.InputType = CriteriaInputType.COMBO;
+                if (Criteria.Field.AllowManualFilterInput)
+                    valueInputField.ComboBox.DropDownStyle = ComboBoxStyle.DropDown;
+                else
+                    valueInputField.ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            }
+            else
+                valueInputField.InputType = CriteriaInputType.STRING;
+
+            // add all possible values to the drop down
+            valueInputField.ComboBox.Items.Clear();
+            foreach (string currValue in values) {
+                valueInputField.ComboBox.Items.Add(currValue);
+            }
+
+            // set value
+            if (Criteria.Value == null) valueInputField.ComboBox.Text = "";
+            else valueInputField.ComboBox.Text = Criteria.Value.ToString();
+        }
+
+        private List<string> getValues(DBField field, DBRelation relation) {
+            // loop through all items in the DB and grab all existing values for this field
+            // use a dictionary because there is no Set class in .NET 2.0 :(
+            Dictionary<string, bool> uniqueStrings = new Dictionary<string, bool>();
+            List<T> items = DBManager.Get<T>(null);
+            foreach (T currItem in items) {
+                // if this is a field on a sub table, loop through all sub objects
+                if (Criteria.Relation != null) {
+                    foreach (object currSubItem in Criteria.Relation.GetRelationList(currItem)) {
+                        List<string> values = getValues(Criteria.Field.GetValue((DatabaseTable)currSubItem), !field.AllowManualFilterInput);
+                        foreach (string currStr in values) {
+                            uniqueStrings[currStr] = true;
+                        }
                     }
                 }
-
-                // add all unique strings to the drop down
-                valueInputField.ComboBox.Items.Clear();
-                foreach (string currValue in uniqueStrings.Keys) {
-                    valueInputField.ComboBox.Items.Add(currValue);
+                // normal field, just add the value(s)
+                else {
+                    List<string> values = getValues(Criteria.Field.GetValue(currItem), !field.AllowManualFilterInput);
+                    foreach (string currStr in values) {
+                        uniqueStrings[currStr] = true;
+                    }
                 }
-
-                // set value
-                if (Criteria.Value == null) valueInputField.ComboBox.Text = "";
-                else valueInputField.ComboBox.Text = Criteria.Value.ToString();
-
             }
-            else if (Criteria.Field.Type == typeof(string)) {
-                valueInputField.InputType = CriteriaInputType.COMBO;
 
-                // loop through all items in the DB and grab all existing values for this field
-                // use a dictionary because there is no Set class in .NET 2.0 :(
-                Dictionary<string, bool> uniqueStrings = new Dictionary<string, bool>();
-                List<T> items = DBManager.Get<T>(null);
-                foreach (T currItem in items) {
-                    string value = (string)Criteria.Field.GetValue(currItem);
-                    uniqueStrings[value] = true;
+            // add all unique strings to the result set
+            List<string> results = new List<string>();
+            foreach (string currValue in uniqueStrings.Keys) 
+                results.Add(currValue);
+
+            return results;
+        }
+
+        private List<string> getValues(object obj, bool forcePopulation) {
+            List<string> results = new List<string>();
+
+            if (obj == null)
+                return results;
+
+            if (obj is string) {
+                if (((string)obj).Trim().Length != 0)
+                    results.Add((string)obj);
+            }
+            else if (obj is StringList) {
+                foreach (string currValue in (StringList)obj) {
+                    if (currValue != null && currValue.Trim().Length != 0)
+                        results.Add(currValue);
                 }
-
-                // add all unique strings to the drop down
-                valueInputField.ComboBox.Items.Clear();
-                foreach (string currValue in uniqueStrings.Keys) {
-                    valueInputField.ComboBox.Items.Add(currValue);
-                }
-
-                // set value
-                if (Criteria.Value == null) valueInputField.ComboBox.Text = "";
-                else valueInputField.ComboBox.Text = Criteria.Value.ToString();
             }
-            else {
-                valueInputField.InputType = CriteriaInputType.STRING;
-                if (Criteria.Value == null)
-                    valueInputField.TextBox.Text = "";
-                else
-                    valueInputField.TextBox.Text = Criteria.Value.ToString();
+            else if (obj is bool || obj is bool?) {
+                results.Add("true");
+                results.Add("false");
             }
+            else if (forcePopulation) {
+                results.Add(obj.ToString());
+            }
+
+            return results;
         }
 
         private void fieldComboBox_SelectedIndexChanged(object sender, EventArgs e) {
-            if (Criteria != null) 
-                Criteria.Field = (DBField)fieldComboBox.SelectedItem;
+            if (Criteria != null) {
+                Criteria.Field = ((ComboFieldWrapper)fieldComboBox.SelectedItem).Field;
+                Criteria.Relation = ((ComboFieldWrapper)fieldComboBox.SelectedItem).Relation;
+            }
 
             populateOperatorCombo();
             populateValue();
@@ -172,6 +222,31 @@ namespace Cornerstone.GUI.Filtering {
     }
 
     public delegate void SelectedDelegate<T>(CriteriaPanel<T> obj) where T: DatabaseTable;
+
+    class ComboFieldWrapper {
+        public DBField Field {
+            get { return _field; }
+            set { _field = value; }
+        } private DBField _field = null;
+
+        public DBRelation Relation {
+            get { return _relation; }
+            set { _relation = value; }
+        } private DBRelation _relation = null;
+
+        public ComboFieldWrapper(DBField field) {
+            _field = field;
+        }
+
+        public ComboFieldWrapper(DBField field, DBRelation relation) {
+            _field = field;
+            _relation = relation;
+        }
+
+        public override string ToString() {
+            return _field.ToString();
+        }
+    }
 
     class ComboEnumWrapper {
         public string Name {

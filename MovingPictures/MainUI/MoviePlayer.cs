@@ -755,7 +755,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // get the user settings for the default profile (for now)
             DBUserMovieSettings userSetting = movie.ActiveUserSettings;
-            userSetting.Watched++; // increment watch counter
+            userSetting.WatchedCount++; // increment watch counter
             userSetting.Commit();
             DBWatchedHistory.AddWatchedHistory(movie, userSetting.User);
         }

@@ -49,7 +49,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #region Database Fields
 
-        [DBFieldAttribute]
+        [DBField]
         public string Title {
             get { return _title; }
 
@@ -61,7 +61,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _title;
 
-        [DBFieldAttribute(FieldName = "alternate_titles")]
+        [DBField(FieldName = "alternate_titles")]
         public StringList AlternateTitles {
           get { return _alternateTitles; }
 
@@ -71,7 +71,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
         } private StringList _alternateTitles;
 
-        [DBFieldAttribute]
+        [DBField(Filterable=false)]
         public string SortBy {
             get {
                 if (_sortBy.Trim().Length == 0)
@@ -87,7 +87,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _sortBy;
 
 
-        [DBFieldAttribute]
+        [DBField]
         public StringList Directors {
             
             get { return _directors; }
@@ -99,7 +99,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private StringList _directors;
 
 
-        [DBFieldAttribute]
+        [DBField]
         public StringList Writers {
             get { return _writers; }
 
@@ -110,7 +110,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private StringList _writers;
 
 
-        [DBFieldAttribute]
+        [DBField]
         public StringList Actors {
             get { return _actors; }
 
@@ -121,7 +121,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private StringList _actors;
 
 
-        [DBFieldAttribute]
+        [DBField]
         public int Year {
             get { return _year; }
 
@@ -132,7 +132,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private int _year;
 
 
-        [DBFieldAttribute]
+        [DBField]
         public StringList Genres {
             get { return _genres; }
 
@@ -143,7 +143,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private StringList _genres;
 
 
-        [DBFieldAttribute]
+        [DBField]
         public string Certification {
             get { return _certification; }
 
@@ -154,7 +154,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _certification;
         
         
-        [DBFieldAttribute]
+        [DBField(AllowManualFilterInput=false)]
         public string Language {
             get { return _language; }
 
@@ -165,7 +165,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _language;
 
 
-        [DBFieldAttribute]
+        [DBField]
         public string Tagline {
             get { return _tagline; }
 
@@ -176,7 +176,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _tagline;
 
 
-        [DBFieldAttribute]
+        [DBField]
         public string Summary {
             get { return _summary; }
 
@@ -187,7 +187,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _summary;
 
 
-        [DBFieldAttribute]
+        [DBField]
         public float Score {
             get { return _score; }
 
@@ -202,7 +202,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private float _score;
 
-        [DBFieldAttribute]
+        [DBField(Filterable=false)]
         public int Popularity {
             get { return _popularity; }
 
@@ -212,7 +212,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _popularity;
 
-        [DBFieldAttribute(FieldName="date_added")]
+        [DBField(FieldName="date_added")]
         public DateTime DateAdded {
             get { return _dateAdded; }
 
@@ -223,7 +223,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private DateTime _dateAdded;
 
 
-        [DBFieldAttribute]
+        [DBField]
         public int Runtime {
             get { return _runtime; }
 
@@ -234,7 +234,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private int _runtime;
 
 
-        [DBFieldAttribute(FieldName="movie_xml_id")]
+        [DBField(FieldName="movie_xml_id", Filterable=false)]
         public int? MovieXmlID {
             get { return _movieXmlID; }
 
@@ -245,7 +245,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private int? _movieXmlID;
 
 
-        [DBFieldAttribute(FieldName = "imdb_id")]
+        [DBField(FieldName = "imdb_id", Filterable=false)]
         public string ImdbID {
             get { return _imdbID; }
 
@@ -267,7 +267,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } RelationList<DBMovieInfo, DBLocalMedia> _localMedia;
 
 
-        [DBRelation(AutoRetrieve = true)]
+        [DBRelation(AutoRetrieve = true, Filterable=false)]
         public RelationList<DatabaseTable, DBAttribute> Attributes {
             get {
                 if (_attributes == null) {
@@ -287,7 +287,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
         } RelationList<DBMovieInfo, DBUserMovieSettings> _userSettings;
 
-        [DBRelation(AutoRetrieve = true)]
+        [DBRelation(AutoRetrieve = true, Filterable = false)]
         public RelationList<DBMovieInfo, DBSourceMovieInfo> SourceMovieInfo {
           get {
             if (_sourceIDs == null) {
@@ -297,7 +297,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
         } RelationList<DBMovieInfo, DBSourceMovieInfo> _sourceIDs;
 
-        [DBRelation(AutoRetrieve = true)]
+        [DBRelation(AutoRetrieve = true, Filterable = false)]
         public RelationList<DBMovieInfo, DBWatchedHistory> WatchedHistory {
             get {
                 if (_watchedHistory == null) {
@@ -315,7 +315,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return DBSourceMovieInfo.GetOrCreate(this, source);
         }
 
-        [DBFieldAttribute(AllowAutoUpdate = false)]
+        [DBField(AllowAutoUpdate = false, Filterable=false)]
         public StringList AlternateCovers {
             get { return _covers; }
 
@@ -326,7 +326,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private StringList _covers;
 
 
-        [DBFieldAttribute(AllowAutoUpdate = false)]
+        [DBField(AllowAutoUpdate = false, Filterable=false)]
         public String CoverFullPath
         {
             get {
@@ -343,7 +343,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private String _coverFullPath;
 
 
-        [DBFieldAttribute(AllowAutoUpdate = false)]
+        [DBField(AllowAutoUpdate = false, Filterable=false)]
         public String CoverThumbFullPath {
             get {
                 if (_coverThumbFullPath.Trim().Length == 0)
@@ -357,7 +357,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private String _coverThumbFullPath;
 
-        [DBFieldAttribute(AllowAutoUpdate = false)]
+        [DBField(AllowAutoUpdate = false, Filterable=false)]
         public String BackdropFullPath {
             get {
                 return _backdropFullPath;
@@ -369,7 +369,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _backdropFullPath;
 
-        [DBFieldAttribute(AllowAutoUpdate = false, FieldName="details_url")]
+        [DBField(AllowAutoUpdate = false, FieldName="details_url", Filterable=false)]
         public String DetailsURL {
             get {
                 return _detailsUrl;
