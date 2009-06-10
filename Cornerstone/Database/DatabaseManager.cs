@@ -8,6 +8,7 @@ using System.Reflection;
 using NLog;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database.CustomTypes;
+using System.Globalization;
 
 namespace Cornerstone.Database {
     public class DatabaseManager {
@@ -396,9 +397,17 @@ namespace Cornerstone.Database {
                     strVal = "1";
                 else
                     strVal = "0";
-            
+            }
+            // handle double types
+            else if (value.GetType() == typeof(double) || value.GetType() == typeof(Double)) 
+                ((double)value).ToString(new CultureInfo("en-US", false));
+
+            // handle float types
+            else if (value.GetType() == typeof(float) || value.GetType() == typeof(Single)) 
+                ((float)value).ToString(new CultureInfo("en-US", false));
+
             // handle database table types
-            } else if (IsDatabaseTableType(value.GetType()))
+            else if (IsDatabaseTableType(value.GetType()))
                 strVal = ((DatabaseTable)value).ID.ToString();
 
             // if field represents metadata about another dbfield
