@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using MediaPortal.Dialogs;
 using MediaPortal.GUI.Library;
 using NLog;
-using System.ComponentModel;
 
 namespace Cornerstone.MP {
     public class GUIGeneralRating : GUIDialogWindow {
@@ -114,60 +111,60 @@ namespace Cornerstone.MP {
             return Load(GUIGraphicsContext.Skin + @"\dialogGeneralRating.xml");
         }
 
-        public override void OnAction(Action action) {
+        public override void OnAction(MediaPortal.GUI.Library.Action action) {
             switch (action.wID) {
-                case Action.ActionType.REMOTE_1:
+                case MediaPortal.GUI.Library.Action.ActionType.REMOTE_1:
                     Rating = 1;
                     UpdateRating();
                     break;
-                case Action.ActionType.REMOTE_2:
+                case MediaPortal.GUI.Library.Action.ActionType.REMOTE_2:
                     Rating = 2;
                     UpdateRating();
                     break;
-                case Action.ActionType.REMOTE_3:
+                case MediaPortal.GUI.Library.Action.ActionType.REMOTE_3:
                     Rating = 3;
                     UpdateRating();
                     break;
-                case Action.ActionType.REMOTE_4:
+                case MediaPortal.GUI.Library.Action.ActionType.REMOTE_4:
                     Rating = 4;
                     UpdateRating();
                     break;
-                case Action.ActionType.REMOTE_5:
+                case MediaPortal.GUI.Library.Action.ActionType.REMOTE_5:
                     Rating = 5;
                     UpdateRating();
                     break;
-				case Action.ActionType.REMOTE_6:
+				case MediaPortal.GUI.Library.Action.ActionType.REMOTE_6:
 					if (DisplayStars == StarDisplay.FIVE_STARS) break;
 					Rating = 6;
 					UpdateRating();
 					break;
-				case Action.ActionType.REMOTE_7:
+				case MediaPortal.GUI.Library.Action.ActionType.REMOTE_7:
 					if (DisplayStars == StarDisplay.FIVE_STARS) break;
 					Rating = 7;
 					UpdateRating();
 					break;
-				case Action.ActionType.REMOTE_8:
+				case MediaPortal.GUI.Library.Action.ActionType.REMOTE_8:
 					if (DisplayStars == StarDisplay.FIVE_STARS) break;
 					Rating = 8;
 					UpdateRating();
 					break;
-				case Action.ActionType.REMOTE_9:
+				case MediaPortal.GUI.Library.Action.ActionType.REMOTE_9:
 					if (DisplayStars == StarDisplay.FIVE_STARS) break;
 					Rating = 9;
 					UpdateRating();
 					break;
-				case Action.ActionType.REMOTE_0:
+				case MediaPortal.GUI.Library.Action.ActionType.REMOTE_0:
 					if (DisplayStars == StarDisplay.FIVE_STARS) break;
 					Rating = 10;
 					UpdateRating();
 					break;
-                case Action.ActionType.ACTION_SELECT_ITEM:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_SELECT_ITEM:
                     IsSubmitted = true;
                     PageDestroy();
                     return;
-                case Action.ActionType.ACTION_PREVIOUS_MENU:
-                case Action.ActionType.ACTION_CLOSE_DIALOG:
-                case Action.ActionType.ACTION_CONTEXT_MENU:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_PREVIOUS_MENU:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_CLOSE_DIALOG:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_CONTEXT_MENU:
                     IsSubmitted = false;
                     PageDestroy();
                     return;

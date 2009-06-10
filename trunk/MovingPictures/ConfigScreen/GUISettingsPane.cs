@@ -181,5 +181,26 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             passwordTextBox.Enabled = parentalControlsCheckBox.Checked;
             parentalContolsButton.Enabled = parentalControlsCheckBox.Checked;
         }
+
+        private void button1_Click(object sender, EventArgs e) {
+            MenuEditorPopup popup = new MenuEditorPopup();
+            popup.MenuTree.FieldDisplaySettings.Table = typeof(DBMovieInfo);
+
+            // grab or create the menu object for categories
+            DBMenu<DBMovieInfo> menu;
+            string menuID = MovingPicturesCore.Settings.CategoriesMenuID;
+            if (menuID == "null") {
+                menu = new DBMenu<DBMovieInfo>();
+                menu.Name = "Categories Menu";
+                MovingPicturesCore.DatabaseManager.Commit(menu);
+                MovingPicturesCore.Settings.CategoriesMenuID = menu.ID.ToString();
+            }
+            else {
+                menu = MovingPicturesCore.DatabaseManager.Get<DBMenu<DBMovieInfo>>(int.Parse(menuID));
+            }
+
+            popup.MenuTree.Menu = menu;
+            popup.ShowDialog();
+        }
     }
 }

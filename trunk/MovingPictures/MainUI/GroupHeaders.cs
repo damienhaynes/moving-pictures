@@ -165,12 +165,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     if (newIndex == 0)
                         Browser.Facade.SelectedListItemIndex = lastIndex;
                     else
-                        Browser.Facade.OnAction(new Action(Action.ActionType.ACTION_MOVE_UP, 0, 0));
+                        Browser.Facade.OnAction(new MediaPortal.GUI.Library.Action(MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_UP, 0, 0));
                 }
                 else {
                     // MOVE DOWN
                     logger.Debug("Jumping Down");
-                    Browser.Facade.OnAction(new Action(Action.ActionType.ACTION_MOVE_DOWN, 0, 0));
+                    Browser.Facade.OnAction(new MediaPortal.GUI.Library.Action(MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_DOWN, 0, 0));
                 }
             }
         }

@@ -226,8 +226,8 @@ namespace Cornerstone.GUI {
             popup.Text = "Results";
             
             List<T> allItems = DBManager.Get<T>(null);
-            List<T> filteredItems = _attachedFilter.Filter(allItems);
-            
+            HashSet<T> filteredItems = _attachedFilter.Filter(allItems);
+
             foreach(T currItem in filteredItems) 
                 popup.ItemList.DatabaseObjects.Add(currItem);
 

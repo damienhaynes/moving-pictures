@@ -174,11 +174,11 @@ namespace Cornerstone.Tools {
 
                     // Return when hitting maximum retries.
                     if (tryCount == maxRetries) {
-                        logger.ErrorException("Connection failed: Reached retry limit of " + maxRetries + ". URL=" + requestUrl, e);
+                        logger.Warn("Connection failed: Reached retry limit of " + maxRetries + ". URL=" + requestUrl);
                         return false;
                     }
                     else {
-                        logger.DebugException("Connection retry (" + tryCount.ToString() + "): URL=" + requestUrl + ", Status=" + e.Status.ToString() + ". ", e);
+                        //logger.Debug("Connection retry (" + tryCount.ToString() + "): URL=" + requestUrl + ", Status=" + e.Status.ToString() + ". ");
                     }
 
                     // If we did not experience a timeout but some other error

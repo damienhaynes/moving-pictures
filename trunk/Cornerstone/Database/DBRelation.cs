@@ -157,6 +157,11 @@ namespace Cornerstone.Database {
             set { _autoRetrieve = value; }
         } private bool _autoRetrieve = false;
 
+        public bool OneWay {
+            get { return _oneWay; }
+            set { _oneWay = value; }
+        } private bool _oneWay = false;
+
         public bool Filterable {
             get { return _filterable; }
             set { _filterable = value; }

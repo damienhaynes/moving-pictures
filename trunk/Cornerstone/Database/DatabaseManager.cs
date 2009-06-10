@@ -319,28 +319,39 @@ namespace Cornerstone.Database {
                     // check if the table exists in the database, if not, create it
                     SQLiteResultSet resultSet = dbClient.Execute("select * from sqlite_master where type='table' and name = '" + currRelation.TableName + "'");
                     if (resultSet.Rows.Count == 0) {
+                        string idColumn1;
+                        string idColumn2;
+                        if (currRelation.PrimaryType == currRelation.SecondaryType) {
+                            idColumn1 = GetTableName(currRelation.PrimaryType) + "1_id";
+                            idColumn2 = GetTableName(currRelation.SecondaryType) + "2_id";
+                        }
+                        else {
+                            idColumn1 = GetTableName(currRelation.PrimaryType) + "_id";
+                            idColumn2 = GetTableName(currRelation.SecondaryType) + "_id";
+                        }
+
                         // create table
                         string createQuery =
                             "create table " + currRelation.TableName + " (id INTEGER primary key, " +
-                            GetTableName(currRelation.PrimaryType) + "_id INTEGER, " +
-                            GetTableName(currRelation.SecondaryType) + "_id INTEGER)";
+                            idColumn1 + " INTEGER, " +
+                            idColumn2 + " INTEGER)";
 
                         logger.Debug(createQuery);
                         resultSet = dbClient.Execute(createQuery);
 
                         // create index1
                         resultSet = dbClient.Execute("create index " + currRelation.TableName + "__index1 on " +
-                            currRelation.TableName + " (" + GetTableName(currRelation.PrimaryType) + "_id)");
+                            currRelation.TableName + " (" + idColumn1 + ")");
 
                         // create index2
                         resultSet = dbClient.Execute("create index " + currRelation.TableName + "__index2 on " +
-                            currRelation.TableName + " (" + GetTableName(currRelation.SecondaryType) + "_id)");
+                            currRelation.TableName + " (" + idColumn2 + ")");
 
                         logger.Info("Created " + currRelation.TableName + " sub-table.");
                     }
                 }
-                catch (SQLiteException) {
-                    logger.Fatal("Error verifying " + currRelation.TableName + " subtable.");
+                catch (SQLiteException e) {
+                    logger.FatalException("Error verifying " + currRelation.TableName + " subtable.", e);
                 }
             }
         }
@@ -355,7 +366,7 @@ namespace Cornerstone.Database {
                     return (DBTableAttribute)currAttr;
             }
 
-            return null;
+            throw new Exception("Table class " + tableType.Name + " not tagged with DBTable attribute.");
         }
 
         // Returns a select statement retrieving all fields ordered as defined by FieldList
@@ -574,10 +585,20 @@ namespace Cornerstone.Database {
             bool oldCommitNeededFlag = dbObject.CommitNeeded;
             list.Populated = true;
 
+            string idColumn1;
+            string idColumn2;
+            if (relation.PrimaryType == relation.SecondaryType) {
+                idColumn1 = GetTableName(relation.PrimaryType) + "1_id";
+                idColumn2 = GetTableName(relation.SecondaryType) + "2_id";
+            }
+            else {
+                idColumn1 = GetTableName(relation.PrimaryType) + "_id";
+                idColumn2 = GetTableName(relation.SecondaryType) + "_id";
+            }
 
             // build query
-            string selectQuery = "select " + GetTableName(relation.SecondaryType) + "_id from " +
-                       relation.TableName + " where " + GetTableName(relation.PrimaryType) + "_id=" + dbObject.ID;
+            string selectQuery = "select " + idColumn2 + " from " +
+                       relation.TableName + " where " + idColumn1 + "=" + dbObject.ID;
 
             // and retireve relations
             //logger.Debug("Getting Relation Data for " + dbObject.GetType().Name + "[" + dbObject.ID + "]" + relation.SecondaryType.Name + "::: " + selectQuery);

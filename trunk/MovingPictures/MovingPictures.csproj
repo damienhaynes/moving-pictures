@@ -22,6 +22,7 @@
     </SccProvider>
     <StartupObject>
     </StartupObject>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +50,9 @@
       <HintPath>..\External\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
@@ -177,6 +181,12 @@
     </Compile>
     <Compile Include="ConfigScreen\Popups\CoverURLPopup.Designer.cs">
       <DependentUpon>CoverURLPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\MenuEditorPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\MenuEditorPopup.Designer.cs">
+      <DependentUpon>MenuEditorPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\Popups\ProgressPopup.cs">
       <SubType>Form</SubType>
@@ -352,6 +362,9 @@
     <EmbeddedResource Include="ConfigScreen\Popups\CoverURLPopup.resx">
       <DependentUpon>CoverURLPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\MenuEditorPopup.resx">
+      <DependentUpon>MenuEditorPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\ProgressPopup.resx">
       <DependentUpon>ProgressPopup.cs</DependentUpon>

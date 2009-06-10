@@ -62,7 +62,7 @@ namespace Cornerstone.GUI.Controls {
 
 
         void _dbObjects_Changed(object sender, EventArgs e) {
-            repopulateList();
+            if (this.Visible) repopulateList();
         } 
 
         #endregion
@@ -72,6 +72,11 @@ namespace Cornerstone.GUI.Controls {
         public DBObjectListEditor()
             : base() {
             this.View = System.Windows.Forms.View.Details;
+            VisibleChanged += new EventHandler(DBObjectListEditor_VisibleChanged);
+        }
+
+        void DBObjectListEditor_VisibleChanged(object sender, EventArgs e) {
+            if (Visible) repopulateList();
         }
 
         public void OnFieldPropertiesChanged() {

@@ -165,7 +165,7 @@ namespace Cornerstone.Database.CustomTypes {
                 foreach (PropertyInfo currProperty in typeof(T2).GetProperties())
                     foreach (object currAttr in currProperty.GetCustomAttributes(true))
                         // if we have come to a relation property, lets check it
-                        if (currAttr.GetType() == typeof(DBRelationAttribute)) {
+                        if (currAttr.GetType() == typeof(DBRelationAttribute) && !((DBRelationAttribute)currAttr).OneWay) {
                             if (currProperty.PropertyType.GetGenericArguments()[0] == typeof(T2) &&
                                 currProperty.PropertyType.GetGenericArguments()[1] == typeof(T1) &&
                                 ((DBRelationAttribute)currAttr).Identifier == MetaData.Identifier)
