@@ -1077,6 +1077,26 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
+        #region Filtering
+
+        [CornerstoneSetting(
+            Name = "Category Menu ID",
+            Description = "The menu for the categories functionality.",
+            Groups = "|MediaPortal GUI|Filtering|",
+            Identifier = "categories_menu_id",
+            Default = "null",
+            Hidden = true)]
+        public string CategoriesMenuID {
+            get { return _categoriesMenuID; }
+            set {
+                _categoriesMenuID = value;
+                OnSettingChanged("categories_menu_id");
+            }
+        }
+        private string _categoriesMenuID;
+
+        #endregion
+
         #endregion
 
         #region Internal Settings

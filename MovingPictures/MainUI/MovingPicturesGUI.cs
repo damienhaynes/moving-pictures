@@ -447,7 +447,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     bool clickToDetails = MovingPicturesCore.Settings.ClickShowsDetails;
 
                     switch (actionType) {
-                        case Action.ActionType.ACTION_SELECT_ITEM:
+                        case MediaPortal.GUI.Library.Action.ActionType.ACTION_SELECT_ITEM:
                             if (control == facade) {
                                 if (clickToDetails)
                                     browser.CurrentView = BrowserViewMode.DETAILS;
@@ -455,7 +455,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                                     playSelectedMovie();
                             }
                             break;
-                        case Action.ActionType.ACTION_SHOW_INFO:
+                        case MediaPortal.GUI.Library.Action.ActionType.ACTION_SHOW_INFO:
                             if (control == facade) {
                                 browser.CurrentView = BrowserViewMode.DETAILS;
                             }
@@ -487,13 +487,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             base.OnClicked(controlId, control, actionType);
         }
 
-        public override void OnAction(Action action) {
+        public override void OnAction(MediaPortal.GUI.Library.Action action) {
             switch (action.wID) {
-                case Action.ActionType.ACTION_PARENT_DIR:
-                case Action.ActionType.ACTION_HOME:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_PARENT_DIR:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_HOME:
                     GUIWindowManager.ShowPreviousWindow();
                     break;
-                case Action.ActionType.ACTION_PREVIOUS_MENU:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_PREVIOUS_MENU:
                     if (browser.CurrentView == BrowserViewMode.DETAILS)
                         // return to the facade screen
                         browser.CurrentView = browser.PreviousView;
@@ -505,12 +505,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         GUIWindowManager.ShowPreviousWindow();
                     }
                     break;
-                case Action.ActionType.ACTION_PLAY:
-                case Action.ActionType.ACTION_MUSIC_PLAY:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_PLAY:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_MUSIC_PLAY:
                     // don't be confused, this in some cases is the generic PLAY action
                     playSelectedMovie();
                     break;
-                case Action.ActionType.ACTION_KEY_PRESSED:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED:
                     // if remote filtering is active, try to route the keypress through the filter
                     bool remoteFilterEnabled = MovingPicturesCore.Settings.UseRemoteControlFiltering;
                     if (remoteFilterEnabled && browser.CurrentView != BrowserViewMode.DETAILS) {
@@ -528,7 +528,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         base.OnAction(action);
                     }
                     break;
-                case Action.ActionType.ACTION_MOVE_UP:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_UP:
                     int _loopDelay = 100; // wait at the last item this amount of msec until loop to the last item
 
                     // if the user is holding the up key, don't go past index 1
@@ -544,7 +544,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     _lastCommandTime = AnimationTimer.TickCount;
                     break;
 
-                case Action.ActionType.ACTION_PAGE_UP:
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_PAGE_UP:
                     lock (browser) {
                         base.OnAction(action);
 

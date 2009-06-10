@@ -50,11 +50,19 @@ namespace Cornerstone.Database.Tables {
 
         public event FilterUpdatedDelegate<T> Updated;
 
-        public List<T> Filter(List<T> input) {
-            if (!_active) return input;
+        public HashSet<T> Filter(ICollection<T> input) {
+            HashSet<T> results = new HashSet<T>();
 
-            List<T> results = new List<T>();
+            // if we are not active, just return the inputs.
+            if (!_active) {
+                if (input is HashSet<T>)
+                    return (HashSet<T>)input;
 
+                foreach (T currItem in input)
+                    results.Add(currItem);
+                return results;
+            }
+            
             foreach (T currItem in input) {
                 if (Relation == null) {
                     if (isIncluded(Field.GetValue(currItem)))
@@ -141,7 +149,6 @@ namespace Cornerstone.Database.Tables {
                         foreach (string currStr in (StringList)value) {
                             if (currStr.ToLower().StartsWith(Value.ToString().ToLower())) {
                                 return true;
-                                break;
                             }
                         }
                     }
@@ -156,7 +163,6 @@ namespace Cornerstone.Database.Tables {
                         foreach (string currStr in (StringList)value) {
                             if (!currStr.ToLower().StartsWith(Value.ToString().ToLower())) {
                                 return true;
-                                break;
                             }
                         }
                     }
@@ -171,7 +177,6 @@ namespace Cornerstone.Database.Tables {
                         foreach (string currStr in (StringList)value) {
                             if (currStr.ToLower().EndsWith(Value.ToString().ToLower())) {
                                 return true;
-                                break;
                             }
                         }
                     }
@@ -186,7 +191,6 @@ namespace Cornerstone.Database.Tables {
                         foreach (string currStr in (StringList)value) {
                             if (!currStr.ToLower().EndsWith(Value.ToString().ToLower())) {
                                 return true;
-                                break;
                             }
                         }
                     }

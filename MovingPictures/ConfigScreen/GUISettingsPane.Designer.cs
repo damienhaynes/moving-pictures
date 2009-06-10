@@ -62,6 +62,9 @@
             this.remoteControlCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.watchedPercentTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
             this.homeScreenTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -487,10 +490,47 @@
             this.homeScreenTextBox.Size = new System.Drawing.Size(173, 21);
             this.homeScreenTextBox.TabIndex = 5;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(128, 448);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(88, 23);
+            this.button1.TabIndex = 45;
+            this.button1.Text = "Menu Edit Test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox9.Location = new System.Drawing.Point(10, 439);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(492, 3);
+            this.groupBox9.TabIndex = 18;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "groupBox4";
+            this.groupBox9.Visible = false;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(4, 453);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(52, 13);
+            this.label13.TabIndex = 46;
+            this.label13.Text = "Testing:";
+            this.label13.Visible = false;
+            // 
             // GUISettingsPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.groupBox9);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.parentalContolsButton);
@@ -528,7 +568,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(460, 100);
             this.Name = "GUISettingsPane";
-            this.Size = new System.Drawing.Size(512, 461);
+            this.Size = new System.Drawing.Size(512, 524);
             this.Load += new System.EventHandler(this.GUISettingsPane_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -580,5 +620,8 @@
         private System.Windows.Forms.Button parentalContolsButton;
         private System.Windows.Forms.GroupBox groupBox8;
         private Cornerstone.GUI.Controls.SettingsTextBox passwordTextBox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.Label label13;
     }
 }

@@ -245,7 +245,10 @@ namespace Cornerstone.Database {
                         return int.Parse(tmp);
                     
                     case DBDataType.REAL:
-                        return double.Parse(strVal, new CultureInfo("en-US", false));
+                        if (propertyInfo.PropertyType == typeof(double))
+                            return double.Parse(strVal, new CultureInfo("en-US", false));
+                        else
+                            return float.Parse(strVal, new CultureInfo("en-US", false));
                     
                     case DBDataType.BOOL:
                         return (strVal.ToString() == "true" || strVal.ToString() == "1");

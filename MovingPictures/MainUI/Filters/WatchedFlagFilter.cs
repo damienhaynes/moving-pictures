@@ -21,19 +21,30 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
         }
         private bool active;
 
-        public List<DBMovieInfo> Filter(List<DBMovieInfo> input) {
-            if (active) {
+        public HashSet<DBMovieInfo> Filter(ICollection<DBMovieInfo> input) {
+            HashSet<DBMovieInfo> results = new HashSet<DBMovieInfo>();
 
-                Predicate<DBMovieInfo> unwatched = delegate(DBMovieInfo item) {
-                    return item.ActiveUserSettings.WatchedCount == 0;
-                };
+            // if we are not active, just return the inputs.
+            if (!active) {
+                if (input is HashSet<DBMovieInfo>)
+                    return (HashSet<DBMovieInfo>)input;
 
-                // Filter the list with the specified critera
-                List<DBMovieInfo> filteredList = input.FindAll(unwatched);
-                return filteredList;
+                foreach (DBMovieInfo currItem in input)
+                    results.Add(currItem);
+
+                return results;
             }
 
-            return input;
+            Predicate<DBMovieInfo> unwatched = delegate(DBMovieInfo item) {
+                return item.ActiveUserSettings.WatchedCount == 0;
+            };
+
+            // Filter the list with the specified critera
+            foreach (DBMovieInfo currMovie in input) {
+                if (currMovie.ActiveUserSettings.WatchedCount == 0)
+                    results.Add(currMovie);
+            }
+            return results;
         }
 
     }

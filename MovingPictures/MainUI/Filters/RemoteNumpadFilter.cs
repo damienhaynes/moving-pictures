@@ -41,56 +41,49 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
             _keyMap.Add("9","wxyz");
         }
 
-        public List<DBMovieInfo> Filter(List<DBMovieInfo> input) {
+        public HashSet<DBMovieInfo> Filter(ICollection<DBMovieInfo> input) {
+            HashSet<DBMovieInfo> results = new HashSet<DBMovieInfo>();
+
+            // if we are not active, just return the inputs.
+            if (!Active) {
+                if (input is HashSet<DBMovieInfo>)
+                    return (HashSet<DBMovieInfo>)input;
+
+                foreach (DBMovieInfo currItem in input)
+                    results.Add(currItem);
+
+                return results;
+            }
+
             // If the listFilterString contains characters
             // filter the list using the current filter string
-            if (Active) {
-                logger.Debug("List Filter Active: '{0}'", _listFilterString);
 
-                // Contains (title)
-                Predicate<DBMovieInfo> titleContains = delegate(DBMovieInfo item) {
-                    return (NumPadEncode(item.Title).Contains(_listFilterString));
-                };
+            logger.Debug("List Filter Active: '{0}'", _listFilterString);
 
-                // Starts with (sortby)
-                Predicate<DBMovieInfo> titleStartsWith = delegate(DBMovieInfo item) {
-                    return item.SortBy.ToLower().StartsWith(_listFilterString);
-                };
-
-                // By Year
-                Predicate<DBMovieInfo> byYear = delegate(DBMovieInfo item) {
-                    return item.Year.ToString() == _listFilterString;
-                };
-
-                // By Decade
-                Predicate<DBMovieInfo> byDecade = delegate(DBMovieInfo item) {
-                    int start = int.Parse(_listFilterString + "0");
-                    return (item.Year >= start) && (item.Year < (start + 10));
-                };
-
-                // Filter the list with the specified critera
-                List<DBMovieInfo> filteredList;
+            // Filter the list with the specified critera
+            foreach (DBMovieInfo currMovie in input) {
                 switch (_listFilterAction) {
                     case FilterAction.StartsWith:
-                        filteredList = input.FindAll(titleStartsWith);
+                        if (currMovie.SortBy.ToLower().StartsWith(_listFilterString))
+                            results.Add(currMovie);
                         break;
                     case FilterAction.ByYear:
-                        filteredList = input.FindAll(byYear);
+                        if (currMovie.Year.ToString() == _listFilterString)
+                            results.Add(currMovie);
                         break;
                     case FilterAction.ByDecade:
-                        filteredList = input.FindAll(byDecade);
+                        int start = int.Parse(_listFilterString + "0");
+                        if ((currMovie.Year >= start) && (currMovie.Year < (start + 10)))
+                            results.Add(currMovie);
                         break;
                     default:
-                        filteredList = input.FindAll(titleContains);
+                        if (NumPadEncode(currMovie.Title).Contains(_listFilterString))
+                            results.Add(currMovie);
                         break;
                 }
+            }
 
-                return filteredList;
-            }
-            else {
-                // fill facade (facade) with all items.
-                return input;
-            }
+            return results;
         }
 
         public bool Active {

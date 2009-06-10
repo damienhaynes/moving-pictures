@@ -18,11 +18,19 @@ namespace Cornerstone.Database.Tables {
 
         public event FilterUpdatedDelegate<T> Updated;
 
-        public List<T> Filter(List<T> input) {
-            if (!_active)
-                return input;
+        public HashSet<T> Filter(ICollection<T> input) {
+            HashSet<T> results = new HashSet<T>();
 
-            List<T> results = new List<T>();
+            // if we are not active, just return the inputs.
+            if (!_active) {
+                if (input is HashSet<T>)
+                    return (HashSet<T>) input;
+
+                foreach (T currItem in input)
+                    results.Add(currItem);
+                return results;
+            }
+
 
             // if there is no criteria, just use the white list
             if (Criteria.Count == 0) {
@@ -31,25 +39,20 @@ namespace Cornerstone.Database.Tables {
                 return results;
             }
 
-            // remove blacklist items
-            foreach (T currItem in input) {
-                if (!BlackList.Contains(currItem))
-                    results.Add(currItem);
-            }
-
             // handle AND type criteria
+            bool first = true;
             if (CriteriaGrouping == CriteriaGroupingEnum.ALL)
-                foreach (DBCriteria<T> currCriteria in Criteria) 
-                    results = currCriteria.Filter(results);
+                foreach (DBCriteria<T> currCriteria in Criteria) {
+                    results = currCriteria.Filter(first ? input : results);
+                    first = false;
+                }
 
             // handle OR type criteria
             if (CriteriaGrouping == CriteriaGroupingEnum.ONE) {
-                List<T> okItems = new List<T>();
+                HashSet<T> okItems = new HashSet<T>();
                 foreach (DBCriteria<T> currCriteria in Criteria) {
-                    List<T> tmp = currCriteria.Filter(results);
-                    foreach (T currItem in tmp)
-                        if (!okItems.Contains(currItem))
-                            okItems.Add(currItem);
+                    HashSet<T> tmp = currCriteria.Filter(input);
+                    okItems.UnionWith(tmp);
                 }
 
                 results = okItems;
@@ -57,14 +60,21 @@ namespace Cornerstone.Database.Tables {
 
             // handle NONE type criteria
             if (CriteriaGrouping == CriteriaGroupingEnum.NONE) {
-                List<T> excludeItems = new List<T>();
-                excludeItems.AddRange(results);
+                HashSet<T> excludeItems = new HashSet<T>();
+                foreach (T currItem in input)
+                    excludeItems.Add(currItem);
 
                 foreach (DBCriteria<T> currCriteria in Criteria)
                     excludeItems = currCriteria.Filter(excludeItems);
 
                 foreach(T item in excludeItems)
                     results.Remove(item);   
+            }
+
+            // remove blacklist items
+            foreach (T currItem in BlackList) {
+                if (BlackList.Contains(currItem))
+                    results.Remove(currItem);
             }
 
             // make sure all whitelist items are in the result list

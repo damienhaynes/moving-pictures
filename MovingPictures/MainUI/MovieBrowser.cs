@@ -120,14 +120,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// <summary>
         /// All movies currently visible in the movie browser.
         /// </summary>
-        public ReadOnlyCollection<DBMovieInfo> FilteredMovies {
+        public ICollection<DBMovieInfo> FilteredMovies {
             get {
                 if (filteredMovies == null)
                     ReapplyFilters();
-                return filteredMovies.AsReadOnly(); 
+                return filteredMovies; 
             }
         }
-        List<DBMovieInfo> filteredMovies = null;
+        HashSet<DBMovieInfo> filteredMovies = null;
 
         /// <summary>
         /// All filters that are active on the movie browser.
@@ -279,13 +279,19 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public void ReapplyFilters() {
             // (re)initialize the filtered movie list
-            filteredMovies = new List<DBMovieInfo>();
+            filteredMovies = new HashSet<DBMovieInfo>();
             filteredMovies.Clear();
-            filteredMovies.AddRange(allMovies);
 
             // trim it down to satisfy the filters.
-            foreach (IFilter<DBMovieInfo> currFilter in ActiveFilters)
-                filteredMovies = currFilter.Filter(filteredMovies);
+            bool first = true;
+            foreach (IFilter<DBMovieInfo> currFilter in ActiveFilters) {
+                if (first)
+                    filteredMovies = currFilter.Filter(allMovies);
+                else 
+                    filteredMovies = currFilter.Filter(filteredMovies);
+
+                first = false;
+            }
         }
 
         #endregion

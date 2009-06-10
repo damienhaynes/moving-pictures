@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Cornerstone</RootNamespace>
     <AssemblyName>Cornerstone</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -37,6 +37,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
@@ -61,6 +64,8 @@
     <Compile Include="Database\Tables\DatabaseTable.cs" />
     <Compile Include="Database\Tables\DBAttribute.cs" />
     <Compile Include="Database\Tables\DBFilter.cs" />
+    <Compile Include="Database\Tables\DBMenu.cs" />
+    <Compile Include="Database\Tables\DBNode.cs" />
     <Compile Include="Database\Tables\DBSetting.cs" />
     <Compile Include="Database\Tables\DBCriteria.cs" />
     <Compile Include="Database\Tables\IFilter.cs" />
@@ -156,6 +161,15 @@
     <Compile Include="GUI\Filtering\ItemSelectionPopup.Designer.cs">
       <DependentUpon>ItemSelectionPopup.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Filtering\GenericMenuTreePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericMenuTreePanel.Designer.cs">
+      <DependentUpon>GenericMenuTreePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\MenuTreePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -227,6 +241,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Filtering\ItemSelectionPopup.resx">
       <DependentUpon>ItemSelectionPopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\GenericMenuTreePanel.resx">
+      <DependentUpon>GenericMenuTreePanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
