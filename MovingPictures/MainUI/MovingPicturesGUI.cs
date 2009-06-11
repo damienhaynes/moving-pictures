@@ -1127,7 +1127,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
 
             SetProperty("#MovingPictures.LocalMedia.Subtitles", browser.SelectedMovie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles", true);
-            SetProperty("#MovingPictures.LocalMedia.AudioChannelsFriendly", browser.SelectedMovie.LocalMedia[0].AudioChannelsFriendly, true);
 
             if (selectedMovieWatchedIndicator != null)
                 if (browser.SelectedMovie.ActiveUserSettings.WatchedCount > 0)
