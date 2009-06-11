@@ -399,12 +399,12 @@ namespace Cornerstone.Database {
                     strVal = "0";
             }
             // handle double types
-            else if (value.GetType() == typeof(double) || value.GetType() == typeof(Double)) 
-                ((double)value).ToString(new CultureInfo("en-US", false));
+            else if (value.GetType() == typeof(double) || value.GetType() == typeof(Double))
+                strVal = ((double)value).ToString(new CultureInfo("en-US", false));
 
             // handle float types
-            else if (value.GetType() == typeof(float) || value.GetType() == typeof(Single)) 
-                ((float)value).ToString(new CultureInfo("en-US", false));
+            else if (value.GetType() == typeof(float) || value.GetType() == typeof(Single))
+                strVal = ((float)value).ToString(new CultureInfo("en-US", false));
 
             // handle database table types
             else if (IsDatabaseTableType(value.GetType()))
