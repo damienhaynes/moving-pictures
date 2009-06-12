@@ -172,7 +172,9 @@ namespace Cornerstone.ScraperEngine {
                 else if (modifier.Equals("htmldecode"))
                     value = HttpUtility.HtmlDecode(value);
                 else if (modifier.Equals("striptags")) {
-                    value = Regex.Replace(value, @"<.+?>", string.Empty); // Removes tags
+                    value = Regex.Replace(value, @"<br\s*/?>", "\n", RegexOptions.IgnoreCase); // Replace HTML breaks with \n
+                    value = Regex.Replace(value, @"</p>", "\n\n", RegexOptions.IgnoreCase); // Replace paragraph tags with \n\n
+                    value = Regex.Replace(value, @"<.+?>", string.Empty); // Remove all other tags
                     value = Regex.Replace(value, @"\n{3,}", "\n\n"); // Trim newlines
                     value = Regex.Replace(value, @"\t{2,}", " ").Trim(); // Trim whitespace
                 }
