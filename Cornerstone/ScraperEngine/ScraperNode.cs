@@ -174,7 +174,7 @@ namespace Cornerstone.ScraperEngine {
                 else if (modifier.Equals("striptags")) {
                     value = Regex.Replace(value, @"<.+?>", string.Empty); // Removes tags
                     value = Regex.Replace(value, @"\n{3,}", "\n\n"); // Trim newlines
-                    value = Regex.Replace(value, @"\s{2,}", " ").Trim(); // Trim whitespace
+                    value = Regex.Replace(value, @"\t{2,}", " ").Trim(); // Trim whitespace
                 }
 
                 output.Insert(currMatch.Index + offset, value);
