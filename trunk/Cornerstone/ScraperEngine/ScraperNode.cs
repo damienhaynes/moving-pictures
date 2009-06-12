@@ -172,6 +172,7 @@ namespace Cornerstone.ScraperEngine {
                 else if (modifier.Equals("htmldecode"))
                     value = HttpUtility.HtmlDecode(value);
                 else if (modifier.Equals("striptags")) {
+                    value = Regex.Replace(value, @"\n", string.Empty); // Remove all linebreaks
                     value = Regex.Replace(value, @"<br\s*/?>", "\n", RegexOptions.IgnoreCase); // Replace HTML breaks with \n
                     value = Regex.Replace(value, @"</p>", "\n\n", RegexOptions.IgnoreCase); // Replace paragraph tags with \n\n
                     value = Regex.Replace(value, @"<.+?>", string.Empty); // Remove all other tags
