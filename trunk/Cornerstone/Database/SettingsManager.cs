@@ -135,6 +135,7 @@ namespace Cornerstone.Database {
                 // update the property in the settings manager to reflect the change in the object
                 oldValue = property.GetGetMethod().Invoke(this, null);
                 property.GetSetMethod().Invoke(this, new object[] {setting.Value});
+                setting.Commit();
             }
             else {
                 // update the actual setting object and commit
