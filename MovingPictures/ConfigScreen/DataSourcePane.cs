@@ -14,6 +14,7 @@ using System.Threading;
 using NLog;
 using System.IO;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using Cornerstone.GUI.Dialogs;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class DataSourcePane : UserControl {

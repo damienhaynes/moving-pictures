@@ -33,7 +33,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         //} private DBMovieInfo movie;
 
         // Value between 0 and 10
-        [DBFieldAttribute(FieldName = "user_rating", Default = null)]
+        [DBFieldAttribute(FieldName = "user_rating", Default = null, AllowDynamicFiltering=false)]
         public int? UserRating {
             get { return _userRating; }
             set {
@@ -47,7 +47,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int? _userRating;
 
-        [DBFieldAttribute(FieldName = "watched")]
+        [DBFieldAttribute(FieldName = "watched", AllowDynamicFiltering=false)]
         public int WatchedCount {
             get { return _watched; }
             set {

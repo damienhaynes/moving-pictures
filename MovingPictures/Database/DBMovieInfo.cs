@@ -49,7 +49,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #region Database Fields
 
-        [DBField]
+        [DBField(AllowDynamicFiltering=false)]
         public string Title {
             get { return _title; }
 
@@ -61,7 +61,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _title;
 
-        [DBField(FieldName = "alternate_titles")]
+        [DBField(FieldName = "alternate_titles", AllowDynamicFiltering = false)]
         public StringList AlternateTitles {
           get { return _alternateTitles; }
 
@@ -165,7 +165,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _language;
 
 
-        [DBField]
+        [DBField(AllowDynamicFiltering = false)]
         public string Tagline {
             get { return _tagline; }
 
@@ -176,7 +176,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _tagline;
 
 
-        [DBField]
+        [DBField(AllowDynamicFiltering = false)]
         public string Summary {
             get { return _summary; }
 
@@ -187,7 +187,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _summary;
 
 
-        [DBField]
+        [DBField(AllowDynamicFiltering = false)]
         public float Score {
             get { return _score; }
 
@@ -212,7 +212,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _popularity;
 
-        [DBField(FieldName="date_added")]
+        [DBField(FieldName="date_added", AllowDynamicFiltering=false)]
         public DateTime DateAdded {
             get { return _dateAdded; }
 
@@ -223,7 +223,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private DateTime _dateAdded;
 
 
-        [DBField]
+        [DBField(AllowDynamicFiltering = false)]
         public int Runtime {
             get { return _runtime; }
 
@@ -232,17 +232,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private int _runtime;
-
-
-        [DBField(FieldName="movie_xml_id", Filterable=false)]
-        public int? MovieXmlID {
-            get { return _movieXmlID; }
-
-            set {
-                _movieXmlID = value;
-                commitNeeded = true;
-            }
-        } private int? _movieXmlID;
 
 
         [DBField(FieldName = "imdb_id", Filterable=false)]

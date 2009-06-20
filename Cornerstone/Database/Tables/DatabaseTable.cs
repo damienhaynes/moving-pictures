@@ -28,7 +28,12 @@ namespace Cornerstone.Database.Tables {
         public bool CommitNeeded {
             get { return commitNeeded; }
             set { commitNeeded = value; }
-        } protected bool commitNeeded;
+        } protected bool commitNeeded = false;
+
+        public bool CommitInProcess {
+            get { return commitInProcess; }
+            set { commitInProcess = value; }
+        } protected bool commitInProcess = false;
 
         protected void commitNeededEventHandler(object sender, EventArgs e) {
             commitNeeded = true;

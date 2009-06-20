@@ -15,12 +15,9 @@ using NLog.Targets;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.Database.Tables;
+using Cornerstone.GUI.Dialogs;
 
 namespace MediaPortal.Plugins.MovingPictures {
-    public delegate void WorkerDelegate();
-    public delegate void TrackableWorkerDelegate(ProgressDelegate progress);
-    public delegate void ProgressDelegate(string actionName, int percentDone);
-
     public class MovingPicturesCore {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 

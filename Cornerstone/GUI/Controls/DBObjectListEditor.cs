@@ -18,6 +18,20 @@ namespace Cornerstone.GUI.Controls {
         #region Properties
 
         [Category("Cornerstone Settings")]
+        [Description("If set to true, columns will nto be displayed and list items will use the ToString() method for contents.")]
+        [DefaultValue(true)]
+        public bool DisplayColumns {
+            get { return _displayColumns; }
+            set { 
+                _displayColumns = value;
+                if (_displayColumns)
+                    HeaderStyle = ColumnHeaderStyle.Nonclickable;
+                else
+                    HeaderStyle = ColumnHeaderStyle.None;
+            }
+        } private bool _displayColumns = true;
+
+        [Category("Cornerstone Settings")]
         [Description("Manage the type of database table this control connects to and which fields should be displayed.")]
         public FieldDisplaySettings FieldDisplaySettings {
             get {
@@ -72,6 +86,8 @@ namespace Cornerstone.GUI.Controls {
         public DBObjectListEditor()
             : base() {
             this.View = System.Windows.Forms.View.Details;
+            this.HeaderStyle = ColumnHeaderStyle.Nonclickable;
+            this.FullRowSelect = true;
             VisibleChanged += new EventHandler(DBObjectListEditor_VisibleChanged);
         }
 
@@ -99,7 +115,11 @@ namespace Cornerstone.GUI.Controls {
                     
                     if (newItem == null) {
                         newItem = new ListViewItem();
-                        newItem.Text = currField.GetValue(currObj).ToString().Trim();
+                        if (_displayColumns) 
+                            newItem.Text = currField.GetValue(currObj).ToString().Trim();
+                        else
+                            newItem.Text = currObj.ToString();
+
                         newItem.Tag = currObj;
                     }
                     else {
@@ -142,6 +162,9 @@ namespace Cornerstone.GUI.Controls {
                 columnLookup[properties] = newColumn;
 
                 this.Columns.Add(newColumn);
+
+                // if we are not displaying columns we only need the first one.
+                if (!_displayColumns) break;
             }
 
             foreach (FieldProperty currProperty in FieldDisplaySettings.FieldProperties) {

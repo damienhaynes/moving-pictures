@@ -1,4 +1,4 @@
-﻿namespace Cornerstone.GUI.Filtering
+﻿namespace Cornerstone.GUI
 {
     partial class ItemSelectionPopup
     {

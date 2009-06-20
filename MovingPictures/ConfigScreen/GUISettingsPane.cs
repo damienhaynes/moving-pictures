@@ -12,10 +12,13 @@ using System.Diagnostics;
 using MediaPortal.Plugins.MovingPictures.MainUI;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using MediaPortal.Plugins.MovingPictures.Database;
+using Cornerstone.GUI.Dialogs;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class GUISettingsPane : UserControl {
 
+        private DBMenu<DBMovieInfo> menu;
+        
         DBSetting clickGoesToDetails;
         DBSetting dvdInsertedAction;
         DBSetting defaultView;
@@ -156,7 +159,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void parentalControlsButton_Click(object sender, EventArgs e) {
-            FilterConfigPopup popup = new FilterConfigPopup();
+            MovieFilterEditorPopup popup = new MovieFilterEditorPopup();
 
             // grab or create the filter object attached to the parental controls
             DBFilter<DBMovieInfo> filter;
@@ -186,8 +189,25 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             MenuEditorPopup popup = new MenuEditorPopup();
             popup.MenuTree.FieldDisplaySettings.Table = typeof(DBMovieInfo);
 
+            menu = null;
+            ProgressPopup loadingPopup = new ProgressPopup(new WorkerDelegate(loadCategoriesMenu));
+            loadingPopup.Owner = FindForm();
+            loadingPopup.Text = "Loading Menu...";
+            loadingPopup.ShowDialog();
+
+            popup.MenuTree.Menu = menu;
+            popup.ShowDialog();
+
+            MovingPicturesCore.DatabaseManager.BeginTransaction();
+            ProgressPopup savingPopup = new ProgressPopup(new WorkerDelegate(menu.Commit));
+            savingPopup.Owner = FindForm();
+            savingPopup.Text = "Saving Menu...";
+            savingPopup.ShowDialog();
+            MovingPicturesCore.DatabaseManager.EndTransaction();
+        }
+
+        private void loadCategoriesMenu() {
             // grab or create the menu object for categories
-            DBMenu<DBMovieInfo> menu;
             string menuID = MovingPicturesCore.Settings.CategoriesMenuID;
             if (menuID == "null") {
                 menu = new DBMenu<DBMovieInfo>();
@@ -198,9 +218,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             else {
                 menu = MovingPicturesCore.DatabaseManager.Get<DBMenu<DBMovieInfo>>(int.Parse(menuID));
             }
-
-            popup.MenuTree.Menu = menu;
-            popup.ShowDialog();
         }
     }
 }

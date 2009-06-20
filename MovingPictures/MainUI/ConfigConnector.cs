@@ -9,8 +9,11 @@ using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Threading;
+using MediaPortal.Configuration;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
+    //MediaPortal.Plugins.MovingPictures.Properties.Resources.mp_config_icon
+    [PluginIcons("MediaPortal.Plugins.MovingPictures.mp_config_icon.png", "MediaPortal.Plugins.MovingPictures.mp_config_icon.png")]
     public class ConfigConnector: ISetupForm {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();

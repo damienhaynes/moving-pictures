@@ -7,6 +7,14 @@ namespace Cornerstone.Database.Tables {
     [DBTable("menu")]
     public class DBMenu<T>: DatabaseTable, IDBMenu where T: DatabaseTable {
 
+        public DBMenu() {
+            RootNodes.Changed += new ChangedEventHandler(RootNodes_Changed);
+        }
+
+        void RootNodes_Changed(object sender, EventArgs e) {
+            commitNeeded = true;
+        }
+
         #region Database Fields
 
         [DBField]
@@ -32,11 +40,6 @@ namespace Cornerstone.Database.Tables {
         RelationList<DBMenu<T>, DBNode<T>> _rootNodes;
         
         #endregion
-
-        public override void  AfterCommit() {
-            foreach (DBNode<T> currNode in RootNodes)
-                DBManager.Commit(currNode);
-        }
     }
 
     public interface IDBMenu { }

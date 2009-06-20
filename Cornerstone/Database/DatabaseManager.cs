@@ -20,6 +20,8 @@ namespace Cornerstone.Database {
         private Dictionary<Type, bool> isVerified;
         private Dictionary<Type, bool> doneFullRetrieve;
 
+        private bool transactionInProgress = false;
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         #endregion
@@ -154,6 +156,30 @@ namespace Cornerstone.Database {
             getRelationData(relationList.Owner, relationList.MetaData);
         }
 
+        public void BeginTransaction() {
+            if (!transactionInProgress) {
+                transactionInProgress = true;
+                try {
+                    lock (dbClient) dbClient.Execute("BEGIN");
+                }
+                catch (SQLiteException) {
+                    logger.Error("Failed to BEGIN a SQLite Transaction.");
+                }
+            }
+        }
+
+        public void EndTransaction() {
+            if (transactionInProgress) {
+                transactionInProgress = false;
+                try {
+                    lock (dbClient) dbClient.Execute("COMMIT");
+                }
+                catch (SQLiteException) {
+                    logger.Error("Failed to COMMIT a SQLite Transaction.");
+                }
+            }
+        }
+
         public void Commit(IRelationList relationList) {
             updateRelationTable(relationList.Owner, relationList.MetaData);
         }
@@ -163,18 +189,41 @@ namespace Cornerstone.Database {
             if (dbObject == null)
                 return;
 
-            if (!dbObject.CommitNeeded)
+            if (dbObject.CommitInProcess)
                 return;
 
-            verifyTable(dbObject.GetType());
+            if (dbObject.DBManager == null)
+                dbObject.DBManager = this;
 
-            dbObject.BeforeCommit();
+            dbObject.CommitInProcess = true;
 
-            if (dbObject.ID == null) insert(dbObject);
-            else update(dbObject);
+            if (dbObject.CommitNeeded) {
+                verifyTable(dbObject.GetType());
 
+                dbObject.BeforeCommit();
+
+                if (dbObject.ID == null) insert(dbObject);
+                else update(dbObject);
+            }
+
+            CommitRelations(dbObject);
+
+            dbObject.CommitInProcess = false;
             dbObject.CommitNeeded = false;
             dbObject.AfterCommit();
+        }
+
+        public void CommitRelations(DatabaseTable dbObject) {
+            if (dbObject == null) return;
+
+            foreach (DBRelation currRelation in DBRelation.GetRelations(dbObject.GetType())) {
+                if (currRelation.AutoRetrieve) {
+                    foreach (DatabaseTable subObj in currRelation.GetRelationList(dbObject))
+                        Commit(subObj);
+
+                    updateRelationTable(dbObject, currRelation);
+                }
+            }
         }
 
         // Deletes a given object from the database, object in memory persists and could be recommited.
@@ -210,6 +259,59 @@ namespace Cornerstone.Database {
 
         }
 
+        public HashSet<string> GetAllValues(DBField field) {
+            ICollection items = Get(field.OwnerType, null);
+
+            // loop through all items in the DB and grab all existing values for this field
+            HashSet<string> uniqueStrings = new HashSet<string>();
+            foreach (DatabaseTable currItem in items) {
+                List<string> values = getValues(field.GetValue(currItem));
+                foreach (string currStr in values)
+                    uniqueStrings.Add(currStr);
+            }
+
+            return uniqueStrings;
+        }
+
+        public HashSet<string> GetAllValues<T>(DBField field, ICollection<T> items) where T:DatabaseTable {
+            // loop through all items in the DB and grab all existing values for this field
+            HashSet<string> uniqueStrings = new HashSet<string>();
+            foreach (T currItem in items) {
+                List<string> values = getValues(field.GetValue(currItem));
+                foreach (string currStr in values) 
+                    uniqueStrings.Add(currStr);
+            }
+
+            return uniqueStrings;
+        }
+
+        private static List<string> getValues(object obj) {
+            List<string> results = new List<string>();
+
+            if (obj == null)
+                return results;
+
+            if (obj is string) {
+                if (((string)obj).Trim().Length != 0)
+                    results.Add((string)obj);
+            }
+            else if (obj is StringList) {
+                foreach (string currValue in (StringList)obj) {
+                    if (currValue != null && currValue.Trim().Length != 0)
+                        results.Add(currValue);
+                }
+            }
+            else if (obj is bool || obj is bool?) {
+                results.Add("true");
+                results.Add("false");
+            }
+            else {
+                results.Add(obj.ToString());
+            }
+
+            return results;
+        }
+
         #endregion
 
         #region Public Static Methods
@@ -225,7 +327,7 @@ namespace Cornerstone.Database {
         }
 
         public static bool IsDatabaseTableType(Type t) {
-            Type currType = t.BaseType;
+            Type currType = t;
             while (currType != null) {
                 if (currType == typeof(DatabaseTable)) {
                     return true;
@@ -246,6 +348,7 @@ namespace Cornerstone.Database {
         private void initDB() {
             try {
                 dbClient = new SQLiteClient(dbFilename);
+                dbClient.Execute("PRAGMA synchronous=OFF");
                 logger.Info("Successfully Opened Database: " + dbFilename);
             }
             catch (Exception e) {
@@ -297,7 +400,7 @@ namespace Cornerstone.Database {
                             if (currField.Default == null)
                                 defaultValue = "NULL";
                             else
-                                defaultValue = getSQLiteString(currField.Default);
+                                defaultValue = getSQLiteString(currField, currField.Default);
 
                             dbClient.Execute("alter table " + tableAttr.TableName + " add column " + currField.FieldName + " " +
                                              currField.DBType.ToString() + " default " + defaultValue);
@@ -320,33 +423,22 @@ namespace Cornerstone.Database {
                     // check if the table exists in the database, if not, create it
                     SQLiteResultSet resultSet = dbClient.Execute("select * from sqlite_master where type='table' and name = '" + currRelation.TableName + "'");
                     if (resultSet.Rows.Count == 0) {
-                        string idColumn1;
-                        string idColumn2;
-                        if (currRelation.PrimaryType == currRelation.SecondaryType) {
-                            idColumn1 = GetTableName(currRelation.PrimaryType) + "1_id";
-                            idColumn2 = GetTableName(currRelation.SecondaryType) + "2_id";
-                        }
-                        else {
-                            idColumn1 = GetTableName(currRelation.PrimaryType) + "_id";
-                            idColumn2 = GetTableName(currRelation.SecondaryType) + "_id";
-                        }
-
                         // create table
                         string createQuery =
                             "create table " + currRelation.TableName + " (id INTEGER primary key, " +
-                            idColumn1 + " INTEGER, " +
-                            idColumn2 + " INTEGER)";
+                            currRelation.PrimaryColumnName + " INTEGER, " +
+                            currRelation.SecondaryColumnName + " INTEGER)";
 
                         logger.Debug(createQuery);
                         resultSet = dbClient.Execute(createQuery);
 
                         // create index1
                         resultSet = dbClient.Execute("create index " + currRelation.TableName + "__index1 on " +
-                            currRelation.TableName + " (" + idColumn1 + ")");
+                            currRelation.TableName + " (" + currRelation.PrimaryColumnName + ")");
 
                         // create index2
                         resultSet = dbClient.Execute("create index " + currRelation.TableName + "__index2 on " +
-                            currRelation.TableName + " (" + idColumn2 + ")");
+                            currRelation.TableName + " (" + currRelation.SecondaryColumnName + ")");
 
                         logger.Info("Created " + currRelation.TableName + " sub-table.");
                     }
@@ -383,9 +475,13 @@ namespace Cornerstone.Database {
             query += ", id from " + GetTableName(tableType) + " ";
             return query;
         }
-        
-        // creates an escaped, quoted string representation of the given object
+
         public static string getSQLiteString(object value) {
+            return getSQLiteString(null, value);
+        }
+
+        // creates an escaped, quoted string representation of the given object
+        public static string getSQLiteString(DBField ownerField, object value) {
             if (value == null)
                 return "NULL";
             
@@ -399,27 +495,32 @@ namespace Cornerstone.Database {
                     strVal = "0";
             }
             // handle double types
-            else if (value.GetType() == typeof(double) || value.GetType() == typeof(Double))
+            else if (value.GetType() == typeof(double) || value.GetType() == typeof(Double)) 
                 strVal = ((double)value).ToString(new CultureInfo("en-US", false));
 
             // handle float types
-            else if (value.GetType() == typeof(float) || value.GetType() == typeof(Single))
+            else if (value.GetType() == typeof(float) || value.GetType() == typeof(Single)) 
                 strVal = ((float)value).ToString(new CultureInfo("en-US", false));
 
             // handle database table types
-            else if (IsDatabaseTableType(value.GetType()))
-                strVal = ((DatabaseTable)value).ID.ToString();
+            else if (IsDatabaseTableType(value.GetType())) {
+                if (ownerField != null && ownerField.Type != value.GetType())
+                    strVal = ((DatabaseTable)value).ID.ToString() + "|||" + value.GetType().AssemblyQualifiedName;
+                else
+                    strVal = ((DatabaseTable)value).ID.ToString();
+
+            }
 
             // if field represents metadata about another dbfield
             else if (value is DBField) {
-                DBField field = (DBField) value;
-                strVal = field.OwnerType.AssemblyQualifiedName + "|||" + field.FieldName;                
+                DBField field = (DBField)value;
+                strVal = field.OwnerType.AssemblyQualifiedName + "|||" + field.FieldName;
             }
 
             // if field represents metadata about a relation (subtable)
             else if (value is DBRelation) {
                 DBRelation relation = (DBRelation)value;
-                strVal = relation.PrimaryType.AssemblyQualifiedName + "|||" + 
+                strVal = relation.PrimaryType.AssemblyQualifiedName + "|||" +
                          relation.SecondaryType.AssemblyQualifiedName + "|||" +
                          relation.Identifier;
             }
@@ -460,8 +561,12 @@ namespace Cornerstone.Database {
                         queryValueList += ", ";
                     }
 
+                    // if this is a linked db object commit it as needed
+                    if (currField.DBType == DBField.DBDataType.DB_OBJECT)
+                        Commit((DatabaseTable)currField.GetValue(dbObject));
+
                     queryFieldList += currField.FieldName;
-                    queryValueList += getSQLiteString(currField.GetValue(dbObject));
+                    queryValueList += getSQLiteString(currField, currField.GetValue(dbObject));
                 }
 
                 string query = "insert into " + GetTableName(dbObject.GetType()) +
@@ -474,7 +579,6 @@ namespace Cornerstone.Database {
                     dbObject.ID = dbClient.LastInsertID();
                 }
                 dbObject.DBManager = this;
-                updateRelationTables(dbObject);
                 cache.Add(dbObject);
 
                 // notify any listeners of the status change
@@ -501,7 +605,11 @@ namespace Cornerstone.Database {
 
                     firstField = false;
 
-                    query += currField.FieldName + " = " + getSQLiteString(currField.GetValue(dbObject));
+                    // if this is a linked db object commit it as needed
+                    if (currField.DBType == DBField.DBDataType.DB_OBJECT)
+                        Commit((DatabaseTable)currField.GetValue(dbObject));
+
+                    query += currField.FieldName + " = " + getSQLiteString(currField, currField.GetValue(dbObject));
 
                 }
 
@@ -544,22 +652,18 @@ namespace Cornerstone.Database {
             // clear out old values then insert the new
             deleteRelationData(dbObject, currRelation);
 
-            // make sure all related objects have an ID
-            foreach (object currObj in (IList)currRelation.GetRelationList(dbObject)) {
-                if (((DatabaseTable)currObj).ID == null)
-                    Commit((DatabaseTable)currObj);
-            }
-
             // insert all relations to the database
             foreach (object currObj in (IList)currRelation.GetRelationList(dbObject)) {
                 DatabaseTable currDBObj = (DatabaseTable)currObj;
                 string insertQuery = "insert into " + currRelation.TableName + "(" +
-                    GetTableName(dbObject) + "_id, " +
-                    GetTableName(currDBObj) + "_id) values (" +
+                    currRelation.PrimaryColumnName + ", " +
+                    currRelation.SecondaryColumnName + ") values (" +
                     dbObject.ID + ", " + currDBObj.ID + ")";
 
                 lock (dbClient) dbClient.Execute(insertQuery);
             }
+
+            currRelation.GetRelationList(dbObject).CommitNeeded = false;
         }
 
         // deletes all subtable data for the given object.
@@ -572,8 +676,7 @@ namespace Cornerstone.Database {
             if (relation.PrimaryType != dbObject.GetType())
                 return;
 
-            string column = GetTableName(relation.PrimaryType) + "_id";
-            string deleteQuery = "delete from " + relation.TableName + " where " + column + "=" + dbObject.ID;
+            string deleteQuery = "delete from " + relation.TableName + " where " + relation.PrimaryColumnName + "=" + dbObject.ID;
             logger.Debug(deleteQuery);
             lock (dbClient) dbClient.Execute(deleteQuery);
         }
@@ -594,20 +697,9 @@ namespace Cornerstone.Database {
             bool oldCommitNeededFlag = dbObject.CommitNeeded;
             list.Populated = true;
 
-            string idColumn1;
-            string idColumn2;
-            if (relation.PrimaryType == relation.SecondaryType) {
-                idColumn1 = GetTableName(relation.PrimaryType) + "1_id";
-                idColumn2 = GetTableName(relation.SecondaryType) + "2_id";
-            }
-            else {
-                idColumn1 = GetTableName(relation.PrimaryType) + "_id";
-                idColumn2 = GetTableName(relation.SecondaryType) + "_id";
-            }
-
             // build query
-            string selectQuery = "select " + idColumn2 + " from " +
-                       relation.TableName + " where " + idColumn1 + "=" + dbObject.ID;
+            string selectQuery = "select " + relation.SecondaryColumnName + " from " +
+                       relation.TableName + " where " + relation.PrimaryColumnName + "=" + dbObject.ID;
 
             // and retireve relations
             //logger.Debug("Getting Relation Data for " + dbObject.GetType().Name + "[" + dbObject.ID + "]" + relation.SecondaryType.Name + "::: " + selectQuery);
@@ -679,7 +771,7 @@ namespace Cornerstone.Database {
         }
 
         public string GetClause() {
-            return " (" + field.FieldName + " " + op + " " + DatabaseManager.getSQLiteString(value) + ") ";
+            return " (" + field.FieldName + " " + op + " " + DatabaseManager.getSQLiteString(field, value) + ") ";
         }
 
         public override string ToString() {

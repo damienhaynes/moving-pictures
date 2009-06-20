@@ -6,31 +6,6 @@ using Cornerstone.Database.Tables;
 
 namespace Cornerstone.GUI.Controls {
     public class SettingsComboBox: ComboBox {
-        public class FormatedComboBoxItem {
-            public object Value {
-                get { return _value; }
-                set { _value = value; }
-            } private object _value;
-
-            public override string ToString() {
-                return MakeHumanReadable(Value.ToString());
-            }
-
-            public string MakeHumanReadable(string input) {
-                string rtn = "";
-
-                char prevChar = char.MinValue;
-                foreach (char currChar in input) {
-                    if (prevChar != char.MinValue && char.IsLower(prevChar) && char.IsUpper(currChar))
-                        rtn += " ";
-
-                    rtn += currChar;
-                    prevChar = currChar;
-                }
-
-                return rtn;
-            }
-        }
 
         #region Properties
 
@@ -100,5 +75,31 @@ namespace Cornerstone.GUI.Controls {
             
         }
 
+    }
+
+    public class FormatedComboBoxItem {
+        public object Value {
+            get { return _value; }
+            set { _value = value; }
+        } private object _value;
+
+        public override string ToString() {
+            return MakeHumanReadable(Value.ToString());
+        }
+
+        public string MakeHumanReadable(string input) {
+            string rtn = "";
+
+            char prevChar = char.MinValue;
+            foreach (char currChar in input) {
+                if (prevChar != char.MinValue && char.IsLower(prevChar) && char.IsUpper(currChar))
+                    rtn += " ";
+
+                rtn += currChar;
+                prevChar = currChar;
+            }
+
+            return rtn;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
+﻿namespace Cornerstone.GUI.Dialogs {
     partial class ProgressPopup {
         /// <summary>
         /// Required designer variable.

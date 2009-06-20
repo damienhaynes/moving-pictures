@@ -9,7 +9,7 @@ using Cornerstone.GUI.Controls;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database.CustomTypes;
 
-namespace Cornerstone.GUI.Filtering {
+namespace Cornerstone.GUI {
     public partial class ItemSelectionPopup : Form, IFieldDisplaySettingsOwner {
 
         public enum ExitStatusEnum { OK, CANCEL }

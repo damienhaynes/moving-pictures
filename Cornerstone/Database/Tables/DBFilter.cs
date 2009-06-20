@@ -21,21 +21,31 @@ namespace Cornerstone.Database.Tables {
         public HashSet<T> Filter(ICollection<T> input) {
             HashSet<T> results = new HashSet<T>();
 
-            // if we are not active, just return the inputs.
-            if (!_active) {
+            // if we are not active, or the filter has no inclusive rules start
+            // with everything and remove the blacklist
+            if (!_active || (Criteria.Count == 0 && WhiteList.Count == 0)) {
                 if (input is HashSet<T>)
                     return (HashSet<T>) input;
 
                 foreach (T currItem in input)
                     results.Add(currItem);
+
+                // remove blacklist items
+                if (_active)
+                    foreach (T currItem in BlackList) {
+                        if (BlackList.Contains(currItem))
+                            results.Remove(currItem);
+                    }
+
                 return results;
             }
 
 
-            // if there is no criteria, just use the white list
-            if (Criteria.Count == 0) {
+            // if there is no criteria and no blacklisted items, just use the white list
+            if (Criteria.Count == 0 && BlackList.Count == 0) {
                 foreach (T currItem in WhiteList)
-                    results.Add(currItem);
+                    if (input.Contains(currItem))
+                        results.Add(currItem);
                 return results;
             }
 
@@ -79,7 +89,7 @@ namespace Cornerstone.Database.Tables {
 
             // make sure all whitelist items are in the result list
             foreach (T item in WhiteList)
-                if (!results.Contains(item))
+                if (!results.Contains(item) && input.Contains(item))
                     results.Add(item);
 
             return results;
@@ -154,12 +164,15 @@ namespace Cornerstone.Database.Tables {
 
         #endregion
 
-        public override void Commit() {
-            base.Commit();
+        public override void Delete() {
+            base.Delete();
 
-            foreach (DBCriteria<T> currCriteria in Criteria) {
-                DBManager.Commit(currCriteria);
-            }
+            foreach (DBCriteria<T> currCriteria in Criteria)
+                currCriteria.Delete();
+        }
+
+        public override string ToString() {
+            return Name;
         }
     }
 

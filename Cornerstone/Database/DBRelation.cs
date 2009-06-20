@@ -35,6 +35,34 @@ namespace Cornerstone.Database {
             get { return _secondaryType; }
         } private Type _secondaryType;
 
+        public string PrimaryColumnName {
+            get {
+                if (_primaryColumnName == null) {
+                    if (PrimaryType == SecondaryType) 
+                        _primaryColumnName = DatabaseManager.GetTableName(PrimaryType) + "1_id";
+                    else 
+                        _primaryColumnName = DatabaseManager.GetTableName(PrimaryType) + "_id";
+                }
+
+                return _primaryColumnName;
+            }
+        } private string _primaryColumnName = null;
+
+        public string SecondaryColumnName {
+            get {
+                if (_secondaryColumnName == null) {
+                    if (PrimaryType == SecondaryType)
+                        _secondaryColumnName = DatabaseManager.GetTableName(SecondaryType) + "2_id";
+                    else
+                        _secondaryColumnName = DatabaseManager.GetTableName(SecondaryType) + "_id";
+                }
+
+                return _secondaryColumnName;
+            }
+        } private string _secondaryColumnName = null;
+
+
+
         /// <summary>
         /// The optional unique identifier for this relationship. Without a unique ID,
         /// relations gcan go both ways if defined from each type.

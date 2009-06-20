@@ -187,7 +187,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private string media_label;
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowDynamicFiltering = false)]
         public string FullPath {
             get {
                 if (fileInfo == null)
@@ -372,7 +372,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _audioChannels;
 
-        [DBFieldAttribute]
+        [DBFieldAttribute(AllowDynamicFiltering = false)]
         public bool HasSubtitles {
             get { return _hasSubtitles; }
             set {

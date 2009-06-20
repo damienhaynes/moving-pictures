@@ -12,6 +12,7 @@ using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using MediaPortal.Plugins.MovingPictures.Properties;
 using Cornerstone.Database;
 using System.Diagnostics;
+using Cornerstone.GUI.Dialogs;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class ImportPathsPane : UserControl {
