@@ -46,85 +46,160 @@
             Cornerstone.GUI.Controls.FieldProperty fieldProperty20 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty21 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty22 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldDisplaySettings fieldDisplaySettings2 = new Cornerstone.GUI.Controls.FieldDisplaySettings();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty23 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty24 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty25 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty26 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty27 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty28 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty29 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty30 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty31 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty32 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty33 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty34 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty35 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty36 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty37 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty38 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty39 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty40 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty41 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty42 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty43 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty44 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty45 = new Cornerstone.GUI.Controls.FieldProperty();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.okButton = new System.Windows.Forms.Button();
+            this.movieNodeSettingsPanel = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieNodeSettingsPanel();
+            this.nodeSettingsPanel = new Cornerstone.GUI.Filtering.NodeSettingsPanel();
             this.MenuTree = new Cornerstone.GUI.Filtering.MenuTreePanel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.SuspendLayout();
             // 
-            // MenuTree
+            // groupBox2
             // 
-            this.MenuTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            fieldProperty1.ColumnWidth = null;
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Location = new System.Drawing.Point(277, 6);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(2, 380);
+            this.groupBox2.TabIndex = 4;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Node Settings";
+            // 
+            // okButton
+            // 
+            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.okButton.Location = new System.Drawing.Point(646, 363);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.TabIndex = 6;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            // 
+            // movieNodeSettingsPanel
+            // 
+            this.movieNodeSettingsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.movieNodeSettingsPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.movieNodeSettingsPanel.Location = new System.Drawing.Point(285, 79);
+            this.movieNodeSettingsPanel.Name = "movieNodeSettingsPanel";
+            this.movieNodeSettingsPanel.Node = null;
+            this.movieNodeSettingsPanel.Size = new System.Drawing.Size(438, 187);
+            this.movieNodeSettingsPanel.TabIndex = 5;
+            // 
+            // nodeSettingsPanel
+            // 
+            this.nodeSettingsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nodeSettingsPanel.DBManager = null;
+            this.nodeSettingsPanel.DisplayName = "movies";
+            fieldProperty1.ColumnWidth = 150;
             fieldProperty1.DisplayName = "Title";
             fieldProperty1.FieldName = "Title";
             fieldProperty2.ColumnWidth = null;
             fieldProperty2.DisplayName = "Alternate Titles";
             fieldProperty2.FieldName = "AlternateTitles";
+            fieldProperty2.Visible = false;
             fieldProperty3.ColumnWidth = null;
             fieldProperty3.DisplayName = "Sort By";
             fieldProperty3.FieldName = "SortBy";
+            fieldProperty3.Visible = false;
             fieldProperty4.ColumnWidth = null;
             fieldProperty4.DisplayName = "Directors";
             fieldProperty4.FieldName = "Directors";
+            fieldProperty4.Visible = false;
             fieldProperty5.ColumnWidth = null;
             fieldProperty5.DisplayName = "Writers";
             fieldProperty5.FieldName = "Writers";
+            fieldProperty5.Visible = false;
             fieldProperty6.ColumnWidth = null;
             fieldProperty6.DisplayName = "Actors";
             fieldProperty6.FieldName = "Actors";
-            fieldProperty7.ColumnWidth = null;
+            fieldProperty6.Visible = false;
+            fieldProperty7.ColumnWidth = 40;
             fieldProperty7.DisplayName = "Year";
             fieldProperty7.FieldName = "Year";
             fieldProperty8.ColumnWidth = null;
             fieldProperty8.DisplayName = "Genres";
             fieldProperty8.FieldName = "Genres";
+            fieldProperty8.Visible = false;
             fieldProperty9.ColumnWidth = null;
             fieldProperty9.DisplayName = "Certification";
             fieldProperty9.FieldName = "Certification";
+            fieldProperty9.Visible = false;
             fieldProperty10.ColumnWidth = null;
             fieldProperty10.DisplayName = "Language";
             fieldProperty10.FieldName = "Language";
+            fieldProperty10.Visible = false;
             fieldProperty11.ColumnWidth = null;
             fieldProperty11.DisplayName = "Tagline";
             fieldProperty11.FieldName = "Tagline";
+            fieldProperty11.Visible = false;
             fieldProperty12.ColumnWidth = null;
             fieldProperty12.DisplayName = "Summary";
             fieldProperty12.FieldName = "Summary";
+            fieldProperty12.Visible = false;
             fieldProperty13.ColumnWidth = null;
             fieldProperty13.DisplayName = "Score";
             fieldProperty13.FieldName = "Score";
+            fieldProperty13.Visible = false;
             fieldProperty14.ColumnWidth = null;
             fieldProperty14.DisplayName = "Popularity";
             fieldProperty14.FieldName = "Popularity";
+            fieldProperty14.Visible = false;
             fieldProperty15.ColumnWidth = null;
             fieldProperty15.DisplayName = "Date Added";
             fieldProperty15.FieldName = "DateAdded";
+            fieldProperty15.Visible = false;
             fieldProperty16.ColumnWidth = null;
             fieldProperty16.DisplayName = "Runtime";
             fieldProperty16.FieldName = "Runtime";
+            fieldProperty16.Visible = false;
             fieldProperty17.ColumnWidth = null;
-            fieldProperty17.DisplayName = "Movie Xml ID";
-            fieldProperty17.FieldName = "MovieXmlID";
+            fieldProperty17.DisplayName = "Imdb ID";
+            fieldProperty17.FieldName = "ImdbID";
+            fieldProperty17.Visible = false;
             fieldProperty18.ColumnWidth = null;
-            fieldProperty18.DisplayName = "Imdb ID";
-            fieldProperty18.FieldName = "ImdbID";
+            fieldProperty18.DisplayName = "Alternate Covers";
+            fieldProperty18.FieldName = "AlternateCovers";
+            fieldProperty18.Visible = false;
             fieldProperty19.ColumnWidth = null;
-            fieldProperty19.DisplayName = "Alternate Covers";
-            fieldProperty19.FieldName = "AlternateCovers";
+            fieldProperty19.DisplayName = "Cover Full Path";
+            fieldProperty19.FieldName = "CoverFullPath";
+            fieldProperty19.Visible = false;
             fieldProperty20.ColumnWidth = null;
-            fieldProperty20.DisplayName = "Cover Full Path";
-            fieldProperty20.FieldName = "CoverFullPath";
+            fieldProperty20.DisplayName = "Cover Thumb Full Path";
+            fieldProperty20.FieldName = "CoverThumbFullPath";
+            fieldProperty20.Visible = false;
             fieldProperty21.ColumnWidth = null;
-            fieldProperty21.DisplayName = "Cover Thumb Full Path";
-            fieldProperty21.FieldName = "CoverThumbFullPath";
+            fieldProperty21.DisplayName = "Backdrop Full Path";
+            fieldProperty21.FieldName = "BackdropFullPath";
+            fieldProperty21.Visible = false;
             fieldProperty22.ColumnWidth = null;
-            fieldProperty22.DisplayName = "Backdrop Full Path";
-            fieldProperty22.FieldName = "BackdropFullPath";
-            fieldProperty23.ColumnWidth = null;
-            fieldProperty23.DisplayName = "Details URL";
-            fieldProperty23.FieldName = "DetailsURL";
+            fieldProperty22.DisplayName = "Details URL";
+            fieldProperty22.FieldName = "DetailsURL";
+            fieldProperty22.Visible = false;
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty1);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty2);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty3);
@@ -147,57 +222,149 @@
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty20);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty21);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty22);
-            fieldDisplaySettings1.FieldProperties.Add(fieldProperty23);
             fieldDisplaySettings1.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
-            this.MenuTree.FieldDisplaySettings = fieldDisplaySettings1;
-            this.MenuTree.Location = new System.Drawing.Point(12, 39);
-            this.MenuTree.Name = "MenuTree";
-            this.MenuTree.Size = new System.Drawing.Size(195, 347);
-            this.MenuTree.TabIndex = 0;
+            this.nodeSettingsPanel.FieldDisplaySettings = fieldDisplaySettings1;
+            this.nodeSettingsPanel.Location = new System.Drawing.Point(285, 12);
+            this.nodeSettingsPanel.Name = "nodeSettingsPanel";
+            this.nodeSettingsPanel.Node = null;
+            this.nodeSettingsPanel.Size = new System.Drawing.Size(438, 70);
+            this.nodeSettingsPanel.TabIndex = 3;
             // 
-            // label1
+            // MenuTree
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(306, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "This popup is a work in progress and currently is non-functional.";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.MenuTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Location = new System.Drawing.Point(13, 30);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(503, 3);
-            this.groupBox1.TabIndex = 2;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.MenuTree.DBManager = null;
+            fieldProperty23.ColumnWidth = null;
+            fieldProperty23.DisplayName = "Title";
+            fieldProperty23.FieldName = "Title";
+            fieldProperty24.ColumnWidth = null;
+            fieldProperty24.DisplayName = "Alternate Titles";
+            fieldProperty24.FieldName = "AlternateTitles";
+            fieldProperty25.ColumnWidth = null;
+            fieldProperty25.DisplayName = "Sort By";
+            fieldProperty25.FieldName = "SortBy";
+            fieldProperty26.ColumnWidth = null;
+            fieldProperty26.DisplayName = "Directors";
+            fieldProperty26.FieldName = "Directors";
+            fieldProperty27.ColumnWidth = null;
+            fieldProperty27.DisplayName = "Writers";
+            fieldProperty27.FieldName = "Writers";
+            fieldProperty28.ColumnWidth = null;
+            fieldProperty28.DisplayName = "Actors";
+            fieldProperty28.FieldName = "Actors";
+            fieldProperty29.ColumnWidth = null;
+            fieldProperty29.DisplayName = "Year";
+            fieldProperty29.FieldName = "Year";
+            fieldProperty30.ColumnWidth = null;
+            fieldProperty30.DisplayName = "Genres";
+            fieldProperty30.FieldName = "Genres";
+            fieldProperty31.ColumnWidth = null;
+            fieldProperty31.DisplayName = "Certification";
+            fieldProperty31.FieldName = "Certification";
+            fieldProperty32.ColumnWidth = null;
+            fieldProperty32.DisplayName = "Language";
+            fieldProperty32.FieldName = "Language";
+            fieldProperty33.ColumnWidth = null;
+            fieldProperty33.DisplayName = "Tagline";
+            fieldProperty33.FieldName = "Tagline";
+            fieldProperty34.ColumnWidth = null;
+            fieldProperty34.DisplayName = "Summary";
+            fieldProperty34.FieldName = "Summary";
+            fieldProperty35.ColumnWidth = null;
+            fieldProperty35.DisplayName = "Score";
+            fieldProperty35.FieldName = "Score";
+            fieldProperty36.ColumnWidth = null;
+            fieldProperty36.DisplayName = "Popularity";
+            fieldProperty36.FieldName = "Popularity";
+            fieldProperty37.ColumnWidth = null;
+            fieldProperty37.DisplayName = "Date Added";
+            fieldProperty37.FieldName = "DateAdded";
+            fieldProperty38.ColumnWidth = null;
+            fieldProperty38.DisplayName = "Runtime";
+            fieldProperty38.FieldName = "Runtime";
+            fieldProperty39.ColumnWidth = null;
+            fieldProperty39.DisplayName = "Movie Xml ID";
+            fieldProperty39.FieldName = "MovieXmlID";
+            fieldProperty40.ColumnWidth = null;
+            fieldProperty40.DisplayName = "Imdb ID";
+            fieldProperty40.FieldName = "ImdbID";
+            fieldProperty41.ColumnWidth = null;
+            fieldProperty41.DisplayName = "Alternate Covers";
+            fieldProperty41.FieldName = "AlternateCovers";
+            fieldProperty42.ColumnWidth = null;
+            fieldProperty42.DisplayName = "Cover Full Path";
+            fieldProperty42.FieldName = "CoverFullPath";
+            fieldProperty43.ColumnWidth = null;
+            fieldProperty43.DisplayName = "Cover Thumb Full Path";
+            fieldProperty43.FieldName = "CoverThumbFullPath";
+            fieldProperty44.ColumnWidth = null;
+            fieldProperty44.DisplayName = "Backdrop Full Path";
+            fieldProperty44.FieldName = "BackdropFullPath";
+            fieldProperty45.ColumnWidth = null;
+            fieldProperty45.DisplayName = "Details URL";
+            fieldProperty45.FieldName = "DetailsURL";
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty23);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty24);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty25);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty26);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty27);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty28);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty29);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty30);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty31);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty32);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty33);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty34);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty35);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty36);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty37);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty38);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty39);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty40);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty41);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty42);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty43);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty44);
+            fieldDisplaySettings2.FieldProperties.Add(fieldProperty45);
+            fieldDisplaySettings2.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
+            this.MenuTree.FieldDisplaySettings = fieldDisplaySettings2;
+            this.MenuTree.Location = new System.Drawing.Point(12, 12);
+            this.MenuTree.Name = "MenuTree";
+            this.MenuTree.Size = new System.Drawing.Size(259, 374);
+            this.MenuTree.TabIndex = 0;
             // 
             // MenuEditorPopup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(528, 398);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(733, 398);
+            this.ControlBox = false;
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.movieNodeSettingsPanel);
+            this.Controls.Add(this.nodeSettingsPanel);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.MenuTree);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(685, 436);
             this.Name = "MenuEditorPopup";
             this.ShowIcon = false;
-            this.Text = "MenuEditorPopup";
+            this.ShowInTaskbar = false;
+            this.Text = "Menu Editor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MenuEditorPopup_FormClosing);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         public Cornerstone.GUI.Filtering.MenuTreePanel MenuTree;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private Cornerstone.GUI.Filtering.NodeSettingsPanel nodeSettingsPanel;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private MovieNodeSettingsPanel movieNodeSettingsPanel;
+        private System.Windows.Forms.Button okButton;
 
 
 

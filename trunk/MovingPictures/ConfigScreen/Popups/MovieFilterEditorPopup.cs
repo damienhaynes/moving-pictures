@@ -11,7 +11,7 @@ using Cornerstone.Database.Tables;
 using Cornerstone.GUI.Filtering;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
-    public partial class FilterConfigPopup : Form {
+    public partial class MovieFilterEditorPopup : Form {
 
         public bool ExitOk {
             get {
@@ -25,7 +25,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             }
         }
 
-        public FilterConfigPopup() {
+        public MovieFilterEditorPopup() {
             InitializeComponent();
             filterEditorPane1.DBManager = MovingPicturesCore.DatabaseManager;
         }

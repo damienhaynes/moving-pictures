@@ -42,8 +42,8 @@ namespace Cornerstone.GUI.Filtering {
         public void OnFieldPropertiesChanged() {
             InitializeComponent();
 
-            //if (genericFilterEditorPane != null) 
-            //    ((IFieldDisplaySettingsOwner)genericFilterEditorPane).OnFieldPropertiesChanged();
+            if (genericFilterEditorPane != null) 
+                ((IFieldDisplaySettingsOwner)genericFilterEditorPane).OnFieldPropertiesChanged();
         }
 
         #endregion
@@ -75,7 +75,9 @@ namespace Cornerstone.GUI.Filtering {
         } private DatabaseManager _dbManager;
 
         #endregion
-
+        
+        [ReadOnly(true)]
+        [Browsable(false)]
         public IDBFilter AttachedFilter {
             get {
                 if (genericFilterEditorPane == null) return null;
@@ -94,13 +96,13 @@ namespace Cornerstone.GUI.Filtering {
         private void InitializeComponent() {
             // determine the type the filter applies to
             Type filterType = typeof(DatabaseTable);
-            if (_fieldSettings != null) filterType = _fieldSettings.Table;
+            if (_fieldSettings != null && _fieldSettings.Table != null) filterType = _fieldSettings.Table;
 
             // create an instance of the filter panel specific to the type we are filtering
             this.genericFilterEditorPane = null;
             Type genericType = typeof(GenericFilterEditorPane<>).GetGenericTypeDefinition();
             Type specificType = genericType.MakeGenericType(new Type[] { filterType });
-            genericFilterEditorPane = (Control) specificType.GetConstructor(Type.EmptyTypes).Invoke(null);
+            genericFilterEditorPane = (Control)specificType.GetConstructor(Type.EmptyTypes).Invoke(null);
             genericFilterEditorPane.Dock = System.Windows.Forms.DockStyle.Fill;
 
             // link new control to existing settings
@@ -113,14 +115,14 @@ namespace Cornerstone.GUI.Filtering {
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;           
             */
-            
+
             SuspendLayout();
             Controls.Clear();
             Controls.Add(this.genericFilterEditorPane);
-            
+
             Name = "FilterEditorPane";
             Size = new System.Drawing.Size(689, 364);
-            
+
             ResumeLayout(false);
         }
     }

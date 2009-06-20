@@ -14,6 +14,7 @@ using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using NLog;
 using System.Diagnostics;
+using Cornerstone.GUI.Dialogs;
 
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {

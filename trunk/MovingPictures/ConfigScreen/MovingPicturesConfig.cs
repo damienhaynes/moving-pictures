@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using Cornerstone.GUI.Dialogs;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovingPicturesConfig : Form {      

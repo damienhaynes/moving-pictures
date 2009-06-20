@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using NLog;
+using Cornerstone.GUI.Dialogs;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public class DatabaseMaintenanceManager {

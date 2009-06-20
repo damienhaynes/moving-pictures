@@ -18,6 +18,7 @@ using NLog;
 using System.Collections.ObjectModel;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using System.IO;
+using Cornerstone.GUI.Dialogs;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {
@@ -154,6 +155,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // This ensures we are thread safe. Makes sure this method is run by
             // the thread that created this panel.
             if (InvokeRequired) {
+                if (!this.Parent.Visible) return;
                 Delegate method = new DatabaseManager.ObjectAffectedDelegate(movieInsertedListener);
                 object[] parameters = new object[] { obj };
                 this.Invoke(method, parameters);

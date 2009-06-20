@@ -71,6 +71,9 @@ namespace Cornerstone.GUI {
         }
 
         private void updateScreen() {
+            if (_attachedFilter == null)
+                return;
+
             whiteList.DatabaseObjects.Clear();
             foreach (T currItem in _attachedFilter.WhiteList)
                 whiteList.DatabaseObjects.Add(currItem);
@@ -122,6 +125,13 @@ namespace Cornerstone.GUI {
         }
 
         private void FilterEditorPane_Load(object sender, EventArgs e) {
+            if (_attachedFilter == null) {
+                DBFilter<T> newFilter = new DBFilter<T>();
+                newFilter.Name = "New Filter";
+
+                AttachedFilter = newFilter;
+            }
+
             initControls();
             updateScreen();
         }
@@ -132,6 +142,9 @@ namespace Cornerstone.GUI {
         }
 
         private void whitelistAddButton_Click(object sender, EventArgs e) {
+            if (DBManager == null)
+                throw new Exception("DBManager Property must be defined for FilterEditorPane.");
+
             ItemSelectionPopup popup = new ItemSelectionPopup();
             popup.FieldDisplaySettings.Table = FieldDisplaySettings.Table;
             popup.FieldDisplaySettings.FieldProperties = FieldDisplaySettings.FieldProperties;
@@ -161,6 +174,9 @@ namespace Cornerstone.GUI {
         }
 
         private void blacklistAddButton_Click(object sender, EventArgs e) {
+            if (DBManager == null)
+                throw new Exception("DBManager Property must be defined for FilterEditorPane.");
+
             ItemSelectionPopup popup = new ItemSelectionPopup();
             popup.FieldDisplaySettings.Table = FieldDisplaySettings.Table;
             popup.FieldDisplaySettings.FieldProperties = FieldDisplaySettings.FieldProperties;
@@ -219,6 +235,9 @@ namespace Cornerstone.GUI {
         }
 
         private void button1_Click(object sender, EventArgs e) {
+            if (DBManager == null)
+                throw new Exception("DBManager Property must be defined for FilterEditorPane.");
+
             ItemSelectionPopup popup = new ItemSelectionPopup();
             popup.FieldDisplaySettings.Table = FieldDisplaySettings.Table;
             popup.FieldDisplaySettings.FieldProperties = FieldDisplaySettings.FieldProperties;
@@ -232,6 +251,23 @@ namespace Cornerstone.GUI {
                 popup.ItemList.DatabaseObjects.Add(currItem);
 
             popup.ShowDialog();
+        }
+    }
+
+    interface IFilterEditorPane {
+        string DisplayName {
+            get;
+            set;
+        }
+
+        DatabaseManager DBManager {
+            get;
+            set;
+        }
+
+        IDBFilter AttachedFilter {
+            get;
+            set;
         }
     }
 }

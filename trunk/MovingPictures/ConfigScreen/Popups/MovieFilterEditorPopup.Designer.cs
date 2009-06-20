@@ -1,7 +1,7 @@
 ﻿using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.GUI.Filtering;
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
-    partial class FilterConfigPopup {
+    partial class MovieFilterEditorPopup {
         /// <summary>
         /// Required designer variable.
         /// </summary>

@@ -7,7 +7,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 
-namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
+namespace Cornerstone.GUI.Dialogs {
+    public delegate void WorkerDelegate();
+    public delegate void TrackableWorkerDelegate(ProgressDelegate progress);
+    public delegate void ProgressDelegate(string actionName, int percentDone);
+
     public partial class ProgressPopup : Form {
         Thread workerThread;
         

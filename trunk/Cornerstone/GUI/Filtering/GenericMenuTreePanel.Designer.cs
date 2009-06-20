@@ -23,34 +23,38 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.treeView1 = new System.Windows.Forms.TreeView();
-            this.removeNodeButton = new System.Windows.Forms.ToolStripButton();
+            this.treeView = new System.Windows.Forms.TreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.addNodeButton = new System.Windows.Forms.ToolStripButton();
+            this.removeNodeButton = new System.Windows.Forms.ToolStripButton();
+            this.advancedButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.convertToRegularMenuItemButton = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // treeView1
+            // treeView
             // 
-            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.treeView.AllowDrop = true;
+            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.treeView1.Location = new System.Drawing.Point(0, 0);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(195, 340);
-            this.treeView1.TabIndex = 0;
-            // 
-            // removeNodeButton
-            // 
-            this.removeNodeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.removeNodeButton.Image = global::Cornerstone.Properties.Resources.list_remove;
-            this.removeNodeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.removeNodeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.removeNodeButton.Name = "removeNodeButton";
-            this.removeNodeButton.Size = new System.Drawing.Size(30, 20);
-            this.removeNodeButton.Text = "Remove Node";
-            this.removeNodeButton.Click += new System.EventHandler(this.removeNodeButton_Click);
+            this.treeView.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.treeView.HideSelection = false;
+            this.treeView.LabelEdit = true;
+            this.treeView.Location = new System.Drawing.Point(0, 0);
+            this.treeView.Name = "treeView";
+            this.treeView.Size = new System.Drawing.Size(186, 340);
+            this.treeView.TabIndex = 0;
+            this.treeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeView_AfterLabelEdit);
+            this.treeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeView_DragDrop);
+            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
+            this.treeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeView_DragEnter);
+            this.treeView.BeforeLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeView_BeforeLabelEdit);
+            this.treeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeSelect);
+            this.treeView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeView_KeyDown);
+            this.treeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.treeView_ItemDrag);
+            this.treeView.DragOver += new System.Windows.Forms.DragEventHandler(this.treeView_DragOver);
             // 
             // toolStrip1
             // 
@@ -59,30 +63,71 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNodeButton,
-            this.removeNodeButton});
+            this.removeNodeButton,
+            this.toolStripSeparator1,
+            this.advancedButton});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.toolStrip1.Location = new System.Drawing.Point(198, 0);
+            this.toolStrip1.Location = new System.Drawing.Point(189, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(24, 48);
+            this.toolStrip1.Size = new System.Drawing.Size(33, 77);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(31, 6);
             // 
             // addNodeButton
             // 
             this.addNodeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.addNodeButton.Image = global::Cornerstone.Properties.Resources.list_add;
+            this.addNodeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.addNodeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.addNodeButton.Name = "addNodeButton";
-            this.addNodeButton.Size = new System.Drawing.Size(30, 20);
-            this.addNodeButton.Text = "Add Node";
+            this.addNodeButton.Size = new System.Drawing.Size(31, 20);
+            this.addNodeButton.Text = "Add Menu Item";
             this.addNodeButton.Click += new System.EventHandler(this.addNodeButton_Click);
+            // 
+            // removeNodeButton
+            // 
+            this.removeNodeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.removeNodeButton.Image = global::Cornerstone.Properties.Resources.list_remove;
+            this.removeNodeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.removeNodeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.removeNodeButton.Name = "removeNodeButton";
+            this.removeNodeButton.Size = new System.Drawing.Size(31, 20);
+            this.removeNodeButton.Text = "Remove Node";
+            this.removeNodeButton.ToolTipText = "Remove Menu Item";
+            this.removeNodeButton.Click += new System.EventHandler(this.removeNodeButton_Click);
+            // 
+            // advancedButton
+            // 
+            this.advancedButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.advancedButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.convertToRegularMenuItemButton});
+            this.advancedButton.Image = global::Cornerstone.Properties.Resources.advanced;
+            this.advancedButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.advancedButton.Name = "advancedButton";
+            this.advancedButton.Size = new System.Drawing.Size(31, 20);
+            this.advancedButton.Text = "toolStripButton1";
+            this.advancedButton.ToolTipText = "Advanced Options";
+            this.advancedButton.ButtonClick += new System.EventHandler(this.advancedButton_ButtonClick);
+            // 
+            // convertToRegularMenuItemButton
+            // 
+            this.convertToRegularMenuItemButton.Name = "convertToRegularMenuItemButton";
+            this.convertToRegularMenuItemButton.Size = new System.Drawing.Size(234, 22);
+            this.convertToRegularMenuItemButton.Text = "Convert to Regular Menu Item";
+            this.convertToRegularMenuItemButton.Click += new System.EventHandler(this.convertToRegularMenuItemToolStripMenuItem_Click);
             // 
             // GenericMenuTreePanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.treeView1);
+            this.Controls.Add(this.treeView);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "GenericMenuTreePanel";
             this.Size = new System.Drawing.Size(223, 340);
             this.toolStrip1.ResumeLayout(false);
@@ -94,9 +139,12 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.TreeView treeView;
         private System.Windows.Forms.ToolStripButton removeNodeButton;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton addNodeButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSplitButton advancedButton;
+        private System.Windows.Forms.ToolStripMenuItem convertToRegularMenuItemButton;
     }
 }

@@ -165,6 +165,9 @@ namespace Cornerstone.Database {
                         newObj.LoadFromString(attribute.Default);
                         return newObj;
                     case DBDataType.DB_OBJECT:
+                        if (propertyInfo.PropertyType == typeof(DatabaseTable))
+                            return null;
+
                         DatabaseTable newDBObj = (DatabaseTable)propertyInfo.PropertyType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
                         return newDBObj;
                     default:
@@ -197,6 +200,11 @@ namespace Cornerstone.Database {
             }
         }
 
+        // returns true if dynamic filtering nodes are permissible for this field
+        public bool AllowDynamicFiltering {
+            get { return attribute.AllowDynamicFiltering; }
+        }
+
         #endregion
 
         #region Public Methods
@@ -218,6 +226,7 @@ namespace Cornerstone.Database {
 
                 if (value is string) 
                     propertyInfo.GetSetMethod().Invoke(owner, new object[] { ConvertString(owner.DBManager, (string)value) });
+                
 
             }
             catch (Exception e) {
@@ -231,7 +240,12 @@ namespace Cornerstone.Database {
 
         // Returns the value of this field for the given object.
         public object GetValue(DatabaseTable owner) {
-            return propertyInfo.GetGetMethod().Invoke(owner, null);
+            try {
+                return propertyInfo.GetGetMethod().Invoke(owner, null);
+            }
+            catch (Exception ) {
+                throw new Exception("DBField does not belong to the Type of the supplied Owner.");
+            }
         }
 
         public object ConvertString(DatabaseManager dbManager, string strVal) {
@@ -283,12 +297,15 @@ namespace Cornerstone.Database {
                         return newDateTimeObj;
                     
                     case DBDataType.DB_OBJECT:
-                        DatabaseTable newDBObj;
                         if (strVal.Trim().Length == 0)
-                            newDBObj = null;
-                        else newDBObj = dbManager.Get(propertyInfo.PropertyType, int.Parse(strVal));
+                            return null;
 
-                        return newDBObj;
+                        string[] objectValues = strVal.Split(new string[] { "|||" }, StringSplitOptions.None);
+                        if (objectValues.Length > 1) {
+                            return dbManager.Get(Type.GetType(objectValues[1]), int.Parse(objectValues[0]));
+                        }
+                        else 
+                            return dbManager.Get(propertyInfo.PropertyType, int.Parse(strVal));
                     
                     case DBDataType.DB_FIELD:
                         string[] fieldValues = strVal.Split(new string[] { "|||" }, StringSplitOptions.None);
@@ -426,6 +443,7 @@ namespace Cornerstone.Database {
         private bool allowAutoUpdate = true;
         private bool _filterable = true;
         private bool _allowManualFilterInput = true;
+        private bool _allowDynamicFiltering = true;
         #endregion
 
         #region Properties
@@ -453,6 +471,11 @@ namespace Cornerstone.Database {
         public bool AllowManualFilterInput {
             get { return _allowManualFilterInput; }
             set { _allowManualFilterInput = value; }
+        }
+
+        public bool AllowDynamicFiltering {
+            get { return _allowDynamicFiltering; }
+            set { _allowDynamicFiltering = value; }
         }
 
         #endregion

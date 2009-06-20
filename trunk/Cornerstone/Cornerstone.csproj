@@ -121,6 +121,24 @@
     <Compile Include="GUI\Dialogs\AttributeTypeEditor.Designer.cs">
       <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Dialogs\ProgressPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Dialogs\ProgressPopup.Designer.cs">
+      <DependentUpon>ProgressPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FilterEditorPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FilterEditorPopup.Designer.cs">
+      <DependentUpon>FilterEditorPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\AddNodePopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\AddNodePopup.Designer.cs">
+      <DependentUpon>AddNodePopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Filtering\CategorySettingsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -154,11 +172,10 @@
     <Compile Include="GUI\Filtering\GenericFilterEditorPane.Designer.cs">
       <DependentUpon>GenericFilterEditorPane.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Filtering\IFilterEditorPane.cs" />
-    <Compile Include="GUI\Filtering\ItemSelectionPopup.cs">
+    <Compile Include="GUI\ItemSelectionPopup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Filtering\ItemSelectionPopup.Designer.cs">
+    <Compile Include="GUI\ItemSelectionPopup.Designer.cs">
       <DependentUpon>ItemSelectionPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Filtering\GenericMenuTreePanel.cs">
@@ -168,6 +185,15 @@
       <DependentUpon>GenericMenuTreePanel.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Filtering\MenuTreePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericNodeSettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericNodeSettingsPanel.Designer.cs">
+      <DependentUpon>GenericNodeSettingsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\NodeSettingsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -223,6 +249,16 @@
       <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Dialogs\ProgressPopup.resx">
+      <DependentUpon>ProgressPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FilterEditorPopup.resx">
+      <DependentUpon>FilterEditorPopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\AddNodePopup.resx">
+      <DependentUpon>AddNodePopup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Filtering\CategorySettingsPanel.resx">
       <DependentUpon>CategorySettingsPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -239,11 +275,14 @@
       <DependentUpon>GenericFilterEditorPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Filtering\ItemSelectionPopup.resx">
+    <EmbeddedResource Include="GUI\ItemSelectionPopup.resx">
       <DependentUpon>ItemSelectionPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Filtering\GenericMenuTreePanel.resx">
       <DependentUpon>GenericMenuTreePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\GenericNodeSettingsPanel.resx">
+      <DependentUpon>GenericNodeSettingsPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -252,6 +291,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Images\cog.png" />
+    <None Include="Images\folder.png" />
+    <None Include="Images\folder_explore.png" />
+    <None Include="Images\blank.png" />
+    <None Include="Images\bullet_go.png" />
+    <None Include="Images\bullet_black.png" />
+    <None Include="Images\bullet_error.png" />
     <Content Include="Images\list-add.png" />
     <Content Include="Images\list-remove.png" />
   </ItemGroup>

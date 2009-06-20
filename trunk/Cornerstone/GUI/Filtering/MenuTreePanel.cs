@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using Cornerstone.GUI.Controls;
 using Cornerstone.Database.Tables;
+using Cornerstone.Database;
+using System.Drawing;
 
 namespace Cornerstone.GUI.Filtering {
     public class MenuTreePanel: UserControl, IMenuTreePanel, IFieldDisplaySettingsOwner {
@@ -16,6 +18,14 @@ namespace Cornerstone.GUI.Filtering {
         }
 
         #region IMenuTreePanel Members
+
+        public event DBNodeEventHandler SelectedNodeChanged;
+
+        [Browsable(false)]
+        public DatabaseManager DBManager {
+            get { return ((IMenuTreePanel)genericMenuTreePanel).DBManager; }
+            set { ((IMenuTreePanel)genericMenuTreePanel).DBManager = value; }
+        } 
 
         [ReadOnly(true)]
         public IDBMenu Menu {
@@ -70,10 +80,10 @@ namespace Cornerstone.GUI.Filtering {
             Type specificType = genericType.MakeGenericType(new Type[] { filterType });
             genericMenuTreePanel = (Control)specificType.GetConstructor(Type.EmptyTypes).Invoke(null);
             genericMenuTreePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            ((IMenuTreePanel)genericMenuTreePanel).SelectedNodeChanged += new DBNodeEventHandler(MenuTreePanel_SelectedNodeChanged);
 
             // link new control to existing settings
-            //((IFilterEditorPane)genericMenuTreePanel).DBManager = DBManager;
-            //((IFilterEditorPane)genericMenuTreePanel).DisplayName = DisplayName;
+            ((IMenuTreePanel)genericMenuTreePanel).DBManager = DBManager;
             ((IFieldDisplaySettingsOwner)genericMenuTreePanel).FieldDisplaySettings = FieldDisplaySettings;
 
             SuspendLayout();
@@ -86,5 +96,9 @@ namespace Cornerstone.GUI.Filtering {
             ResumeLayout(false);
         }
 
+        void MenuTreePanel_SelectedNodeChanged(IDBNode node, Type type) {
+            if (SelectedNodeChanged != null)
+                SelectedNodeChanged(node, type);
+        }
     }
 }

@@ -55,6 +55,9 @@
             this.label12 = new System.Windows.Forms.Label();
             this.parentalContolsButton = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.passwordTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
             this.parentalControlsCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.enableDeleteCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
@@ -62,9 +65,6 @@
             this.remoteControlCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.watchedPercentTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
             this.homeScreenTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -415,6 +415,37 @@
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "groupBox8";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(128, 448);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(144, 23);
+            this.button1.TabIndex = 45;
+            this.button1.Text = "Modify Categories Menu";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox9.Location = new System.Drawing.Point(10, 439);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(492, 3);
+            this.groupBox9.TabIndex = 18;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "groupBox4";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(4, 453);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(71, 13);
+            this.label13.TabIndex = 46;
+            this.label13.Text = "Categories:";
+            // 
             // passwordTextBox
             // 
             this.passwordTextBox.Location = new System.Drawing.Point(432, 376);
@@ -489,40 +520,6 @@
             this.homeScreenTextBox.Setting = null;
             this.homeScreenTextBox.Size = new System.Drawing.Size(173, 21);
             this.homeScreenTextBox.TabIndex = 5;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(128, 448);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(88, 23);
-            this.button1.TabIndex = 45;
-            this.button1.Text = "Menu Edit Test";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // groupBox9
-            // 
-            this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox9.Location = new System.Drawing.Point(10, 439);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(492, 3);
-            this.groupBox9.TabIndex = 18;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "groupBox4";
-            this.groupBox9.Visible = false;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(4, 453);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(52, 13);
-            this.label13.TabIndex = 46;
-            this.label13.Text = "Testing:";
-            this.label13.Visible = false;
             // 
             // GUISettingsPane
             // 

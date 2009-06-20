@@ -116,6 +116,12 @@
     <Compile Include="ConfigScreen\MovieManager\MovieDetailsSubPane.Designer.cs">
       <DependentUpon>MovieDetailsSubPane.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\MovieNodeSettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\MovieNodeSettingsPanel.Designer.cs">
+      <DependentUpon>MovieNodeSettingsPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\Popups\AddImportPathPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,11 +134,11 @@
     <Compile Include="ConfigScreen\Popups\AdvancedSettingsPopup.Designer.cs">
       <DependentUpon>AdvancedSettingsPopup.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\Popups\FilterConfigPopup.cs">
+    <Compile Include="ConfigScreen\Popups\MovieFilterEditorPopup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConfigScreen\Popups\FilterConfigPopup.Designer.cs">
-      <DependentUpon>FilterConfigPopup.cs</DependentUpon>
+    <Compile Include="ConfigScreen\Popups\MovieFilterEditorPopup.Designer.cs">
+      <DependentUpon>MovieFilterEditorPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\Popups\LoadingPopup.cs">
       <SubType>Form</SubType>
@@ -188,12 +194,6 @@
     <Compile Include="ConfigScreen\Popups\MenuEditorPopup.Designer.cs">
       <DependentUpon>MenuEditorPopup.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\Popups\ProgressPopup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\Popups\ProgressPopup.Designer.cs">
-      <DependentUpon>ProgressPopup.cs</DependentUpon>
-    </Compile>
     <Compile Include="ConfigScreen\Popups\ScriptVersionPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -225,6 +225,7 @@
       <DependentUpon>UserManagementPane.cs</DependentUpon>
     </Compile>
     <Compile Include="Database\DatabaseMaintenanceManager.cs" />
+    <Compile Include="Database\DBMovieNodeSettings.cs" />
     <Compile Include="Database\DBScriptInfo.cs" />
     <Compile Include="Database\DBSortPreferences.cs" />
     <Compile Include="Database\DBSourceInfo.cs" />
@@ -322,6 +323,9 @@
       <DependentUpon>MovieDetailsSubPane.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\MovieNodeSettingsPanel.resx">
+      <DependentUpon>MovieNodeSettingsPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\AddImportPathPopup.resx">
       <DependentUpon>AddImportPathPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -334,8 +338,8 @@
       <DependentUpon>DataSourcesPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\Popups\FilterConfigPopup.resx">
-      <DependentUpon>FilterConfigPopup.cs</DependentUpon>
+    <EmbeddedResource Include="ConfigScreen\Popups\MovieFilterEditorPopup.resx">
+      <DependentUpon>MovieFilterEditorPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\LoadingPopup.resx">
@@ -368,10 +372,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\MenuEditorPopup.resx">
       <DependentUpon>MenuEditorPopup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\Popups\ProgressPopup.resx">
-      <DependentUpon>ProgressPopup.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\Popups\ScriptVersionPopup.resx">
       <DependentUpon>ScriptVersionPopup.cs</DependentUpon>
