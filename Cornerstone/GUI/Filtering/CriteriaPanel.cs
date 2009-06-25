@@ -34,7 +34,6 @@ namespace Cornerstone.GUI.Filtering {
             set { 
                 _criteria = value;
                 populateFieldCombo();
-                populateValue();
             }
         } private DBCriteria<T> _criteria;
 
@@ -64,7 +63,7 @@ namespace Cornerstone.GUI.Filtering {
 
             // add fields from primary type
             fieldComboBox.Items.Clear();
-            foreach(DBField currField in DBField.GetFieldList(typeof(T))) {
+            foreach (DBField currField in DBField.GetFieldList(typeof(T))) {
                 if (currField.Filterable) {
                     ComboFieldWrapper wrapper = new ComboFieldWrapper(currField);
                     wrapperLookup[currField] = wrapper;
@@ -119,7 +118,7 @@ namespace Cornerstone.GUI.Filtering {
                 Criteria.Field.Type == typeof(string) ||
                 Criteria.Field.Type == typeof(StringList) ||
                 Criteria.Field.Type == typeof(bool)) {
-             
+
                 HashSet<string> values = DBManager.GetAllValues(Criteria.Field);
 
                 // if we have possible values, set displaymode to a combo box
@@ -138,10 +137,12 @@ namespace Cornerstone.GUI.Filtering {
                 foreach (string currValue in values) {
                     valueInputField.ComboBox.Items.Add(currValue);
                 }
-            } else
+            }
+            else
                 valueInputField.InputType = CriteriaInputType.STRING;
 
             // set value
+            valueInputField.ComboBox.SelectedIndex = -1;
             if (Criteria.Value == null) {
                 valueInputField.ComboBox.Text = "";
                 valueInputField.TextBox.Text = "";
@@ -158,6 +159,7 @@ namespace Cornerstone.GUI.Filtering {
                 Criteria.Relation = ((ComboFieldWrapper)fieldComboBox.SelectedItem).Relation;
             }
 
+            // if the user made a change, clear the input field
             if (!fieldChanging)
                 Criteria.Value = "";
 

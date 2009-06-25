@@ -51,6 +51,7 @@ namespace Cornerstone.GUI {
             }
             set {
                 _dbManager = value;
+                initControls(); 
             }
         } private DatabaseManager _dbManager;
 
@@ -132,8 +133,26 @@ namespace Cornerstone.GUI {
                 AttachedFilter = newFilter;
             }
 
-            initControls();
+            //updateScreen();
+            //criteriaListPanel1.Focus();
+
+            // no idea why this is necessary but the criteria value combobox selection behaves oddly 
+            // without this delay. :( 
+            timer = new Timer();
+            timer.Interval = 1;
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Enabled = true;
+            timer.Start();
+        }
+        
+        Timer timer;
+        void timer_Tick(object sender, EventArgs e) {
+            timer.Stop();
+            Visible = false;
             updateScreen();
+            Visible = true;
+            criteriaListPanel1.Focus();
+
         }
 
         public void AddCriteria(IGenericFilter criteria) {
@@ -251,6 +270,10 @@ namespace Cornerstone.GUI {
                 popup.ItemList.DatabaseObjects.Add(currItem);
 
             popup.ShowDialog();
+        }
+
+        private void GenericFilterEditorPane_VisibleChanged(object sender, EventArgs e) {
+             updateScreen();
         }
     }
 

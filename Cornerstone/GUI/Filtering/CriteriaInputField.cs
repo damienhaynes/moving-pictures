@@ -12,14 +12,12 @@ namespace Cornerstone.GUI.Filtering {
     public class CriteriaInputField: UserControl {
         public TextBox TextBox;
         public ComboBox ComboBox;
-        
-        private Panel wrapper;
 
         public CriteriaInputType InputType {
             get { return _inputType; }
             set {
                 _inputType = value;
-                InitializeComponent();
+                UpdateInputField();
             }
         } private CriteriaInputType _inputType = CriteriaInputType.STRING;
 
@@ -29,43 +27,39 @@ namespace Cornerstone.GUI.Filtering {
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
 
-            wrapper = new Panel();
-            wrapper.Dock = DockStyle.Fill;
-            wrapper.Margin = new Padding(0);
-            wrapper.AutoSize = true;
-            wrapper.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            Controls.Add(wrapper);
-
             ComboBox = new ComboBox();
-            TextBox = new TextBox();
+            ComboBox.Dock = DockStyle.Fill;
+            ComboBox.AutoSize = true;
+            ComboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            Controls.Add(ComboBox);
 
-            InitializeComponent();
+            TextBox = new TextBox(); 
+            TextBox.Dock = DockStyle.Fill;
+            TextBox.AutoSize = true;
+            Controls.Add(TextBox);
+
+            UpdateInputField();
         }
 
-        private void InitializeComponent() {
+        private void UpdateInputField() {
             SuspendLayout();
+
             switch (InputType) {
                 case CriteriaInputType.COMBO:
-                    ComboBox.Dock = DockStyle.Fill;
-                    ComboBox.AutoSize = true;
-
-                    wrapper.Controls.Clear();
-                    wrapper.Controls.Add(ComboBox);
+                    ComboBox.Visible = true;
+                    TextBox.Visible = false;
                     break;
 
                 case CriteriaInputType.INT:
                 case CriteriaInputType.REAL:
                 case CriteriaInputType.STRING:
-                    TextBox.Dock = DockStyle.Fill;
-                    TextBox.AutoSize = true;
-
-                    wrapper.Controls.Clear();
-                    wrapper.Controls.Add(TextBox);
+                    ComboBox.Visible = false;
+                    TextBox.Visible = true;
                     break;
-
             }
 
-            ResumeLayout(false);
+            ResumeLayout(true);
         }
     }
 }

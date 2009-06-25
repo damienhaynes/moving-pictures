@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using Cornerstone.Database.Tables;
 using Cornerstone.GUI.Controls;
@@ -11,17 +12,31 @@ using System.Threading;
 using Cornerstone.Database;
 using Cornerstone.Properties;
 using Cornerstone.GUI.Dialogs;
+using NLog;
 
 namespace Cornerstone.GUI.Filtering {
+    internal struct NodeModifiedDetails {
+        public int Index;
+        public TreeNode Parent;
+    }
+
     public partial class GenericMenuTreePanel<T> : UserControl, IMenuTreePanel, IFieldDisplaySettingsOwner
         where T : DatabaseTable {
 
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         private Dictionary<DBNode<T>, TreeNode> treeNodeLookup = new Dictionary<DBNode<T>,TreeNode>();
         private HashSet<DBNode<T>> updatingNodes = new HashSet<DBNode<T>>();
+        private Dictionary<DBNode<T>, NodeModifiedDetails> modificationDetails = new Dictionary<DBNode<T>, NodeModifiedDetails>();
+        private Stack<DBNode<T>> pendingModification = new Stack<DBNode<T>>();
+        private Stack<DBNode<T>> finishedModification = new Stack<DBNode<T>>();
 
         TreeNode previousNode = null;
         Color previousForeColor;
         Color previousBackColor;
+
+        Font bold;
+        Font regular;
 
         public GenericMenuTreePanel() {
             InitializeComponent();
@@ -34,6 +49,10 @@ namespace Cornerstone.GUI.Filtering {
             imageList.Images.Add("filteredItem", Resources.bullet_black);
 
             treeView.ImageList = imageList;
+
+            bold = new Font(treeView.Font.Name, treeView.Font.Size, FontStyle.Bold, treeView.Font.Unit);
+            regular = new Font(treeView.Font.Name, treeView.Font.Size, FontStyle.Regular, treeView.Font.Unit);
+
         }
 
         #region IFieldDisplaySettingsOwner Members
@@ -96,7 +115,7 @@ namespace Cornerstone.GUI.Filtering {
             if (popup.CloseState == AddNodePopup.CloseStateEnum.ADD_BASIC) {
                 addEmptyNode(popup.AddToRoot);
             } else if (popup.CloseState == AddNodePopup.CloseStateEnum.ADD_DYNAMIC) {
-                addDynamicNode(popup.DynamicFilteringField, popup.AddToRoot);
+                addDynamicNode(popup.DynamicFilteringField, popup.DynamicFilteringRelation, popup.AddToRoot);
             }
         }
 
@@ -143,22 +162,42 @@ namespace Cornerstone.GUI.Filtering {
             treeView.EndUpdate();
         }
 
-        private void addDynamicNode(DBField field, bool forceRoot) {
+        private void addDynamicNode(DBField field, DBRelation relation, bool forceRoot) {
             if (_menu == null)
                 return;
+
+            SuspendLayout();
 
             // build internal node object
             DBNode<T> newNode = new DBNode<T>();
             newNode.Name = field.FriendlyName;
             newNode.BasicFilteringField = field;
+            newNode.BasicFilteringRelation = relation;
             newNode.DynamicNode = true;
             newNode.DBManager = DBManager;
-            newNode.UpdateDynamicNode();
             
             count++;
-
+            
             // build treenode object (for the UI)
-            TreeNode treeNode = createTreeNode(newNode);
+            asyncInput = newNode;
+            forceNewNodeRoot = forceRoot;
+            ProgressPopup p = new ProgressPopup(new WorkerDelegate(createTreeNodeAsyncWorker));
+            p.Owner = FindForm();
+            p.Text = "Building Menu Tree";
+            p.WorkComplete += new WorkCompleteDelegate(addDynamicNode_TreeNodeCreated);
+            p.ShowDialogDelayed(300);
+            
+        }
+
+        void addDynamicNode_TreeNodeCreated() {
+            if (InvokeRequired) {
+                Invoke(new WorkerDelegate(addDynamicNode_TreeNodeCreated));
+                return;
+            }
+
+            logger.Debug("addDynamicNode_TreeNodeCreated");
+            TreeNode treeNode = asyncOutput;
+            DBNode<T> newNode = treeNode.Tag as DBNode<T>;
 
             // find the appropriate parent
             TreeNode parentTreeNode = treeView.SelectedNode;
@@ -171,7 +210,7 @@ namespace Cornerstone.GUI.Filtering {
 
             // add the new node and tree node to the existing heirarchies.
             treeView.BeginUpdate();
-            if (parentTreeNode != null && !forceRoot) {
+            if (parentTreeNode != null && !forceNewNodeRoot) {
                 parent.Children.Add(newNode);
                 newNode.Parent = parent;
 
@@ -185,11 +224,20 @@ namespace Cornerstone.GUI.Filtering {
             }
 
             treeView.EndUpdate();
+            ResumeLayout();
+        }
+
+        private DBNode<T> asyncInput;
+        private TreeNode asyncOutput;
+        private bool forceNewNodeRoot;
+        private void createTreeNodeAsyncWorker() {
+            asyncOutput = createTreeNode(asyncInput);
         }
 
         private void removeNode() {
             if (treeView.SelectedNode != null) {
-                DBNode<T> selectedNode = (DBNode<T>)treeView.SelectedNode.Tag;
+                DBNode<T> selectedNode = treeView.SelectedNode.Tag as DBNode<T>;
+                if (selectedNode == null || selectedNode.AutoGenerated) return;
 
                 if (treeView.SelectedNode.Parent == null) {
                     _menu.RootNodes.Remove(selectedNode);
@@ -224,18 +272,18 @@ namespace Cornerstone.GUI.Filtering {
         private TreeNode createTreeNode(DBNode<T> node) {
             TreeNode treeNode;
             if (treeNodeLookup.ContainsKey(node))
-                treeNode = treeNodeLookup[node];
+                return treeNodeLookup[node];
             else {
                 treeNode = new TreeNode(node.Name);
                 treeNode.Tag = node;
                 treeNodeLookup[node] = treeNode;
-                node.Modified += new DBNodeEventHandler(nodeModified);
             }
 
             node.UpdateDynamicNode();
 
             setVisualProperties(treeNode);
-            
+            updateFilteredItems(treeNode, false);
+
             // add any missing children
             foreach (DBNode<T> currSubNode in node.Children) {
                 TreeNode child = createTreeNode(currSubNode);
@@ -243,36 +291,50 @@ namespace Cornerstone.GUI.Filtering {
                     treeNode.Nodes.Add(child);
             }
 
-            // if this is a leaf node add all items displayed under this menu item
-            updateFilteredItems(treeNode);
-
             treeNode.Collapse();
+            node.Modified += new DBNodeEventHandler(nodeModified);
 
             return treeNode;
         }
 
-        private void updateFilteredItems(TreeNode treeNode) {
+        private void updateFilteredItems(TreeNode treeNode, bool forcePopulation) {            
             DBNode<T> node = treeNode.Tag as DBNode<T>;
 
-            if (node == null)
-                return;
-
-            if (updatingNodes.Contains(node))
-                return;
-
+            // make sure we have an updatable node and we are not already processing
+            if (node == null) return;
+            if (updatingNodes.Contains(node)) return;
             updatingNodes.Add(node);
+
+            // if this is a dynamic node, update the children at model level
+            if (node.DynamicNode) 
+                node.UpdateDynamicNode();
+
+            // if the node is not expanded and is a leaf node, don't worry about populating it for now
+            if (!forcePopulation && !treeNode.IsExpanded && node.Children.Count == 0 && node.Filter != null) {
+                if (treeNode.Nodes.Count == 0)
+                    treeNode.Nodes.Add(new TreeNode("dummy"));
+
+                updatingNodes.Remove(node);
+                return;
+            }
+
+            // if we are populating the node and there is a dummy node in there, get rid of it
+            if (treeNode.Nodes.Count == 1 && treeNode.Nodes[0].Tag == null)
+                treeNode.Nodes.Clear();
 
             // if this is a dynamic node, update the children and remove any that are
             // no longer needed
             if (node.DynamicNode) {
-                node.UpdateDynamicNode();
-                List<TreeNode> subNodesToRemove = new List<TreeNode>();
-                foreach (TreeNode currSubNode in treeNode.Nodes)
-                    if (!node.Children.Contains(currSubNode.Tag as DBNode<T>))
-                        subNodesToRemove.Add(currSubNode);
+                // using a slightly slower method here to preserve sorted order
 
-                foreach (TreeNode currSubNode in subNodesToRemove)
-                    treeNode.Nodes.Remove(currSubNode);
+                //List<TreeNode> subNodesToRemove = new List<TreeNode>();
+                //foreach (TreeNode currSubNode in treeNode.Nodes)
+                //    if (!node.Children.Contains(currSubNode.Tag as DBNode<T>))
+                //        subNodesToRemove.Add(currSubNode);
+
+                //foreach (TreeNode currSubNode in subNodesToRemove)
+                //    treeNode.Nodes.Remove(currSubNode);
+                treeNode.Nodes.Clear();
 
                 // add any missing children
                 foreach (DBNode<T> currSubNode in node.Children) {
@@ -282,10 +344,20 @@ namespace Cornerstone.GUI.Filtering {
                 }
             }
 
-            // get list of subitems
+            // if this node has children, delegate to sub node processing and exit
+            if (node.Children.Count > 0) {
+                foreach (DBNode<T> currSubNode in node.Children)
+                    if (treeNodeLookup.ContainsKey(currSubNode))
+                        updateFilteredItems(treeNodeLookup[currSubNode], false);
+
+                updatingNodes.Remove(node);
+                return;
+            }
+
+            // get list of existing leaf nodes
             List<TreeNode> filteredItemsToRemove = new List<TreeNode>();
             foreach (TreeNode currSubNode in treeNode.Nodes) {
-                if (currSubNode.Tag is T)
+                if (currSubNode.Tag == null || currSubNode.Tag is T)
                     filteredItemsToRemove.Add(currSubNode);
             }
 
@@ -293,18 +365,10 @@ namespace Cornerstone.GUI.Filtering {
             foreach (TreeNode currSubNode in filteredItemsToRemove)
                 treeNode.Nodes.Remove(currSubNode);
 
-            // if this is not a root level node, delegate to sub node processing and exit
-            if (node.Children.Count > 0) {
-                foreach (TreeNode currSubNode in treeNode.Nodes)
-                    updateFilteredItems(currSubNode);
-
-                updatingNodes.Remove(node);
-                return;
-            }
-
+            // then readd add all leaf nodes
             node.DBManager = DBManager;
             if (node.Children.Count == 0 && node.Filter != null) {
-                foreach (T currItem in node.GetFilteredItems()) {
+                foreach (T currItem in node.GetFilteredItems().OrderBy((item) => item.ToString())) {
                     TreeNode itemNode = new TreeNode(currItem.ToString());
                     itemNode.Tag = currItem;
                     treeNode.Nodes.Add(itemNode);
@@ -346,9 +410,9 @@ namespace Cornerstone.GUI.Filtering {
 
             // mark as bold if the node has children
             if (node != null && node.Children.Count > 0)
-                treeNode.NodeFont = new Font(treeView.Font.Name, treeView.Font.Size, FontStyle.Bold , treeView.Font.Unit);
+                treeNode.NodeFont = bold;
             else
-                treeNode.NodeFont = new Font(treeView.Font.Name, treeView.Font.Size, FontStyle.Regular, treeView.Font.Unit);
+                treeNode.NodeFont = regular;
 
             // mark a node in red if it has no children and no filters attached
             // mark a node teal if it has children and a filter attaches as a 
@@ -386,10 +450,71 @@ namespace Cornerstone.GUI.Filtering {
         }
 
         void nodeModified(IDBNode node, Type type) {
+            if (modificationDetails.ContainsKey((DBNode<T>)node))
+                return;
+
             if (treeNodeLookup.ContainsKey((DBNode<T>)node) && this.Visible) {
-                setVisualProperties(treeNodeLookup[(DBNode<T>)node]);
-                updateFilteredItems(treeNodeLookup[(DBNode<T>)node]);
+                // store modification details
+                TreeNode treeNode =  treeNodeLookup[(DBNode<T>)node];
+                NodeModifiedDetails details = new NodeModifiedDetails();
+                details.Index = treeNode.Index;
+                details.Parent = treeNode.Parent;
+                modificationDetails[(DBNode<T>)node] = details;
+                pendingModification.Push((DBNode<T>)node);
+
+                // temporarily remove the node
+                if (details.Parent == null)
+                    treeView.Nodes.Remove(treeNode);
+                else
+                    details.Parent.Nodes.Remove(treeNode);
+
+                // add a dummy node so the user doesnt freak out
+
+                // update the node in a new thread while displaying a progress dialog
+                ProgressPopup popup = new ProgressPopup(new WorkerDelegate(nodeModifiedWorker));
+                popup.Owner = FindForm();
+                popup.Text = "Updating Menu Items";
+                popup.WorkComplete += new WorkCompleteDelegate(modifyingNode_Complete);
+                popup.ShowDialogDelayed(300);
             }
+        }
+
+        private void nodeModifiedWorker() {
+            DBNode<T> node = pendingModification.Pop();
+
+            setVisualProperties(treeNodeLookup[node]);
+            updateFilteredItems(treeNodeLookup[node], false);
+
+            finishedModification.Push(node);
+
+        }
+
+        private void modifyingNode_Complete() {
+            if (InvokeRequired) {
+                Invoke(new WorkerDelegate(modifyingNode_Complete));
+                return;
+            }
+
+            if (finishedModification.Count == 0)
+                return;
+
+            DBNode<T> node = finishedModification.Pop();
+            TreeNode treeNode = treeNodeLookup[node];
+            NodeModifiedDetails details = modificationDetails[node];
+
+            // re-add the node
+            try {
+                if (details.Parent == null)
+                    treeView.Nodes.Insert(details.Index, treeNode);
+                else
+                    details.Parent.Nodes.Insert(details.Index, treeNode);
+            }
+            catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+            }
+
+            modificationDetails.Remove(node);
         }
 
         private void treeView_ItemDrag(object sender, ItemDragEventArgs e) {
@@ -433,24 +558,48 @@ namespace Cornerstone.GUI.Filtering {
                 _menu.RootNodes.Remove((DBNode<T>)movedNode.Tag);
             }
 
-
             // move to the root
             if (newParent == null) {
-                treeView.Nodes.Add(movedNode);
                 _menu.RootNodes.Add((DBNode<T>)movedNode.Tag);
                 ((DBNode<T>)movedNode.Tag).Parent = null;
             }
             // or move to new node if necessary
             else {
-                newParent.Nodes.Add(movedNode);
                 ((DBNode<T>)newParent.Tag).Children.Add((DBNode<T>)movedNode.Tag);
                 ((DBNode<T>)movedNode.Tag).Parent = (DBNode<T>)newParent.Tag;
-                setVisualProperties(newParent);
-                updateFilteredItems(newParent);
             }
 
+            // update the node in a new thread while displaying a progress dialog
+            this.movedNode = movedNode;
+            this.newParent = newParent;
+            ProgressPopup popup = new ProgressPopup(new WorkerDelegate(updateMovedNodeDragDrop));
+            popup.Owner = FindForm();
+            popup.Text = "Updating Moved Menu Item";
+            popup.WorkComplete += new WorkCompleteDelegate(updateMovedNode_Complete);
+            popup.ShowDialogDelayed(300);
+        }
+
+        TreeNode movedNode;
+        TreeNode newParent;
+        private void updateMovedNodeDragDrop() {
             setVisualProperties(movedNode);
-            updateFilteredItems(movedNode);
+            updateFilteredItems(movedNode, false);          
+        }
+
+        private void updateMovedNode_Complete() {
+            if (InvokeRequired) {
+                Invoke(new WorkerDelegate(updateMovedNode_Complete));
+                return;
+            }
+
+            // move to the root
+            if (newParent == null)
+                treeView.Nodes.Add(movedNode);
+            // or move to new node if necessary
+            else {
+                newParent.Nodes.Add(movedNode);
+                setVisualProperties(newParent);
+            }
         }
 
         private void treeView_DragOver(object sender, DragEventArgs e) {
@@ -576,6 +725,16 @@ namespace Cornerstone.GUI.Filtering {
             if (e.Node.Tag is T) {
                 if (SelectedNodeChanged != null)
                     SelectedNodeChanged(null, typeof(T));
+            }
+        }
+
+        private void treeView_BeforeExpand(object sender, TreeViewCancelEventArgs e) {
+            DBNode<T> node = e.Node.Tag as DBNode<T>;
+            if (node == null)
+                return;
+
+            if (node.Children.Count == 0) {
+                updateFilteredItems(e.Node, true);
             }
         }       
     }

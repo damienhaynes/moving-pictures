@@ -4,12 +4,15 @@ using System.Text;
 using Cornerstone.Database.CustomTypes;
 using System.Windows.Forms;
 using System.Threading;
+using NLog;
 
 namespace Cornerstone.Database.Tables {
     public delegate void DBNodeEventHandler(IDBNode node, Type type);
 
     [DBTable("node")]
     public class DBNode<T>: DatabaseTable, IDBNode where T: DatabaseTable {
+        
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public event DBNodeEventHandler Modified;
         private bool updating = false;
@@ -223,7 +226,7 @@ namespace Cornerstone.Database.Tables {
             updating = true;
             
             // grab list of possible values
-            HashSet<string> possibleValues = DBManager.GetAllValues(BasicFilteringField, GetFilteredItems());
+            HashSet<string> possibleValues = DBManager.GetAllValues(BasicFilteringField, BasicFilteringRelation, GetFilteredItems());
 
             // build lookup for subnodes and build list of nodes to remove
             List<DBNode<T>> toRemove = new List<DBNode<T>>();
@@ -266,6 +269,8 @@ namespace Cornerstone.Database.Tables {
                 Children.Add(newSubNode);
                 newSubNode.Parent = this;
             }
+
+            Children.Sort();
 
             updating = false;
             OnModified();

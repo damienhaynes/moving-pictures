@@ -213,9 +213,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             object selected = backdropMovieCombo.SelectedItem;
             
             backdropMovieCombo.Items.Clear();
-            foreach (DatabaseTable currMovie in _node.GetPossibleFilteredItems()) {
-                backdropMovieCombo.Items.Add(currMovie);
-            }
+            HashSet<DBMovieInfo> unsortedMovies = _node.GetPossibleFilteredItems();
+            IOrderedEnumerable<DBMovieInfo> sortedMovies = unsortedMovies.OrderBy((movie) => movie.SortBy);
+            backdropMovieCombo.Items.AddRange(sortedMovies.ToArray());
 
             backdropMovieCombo.SelectedItem = selected;
         }

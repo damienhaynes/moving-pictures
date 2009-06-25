@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using Cornerstone.Database.CustomTypes;
 
 namespace Cornerstone.Database.Tables {
-    public abstract class DatabaseTable {
+    public abstract class DatabaseTable: IComparable {
         #region Properties
 
         public int? ID {
@@ -168,6 +168,14 @@ namespace Cornerstone.Database.Tables {
                 DBManager.Delete(this);
         }
 
+
+        #endregion
+
+        #region IComparable Members
+
+        public int CompareTo(object obj) {
+            return this.ToString().CompareTo(obj.ToString());
+        }
 
         #endregion
     }

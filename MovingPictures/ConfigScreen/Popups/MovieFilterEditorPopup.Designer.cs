@@ -65,7 +65,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             // 
             // filterEditorPane1
             // 
-            this.filterEditorPane1.AttachedFilter = null;
             this.filterEditorPane1.DBManager = null;
             this.filterEditorPane1.DisplayName = "movies";
             fieldProperty1.ColumnWidth = 150;

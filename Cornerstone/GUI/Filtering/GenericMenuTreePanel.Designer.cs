@@ -25,9 +25,9 @@
         private void InitializeComponent() {
             this.treeView = new System.Windows.Forms.TreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.addNodeButton = new System.Windows.Forms.ToolStripButton();
             this.removeNodeButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.advancedButton = new System.Windows.Forms.ToolStripSplitButton();
             this.convertToRegularMenuItemButton = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
@@ -47,6 +47,7 @@
             this.treeView.Size = new System.Drawing.Size(186, 340);
             this.treeView.TabIndex = 0;
             this.treeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeView_AfterLabelEdit);
+            this.treeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeExpand);
             this.treeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeView_DragDrop);
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
             this.treeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeView_DragEnter);
@@ -73,11 +74,6 @@
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(31, 6);
-            // 
             // addNodeButton
             // 
             this.addNodeButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -100,6 +96,11 @@
             this.removeNodeButton.Text = "Remove Node";
             this.removeNodeButton.ToolTipText = "Remove Menu Item";
             this.removeNodeButton.Click += new System.EventHandler(this.removeNodeButton_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(31, 6);
             // 
             // advancedButton
             // 
