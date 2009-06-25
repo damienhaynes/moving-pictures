@@ -49,7 +49,7 @@
             this.nameTextBox.Name = "nameTextBox";
             this.nameTextBox.Size = new System.Drawing.Size(212, 21);
             this.nameTextBox.TabIndex = 2;
-            this.nameTextBox.TextChanged += new System.EventHandler(this.nameTextBox_TextChanged);
+            this.nameTextBox.Leave += new System.EventHandler(this.nameTextBox_TextChanged);
             // 
             // label3
             // 

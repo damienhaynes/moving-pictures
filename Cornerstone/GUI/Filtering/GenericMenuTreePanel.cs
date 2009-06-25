@@ -514,6 +514,8 @@ namespace Cornerstone.GUI.Filtering {
                     throw e;
             }
 
+
+            treeView.SelectedNode = treeNode;
             modificationDetails.Remove(node);
         }
 
@@ -594,11 +596,17 @@ namespace Cornerstone.GUI.Filtering {
 
             // move to the root
             if (newParent == null)
-                treeView.Nodes.Add(movedNode);
+                try {
+                    treeView.Nodes.Add(movedNode);
+                }
+                catch (Exception ) { }
             // or move to new node if necessary
             else {
-                newParent.Nodes.Add(movedNode);
-                setVisualProperties(newParent);
+                try {
+                    newParent.Nodes.Add(movedNode);
+                    setVisualProperties(newParent);
+                }
+                catch (Exception) { }
             }
         }
 
