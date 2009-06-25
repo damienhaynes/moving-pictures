@@ -25,7 +25,6 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.timer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // progressBar
@@ -35,10 +34,6 @@
             this.progressBar.Size = new System.Drawing.Size(267, 16);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar.TabIndex = 0;
-            // 
-            // timer
-            // 
-            this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // ProgressPopup
             // 
@@ -59,6 +54,5 @@
         #endregion
 
         private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.Timer timer;
     }
 }

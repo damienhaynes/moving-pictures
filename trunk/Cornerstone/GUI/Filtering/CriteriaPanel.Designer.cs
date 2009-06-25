@@ -60,7 +60,7 @@
             this.fieldComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.fieldComboBox.Name = "fieldComboBox";
             this.fieldComboBox.Size = new System.Drawing.Size(115, 21);
-            this.fieldComboBox.TabIndex = 0;
+            this.fieldComboBox.TabIndex = 1;
             this.fieldComboBox.SelectedIndexChanged += new System.EventHandler(this.fieldComboBox_SelectedIndexChanged);
             // 
             // operatorComboBox
@@ -84,7 +84,7 @@
             this.operatorComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.operatorComboBox.Name = "operatorComboBox";
             this.operatorComboBox.Size = new System.Drawing.Size(146, 21);
-            this.operatorComboBox.TabIndex = 1;
+            this.operatorComboBox.TabIndex = 2;
             this.operatorComboBox.SelectedIndexChanged += new System.EventHandler(this.operatorComboBox_SelectedIndexChanged);
             // 
             // valueInputField
@@ -97,7 +97,7 @@
             this.valueInputField.Margin = new System.Windows.Forms.Padding(2);
             this.valueInputField.Name = "valueInputField";
             this.valueInputField.Size = new System.Drawing.Size(176, 21);
-            this.valueInputField.TabIndex = 2;
+            this.valueInputField.TabIndex = 0;
             // 
             // CriteriaPanel
             // 
@@ -120,6 +120,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ComboBox fieldComboBox;
         private System.Windows.Forms.ComboBox operatorComboBox;
-        private CriteriaInputField valueInputField;
+        public CriteriaInputField valueInputField;
     }
 }

@@ -42,11 +42,10 @@ namespace Cornerstone.GUI.Filtering {
             DBCriteria<T> newCriteria = (DBCriteria<T>)criteria;
 
             CriteriaPanel<T> newPanel = new CriteriaPanel<T>();
+            listPanel.Controls.Add(newPanel);
             newPanel.DBManager = DBManager;
             newPanel.Selected += ItemSelected;
             newPanel.Criteria = newCriteria;
-            listPanel.Controls.Add(newPanel);
-
             itemLookup[newCriteria] = newPanel;
         }
 

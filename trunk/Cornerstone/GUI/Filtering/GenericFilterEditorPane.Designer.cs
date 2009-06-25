@@ -40,12 +40,12 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.blackList = new Cornerstone.GUI.Controls.DBObjectListEditor();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.whiteList = new Cornerstone.GUI.Controls.DBObjectListEditor();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.whitelistAddButton = new System.Windows.Forms.ToolStripButton();
             this.whitelistRemoveButton = new System.Windows.Forms.ToolStripButton();
-            this.blackList = new Cornerstone.GUI.Controls.DBObjectListEditor();
-            this.whiteList = new Cornerstone.GUI.Controls.DBObjectListEditor();
             this.criteriaListPanel1 = new Cornerstone.GUI.Filtering.CriteriaListPanel();
             this.toolStrip1.SuspendLayout();
             this.toolStrip3.SuspendLayout();
@@ -146,7 +146,7 @@
             this.filterGroupingCombo.Location = new System.Drawing.Point(125, 3);
             this.filterGroupingCombo.Name = "filterGroupingCombo";
             this.filterGroupingCombo.Size = new System.Drawing.Size(48, 21);
-            this.filterGroupingCombo.TabIndex = 7;
+            this.filterGroupingCombo.TabIndex = 1;
             this.filterGroupingCombo.SelectedIndexChanged += new System.EventHandler(this.filterGroupingCombo_SelectedIndexChanged);
             // 
             // label1
@@ -173,7 +173,7 @@
             this.filterNameTextBox.Location = new System.Drawing.Point(272, 6);
             this.filterNameTextBox.Name = "filterNameTextBox";
             this.filterNameTextBox.Size = new System.Drawing.Size(259, 21);
-            this.filterNameTextBox.TabIndex = 13;
+            this.filterNameTextBox.TabIndex = 1;
             this.filterNameTextBox.TextChanged += new System.EventHandler(this.filterNameTextBox_TextChanged);
             // 
             // label6
@@ -355,6 +355,20 @@
             this.panel1.Size = new System.Drawing.Size(259, 120);
             this.panel1.TabIndex = 30;
             // 
+            // blackList
+            // 
+            this.blackList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            fieldDisplaySettings1.Table = null;
+            this.blackList.FieldDisplaySettings = fieldDisplaySettings1;
+            this.blackList.FullRowSelect = true;
+            this.blackList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.blackList.Location = new System.Drawing.Point(0, 16);
+            this.blackList.Name = "blackList";
+            this.blackList.Size = new System.Drawing.Size(222, 104);
+            this.blackList.TabIndex = 28;
+            this.blackList.View = System.Windows.Forms.View.Details;
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.whiteList);
@@ -366,6 +380,20 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(259, 120);
             this.panel2.TabIndex = 31;
+            // 
+            // whiteList
+            // 
+            this.whiteList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            fieldDisplaySettings2.Table = null;
+            this.whiteList.FieldDisplaySettings = fieldDisplaySettings2;
+            this.whiteList.FullRowSelect = true;
+            this.whiteList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.whiteList.Location = new System.Drawing.Point(0, 16);
+            this.whiteList.Name = "whiteList";
+            this.whiteList.Size = new System.Drawing.Size(222, 104);
+            this.whiteList.TabIndex = 27;
+            this.whiteList.View = System.Windows.Forms.View.Details;
             // 
             // toolStrip2
             // 
@@ -406,32 +434,6 @@
             this.whitelistRemoveButton.ToolTipText = "Remove Item";
             this.whitelistRemoveButton.Click += new System.EventHandler(this.whitelistRemoveButton_Click);
             // 
-            // blackList
-            // 
-            this.blackList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            fieldDisplaySettings1.Table = null;
-            this.blackList.FieldDisplaySettings = fieldDisplaySettings1;
-            this.blackList.FullRowSelect = true;
-            this.blackList.Location = new System.Drawing.Point(0, 16);
-            this.blackList.Name = "blackList";
-            this.blackList.Size = new System.Drawing.Size(222, 104);
-            this.blackList.TabIndex = 28;
-            this.blackList.View = System.Windows.Forms.View.Details;
-            // 
-            // whiteList
-            // 
-            this.whiteList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            fieldDisplaySettings2.Table = null;
-            this.whiteList.FieldDisplaySettings = fieldDisplaySettings2;
-            this.whiteList.FullRowSelect = true;
-            this.whiteList.Location = new System.Drawing.Point(0, 16);
-            this.whiteList.Name = "whiteList";
-            this.whiteList.Size = new System.Drawing.Size(222, 104);
-            this.whiteList.TabIndex = 27;
-            this.whiteList.View = System.Windows.Forms.View.Details;
-            // 
             // criteriaListPanel1
             // 
             this.criteriaListPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -443,7 +445,7 @@
             this.criteriaListPanel1.MinimumSize = new System.Drawing.Size(483, 120);
             this.criteriaListPanel1.Name = "criteriaListPanel1";
             this.criteriaListPanel1.Size = new System.Drawing.Size(483, 120);
-            this.criteriaListPanel1.TabIndex = 5;
+            this.criteriaListPanel1.TabIndex = 0;
             this.criteriaListPanel1.Table = null;
             // 
             // GenericFilterEditorPane

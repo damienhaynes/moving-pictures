@@ -20,6 +20,8 @@ namespace Cornerstone.Database {
         private Dictionary<Type, bool> isVerified;
         private Dictionary<Type, bool> doneFullRetrieve;
 
+        private HashSet<Type> preloading;
+
         private bool transactionInProgress = false;
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -43,7 +45,23 @@ namespace Cornerstone.Database {
 
             isVerified = new Dictionary<Type, bool>();
             doneFullRetrieve = new Dictionary<Type, bool>();
+            preloading = new HashSet<Type>();
+
             cache = new DatabaseCache();
+        }
+
+        /// <summary>
+        /// Quickly retrieves all items in the database of the specified type and loads them into
+        /// memory. This will provide much faster access time for some configurations.
+        /// </summary>
+        /// <param name="tableType"></param>
+        public void PreLoad(Type tableType) {
+            preloading.Add(tableType);
+            List<DatabaseTable> items = Get(tableType, null);
+            preloading.Remove(tableType);
+
+            foreach (DatabaseTable currItem in items) 
+                getAllRelationData(currItem);
         }
 
         // Returns a list of objects of the specified type, based on the specified criteria.
@@ -80,6 +98,7 @@ namespace Cornerstone.Database {
                     if (criteria != null)
                         query += criteria.GetWhereClause();
 
+                    logger.Debug(query);
                     SQLiteResultSet resultSet = dbClient.Execute(query);
 
                     // store each one
@@ -88,7 +107,7 @@ namespace Cornerstone.Database {
                         DatabaseTable newRecord = (DatabaseTable)tableType.GetConstructor(System.Type.EmptyTypes).Invoke(null);
                         newRecord.DBManager = this; 
                         newRecord.LoadByRow(row);
-                        
+
                         // if it is already cached, just use the cached object
                         if (cache.Get(tableType, (int)newRecord.ID) != null)
                             rtn.Add(cache.Get(tableType, (int)newRecord.ID));
@@ -224,6 +243,13 @@ namespace Cornerstone.Database {
                     updateRelationTable(dbObject, currRelation);
                 }
             }
+
+            foreach (DBField currField in DBField.GetFieldList(dbObject.GetType())) {
+                if (currField.DBType == DBField.DBDataType.DB_OBJECT) {
+                    Commit((DatabaseTable)currField.GetValue(dbObject));
+                }
+            }
+
         }
 
         // Deletes a given object from the database, object in memory persists and could be recommited.
@@ -273,13 +299,22 @@ namespace Cornerstone.Database {
             return uniqueStrings;
         }
 
-        public HashSet<string> GetAllValues<T>(DBField field, ICollection<T> items) where T:DatabaseTable {
+        public HashSet<string> GetAllValues<T>(DBField field, DBRelation relation, ICollection<T> items) where T:DatabaseTable {
             // loop through all items in the DB and grab all existing values for this field
             HashSet<string> uniqueStrings = new HashSet<string>();
             foreach (T currItem in items) {
-                List<string> values = getValues(field.GetValue(currItem));
-                foreach (string currStr in values) 
-                    uniqueStrings.Add(currStr);
+                if (relation == null) {
+                    List<string> values = getValues(field.GetValue(currItem));
+                    foreach (string currStr in values)
+                        uniqueStrings.Add(currStr);
+                }
+                else {
+                    foreach (DatabaseTable currSubItem in relation.GetRelationList(currItem)) {
+                        List<string> values = getValues(field.GetValue(currSubItem));
+                        foreach (string currStr in values)
+                            uniqueStrings.Add(currStr);
+                    }
+                }
             }
 
             return uniqueStrings;
@@ -682,6 +717,9 @@ namespace Cornerstone.Database {
         }
 
         private void getAllRelationData(DatabaseTable dbObject) {
+            if (preloading.Contains(dbObject.GetType()))
+                return;
+
             foreach (DBRelation currRelation in DBRelation.GetRelations(dbObject.GetType())) {
                 if (currRelation.AutoRetrieve)
                     getRelationData(dbObject, currRelation);

@@ -224,7 +224,7 @@ namespace Cornerstone.Database {
                     return;
                 }
 
-                if (value is string) 
+                if (value is string)
                     propertyInfo.GetSetMethod().Invoke(owner, new object[] { ConvertString(owner.DBManager, (string)value) });
                 
 
@@ -243,7 +243,7 @@ namespace Cornerstone.Database {
             try {
                 return propertyInfo.GetGetMethod().Invoke(owner, null);
             }
-            catch (Exception ) {
+            catch (Exception) {
                 throw new Exception("DBField does not belong to the Type of the supplied Owner.");
             }
         }
@@ -379,9 +379,6 @@ namespace Cornerstone.Database {
 
                 fieldLists[tableType] = newFieldList;
             }
-
-            if (!fieldLists.ContainsKey(tableType)) 
-                return null;
 
             return fieldLists[tableType].AsReadOnly();
         }
