@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Windows.Forms;
 using SQLite.NET;
+using System.Threading;
 
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
@@ -140,7 +141,18 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
                 string Certification = sqlResults.GetField(0, int.Parse(columns["mpaa"].ToString()));
                 if (!Certification.Contains("unknown"))
-                    movieRes.Certification = Certification;
+                {
+                    try {
+                        Regex certParse = new Regex(@"Rated\s(?<cert>.+)\sfor");
+                        Match match = certParse.Match(Certification);
+                        movieRes.Certification = match.Groups["cert"].Value;
+                    }
+                    catch (Exception e) {
+                        // if an error happens in the try we will not set a value for the Certification
+                        if (e is ThreadAbortException)
+                            throw e;
+                    }
+                }
 
                 string Tagline = sqlResults.GetField(0, int.Parse(columns["strTagLine"].ToString()));
                 if (!Tagline.Contains("unknown"))
