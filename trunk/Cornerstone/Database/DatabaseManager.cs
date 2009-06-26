@@ -596,8 +596,9 @@ namespace Cornerstone.Database {
                         queryValueList += ", ";
                     }
 
-                    // if this is a linked db object commit it as needed
-                    if (currField.DBType == DBField.DBDataType.DB_OBJECT)
+                    // if we dont have an ID, commit as needed
+                    if (currField.DBType == DBField.DBDataType.DB_OBJECT && currField.GetValue(dbObject) != null &&
+                        ((DatabaseTable)currField.GetValue(dbObject)).ID == null)
                         Commit((DatabaseTable)currField.GetValue(dbObject));
 
                     queryFieldList += currField.FieldName;
@@ -615,6 +616,12 @@ namespace Cornerstone.Database {
                 }
                 dbObject.DBManager = this;
                 cache.Add(dbObject);
+
+                // loop through the fields and commit attached objects as needed
+                foreach (DBField currField in DBField.GetFieldList(dbObject.GetType())) {
+                    if (currField.DBType == DBField.DBDataType.DB_OBJECT)
+                        Commit((DatabaseTable)currField.GetValue(dbObject));
+                }
 
                 // notify any listeners of the status change
                 if (ObjectInserted != null)
