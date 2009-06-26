@@ -24,7 +24,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         }
 
         public string Title { get { return uxTitle.Text; } }
-        public int? Year { get { return Int32.Parse(uxYear.Text); } }      
+        
+        public int? Year { 
+            get {
+                int year;
+                if (int.TryParse(uxYear.Text, out year))
+                    return year;                        
+                else
+                    return null;
+            } 
+        }      
 
     }
 }
