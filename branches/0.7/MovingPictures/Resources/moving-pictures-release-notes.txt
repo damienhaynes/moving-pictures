@@ -1,4 +1,4 @@
-Moving Pictures 0.7.3
+Moving Pictures 0.7.4
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -26,6 +26,23 @@ even if their favorite skin has not yet added support.
 
 
 Change Log
+================================================================================
+0.7.4
+--------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+**********:	Updated Installer to support new directory structure of 
+                MediaPortal 1.1.
+
+**********:     Updated database logic so that initial launch of the plugin 
+                will be signifigantly faster, particularly for large collections.
+
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #435:     Manual import path entry is now verified, preventing a database 
+                state that causes Moving Pictures to crash.
+
 ================================================================================
 0.7.3
 --------------------------------------------------------------------------------
