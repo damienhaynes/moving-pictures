@@ -1272,6 +1272,37 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty(propertyStr, valueStr, forceLogging);
             }
 
+            // convert mediainfo duration from milliseconds to hour & minute values
+            if (obj is DBLocalMedia) {
+                DBLocalMedia movie = (DBLocalMedia)obj;
+                int minValue;
+                int hourValue;
+
+                // hour component of duration
+                propertyStr = "#MovingPictures." + prefix + ".extra.runtime.hour";
+                hourValue = (movie.Duration / 3600000);
+                SetProperty(propertyStr, hourValue.ToString(), forceLogging);
+
+                // minute component of duration
+                propertyStr = "#MovingPictures." + prefix + ".extra.runtime.minute";
+                minValue = ((movie.Duration / 60000) % 60);
+                SetProperty(propertyStr, minValue.ToString(), forceLogging);
+
+                // give short runtime string 0:00
+                propertyStr = "#MovingPictures." + prefix + ".extra.runtime.short";
+                valueStr = string.Format("{0}:{1:00}", hourValue, minValue);
+                SetProperty(propertyStr, valueStr, forceLogging);
+
+                // give pretty runtime string
+                propertyStr = "#MovingPictures." + prefix + ".extra.runtime.en.pretty";
+                valueStr = string.Empty;
+                if (hourValue > 0)
+                    valueStr = string.Format("{0} hour{1}", hourValue, hourValue != 1 ? "s" : string.Empty);
+                if (minValue > 0)
+                    valueStr = valueStr + string.Format(", {0} minute{1}", minValue, minValue != 1 ? "s" : string.Empty);
+                SetProperty(propertyStr, valueStr, forceLogging);
+            }
+
         }
 
         // all details relating to the current view and filtering status
