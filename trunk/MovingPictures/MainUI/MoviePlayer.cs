@@ -675,23 +675,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
            DBMovieInfo previousMovie = CurrentMovie;
            activeMedia = localMedia;
 
+           // Update OSD (delayed)
+           Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
+           newThread.Start();
+
            // only invoke movie started event if we were not playing this movie before
-           if (previousMovie != CurrentMovie)
-               onMovieStarted(CurrentMovie);
-        }
-
-        private void onMovieStarted(DBMovieInfo movie) {
-            // Update OSD (delayed)
-            Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
-            newThread.Start();
-
-            // invoke movie started event
-            if (MovieStarted != null)
-                MovieStarted(_activeMovie);
+           if ((previousMovie != CurrentMovie) && (MovieStarted != null))
+               MovieStarted(CurrentMovie);
         }
 
         private void onMovieStopped(DBMovieInfo movie) {
-
             // reset player
             resetPlayer();
 
