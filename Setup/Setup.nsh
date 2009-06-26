@@ -107,11 +107,11 @@ Section "Generic Skin Support" SEC0001
         # if this is the current or previous directory, skip
         StrCmp $1 "." next
         StrCmp $1 ".." next
-        
+
         # if this is a folder check the movingpictures.xml
         IfFileExists "$SKIN_DIR\$1\*.*" 0 not_a_directory
             StrCpy $CURR_SKIN $1
-            Call processCurrentSkin            
+			Call processCurrentSkin            
         not_a_directory:
         
         # setup iteration variables for next loop
@@ -295,7 +295,10 @@ FunctionEnd
 
 # Grabs the Install Path of MediaPortal
 Function getMediaPortalDir
-    ReadRegStr $MEDIAPORTAL_DIR HKEY_LOCAL_MACHINE SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal InstallPath
+    Push $0
+	Push $1
+	
+	ReadRegStr $MEDIAPORTAL_DIR HKEY_LOCAL_MACHINE SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal InstallPath
     
     # if the mediaportal install path was missing, inform the user and prompt to
     # goto http://www.team-mediaportal.com
@@ -311,7 +314,31 @@ Function getMediaPortalDir
     
     # store our output folders
     StrCpy $PLUGIN_DIR "$MEDIAPORTAL_DIR\plugins\Windows"
-    StrCpy $SKIN_DIR "$MEDIAPORTAL_DIR\skin"
+	
+	#grab the skin folder
+	${xml::LoadFile} "$MEDIAPORTAL_DIR\MediaPortalDirs.xml" $1
+    IntCmp $1 -1 fail
+    ${xml::RootElement} $0 $1
+    IntCmp $1 -1 fail
+    ${xml::XPathNode} "//Config/Dir[@id='Skin']/Path" $1
+    IntCmp $1 -1 fail
+    ${xml::GetText} $SKIN_DIR $1
+    IntCmp $1 -1 fail
+	
+	# expand any environment variables
+	ExpandEnvStrings $SKIN_DIR $SKIN_DIR
+	
+	# verify the skin folder was found properly
+	IfFileExists $SKIN_DIR\*.* done invalid_path
+	invalid_path:
+		StrCpy $SKIN_DIR "$MEDIAPORTAL_DIR\$SKIN_DIR"
+		IfFileExists $SKIN_DIR\*.* done fail
+	fail:
+		MessageBox MB_OK|MB_ICONEXCLAMATION $(BAD_SKIN_PATH)	
+	done:
+		
+	Pop $1
+	Pop $0
 FunctionEnd
 
 # grabs the install number counter from the registry and increments
