@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="0" minor="3" point="1"/>
-    <published month="05" day="03" year="2009"/>
+    <version major="0" minor="3" point="4"/>
+    <published month="06" day="05" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -69,6 +69,12 @@
       <p style="text-align:justify;">
       ]]>
       </set>
+	  
+	  <set name="score">
+        <![CDATA[
+      <i>mymonetro</i>\s(?<rating>[^s]+)\s
+      ]]>
+      </set>
 
       <if test='${movie.actors}='>
         <!-- Actors -->
@@ -88,15 +94,15 @@
         <set name='movie.genres' value='|${genres[0][0]:htmldecode}|'/>
       </if>
 
-      <if test='${movie.runtime}='>
+      <if test='${movie.runtime}=0'>
         <!-- Runtime -->
         <parse name="runtime" input="${details_page}" regex='durata\s+(\d+)\smin'/>
         <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
       </if>
 
-      <if test='${movie.score}='>
+      <if test='${movie.score}=0'>
         <!-- Score -->
-        <parse name="score" input="${details_page}" regex='valutazione media tra critica e pubblico:\s*stelle'/>
+        <parse name="score" input="${details_page}" regex='${score}'/>
         <replace name='movie.score' input='${score[0][0]:htmldecode}' pattern=',' with='.' />
         <multiply name="movie.score" value1="${movie.score}" value2="10" resultType="FLOAT" />
         <divide name="movie.score" value1="${movie.score}" value2="5" resultType="INT"/>

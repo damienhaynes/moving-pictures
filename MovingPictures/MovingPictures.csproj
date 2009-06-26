@@ -406,6 +406,7 @@
     <Content Include="DataProviders\ScraperScripts\IMPAwards.xml" />
     <Content Include="DataProviders\ScraperScripts\Kinopoisk.xml" />
     <Content Include="DataProviders\ScraperScripts\MoTechPosters.xml" />
+    <None Include="DataProviders\ScraperScripts\MovieMaze.xml" />
     <Content Include="DataProviders\ScraperScripts\MovieMeter.xml" />
     <Content Include="DataProviders\ScraperScripts\MyMoviesItalian.xml" />
     <Content Include="DataProviders\ScraperScripts\OFDb.xml" />
