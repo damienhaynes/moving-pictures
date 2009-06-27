@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="1" point="5"/>
-    <published month="2" day="23" year="2009"/>
+    <version major="1" minor="1" point="6"/>
+    <published month="6" day="27" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -162,7 +162,7 @@
 
     <!-- Directors -->
     <parse name="directors_block" input="${details_page}" regex='&lt;h5&gt;Director[s]?:&lt;/h5&gt;.*?&lt;/div&gt;'/>
-    <parse name="directors" input="${directors_block}" regex='&lt;a href="/name/nm\d{7}/"&gt;([^&lt;]+)&lt;/a&gt;'/>
+    <parse name="directors" input="${directors_block}" regex='&lt;a href="/name/nm\d{7}/"[^&gt;]*&gt;([^&lt;]+)&lt;/a&gt;'/>
     <set name='movie.directors' value=''/>
     <loop name='currDirector' on='directors'>
       <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
@@ -170,7 +170,7 @@
 
     <!-- Writers -->
     <parse name="writers_block" input="${details_page}" regex='&lt;div class="info"&gt;\s+&lt;h5&gt;Writer[s]?(?: &lt;a href="[^"]+"&gt;\([^)]+\)&lt;/a&gt;)?:&lt;/h5&gt;.+?&lt;/div&gt;'/>
-    <parse name='writers' input="${writers_block}" regex='&lt;a href="/name/nm\d+/"&gt;([^&lt;]+)&lt;/a&gt;'/>
+    <parse name='writers' input="${writers_block}" regex='&lt;a href="/name/nm\d+/"[^&gt;]*&gt;([^&lt;]+)&lt;/a&gt;'/>
     <set name='movie.writers' value=''/>
     <loop name='currWriter' on='writers'>
       <set name='movie.writers' value='${movie.writers}|${currWriter[0]:htmldecode}'/>
@@ -178,7 +178,7 @@
     
     <!-- Actors -->
     <parse name="actors_block" input="${details_page}" regex='&lt;div class="headerinline"&gt;&lt;h3&gt;Cast&lt;/h3&gt;.+?&lt;h3&gt;Additional Details&lt;/h3&gt;'/>
-    <parse name='actors' input='"${actors_block}' regex='&lt;td class="nm"&gt;&lt;a href="/name/nm\d{7}/"&gt;(.+?)&lt;/a&gt;'/>
+    <parse name='actors' input='"${actors_block}' regex='&lt;td class="nm"&gt;&lt;a href="/name/nm\d{7}/"[^&gt;]*&gt;(.+?)&lt;/a&gt;'/>
     <set name='movie.actors' value=''/>
     <loop name='currActor' on='actors'>
       <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>

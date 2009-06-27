@@ -27,11 +27,22 @@ even if their favorite skin has not yet added support.
 
 Change Log
 ================================================================================
+0.7.5
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+**********:     Fixed bug in installer causing skin folder to not be found with
+                Windows XP and MediaPortal 1.1.0 Alpha.
+
+**********:     Fixed IMDb scraper to again correctly pull actor, writer, and 
+                director details.
+
+================================================================================
 0.7.4
 --------------------------------------------------------------------------------
 Enhancements
 --------------------------------------------------------------------------------
-**********:	Updated Installer to support new directory structure of 
+**********:     Updated Installer to support new directory structure of 
                 MediaPortal 1.1.
 
 **********:     Updated database logic so that initial launch of the plugin 
