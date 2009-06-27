@@ -85,7 +85,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private string _sortBy;
-
+        
 
         [DBField]
         public StringList Directors {
@@ -389,8 +389,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             Delete();
         }
 
-        // the total runtime of all the files. returns 0 if the data has not yet been
-        // set in all of the dblocalmedia objects
+        /// <summary>
+        /// The total runtime of the the localmedia files in milliseconds. 
+        /// Returns 0 if the data has not yet been set in all of the dblocalmedia objects
+        /// </summary>
         public int ActualRuntime {
             get {
                 if (actualRuntime == 0) {
@@ -409,21 +411,27 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } 
         private int actualRuntime = 0;
 
-        // given a part number and the number of seconds into that part,
-        // returns the percentage 1 - 100 through the whole movie.
+        /// <summary>
+        /// Returns percentage watched
+        /// </summary>
+        /// <param name="part">part number</param>
+        /// <param name="time">time in seconds</param>
+        /// <returns>the percentage 1 - 100 through the whole movie.</returns>
         public int GetPercentage(int part, int time) {
             if (part > LocalMedia.Count)
                 return 0;
+            
+            // convert to milliseconds
+            float tally = time * 1000;
 
-            float tally = time;
             for (int i = 0; i < part-1; i++) {
                 if (LocalMedia[i].Duration == 0)
                     return 0;
 
                 tally += LocalMedia[i].Duration;
             }
-            tally *= 1000; // conver to milliseconds
-            return (int)(100 *(tally / (float) ActualRuntime));
+
+            return (int) (100 * (tally / (float) ActualRuntime));
         }
 
 

@@ -173,7 +173,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
             }
 
-            logger.Debug(" movie: {0}, requestedPart: {1}", movie.Title, requestedPart);
+            logger.Debug("Request: Movie='{0}', Part={1}", movie.Title, requestedPart);
             for (int i = 0; i < movie.LocalMedia.Count; i++) {
                 logger.Debug("LocalMedia[{0}] = {1}  Duration = {2}", i, movie.LocalMedia[i].FullPath, movie.LocalMedia[i].Duration);
             }
@@ -543,6 +543,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         msg.Param1 = movie.ActiveUserSettings.ResumeTime;
                         GUIGraphicsContext.SendMessage(msg);
                     }
+                    // deactivate resume
+                    _resumeActive = false;
                 }
 
                 // Trigger Movie started
@@ -566,10 +568,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             int requiredWatchedPercent = MovingPicturesCore.Settings.MinimumWatchPercentage;
-            logger.Debug("Watched: Percentage=" + _activeMovie.GetPercentage(_activePart, timeMovieStopped) + ", Required=" + requiredWatchedPercent);
+            int watchedPercentage = _activeMovie.GetPercentage(_activePart, timeMovieStopped);
+
+            logger.Debug("Watched: Percentage=" + watchedPercentage + ", Required=" + requiredWatchedPercent);
 
             // if enough of the movie has been watched
-            if (_activeMovie.GetPercentage(_activePart, timeMovieStopped) >= requiredWatchedPercent) {
+            if (watchedPercentage >= requiredWatchedPercent) {
                 // run movie ended logic
                 onMovieEnded(_activeMovie);
             }
@@ -806,17 +810,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private bool PromptUserToResume(DBMovieInfo movie) {
-            if (movie.UserSettings == null || movie.UserSettings.Count == 0 || movie.ActiveUserSettings.ResumeTime <= 30)
+            if (movie.UserSettings == null || movie.UserSettings.Count == 0 || (movie.ActiveUserSettings.ResumePart == 1 && movie.ActiveUserSettings.ResumeTime <= 30))
                 return false;
 
-            logger.Debug("PromptUserToResume {0} ResumeTime {1} ResumePart {2}", movie.Title, movie.ActiveUserSettings.ResumeTime, movie.ActiveUserSettings.ResumePart);
+            logger.Debug("Resume Prompt: Movie='{0}', ResumePart={1}, ResumeTime={2}", movie.Title, movie.ActiveUserSettings.ResumePart, movie.ActiveUserSettings.ResumeTime);
 
             // figure out the resume time to display to the user
             int displayTime = movie.ActiveUserSettings.ResumeTime;
             if (movie.LocalMedia.Count > 1) {
                 for (int i = 0; i < movie.ActiveUserSettings.ResumePart - 1; i++) {
                     if (movie.LocalMedia[i].Duration > 0)
-                        displayTime += movie.LocalMedia[i].Duration;
+                        displayTime += (movie.LocalMedia[i].Duration / 1000); // convert milliseconds to seconds
                 }
             }
 
