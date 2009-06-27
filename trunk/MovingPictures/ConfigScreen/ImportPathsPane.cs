@@ -13,6 +13,7 @@ using MediaPortal.Plugins.MovingPictures.Properties;
 using Cornerstone.Database;
 using System.Diagnostics;
 using Cornerstone.GUI.Dialogs;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class ImportPathsPane : UserControl {
@@ -138,8 +139,23 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             addPopup.Owner = ParentForm;
             DialogResult result = addPopup.ShowDialog();
             if (result == DialogResult.OK) {
-                DBImportPath newPath = DBImportPath.Get(addPopup.SelectedPath);
-
+                DBImportPath newPath;
+                try {
+                    newPath = DBImportPath.Get(addPopup.SelectedPath);
+                }
+                catch (Exception ex){
+                    if (ex is ThreadAbortException)
+                        throw ex;
+                    
+                    MessageBox.Show("The path that you have entered is invalid.");
+                    return;
+                }
+                
+                if (newPath.Directory == null || !newPath.Directory.Exists) {
+                    MessageBox.Show("The path that you have entered is invalid.");
+                    return;
+                }
+                
                 if (newPath.GetDriveType() == DriveType.CDRom) {
                     MessageBox.Show("Importing from this drive is controlled through the setting 'Enable Import Paths For Optical Drives'", "Not Allowed!");
                     return;
