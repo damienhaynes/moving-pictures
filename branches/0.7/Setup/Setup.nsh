@@ -32,6 +32,7 @@ Var INSTALL_NUMBER
 !include FileFunc.nsh
 !include XML.nsh
 !include LanguageMacros.nsh
+!include StrRep.nsh
 
 # Installer pages
 !insertmacro MUI_PAGE_WELCOME
@@ -56,6 +57,7 @@ ShowInstDetails hide
 Name "${NAME}"
 VIProductVersion ${VERSION}
 VIAddVersionKey ProductName "${NAME}"
+VIAddVersionKey CompanyName "${NAME}"
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyWebsite "${URL}"
 VIAddVersionKey FileVersion "${VERSION}"
@@ -297,6 +299,7 @@ FunctionEnd
 Function getMediaPortalDir
     Push $0
 	Push $1
+    Push $2
 	
 	ReadRegStr $MEDIAPORTAL_DIR HKEY_LOCAL_MACHINE SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal InstallPath
     
@@ -322,22 +325,27 @@ Function getMediaPortalDir
     IntCmp $1 -1 fail
     ${xml::XPathNode} "//Config/Dir[@id='Skin']/Path" $1
     IntCmp $1 -1 fail
-    ${xml::GetText} $SKIN_DIR $1
+    ${xml::GetText} $2 $1
     IntCmp $1 -1 fail
 	
-	# expand any environment variables
-	ExpandEnvStrings $SKIN_DIR $SKIN_DIR
-	
-	# verify the skin folder was found properly
-	IfFileExists $SKIN_DIR\*.* done invalid_path
-	invalid_path:
+    # verify the skin folder was found properly
+    
+    #check_for_new_path_on_vista_or_win7
+        ExpandEnvStrings $SKIN_DIR $2
+        IfFileExists $SKIN_DIR\*.* done check_for_relative_path
+	check_for_relative_path:
 		StrCpy $SKIN_DIR "$MEDIAPORTAL_DIR\$SKIN_DIR"
-		IfFileExists $SKIN_DIR\*.* done fail
+		IfFileExists $SKIN_DIR\*.* done check_for_new_xp_path
+    check_for_new_xp_path:
+        ${StrReplace} $SKIN_DIR "%ProgramData%" "%ALLUSERSPROFILE%\Application Data" $2
+        ExpandEnvStrings $SKIN_DIR $SKIN_DIR
+        IfFileExists $SKIN_DIR\*.* done fail
 	fail:
 		MessageBox MB_OK|MB_ICONEXCLAMATION $(BAD_SKIN_PATH)	
 	done:
 		
-	Pop $1
+	Pop $2
+    Pop $1
 	Pop $0
 FunctionEnd
 

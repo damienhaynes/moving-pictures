@@ -31,6 +31,6 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("0.7.4.673")]
+[assembly: AssemblyVersion("0.7.5.681")]
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("MovingPicturesUnitTest")]
