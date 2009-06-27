@@ -1,0 +1,601 @@
+Moving Pictures 0.7.4
+================================================================================
+
+Thanks for downloading Moving Pictures. This package contains the Moving Pictures
+plug-in itself along with the 16x9 and 4x3 Generic Moving Pictures skin files. 
+If you have any problems or questions about the plug-in you can visit the 
+forums to interact with the community and developers, or you can visit the 
+(always in progress, but very new) Moving Pictures wiki for a user's guide 
+and frequently asked questions document. 
+
+Moving Pictures Forum:          http://forum.team-mediaportal.com/moving-pictures-284/
+Moving Pictures Wiki:           http://moving-pictures.tv
+Moving Pictures Project Page:   http://moving-pictures.googlecode.com
+
+
+
+The Generic Skin Files
+----------------------
+If your skin does not support Moving Pictures, don't fret, you can still use the
+Moving Pictures with the Generic Skin. But if your skin DOES supports Moving 
+Pictures it is strongly recommended you do NOT use the generic skin (by default it
+will only be installed for skins not supporting Moving Pictures). The generic skin 
+is meant to be a temporary solution to allow all users to enjoy Moving Pictures 
+even if their favorite skin has not yet added support. 
+
+
+
+Change Log
+================================================================================
+0.7.4
+--------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+**********:	Updated Installer to support new directory structure of 
+                MediaPortal 1.1.
+
+**********:     Updated database logic so that initial launch of the plugin 
+                will be signifigantly faster, particularly for large collections.
+
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #435:     Manual import path entry is now verified, preventing a database 
+                state that causes Moving Pictures to crash.
+
+================================================================================
+0.7.3
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #428:     Multiple movies located in a folder having only one character in 
+                the name will no longer use the folder name for importation.
+
+Issue #427:     Importer will now properly handle movies contained in the root of 
+                a share that has a one character name.
+
+Issue #419:     Added advanced setting to turn off the DeviceManager which for at 
+                least one user was causing sound distortion during playback.
+
+Issue #385:     Fixed a rarely occuring bug causing a DVD to be misatched to an
+                existing DVD in the database.
+--------------------------------------------------------------------------------
+Scraper Script Updates
+--------------------------------------------------------------------------------
+Issue #406:     OFDb scraper script will now properly pull results and cover art 
+                will be retrieved (previously available on the forum).
+
+Issue #384:     Updated to new version of russian scraper (previously available on
+                the forum).
+
+**********:     Updated scraper script for mymovies.it (previously available on the
+                forum).
+
+================================================================================
+0.7.2
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #371:     Rare crashes occuring near startup of the plug-in in the GUI 
+                have been eliminated.
+                
+Issue #364:     Allowing playback to end (without pressing stop) while in "show 
+                only unwatched movies" mode will no longer crash MediaPortal.
+                
+Issue #372:     MediaPortal will now startup much faster when the movie library 
+                contains a large number of movies stored on network based import
+                paths.
+                
+Issue #349:     When playing an image file (mounted via Daemon tools) playback 
+                will now always start rather than the user having to sometimes
+                press play twice.
+                
+Issue #366:     Focus will now consistently switch to the playback window when 
+                playing mounted media.
+                
+Issue #361:     Removable SATA drives will now be properly detected as removable.
+                
+Issue #375:     Deleteing files located on a drive referenced by a UNC path through
+                the MediaPortal context menu now works correctly.
+                
+Issue #370:     Minor enhancements to the filmweb.pl scraper have been made. Thanks 
+                LRFalk01!
+
+Issue #377:     Updated OFDb scrapper with changes to now pull certification and 
+                writers. Also corrects a bug in the script causing limited results
+                for some movies. Thanks Schenk2302!
+
+================================================================================
+0.7.1
+--------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+Issue #333:    	Sorting by date in the GUI will now sort by the date a movie was added
+                to your system (file creation date) rather than the date it was added
+                to Moving Pictures.
+
+Issue #327:    	The user can now optionally configure an external player for Bluray
+                and HD-DVD content.
+                
+Issue #340:    	Harley's Blue3wide skin is now distributed with Moving Pictures.
+
+Issue #263:     Spanish and Russian scrapers have been added to Moving Pictures. Please
+                be aware these are still works in progress. See the forums for support.
+                Thanks goes to LRFalk01!
+
+Importer / Configuration Screen Bug Fixes
+--------------------------------------------------------------------------------
+Issue #331:    	Movies on network drives will no longer (in rare cases) be 
+                readded to the database creating duplicate entries.
+
+Issue #342:    	File/path names that are longer than the windows maximum path length
+                will no longer cause the entire import path to fail to import. An 
+                appropriate error message is now also logged to the log file.
+                
+Issue #347:    	The removable import path logic will now work correctly for external
+                drives mounted to a folder on a fixed drive.
+
+Issue #344:    	New data sources will now automatically be correctly loaded on upgrade.
+                This includes the themoviedb.org data source which provides backdrops.
+                
+Issue #325:    	allocine.fr and moviemeter.nl scripts have been updated to return 
+                correct results after website changes.
+
+Issue #328:    	The Moving Pictures configuration screen will no longer cause a
+                crash when quickly exiting and reentering the config.
+
+--------------------------------------------------------------------------------
+MediaPortal GUI Bug Fixes
+--------------------------------------------------------------------------------
+Issue #330:    	Moving Pictures is now more tolerant of skins that do not implement
+                all "dummy" labels.
+
+Issue #326:    	Bluray and HD-DVD media will now correctly play using the currently 
+                selected player (although the menu will not be displayed).
+                
+Issue #257:    	Multi-part movies will now always be played in the correct order.
+
+Issue #336:    	Moving Pictures will no longer crash because of bad artwork (such 
+                as the old Hancock backdrop).
+
+Issue #334:    	Moving Pictures will no longer cause "double playback" problems in
+                other plug-ins such as MPTV-Series.
+
+Issue #332:    	The "Change View" button will now correctly invoke the "Change View" 
+                context menu.
+
+================================================================================
+0.7.0
+--------------------------------------------------------------------------------
+
+GUI Enhancements
+--------------------------------------------------------------------------------
+Issue #92:      It is now possible to sort by various fields in the GUI.
+
+Issue #36:      Backdrops will now smoothly fade from one image to another when
+                moving through your movie collection. This requires a skin update
+                if not using the Generic Skin.
+
+Issue #159:     It is now possible to permanently delete a file from your system via the
+                context menu in the GUI. Disabled by default.
+
+Issue #76:      It is now possible to define a prompt for offline Media to be 
+                displayed in the GUI when the user presses play and the media is
+                unavailable.
+                
+Issue #280:     Added option to force Moving Pictures to display only unwatched movies
+                on initial startup.
+                
+Issue #295:     There is now a working icon in the GUI when the Movie Importer is active.
+                This requires a skin change if not using the generic skin.
+
+Issue #236:     Pressing the Show Info key in the GUI now takes you to the details 
+                page of the selected movie
+
+Issue #213:     Enhanced the Remote Filtering functionality.
+
+Issue #222:     The number of movies in the collection and the number of movies 
+                currently displayed due to filtering is now available to the skin.
+
+Issue #68:      Rapidly moving through the GUI should now be slightly more responsive.
+
+Issue #273:     It is now possible to play a custom movie intro before each movie
+                (configurable from Advanced Settings).
+
+
+Importer Enhancements
+--------------------------------------------------------------------------------
+
+Issue #28:      Removable media is now automatically detected. Files deleted from
+                a removable drive will now also be removed from MediaPortal as well.
+                When a drive is simply taken offline, or unavailable, no action is
+                taken.
+
+Issue #155:     Moving Pictures now supports ripped Bluray and HD-DVD disks.
+
+Issue #262:     Partial DVD Rips (missing a video_ts.ifo) are now supported.
+
+Issue #287:     It is now possible to rename or move a file within it's watch folder
+                without requiring Moving Pictures to reimport the movie. NOTE: Currently
+                for this to function properly, Moving Pictures must be running.
+
+Issue #223:     The importer can now be set to automatically turn off when in the GUI.
+                This can be configured under Advanced Settings.
+                
+Issue #98:      It is now possible to manually enter an import path.
+                
+Issue #244:     Moving Pictures will now track the date a movie was added to your 
+                collection.
+                
+Issue #311:     Cover art is now saved as PNG files.
+
+Issue #193:     An article placed at the end of a movie title (e.g. "Matrix, The")
+                is now taken into account in the auto-approval logic.
+
+Issue #289:     Added internal tracking of recently watched movies. Not used for anything
+                right now, but useful for external plugins like movingpicturesxml
+                (see http://code.google.com/p/movingpicturesxml).
+             
+Issue #243:     If the IMDb ID of a movie is in it's filename, this will now be 
+                used for matching.
+
+
+Data Provider / Scraper Enhancements
+--------------------------------------------------------------------------------
+Issue #188:     Moving Pictures now uses themoviedb.org as a source for movie 
+                details and cover art.
+
+Issue #281:     Cover art retrieval from impawards has been signifigantly improved.
+
+Issue #316:     Added a polish scraper (FilmWeb.pl) movie details and cover art scraper.
+
+Issue #252:     Integrate user created mymovies.it scraper script (previously available
+                on the forums).
+
+Issue #309:     A scraper script can now optionally allow malformed http headers.
+
+Issue #293:     Add a "Log" element to the scripting engine.
+
+
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #238:     DVD resume data will now load properly.
+
+Issue #207:     Watched data will now be properly saved for ISOs.
+
+Issue #158:     Two Part playback now works correctly for external players.
+
+Issue #306:     The displayed backdrop will now be properly updated after marking a 
+                movie as watched from the details view, then exiting to the facade view
+                while watched flag filtering is turned on.
+
+Issue #153:     Ripped disks (ISO/IFO media) should now work better with the MediaPortal 
+                autoplay functionality.
+
+Issue #279:     If the first backdrop fails the minimum resolution test, Moving Pictures
+                will now continue looking for backdrops until an acceptable one is found.
+                
+Issue #245:     The importer will continue to monitor for file system changes on a 
+                networked drive, even when connection to the drive is temporarily lost.
+
+Issue #298:     Progress bar in importer now acts much more coherently.
+
+Issue #201:     Incorrect cover-art will no longer be picked up for odd movies like [Rec].
+
+Issue #276:     Incorrect backdrops and covers will no longer be loaded for movies with
+                similar names (for example Blade and Slingblade).
+                
+Issue #301:     Backdrops will no longer occassionally fail to save properly (for example, 
+                with the movie Hancock).
+
+Issue #261:     Importer will now confuse sequels less often (for example, X-Men and X-Men 2).
+
+Issue #249:     Backdrops stored in the movie folder of a DVD rip will now be 
+                properly loaded if this feature is enabled.
+
+Issue #185:     The importer will now properly handle a multi-part movie with files in folders
+                labeled CD1 and CD2.
+
+Issue #186:     The impawards provider should now return english language covers before
+                other langauges.
+                
+Issue #216:     In the MovieManager, selecting cover art by URL will no longer cause
+                a an unahndled error.
+                
+Issue #150:     Removed the Single Movie Importer dialog as it was quite buggy. Clicking the
+                reassign button will now send a movie back to the importer.
+
+================================================================================
+0.6.6
+--------------------------------------------------------------------------------
+* Fixed OFDb script.
+
+* Selecting a different version of a script will now "stick" after restarting 
+  the plug-in
+
+================================================================================
+0.6.5
+--------------------------------------------------------------------------------
+* IMPAwards has been fixed. Covers will be pulled down again.
+
+* Additional fixes were added to prevent Ignored movies from coming back.
+
+* In GUI the first selected movie will now be the first in the list.
+
+================================================================================
+0.6.4
+--------------------------------------------------------------------------------
+Issue #256: Sometimes when a movie was removed from a watch folder, it did
+            not stay deleted. If a movie was moved it became duplicated in the 
+            movie list.
+            
+Issue #267: Sometimes in the importer a movie would be approved as one movie
+            but when details were pulled, the details would be for another
+            movie or TV Show.
+            
+Artwork   : Several changes have been made to increase the stability of the 
+Scanner     background artwork scanner. This was, in some rare cases causing 
+            MediaPortal to crash.
+            
+themoviedb: Additional error handling was added to the backdrop provider for
+            themoviedb.org which was in rare cases causing MediaPortal to crash
+            if themoviedb.org failed to respond.
+
+Issue #264: Backdrops for movies with unusual characters in the title (for 
+            example, Léon) were not properly pulled from themoviedb.org.
+
+
+================================================================================
+0.6.3
+--------------------------------------------------------------------------------
+IMDb:       Corrected a bug in script causing summary information to be omitted
+            for some movies.
+            
+            Corrected bug causing IMDb ID to not be written when rescanning a 
+            movie that was originally imported by allocine.
+
+
+Issue #239: The Allocine.fr scraper script is no longer CPU intensive and will 
+            return more reliable results.
+            
+IMPAwards:  The impawards.com cover art scraper will now return better results 
+            for movies with data pulled from allocine.
+            
+MovieMeter: Fixed bug causing summary information to be omitted for some movies.
+
+OFDb:       Script will now only return movie content.
+            
+
+================================================================================
+0.6.2
+--------------------------------------------------------------------------------
+IMDb Fix:   After a change to the IMDb website, the IMDb script provided in 0.6.1
+            would not return results. Moving Pictures 0.6.2 includes an updated 
+            script to properly pull results. 
+
+
+================================================================================
+0.6.1
+--------------------------------------------------------------------------------
+Issue #204: Searching by a custom search string failed and caused the 
+            config to crash when searching for a movie sent for 
+            reprocessing by the Movie Manager.
+            
+Issue #203: Multi-part playback was broken. This caused MediaPortal to crash if the
+            user did not press stop before the second part of a to part movie ended.
+            This also caused three part movies to only play the first part.
+            
+Issue #189: Importer would fail when NFO Scanner is turned off.
+
+Issue #198: Advanced feature to load backdrops from movie folder caused importer to fail.
+
+Issue #199: In rare situations a file could be added to a watch folder but not get 
+            loaded into the importer.
+
+Issue #202: Runtime was still not always populated by the IMDb script.
+
+Issue #205: Filename patterns for backdrop and cover retrieval now properly support
+            the %filename% tag.
+
+Issue #181: When using unwatched filter, after watching a movie it was still in the list
+            until the watched filter was cycled.
+            
+Issue #187: Cover in facade did not change when cover art was cycled from the 
+            details page.
+            
+Issue #197: Fields that had no value in some situations were displayed as the skin
+            property name rather than am empty field.
+
+Issue #168: Rating stars displayed incorrectly for some locales.
+
+Issue #192: New default backdrop caused odd ghost image on thumbanil views in Generic
+            Skin.
+
+Issue #184: The rating star was not properly linked in the 4x3 Generic Skin preventing
+            ratings from being displayed.
+
+================================================================================
+0.6.0
+--------------------------------------------------------------------------------
+This is a partial list of enhancements and bug fixes. For a complete list please
+visit the following URL: 
+
+http://code.google.com/p/moving-pictures/issues/list?can=1&q=milestone:0.6.0
+
+Enhancements
+------------
+
+Watched Flags:              Moving Pictures will now track which movies you have watched 
+                            and allow you to filter by unwatched movies.
+
+Resume Playback:            If a movie is stopped before completion, when you start playback 
+                            again you have to resume playback where you left off.
+
+Additional Data Sources &   The plug-in will now optionally pull data from OFDb (German), 
+Scriptable Scraping Engine: MovieMeter.nl (Dutch) or Allocine.fr (French) in addition to 
+                            IMDb. Additionally a scriptable scraping system is now in place
+                            for future changes and new scripts.
+
+Enhanced Coverart Support:  Moving Pictures will now pull from multiple data sources to
+                            retrieve coverart. Existing providers have been enhanced and 
+                            covers from MyVideos will now be imported if no other covers are
+                            available.
+                            
+Remote Control Filtering:   You can now type out a partial name of a movie on the number pad
+                            of your remote control "cell phone style" to dynamically filter the
+                            movies listed in MediaPortal.
+
+Manual Movie Inserting:     If a match is not coming up for a file you can now manually add the 
+                            file to the database and edit the movie details in the Movie Manager.
+                            
+Unignore Files:             You can now unignore files that had been previously "permanently 
+                            ignored". This is currently a bulk feature. Additional granularity 
+                            will be added in a future version.
+
+Major Bug Fixes
+---------------
+Issue #131:    After rapidly opening and closing the config and/or the MP GUI, the plug-in will 
+               no longer corrupt the Moving Pictures database.
+
+Issue #126:    Reordering grouped files belonging to a movie is now functional and less confusing.
+
+Issue #112:    Runtime is now properly populated via the IMDb script.
+
+Issue #168:    Rating stars are now properly displayed in all locales.
+
+Plus many more...
+
+================================================================================
+0.5.5c
+--------------------------------------------------------------------------------
+Issue #132: Previously, if a movie was added to or deleted from a watch folder
+            while MediaPortal and Moving Pictures was offline, the next time 
+            MediaPortal launched, the program would crash. Relaunching 
+            MediaPortal again would work correctly. This issue has been 
+            resolved.
+
+================================================================================
+0.5.5b
+--------------------------------------------------------------------------------
+Issue #114: Fixed bug causing unhandled exception when reassigning a set of 
+            files to a new movie from the Movie Manager panel.
+
+================================================================================
+0.5.5
+--------------------------------------------------------------------------------
+Enhancements
+------------
+Issue #9:   Scanner will now pull movie details from IMDb.
+
+Issue #30:  Scanner will now pull cover artwork from impawards.com.
+
+Issue #40:  Full DVD rips are now supported.
+
+Issue #49:  DVD Images are now supported. This requires the Daemon Tools integration
+            of Media Portal to be turned on, as well as the ISO file extension to be
+            added to the list of valid video file extension.
+
+Issue #103: The movie importer will now attempt to retrieve an IMDB ID from an NFO
+            file in the folder with the movie. If found, search will be based on 
+            this rather than title and year.
+
+Issue #43:  After playback or exiting and re-entering the plug-in, the previously
+            selected movie and view will now be retained.
+            
+Issue #94:  Enhanced multi-part matcher to detect additional filename patterns. 
+
+            
+Bug Fixes
+---------
+Issue #80:  Removing and re-adding an import path in the configuration screen 
+            now works as expected, and duplicates movie entries will not be 
+            created.
+
+Issue #89:  In the importer, file extension matching is no longer case sensitive. 
+
+Issue #88:  On the movie manager tab of the configuration screen, when the user 
+            tries to manually add a cover, but clicks cancel, the cover art will 
+            no longer be loaded anyway.
+            
+Issue #78:  Movie ratings (Score) should now be loading correctly for international 
+            users.
+
+Issue #100: HD Quality sample files should no longer squeeze through the sample
+            filter.
+            
+Issue #74:  Filenames with underscores delimiting words should now be imported
+            correctly.
+
+================================================================================
+0.5.4
+--------------------------------------------------------------------------------
+Issue #75: Fixed data provider for movie backdrops (fan-art) from 
+           poseters.consumeroo.com backdrop, now known as meligrove.com.
+                      
+           Also set this data provider as the primary. Effectively this means
+           more 1080p artwork. 
+
+Issue #72: If you delete Moving Pictures artwork (covers or fanart) in the 
+           "thumbs" folder, references to this artwork will automatically be 
+           severed and new artwork will be downloaded. This combined with the
+           previous issue means you can delete your backdrop folder and do a 
+           Full Rescan to get more 1080p backdrops.
+
+Issue #82: Fixed a bug causing slow file system scans when checking network 
+           drives.
+
+================================================================================
+0.5.3
+--------------------------------------------------------------------------------
+Major Bug Fixes
+---------------
+Issue #50: MediaPortal crashed after playback in any plug-in if Moving 
+           Pictures had not yet been opened.
+  
+
+Importer Changes
+----------------
+Issue #24: Video files tagged as "samples" in their filename are now filtered
+           out, and will not be grouped or automatched.
+
+Issue #46: Year based matching has been enhanced to better parse year data
+           from a file/folder name.
+ 
+Issue #52: Created more strict rules for grouping. There should be fewer
+           incorrect groupings of sequels now.
+  
+Issue #54: The movie scanner will no longer fail when scanning a root folder
+           on a hard drive.
+    
+Issue #1:  Grouped matches no longer incorrectly use folder name for search string.
+
+Issue #56: Auto-approve threshold is now lower, meaning matches now must be 
+           closer to get auto-approved. This is user definable. Previous 
+           setting was 3, and it has been changed to 1. To get previous behavior
+           see advanced settings.
+
+Issue #37: Upon launch, the plug-in will now search for new artwork for all
+           movies currently missing cover-art or a movie backdrop.
+
+
+MediaPortal GUI Changes
+-----------------------
+Issue #44: Plug-in will now dynamically update GUI in MediaPortal when movie
+           files have been added to or deleted from an Import Path.
+
+Issue #60: Movies will now be removed from the system when corresponding import 
+           path has been removed (confirming first).
+
+Issue #34: A (configurable) delay has been added to the GUI. This increases the
+           time to load backdrops and cover-art, but dramatically improves 
+           performance when moving rapidly through a list, thumbnail view, etc.
+           Additional enhancements are upcoming for this...
+
+Issue #42: The play button no longer holds focus after exiting details view.
+
+Issue #33: Filmstrip scrolling is significantly improved.
+           
+Issue #45: Display of lists (actors, genres, etc) n GUI are now limited to 5
+           elements (configurable).
+
+Issue #51: Focus now remains on view button when cycling views.
