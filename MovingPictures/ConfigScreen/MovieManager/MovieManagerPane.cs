@@ -155,7 +155,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // This ensures we are thread safe. Makes sure this method is run by
             // the thread that created this panel.
             if (InvokeRequired) {
-                if (!this.Parent.Visible) return;
+                if (!FindForm().Visible) return;
                 Delegate method = new DatabaseManager.ObjectAffectedDelegate(movieInsertedListener);
                 object[] parameters = new object[] { obj };
                 this.Invoke(method, parameters);
