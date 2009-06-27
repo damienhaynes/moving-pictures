@@ -260,6 +260,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
         private int part;
 
+        /// <summary>
+        /// The duration of the video file in milliseconds
+        /// </summary>
         [DBFieldAttribute(Default = "0", Filterable = false)]
         public int Duration {
             get { return _duration; }
