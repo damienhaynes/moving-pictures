@@ -523,8 +523,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             int minWidth = MovingPicturesCore.Settings.MinimumCoverWidth;
             int minHeight = MovingPicturesCore.Settings.MinimumCoverHeight;
             string artFolder = MovingPicturesCore.Settings.CoverArtFolder;
-            
-            Image newCover = Image.FromFile(filename);
+
+            Image newCover = null;
+            try {
+                newCover = Image.FromFile(filename);
+            }
+            catch (OutOfMemoryException e) {
+                logger.DebugException("Invalid image or image format not supported.", e);
+            }
+            catch (FileNotFoundException e) {
+                logger.DebugException("File not found.", e);
+            }
 
             if (newCover == null) {
                 logger.Error("Failed loading cover artwork for '" + Title + "' [" + ID + "] from " + filename + ".");
@@ -707,8 +716,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             int minHeight = MovingPicturesCore.Settings.MinimumBackdropHeight;
             string artFolder = MovingPicturesCore.Settings.BackdropFolder;
 
-            Image newBackdrop = Image.FromFile(filename);
-
+            Image newBackdrop = null;
+            try {
+                newBackdrop = Image.FromFile(filename);
+            }
+            catch (OutOfMemoryException e) {
+                logger.DebugException("Invalid image or image format not supported.", e);
+            }
+            catch (FileNotFoundException e) {
+                logger.DebugException("File not found.", e);
+            }
+            
             if (newBackdrop == null) {
                 logger.Error("Failed loading backdrop for '" + Title + "' [" + ID + "] from " + filename + ".");
                 return false;
