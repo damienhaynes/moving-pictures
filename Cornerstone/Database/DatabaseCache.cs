@@ -20,15 +20,6 @@ namespace Cornerstone.Database {
             if (cache.ContainsKey(type) && cache[type].ContainsKey(id))
                 return cache[type][id];
             else return null;
-
-            //try {
-            //    return cache[type][id];
-            //}
-            //catch (Exception e) {
-            //    if (e.GetType() == typeof(ThreadAbortException))
-            //        throw e;
-            //    return null;
-            //}
         }
 
 

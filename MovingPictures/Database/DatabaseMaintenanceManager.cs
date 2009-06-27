@@ -139,6 +139,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         // Update System Managed Import Paths
         public static void UpdateImportPaths() {
+            
+            // remove invalid import paths
+            foreach (DBImportPath currPath in DBImportPath.GetAll()) {
+                if (currPath.Directory == null)
+                    currPath.Delete();
+            }
+
             float count = 0;
             float total = DriveInfo.GetDrives().Length; 
 
