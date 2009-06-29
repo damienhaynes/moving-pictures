@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using MediaPortal.Plugins.MovingPictures.Database;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesSettings: SettingsManager {
@@ -182,7 +183,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If set to true, Moving Pictures will scan files for various statistics including video file resolution and audio settings. If this option is turned off, this information will not be available to the skin, but the import process will be faster.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_use_mediainfo",
-            Default = true)]
+            Default = false)]
         public bool UseMediaInfo {
             get { return _useMediaInfo; }
             set {
@@ -1035,13 +1036,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             Default = false,
             Hidden = true)]
         public bool ParentalControlsEnabled {
-            get { return _useRemoteControlFiltering; }
+            get { return _parentalControlsEnabled; }
             set {
                 _parentalControlsEnabled = value;
                 OnSettingChanged("enable_parental_controls");
             }
         }
-        private bool? _parentalControlsEnabled;
+        private bool _parentalControlsEnabled;
 
         [CornerstoneSetting(
             Name = "Parental Controls Filter ID",
@@ -1058,6 +1059,26 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private string _parentalContolsFilterID;
+
+        public DBFilter<DBMovieInfo> ParentalControlsFilter {
+            get {
+                if (_parentalControlsFilter == null) {
+                    // grab or create the filter object attached to the parental controls
+                    string filterID = MovingPicturesCore.Settings.ParentalContolsFilterID;
+                    if (filterID == "null") {
+                        _parentalControlsFilter = new DBFilter<DBMovieInfo>();
+                        _parentalControlsFilter.Name = "Parental Controls Filter";
+                        MovingPicturesCore.DatabaseManager.Commit(_parentalControlsFilter);
+                        ParentalContolsFilterID = _parentalControlsFilter.ID.ToString();
+                    }
+                    else {
+                        _parentalControlsFilter = MovingPicturesCore.DatabaseManager.Get<DBFilter<DBMovieInfo>>(int.Parse(filterID));
+                    }
+                }
+
+                return _parentalControlsFilter;
+            }
+        } private DBFilter<DBMovieInfo> _parentalControlsFilter = null;
 
         [CornerstoneSetting(
             Name = "Parental Controls Password",

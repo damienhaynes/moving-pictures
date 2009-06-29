@@ -122,6 +122,9 @@
     <Compile Include="ConfigScreen\MovieNodeSettingsPanel.Designer.cs">
       <DependentUpon>MovieNodeSettingsPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\PinCodeTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ConfigScreen\Popups\AddImportPathPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -415,6 +418,7 @@
     <Content Include="MainUI\Blue3wide\Media\Background_moving.png" />
     <Content Include="MainUI\Blue3wide\Media\blue.png" />
     <Content Include="MainUI\Blue3wide\Media\defaultdvdcover.png" />
+    <Content Include="MainUI\Blue3wide\DialogPinCode.xml" />
     <Content Include="MainUI\Blue3wide\Media\dialogprogressbg.png" />
     <Content Include="MainUI\Blue3wide\Media\diffusemirrorwide.png" />
     <Content Include="MainUI\Blue3wide\Media\filmstrip_overlay.png" />
@@ -434,6 +438,8 @@
     <Content Include="MainUI\Blue3wide\movingpictures.facade.xml" />
     <Content Include="MainUI\Blue3wide\movingpictures.overlay.xml" />
     <Content Include="MainUI\Blue3wide\movingpictures.xml" />
+    <Content Include="MainUI\Generic Skin\16x9\DialogPinCode.xml" />
+    <Content Include="MainUI\Generic Skin\16x9\movingpictures.category.facade.xml" />
     <Content Include="MainUI\Generic Skin\16x9\dialogGeneralRating.xml" />
     <Content Include="MainUI\Generic Skin\16x9\Media\MovingPictures\background.png" />
     <Content Include="MainUI\Generic Skin\16x9\Media\MovingPictures\dvd_frame.png" />

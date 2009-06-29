@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="AsyncImageResource.cs" />
     <Compile Include="GUIGeneralRating.cs" />
+    <Compile Include="GUIPinCodeDialog.cs" />
     <Compile Include="ImageSwapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkinSettings.cs" />

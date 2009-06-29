@@ -34,6 +34,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         MovieBrowser browser;
         RemoteNumpadFilter remoteFilter;
         WatchedFlagFilter watchedFilter;
+        DBFilter<DBMovieInfo> parentalControlsFilter;
 
         MovingPicturesSkinSettings skinSettings;
 
@@ -58,6 +59,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         [SkinControl(50)]
         protected GUIFacadeControl facade = null;
+
+        [SkinControl(51)]
+        protected GUIFacadeControl categoriesFacade = null;
 
         [SkinControl(1)]
         protected GUIImage movieBackdropControl = null;
@@ -100,6 +104,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         [SkinControl(14)]
         protected GUIButtonControl sortMenuButton = null;
+
+        [SkinControl(15)]
+        protected GUIButtonControl toggleParentalControlsButton = null;
+
+        [SkinControl(16)]
+        protected GUIImage parentalControlsIndicator = null;
 
         #endregion
 
@@ -173,6 +183,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (playButton != null) playButton.Focus = false;
             if (textToggleButton != null) textToggleButton.Focus = false;
             if (sortMenuButton != null) sortMenuButton.Focus = false;
+            if (toggleParentalControlsButton != null) toggleParentalControlsButton.Focus = false;
         }
 
         public void ShowMessage(string heading, string lines) {
@@ -254,6 +265,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (remoteFilteringIndicator != null)
                 remoteFilteringIndicator.Visible = false;
+
+            // set the label for the parental controls indicator
+            if (parentalControlsIndicator != null && parentalControlsFilter.Active != parentalControlsIndicator.Visible)
+                parentalControlsIndicator.Visible = parentalControlsFilter.Active;
+
+            // set the parental controls toggle button visible or 
+            // invisible based on if functionality is turned on
+            if (toggleParentalControlsButton != null && MovingPicturesCore.Settings.ParentalControlsEnabled != toggleParentalControlsButton.Visible)
+                toggleParentalControlsButton.Visible = MovingPicturesCore.Settings.ParentalControlsEnabled;
+
         }
 
         private void OnBrowserSelectionChanged(DBMovieInfo movie) {
@@ -332,11 +353,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ActiveFilters.Add(remoteFilter);
 
                 watchedFilter = new WatchedFlagFilter();
+                watchedFilter.Active = MovingPicturesCore.Settings.ShowUnwatchedOnStartup;
                 browser.ActiveFilters.Add(watchedFilter);
 
-                // if option is set, turn on the watched movies filter by default
-                if (MovingPicturesCore.Settings.ShowUnwatchedOnStartup)
-                    watchedFilter.Active = true;
+                parentalControlsFilter = MovingPicturesCore.Settings.ParentalControlsFilter;
+                parentalControlsFilter.Active = MovingPicturesCore.Settings.ParentalControlsEnabled;
+                parentalControlsFilter.Invert = true;
+                browser.ActiveFilters.Add(parentalControlsFilter);
 
                 // give the browser a delegate to the method to clear focus from all existing controls
                 browser.ClearFocusAction = new MovieBrowser.ClearFocusDelegate(ClearFocus);
@@ -482,6 +505,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case 14:
                     showSortContext();
                     break;
+
+                // parental controls button clicked
+                case 15:
+                    toggleParentalControls();
+                    break;
             }
 
             base.OnClicked(controlId, control, actionType);
@@ -585,45 +613,48 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void showMainContext() {
-            // WARNING/TODO
-            // If any items are added to this menu conditionally, the current setup will break.
-            // the method structure needs to be changed to mimic the showDetailsContext() method
-            // if ANY conditional items are added.
-
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
             dialog.SetHeading("Moving Pictures");  // not translated because it's a proper noun
 
+            int currID = 1;
             GUIListItem watchItem = new GUIListItem(watchedFilter.Active ? Translation.ShowAllMovies : Translation.ShowOnlyUnwatchedMovies);
-            watchItem.ItemId = 1;
+            watchItem.ItemId = currID++;
             dialog.Add(watchItem);
 
+            GUIListItem parentalControlsItem = new GUIListItem(parentalControlsFilter.Active ? Translation.UnlockRestrictedMovies : Translation.LockRestrictedMovies);
+            if (MovingPicturesCore.Settings.ParentalControlsEnabled) {
+                parentalControlsItem.ItemId = currID++;
+                dialog.Add(parentalControlsItem);
+            }
+
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
-            sortItem.ItemId = 2;
+            sortItem.ItemId = currID++;
             dialog.Add(sortItem);
 
             GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
-            viewItem.ItemId = 3;
+            viewItem.ItemId = currID++;
             dialog.Add(viewItem);
 
             GUIListItem movieOptionsItem = new GUIListItem(Translation.MovieOptions + " ...");
-            movieOptionsItem.ItemId = 4;
+            movieOptionsItem.ItemId = currID++;
             dialog.Add(movieOptionsItem);
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
-            switch (dialog.SelectedId) {
-                case 1:
-                    watchedFilter.Active = !watchedFilter.Active;
-                    break;
-                case 2:
-                    showSortContext();
-                    break;
-                case 3:
-                    showChangeViewContext();
-                    break;
-                case 4:
-                    showDetailsContext();
-                    break;
+            if (dialog.SelectedId == watchItem.ItemId) {
+                watchedFilter.Active = !watchedFilter.Active;
+            }
+            else if (dialog.SelectedId == sortItem.ItemId) {
+                showSortContext();
+            }
+            else if (dialog.SelectedId == viewItem.ItemId) {
+                showChangeViewContext();
+            }
+            else if (dialog.SelectedId == movieOptionsItem.ItemId) {
+                showDetailsContext();
+            }
+            else if (dialog.SelectedId == parentalControlsItem.ItemId) {
+                toggleParentalControls();
             }
         }
 
@@ -854,6 +885,29 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 			ratingDlg.FiveStarRateFiveDesc = Translation.RateFiveStarFive;
 			return;
 		}
+
+        private void toggleParentalControls() {
+            if (!parentalControlsFilter.Active || ValidatePin())
+                parentalControlsFilter.Active = !parentalControlsFilter.Active;
+        }
+
+        private bool ValidatePin() {
+            GUIPinCodeDialog pinCodeDialog = (GUIPinCodeDialog)GUIWindowManager.GetWindow(GUIPinCodeDialog.ID);
+            pinCodeDialog.Reset();
+            pinCodeDialog.MasterCode = MovingPicturesCore.Settings.ParentalContolsPassword;
+            pinCodeDialog.SetHeading(Translation.PinCodeHeader);
+            pinCodeDialog.SetLine(1, Translation.PinCodePrompt);
+
+            try {
+                pinCodeDialog.DoModal(GetID);
+            }
+            catch (ArgumentNullException) {
+                ShowMessage(Translation.Error, Translation.SkinDoesNotSupportPinDialog);
+                return false;
+            }
+
+            return true;
+        }
 
         private void deleteMovie() {
             DBLocalMedia firstFile = browser.SelectedMovie.LocalMedia[0];

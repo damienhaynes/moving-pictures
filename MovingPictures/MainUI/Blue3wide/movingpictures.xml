@@ -226,7 +226,15 @@ multiple view modes.
           <id>66610</id>
           <label>Video Settings</label>
           <hyperlink>703</hyperlink>
+          <ondown>15</ondown>
+          <onleft>50</onleft>
+        </control>
+        <control>
+          <description>Parental Controls Toggle</description>
+          <type>button</type>
           <ondown>2</ondown>
+          <id>15</id>
+          <label>Parental Controls</label>
           <onleft>50</onleft>
         </control>
       </control>
@@ -828,6 +836,16 @@ multiple view modes.
       <textcolor>ffa9d0f7</textcolor>
       <animation effect="fade" time="250">WindowOpen</animation>
       <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+    <control>
+      <description>Parental Controls Lock Indicator</description>
+      <type>image</type>
+      <id>16</id>
+      <posX>3</posX>
+      <posY>3</posY>
+      <width>48</width>
+      <height>48</height>
+      <texture>lock.png</texture>
     </control>
 
   </controls>

@@ -873,7 +873,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #endregion
 
-        public int CompareTo(object obj) {
+        public override int CompareTo(object obj) {
             if (obj.GetType() == typeof(DBMovieInfo)) {
                 return SortBy.CompareTo(((DBMovieInfo)obj).SortBy);
             }
