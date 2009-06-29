@@ -24,11 +24,13 @@ namespace Cornerstone.Database.Tables {
             // if we are not active, or the filter has no inclusive rules start
             // with everything and remove the blacklist
             if (!_active || (Criteria.Count == 0 && WhiteList.Count == 0)) {
-                if (input is HashSet<T>)
-                    return (HashSet<T>) input;
-
+                if (!_active && input is HashSet<T>)
+                    return input as HashSet<T>;
+                
                 foreach (T currItem in input)
                     results.Add(currItem);
+
+                if (!_active) return results;
 
                 // remove blacklist items
                 if (_active)
@@ -37,7 +39,7 @@ namespace Cornerstone.Database.Tables {
                             results.Remove(currItem);
                     }
 
-                return results;
+                return CheckInversion(input, results);
             }
 
 
@@ -46,7 +48,7 @@ namespace Cornerstone.Database.Tables {
                 foreach (T currItem in WhiteList)
                     if (input.Contains(currItem))
                         results.Add(currItem);
-                return results;
+                return CheckInversion(input, results);
             }
 
             // handle AND type criteria
@@ -92,7 +94,18 @@ namespace Cornerstone.Database.Tables {
                 if (!results.Contains(item) && input.Contains(item))
                     results.Add(item);
 
-            return results;
+            return CheckInversion(input, results);
+        }
+
+        private HashSet<T> CheckInversion(ICollection<T> input, HashSet<T> filtered) {
+            if (!Invert) return filtered;
+
+            HashSet<T> output = new HashSet<T>();
+            foreach (T currItem in input)
+                if (!filtered.Contains(currItem))
+                    output.Add(currItem);
+
+            return output;
         }
 
         public bool Active {
@@ -107,6 +120,16 @@ namespace Cornerstone.Database.Tables {
             }
         }
         private bool _active = true;
+
+        public bool Invert {
+            get { return _invert; }
+            set {
+                _invert = value;
+
+                if (Updated != null)
+                    Updated(this);
+            }
+        } private bool _invert = false;
 
         #endregion
 

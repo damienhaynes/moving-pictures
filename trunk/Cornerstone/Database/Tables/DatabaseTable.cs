@@ -173,7 +173,7 @@ namespace Cornerstone.Database.Tables {
 
         #region IComparable Members
 
-        public int CompareTo(object obj) {
+        public virtual int CompareTo(object obj) {
             return this.ToString().CompareTo(obj.ToString());
         }
 

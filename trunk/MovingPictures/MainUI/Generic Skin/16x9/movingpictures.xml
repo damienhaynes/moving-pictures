@@ -142,7 +142,7 @@ multiple view modes.
     
     
     <!--***************** Details View Only **********************-->
-        <control>
+    <control>
       <type>image</type>
       <id>0</id>
       <posX>0</posX>
@@ -650,6 +650,17 @@ multiple view modes.
       <visible>Control.IsVisible(50)+Control.IsVisible(8)+Control.IsVisible(10)</visible>
       <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
       <animation effect="slide" end="-300,0" time="500">Hidden</animation>
+    </control>
+
+    <control>
+      <description>Parental Controls Lock Indicator</description>
+      <type>image</type>
+      <id>16</id>
+      <posX>3</posX>
+      <posY>3</posY>
+      <width>48</width>
+      <height>48</height>
+      <texture>lock.png</texture>
     </control>
     
     <control>

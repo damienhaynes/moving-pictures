@@ -454,6 +454,9 @@
             this.passwordTextBox.Setting = null;
             this.passwordTextBox.Size = new System.Drawing.Size(51, 21);
             this.passwordTextBox.TabIndex = 44;
+            this.passwordTextBox.TextChanged += new System.EventHandler(this.passwordTextBox_TextChanged);
+            this.passwordTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.passwordTextBox_KeyDown);
+            this.passwordTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.passwordTextBox_KeyPress);
             // 
             // parentalControlsCheckBox
             // 
