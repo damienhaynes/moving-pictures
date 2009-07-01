@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using DirectShowLib;
 using DirectShowLib.Dvd;
+using Cornerstone.Tools;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
@@ -590,6 +591,19 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         #endregion
+        
+        /// <summary>
+        /// Get a WebGrabber instance with the default moving pictures settings
+        /// </summary>
+        /// <param name="url">url to resource</param>
+        /// <returns>webgrabber instance</returns>
+        public static WebGrabber GetWebGrabberInstance(string url) {
+            WebGrabber grabber = new WebGrabber(url);
+            grabber.MaxRetries = MovingPicturesCore.Settings.MaxTimeouts;
+            grabber.Timeout = MovingPicturesCore.Settings.TimeoutLength;
+            grabber.TimeoutIncrement = MovingPicturesCore.Settings.TimeoutIncrement;
+            return grabber;
+        }
 
         #region Video Methods
 

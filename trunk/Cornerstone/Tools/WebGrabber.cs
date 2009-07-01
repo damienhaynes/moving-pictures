@@ -11,13 +11,16 @@ namespace Cornerstone.Tools {
 
     public class WebGrabber {
 
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        #region Private variables
 
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         private static int unsafeHeaderUserCount;
         private static object lockingObj;
-
         private string requestUrl;
-        private string data;
+
+        #endregion
+
+        #region Ctor
 
         static WebGrabber() {
             unsafeHeaderUserCount = 0;
@@ -29,14 +32,22 @@ namespace Cornerstone.Tools {
             request = (HttpWebRequest)WebRequest.Create(requestUrl);
         }
 
+        public WebGrabber(Uri uri) {
+            requestUrl = uri.OriginalString;
+            request = (HttpWebRequest)WebRequest.Create(uri);
+        }
+
         ~WebGrabber() {
-            data = null;
             request = null;
             if (response != null) {
                 response.Close();
                 response = null;
             }
         }
+
+        #endregion
+
+        #region Public properties
 
         public HttpWebRequest Request {
             get { return request; }
@@ -86,12 +97,15 @@ namespace Cornerstone.Tools {
             set { _allowUnsafeHeader = value; }
         } private bool _allowUnsafeHeader = false;
 
+        #endregion
+
+        #region Public methods
 
         public bool GetResponse() {
-            data = string.Empty;
-            int tryCount = 0;
-
-            while (data == string.Empty) {
+            bool completed = false;
+            int tryCount = 0; 
+           
+            while (!completed) {
                 tryCount++;
                 try {
                     if (_allowUnsafeHeader)
@@ -105,54 +119,12 @@ namespace Cornerstone.Tools {
                     response = (HttpWebResponse)request.GetResponse();
                     cookieHeader = request.CookieContainer.GetCookieHeader(request.RequestUri);
 
-                    // Get result as stream
-                    Stream resultData = response.GetResponseStream();
-
-                    // If encoding was not set manually try to detect it
-                    if (encoding == null) {
-                        try {
-                            // Try to get the encoding using the characterset
-                            encoding = Encoding.GetEncoding(response.CharacterSet);
-                        }
-                        catch (Exception e) {
-                            // If this fails default to the system's default encoding
-                            logger.DebugException("Encoding could not be determined, using default.", e);
-                            encoding = Encoding.Default;
-                        }
-                    }
-
                     // Debug
-                    if (_debug)
-                        logger.Debug("GetResponse: URL={0}, UserAgent={1}, Encoding={2}, CookieHeader={3}",
-                            requestUrl, userAgent, encoding.EncodingName, cookieHeader);
-
-                    // Converts the stream to a string
-                    try {
-                        StreamReader reader = new StreamReader(resultData, encoding, true);
-                        data = reader.ReadToEnd();
-                        reader.Close();
-                    }
-                    catch (Exception e) {
-                        if (e.GetType() == typeof(ThreadAbortException))
-                            throw e;
-                        
-                        // Return when hitting maximum retries.
-                        if (tryCount == maxRetries) {
-                            logger.ErrorException("Error while trying to read stream data: ", e);
-                            return false;
-                        }
-                        else {
-                            // if we encountered a stream error use the timeout 
-                            // value as a pause between retries
-                            Thread.Sleep(timeout + (timeoutIncrement * tryCount));
-                            logger.DebugException("Error while trying to read stream data: ", e);
-                        }
-                        
+                    if (_debug) {
+                        logger.Debug("GetResponse: URL={0}, UserAgent={1}, CookieHeader={3}", requestUrl, userAgent, cookieHeader);
                     }
 
-                    // Close stream and response objects
-                    resultData.Close();
-                    response.Close();
+                    completed = true;
                 }
                 catch (WebException e) {
 
@@ -188,7 +160,7 @@ namespace Cornerstone.Tools {
                     }
                 }
                 finally {
-                    if (_allowUnsafeHeader)
+                    if (_allowUnsafeHeader) 
                         SetAllowUnsafeHeaderParsing(false);
                 }
             }
@@ -196,7 +168,45 @@ namespace Cornerstone.Tools {
         }
 
         public string GetString() {
-            return data;
+            // If encoding was not set manually try to detect it
+            if (encoding == null) {
+                try {
+                    // Try to get the encoding using the characterset
+                    encoding = Encoding.GetEncoding(response.CharacterSet);
+                }
+                catch (Exception e) {
+                    // If this fails default to the system's default encoding
+                    logger.DebugException("Encoding could not be determined, using default.", e);
+                    encoding = Encoding.Default;
+                }
+            }
+
+            // Debug
+            if (_debug) logger.Debug("GetString: Encoding={2}", encoding.EncodingName);
+
+            // Converts the stream to a string
+            try {
+                Stream stream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(stream, encoding, true);
+                string data = reader.ReadToEnd();
+                reader.Close();
+                stream.Close();
+                response.Close();
+
+                // return the string data
+                return data;
+            }
+            catch (Exception e) {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
+                // There was an error reading the stream
+                // todo: might have to retry
+                logger.ErrorException("Error while trying to read stream data: ", e);
+            }
+
+            // return nothing.
+            return null;
         }
 
         public XmlNodeList GetXML() {
@@ -204,6 +214,8 @@ namespace Cornerstone.Tools {
         }
 
         public XmlNodeList GetXML(string rootNode) {
+            string data = GetString();
+            
             // if there's no data return nothing
             if (String.IsNullOrEmpty(data))
                 return null;
@@ -228,6 +240,10 @@ namespace Cornerstone.Tools {
                 return null;
             }
         }
+
+        #endregion
+
+        #region Private methods
 
         //Method to change the AllowUnsafeHeaderParsing property of HttpWebRequest.
         private bool SetAllowUnsafeHeaderParsing(bool setState) {
@@ -285,5 +301,7 @@ namespace Cornerstone.Tools {
                 return false;
             }
         }
+
+        #endregion
     }
 }
