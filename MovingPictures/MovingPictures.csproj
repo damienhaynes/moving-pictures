@@ -1,4 +1,4 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -38,7 +38,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CookComputing.XmlRpcV2, Version=2.4.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -243,9 +243,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Database\MovingPicturesDBTable.cs" />
+    <Compile Include="DataProviders\InternalProvider.cs" />
+    <Compile Include="DataProviders\MovieMeterProvider.cs" />
     <Compile Include="DataProviders\DataProviderManager.cs" />
     <Compile Include="DataProviders\IMovieProvider.cs" />
     <Compile Include="DataProviders\LocalProvider.cs" />
+    <Compile Include="DataProviders\MovieMeter.cs">
+    </Compile>
     <Compile Include="DataProviders\OpenSubtitles.cs" />
     <Compile Include="DataProviders\OSDbProvider.cs">
       <SubType>Code</SubType>

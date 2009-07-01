@@ -6,10 +6,11 @@ using System.Xml;
 using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
-    class TheMovieDbProvider: IMovieProvider {
+    class TheMovieDbProvider: InternalProvider, IMovieProvider {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         
         // NOTE: To other developers creating other applications, using this code as a base
@@ -31,16 +32,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
         }
 
-        public string Version {
-            get {
-                return "Internal";
-            }
-        }
-
-        public string Author {
-            get { return "Moving Pictures Team"; }
-        }
-
         public string Description {
             get { return "Returns details, covers and backdrops from themoviedb.org."; }
         }
@@ -48,7 +39,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         public string Language {
             get { return new CultureInfo("en").DisplayName; }
         }
-        
+
         public bool ProvidesMoviesDetails {
             get { return true; }
         }
@@ -60,14 +51,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         public bool ProvidesBackdrops {
             get { return true; }
         }
-
-        public DBSourceInfo SourceInfo {
-            get {
-                if (_sourceInfo == null)
-                    _sourceInfo = DBSourceInfo.GetFromProviderObject(this);
-                return _sourceInfo;
-            }
-        } private DBSourceInfo _sourceInfo;
 
         public bool GetBackdrop(DBMovieInfo movie) {
             if (movie == null)
@@ -286,10 +269,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             int maxCovers = MovingPicturesCore.Settings.MaxCoversPerMovie;
             int maxCoversInSession = MovingPicturesCore.Settings.MaxCoversPerSession;
 
-            // if we have already hit our limit for the number of covers to load, quit
-            if (movie.AlternateCovers.Count >= maxCovers)
-                return true;
-
             // an imdb tag is required for this dataprovider. if it is not set, fail
             if (movie.ImdbID.Trim().Length != 9)
                 return false;
@@ -328,10 +307,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         // given a url, retrieves the xml result set and returns the nodelist of Item objects
         private XmlNodeList getXML(string url) {
-            WebGrabber grabber = new WebGrabber(url);
-            grabber.MaxRetries = MovingPicturesCore.Settings.MaxTimeouts;
-            grabber.Timeout = MovingPicturesCore.Settings.TimeoutLength;
-            grabber.TimeoutIncrement = MovingPicturesCore.Settings.TimeoutIncrement;
+            WebGrabber grabber = Utility.GetWebGrabberInstance(url);
             grabber.Encoding = Encoding.UTF8;
 
             if (grabber.GetResponse())

@@ -228,8 +228,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(LocalProvider));
             AddSource(typeof(ScriptableProvider), Resources.Script_IMPAwards);          
             AddSource(typeof(ScriptableProvider), Resources.Script_IMDb);
-            AddSource(typeof(TheMovieDbProvider));            
-            AddSource(typeof(ScriptableProvider), Resources.Script_MovieMeter);
+            AddSource(typeof(TheMovieDbProvider));
+            AddSource(typeof(MovieMeterProvider));
             AddSource(typeof(ScriptableProvider), Resources.Script_OFDb);
             AddSource(typeof(ScriptableProvider), Resources.Script_MovieMaze);
             AddSource(typeof(ScriptableProvider), Resources.Script_Allocine);
@@ -441,6 +441,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool GetArtwork(DBMovieInfo movie) {
+            // if we have already hit our limit for the number of covers to load, quit
+            if (movie.AlternateCovers.Count >= MovingPicturesCore.Settings.MaxCoversPerMovie)
+                return true;
+            
             List<DBSourceInfo> sources;
             lock (coverSources) sources = new List<DBSourceInfo>(coverSources);
 
