@@ -350,16 +350,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // add available filters to browser
                 remoteFilter = new RemoteNumpadFilter();
-                browser.ActiveFilters.Add(remoteFilter);
+                browser.Filters.Add(remoteFilter);
 
                 watchedFilter = new WatchedFlagFilter();
                 watchedFilter.Active = MovingPicturesCore.Settings.ShowUnwatchedOnStartup;
-                browser.ActiveFilters.Add(watchedFilter);
+                browser.Filters.Add(watchedFilter);
 
                 parentalControlsFilter = MovingPicturesCore.Settings.ParentalControlsFilter;
                 parentalControlsFilter.Active = MovingPicturesCore.Settings.ParentalControlsEnabled;
                 parentalControlsFilter.Invert = true;
-                browser.ActiveFilters.Add(parentalControlsFilter);
+                browser.Filters.Add(parentalControlsFilter);
 
                 // give the browser a delegate to the method to clear focus from all existing controls
                 browser.ClearFocusAction = new MovieBrowser.ClearFocusDelegate(ClearFocus);
@@ -618,7 +618,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             dialog.SetHeading("Moving Pictures");  // not translated because it's a proper noun
 
             int currID = 1;
-            GUIListItem watchItem = new GUIListItem(watchedFilter.Active ? Translation.ShowAllMovies : Translation.ShowOnlyUnwatchedMovies);
+            GUIListItem watchItem = new GUIListItem(watchedFilter.Active ? Translation.ShowWatchedAndUnwatchedMovies : Translation.ShowOnlyUnwatchedMovies);
             watchItem.ItemId = currID++;
             dialog.Add(watchItem);
 
@@ -627,6 +627,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 parentalControlsItem.ItemId = currID++;
                 dialog.Add(parentalControlsItem);
             }
+
+            GUIListItem filterItem = new GUIListItem(Translation.FilterBy + " ...");
+            filterItem.ItemId = currID++;
+            dialog.Add(filterItem);
 
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
             sortItem.ItemId = currID++;
@@ -644,6 +648,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (dialog.SelectedId == watchItem.ItemId) {
                 watchedFilter.Active = !watchedFilter.Active;
             }
+            else if (dialog.SelectedId == filterItem.ItemId) {
+                showFilterContext();
+            }
             else if (dialog.SelectedId == sortItem.ItemId) {
                 showSortContext();
             }
@@ -655,6 +662,69 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (dialog.SelectedId == parentalControlsItem.ItemId) {
                 toggleParentalControls();
+            }
+        }
+
+        private bool showFilterContext() {
+            return showFilterContext(MovingPicturesCore.Settings.FilterMenu.RootNodes, true);
+        }
+
+        private bool showFilterContext(ICollection<DBNode<DBMovieInfo>> nodeList, bool showClearMenuItem) {
+            if (nodeList.Count == 0) {
+                ShowMessage("No Filters", "There are no filters to display.");
+                return false;
+            }
+
+            while (true) {
+                IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+                dialog.Reset();
+                dialog.SetHeading("Moving Pictures - " + Translation.FilterBy);
+
+                Dictionary<int, DBNode<DBMovieInfo>> nodeLookup = new Dictionary<int, DBNode<DBMovieInfo>>();
+
+                // ad clear menu item as necessary
+                int currID = 1;
+                GUIListItem clearListItem = new GUIListItem(Translation.AllMovies);
+                if (showClearMenuItem) {
+                    clearListItem.ItemId = currID++;
+                    dialog.Add(clearListItem);
+                }
+
+                // build menu
+                foreach (DBNode<DBMovieInfo> currNode in nodeList) {
+                    GUIListItem newListItem = new GUIListItem(currNode.Name);
+                    newListItem.ItemId = currID++;
+                    dialog.Add(newListItem);
+
+                    nodeLookup[newListItem.ItemId] = currNode;
+                }
+
+                // display popup
+                dialog.DoModal(GUIWindowManager.ActiveWindow);
+
+                logger.Debug("SelectedID = " + dialog.SelectedId);
+
+                // handle selection
+                if (dialog.SelectedId == -1) {
+                    return false;
+                }
+                if (dialog.SelectedId == clearListItem.ItemId) {
+                    browser.FilterNode = null;
+                    return true;
+                }
+                else {
+                    // apply the filter
+                    DBNode<DBMovieInfo> selectedNode = nodeLookup[dialog.SelectedId];
+                    if (selectedNode.Children.Count == 0 && selectedNode.Filter != null) {
+                        browser.FilterNode = selectedNode;
+                        return true;
+                    }
+                    // handle sub menus if needed
+                    else {
+                        if (showFilterContext(selectedNode.Children, false))
+                            return true;
+                    }
+                }
             }
         }
 
@@ -897,6 +967,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             pinCodeDialog.MasterCode = MovingPicturesCore.Settings.ParentalContolsPassword;
             pinCodeDialog.SetHeading(Translation.PinCodeHeader);
             pinCodeDialog.SetLine(1, Translation.PinCodePrompt);
+            pinCodeDialog.InvalidPinMessage = Translation.InvalidPin;
 
             try {
                 pinCodeDialog.DoModal(GetID);
@@ -906,7 +977,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return false;
             }
 
-            return true;
+            return pinCodeDialog.IsCorrect;
         }
 
         private void deleteMovie() {

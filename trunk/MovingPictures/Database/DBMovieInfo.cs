@@ -212,7 +212,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _popularity;
 
-        [DBField(FieldName="date_added", AllowDynamicFiltering=false)]
+        [DBField(FieldName="date_added")]
         public DateTime DateAdded {
             get { return _dateAdded; }
 

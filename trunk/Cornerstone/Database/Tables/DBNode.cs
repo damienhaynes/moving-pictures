@@ -170,6 +170,8 @@ namespace Cornerstone.Database.Tables {
         /// </summary>
         /// <returns></returns>
         public HashSet<T> GetFilteredItems() {
+            // TODO: Refactor to remove bulk of logic and use GetAllFilters()
+
             HashSet<T> results = new HashSet<T>();
 
             // apply the filter for the currently selected node
@@ -188,6 +190,23 @@ namespace Cornerstone.Database.Tables {
             while (currNode != null) {
                 if (currNode.Filter != null)
                     results = currNode.Filter.Filter(results);
+                currNode = currNode.Parent;
+            }
+
+            return results;
+        }
+
+        public HashSet<IFilter<T>> GetAllFilters() {
+            HashSet<IFilter<T>> results = new HashSet<IFilter<T>>();
+
+            if (Filter != null)
+                results.Add(Filter);
+
+            // apply the filter for all parent nodes
+            DBNode<T> currNode = this.Parent;
+            while (currNode != null) {
+                if (currNode.Filter != null)
+                    results.Add(currNode.Filter);
                 currNode = currNode.Parent;
             }
 
@@ -224,7 +243,21 @@ namespace Cornerstone.Database.Tables {
                 return;
 
             updating = true;
+
+            // try using a filtering helper for dynamic node maintenance
+            if (DBManager.GetFilterHelper<T>() != null) {
+                bool success = DBManager.GetFilterHelper<T>().UpdateDynamicNode(this);
+
+                if (success) {
+                    Children.Sort();
+
+                    updating = false;
+                    OnModified();
+                    return;
+                }
+            }
             
+
             // grab list of possible values
             HashSet<string> possibleValues = DBManager.GetAllValues(BasicFilteringField, BasicFilteringRelation, GetFilteredItems());
 

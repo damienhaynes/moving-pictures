@@ -1101,6 +1101,43 @@ namespace MediaPortal.Plugins.MovingPictures {
         #region Filtering
 
         [CornerstoneSetting(
+            Name = "Filter Menu ID",
+            Description = "The menu for the popup filtering menu.",
+            Groups = "|MediaPortal GUI|Filtering|",
+            Identifier = "filter_menu_id",
+            Default = "null",
+            Hidden = true)]
+        public string FilterMenuID {
+            get { return _filterMenuID; }
+            set {
+                _filterMenuID = value;
+                OnSettingChanged("filter_menu_id");
+            }
+        }
+        private string _filterMenuID;
+
+        public DBMenu<DBMovieInfo> FilterMenu {
+            get {
+                if (_filterMenu == null) {
+                    // grab or create the menu for the filtering popup
+                    string menuID = FilterMenuID;
+                    if (menuID == "null") {
+                        _filterMenu = new DBMenu<DBMovieInfo>();
+                        _filterMenu.Name = "Filtering Menu";
+                        MovingPicturesCore.DatabaseManager.Commit(_filterMenu);
+                        FilterMenuID = _filterMenu.ID.ToString();
+                    }
+                    else {
+                        _filterMenu = MovingPicturesCore.DatabaseManager.Get<DBMenu<DBMovieInfo>>(int.Parse(menuID));
+                    }
+                }
+
+                return _filterMenu;
+            }
+        } private DBMenu<DBMovieInfo> _filterMenu = null;
+
+
+        [CornerstoneSetting(
             Name = "Category Menu ID",
             Description = "The menu for the categories functionality.",
             Groups = "|MediaPortal GUI|Filtering|",

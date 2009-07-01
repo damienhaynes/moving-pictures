@@ -18,7 +18,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // lookup for GUIListItems that have been created for DBMovieInfo objects
         private Dictionary<DBMovieInfo, GUIListItem> listItems;
+        
         private MovingPicturesSkinSettings skinSettings;
+        private FilterUpdatedDelegate<DBMovieInfo> filterUpdatedDelegate;
+
+        bool updatingFiltering = false;
 
         #region Properties
 
@@ -132,11 +136,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// <summary>
         /// All filters that are active on the movie browser.
         /// </summary>
-        public DynamicList<IFilter<DBMovieInfo>> ActiveFilters {
+        public DynamicList<IFilter<DBMovieInfo>> Filters {
             get {
                 if (activeFilters == null) {
                     activeFilters = new DynamicList<IFilter<DBMovieInfo>>();
-                    activeFilters.Changed += new ChangedEventHandler(onActiveFiltersChanged);
+                    activeFilters.Changed += new ChangedEventHandler(onFiltersChanged);
 
                     watchedFilters = new DynamicList<IFilter<DBMovieInfo>>();
 
@@ -145,7 +149,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
         private DynamicList<IFilter<DBMovieInfo>> activeFilters = null;
-        private DynamicList<IFilter<DBMovieInfo>> watchedFilters = null;
+        private List<IFilter<DBMovieInfo>> watchedFilters = null;
+
+        public DBNode<DBMovieInfo> FilterNode {
+            get { return _filterNode; }
+            set {
+                updatingFiltering = true;
+
+                if (_filterNode != null) removeFilters(_filterNode);
+                if (value != null) addFilters(value);
+
+                _filterNode = value;
+                
+                updatingFiltering = false;
+                onFiltersChanged(null, null);
+            }
+        } private DBNode<DBMovieInfo> _filterNode;
 
         public SortingFields CurrentSortField { get; set; }
         public SortingDirections CurrentSortDirection { get; set; }
@@ -187,6 +206,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
 
             listItems = new Dictionary<DBMovieInfo, GUIListItem>();
+            filterUpdatedDelegate = new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
 
             loadMovies();
             initSortingDefaults();
@@ -284,7 +304,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // trim it down to satisfy the filters.
             bool first = true;
-            foreach (IFilter<DBMovieInfo> currFilter in ActiveFilters) {
+            foreach (IFilter<DBMovieInfo> currFilter in Filters) {
                 if (first)
                     filteredMovies = currFilter.Filter(allMovies);
                 else 
@@ -372,13 +392,28 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             onContentsChanged();
         }
 
+        private void removeFilters(DBNode<DBMovieInfo> node) {
+            foreach (IFilter<DBMovieInfo> currFilter in node.GetAllFilters())
+                if (Filters.Contains(currFilter))
+                    Filters.Remove(currFilter);
+        }
+
+        private void addFilters(DBNode<DBMovieInfo> node) {
+            foreach (IFilter<DBMovieInfo> currFilter in node.GetAllFilters())
+                if (!Filters.Contains(currFilter))
+                    Filters.Add(currFilter);
+        }
+
         // When a new filter is added to or removed update our listeners and reload the facade
-        private void onActiveFiltersChanged(object sender, EventArgs e) {
+        private void onFiltersChanged(object sender, EventArgs e) {
+            if (updatingFiltering)
+                return;
+
             foreach (IFilter<DBMovieInfo> currFilter in watchedFilters)
-                currFilter.Updated -= new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
+                currFilter.Updated -= filterUpdatedDelegate;
 
             foreach (IFilter<DBMovieInfo> currFilter in activeFilters)
-                currFilter.Updated += new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
+                currFilter.Updated += filterUpdatedDelegate;
 
             watchedFilters = new DynamicList<IFilter<DBMovieInfo>>();
             watchedFilters.AddRange(activeFilters);

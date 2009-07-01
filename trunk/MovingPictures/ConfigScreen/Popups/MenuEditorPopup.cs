@@ -10,6 +10,12 @@ using MediaPortal.Plugins.MovingPictures.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     public partial class MenuEditorPopup : Form {
+
+        public bool ShowMovieNodeSettings {
+            get { return movieNodeSettingsPanel.Visible; }
+            set { movieNodeSettingsPanel.Visible = value; }
+        }
+        
         public MenuEditorPopup() {
             InitializeComponent();
 
@@ -22,7 +28,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             DBNode<DBMovieInfo> movieNode = (DBNode<DBMovieInfo>)node;
 
             nodeSettingsPanel.Node = movieNode;
-            movieNodeSettingsPanel.Node = movieNode;
+            if (movieNodeSettingsPanel.Visible)
+                movieNodeSettingsPanel.Node = movieNode;
 
         }
 

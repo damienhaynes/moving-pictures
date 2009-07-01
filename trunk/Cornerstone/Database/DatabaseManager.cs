@@ -20,6 +20,8 @@ namespace Cornerstone.Database {
         private Dictionary<Type, bool> isVerified;
         private Dictionary<Type, bool> doneFullRetrieve;
 
+        private Dictionary<Type, IDynamicFilterHelper> filterHelperLookup;
+
         private HashSet<Type> preloading;
 
         private bool transactionInProgress = false;
@@ -46,6 +48,7 @@ namespace Cornerstone.Database {
             isVerified = new Dictionary<Type, bool>();
             doneFullRetrieve = new Dictionary<Type, bool>();
             preloading = new HashSet<Type>();
+            filterHelperLookup = new Dictionary<Type, IDynamicFilterHelper>();
 
             cache = new DatabaseCache();
         }
@@ -345,6 +348,17 @@ namespace Cornerstone.Database {
             }
 
             return results;
+        }
+
+        public DynamicFilterHelper<T> GetFilterHelper<T>() where T : DatabaseTable {
+            if (filterHelperLookup.ContainsKey(typeof(T)))
+                return (DynamicFilterHelper<T>) filterHelperLookup[typeof(T)];
+
+            return null;
+        }
+
+        public void AddFilterHelper<T>(DynamicFilterHelper<T> helper) where T: DatabaseTable {
+            filterHelperLookup[typeof(T)] = helper;
         }
 
         #endregion
