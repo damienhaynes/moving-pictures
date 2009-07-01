@@ -196,7 +196,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 while (_score > 10)
                     _score /= 10;
 
-                _score = (float) Math.Round(_score);
+                _score = (float) Math.Round(_score, 1);
 
                 commitNeeded = true;
             }

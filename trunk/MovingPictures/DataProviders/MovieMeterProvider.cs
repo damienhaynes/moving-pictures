@@ -68,14 +68,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movieSignature == null)
                 return results;
 
-            if (movieSignature.ImdbId != null) {
-                DBMovieInfo movie = getMovieByImdb(movieSignature.ImdbId);
-                if (movie != null)
-                    results.Add(movie);
-            }
-            else {
+            DBMovieInfo movie = null;
+            if (movieSignature.ImdbId != null)
+                movie = getMovieByImdb(movieSignature.ImdbId);
+
+            if (movie != null)
+                results.Add(movie);
+            else
                 results = getMoviesByTitle(movieSignature.Title);
-            }
 
             return results;
         }
@@ -188,7 +188,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 movie.ImdbID = "tt" + film.imdb;
                 movie.DetailsURL = film.url;
 
-                //movie.Runtime = film.duration;
+                // Score (multiply by 2 to get the 1-10 scale)
+                if (!String.IsNullOrEmpty(film.average))
+                    movie.Score = (Convert.ToSingle(film.average, NumberFormatInfo.InvariantInfo) * 2);
+
+                // Runtime
+                int runtime = 0;
+                if (int.TryParse(film.duration, out runtime))
+                    movie.Runtime = runtime;
 
                 // Year
                 int year = 0;
