@@ -4,6 +4,8 @@ using System.Text;
 using System.IO;
 using NLog;
 using Cornerstone.GUI.Dialogs;
+using Cornerstone.Database.Tables;
+using Cornerstone.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public class DatabaseMaintenanceManager {
@@ -272,6 +274,47 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     lm.UpdateMediaInfo();
                     lm.Commit();
                 }
+            }
+        }
+
+        public static void VerifyFilterMenu() {
+            DBMenu<DBMovieInfo> menu = MovingPicturesCore.Settings.FilterMenu;
+
+            if (menu.RootNodes.Count == 0) {
+                DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
+                genreNode.DynamicNode = true;
+                genreNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "genres");
+                genreNode.Name = genreNode.BasicFilteringField.Name;
+                genreNode.DBManager = MovingPicturesCore.DatabaseManager;
+                menu.RootNodes.Add(genreNode);
+
+                DBNode<DBMovieInfo> yearNode = new DBNode<DBMovieInfo>();
+                yearNode.DynamicNode = true;
+                yearNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "year");
+                yearNode.Name = yearNode.BasicFilteringField.Name;
+                yearNode.DBManager = MovingPicturesCore.DatabaseManager; 
+                menu.RootNodes.Add(yearNode);
+
+                DBNode<DBMovieInfo> certNode = new DBNode<DBMovieInfo>();
+                certNode.DynamicNode = true;                                       
+                certNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "certification");
+                certNode.Name = certNode.BasicFilteringField.Name;
+                certNode.DBManager = MovingPicturesCore.DatabaseManager; 
+                menu.RootNodes.Add(certNode);
+
+                DBNode<DBMovieInfo> dateNode = new DBNode<DBMovieInfo>();
+                dateNode.DynamicNode = true;
+                dateNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "date_added");
+                dateNode.Name = "Date Added";
+                dateNode.DBManager = MovingPicturesCore.DatabaseManager; 
+                menu.RootNodes.Add(dateNode);
+
+                menu.Commit();
+            }
+
+            foreach (DBNode<DBMovieInfo> currNode in menu.RootNodes) {
+                currNode.UpdateDynamicNode();
+                currNode.Commit();
             }
         }
     }

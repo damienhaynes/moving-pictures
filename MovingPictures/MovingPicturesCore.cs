@@ -145,6 +145,10 @@ namespace MediaPortal.Plugins.MovingPictures {
             actionDescriptions.Add(newAction, "Initializing Data Provider Manager...");
             initActions.Add(newAction);
 
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.VerifyFilterMenu);
+            actionDescriptions.Add(newAction, "Building Filtering Menu...");
+            initActions.Add(newAction);
+
             newAction = new WorkerDelegate(DeviceManager.StartMonitor);
             actionDescriptions.Add(newAction, "Starting Device Monitor...");
             initActions.Add(newAction);
@@ -206,6 +210,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                 defaultUser.Name = "Default User";
                 defaultUser.Commit();
             }
+
+            // add all filter helpers
+            databaseManager.AddFilterHelper<DBMovieInfo>(new FilterHelperDBMovieInfo());
         }
 
         private static void initLogger() {

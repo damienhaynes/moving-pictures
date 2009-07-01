@@ -239,6 +239,7 @@
     <Compile Include="Database\DBUser.cs" />
     <Compile Include="Database\DBUserMovieSettings.cs" />
     <Compile Include="Database\DBWatchedHistory.cs" />
+    <Compile Include="Database\FilterHelperDBMovieInfo.cs" />
     <Compile Include="Database\MediaInfoWrapper.cs">
       <SubType>Code</SubType>
     </Compile>

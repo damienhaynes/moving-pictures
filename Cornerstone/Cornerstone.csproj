@@ -68,6 +68,7 @@
     <Compile Include="Database\Tables\DBNode.cs" />
     <Compile Include="Database\Tables\DBSetting.cs" />
     <Compile Include="Database\Tables\DBCriteria.cs" />
+    <Compile Include="Database\IDynamicFilterHelper.cs" />
     <Compile Include="Database\Tables\IFilter.cs" />
     <Compile Include="Database\Tables\GenericDatabaseTable.cs" />
     <Compile Include="GUI\AdvancedSettingsPane.cs">
@@ -219,12 +220,6 @@
     <Compile Include="Tools\WebGrabber.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
-      <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
-      <Name>Databases</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="GUI\AdvancedSettingsPane.resx">
       <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -300,6 +295,12 @@
     <None Include="Images\bullet_error.png" />
     <Content Include="Images\list-add.png" />
     <Content Include="Images\list-remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
+      <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
+      <Name>Databases</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

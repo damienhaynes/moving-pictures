@@ -17,7 +17,8 @@ using Cornerstone.GUI.Dialogs;
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class GUISettingsPane : UserControl {
 
-        private DBMenu<DBMovieInfo> menu;
+        private DBMenu<DBMovieInfo> categoriesMenu;
+        private DBMenu<DBMovieInfo> filtersMenu;
         
         DBSetting clickGoesToDetails;
         DBSetting dvdInsertedAction;
@@ -175,21 +176,21 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             parentalContolsButton.Enabled = parentalControlsCheckBox.Checked;
         }
 
-        private void button1_Click(object sender, EventArgs e) {
+        private void categoriesMenuButton_Click(object sender, EventArgs e) {
             MenuEditorPopup popup = new MenuEditorPopup();
             popup.MenuTree.FieldDisplaySettings.Table = typeof(DBMovieInfo);
 
-            menu = null;
+            categoriesMenu = null;
             ProgressPopup loadingPopup = new ProgressPopup(new WorkerDelegate(loadCategoriesMenu));
             loadingPopup.Owner = FindForm();
             loadingPopup.Text = "Loading Menu...";
             loadingPopup.ShowDialog();
 
-            popup.MenuTree.Menu = menu;
+            popup.MenuTree.Menu = categoriesMenu;
             popup.ShowDialog();
 
             MovingPicturesCore.DatabaseManager.BeginTransaction();
-            ProgressPopup savingPopup = new ProgressPopup(new WorkerDelegate(menu.Commit));
+            ProgressPopup savingPopup = new ProgressPopup(new WorkerDelegate(categoriesMenu.Commit));
             savingPopup.Owner = FindForm();
             savingPopup.Text = "Saving Menu...";
             savingPopup.ShowDialog();
@@ -200,13 +201,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // grab or create the menu object for categories
             string menuID = MovingPicturesCore.Settings.CategoriesMenuID;
             if (menuID == "null") {
-                menu = new DBMenu<DBMovieInfo>();
-                menu.Name = "Categories Menu";
-                MovingPicturesCore.DatabaseManager.Commit(menu);
-                MovingPicturesCore.Settings.CategoriesMenuID = menu.ID.ToString();
+                categoriesMenu = new DBMenu<DBMovieInfo>();
+                categoriesMenu.Name = "Categories Menu";
+                MovingPicturesCore.DatabaseManager.Commit(categoriesMenu);
+                MovingPicturesCore.Settings.CategoriesMenuID = categoriesMenu.ID.ToString();
             }
             else {
-                menu = MovingPicturesCore.DatabaseManager.Get<DBMenu<DBMovieInfo>>(int.Parse(menuID));
+                categoriesMenu = MovingPicturesCore.DatabaseManager.Get<DBMenu<DBMovieInfo>>(int.Parse(menuID));
             }
         }
 
@@ -256,6 +257,32 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 passwordTextBox.ForeColor = Color.Red;
             else
                 passwordTextBox.ForeColor = SystemColors.ControlText;
+        }
+
+        private void filterMenuButton_Click(object sender, EventArgs e) {
+            MenuEditorPopup popup = new MenuEditorPopup();
+            popup.MenuTree.FieldDisplaySettings.Table = typeof(DBMovieInfo);
+
+            categoriesMenu = null;
+            ProgressPopup loadingPopup = new ProgressPopup(new WorkerDelegate(loadFiltersMenu));
+            loadingPopup.Owner = FindForm();
+            loadingPopup.Text = "Loading Menu...";
+            loadingPopup.ShowDialog();
+
+            popup.MenuTree.Menu = filtersMenu;
+            popup.ShowMovieNodeSettings = false;
+            popup.ShowDialog();
+
+            MovingPicturesCore.DatabaseManager.BeginTransaction();
+            ProgressPopup savingPopup = new ProgressPopup(new WorkerDelegate(filtersMenu.Commit));
+            savingPopup.Owner = FindForm();
+            savingPopup.Text = "Saving Menu...";
+            savingPopup.ShowDialog();
+            MovingPicturesCore.DatabaseManager.EndTransaction();
+        }
+
+        private void loadFiltersMenu() {
+            filtersMenu = MovingPicturesCore.Settings.FilterMenu;
         }
     }
 }
