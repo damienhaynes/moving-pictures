@@ -153,6 +153,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     DBMovieInfo movie = new DBMovieInfo();
                     movie.Title = Utility.TitleToDisplayName(film.title);
                     movie.AlternateTitles.Add(film.alternative_title);
+                    movie.GetSourceMovieInfo(SourceInfo).Identifier = film.filmId;
                     int year = 0;
                     if (int.TryParse(film.year, out year))
                         movie.Year = year;
