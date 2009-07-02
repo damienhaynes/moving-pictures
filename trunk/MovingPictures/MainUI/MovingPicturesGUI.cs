@@ -1361,9 +1361,29 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         SetProperty(propertyStr, valueStr, forceLogging);
                     }
 
-                    // for floats we need to make sure we use english style printing or imagelist controls
-                    // will break. 
+                   
                 }
+                // for the movie score we add some special properties to give skinners more options
+                else if (currField.FieldName == "score" && tableType == typeof(DBMovieInfo)) {
+                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
+
+                    float score = (float)currField.GetValue(obj);
+                    int percentage = (int) Math.Floor((score * 10));
+                    int major = (int) Math.Floor(score);
+                    int minor = (int) Math.Floor(((score - major) * 10));
+                    int rounded = (int)(score + 0.5f);
+
+                    // debug logging for these values are enabled for now for troubleshooting purposes
+                    SetProperty(propertyStr + ".localized", score.ToString(), true);
+                    SetProperty(propertyStr + ".invariant", score.ToString(NumberFormatInfo.InvariantInfo), true);
+                    SetProperty(propertyStr + ".rounded", rounded.ToString(), true);
+                    SetProperty(propertyStr + ".percentage", percentage.ToString(), true);
+                    SetProperty(propertyStr + ".major", major.ToString(), true);
+                    SetProperty(propertyStr + ".minor", minor.ToString(), true);
+
+                } 
+                // for floats we need to make sure we use english style printing or imagelist controls
+                // will break. 
                 else if (value.GetType() == typeof(float)) {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = ((float)currField.GetValue(obj)).ToString(CultureInfo.CreateSpecificCulture("en-US"));
