@@ -1192,7 +1192,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // loop through the local media files and clear out any movie assignments
             foreach (DBLocalMedia currFile in localMedia) {
                 RemoveCommitedRelations(currFile);
-                currFile.UpdateMediaInfo();
+                if (MovingPicturesCore.Settings.AutoRetrieveMediaInfo)
+                    currFile.UpdateMediaInfo();
             }
 
             // write the file(s) to the DB

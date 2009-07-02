@@ -567,7 +567,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             // create a thumbnail for the cover
-            logger.Info("Added cover art for '" + Title + "' [" + ID + "] from " + filename + ".");
+            logger.Debug("Added cover art for '" + Title + "' [" + ID + "] from " + filename + ".");
             newCover.Dispose();
             commitNeeded = true;
             GenerateThumbnail();
@@ -609,7 +609,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         commitNeeded = true;
                     }
 
-                    logger.Info("Cover art for '" + Title + "' [" + ID + "] already exists from " + url + ".");
+                    logger.Debug("Cover art for '" + Title + "' [" + ID + "] already exists from " + url + ".");
                     GenerateThumbnail();
                     return ArtworkLoadStatus.ALREADY_LOADED;
                 }
@@ -624,13 +624,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // check resolution
             if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
-                logger.Info("Cover art for '" + Title + "' [" + ID + "] failed minimum resolution requirements: " + url);
+                logger.Debug("Cover art for '" + Title + "' [" + ID + "] failed minimum resolution requirements: " + url);
                 currImage.Dispose();
                 return ArtworkLoadStatus.FAILED_RES_REQUIREMENTS;
             }
 
             // save the artwork
-            logger.Info("Added cover art for '" + Title + "' [" + ID + "] from " + url + ".");
+            logger.Debug("Added cover art for '" + Title + "' [" + ID + "] from " + url + ".");
             currImage.Save(filename, ImageFormat.Png);
             AlternateCovers.Add(filename);
             GenerateThumbnail();
@@ -678,7 +678,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         BackdropFullPath = filename;
                         commitNeeded = true;
                     }
-                    logger.Info("Backdrop for '" + Title + "' [" + ID + "] already exists from " + url + ".");
+                    logger.Debug("Backdrop for '" + Title + "' [" + ID + "] already exists from " + url + ".");
                     return ArtworkLoadStatus.ALREADY_LOADED;
                 }
             }
@@ -694,7 +694,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // check resolution
             if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
-                logger.Info("Backdrop for '" + Title + "' [" + ID + "] failed minimum resolution requirements: " + url);
+                logger.Debug("Backdrop for '" + Title + "' [" + ID + "] failed minimum resolution requirements: " + url);
                 currImage.Dispose();
                 return ArtworkLoadStatus.FAILED_RES_REQUIREMENTS;
             }

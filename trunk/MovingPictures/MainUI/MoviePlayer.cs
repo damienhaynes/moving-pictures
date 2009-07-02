@@ -246,8 +246,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (DaemonTools.IsImageFile(extension)) {
                 playImage(filename);
                 if (!mediaToPlay.HasMediaInfo) {
-                    mediaToPlay.UpdateMediaInfo();
-                    mediaToPlay.Commit();
+                    if (MovingPicturesCore.Settings.AutoRetrieveMediaInfo) {
+                        mediaToPlay.UpdateMediaInfo();
+                        mediaToPlay.Commit();
+                    }
                 }
             }
             else

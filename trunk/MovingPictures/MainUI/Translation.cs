@@ -45,6 +45,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string PinCodeHeader = "Unlocking Restricted Content";
         public static string PinCodePrompt = "Please enter PIN code to continue:";
         public static string InvalidPin = "Invalid PIN code!";
+        public static string ParentalControlsDisabled = "Parental controls are not enabled.";
         public static string UnlockRestrictedMovies = "Unlock Restricted Movies";
         public static string CannotDeleteReadOnly = "Cannot delete a read-only movie.\nWould you like Moving Pictures to ignore this movie?";
         public static string CannotDeleteOffline = "Not able to delete {0}\n because the file is offline";

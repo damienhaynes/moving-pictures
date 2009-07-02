@@ -199,14 +199,13 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             }
 
             // return the result
-            logger.Debug("Best MatchResult for '{0}': {1}", movie.Title, result.ToString());
+            logger.Debug("{0} checked against {1}: {2}", this.baseTitle, movie.Title, result.ToString());
             return result;
         }
 
         private int matchTitle(string title) {
             string otherTitle = Utility.NormalizeTitle(title);
             int score = AdvancedStringComparer.Levenshtein(baseTitle, otherTitle);
-            logger.Debug("Compare: '{0}', With: '{1}', Result: {2}", baseTitle, otherTitle, score);
             return score;
         }
 

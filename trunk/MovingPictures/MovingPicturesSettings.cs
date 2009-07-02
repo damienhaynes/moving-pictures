@@ -179,12 +179,12 @@ namespace MediaPortal.Plugins.MovingPictures {
         private int _dataProviderRequestLimit;
 
         [CornerstoneSetting(
-            Name = "Aquire MediaInfo Details From Movies",
-            Description = "If set to true, Moving Pictures will scan files for various statistics including video file resolution and audio settings. If this option is turned off, this information will not be available to the skin, but the import process will be faster.",
+            Name = "Automatically Aquire MediaInfo Details From Movies",
+            Description = "If set to true, Moving Pictures will automatically scan files for various statistics including video file resolution and audio settings. If this option is turned off, this information will not be available to the skin unless manually retrieved by the user. This can improve the speed of the import process.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_use_mediainfo",
-            Default = false)]
-        public bool UseMediaInfo {
+            Default = true)]
+        public bool AutoRetrieveMediaInfo {
             get { return _useMediaInfo; }
             set {
                 _useMediaInfo = value;
@@ -1085,7 +1085,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The password required to access movies restricted by parental controls.",
             Groups = "|MediaPortal GUI|Parental Controls|",
             Identifier = "parental_controls_password",
-            Default = "null",
+            Default = "1111",
             Hidden = true)]
         public string ParentalContolsPassword {
             get { return _parentalContolsPassword; }

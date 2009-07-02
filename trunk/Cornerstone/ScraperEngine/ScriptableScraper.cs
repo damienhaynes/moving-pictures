@@ -166,7 +166,7 @@ namespace Cornerstone.ScraperEngine {
             if (!loadSuccessful)
                 return;
 
-            logger.Info("Loading scriptable scraper: " + name + " (" + id + ") Version " + Version);
+            logger.Debug("Parsing scriptable scraper: " + name + " (" + id + ") Version " + Version);
             loadActionNodes();
         }
 
@@ -200,7 +200,7 @@ namespace Cornerstone.ScraperEngine {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
 
-                logger.Info("Error parsing <details> node for scriptable scraper.");
+                logger.Error("Error parsing <details> node for scriptable scraper.");
                 loadSuccessful = false;
             }
 

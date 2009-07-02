@@ -41,11 +41,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             MovingPicturesConfig configScr;
 
             try {
-                configScr = new MovingPicturesConfig();
                 LoadingPopup loadingPopup = new LoadingPopup();
 
                 Thread initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
                 initThread.Start();
+                configScr = new MovingPicturesConfig();
                 loadingPopup.ShowDialog();
             }
             catch (Exception e) {

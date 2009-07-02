@@ -4,6 +4,7 @@ using System.Text;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("scripts")]
@@ -24,7 +25,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public IScriptableMovieProvider Provider {
             get {
-                if (provider == null) {
+                if (provider == null && contents != null && contents.Trim().Length != 0) {
                     Reload();
                 }
 
@@ -47,6 +48,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public override int GetHashCode() {
             return Provider.GetHashCode();
+        }
+
+        public override string ToString() {
+            try {
+                return "DBScriptInfo: " + Provider.Name + " (" + Provider.Version + ")";
+            }
+            catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
+                return base.ToString();
+            }
         }
     }
 }

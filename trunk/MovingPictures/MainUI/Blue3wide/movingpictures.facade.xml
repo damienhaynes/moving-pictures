@@ -12,8 +12,8 @@ This file should contain the facade view
         <description>Movie List</description>
         <type>listcontrol</type>
         <id>50</id>
-        <onleft>2</onleft>
-        <onright>2</onright>
+        <onleft>3</onleft>
+        <onright>3</onright>
         <posX>786</posX>
         <posY>252</posY>
         <height>490</height>
@@ -33,7 +33,7 @@ This file should contain the facade view
         <description>Filmstrip view</description>
         <type>filmstrip</type>
         <id>50</id>
-        <onup>2</onup>
+        <onup>3</onup>
         <posX>12</posX>
         <posY>512</posY>
         <width>1280</width>
@@ -69,7 +69,7 @@ This file should contain the facade view
           <description>Thumbnail Panel</description>
           <type>thumbnailpanel</type>
           <id>50</id>
-          <onleft>2</onleft>
+          <onleft>3</onleft>
           <posX>30</posX>
           <posY>245</posY>
           <unfocusedAlpha>100</unfocusedAlpha>

@@ -702,7 +702,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public static string GetMovieHashString(string filename) {
             string hash;
             try {
-                logger.Debug("Generating FileHash for: " + filename);
                 byte[] moviehash = ComputeMovieHash(filename);
                 hash = ToHexadecimal(moviehash);
             }

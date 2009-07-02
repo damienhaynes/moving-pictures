@@ -267,10 +267,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public static void UpdateMediaInfo() {
-            List<DBLocalMedia> localMedias = DBLocalMedia.GetAll();
-            foreach (DBLocalMedia lm in localMedias) {
+            if (!MovingPicturesCore.Settings.AutoRetrieveMediaInfo)
+                return;
+
+            logger.Info("Updating Media Info...");
+
+            List<DBLocalMedia> allLocalMedia = DBLocalMedia.GetAll();
+            foreach (DBLocalMedia lm in allLocalMedia) {
                 if (!lm.HasMediaInfo) {
-                    logger.Info("Updating media info for " + lm.FullPath);
                     lm.UpdateMediaInfo();
                     lm.Commit();
                 }
@@ -284,7 +288,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
                 genreNode.DynamicNode = true;
                 genreNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "genres");
-                genreNode.Name = genreNode.BasicFilteringField.Name;
+                genreNode.Name = "Genre";
                 genreNode.DBManager = MovingPicturesCore.DatabaseManager;
                 menu.RootNodes.Add(genreNode);
 

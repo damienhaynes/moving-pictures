@@ -186,5 +186,9 @@ namespace Cornerstone.Database.Tables {
 
             return null;
         }
+
+        public override string ToString() {
+            return "DBSetting: " + Name + " = \"" + Value.ToString() + "\""; 
+        }
     }
 }

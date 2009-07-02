@@ -13,7 +13,7 @@ multiple view modes.
   This set of defines are read by the plug-in and used to determine aspects of it's behavior. These
   are parameters to give the skinner a tiny bit more control over the presentation.
   -->
-  <define>#largeicons.available:true</define>      <!-- true if this skin implements the largeicons view -->
+  <define>#largeicons.available:false</define>      <!-- true if this skin implements the largeicons view -->
   <define>#largeicons.backdrop.used:true</define> <!-- true if backdrop (fanart) should be displayed in this view -->
 
   <define>#smallicons.available:true</define>      <!-- Set to true if this skin implements the smallicons view -->
@@ -156,7 +156,7 @@ multiple view modes.
     <control>
       <type>actiongroup</type>
       <description>action menu</description>
-      <defaultcontrol>2</defaultcontrol>
+      <defaultcontrol>3</defaultcontrol>
       <onexit>50</onexit>
       <dimColor>00ffffff</dimColor>
       <control>
@@ -186,32 +186,37 @@ multiple view modes.
           <description>Toggle View</description>
           <type>button</type>
           <id>2</id>
-          <label>Toggle View</label>
+          <label>Cycle View</label>
           <onleft>50</onleft>
           <onup>66610</onup>
+          <visible>false</visible>
         </control>
         <control>
-          <description>Switch View</description>
+          <description>Change View ...</description>
           <type>button</type>
           <id>3</id>
-          <label>Switch View</label>
+          <label>Change View ...</label>
           <onleft>50</onleft>
-        </control>
-        <!--<control>
-          <description>Empty button</description>
-          <type>button</type>
-          <id>0</id>
-          <label>-</label>
-          <visible>false</visible>
         </control>
         <control>
-          <description>Filters Menu</description>
+          <description>Filter By ...</description>
           <type>button</type>
           <id>4</id>
-          <label>Filters</label>
+          <label>Filter By ...</label>
           <onleft>50</onleft>
-          <visible>false</visible>
+          <ondown>14</ondown>
+          <visible>true</visible>
         </control>
+        <control>
+          <description>Sort By ...</description>
+          <type>button</type>
+          <id>14</id>
+          <label>Sort By ...</label>
+          <onleft>50</onleft>
+          <ondown>15</ondown>
+          <visible>true</visible>
+        </control>
+        <!--
         <control>
           <description>Settings Menu</description>
           <type>button</type>
@@ -221,20 +226,27 @@ multiple view modes.
           <visible>false</visible>
         </control>-->
         <control>
+          <description>Parental Controls Toggle</description>
+          <type>button</type>
+          <ondown>66610</ondown>
+          <id>15</id>
+          <label>Parental Controls</label>
+          <onleft>50</onleft>
+        </control>
+        <control>
+          <description>Empty button</description>
+          <type>button</type>
+          <id>0</id>
+          <label>-</label>
+          <visible>false</visible>
+        </control>
+        <control>
           <description>Video Settings</description>
           <type>button</type>
           <id>66610</id>
           <label>Video Settings</label>
           <hyperlink>703</hyperlink>
-          <ondown>15</ondown>
-          <onleft>50</onleft>
-        </control>
-        <control>
-          <description>Parental Controls Toggle</description>
-          <type>button</type>
-          <ondown>2</ondown>
-          <id>15</id>
-          <label>Parental Controls</label>
+          <ondown>3</ondown>
           <onleft>50</onleft>
         </control>
       </control>
@@ -840,7 +852,7 @@ multiple view modes.
     <control>
       <description>Parental Controls Lock Indicator</description>
       <type>image</type>
-      <id>16</id>
+      <id>17</id>
       <posX>3</posX>
       <posY>3</posY>
       <width>48</width>

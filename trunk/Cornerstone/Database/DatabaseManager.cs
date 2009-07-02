@@ -101,7 +101,6 @@ namespace Cornerstone.Database {
                     if (criteria != null)
                         query += criteria.GetWhereClause();
 
-                    logger.Debug(query);
                     SQLiteResultSet resultSet = dbClient.Execute(query);
 
                     // store each one
@@ -453,7 +452,7 @@ namespace Cornerstone.Database {
 
                             dbClient.Execute("alter table " + tableAttr.TableName + " add column " + currField.FieldName + " " +
                                              currField.DBType.ToString() + " default " + defaultValue);
-                            logger.Info("Added " + tableAttr.TableName + "." + currField.FieldName + " column.");
+                            // logger.Debug("Added " + tableAttr.TableName + "." + currField.FieldName + " column.");
                         }
                     }
 
@@ -478,7 +477,6 @@ namespace Cornerstone.Database {
                             currRelation.PrimaryColumnName + " INTEGER, " +
                             currRelation.SecondaryColumnName + " INTEGER)";
 
-                        logger.Debug(createQuery);
                         resultSet = dbClient.Execute(createQuery);
 
                         // create index1
@@ -489,7 +487,7 @@ namespace Cornerstone.Database {
                         resultSet = dbClient.Execute("create index " + currRelation.TableName + "__index2 on " +
                             currRelation.TableName + " (" + currRelation.SecondaryColumnName + ")");
 
-                        logger.Info("Created " + currRelation.TableName + " sub-table.");
+                        logger.Debug("Created " + currRelation.TableName + " sub-table.");
                     }
                 }
                 catch (SQLiteException e) {
@@ -623,7 +621,7 @@ namespace Cornerstone.Database {
                                " (" + queryFieldList + ") values (" + queryValueList + ")";
 
                 logger.Debug("INSERTING: " + dbObject.ToString());
-                logger.Debug(query);
+                
                 lock (dbClient) {
                     dbClient.Execute(query);
                     dbObject.ID = dbClient.LastInsertID();
@@ -674,7 +672,7 @@ namespace Cornerstone.Database {
 
                 // execute the query
                 logger.Debug("UPDATING: " + dbObject.ToString());
-                logger.Debug(query);
+                
                 lock (dbClient) dbClient.Execute(query);
                 dbObject.DBManager = this;
 
@@ -711,6 +709,7 @@ namespace Cornerstone.Database {
             // insert all relations to the database
             foreach (object currObj in (IList)currRelation.GetRelationList(dbObject)) {
                 DatabaseTable currDBObj = (DatabaseTable)currObj;
+                Commit(currDBObj);
                 string insertQuery = "insert into " + currRelation.TableName + "(" +
                     currRelation.PrimaryColumnName + ", " +
                     currRelation.SecondaryColumnName + ") values (" +
@@ -733,7 +732,7 @@ namespace Cornerstone.Database {
                 return;
 
             string deleteQuery = "delete from " + relation.TableName + " where " + relation.PrimaryColumnName + "=" + dbObject.ID;
-            logger.Debug(deleteQuery);
+            
             lock (dbClient) dbClient.Execute(deleteQuery);
         }
 
