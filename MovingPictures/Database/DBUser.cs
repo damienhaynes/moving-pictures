@@ -36,5 +36,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #endregion
 
+        public override string ToString() {
+            return "DBUser: " + Name;
+        }
     }
 }

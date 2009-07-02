@@ -6,6 +6,7 @@ using MediaPortal.Plugins.MovingPictures.DataProviders;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using NLog;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("source_info")]
@@ -139,6 +140,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 currScript.Delete();
 
             base.Delete();
+        }
+
+        public override string ToString() {
+            try {
+                return "DBSourceInfo: " + SelectedScript.Provider.Name;
+            }
+            catch (Exception e) {
+                if (e is ThreadAbortException)
+                    throw e;
+
+                return base.ToString();
+            }
         }
 
         #region Static Methods

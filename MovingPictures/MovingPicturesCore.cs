@@ -31,35 +31,45 @@ namespace MediaPortal.Plugins.MovingPictures {
         private static float loadingTotal;
         private static string loadingProgressDescription;
 
+        private static object importerLock = new Object();
+        private static object dbLock = new Object();
+        private static object settingsLock = new Object();
+
         #region Properties & Events
 
         // The MovieImporter object that should be used by all components of the plugin
         public static MovieImporter Importer {
             get {
-                if (importer == null)
-                    importer = new MovieImporter();
+                lock (importerLock) {
+                    if (importer == null)
+                        importer = new MovieImporter();
 
-                return importer;
+                    return importer;
+                }
             }
         } private static MovieImporter importer;
 
         // The DatabaseManager that should be used by all components of the plugin.       
         public static DatabaseManager DatabaseManager {
             get {
-                if (databaseManager == null)
-                    initDB();
+                lock (dbLock) {
+                    if (databaseManager == null)
+                        initDB();
 
-                return databaseManager;
+                    return databaseManager;
+                }
             }
         }  private static DatabaseManager databaseManager;
 
         // The SettingsManager that should be used by all components of the plugin.
         public static MovingPicturesSettings Settings {
             get {
-                if (_settings == null)
-                    _settings = new MovingPicturesSettings(DatabaseManager);
+                lock (settingsLock) {
+                    if (_settings == null)
+                        _settings = new MovingPicturesSettings(DatabaseManager);
 
-                return _settings;
+                    return _settings;
+                }
             }
         } private static MovingPicturesSettings _settings = null;
         
@@ -146,7 +156,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.VerifyFilterMenu);
-            actionDescriptions.Add(newAction, "Building Filtering Menu...");
+            actionDescriptions.Add(newAction, "Updating Filtering Menu...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DeviceManager.StartMonitor);

@@ -418,17 +418,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public UpdateMediaInfoResults UpdateMediaInfo() {
             try {
+                logger.Debug("Updating media info for " + FullPath);
+
                 if (!this.IsAvailable) return UpdateMediaInfoResults.MediaNotAvailable;
 
                 VideoDiscFormat mountedVideoDiscFormat = VideoDiscFormat.Unknown;
-                if (!MovingPicturesCore.Settings.UseMediaInfo)
-                    return UpdateMediaInfoResults.Success;
 
                 string mediaPath = this.FullPath;
 
                 if (this.IsDVD || this.IsHDDVD || this.IsBluray) {
                     mediaPath = Utility.GetMainFeatureStreamFromVideoDisc(mediaPath, this.VideoDiscFormat);
-                    logger.Debug("Updating mediainfo for a {0} video disc.  mediapath={1}", this.VideoDiscFormat.ToString(), mediaPath);
+                    // logger.Debug("Updating mediainfo for a {0} video disc.  mediapath={1}", this.VideoDiscFormat.ToString(), mediaPath);
                 }
                 else if (this.IsImageFile && DaemonTools.IsMounted(mediaPath)) {
                     string videoDiscPath = Utility.GetVideoDiscPath(DaemonTools.GetVirtualDrive());

@@ -136,7 +136,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             foreach (FileInfo currFile in backdropFolder.GetFiles()) {
                 if (oldBackdropRegex.IsMatch(currFile.Name)) {
                     found &= movie.AddBackdropFromFile(currFile.FullName);
-                    logger.Info("Added old backdrop found in cover folder: " + currFile.Name);
                 }
             }
 
@@ -211,9 +210,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 if (oldCoverRegex.IsMatch(currFile.Name)) {
                     bool success = movie.AddCoverFromFile(currFile.FullName);
                     found = found || success;
-                    
-                    if (success)
-                        logger.Info("Added old cover found in cover folder: " + currFile.Name);
                 }
             }
 

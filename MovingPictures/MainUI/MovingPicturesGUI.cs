@@ -111,6 +111,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         [SkinControl(16)]
         protected GUIImage parentalControlsIndicator = null;
 
+        [SkinControl(17)]
+        protected GUIImage filteringIndicator = null;
+
+
         #endregion
 
         public MovingPicturesGUI() {
@@ -371,6 +375,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
                 SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
+
+                SetProperty("#MovingPictures.Settings.HomeScreenName", MovingPicturesCore.Settings.HomeScreenName);
+
+                if (filteringIndicator != null) filteringIndicator.Visible = false;
+                PublishFilterDetails();
+
             }
 
             if (recentInsertedDiskSerials == null) {              
@@ -430,8 +440,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 GetUserRating(awaitingUserRatingMovie);
                 awaitingUserRatingMovie = null;
             }
-
-            SetProperty("#MovingPictures.Settings.HomeScreenName", MovingPicturesCore.Settings.HomeScreenName);
         }
 
         protected override void OnPageDestroy(int new_windowId) {
@@ -494,6 +502,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // a click on the view menu button
                 case 3:
                     showChangeViewContext();
+                    break;
+
+                // a click on the filter button
+                case 4:
+                    showFilterContext();
                     break;
 
                 // a click on the play button
@@ -702,14 +715,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // display popup
                 dialog.DoModal(GUIWindowManager.ActiveWindow);
 
-                logger.Debug("SelectedID = " + dialog.SelectedId);
-
                 // handle selection
                 if (dialog.SelectedId == -1) {
                     return false;
                 }
                 if (dialog.SelectedId == clearListItem.ItemId) {
                     browser.FilterNode = null;
+                    PublishFilterDetails();
                     return true;
                 }
                 else {
@@ -717,6 +729,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     DBNode<DBMovieInfo> selectedNode = nodeLookup[dialog.SelectedId];
                     if (selectedNode.Children.Count == 0 && selectedNode.Filter != null) {
                         browser.FilterNode = selectedNode;
+                        PublishFilterDetails();
+
                         return true;
                     }
                     // handle sub menus if needed
@@ -957,6 +971,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 		}
 
         private void toggleParentalControls() {
+            if (!MovingPicturesCore.Settings.ParentalControlsEnabled) {
+                ShowMessage("Moving Pictures", Translation.ParentalControlsDisabled);
+                return;
+            }
+
             if (!parentalControlsFilter.Active || ValidatePin())
                 parentalControlsFilter.Active = !parentalControlsFilter.Active;
         }
@@ -1239,10 +1258,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (browser.SelectedMovie == null)
                 return;
 
+            // publish details on selected movie
             PublishDetails(browser.SelectedMovie, "SelectedMovie");
             PublishDetails(browser.SelectedMovie.ActiveUserSettings, "UserMovieSettings");
             PublishDetails(browser.SelectedMovie.LocalMedia[0], "LocalMedia", true);
 
+            // publish easily usable subtitles info
+            SetProperty("#MovingPictures.LocalMedia.Subtitles", browser.SelectedMovie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles", true);
+
+            // calculate and publish the selected index in the facade
             int selectedIndex = browser.Facade.SelectedListItemIndex;
             for (int i = 0; i < browser.Facade.SelectedListItemIndex; i++) {
                 if (browser.facade.ListView.ListItems[i].TVTag == null)
@@ -1251,7 +1275,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             selectedIndex++; // make this one-based
             SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
 
-            SetProperty("#MovingPictures.LocalMedia.Subtitles", browser.SelectedMovie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles", true);
 
             if (selectedMovieWatchedIndicator != null)
                 if (browser.SelectedMovie.ActiveUserSettings.WatchedCount > 0)
@@ -1444,6 +1467,29 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             propertyStr = "#MovingPictures.general.filteredmoviecount";
             valueStr = browser.FilteredMovies.Count.ToString();
             SetProperty(propertyStr, valueStr);
+        }
+
+        private void PublishFilterDetails() {
+            logger.Debug("updateing filter. properties");
+            if (browser.FilterNode == null) {
+                if (filteringIndicator != null) filteringIndicator.Visible = false;
+                SetProperty("#MovingPictures.Filter.Combined", " ");
+                SetProperty("#MovingPictures.Filter.Name", " ");
+                SetProperty("#MovingPictures.Filter.Category", " ");
+            }
+            else if (browser.FilterNode.Parent == null) {
+                if (filteringIndicator != null) filteringIndicator.Visible = true;
+                SetProperty("#MovingPictures.Filter.Combined", browser.FilterNode.Name);
+                SetProperty("#MovingPictures.Filter.Name", browser.FilterNode.Name);
+                SetProperty("#MovingPictures.Filter.Category", " ");
+            }
+            else {
+                if (filteringIndicator != null) filteringIndicator.Visible = true;
+                SetProperty("#MovingPictures.Filter.Combined", browser.FilterNode.Parent.Name + ": " + browser.FilterNode.Name);
+                SetProperty("#MovingPictures.Filter.Name", browser.FilterNode.Name);
+                SetProperty("#MovingPictures.Filter.Category", browser.FilterNode.Parent.Name);
+            }
+
         }
 
         #endregion

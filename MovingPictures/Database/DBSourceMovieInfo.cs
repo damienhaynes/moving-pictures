@@ -94,5 +94,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         #endregion
+
+        public override string ToString() {
+            return "DBSourceMovieInfo: " + Movie.Title + " (" + identifier + ") from " + Source.Provider.Name;
+        }
+
     }
 }
