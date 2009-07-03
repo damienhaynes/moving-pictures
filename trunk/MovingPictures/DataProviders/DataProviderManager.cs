@@ -11,6 +11,7 @@ using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using System.Collections.ObjectModel;
 using NLog;
 using System.IO;
+using Cornerstone.Tools.Translate;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class DataProviderManager {
@@ -435,6 +436,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 else {
                     // stop update
                     break;
+                }
+
+                if (MovingPicturesCore.Settings.UseTranslator) {
+                    movie.Translate();
                 }
 
             }
