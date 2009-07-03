@@ -4,6 +4,7 @@ using System.Text;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Database;
+using Cornerstone.Tools.Translate;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesSettings: SettingsManager {
@@ -697,7 +698,67 @@ namespace MediaPortal.Plugins.MovingPictures {
         private int _timeoutIncrement;
 
         #endregion
-        
+
+        #region Translator
+
+        [CornerstoneSetting(
+            Name = "Use Translator Service",
+            Description = "Service that will translate scraped movie information to a specified language. This service translates the following movie detail fields: genres, tagline, summary.",
+            Groups = "|Movie Importer|Translator|",
+            Identifier = "use_translator",
+            Default = false)]
+        public bool UseTranslator
+        {
+            get { return _useTranslator; }
+            set
+            {
+                _useTranslator = value;
+                OnSettingChanged("use_translator");
+            }
+        }
+        private bool _useTranslator;
+
+        [CornerstoneSetting(
+            Name = "Translation Language",
+            Description = "The language that the translator service will attempt to tranlate scraped movie details into.",
+            Groups = "|Movie Importer|Translator|",
+            Identifier = "translate_to",
+            Default = "English")]
+        public string TranslationLanguageStr
+        {
+            get { return _translateTo; }
+            set
+            {
+                _translateTo = value;
+                OnSettingChanged("use_translator");
+            }
+        }
+        private string _translateTo;
+
+        public TranslatorLanguage TranslationLanguage {
+            get {
+                if (_translationLanguage == null) {
+                    foreach (TranslatorLanguage currLang in LanguageUtility.TranslatableCollection) {
+                        if (LanguageUtility.ToString(currLang).ToLower() == TranslationLanguageStr.ToLower()) {
+                            _translationLanguage = currLang;
+                            break;
+                        }
+                    }
+                    
+                    if (_translationLanguage == null) 
+                        _translationLanguage = TranslatorLanguage.English;                   
+                }
+
+                return (TranslatorLanguage) _translationLanguage;
+            }
+
+            set {
+                TranslationLanguageStr = LanguageUtility.ToString(value);
+            }
+        } private TranslatorLanguage? _translationLanguage = null;
+
+        #endregion
+
         #endregion
 
         #region GUI Settings

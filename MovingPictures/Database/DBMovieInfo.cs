@@ -15,6 +15,7 @@ using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Text.RegularExpressions;
+using Cornerstone.Tools.Translate;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public enum ArtworkLoadStatus {
@@ -897,6 +898,22 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     }
                 }
             }
+        }
+
+        public void Translate() {
+            Translate(MovingPicturesCore.Settings.TranslationLanguage);
+        }
+
+        public void Translate(TranslatorLanguage language) {
+            Translator tr = new Translator();
+            tr.ToLanguage = language;
+
+            Summary = tr.Translate(Summary);
+            Tagline = tr.Translate(Tagline);
+
+            string tmp = tr.Translate(Genres.ToString());
+            Genres.Clear();
+            Genres.AddRange(tmp.Split('|'));
         }
     }
 }
