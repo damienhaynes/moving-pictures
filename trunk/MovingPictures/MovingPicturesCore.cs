@@ -16,6 +16,8 @@ using MediaPortal.Plugins.MovingPictures.Properties;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.Database.Tables;
 using Cornerstone.GUI.Dialogs;
+using Cornerstone.Tools;
+using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesCore {
@@ -34,6 +36,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private static object importerLock = new Object();
         private static object dbLock = new Object();
         private static object settingsLock = new Object();
+        private static object processLock = new Object();
 
         #region Properties & Events
 
@@ -41,25 +44,25 @@ namespace MediaPortal.Plugins.MovingPictures {
         public static MovieImporter Importer {
             get {
                 lock (importerLock) {
-                    if (importer == null)
-                        importer = new MovieImporter();
+                    if (_importer == null)
+                        _importer = new MovieImporter();
 
-                    return importer;
+                    return _importer;
                 }
             }
-        } private static MovieImporter importer;
+        } private static MovieImporter _importer;
 
         // The DatabaseManager that should be used by all components of the plugin.       
         public static DatabaseManager DatabaseManager {
             get {
                 lock (dbLock) {
-                    if (databaseManager == null)
+                    if (_databaseManager == null)
                         initDB();
 
-                    return databaseManager;
+                    return _databaseManager;
                 }
             }
-        }  private static DatabaseManager databaseManager;
+        }  private static DatabaseManager _databaseManager;
 
         // The SettingsManager that should be used by all components of the plugin.
         public static MovingPicturesSettings Settings {
@@ -78,6 +81,17 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return DataProviderManager.GetInstance();
             }
         }
+
+        public static BackgroundProcessManager ProcessManager {
+            get {
+                lock (processLock) {
+                    if (_processManager == null)
+                        _processManager = new BackgroundProcessManager();
+
+                    return _processManager;
+                }
+            }
+        } private static BackgroundProcessManager _processManager = null;
 
         // Settings from Media Portal
         // Instead of calling this line whenever we need some MP setting we only define it once
@@ -116,15 +130,11 @@ namespace MediaPortal.Plugins.MovingPictures {
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidFiles);
-            actionDescriptions.Add(newAction, "Checking for deleted movies...");
+            actionDescriptions.Add(newAction, "Removing invalid file entries...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidMovies);
             actionDescriptions.Add(newAction, "Removing invalid movie entries...");
-            initActions.Add(newAction);
-
-            newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveOrphanArtwork);
-            actionDescriptions.Add(newAction, "Removing missing artwork...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateImportPaths);
@@ -141,10 +151,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateDateAddedFields);
             actionDescriptions.Add(newAction, "Updating sorting metadata...");
-            initActions.Add(newAction);
-
-            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateMediaInfo);
-            actionDescriptions.Add(newAction, "Updating media info...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(checkVersionInfo);
@@ -183,6 +189,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             if (InitializeProgress != null) InitializeProgress("Done!", 100);
 
+            launchBackgroundTasks();
         }
 
         static void DatabaseMaintenanceManager_MaintenanceProgress(string actionName, int percentDone) {
@@ -192,11 +199,13 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public static void Shutdown() {
             DeviceManager.StopMonitor();
-            importer.Stop();
+            _importer.Stop();
+            _processManager.CancelAllProcesses();
 
-            importer = null;
+            _processManager = null;
+            _importer = null;
             _settings = null;
-            databaseManager = null;
+            _databaseManager = null;
 
             logger.Info("Plugin Closed");
         }
@@ -207,11 +216,11 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         // Initializes the database connection to the Movies Plugin database
         private static void initDB() {
-            if (databaseManager != null)
+            if (_databaseManager != null)
                 return;
 
             string fullDBFileName = Config.GetFile(Config.Dir.Database, dbFileName);
-            databaseManager = new DatabaseManager(fullDBFileName);
+            _databaseManager = new DatabaseManager(fullDBFileName);
 
             // check that we at least have a default user
             List<DBUser> users = DBUser.GetAll();
@@ -222,7 +231,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             // add all filter helpers
-            databaseManager.AddFilterHelper<DBMovieInfo>(new FilterHelperDBMovieInfo());
+            _databaseManager.AddFilterHelper<DBMovieInfo>(new FilterHelperDBMovieInfo());
         }
 
         private static void initLogger() {
@@ -308,6 +317,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             // create the backdrop thumbs folder if it doesn't already exist
             if (!Directory.Exists(Settings.BackdropThumbsFolder))
                 Directory.CreateDirectory(Settings.BackdropThumbsFolder);
+        }
+
+        private static void launchBackgroundTasks() {
+            logger.Info("Launching Background Processes...");
+            ProcessManager.StartProcess(new MediaInfoUpdateProcess());
+            ProcessManager.StartProcess(new UpdateArtworkProcess());
+            ProcessManager.StartProcess(new FileSyncProcess());
         }
 
         private static void checkVersionInfo() {

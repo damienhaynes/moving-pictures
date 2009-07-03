@@ -249,6 +249,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                         // Create the proxy with the user agent and set the
                         // keep alive property to false
                         try {
+                            logger.Debug("Attempting to create proxy...");
                             _proxy = XmlRpcProxyGen.Create<IMovieMeter>();
                             _proxy.KeepAlive = false;
                             _proxy.UserAgent = _userAgent;

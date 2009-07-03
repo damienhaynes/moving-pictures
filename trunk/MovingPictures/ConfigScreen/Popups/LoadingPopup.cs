@@ -15,12 +15,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         public LoadingPopup() {
             InitializeComponent();
             splashPane1.ShowProgressComponents = true;
+            MovingPicturesCore.InitializeProgress += new ProgressDelegate(MovingPicturesCore_InitializeProgress);
+
         }
 
         private void LoadingPopup_Load(object sender, EventArgs e) {
             centerDialog();
 
-            MovingPicturesCore.InitializeProgress += new ProgressDelegate(MovingPicturesCore_InitializeProgress);
             //Thread workThread = new Thread(new ThreadStart(worker));
             //workThread.Start();
         }
@@ -30,7 +31,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             splashPane1.Progress = percentDone;
 
             if (percentDone == 100) {
-                Thread.Sleep(200);
+                Thread.Sleep(500);
                 CloseThreadSafe();
             }
         }
