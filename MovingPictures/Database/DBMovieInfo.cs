@@ -884,22 +884,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public void PopulateSortBy() {
             // remove all non-word characters and replace them with spaces
-            SortBy = Regex.Replace(_title, @"[^\w]", " ", RegexOptions.IgnoreCase).ToLower().Trim();
+            SortBy = Regex.Replace(_title, @"[^\w\s]", "", RegexOptions.IgnoreCase).ToLower().Trim();
 
             // loop through and try to remove a preposition
             if (MovingPicturesCore.Settings.RemoveTitleArticles) {
                 string[] prepositions = MovingPicturesCore.Settings.ArticlesForRemoval.Split('|');
                 foreach (string currWord in prepositions) {
-                    Regex rx = new Regex(@"^" + currWord + " ", RegexOptions.IgnoreCase);
-                    if (rx.Match(_sortBy).Success) {
-                        SortBy = rx.Replace(_sortBy, "");
-                        break;
+                    string word = currWord + " ";
+                    if (_sortBy.ToLower().IndexOf(word) == 0) {
+                        SortBy = _sortBy.Substring(word.Length) + " " + _sortBy.Substring(0, currWord.Length);
+                        return;
                     }
                 }
             }
-
-            // Finally trim multiple spaces
-            SortBy = Utility.TrimSpaces(_sortBy);
         }
     }
 }
