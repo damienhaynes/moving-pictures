@@ -52,11 +52,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBField(AllowDynamicFiltering=false)]
         public string Title {
             get { return _title; }
-
-            set {
+            set { 
                 _title = value;
                 PopulateSortBy();
-
                 commitNeeded = true;
             }
         } private string _title;
@@ -885,21 +883,23 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public void PopulateSortBy() {
-            // remove all punctuation and make lowercase
-            SortBy = Regex.Replace(_title, "[\\~`!@#$%^&*\\(\\)_\\+-={}|\\[\\]\\\\:\";'<>?,./]", "", RegexOptions.IgnoreCase).ToLower();
-
+            // remove all non-word characters and replace them with spaces
+            SortBy = Regex.Replace(_title, @"[^\w]", " ", RegexOptions.IgnoreCase).ToLower().Trim();
 
             // loop through and try to remove a preposition
             if (MovingPicturesCore.Settings.RemoveTitleArticles) {
                 string[] prepositions = MovingPicturesCore.Settings.ArticlesForRemoval.Split('|');
                 foreach (string currWord in prepositions) {
-                    string word = currWord + " ";
-                    if (_sortBy.ToLower().IndexOf(word) == 0) {
-                        SortBy = _sortBy.Substring(word.Length) + " " + _sortBy.Substring(0, currWord.Length);
-                        return;
+                    Regex rx = new Regex(@"^" + currWord + " ", RegexOptions.IgnoreCase);
+                    if (rx.Match(_sortBy).Success) {
+                        SortBy = rx.Replace(_sortBy, "");
+                        break;
                     }
                 }
             }
+
+            // Finally trim multiple spaces
+            SortBy = Utility.TrimSpaces(_sortBy);
         }
     }
 }
