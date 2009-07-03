@@ -676,19 +676,69 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void updateMediaInfoWorker(ProgressDelegate progress) {
             int count = 0;
+            bool mount = false;
+            bool askMount = false;
+
+            // if we are processing a batch ask about mounting images to get the mediainfo
+            if (processingMovies.Count > 1) {
+                askMount = true; // flag that we asked about mounting
+                DialogResult result = MessageBox.Show("You are about to refresh MediaInfo for the selected movies. \n" +
+                    "Do you want movies with disk images to be mounted for this information? \n" +
+                    "Mounting disk images will make the update take a while longer. However \n" +                
+                    "without mounting the MediaInfo will not be available untill playback.\n",
+                    "Mount disk images?", MessageBoxButtons.YesNoCancel);
+
+                if (result == DialogResult.Yes) mount = true;
+                else if (result == DialogResult.Cancel) return;
+            }
+
             foreach (DBMovieInfo currMovie in processingMovies) {
                 foreach (DBLocalMedia localMedia in currMovie.LocalMedia) {
                     count++;
-                    progress("", (int)((count / (processingMovies.Count + 1.0))*100));
 
-                    UpdateMediaInfoResults result = localMedia.UpdateMediaInfo();
-                    if (result == UpdateMediaInfoResults.MediaNotAvailable) {
-                        MessageBox.Show("MediaInfo could not be updated for " + currMovie.Title + " because the media is not available. Please insert the media and try again.");
-                        break;
+                    // if we are processing just one movie and we encounter a disk image ask (only once) if we should mount
+                    // all disk images contained in this movie
+                    if (processingMovies.Count == 1 && localMedia.IsImageFile && !askMount) {
+                        askMount = true; // flag that we asked about mounting
+                        DialogResult result = MessageBox.Show("You are about to refresh MediaInfo for the selected movie. \n" +
+                            "This movie contains at least one disk image, do you want to mount it for this information? \n" +
+                            "Mounting disk images will make the update take some more time. However \n" +
+                            "without mounting the MediaInfo will not be available untill playback.\n",
+                            "Mount disk images?", MessageBoxButtons.YesNo);
+
+                        if (result == DialogResult.Yes) mount = true;
                     }
-                    else if (result == UpdateMediaInfoResults.ImageFileNotMounted) {
-                        MessageBox.Show("MediaInfo for " + currMovie.Title + " can only be updated during playback because the media is a disk image.");
-                        break;
+                    
+                    progress("", (int)((count / (processingMovies.Count + 1.0))*100));
+                    
+                    UpdateMediaInfoResults updateResult = localMedia.UpdateMediaInfo(mount);
+
+                    // if the media is not available, ask the user to retry/ignore (or abort the batch)
+                    while (updateResult == UpdateMediaInfoResults.MediaNotAvailable) {
+                        DialogResult retry = MessageBox.Show("MediaInfo could not be updated for " + currMovie.Title + " because the media is not available. Please insert the media and try again.", "Retry?", MessageBoxButtons.AbortRetryIgnore);
+                        if (retry == DialogResult.Ignore) {
+                            break;
+                        }
+                        else if (retry == DialogResult.Abort) {
+                            return;
+                        }
+                        else {
+                            updateResult = localMedia.UpdateMediaInfo(mount);
+                        }
+                    }
+
+                    // if we are mounting images but the mounting failed, ask the user to retry/ignore (or abort the batch)
+                    while (updateResult == UpdateMediaInfoResults.ImageFileNotMounted && mount) {
+                        DialogResult retry = MessageBox.Show("MediaInfo could not be updated for " + currMovie.Title + " because mounting failed.", "Retry image mount?", MessageBoxButtons.AbortRetryIgnore);
+                        if (retry == DialogResult.Ignore) {
+                            break;
+                        }
+                        else if (retry == DialogResult.Abort) {
+                            return;
+                        }
+                        else {
+                            updateResult = localMedia.UpdateMediaInfo(mount);
+                        }
                     }
                 }
             }

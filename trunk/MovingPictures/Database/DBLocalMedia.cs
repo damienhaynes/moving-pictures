@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
@@ -389,8 +390,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #region Public methods
 
-
-
         public bool UpdateDiskProperties() {
             // This will overwrite/update the label and serial field with the current 
             // disk information available from it's import path
@@ -416,49 +415,64 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
+        /// <summary>
+        /// Updates the MediaInfo fields using the fileinfo (does not mount disk image)
+        /// </summary>
+        /// <returns></returns>
         public UpdateMediaInfoResults UpdateMediaInfo() {
-            try {
-                logger.Debug("Updating media info for " + FullPath);
+            return UpdateMediaInfo(false);
+        }
 
-                if (!this.IsAvailable) return UpdateMediaInfoResults.MediaNotAvailable;
-
-                VideoDiscFormat mountedVideoDiscFormat = VideoDiscFormat.Unknown;
-
-                string mediaPath = this.FullPath;
-
-                if (this.IsDVD || this.IsHDDVD || this.IsBluray) {
-                    mediaPath = Utility.GetMainFeatureStreamFromVideoDisc(mediaPath, this.VideoDiscFormat);
-                    // logger.Debug("Updating mediainfo for a {0} video disc.  mediapath={1}", this.VideoDiscFormat.ToString(), mediaPath);
-                }
-                else if (this.IsImageFile && DaemonTools.IsMounted(mediaPath)) {
-                    string videoDiscPath = Utility.GetVideoDiscPath(DaemonTools.GetVirtualDrive());
-                    mountedVideoDiscFormat = Utility.GetVideoDiscFormat(videoDiscPath);
-                    mediaPath = Utility.GetMainFeatureStreamFromVideoDisc(videoDiscPath, mountedVideoDiscFormat);
-                }
-                else if (this.IsImageFile) {
-                    // if it's an image file and it's not mounted
-                    // we can't get the media info
+        /// <summary>
+        /// Updates the MediaInfo fields using the fileinfo (can mount disk image if needed)
+        /// </summary>
+        /// <param name="mountImage">If true automounts disk images to grab MediaInfo</param>
+        /// <returns></returns>
+        public UpdateMediaInfoResults UpdateMediaInfo(bool mountImage) {
+            string mediaPath;
+            switch (this.GetVideoPath(out mediaPath, mountImage)) {
+                case MediaStatus.Online:
+                    return UpdateMediaInfo(mediaPath);
+                case MediaStatus.Offline: 
+                    return UpdateMediaInfoResults.MediaNotAvailable;
+                case MediaStatus.NotMounted:
                     return UpdateMediaInfoResults.ImageFileNotMounted;
+                default:
+                    return UpdateMediaInfoResults.GeneralError;
+            }
+        }
+
+        /// <summary>
+        /// Updates the MediaInfo property fields using the given path to a videofile
+        /// </summary>
+        /// <param name="videoPath">a path to a valid video file</param>
+        /// <returns></returns>
+        public UpdateMediaInfoResults UpdateMediaInfo(string videoPath) {
+            try {
+                logger.Debug("Updating media info for " + videoPath);
+                string mainFeatureFile;
+                VideoDiscFormat format = Utility.GetVideoDiscFormat(videoPath);
+                switch (format) {
+                    case VideoDiscFormat.DVD:
+                        // because dvds have multiple files
+                        // we must build a list of all IFO files, and loop through them.
+                        // the best file wins
+                        List<string> files = new List<string>();
+                        files.AddRange(Directory.GetFiles(Path.GetDirectoryName(videoPath), "*.ifo"));                       
+                        mainFeatureFile = FindFeatureFilm(files);
+                        logger.Debug("Feature Film File: {0}", mainFeatureFile);
+                        break;
+                    case VideoDiscFormat.HDDVD:
+                    case VideoDiscFormat.Bluray:
+                        mainFeatureFile = Utility.GetMainFeatureStreamFromVideoDisc(videoPath, format);
+                        logger.Debug("Feature Film File: {0}", mainFeatureFile);
+                        break;
+                    default:
+                        mainFeatureFile = videoPath;
+                        break;
                 }
 
-                string featureFilmFile;
-                // because dvds have multiple files
-                // we must build a list of all IFO files, and loop through them.
-                // the best file wins
-
-                // build list of files
-                if (this.IsDVD || (this.IsImageFile && mountedVideoDiscFormat == VideoDiscFormat.DVD)) {
-                    List<string> files = new List<string>();
-                    files.AddRange(Directory.GetFiles(Path.GetDirectoryName(mediaPath), "*.ifo"));
-                    featureFilmFile = FindFeatureFilm(files);
-                    logger.Debug("Feature Film File: ", featureFilmFile);
-                }
-                else {
-                    featureFilmFile = mediaPath;
-                }
-
-                Database.MediaInfoWrapper mInfoWrapper;
-                mInfoWrapper = new Database.MediaInfoWrapper(featureFilmFile);
+                Database.MediaInfoWrapper mInfoWrapper = new Database.MediaInfoWrapper(mainFeatureFile);
                 this.Duration = mInfoWrapper.Duration;
                 this.VideoWidth = mInfoWrapper.Width;
                 this.VideoHeight = mInfoWrapper.Height;
@@ -477,6 +491,126 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 logger.DebugException("", ex);
                 return UpdateMediaInfoResults.GeneralError;
             }
+        }
+
+        /// <summary>
+        /// Gets the actual path to the video file for this object and returns it´s status.
+        /// If the status indicates that the file is any other than online this will be the default fileinfo path.
+        /// This method will try to mount a disk image in the process.
+        /// </summary>
+        /// <param name="videoPath">will hold the actual video path when the method returns.</param>
+        /// <returns>MediaStatus Enum (Online, Offline, Removed etc..)</returns>
+        public MediaStatus GetVideoPath(out string videoPath) {
+            return GetVideoPath(out videoPath, true);
+        }
+
+        /// <summary>
+        /// Gets the actual path to the video file for this object and returns it´s status.
+        /// If the status indicates that the file is any other than online this will be the default fileinfo path.
+        /// You can also specify if the method should mount a disk image.
+        /// </summary>
+        /// <param name="videoPath">will hold the actual video path when the method returns.</param>
+        /// <param name="autoMountImage">If set to true this method will mount and prepare a disk image if needed</param>
+        /// <returns>MediaStatus Enum (Online, Offline, Removed etc..)</returns>
+        public MediaStatus GetVideoPath(out string videoPath, bool autoMountImage) {
+            
+            // Grab the full path (this is our default)
+            videoPath = this.FullPath;
+
+            // Check if the path is available
+            if (!this.IsAvailable) {
+                // if not available recheck if it has been removed entirely
+                if (this.IsRemoved) {
+                    return MediaStatus.Removed;
+                }
+                else {
+                    return MediaStatus.Offline;
+                }
+            }
+
+            // Check if the path is an image
+            if (this.IsImageFile) {
+                string drive;
+                
+                // Max cycles to try/wait when the virtual drive is not ready
+                // after mounting it. One cycle is 1/10 of a second 
+                int maxWaitCycles = 100;
+
+                // Check if the current image is already mounted
+                if (!DaemonTools.IsMounted(videoPath)) {
+                    // If Automount is specified try to mount the image
+                    if (autoMountImage) {
+                        logger.Info("Mounting image...");
+                        if (!DaemonTools.Mount(videoPath, out drive)) {
+                            // there was a mounting error
+                            logger.Error("Mounting image failed.");
+                            return MediaStatus.MountError;
+                        }
+                    }
+                    else {
+                        // If Automount was false do nothing and report the image is not mounted
+                        return MediaStatus.NotMounted;
+                    }
+                }
+                else {
+                    // if the image was already mounted grab the drive letter
+                    drive = DaemonTools.GetVirtualDrive();
+                    // only check the drive once before reporting that the mounting is still pending
+                    maxWaitCycles = 1; 
+                }
+
+                // Check if the mounted drive is ready to be read
+                logger.Info("Mounted: Image='{0}', Drive={1}", videoPath, drive);
+
+                int driveCheck = 0;
+                while (true) {
+                    driveCheck++;
+
+                    // Try to create a DriveInfo object with the returned driveletter
+                    try {
+                        DriveInfo d = new DriveInfo(drive);
+                        if (d.IsReady) {
+                            // This line will list the complete file structure of the image
+                            // Output will only show when the log is set to DEBUG.
+                            // Purpose of method is troubleshoot different image structures.
+                            Utility.LogDirectoryStructure(drive);
+
+                            // See if we can find a known entry path for a video disc format
+                            videoPath = Utility.GetVideoDiscPath(drive);
+
+                            // If we didn't find any just pass the driveletter
+                            if (videoPath == null)
+                                videoPath = drive;
+
+                            // break the while loop
+                            break;
+                        }
+                    }
+                    catch (ArgumentNullException e) {
+                        // The driveletter returned by Daemon Tools is invalid
+                        logger.DebugException("Daemon Tools returned an invalid driveletter", e);
+                        return MediaStatus.MountError;
+                    }
+                    catch (ArgumentException) {
+                        // this exception happens when the driveletter is valid but the driveletter is not 
+                        // finished mounting yet (at least not known to the system). We only need to catch
+                        // this to stay in the loop
+                    }
+
+                    if (driveCheck == maxWaitCycles) {
+                        return MediaStatus.MountDriveNotReady;
+                    }
+                    else if (maxWaitCycles == 1) {
+                        logger.Info("Waiting for virtual drive to become available...");
+                    }
+
+                    // Sleep for a bit
+                    Thread.Sleep(100);
+                }
+            }
+
+            // Return that the file is ready to be played back
+            return MediaStatus.Online;
         }
 
         /// <summary>
@@ -686,4 +820,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         MediaNotAvailable,
         GeneralError
     }
+
+    public enum MediaStatus {
+        Offline,
+        Removed,
+        NotMounted,
+        MountError,
+        MountDriveNotReady,
+        Online
+    }
+
 }

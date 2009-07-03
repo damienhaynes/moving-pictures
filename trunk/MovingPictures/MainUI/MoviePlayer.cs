@@ -208,52 +208,65 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             DBLocalMedia mediaToPlay = movie.LocalMedia[part - 1];
+            string videoPath;
+            MediaStatus mediaStatus = mediaToPlay.GetVideoPath(out videoPath);
+            while (mediaStatus != MediaStatus.Online) {
+                bool exitPlayer = false;
+                switch (mediaStatus) {
+                    case MediaStatus.Removed:
+                        _gui.ShowMessage("Error", Translation.MediaIsMissing);
+                        exitPlayer = true;
+                        break;
+                    case MediaStatus.Offline:
+                        string bodyString = String.Format(Translation.MediaNotAvailableBody, mediaToPlay.MediaLabel);
+                        exitPlayer = _gui.ShowCustomYesNo(Translation.MediaNotAvailableHeader, bodyString,
+                        Translation.Retry, Translation.Cancel, true);
+                        // Special debug line to troubleshoot availability issues
+                        logger.Debug("Media not available: Path={0}, DriveType={1}, Serial={2}, ExpectedSerial={3}",
+                            mediaToPlay.FullPath, mediaToPlay.ImportPath.GetDriveType().ToString(),
+                            mediaToPlay.ImportPath.GetDiskSerial(), mediaToPlay.VolumeSerial);
 
-            // If the media is missing, this loop will ask the user to insert it.
-            // This loop can exit in 2 ways:
-            // 1. the user clicked "retry" and the media is now available
-            // 2. the user clicked "cancel" and we break out of the method
-            while (!mediaToPlay.IsAvailable) {
+                        break;
+                    case MediaStatus.MountError:
+                        _gui.ShowMessage(Translation.Error, Translation.FailedMountingImage);
+                        exitPlayer = true;
+                        break;
+                    case MediaStatus.MountDriveNotReady:
+                        exitPlayer = !_gui.ShowCustomYesNo(Translation.VirtualDriveHeader, Translation.VirtualDriveMessage, Translation.Retry, Translation.Cancel, true);
+                        break;
+                    default:
+                        exitPlayer = true;
+                        break;
+                }
 
-                // Special debug line to troubleshoot availability issues
-                logger.Debug("Media not available: Path={0}, DriveType={1}, Serial={2}, ExpectedSerial={3}",
-                    mediaToPlay.FullPath, mediaToPlay.ImportPath.GetDriveType().ToString(),
-                    mediaToPlay.ImportPath.GetDiskSerial(), mediaToPlay.VolumeSerial);
+                // when needed exit the playback logic
+                if (exitPlayer) {
+                    resetPlayer();
+                    return;
+                }
+            }            
 
+            // Flag that we are playing back mounted media.
+            // note: if the media is an image and we reach this logic
+            // it should be mounted properly.
+            if (mediaToPlay.IsImageFile)
+                mountedPlayback = true;
+            else
+                mountedPlayback = false;
 
-                string bodyString = String.Format(Translation.MediaNotAvailableBody, mediaToPlay.MediaLabel);
-
-                bool retry = _gui.ShowCustomYesNo(Translation.MediaNotAvailableHeader, bodyString,
-                    Translation.Retry, Translation.Cancel, true);
-
-                // if the user clicked cancel, return.
-                if (!retry) return;
-            }
-
-
-            if (mediaToPlay.IsRemoved) {
-                _gui.ShowMessage("Error", Translation.MediaIsMissing);
-                return;
+            // if we do not have MediaInfo but have the AutoRetrieveMediaInfo setting toggled
+            // get the media info
+            if (!mediaToPlay.HasMediaInfo && MovingPicturesCore.Settings.AutoRetrieveMediaInfo) {
+                mediaToPlay.UpdateMediaInfo();
+                mediaToPlay.Commit();
             }
 
             // store the current media object so we can request it later
             _queuedMedia = mediaToPlay;
 
             // start playback
-            logger.Info("Playing {0} ({1})", movie.Title, mediaToPlay.FullPath);
-            string filename = mediaToPlay.FullPath;
-            string extension = mediaToPlay.File.Extension;
-            if (DaemonTools.IsImageFile(extension)) {
-                playImage(filename);
-                if (!mediaToPlay.HasMediaInfo) {
-                    if (MovingPicturesCore.Settings.AutoRetrieveMediaInfo) {
-                        mediaToPlay.UpdateMediaInfo();
-                        mediaToPlay.Commit();
-                    }
-                }
-            }
-            else
-                playFile(filename);
+            logger.Info("Playing: Movie='{0}' FullPath='{1}', VideoPath='{2}', Mounted={3})", movie.Title, mediaToPlay.FullPath, videoPath, mountedPlayback.ToString());
+            playFile(videoPath);            
         }
 
         private bool playCustomIntro() {
@@ -283,7 +296,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return false;
         }
 
-        // start playback of a regular file
+        // start playback of a video file
         private void playFile(string media) {
             logger.Debug("Processing media for playback: File={0}", media);
             VideoDiscFormat videoFormat = Utility.GetVideoDiscFormat(media);
@@ -340,107 +353,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
-        // start playback of an image file (ISO)
-        private void playImage(string media) {
-            logger.Debug("playImage " + media);
-            string drive;
-
-            // Check if the current image is already mounted
-            if (!DaemonTools.IsMounted(media)) {
-                // if not try to mount the image
-                logger.Info("Mounting image...");
-                if (!DaemonTools.Mount(media, out drive)) {
-                    _gui.ShowMessage(Translation.Error, Translation.FailedMountingImage);
-                    logger.Error("Mounting image failed.");
-                    resetPlayer();
-                    return;
-                }
-            }
-            else {
-                logger.Info("Image was already mounted.");
-                drive = DaemonTools.GetVirtualDrive();
-            }
-
-            logger.Info("Image mounted: Drive={0}", drive);
-
-            // Check if the mounted drive is ready to be read
-            // or wait a maximum of 5 seconds to get ready.
-            DriveInfo mountedDrive = null;
-            bool driveReady = false;
-            int driveCheck = 0;
-
-            // Start checking
-            while (!driveReady) {
-                driveCheck++;
-                if (driveCheck == 100) {
-                    // After 10 seconds have passed and the drive is still not ready
-                    // ask the user to retry or cancel waiting for the virtual drive 
-                    // to become ready.
-                    if (_gui.ShowCustomYesNo(Translation.VirtualDriveHeader, Translation.VirtualDriveMessage, Translation.Retry, Translation.Cancel, true)) {
-                        // User clicked retry: reset the wait counter to stay in the loop.
-                        logger.Debug("Virtual drive not available: retrying...");
-                        driveCheck = 0;
-                    }
-                    else {
-                        // User clicked cancel: cancel playback.
-                        logger.Error("Playback cancelled because virtual drive was not available.");
-                        resetPlayer();
-                        return;
-                    }
-                }
-                else if (driveCheck == 2) {
-                    // Log message that we are waiting we log this only in the second iteration
-                    // because the first iteration is the initial check.
-                    logger.Info("Waiting for virtual drive to become available...");
-                }
-
-                // If we do not have a DriveInfo object create it
-                if (mountedDrive != null) {
-                    GUIWindowManager.Process();
-                    Thread.Sleep(100);
-                    driveReady = mountedDrive.IsReady;
-                }
-                else {
-                    try {
-                        // Try to create a DriveInfo object with the returned driveletter
-                        mountedDrive = new DriveInfo(drive);
-                        driveReady = mountedDrive.IsReady;
-                    }
-                    catch (ArgumentNullException e) {
-                        // The driveletter returned by Daemon Tools is invalid, 
-                        // we cancel playback entirely when this is the case
-                        _gui.ShowMessage("Error", "Daemon tools returned an invalid driveletter.", "The virtual drive can not be found.", "Please check your daemon tools ", "configuration and/or try again.");
-                        logger.ErrorException("Daemon Tools returned an invalid driveletter.", e);
-                        resetPlayer();
-                        return;
-                    }
-                    catch (ArgumentException) {
-                        // this exception happens when the driveletter is valid but the driveletter is not 
-                        // finished mounting yet (at least not known to the system). We only need to catch
-                        // this to stay in the loop
-                    }
-                }
-            }
-
-            // Flag that we are playing back mounted media
-            mountedPlayback = true;
-
-            // This line will list the complete file structure of the image
-            // Output will only show when the log is set to DEBUG.
-            // Purpose of method is troubleshoot different image structures.
-            Utility.LogDirectoryStructure(drive);
-
-            // See if we can find a known entry path for a video disc format
-            string discPath = Utility.GetVideoDiscPath(drive);
-
-            // If we didn't find any just pass the driveletter
-            if (discPath == null)
-                discPath = drive;
-
-            // Play the file/path
-            playFile(discPath);
-        }
-
         #endregion
 
         #region External HD Player
@@ -466,9 +378,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             string arguments = MovingPicturesCore.Settings.ExternalPlayerArguements;
             string videoRoot = Utility.GetMovieBaseDirectory(new FileInfo(videoPath).Directory).FullName;
             string filename = Utility.IsDriveRoot(videoRoot) ? videoRoot : videoPath;
+            string fps = ((int)(_queuedMedia.VideoFrameRate + 0.5f)).ToString();
             arguments = arguments.Replace("%filename%", filename);
+            arguments = arguments.Replace("%fps%", fps);
 
-            logger.Debug("External player command: {0} {1}", execPath, arguments);
+            logger.Debug("External Player: Video='{0}', FPS={1}, ExecCommandLine={2} {3}", filename, fps, execPath, arguments);
 
             // Setup the external player process
             ProcessStartInfo processinfo = new ProcessStartInfo();
@@ -812,7 +726,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private bool PromptUserToResume(DBMovieInfo movie) {
-            if (movie.UserSettings == null || movie.UserSettings.Count == 0 || (movie.ActiveUserSettings.ResumePart == 1 && movie.ActiveUserSettings.ResumeTime <= 30))
+            if (movie.UserSettings == null || movie.UserSettings.Count == 0 || (movie.ActiveUserSettings.ResumePart < 2 && movie.ActiveUserSettings.ResumeTime <= 30))
                 return false;
 
             logger.Debug("Resume Prompt: Movie='{0}', ResumePart={1}, ResumeTime={2}", movie.Title, movie.ActiveUserSettings.ResumePart, movie.ActiveUserSettings.ResumeTime);
