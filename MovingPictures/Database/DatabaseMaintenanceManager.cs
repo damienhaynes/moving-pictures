@@ -18,7 +18,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public static void RemoveInvalidFiles() {
             logger.Info("Checking for invalid file entries in the database.");
 
-
             float count = 0;
             float total = DBLocalMedia.GetAll().Count;
             
@@ -31,8 +30,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (currFile.ID == null)
                     continue;
 
-                // remove missing files or files without an import path
-                if (currFile.ImportPath == null || currFile.IsRemoved || currFile.ImportPath.ID == null) {
+                // remove files without an import path
+                if (currFile.ImportPath == null || currFile.ImportPath.ID == null) {
                     currFile.Delete();
                     cleaned++;
                     continue;
@@ -201,44 +200,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (MaintenanceProgress != null) MaintenanceProgress("", 100);
         }
 
-        // Removes Artwork From a Movie
-        public static void RemoveOrphanArtwork() {
-            float count = 0;
-            float total = DBMovieInfo.GetAll().Count; 
-
-            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
-                if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count * 100 / total));
-                count++;
-
-                // get the list of elements to remove
-                List<string> toRemove = new List<string>();
-                foreach (string currCoverPath in currMovie.AlternateCovers) {
-                    if (!new FileInfo(currCoverPath).Exists)
-                        toRemove.Add(currCoverPath);
-                }
-
-                // remove them
-                foreach (string currItem in toRemove) {
-                    currMovie.AlternateCovers.Remove(currItem);
-                }
-
-                // reset default cover is needed
-                if (!currMovie.AlternateCovers.Contains(currMovie.CoverFullPath))
-                    if (currMovie.AlternateCovers.Count == 0)
-                        currMovie.CoverFullPath = " ";
-                    else
-                        currMovie.CoverFullPath = currMovie.AlternateCovers[0];
-
-                // get rid of the backdrop link if it doesnt exist
-                if (currMovie.BackdropFullPath.Trim().Length > 0 && !new FileInfo(currMovie.BackdropFullPath).Exists)
-                    currMovie.BackdropFullPath = " ";
-
-                currMovie.Commit();
-            }
-
-            if (MaintenanceProgress != null) MaintenanceProgress("", 100);
-        }
-
         public static void UpdateDateAddedFields() {
             // update date added fields
             if (MovingPicturesCore.GetDBVersionNumber() < new Version("0.7.1")) {
@@ -262,21 +223,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     }
 
                     movies[i].Commit();
-                }
-            }
-        }
-
-        public static void UpdateMediaInfo() {
-            if (!MovingPicturesCore.Settings.AutoRetrieveMediaInfo)
-                return;
-
-            logger.Info("Updating Media Info...");
-
-            List<DBLocalMedia> allLocalMedia = DBLocalMedia.GetAll();
-            foreach (DBLocalMedia lm in allLocalMedia) {
-                if (!lm.HasMediaInfo) {
-                    lm.UpdateMediaInfo();
-                    lm.Commit();
                 }
             }
         }

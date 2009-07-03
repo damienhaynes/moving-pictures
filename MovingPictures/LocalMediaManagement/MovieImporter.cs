@@ -20,6 +20,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         PENDING,
         GETTING_MATCHES,
         GETTING_DETAILS,
+        GETTING_MEDIA_INFO,
         NEED_INPUT,
         APPROVED,
         COMMITED,
@@ -39,7 +40,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // threads that do actual processing
         private List<Thread> mediaScannerThreads;
         private Thread pathScannerThread;
-        private Thread artworkUpdaterThread;
 
         private int percentDone;
 
@@ -170,12 +170,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 pathScannerThread.Name = "PathScanner";
             }
 
-            if (artworkUpdaterThread == null) {
-                artworkUpdaterThread = new Thread(new ThreadStart(LookForMissingArtworkWorker));
-                artworkUpdaterThread.Name = "Artwork Updater";
-                artworkUpdaterThread.Start();
-            }
-
             if (MovieStatusChanged != null)
                 MovieStatusChanged(null, MovieImporterAction.STARTED);
         }
@@ -226,22 +220,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                     pathScannerThread = null;
                     stoppedSomething = true;
-                }
-
-                if (artworkUpdaterThread != null) {
-                    if (artworkUpdaterThread.IsAlive) {
-                        logger.Info("Shutting Down Artwork Updater Thread...");
-
-                        // wait for the path scanner to shut down
-                        while (artworkUpdaterThread.IsAlive) {
-                            artworkUpdaterThread.Abort();
-                            Thread.Sleep(300);
-                        }
-
-                        stoppedSomething = true;
-                    }
-
-                    artworkUpdaterThread = null;
                 }
 
                 if (stoppedSomething) {
@@ -484,36 +462,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 MovieStatusChanged(newMatch, MovieImporterAction.ADDED);
         }
 
-        private void LookForMissingArtworkWorker() {
-            try {
-                foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
-                    try {
-                        if (currMovie.ID == null)
-                            continue;
 
-                        if (currMovie.CoverFullPath.Trim().Length == 0) {
-                            MovingPicturesCore.DataProviderManager.GetArtwork(currMovie);
-                            currMovie.Commit();
-                        }
-
-                        if (currMovie.BackdropFullPath.Trim().Length == 0) {
-                            new LocalProvider().GetBackdrop(currMovie);
-                            MovingPicturesCore.DataProviderManager.GetBackdrop(currMovie);
-                            currMovie.Commit();
-                        }
-                    }
-                    catch (Exception e) {
-                        if (e is ThreadAbortException)
-                            throw e;
-
-                        logger.ErrorException("Error retrieving artwork for " + currMovie.Title, e);
-                    }
-
-                }
-            }
-            catch (ThreadAbortException) {
-            }
-        }
 
         #endregion
 
@@ -1055,6 +1004,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 percentDone = 100;
         }
 
+        private void OnProgress(string message) {
+            if (Progress != null) {
+                UpdatePercentDone();
+                int processed = commitedMatches.Count;
+                int total = commitedMatches.Count + approvedMatches.Count + matchesNeedingInput.Count;
+                Progress(percentDone, processed, total, message);
+            }        
+        }
+
         // gets details for and commits the next item in the ApprovedMatches list
         private void ProcessNextApprovedMatches() {
             ArrayList matchList;
@@ -1077,21 +1035,29 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // notify the user we are processing
             logger.Info("Retrieving details for \"" + currMatch.Selected.Movie.Title + "\"");
-            if (Progress != null) {
-                UpdatePercentDone();
-                int processed = commitedMatches.Count;
-                int total = commitedMatches.Count + approvedMatches.Count + matchesNeedingInput.Count;
-                Progress(percentDone, processed, total, "Retrieving details for: " + currMatch.Selected.Movie.Title);
-            }
+            OnProgress("Retrieving details for: " + currMatch.Selected.Movie.Title);
 
             // notify any listeners of the status change
             if (MovieStatusChanged != null)
                 MovieStatusChanged(currMatch, MovieImporterAction.GETTING_DETAILS);
 
-            // commit the match and move it to the commited array
+            // retrieve details and commit the match
             AssignAndCommit(currMatch, true);
+
+            // if automatic mediainfo retrieval is active, update media info for the file
+            if (MovingPicturesCore.Settings.AutoRetrieveMediaInfo) {
+                logger.Info("Retrieving media information for: " + currMatch.Selected.Movie.Title);
+                OnProgress("Retrieving media information for: " + currMatch.Selected.Movie.Title);
+                if (MovieStatusChanged != null)
+                    MovieStatusChanged(currMatch, MovieImporterAction.GETTING_MEDIA_INFO);
+
+                UpdateMediaInfo(currMatch);
+            }
+
+            // update internal status to mark the match as done with processing
             retrievingDetailsMatches.Remove(currMatch);
             commitedMatches.Add(currMatch);
+
 
             // if the set has been ignored by the user since we started processing, 
             // reignore it properly and return
@@ -1192,8 +1158,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // loop through the local media files and clear out any movie assignments
             foreach (DBLocalMedia currFile in localMedia) {
                 RemoveCommitedRelations(currFile);
-                if (MovingPicturesCore.Settings.AutoRetrieveMediaInfo)
-                    currFile.UpdateMediaInfo();
             }
 
             // write the file(s) to the DB
@@ -1256,6 +1220,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 else {
                     AssignFileToMovie(match.LocalMedia, match.Selected.Movie, update);
                 }
+            }
+        }
+
+        private void UpdateMediaInfo(MovieMatch match) {
+            foreach (DBLocalMedia currFile in match.LocalMedia) {
+                currFile.UpdateMediaInfo();
+                currFile.Commit();
             }
         }
 

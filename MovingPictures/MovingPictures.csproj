@@ -62,6 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackgroundProcesses\FileSyncProcess.cs" />
+    <Compile Include="BackgroundProcesses\MediaInfoUpdateProcess.cs" />
+    <Compile Include="BackgroundProcesses\UpdateArtworkProcess.cs" />
     <Compile Include="ConfigScreen\AboutPane.cs">
       <SubType>UserControl</SubType>
     </Compile>

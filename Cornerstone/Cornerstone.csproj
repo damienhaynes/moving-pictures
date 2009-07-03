@@ -216,7 +216,9 @@
     <Compile Include="ScraperEngine\Nodes\SetNode.cs" />
     <Compile Include="ScraperEngine\Nodes\SortNode.cs" />
     <Compile Include="ScraperEngine\ScriptableScraper.cs" />
+    <Compile Include="Tools\AbstractBackgroundProcess.cs" />
     <Compile Include="Tools\AdvancedStringComparer.cs" />
+    <Compile Include="Tools\BackgroundProcessManager.cs" />
     <Compile Include="Tools\WebGrabber.cs" />
   </ItemGroup>
   <ItemGroup>

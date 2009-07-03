@@ -183,6 +183,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 MovingPicturesCore.Importer.Start();
                 
                 updateButtons();
+
+                automaticMediaInfoMenuItem.Checked = MovingPicturesCore.Settings.AutoRetrieveMediaInfo;
             }
 
             this.unapprovedGrid.AutoGenerateColumns = false;
@@ -348,7 +350,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             // split join button cant be used now, so disable it.
             else splitJoinButton.Enabled = false;
-
         }
 
         private void splitJoinButton_Click(object sender, EventArgs e) {
@@ -452,6 +453,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void helpButton_Click(object sender, EventArgs e) {
             ProcessStartInfo processInfo = new ProcessStartInfo(Resources.MovieImporterHelpURL);
             Process.Start(processInfo);
+        }
+
+        private void automaticMediaInfoMenuItem_Click(object sender, EventArgs e) {
+            automaticMediaInfoMenuItem.Checked = !automaticMediaInfoMenuItem.Checked;
+            MovingPicturesCore.Settings.AutoRetrieveMediaInfo = automaticMediaInfoMenuItem.Checked;
         }
 
     }
