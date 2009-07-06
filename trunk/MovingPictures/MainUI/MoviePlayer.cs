@@ -27,7 +27,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private bool customIntroPlayed = false;
         private bool mountedPlayback = false;
         private bool listenToExternalPlayerEvents = true;
-        private DBLocalMedia _queuedMedia;
+        private DBLocalMedia queuedMedia;
         private int _activePart;
         private bool _resumeActive = false;
 
@@ -142,7 +142,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             
             // queue the local media object in case we first need to play the custom intro
             // we can get back to it later.
-            _queuedMedia = movie.LocalMedia[part-1];
+            queuedMedia = movie.LocalMedia[part-1];
             
             // try playing our custom intro (if present). If successful quit, as we need to
             // wait for the intro to finish.
@@ -192,8 +192,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // if we have a multi-part movie composed of disk images and we are not resuming 
                 // ask which part the user wants to play
-                string firstExtension = movie.LocalMedia[0].File.Extension;
-                if (!_resumeActive && movie.LocalMedia.Count > 1 && (DaemonTools.IsImageFile(firstExtension) || movie.LocalMedia[0].IsVideoDisc)) {
+                if (!_resumeActive && movie.LocalMedia.Count > 1 && (movie.LocalMedia[0].IsImageFile || movie.LocalMedia[0].IsVideoDisc)) {
                     GUIDialogFileStacking dlg = (GUIDialogFileStacking)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_FILESTACKING);
                     if (null != dlg) {
                         dlg.SetNumberOfFiles(movie.LocalMedia.Count);
@@ -208,51 +207,65 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             DBLocalMedia mediaToPlay = movie.LocalMedia[part - 1];
-            string videoPath;
-            MediaStatus mediaStatus = mediaToPlay.GetVideoPath(out videoPath);
-            while (mediaStatus != MediaStatus.Online) {
-                bool exitPlayer = false;
-                switch (mediaStatus) {
-                    case MediaStatus.Removed:
+            MediaState mediaState = mediaToPlay.State;
+            while (mediaState != MediaState.Online) {
+                switch (mediaState) {
+                    case MediaState.Removed:
                         _gui.ShowMessage("Error", Translation.MediaIsMissing);
-                        exitPlayer = true;
-                        break;
-                    case MediaStatus.Offline:
+                        resetPlayer();
+                        return; 
+                    case MediaState.Offline:
                         string bodyString = String.Format(Translation.MediaNotAvailableBody, mediaToPlay.MediaLabel);
-                        exitPlayer = _gui.ShowCustomYesNo(Translation.MediaNotAvailableHeader, bodyString,
-                        Translation.Retry, Translation.Cancel, true);
                         // Special debug line to troubleshoot availability issues
                         logger.Debug("Media not available: Path={0}, DriveType={1}, Serial={2}, ExpectedSerial={3}",
                             mediaToPlay.FullPath, mediaToPlay.ImportPath.GetDriveType().ToString(),
                             mediaToPlay.ImportPath.GetDiskSerial(), mediaToPlay.VolumeSerial);
 
+                        // Prompt user to enter media
+                        if (!_gui.ShowCustomYesNo(Translation.MediaNotAvailableHeader, bodyString, Translation.Retry, Translation.Cancel, true)) {
+                            // user cancelled so exit
+                            resetPlayer();
+                            return;
+                        }
                         break;
-                    case MediaStatus.MountError:
-                        _gui.ShowMessage(Translation.Error, Translation.FailedMountingImage);
-                        exitPlayer = true;
-                        break;
-                    case MediaStatus.MountDriveNotReady:
-                        exitPlayer = !_gui.ShowCustomYesNo(Translation.VirtualDriveHeader, Translation.VirtualDriveMessage, Translation.Retry, Translation.Cancel, true);
-                        break;
-                    default:
-                        exitPlayer = true;
+                    case MediaState.NotMounted:
+                        // Mount this media
+                        MountResult result = mediaToPlay.Mount();
+                        while (result == MountResult.Pending) {
+                            if (_gui.ShowCustomYesNo(Translation.VirtualDriveHeader, Translation.VirtualDriveMessage, Translation.Retry, Translation.Cancel, true)) {
+                                // User has chosen to retry
+                                // We stay in the mount loop
+                                result = mediaToPlay.Mount();
+                            }
+                            else {
+                                // Exit the player
+                                resetPlayer();
+                                return;
+                            }
+                        }
+
+                        // If the mounting failed (can not be solved within the loop) show error and return
+                        if (result == MountResult.Failed) {
+                            _gui.ShowMessage(Translation.Error, Translation.FailedMountingImage);
+                            // Exit the player
+                            resetPlayer();
+                            return;
+                        }
+                        
+                        // Mounting was succesfull, break the mount loop
                         break;
                 }
 
-                // when needed exit the playback logic
-                if (exitPlayer) {
-                    resetPlayer();
-                    return;
-                }
-            }            
+                // Check mediaState again
+                mediaState = mediaToPlay.State;
+            }
+            
+            // Get the path to the playable video.
+            string videoPath = mediaToPlay.GetVideoPath();
 
-            // Flag that we are playing back mounted media.
-            // note: if the media is an image and we reach this logic
-            // it should be mounted properly.
-            if (mediaToPlay.IsImageFile)
-                mountedPlayback = true;
-            else
-                mountedPlayback = false;
+            // If the media is an image, it will be mounted by this point so
+            // we flag the mounted playback variable
+            mountedPlayback = mediaToPlay.IsImageFile;
 
             // if we do not have MediaInfo but have the AutoRetrieveMediaInfo setting toggled
             // get the media info
@@ -262,17 +275,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             // store the current media object so we can request it later
-            _queuedMedia = mediaToPlay;
+            queuedMedia = mediaToPlay;
 
             // start playback
             logger.Info("Playing: Movie='{0}' FullPath='{1}', VideoPath='{2}', Mounted={3})", movie.Title, mediaToPlay.FullPath, videoPath, mountedPlayback.ToString());
-            playFile(videoPath);            
+            playFile(videoPath, mediaToPlay.VideoFormat);            
         }
 
         private bool playCustomIntro() {
             // Check if we have already played a custom intro
             if (!customIntroPlayed) {
-                DBMovieInfo queuedMovie = _queuedMedia.AttachedMovies[0];
+                DBMovieInfo queuedMovie = queuedMedia.AttachedMovies[0];
                 // Only play custom intro for we are not resuming
                 if (queuedMovie.UserSettings == null || queuedMovie.UserSettings.Count == 0 || queuedMovie.ActiveUserSettings.ResumeTime == 0) {
                     string custom_intro = MovingPicturesCore.Settings.CustomIntroLocation;
@@ -296,13 +309,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return false;
         }
 
-        // start playback of a video file
+        // Start playback of a file (detects format first)
         private void playFile(string media) {
-            logger.Debug("Processing media for playback: File={0}", media);
-            VideoDiscFormat videoFormat = Utility.GetVideoDiscFormat(media);
+            VideoFormat videoFormat = Utility.GetVideoFormat(media);
+            playFile(media, videoFormat);
+        }
+
+        // start playback of a file (using known format)
+        private void playFile(string media, VideoFormat videoFormat) {
+            logger.Debug("Processing media for playback: File={0}, VideoFormat={1}", media, videoFormat);
                         
             // HD Playback
-            if (videoFormat == VideoDiscFormat.Bluray || videoFormat == VideoDiscFormat.HDDVD) {
+            if (videoFormat == VideoFormat.Bluray || videoFormat == VideoFormat.HDDVD) {
 
                 // Take proper action according to playback setting
                 bool hdExternal = MovingPicturesCore.Settings.UseExternalPlayer;
@@ -322,7 +340,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                     else {
                         // Show a dialog to the user that explains how to configure the alternate playback
-                        string ext = (videoFormat == VideoDiscFormat.Bluray) ? ".M2TS" : ".EVO";
+                        string ext = (videoFormat == VideoFormat.Bluray) ? ".M2TS" : ".EVO";
                         logger.Info("HD Playback: extension '{0}' is missing from the mediaportal configuration.", ext);
                         _gui.ShowMessage(Translation.PlaybackFailedHeader, String.Format(Translation.PlaybackFailed, ext));
                         resetPlayer();
@@ -378,7 +396,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             string arguments = MovingPicturesCore.Settings.ExternalPlayerArguements;
             string videoRoot = Utility.GetMovieBaseDirectory(new FileInfo(videoPath).Directory).FullName;
             string filename = Utility.IsDriveRoot(videoRoot) ? videoRoot : videoPath;
-            string fps = ((int)(_queuedMedia.VideoFrameRate + 0.5f)).ToString();
+            string fps = ((int)(queuedMedia.VideoFrameRate + 0.5f)).ToString();
             arguments = arguments.Replace("%filename%", filename);
             arguments = arguments.Replace("%fps%", fps);
 
@@ -407,7 +425,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 GUIGraphicsContext.CurrentState = GUIGraphicsContext.State.SUSPENDING;
 
                 logger.Info("HD Playback: External player started.");
-                onMediaStarted(_queuedMedia);
+                onMediaStarted(queuedMedia);
             }
             catch (Exception e) {
                 logger.ErrorException("HD Playback: Could not start the external player process.", e);
@@ -442,10 +460,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 logger.Info("Playback Started: Internal, File={0}", filename);
 
                 // get the duration of the media 
-                updateMediaDuration(_queuedMedia);
+                updateMediaDuration(queuedMedia);
 
                 // get the movie
-                DBMovieInfo movie = _queuedMedia.AttachedMovies[0];
+                DBMovieInfo movie = queuedMedia.AttachedMovies[0];
 
                 // and jump to our resume position if necessary
                 if (_resumeActive) {
@@ -464,7 +482,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
 
                 // Trigger Movie started
-                onMediaStarted(_queuedMedia);
+                onMediaStarted(queuedMedia);
             }
         }
 
@@ -529,7 +547,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // If we were listening for external player events
             if (_playerState == MoviePlayerState.Processing && listenToExternalPlayerEvents) {
                 logger.Info("Playback Started: External");
-                onMediaStarted(_queuedMedia);
+                onMediaStarted(queuedMedia);
             }
         }
 
@@ -554,7 +572,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 customIntroPlayed = false;
 
                 // If a custom intro was just played, we need to play the selected movie
-                playMovie(_queuedMedia.AttachedMovies[0], _queuedMedia.Part);
+                playMovie(queuedMedia.AttachedMovies[0], queuedMedia.Part);
                 return true;
             }
 
@@ -632,21 +650,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Resets player variables
         /// </summary>
         private void resetPlayer() {
-           
+
+            // If we have an image mounted, unmount it
+            if (mountedPlayback) {
+                queuedMedia.UnMount();
+                mountedPlayback = false;
+            }
+
             // reset player variables
             activeMedia = null;
-            _queuedMedia = null;
+            queuedMedia = null;
             _playerState = MoviePlayerState.Idle;
             _resumeActive = false;
             listenToExternalPlayerEvents = false;
             customIntroPlayed = false;
-
-            // If we have an image mounted, unmount it
-            if (mountedPlayback) {
-                DaemonTools.UnMount();
-                mountedPlayback = false;
-            }
-            
+           
             logger.Debug("Reset.");
         }
 
