@@ -59,26 +59,28 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             // if we already have a backdrop move on for now
             if (movie.BackdropFullPath.Trim().Length > 0)
                 return true;
-            
-            // an imdb tag is required for this dataprovider. if it is not set, fail
-            if (movie.ImdbID.Trim().Length != 9)
-                return false;
 
-            // try to grab the xml results
-            XmlNodeList xml = getXML(apiImdbLookup + movie.ImdbID.Trim());
-            if (xml == null) return false;
+            // Resolve the source ID
+            XmlNodeList xml;
+            string tmdbID = movie.GetSourceMovieInfo(SourceInfo).Identifier;
+            if (String.IsNullOrEmpty(tmdbID)) {
+                // Check IMDB code
+                if (movie.ImdbID.Trim().Length != 9)
+                    return false;
 
-            // IMDb search gives limited backdrop results, so switch to the proper lookup.
-            // if we for some reason (uh oh!) can't find the ID node, just fall through and check
-            // the current XML doc for backdrops
-            XmlNodeList idNodes = xml.Item(0).SelectNodes("//id");
-            if (idNodes.Count != 0) {
-                int id;
-                if (int.TryParse(idNodes[0].InnerText, out id)) {
-                    XmlNodeList newXml = getXML(apiGetInfo + id);
-                    if (newXml != null) xml = newXml;
-                }
+                // Use IMDB code
+                xml = getXML(apiImdbLookup + movie.ImdbID.Trim());
+                if (xml == null) return false;
+
+                // Get TMDB Id
+                XmlNodeList idNodes = xml.Item(0).SelectNodes("//id");
+                if (idNodes.Count != 0)
+                    tmdbID = idNodes[0].InnerText;
             }
+
+            // Tro to get movie information
+            xml = getXML(apiGetInfo + tmdbID);
+            if (xml == null) return false;
 
             // try to grab backdrops from the resulting xml doc
             string backdropURL = string.Empty;
@@ -87,8 +89,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 if (currNode.Attributes["size"].Value == "original") {
                     backdropURL = currNode.InnerText;
                     if (backdropURL.Trim().Length > 0)
-                        if (movie.AddBackdropFromURL(backdropURL) == ArtworkLoadStatus.SUCCESS)
+                        if (movie.AddBackdropFromURL(backdropURL) == ArtworkLoadStatus.SUCCESS) {
+                            movie.GetSourceMovieInfo(SourceInfo).Identifier = tmdbID;
                             return true;
+                        }
                 }
             }
 
@@ -127,6 +131,18 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     results.Add(movie);
             }
             return results;
+        }
+
+        private DBMovieInfo getMovieById(string id) {
+            XmlNodeList xml = getXML(apiGetInfo + id);
+            if (xml == null)
+                return null;
+            
+            XmlNodeList movieNodes = xml.Item(0).SelectNodes("//movie");
+            if (movieNodes.Count > 0)
+                return getMovieInformation(movieNodes[0]);
+            else
+                return null;
         }
 
         private DBMovieInfo getMovieByImdb(string imdbid) {
@@ -240,25 +256,22 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         }
                     }
                 }
-
-                // check if tmdbId is still null, if so request id.
-                if (tmdbId == null)
-                    return UpdateResults.FAILED_NEED_ID;
             }
 
-            XmlNodeList xml = getXML(apiGetInfo + tmdbId);
-            if (xml != null) {
-                XmlNodeList movieNodes = xml.Item(0).SelectNodes("//movie");
-                if (movieNodes.Count > 0) {
-                    DBMovieInfo newMovie = getMovieInformation(movieNodes[0]);
-                    if (newMovie != null) {
-                        movie.CopyUpdatableValues(newMovie);
-                        return UpdateResults.SUCCESS;
-                    }
-                }
-            }
+            // check if tmdbId is still null, if so request id.
+            if (tmdbId == null)
+                return UpdateResults.FAILED_NEED_ID;
 
-            return UpdateResults.FAILED;
+            // Grab the movie using the TMDB ID
+            DBMovieInfo newMovie = getMovieById(tmdbId);
+            if (newMovie != null) {
+                movie.GetSourceMovieInfo(SourceInfo).Identifier = tmdbId;
+                movie.CopyUpdatableValues(newMovie);
+                return UpdateResults.SUCCESS;
+            }
+            else {
+                return UpdateResults.FAILED;
+            }
         }
 
         public bool GetArtwork(DBMovieInfo movie) {
@@ -269,14 +282,26 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             int maxCovers = MovingPicturesCore.Settings.MaxCoversPerMovie;
             int maxCoversInSession = MovingPicturesCore.Settings.MaxCoversPerSession;
 
-            // an imdb tag is required for this dataprovider. if it is not set, fail
-            if (movie.ImdbID.Trim().Length != 9)
-                return false;
+            XmlNodeList xml;
+            string tmdbID = movie.GetSourceMovieInfo(SourceInfo).Identifier;
+            if (String.IsNullOrEmpty(tmdbID)) {
+                // Check IMDB code
+                if (movie.ImdbID.Trim().Length != 9)
+                    return false;
 
-            // try to grab the xml results
-            XmlNodeList xml = getXML(apiImdbLookup + movie.ImdbID.Trim());
-            if (xml == null)
-                return false;
+                // Use IMDB code
+                xml = getXML(apiImdbLookup + movie.ImdbID.Trim());
+                if (xml == null) return false;
+
+                // Get TMDB Id
+                XmlNodeList idNodes = xml.Item(0).SelectNodes("//id");
+                if (idNodes.Count != 0)
+                    tmdbID = idNodes[0].InnerText;
+            }  
+
+            // Tro to get movie information
+            xml = getXML(apiGetInfo + tmdbID);
+            if (xml == null) return false;
 
             int coversAdded = 0;
             int count = 0;
@@ -299,8 +324,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 }
             }
 
-            if (coversAdded > 0)
+
+
+            if (coversAdded > 0) {
+                // Update source info
+                movie.GetSourceMovieInfo(SourceInfo).Identifier = tmdbID;
                 return true;
+            }
 
             return false;
         }
