@@ -1384,11 +1384,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         // If read from optical drive
                         if (currFile.ImportPath.GetDriveType() == DriveType.CDRom && displayname.Length == 3) {
 
-                            VideoDiscFormat videoDisc = currFile.VideoDiscFormat;
-
                             // Add the video disc type and media label
-                            if (videoDisc != VideoDiscFormat.Unknown)
-                                displayname = String.Format("({0}) <{1}>", videoDisc.ToString(), currFile.MediaLabel);                                                      
+                            if (currFile.IsVideoDisc)
+                                displayname = String.Format("({0}) <{1}>", currFile.VideoFormat.ToString(), currFile.MediaLabel);                                                      
                         }
                         _localMediaString += displayname;
                     }

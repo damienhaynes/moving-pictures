@@ -313,9 +313,9 @@ namespace MovingPicturesUnitTest
         [TestMethod()]
         public void GetVideoDiscFormatTest() {
             string path = @"X:\viDeo_ts\video_ts.ifo";
-            VideoDiscFormat expected = VideoDiscFormat.DVD;
-            VideoDiscFormat actual;
-            actual = Utility.GetVideoDiscFormat(path);
+            VideoFormat expected = VideoFormat.DVD;
+            VideoFormat actual;
+            actual = Utility.GetVideoFormat(path);
             Assert.AreEqual(expected, actual);
         }
 
@@ -349,7 +349,7 @@ namespace MovingPicturesUnitTest
         ///</summary>
         [TestMethod()]
         public void GetEnumValueDescriptionTest() {
-            object value = VideoDiscFormat.DVD;
+            object value = VideoFormat.DVD;
             string expected = @"\video_ts\video_ts.ifo";
             string actual;
             actual = Utility.GetEnumValueDescription(value);

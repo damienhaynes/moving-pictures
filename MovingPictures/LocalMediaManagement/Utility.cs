@@ -10,14 +10,17 @@ using System.Threading;
 using DirectShowLib;
 using DirectShowLib.Dvd;
 using Cornerstone.Tools;
+using MediaPortal.Util;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
-    public enum VideoDiscFormat
+    public enum VideoFormat
     {
         [Description("")]
         Unknown,
+        [Description("Standalone Video Files")]
+        File,
         [Description(@"\video_ts\video_ts.ifo")]
         DVD,
         [Description(@"\bdmv\index.bdmv")]
@@ -26,6 +29,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         HDDVD,
         [Description(@"\vcd\entries.vcd")]
         SVCD       
+    }
+
+    public enum MountResult {
+        Failed,
+        Pending,
+        Success
     }
     
     class Utility {
@@ -242,7 +251,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region String Modification / Regular Expressions Methods
 
         // Regular expression pattern that matches a selection of non-word characters
-        private const string rxMatchNonWordCharacters = "[\\~`!@#$%^&*\\(\\)_\\+-={}|\\[\\]\\\\:\";'<>?,./]";
+        private const string rxMatchNonWordCharacters = @"[^\w]";
 
         /// <summary>
         /// Filters non descriptive words/characters from a title so that only keywords remain.
@@ -287,7 +296,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="title"></param>
         /// <returns>archive name</returns>
         public static string TitleToArchiveName(string title) {
-            Regex expr = new Regex(@"^{" + MovingPicturesCore.Settings.ArticlesForRemoval + @")\s(.+)", RegexOptions.IgnoreCase);
+            Regex expr = new Regex(@"^(" + MovingPicturesCore.Settings.ArticlesForRemoval + @")\s(.+)", RegexOptions.IgnoreCase);
             return expr.Replace(title, "$2, $1").Trim();
         }
 
@@ -462,14 +471,17 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static VideoDiscFormat GetVideoDiscFormat(string path) {
-            foreach (VideoDiscFormat format in Enum.GetValues(typeof(VideoDiscFormat))) {
-                if (format != VideoDiscFormat.Unknown) {
-                    if (path.EndsWith(GetEnumValueDescription(format),StringComparison.OrdinalIgnoreCase))
-                        return format;
+        public static VideoFormat GetVideoFormat(string path) {
+            if (path != null && !IsImageFile(path)) {
+                foreach (VideoFormat format in Enum.GetValues(typeof(VideoFormat))) {
+                    if (format != VideoFormat.Unknown && format != VideoFormat.File) {
+                        if (path.EndsWith(GetEnumValueDescription(format), StringComparison.OrdinalIgnoreCase))
+                            return format;
+                    }
                 }
+                return VideoFormat.File;
             }
-            return VideoDiscFormat.Unknown;
+            return VideoFormat.Unknown;
         }
 
         /// <summary>
@@ -478,7 +490,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static bool IsVideoDiscPath(string path) {
-            return GetVideoDiscFormat(path) != VideoDiscFormat.Unknown;
+            VideoFormat format = GetVideoFormat(path);
+            return (format != VideoFormat.Unknown && format != VideoFormat.File);
         }
 
         /// <summary>
@@ -488,8 +501,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns></returns>
         public static string GetVideoDiscPath(string drive) {
            string path;
-           foreach (VideoDiscFormat format in Enum.GetValues(typeof(VideoDiscFormat))) {
-               if (format != VideoDiscFormat.Unknown) {
+           foreach (VideoFormat format in Enum.GetValues(typeof(VideoFormat))) {
+               if (format != VideoFormat.Unknown && format != VideoFormat.File) {
                    path = DeviceManager.GetDriveLetter(drive) + GetEnumValueDescription(format);
                    bool pathExists = File.Exists(path);
                    logger.Debug("Video Disc Check: Format={0}, Path='{1}', Result={2}", format.ToString(), path, pathExists);
@@ -499,7 +512,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                    }
                }
            }
-           logger.Info("Detected Video Disc: {0}", VideoDiscFormat.Unknown.ToString());
+           logger.Info("Detected Video Disc: {0}", VideoFormat.Unknown.ToString());
            return null;
         }
 
@@ -599,6 +612,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns>webgrabber instance</returns>
         public static WebGrabber GetWebGrabberInstance(string url) {
             WebGrabber grabber = new WebGrabber(url);
+            grabber.UserAgent = "MovingPictures/" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             grabber.MaxRetries = MovingPicturesCore.Settings.MaxTimeouts;
             grabber.Timeout = MovingPicturesCore.Settings.TimeoutLength;
             grabber.TimeoutIncrement = MovingPicturesCore.Settings.TimeoutIncrement;
@@ -613,24 +627,121 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="entryPath">entry path to the disc</param>
         /// <param name="format">the video disc format</param>
         /// <returns>path to the stream file</returns>
-        public static string GetMainFeatureStreamFromVideoDisc(string entryPath, VideoDiscFormat format) {   
+        public static string GetMainFeatureStreamFromVideoDisc(string entryPath, VideoFormat format) {   
             if (entryPath == null)
                 return null;
 
             string dir;
             switch (format) {
-                case VideoDiscFormat.Bluray:
+                case VideoFormat.Bluray:
                     dir = entryPath.ToLower().Replace("index.bdmv", @"STREAM\");
                     return GetLargestFileInDirectory(new DirectoryInfo(dir), "*.m2ts");
-                case VideoDiscFormat.HDDVD:
+                case VideoFormat.HDDVD:
                     dir = entryPath.ToLower().Replace(@"adv_obj\discid.dat", @"HVDVD_TS\");
                     return GetLargestFileInDirectory(new DirectoryInfo(dir), "*.evo");
-                case VideoDiscFormat.DVD:
+                case VideoFormat.DVD:
                     return entryPath.ToLower().Replace(@"\video_ts.ifo", @"\vts_01_0.ifo");
                 default:
                     return null;
             }
-        }    
+        }
+
+        #endregion
+
+        #region Mounting
+
+        // note: These methods are wrappers around the Daemon Tools class supplied by mediaportal
+        // we use this wrappers so we can move to other mounting logic in the future more easily.
+
+        public static MountResult MountImage(string imagePath) {
+            // Max cycles to try/wait when the virtual drive is not ready
+            // after mounting it. One cycle is roughly 1/10 of a second 
+           return Utility.MountImage(imagePath, 100);
+        }
+
+        public static MountResult MountImage(string imagePath, int maxWaitCycles) {
+            string drive;
+
+            // Check if the current image is already mounted
+            if (!Utility.IsMounted(imagePath)) {
+                logger.Info("Mounting image...");
+                if (!DaemonTools.Mount(imagePath, out drive)) {
+                    // there was a mounting error
+                    logger.Error("Mounting image failed.");
+                    return MountResult.Failed;
+                }
+            }
+            else {
+                // if the image was already mounted grab the drive letter
+                drive = DaemonTools.GetVirtualDrive();
+                // only check the drive once before reporting that the mounting is still pending
+                maxWaitCycles = 1;
+            }
+
+            // Check if the mounted drive is ready to be read
+            logger.Info("Mounted: Image='{0}', Drive={1}", imagePath, drive);
+
+            int driveCheck = 0;
+            while (true) {
+                driveCheck++;
+                // Try to create a DriveInfo object with the returned driveletter
+                try {
+                    DriveInfo d = new DriveInfo(drive);
+                    if (d.IsReady) {
+                        // This line will list the complete file structure of the image
+                        // Output will only show when the log is set to DEBUG.
+                        // Purpose of method is troubleshoot different image structures.
+                        Utility.LogDirectoryStructure(drive);
+                        return MountResult.Success;
+                    }
+                }
+                catch (ArgumentNullException e) {
+                    // The driveletter returned by Daemon Tools is invalid
+                    logger.DebugException("Daemon Tools returned an invalid driveletter", e);
+                    return MountResult.Failed;
+                }
+                catch (ArgumentException) {
+                    // this exception happens when the driveletter is valid but the driveletter is not 
+                    // finished mounting yet (at least not known to the system). We only need to catch
+                    // this to stay in the loop
+                }
+
+                if (driveCheck == maxWaitCycles) {
+                    return MountResult.Pending;
+                }
+                else if (maxWaitCycles == 1) {
+                    logger.Info("Waiting for virtual drive to become available...");
+                }
+
+                // Sleep for a bit
+                Thread.Sleep(100);
+            }
+        }
+
+        public static bool IsImageFile(string imagePath) {
+            return DaemonTools.IsImageFile(Path.GetExtension(imagePath));
+        }
+        
+        public static bool IsMounted(string imagePath) {
+            return DaemonTools.IsMounted(imagePath);
+        }
+
+        public static void UnMount(string imagePath) {
+            if (IsMounted(imagePath))
+                DaemonTools.UnMount();
+        }
+
+        public static string GetMountedVideoDiscPath(string imagePath) {
+            if (!IsMounted(imagePath))
+                return null;
+
+            string drive = DaemonTools.GetVirtualDrive();
+            string videoPath = GetVideoDiscPath(drive);
+            if (videoPath == null)
+                return drive;
+            else
+                return videoPath;
+        }
 
         #endregion
 
