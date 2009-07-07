@@ -1275,12 +1275,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             selectedIndex++; // make this one-based
             SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
 
-
-            if (selectedMovieWatchedIndicator != null)
-                if (browser.SelectedMovie.ActiveUserSettings.WatchedCount > 0)
-                    selectedMovieWatchedIndicator.Visible = true;
-                else
-                    selectedMovieWatchedIndicator.Visible = false;
+            if (selectedMovieWatchedIndicator != null) {
+                selectedMovieWatchedIndicator.Visible = false;
+                if (browser.SelectedMovie.ActiveUserSettings != null)
+                    if (browser.SelectedMovie.ActiveUserSettings.WatchedCount > 0)
+                        selectedMovieWatchedIndicator.Visible = true;             
+             }
 
             UpdateArtwork();
         }
