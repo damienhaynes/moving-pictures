@@ -172,7 +172,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // grab the list of files and parse out appropriate ones based on extension
             try {
-                List<FileInfo> fileList = Utility.GetVideoFilesRecursive(Directory);
+                List<FileInfo> fileList = VideoUtility.GetVideoFilesRecursive(Directory);
                 foreach (FileInfo videoFile in fileList) {
                     DBLocalMedia newFile = DBLocalMedia.Get(videoFile.FullName, serial);
 

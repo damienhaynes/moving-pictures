@@ -654,12 +654,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (File.Exists(e.FullPath)) {
                 // This is just one file so add it to the list if it's a video file
                 FileInfo file = new FileInfo(e.FullPath);
-                if (Utility.IsVideoFile(file))
+                if (VideoUtility.IsVideoFile(file))
                     filesCreated.Add(file);
             }
             else if (Directory.Exists(e.FullPath)) {
                 // This is a directory so scan it and add create the (video) filelist
-                filesCreated = Utility.GetVideoFilesRecursive(new DirectoryInfo(e.FullPath));
+                filesCreated = VideoUtility.GetVideoFilesRecursive(new DirectoryInfo(e.FullPath));
             }
             else {
                 return;
@@ -793,7 +793,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
                 
                 // exclude samplefiles
-                if (Utility.isSampleFile(currFile.File)) {
+                if (VideoUtility.isSampleFile(currFile.File)) {
                     logger.Info("Sample detected. Skipping {0} ({1} bytes)", currFile.File.Name, currFile.File.Length);
                     continue;
                 }

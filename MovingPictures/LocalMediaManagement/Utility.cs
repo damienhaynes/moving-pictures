@@ -15,22 +15,6 @@ using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
-    public enum VideoFormat
-    {
-        [Description("")]
-        Unknown,
-        [Description("Standalone Video Files")]
-        File,
-        [Description(@"\video_ts\video_ts.ifo")]
-        DVD,
-        [Description(@"\bdmv\index.bdmv")]
-        Bluray,
-        [Description(@"\adv_obj\discid.dat")] // or adv_obj\vplst000.xpl ?
-        HDDVD,
-        [Description(@"\vcd\entries.vcd")]
-        SVCD       
-    }
-
     public enum MountResult {
         Failed,
         Pending,
@@ -101,22 +85,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             return fileList;
-        }
-        
-        /// <summary>
-        /// Get all video files from directory and it's subdirectories.
-        /// </summary>
-        /// <param name="directory"></param>
-        /// <returns></returns>
-        public static List<FileInfo> GetVideoFilesRecursive(DirectoryInfo directory) {
-            List<FileInfo> fileList = GetFilesRecursive(directory);
-            List<FileInfo> videoFileList = new List<FileInfo>();
-            foreach (FileInfo file in fileList) {
-                if (Utility.IsVideoFile(file))
-                    videoFileList.Add(file);
-            }
-            return videoFileList;
-        }
+        } 
 
         /// <summary>
         /// This method will dump the complete file/directory structure to the log
@@ -405,116 +374,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Checks if the file is a valid video file.
-        /// </summary>
-        /// <param name="fileInfo"></param>
-        /// <returns></returns>
-        public static bool IsVideoFile(FileInfo fileInfo) {
-            try {
-                string fullPath = fileInfo.FullName;
-
-                // Video Disc Standards Are OK
-                if (IsVideoDiscPath(fullPath))
-                    return true;
-
-                // Check files that pass the MediaPortal Video Extension list
-                if (IsMediaPortalVideoFile(fileInfo)) {
-                    string ext = fileInfo.Extension.ToLower();
-                    string name = fileInfo.Name.ToLower(); ;
-
-                    // DVD: Non-Standalone content is invalid
-                    if (ext == ".vob" && Regex.Match(name, @"(video_ts|vts_).+", RegexOptions.IgnoreCase).Success)
-                        return false;
-
-                    // DVD: Filter ifo's that are not called video_ts.ifo
-                    // but allow them when we don't have a video_ts.ifo in the same folder
-                    if (ext == ".ifo" && name != "video_ts.ifo")
-                        if (File.Exists(fullPath.ToLower().Replace(name, "video_ts.ifo")))
-                            return false;
-
-                    // Bluray: the only valid bluray file would already passed the method, we filter the rest
-                    if (ext == ".bdmv")
-                        return false;
-
-                    // Bluray: m2ts files sitting in a stream folder are part of a bluray disc
-                    if (ext == ".m2ts" && fileInfo.Directory.Name.Equals("stream", StringComparison.OrdinalIgnoreCase))
-                        return false;
-
-                    // HD-DVD: evo files sitting in a hvdvd_ts folder are part of a hddvd disc
-                    if (ext == ".evo" && fileInfo.Directory.Name.Equals("hvdvd_ts", StringComparison.OrdinalIgnoreCase))
-                        return false;
-
-                    // HD-DVD/(S)VCD: .dat files other than discid.dat should be ignored
-                    if (ext == ".dat" && name != "discid.dat")
-                        return false;
-
-                    // if we made it this far we have a winner
-                    return true;
-                }
-            }
-            catch (Exception e) {
-                if (e is ThreadAbortException)
-                    throw e;
-
-                logger.ErrorException("An error occured while validating '" + fileInfo.ToString() + "' as a video file.", e);
-            }
-
-            // we did not pass so return false
-            return false;
-        }
-
-        /// <summary>
-        /// Returns the Video Disc Type
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static VideoFormat GetVideoFormat(string path) {
-            if (path != null && !IsImageFile(path)) {
-                foreach (VideoFormat format in Enum.GetValues(typeof(VideoFormat))) {
-                    if (format != VideoFormat.Unknown && format != VideoFormat.File) {
-                        if (path.EndsWith(GetEnumValueDescription(format), StringComparison.OrdinalIgnoreCase))
-                            return format;
-                    }
-                }
-                return VideoFormat.File;
-            }
-            return VideoFormat.Unknown;
-        }
-
-        /// <summary>
-        /// Check if the path specified is a video disc standard
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static bool IsVideoDiscPath(string path) {
-            VideoFormat format = GetVideoFormat(path);
-            return (format != VideoFormat.Unknown && format != VideoFormat.File);
-        }
-
-        /// <summary>
-        /// Returns the full path to the video disc or null if it doesn't find one.
-        /// </summary>
-        /// <param name="drive"></param>
-        /// <returns></returns>
-        public static string GetVideoDiscPath(string drive) {
-           string path;
-           foreach (VideoFormat format in Enum.GetValues(typeof(VideoFormat))) {
-               if (format != VideoFormat.Unknown && format != VideoFormat.File) {
-                   path = DeviceManager.GetDriveLetter(drive) + GetEnumValueDescription(format);
-                   bool pathExists = File.Exists(path);
-                   logger.Debug("Video Disc Check: Format={0}, Path='{1}', Result={2}", format.ToString(), path, pathExists);
-                   if (pathExists) {
-                       logger.Info("Detected Video Disc: {0}", format.ToString());
-                       return path;
-                   }
-               }
-           }
-           logger.Info("Detected Video Disc: {0}", VideoFormat.Unknown.ToString());
-           return null;
-        }
+        } 
 
         /// <summary>
         /// Checks if the directory is a logical drive root
@@ -549,49 +409,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             return dirLevel;
         }
-
-        /// <summary>
-        /// Check if the file is classified as sample
-        /// </summary>
-        /// <param name="file">file to check</param>
-        /// <returns>True if file is a sample file</returns>
-        public static bool isSampleFile(FileInfo file) {
-            try {
-                // Set sample max size in bytes
-                long sampleMaxSize = MovingPicturesCore.Settings.MaxSampleFilesize * 1024 * 1024;
-                // Create the sample filter regular expression
-                Regex expr = new Regex(MovingPicturesCore.Settings.SampleRegExFilter, RegexOptions.IgnoreCase);
-                // Return result of given conditions         
-                return ((file.Length < sampleMaxSize) && expr.Match(file.Name).Success);
-            }
-            catch (Exception e) {
-                if (e is ThreadAbortException)
-                    throw e;
-
-                logger.Warn("Sample file check failed: {0}", e.Message);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Get the number of video files (excluding sample files) that are in a folder
-        /// </summary>
-        /// <param name="folder">the directory to count video files in</param>
-        /// <returns>total number of files found in the folder</returns>
-        public static int GetVideoFileCount(DirectoryInfo folder) {
-            int rtn = 0;
-            FileInfo[] fileList = folder.GetFiles("*");
-            foreach (FileInfo currFile in fileList) {
-                // count the number of non-sample video files in the folder
-                if (IsVideoFile(currFile))
-                    if (!isSampleFile(currFile))
-                        rtn++;
-            }
-
-            // Return count
-            return rtn;
-        }       
-
+    
         /// <summary>
         /// Checks if a folder contains a maximum amount of video files
         /// This is used to determine if a folder is dedicated to one movie
@@ -600,7 +418,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="expectedCount">maximum count</param>
         /// <returns>True if folder is dedicated</returns>
         public static bool isFolderDedicated(DirectoryInfo folder, int expectedCount) {
-            return (GetVideoFileCount(folder) <= expectedCount);
+            return (VideoUtility.GetVideoFileCount(folder) <= expectedCount);
         }
 
         #endregion
@@ -618,35 +436,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             grabber.TimeoutIncrement = MovingPicturesCore.Settings.TimeoutIncrement;
             return grabber;
         }
-
-        #region Video Methods
-
-        /// <summary>
-        /// Returns the main feature stream from a video disc (bypassing menu)
-        /// </summary>
-        /// <param name="entryPath">entry path to the disc</param>
-        /// <param name="format">the video disc format</param>
-        /// <returns>path to the stream file</returns>
-        public static string GetMainFeatureStreamFromVideoDisc(string entryPath, VideoFormat format) {   
-            if (entryPath == null)
-                return null;
-
-            string dir;
-            switch (format) {
-                case VideoFormat.Bluray:
-                    dir = entryPath.ToLower().Replace("index.bdmv", @"STREAM\");
-                    return GetLargestFileInDirectory(new DirectoryInfo(dir), "*.m2ts");
-                case VideoFormat.HDDVD:
-                    dir = entryPath.ToLower().Replace(@"adv_obj\discid.dat", @"HVDVD_TS\");
-                    return GetLargestFileInDirectory(new DirectoryInfo(dir), "*.evo");
-                case VideoFormat.DVD:
-                    return entryPath.ToLower().Replace(@"\video_ts.ifo", @"\vts_01_0.ifo");
-                default:
-                    return null;
-            }
-        }
-
-        #endregion
 
         #region Mounting
 
@@ -735,12 +524,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (!IsMounted(imagePath))
                 return null;
 
-            string drive = DaemonTools.GetVirtualDrive();
-            string videoPath = GetVideoDiscPath(drive);
-            if (videoPath == null)
-                return drive;
-            else
-                return videoPath;
+           string drive = DaemonTools.GetVirtualDrive();
+           return VideoUtility.GetVideoPath(drive);
         }
 
         #endregion
