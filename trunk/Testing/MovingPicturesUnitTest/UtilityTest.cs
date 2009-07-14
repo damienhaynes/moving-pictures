@@ -143,58 +143,7 @@ namespace MovingPicturesUnitTest
             string actual;
             actual = Utility.NormalizeTitle(title);
             Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for IsVideoFile
-        ///</summary>
-        [TestMethod()]
-        public void IsVideoFileTest() {
-            FileInfo fileInfo = new FileInfo("NotAMovie.srt");
-            bool expected = false;
-            bool actual;
-            actual = Utility.IsVideoFile(fileInfo);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for IsVideoFile
-        ///</summary>
-        [TestMethod()]
-        public void IsVideoFileTest2() {
-            bool expected = true;
-            bool actual;
-            actual = Utility.IsVideoFile(fileTest);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for IsVideoDiscPath
-        ///</summary>
-        [TestMethod()]
-        public void IsVideoDiscPathTest() {
-            string path = fileTest.FullName;
-            bool expected = false;
-            bool actual;
-            actual = Utility.IsVideoDiscPath(path);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for isSampleFile
-        ///</summary>
-        [TestMethod()]
-        public void isSampleFileTest() {
-            TextWriter tw = new StreamWriter("this-is-a-sample-file.mkv");
-            tw.Close();
-            FileInfo file = new FileInfo("this-is-a-sample-file.mkv");
-            file.Create();
-            bool expected = true;
-            bool actual;
-            actual = Utility.isSampleFile(file);
-            file.Delete();
-            Assert.AreEqual(expected, actual);
-        }
+        } 
 
         /// <summary>
         ///A test for IsMediaPortalVideoFile
@@ -305,30 +254,6 @@ namespace MovingPicturesUnitTest
             //actual = Utility.GetVideoFileCount(folder);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for GetVideoDiscType
-        ///</summary>
-        [TestMethod()]
-        public void GetVideoDiscFormatTest() {
-            string path = @"X:\viDeo_ts\video_ts.ifo";
-            VideoFormat expected = VideoFormat.DVD;
-            VideoFormat actual;
-            actual = Utility.GetVideoFormat(path);
-            Assert.AreEqual(expected, actual);
-        }
-
-        /// <summary>
-        ///A test for GetVideoDiscPath
-        ///</summary>
-        [TestMethod()]
-        public void GetVideoDiscPathTest() {
-            string drive = @"X:\"; // TODO: Initialize to an appropriate value
-            string expected = null; // TODO: Initialize to an appropriate value
-            string actual;
-            actual = Utility.GetVideoDiscPath(drive);
-            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>

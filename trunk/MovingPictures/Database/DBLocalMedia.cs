@@ -180,7 +180,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool IsVideo {
             get {
                 if (fileInfo != null)
-                    return Utility.IsVideoFile(fileInfo);
+                    return VideoUtility.IsVideoFile(fileInfo);
                 else
                     return false;
             }
@@ -414,19 +414,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(AllowManualFilterInput = false)]
         public VideoFormat VideoFormat {
             get {
+
                 // If we do not know the video format check it
+                if (_videoFormat == VideoFormat.NotSupported)             
+                    // store the format, so we can skip this check in the future
+                    VideoFormat = VideoUtility.GetVideoFormat(this.GetVideoPath());
+
+                // For image files it only make sense to look for the VideoFormat
+                // when the image is mounted, so skip the check when this is not the case
                 if (_videoFormat == VideoFormat.Unknown) {
-                    // For image files it only make sense to look for the VideoFormat
-                    // when the image is mounted, so skip the check when this is not the case
-                    if (IsImageFile) {
-                        if (IsMounted)
-                            // store the format, so we can skip this check in the future
-                            VideoFormat = Utility.GetVideoFormat(this.GetVideoPath());
-                    }
-                    else {
-                        // store the format, so we can skip this check in the future
-                        VideoFormat = Utility.GetVideoFormat(this.GetVideoPath());
-                    }
+                    if (IsImageFile)
+                        if (!IsMounted)
+                            return _videoFormat;
                 }
 
                 return _videoFormat;
@@ -435,7 +434,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 _videoFormat = value;
                 commitNeeded = true;
             }
-        } private VideoFormat _videoFormat = VideoFormat.Unknown;
+        } private VideoFormat _videoFormat = VideoFormat.NotSupported;
 
         #endregion
 
@@ -490,11 +489,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     if (mountImage) {
                         if (this.Mount() != MountResult.Success)
                             return UpdateMediaInfoResults.GeneralError;
+                        else
+                            break;
                     }
                     else {
                         return UpdateMediaInfoResults.ImageFileNotMounted;
                     }
-                    break;
             }
 
             // Get the path to the video file
@@ -503,29 +503,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // Start to update media info
             try {
                 logger.Debug("Updating media info for '{0}'", videoPath);
-                string mainFeatureFile;
-                VideoFormat format = this.VideoFormat;
-                switch (format) {
-                    case VideoFormat.DVD:
-                        // because dvds have multiple files
-                        // we must build a list of all IFO files, and loop through them.
-                        // the best file wins
-                        List<string> files = new List<string>();
-                        files.AddRange(Directory.GetFiles(Path.GetDirectoryName(videoPath), "*.ifo"));                       
-                        mainFeatureFile = FindFeatureFilm(files);
-                        logger.Debug("Feature Film File: {0}", mainFeatureFile);
-                        break;
-                    case VideoFormat.HDDVD:
-                    case VideoFormat.Bluray:
-                        mainFeatureFile = Utility.GetMainFeatureStreamFromVideoDisc(videoPath, format);
-                        logger.Debug("Feature Film File: {0}", mainFeatureFile);
-                        break;
-                    default:
-                        mainFeatureFile = videoPath;
-                        break;
-                }
-
-                Database.MediaInfoWrapper mInfoWrapper = new Database.MediaInfoWrapper(mainFeatureFile);
+                Database.MediaInfoWrapper mInfoWrapper = this.VideoFormat.GetMediaInfo(videoPath);
                 this.Duration = mInfoWrapper.Duration;
                 this.VideoWidth = mInfoWrapper.Width;
                 this.VideoHeight = mInfoWrapper.Height;
@@ -575,80 +553,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // by default return the original file path
             return this.FullPath;
         }
-
-        /// <summary>
-        /// Finds the most optimal file in a collection of files.
-        /// Uses the aspect ratio, resolution, audio channel count, and duration to find the file
-        /// </summary>
-        /// <param name="files"></param>
-        /// <returns></returns>
-        private static string FindFeatureFilm(List<string> files) {
-            if (files.Count == 1) return files[0];
-
-            Dictionary<string, MediaInfoWrapper> mediaInfos = new Dictionary<string,MediaInfoWrapper>();
-            foreach (string file in files)
-	        {
-                mediaInfos.Add(file, new Database.MediaInfoWrapper(file));
-	        }
-            
-            // first filter out the fullscreen files if there are widescreen files present
-            List<string> potentialFiles = new List<string>();
-            foreach (var mediaInfo in mediaInfos)
-	        {
-                if (mediaInfo.Value.AspectRatio == "widescreen")
-                    potentialFiles.Add(mediaInfo.Key);
-	        }
-            if (potentialFiles.Count == 0) potentialFiles.AddRange(files);
-            if (potentialFiles.Count == 1) return potentialFiles[0];
-            
-            // next filter out by the highest resolution
-
-            // find max height
-            int maxHeight = 0;
-            foreach (string file in potentialFiles)
-	        {
-                if (mediaInfos[file].Height > maxHeight)
-                    maxHeight = mediaInfos[file].Height;
-	        }
-
-            // remove everything that is not max height
-            for (int i = potentialFiles.Count-1; i >= 0; i--)
-			{
-                if (mediaInfos[potentialFiles[i]].Height != maxHeight)
-                    potentialFiles.RemoveAt(i);
-			}
-            if (potentialFiles.Count == 1) return potentialFiles[0];
-
-            // next filter by audio channel count
-            // find max audio channel count
-            int maxChannelCount = 0;
-            foreach (string file in potentialFiles)
-	        {
-                if (mediaInfos[file].AudioChannels > maxChannelCount)
-                    maxChannelCount = mediaInfos[file].AudioChannels;
-	        }
-
-            // remove everything that is not max channel count
-            for (int i = potentialFiles.Count-1; i >= 0; i--)
-			{
-                if (mediaInfos[potentialFiles[i]].AudioChannels != maxChannelCount)
-                    potentialFiles.RemoveAt(i);
-			}
-
-            // find max duration
-            int maxDuration = 0;
-            foreach (string file in potentialFiles) {
-                if (mediaInfos[file].Duration > maxDuration)
-                    maxDuration = mediaInfos[file].Duration;
-            }
-            // remove everything that is not max duration
-            for (int i = potentialFiles.Count - 1; i >= 0; i--) {
-                if (mediaInfos[potentialFiles[i]].Duration != maxDuration)
-                    potentialFiles.RemoveAt(i);
-            }
-            
-            return potentialFiles[0];
-        }
+        
         #endregion
 
         #region Overrides

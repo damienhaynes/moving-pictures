@@ -311,8 +311,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // Start playback of a file (detects format first)
         private void playFile(string media) {
-            VideoFormat videoFormat = Utility.GetVideoFormat(media);
-            playFile(media, videoFormat);
+            VideoFormat videoFormat = VideoUtility.GetVideoFormat(media);
+            if (videoFormat != VideoFormat.NotSupported) {
+                playFile(media, videoFormat);
+            }
+            else {
+                logger.Warn("'{0}' is not a playable video file.", media);
+                resetPlayer();
+            }
         }
 
         // start playback of a file (using known format)
@@ -332,8 +338,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
 
                 // Alternate playback HD content (without menu)
-                string newMedia = Utility.GetMainFeatureStreamFromVideoDisc(media, videoFormat);
-                if (newMedia != null) {
+                string newMedia = videoFormat.GetMainFeatureFilePath(media);
+                 if (newMedia != null) {
                     // Check if the stream extension is in the mediaportal extension list.
                     if (Utility.IsMediaPortalVideoFile(newMedia)) {
                         media = newMedia;
@@ -656,8 +662,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 queuedMedia.UnMount();
                 mountedPlayback = false;
             }
-
+            
             // reset player variables
+
+            if (GUIGraphicsContext.IsFullScreenVideo)
+                GUIGraphicsContext.IsFullScreenVideo = false;
+
             activeMedia = null;
             queuedMedia = null;
             _playerState = MoviePlayerState.Idle;
