@@ -546,13 +546,13 @@ multiple view modes.
       <orientation>horizontal</orientation>
       <align>left</align>
       <imagesToDraw>5</imagesToDraw>
-      <percentage>#MovingPictures.SelectedMovie.score</percentage>
+      <percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
       <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
     </control>
 
     <control>
       <type>label</type>
-      <label>#MovingPictures.SelectedMovie.score / 10</label>
+      <label>#MovingPictures.SelectedMovie.score.localized / 10</label>
       <posX>920</posX>
       <posY>650</posY>
       <width>360</width>
@@ -697,7 +697,7 @@ multiple view modes.
 
     <control>
       <type>label</type>
-      <label>#MovingPictures.SelectedMovie.runtime min</label>
+      <label>#MovingPictures.SelectedMovie.extra.runtime.short</label>
       <posX>410</posX>
       <posY>345</posY>
       <width>360</width>
@@ -741,13 +741,13 @@ multiple view modes.
       <orientation>horizontal</orientation>
       <align>left</align>
       <imagesToDraw>5</imagesToDraw>
-      <percentage>#MovingPictures.SelectedMovie.score</percentage>
+      <percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
       <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
     </control>
 
     <control>
       <type>label</type>
-      <label>#MovingPictures.SelectedMovie.score / 10</label>
+      <label>#MovingPictures.SelectedMovie.score.localized / 10</label>
       <posX>580</posX>
       <posY>445</posY>
       <width>360</width>
