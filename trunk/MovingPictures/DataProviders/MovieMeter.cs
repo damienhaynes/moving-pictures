@@ -307,6 +307,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
         }
 
         public Film[] Search(string keywords) {
+            if (String.IsNullOrEmpty(keywords))
+                return null;
+            
             int retryCount = 0;
             while (true) {
                 retryCount++;
