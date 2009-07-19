@@ -20,6 +20,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public override void AfterDelete() {
         }
 
+        public bool IsUnc {
+            get { 
+                if (dirInfo == null) 
+                    return true;
+
+                return DeviceManager.PathIsUnc(dirInfo.FullName);
+                }
+        }
+
         public bool IsAvailable {
             get {
                 if (dirInfo == null) 
@@ -58,27 +67,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         /// <summary>
-        /// Returns true if this import path represents an otpical drive.
+        /// Returns true if this import path represents an optical drive.
         /// </summary>
         public bool IsOpticalDrive {
             get {
-                if (_isOpticalDrive == null) {
-                    VolumeInfo volInfo = DeviceManager.GetVolumeInfo(this.FullPath);
-                    if (volInfo != null) {
-                        DriveInfo driveInfo = volInfo.DriveInfo;
-                        if (driveInfo == null)
-                            _isOpticalDrive = false;
-                        else
-                            _isOpticalDrive = driveInfo.DriveType == DriveType.CDRom;
-                    }
-                    else
-                        _isOpticalDrive = false;
-                }
+                if (_isOpticalDrive == null)
+                    _isOpticalDrive = DeviceManager.IsOpticalDrive(this.FullPath);
 
                 return (bool) _isOpticalDrive;
             }
-        }
-        private bool? _isOpticalDrive = null;
+        } private bool? _isOpticalDrive = null;
 
         public DirectoryInfo Directory {
             get { return dirInfo; }
@@ -145,35 +143,75 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public List<DBLocalMedia> GetLocalMedia(bool returnOnlyNew) {
             logger.Debug("Scanning: {0}", Directory.FullName);
-            string volume = null;
-            string label = null;
-            string serial = null;
-            DriveType type = DriveType.Unknown;
-            if (IsAvailable) {                
-                VolumeInfo vi = DeviceManager.GetVolumeInfo(Directory);
-                if (vi != null) {
-                    volume = vi.DriveInfo.Name;
-                    label = vi.Label;
-                    serial = vi.Serial;
-                    type = vi.DriveInfo.DriveType;
-                }
-                logger.Debug("Volume: {0}, Type={1}, Serial={2}", volume, type, serial);
+            
+            // default values
+            string volume = string.Empty;
+            string label = string.Empty;
+            string serial = string.Empty;
+
+            // validate the import path
+            if (this.IsAvailable) {
+                if (!this.IsUnc) {
+                    // Logical volume (can be a mapped network share)
+                    int retry = 0;
+                    while (serial == string.Empty) {
+                        
+                        // Grab information for this logical volume
+                        VolumeInfo volumeInfo = DeviceManager.GetVolumeInfo(Directory);
+                        if (volumeInfo != null) {
+                            // get the volume properties
+                            volume = volumeInfo.Name;
+                            label = volumeInfo.Label;
+                            serial = volumeInfo.Serial;
+                        }
+
+                        // check if the serial is empty
+                        // logical volumes SHOULD have a serial number or something went wrong
+                        if (serial == string.Empty) {
+                            
+                            // If we tried 3 times already then we should report a failure 
+                            if (retry == 3) {
+                                logger.Error("Canceled scan for '{0}': Could not get required volume information.", Directory.FullName);
+                                return null;
+                            }
+
+                            // up the retry count and wait for 1 second
+                            retry++;
+                            Thread.Sleep(1000);
+                            logger.Debug("Retrying: {1} ({0})", Directory.FullName, retry);
+                        }
+                    }
+                } // todo: for UNC paths we could consider using the host part of the UNC path as the MediaLabel (ex. '//SomeHost/../..' => 'SomeHost')
             }
             else {
-                if (this.IsRemovable)
-                    logger.Info("Scanning of removable import path '{0}' was skipped because it is not available.", Directory.FullName);
-                else
+                if (this.IsRemovable) {
+                    if (this.IsUnc) {
+                        // network share
+                        logger.Info("Skipping scan for '{0}': the share is offline.", Directory.FullName);
+                    }
+                    else if (this.IsOpticalDrive) {
+                        // optical drive
+                        logger.Info("Skipping scan for '{0}': the drive is empty.", Directory.FullName);
+                    } 
+                    else {
+                        // all other removable paths
+                        logger.Info("Skipping scan for '{0}': the volume is disconnected.", Directory.FullName);
+                    }
+                }
+                else {
                     logger.Error("Scan for '{0}' was cancelled because the import path is not available.", Directory.FullName);
-
+                }
+                
+                // returning nothing
                 return null;
             }
 
+            // Grab the list of files and validate them
             List<DBLocalMedia> rtn = new List<DBLocalMedia>();
-
-            // grab the list of files and parse out appropriate ones based on extension
             try {
                 List<FileInfo> fileList = VideoUtility.GetVideoFilesRecursive(Directory);
                 foreach (FileInfo videoFile in fileList) {
+
                     DBLocalMedia newFile = DBLocalMedia.Get(videoFile.FullName, serial);
 
                     // The file is in the database
@@ -188,7 +226,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                             }
                         }
 
-                        // If the file is still in the database continue if we only want new new files
+                        // If the file is still in the database continue if we only want new files
                         if (newFile.ID != null && returnOnlyNew)
                             continue;
                     }
@@ -196,9 +234,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     logger.Debug("New File: {0}", videoFile.Name);
                     newFile.ImportPath = this;
 
-                    // we could use the UpdateDiskInformation() method but because we already have the information
-                    // let's just fill the properties manually
-                    // newFile.UpdateDiskInformation();
+                    // Fill in the logical volume details (are both empty when dealing with UNC)
                     newFile.VolumeSerial = serial;
                     newFile.MediaLabel = label;
                     rtn.Add(newFile);
@@ -212,14 +248,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             return rtn;
         }
-
-
+        
         public DriveType GetDriveType() {
             // this property won't be stored as it can differ in time
             if (Directory != null) {
-                VolumeInfo vi = DeviceManager.GetVolumeInfo(Directory);
-                if (vi != null)
-                    return vi.DriveInfo.DriveType;
+                if (DeviceManager.PathIsUnc(Directory.FullName))
+                    return DriveType.Network;
+                else {
+                    VolumeInfo volume = DeviceManager.GetVolumeInfo(Directory);
+                    if (volume != null)
+                        return volume.Type;
+                }
             }
             return DriveType.Unknown;
         }
@@ -229,15 +268,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (Directory != null)
                 return DeviceManager.GetVolumeLabel(Directory);
             else
-                return null;
+                return string.Empty;
         }
 
-        public string GetDiskSerial() {
+        public string GetVolumeSerial() {
             // this property won't be stored as it can differ in time
             if (Directory != null)
-                return DeviceManager.GetDiskSerial(Directory);
+                return DeviceManager.GetVolumeSerial(Directory);
             else
-                return null;
+                return string.Empty;
         }
 
         public override string ToString() {

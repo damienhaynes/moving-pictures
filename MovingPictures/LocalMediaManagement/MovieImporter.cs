@@ -534,7 +534,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // Check if this volume has an import path
             // if so rescan these import paths
             foreach (DBImportPath importPath in DBImportPath.GetAll()) {
-                if (importPath.Active && importPath.GetDiskSerial() == serial)
+                if (importPath.Active && importPath.GetVolumeSerial() == serial)
                     ScanPath(importPath);
             }
         }
@@ -674,7 +674,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // Process all files that were created
                 foreach (FileInfo videoFile in filesCreated) {
                     // Check if the file already exists in our system
-                    DBLocalMedia newFile = DBLocalMedia.Get(videoFile.FullName, DeviceManager.GetDiskSerial(videoFile.FullName));
+                    DBLocalMedia newFile = DBLocalMedia.Get(videoFile.FullName, DeviceManager.GetVolumeSerial(videoFile.FullName));
                     if (newFile.ID != null) {
                         // if this file is already in the system, ignore and log a message.
                         if (importPath.IsRemovable)
@@ -685,7 +685,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     }
                     // We have a new file so add it to the filesAdded list
                     newFile.ImportPath = importPath;
-                    newFile.UpdateDiskProperties();
+                    newFile.UpdateVolumeInformation();
                     lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
                     logger.Info("Watcher queued {0} for processing.", newFile.File.Name);
                 }
@@ -699,7 +699,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // we are going to get all localmedia that IS this file or
             // this directory we can do this by adding a % character to the end of 
             // the path as the sqlite query behind it uses LIKE as operator.
-            localMediaRemoved = DBLocalMedia.GetAll(e.FullPath + '%', DeviceManager.GetDiskSerial(e.FullPath));
+            localMediaRemoved = DBLocalMedia.GetAll(e.FullPath + '%', DeviceManager.GetVolumeSerial(e.FullPath));
 
             // Loop through the remove files list and process
             foreach (DBLocalMedia removedFile in localMediaRemoved) {
@@ -726,7 +726,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             List<DBLocalMedia> localMediaRenamed = new List<DBLocalMedia>();
 
             if (File.Exists(e.FullPath)) {
-                DBLocalMedia localMedia = DBLocalMedia.Get(e.OldFullPath, DeviceManager.GetDiskSerial(e.FullPath));
+                DBLocalMedia localMedia = DBLocalMedia.Get(e.OldFullPath, DeviceManager.GetVolumeSerial(e.FullPath));
                 
                 // if this file is not in our database, return
                 if (localMedia.ID == null)
@@ -740,7 +740,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // This is a directory so we are going to get all localmedia that uses 
                 // this directory we can do this by adding a % character to the end of 
                 // the path as the sqlite query behind it uses LIKE as operator.
-                localMediaRenamed = DBLocalMedia.GetAll(e.OldFullPath + '%', DeviceManager.GetDiskSerial(e.FullPath));
+                localMediaRenamed = DBLocalMedia.GetAll(e.OldFullPath + '%', DeviceManager.GetVolumeSerial(e.FullPath));
 
                 // if this folder isn't related to any file in our database, return
                 if (localMediaRenamed.Count == 0)
@@ -780,21 +780,31 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             foreach (DBLocalMedia currFile in importFileList) {
 
+                string fileName = currFile.File.Name;
+
                 // if we have already loaded this file, move to the next
                 if (currFile.ID != null) {
-                    logger.Debug("Skipping " + currFile.File.Name + " because it is already in the system.");
+                    logger.Debug("Skipping '{0}' because it is already in the system.", fileName);
                     continue;
                 }
 
                 // File is already in the matching system
                 if (matchLookup.ContainsKey(currFile)) {
-                    logger.Debug("Skipping " + currFile.File.Name + " because it's being matched.");
+                    logger.Debug("Skipping '{0}' because it's being matched.", fileName);
                     continue;
                 }
+
+                // Files on logical volumes should have a serial number.
+                // Blocking these files from the import process prevents unnecessary duplications
+                if (!currFile.ImportPath.IsUnc && currFile.VolumeSerial == string.Empty) {
+                    logger.Debug("Skipping '{0}' because it does not have proper volume serial.", fileName);
+                    continue;
+                }
+
                 
                 // exclude samplefiles
                 if (VideoUtility.isSampleFile(currFile.File)) {
-                    logger.Info("Sample detected. Skipping {0} ({1} bytes)", currFile.File.Name, currFile.File.Length);
+                    logger.Info("Sample detected. Skipping {0} ({1} bytes)", fileName, currFile.File.Length);
                     continue;
                 }
 

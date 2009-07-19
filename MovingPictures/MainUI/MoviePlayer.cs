@@ -219,7 +219,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         // Special debug line to troubleshoot availability issues
                         logger.Debug("Media not available: Path={0}, DriveType={1}, Serial={2}, ExpectedSerial={3}",
                             mediaToPlay.FullPath, mediaToPlay.ImportPath.GetDriveType().ToString(),
-                            mediaToPlay.ImportPath.GetDiskSerial(), mediaToPlay.VolumeSerial);
+                            mediaToPlay.ImportPath.GetVolumeSerial(), mediaToPlay.VolumeSerial);
 
                         // Prompt user to enter media
                         if (!_gui.ShowCustomYesNo(Translation.MediaNotAvailableHeader, bodyString, Translation.Retry, Translation.Cancel, true)) {
