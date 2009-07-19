@@ -1,149 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Management;
 using System.Threading;
-using NLog;
-using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
-using System.Windows.Forms;
+using MediaPortal.Plugins.MovingPictures.Database;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
-
-    /// <summary>
-    /// Supplies basic information about the attached physical drive.
-    /// </summary>
-    public class VolumeInfo {
-
-        #region Private Variables
-
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        #endregion
-
-        #region Public Properties (Read-only)
-
-        /// <summary>
-        /// Gets a value indicating wether a volume (drive) is ready
-        /// </summary>
-        /// <remarks>
-        /// Relays IsReady property from embedded DriveInfo object
-        /// </remarks>
-        public bool IsReady {
-            get {
-                return driveInfo.IsReady;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating wether this volume is of a removable type
-        /// </summary>
-        public bool IsRemovable {
-            get {
-                if (removable == null)
-                    removable = (driveInfo.DriveType == DriveType.CDRom || driveInfo.DriveType == DriveType.Removable || driveInfo.DriveType == DriveType.Network);
-
-                return (bool)removable;
-            }
-        } private bool? removable;
-
-        /// <summary>
-        /// Returns the DriveInfo object attached to this instance
-        /// </summary>
-        public DriveInfo DriveInfo {
-            get {
-                return driveInfo;
-            }
-        } private DriveInfo driveInfo;
-        
-        /// <summary>
-        /// Gets the value of VolumeSerialNumber
-        /// </summary>
-        public string Serial {
-            get {
-                if (serial == null && driveInfo != null && driveInfo.IsReady)
-                    RefreshSerial();
-
-                return serial;
-            }
-        } private string serial;
-
-        /// <summary>
-        /// Gets the volume label of the drive
-        /// </summary>
-        public string Label {
-            get {
-                // if the drive is ready return the label
-                if (driveInfo.IsReady)
-                    return driveInfo.VolumeLabel;
-
-                // if not return null
-                return null;
-            }
-        }
-
-        #endregion
-
-        #region Contructors
-
-        // construct using DriveInfo object
-        public VolumeInfo(DriveInfo di) {
-            driveInfo = di;
-            RefreshSerial();
-        }
-
-        // construct using volume (drive letter)
-        public VolumeInfo(string volume) {
-            driveInfo = new DriveInfo(volume);
-            RefreshSerial();
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Refresh the VolumeInfo object
-        /// </summary>
-        public void RefreshSerial() {
-            lock (driveInfo) {
-                
-                string driveLetter = driveInfo.Name.Substring(0, 2);
-
-                // Before we do request information check if the drive is ready.
-                if (!driveInfo.IsReady) {
-                    logger.Debug("Drive Information Update Failed: Drive {0} is not ready.", driveLetter);
-                    serial = null;
-                    return;
-                }
-
-                // Get Volume Serial Number Using WMI
-                try {
-                    ManagementObject disk = new ManagementObject("Win32_LogicalDisk.DeviceID='" + driveLetter + "'");
-                    foreach (PropertyData diskProperty in disk.Properties) {
-                        if (diskProperty.Name == "VolumeSerialNumber") {
-                            serial = diskProperty.Value.ToString();
-                            logger.Debug("Drive Information Updated: Drive={0}, Serial={1}", driveLetter, serial);
-                            return;
-                        }
-                    }
-                    
-                    logger.Debug("Drive Information Update Failed: No Volume Serial Number Found. Drive={0}", driveLetter, serial);
-                    serial = null;
-                }
-                catch (Exception e) {
-                    // Catch Exceptions
-                    logger.DebugException("Drive Information Update Failed: Drive=" + driveLetter, e);
-                    serial = null;
-                }
-            }
-        }
-
-        #endregion       
-
-    }
     
     /// <summary>
     /// Device Manager - needs proper description
@@ -154,10 +18,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // Log object
         private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        // Volume Information Cache
-        private static Dictionary<string, VolumeInfo> volumes;
-        
+        private static readonly object lockObject = new object();
 
         #endregion
 
@@ -193,13 +54,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         static DeviceManager() {
-            volumes = new Dictionary<string, VolumeInfo>();
-            watchedDrives = new List<string>();
-            
-            watcherThread = new Thread(new ThreadStart(WatchDisks));
-            watcherThread.Name = "DeviceManager.WatchDisks";
-            
-            driveStates = new Dictionary<string, bool>();
+            lock (lockObject) {
+                watchedDrives = new List<string>();
+
+                watcherThread = new Thread(new ThreadStart(WatchDisks));
+                watcherThread.Name = "DeviceManager.WatchDisks";
+
+                driveStates = new Dictionary<string, bool>();
+            }
         }
 
         ~DeviceManager() {
@@ -237,10 +99,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         public static void AddWatchDrive(string path) {
             try {
+                // if the path does not point to logical volume do not add it to the drive watcher
+                if (PathIsUnc(path))
+                    return;
+
+                // get the driveletter
                 string driveLetter = GetDriveLetter(path);
                 if (driveLetter == null)
                     return;
 
+                // add the drive to the drive watcher
                 lock (watchedDrives) {
                     if (!watchedDrives.Contains(driveLetter)) {
                         watchedDrives.Add(driveLetter);
@@ -308,9 +176,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         try {
                             // check if the drive is available
                             bool isAvailable;
-                            VolumeInfo volumeInfo = GetVolumeInfo(currDrive);
-                            if (volumeInfo == null) isAvailable = false;
-                            else isAvailable = volumeInfo.IsReady;
+                            VolumeInfo volume = VolumeInfo.Get(currDrive);
+                            if (volume == null) isAvailable = false;
+                            else isAvailable = volume.IsAvailable;
 
                             // if the previous drive state is not stored, store it and continue
                             if (!driveStates.ContainsKey(currDrive)) {
@@ -321,17 +189,30 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             // if a change has occured
                             if (driveStates[currDrive] != isAvailable) {
 
-                                // Refresh Serial
-                                GetVolumeInfo(currDrive).RefreshSerial();
-
                                 // notify any listeners
                                 if (isAvailable) {
-                                    logger.Info("Volume Inserted: " + currDrive);
+                                    
+                                    // Refresh Serial
+                                    volume.Refresh();
+
+                                    if (volume.Type != DriveType.Network)
+                                        logger.Info("Volume Inserted: " + currDrive);
+                                    else
+                                        logger.Info("Volume Online: " + currDrive);
+
                                     if (OnVolumeInserted != null)
-                                        OnVolumeInserted(currDrive, GetDiskSerial(currDrive));
+                                        OnVolumeInserted(currDrive, volume.Serial);
                                 }
                                 else {
-                                    logger.Info("Volume Removed: " + currDrive);
+                                    // if a mapped network share gets disconnected it can either show Network or NoRootDirectory
+                                    if (volume.Type != DriveType.Network && volume.Type != DriveType.NoRootDirectory)
+                                        logger.Info("Volume Removed: " + currDrive);
+                                    else
+                                        logger.Info("Volume Offline: " + currDrive);
+
+                                    // Flush cache for this volume (just to be on the safe side)
+                                    VolumeInfo.Flush(volume.Name);
+
                                     if (OnVolumeRemoved != null)
                                         OnVolumeRemoved(currDrive, null);
                                 }
@@ -376,11 +257,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // Grab drive letter from string
         public static string GetDriveLetter(string path) {
-            if (path == null)
-                return null;
-
             // if the path is UNC return null
-            if (path.StartsWith(@"/") || path.StartsWith(@"\"))
+            if (path != null && PathIsUnc(path))
                 return null;
 
             // return the first 2 characters
@@ -388,6 +266,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return path.Substring(0, 2).ToUpper();
             else // or if only a letter was given add colon
                 return path.ToUpper() + ":";
+        }
+        
+        /// <summary>
+        /// Gets a value indicating wether the path is in UNC format.
+        /// </summary>
+        /// <param name="path">path to check</param>
+        /// <returns>True, if it's a UNC path</returns>
+        public static bool PathIsUnc(string path) {
+            return (path != null && path.StartsWith(@"\\"));
+   
         }
 
         /// <summary>
@@ -400,50 +288,19 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         /// <summary>
-        /// Get the VolumeInfo object where this path is located.
+        /// Gets the VolumeInfo object for this drive
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
         public static VolumeInfo GetVolumeInfo(string path) {
-            string volume = GetDriveLetter(path);
-            // if volume is null then it's UNC
-            if (volume == null)
-                return null;
-
-            // if not loaded, load this VolumeInfo object
-            if (!volumes.ContainsKey(volume)) {
-                try {
-                    lock (volumes) {
-                        if (!volumes.ContainsKey(volume))
-                            volumes.Add(volume, new VolumeInfo(volume));
-                    }
-                }
-                catch (Exception e) {
-                    logger.Error("Error adding drive '{0}' : {1}", volume, e.Message);
-                }
+            if (!PathIsUnc(path)) {
+                string driveletter = GetDriveLetter(path);
+                return VolumeInfo.Get(driveletter);
             }
-
-            // return from cache
-            return volumes[volume];
-        }
-        
-        /// <summary>
-        /// Flushes the drive information cache for all drives
-        /// </summary>
-        public static void Flush() {
-            volumes.Clear();
-            logger.Debug("Flushed drive information cache for all drives.");
-        }
-
-        /// <summary>
-        /// Flushes the drive information cache for the specified drive letter.
-        /// </summary>
-        /// <param name="driveletter">X:</param>
-        public static void Flush(string volume) {
-            if (volumes.ContainsKey(volume))
-                volumes.Remove(volume);
-
-            logger.Debug("Flushed drive information cache for '{0}'.", volume);
+            else {
+                // not a logical volume (no driveinfo)
+                return null;
+            }
         }
 
         /// <summary>
@@ -461,28 +318,28 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="fsInfo"></param>
         /// <param name="serial">if a serial is specified the return value is more reliable.</param>
         /// <returns></returns>
-        public static bool IsAvailable(FileSystemInfo fsInfo, string serial) {         
-            // Get Volume Info
-            VolumeInfo volumeInfo = GetVolumeInfo(fsInfo);
-
+        public static bool IsAvailable(FileSystemInfo fsInfo, string recordedSerial) {
+            // Get Drive Information
+            VolumeInfo volume = GetVolumeInfo(fsInfo);
+            
             // Refresh the object information (important)
             fsInfo.Refresh();
 
-            // do we have a disk serial?
-            if (!String.IsNullOrEmpty(serial) && volumeInfo != null) {
+            // Check if the file exists
+            bool fileExists = fsInfo.Exists;
 
-                // do the disk serials match and does the file exist?
-                if (volumeInfo.Serial == serial && fsInfo.Exists) {
-                    return true; // file available.
-                } else {
-                    return false; // file not available.
-                } 
+            // Do we have a logical volume?
+            if (volume != null && fileExists) {
+                string currentSerial = volume.Serial;
+                // if we have both the recorded and the current serial we can do this very exact
+                // by checking if the serials match
+                if (!String.IsNullOrEmpty(recordedSerial) && !String.IsNullOrEmpty(currentSerial))
+                    // return the exact check result
+                    return (currentSerial == recordedSerial);
             }
-            else {
-                // no serial so we have to do it the old way
-                return fsInfo.Exists;
-            }                    
-                
+            
+           // return the simple check result
+           return fileExists;   
         }
 
         /// <summary>
@@ -508,24 +365,28 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static bool IsRemovable(string path) {
-            if (path == null)
-                return false;
-
-            VolumeInfo volumeInfo = GetVolumeInfo(path);
-            if (volumeInfo == null)
-                return true; // true because it's UNC (=network)
-
-            return volumeInfo.IsRemovable;
+            VolumeInfo volume = GetVolumeInfo(path);
+            if (volume != null)
+                return volume.DriveInfo.IsRemovable();
+            else
+                return true;
         }
 
+        public static bool IsOpticalDrive(string path) {
+            VolumeInfo volume = DeviceManager.GetVolumeInfo(path);
+            if (volume != null)
+                return volume.DriveInfo.IsOptical();
+            else
+                return false;
+        }
 
         /// <summary>
         /// Gets the disk serial of the drive were the given FileSystemInfo object is located.
         /// </summary>
         /// <param name="fsInfo"></param>
         /// <returns></returns>
-        public static string GetDiskSerial(FileSystemInfo fsInfo) {
-            return GetDiskSerial(fsInfo.FullName);   
+        public static string GetVolumeSerial(FileSystemInfo fsInfo) {
+            return GetVolumeSerial(fsInfo.FullName);   
         }
 
         /// <summary>
@@ -533,12 +394,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static string GetDiskSerial(string path) {
-           VolumeInfo volumeInfo = GetVolumeInfo(path);
-           if (volumeInfo != null)
-               return volumeInfo.Serial;
-           else
-               return null;
+        public static string GetVolumeSerial(string path) {
+            VolumeInfo volume = GetVolumeInfo(path);
+            if (volume != null)
+                return volume.Serial;
+            else
+                return string.Empty;
         }
 
         /// <summary>
@@ -556,11 +417,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static string GetVolumeLabel(string path) {
-            VolumeInfo volumeInfo = GetVolumeInfo(path);
-            if (volumeInfo != null)
-                return volumeInfo.DriveInfo.VolumeLabel;
+            VolumeInfo volume = GetVolumeInfo(path);
+            if (volume != null)
+                return volume.Label;
             else
-                return null;
+                return string.Empty;
         }
 
         #endregion

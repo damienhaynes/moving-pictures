@@ -163,7 +163,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // by verifying the volume serial number
                 bool correctMedia = true;
                 if (!String.IsNullOrEmpty(volume_serial))
-                    correctMedia = DeviceManager.GetDiskSerial(fileInfo.DirectoryName) == volume_serial;
+                    correctMedia = DeviceManager.GetVolumeSerial(fileInfo.DirectoryName) == volume_serial;
 
                 // if the import path is online, we have the right media inserted and the file 
                 // is not there, we assume it has been deleted, so return true
@@ -440,16 +440,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #region Public methods
 
-        public bool UpdateDiskProperties() {
-            // This will overwrite/update the label and serial field with the current 
-            // disk information available from it's import path
+        /// <summary>
+        /// This method will update/overwrite volume information of this object
+        /// with the current information from the import path.
+        /// </summary>
+        /// <returns></returns>
+        public void UpdateVolumeInformation() {
+            // we can only update when we have an import path.
             if (importPath != null) {
-                VolumeSerial = importPath.GetDiskSerial();
+                VolumeSerial = importPath.GetVolumeSerial();
                 MediaLabel = importPath.GetVolumeLabel();
-                return true;
-            }
-            else {
-                return false;
             }
         }
 
