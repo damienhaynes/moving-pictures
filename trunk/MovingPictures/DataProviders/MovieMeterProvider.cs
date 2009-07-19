@@ -5,6 +5,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
+using System.Reflection;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
@@ -13,6 +14,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         #region Private variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly object lockApi = new object(); 
 
         // NOTE: To other developers creating other applications, using this code as a base
         // or as a reference. PLEASE get your own API key. Do not reuse the one listed here
@@ -56,9 +58,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         public MovieMeterAPI Api {
             get {
-                if (_mmApi == null)
-                    _mmApi = new MovieMeterAPI(apiKey);
-
+                lock (lockApi) {
+                    if (_mmApi == null)
+                        _mmApi = new MovieMeterAPI(apiKey);
+                        _mmApi.UserAgent = Assembly.GetExecutingAssembly().GetName().Name + "/" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                }
                 return _mmApi;
             }
         }  private MovieMeterAPI _mmApi;

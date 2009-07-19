@@ -189,6 +189,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
         private readonly object lockProxy = new object();
         private readonly object lockSession = new object();
 
+        private static readonly object lockCache = new object();
         private static Dictionary<string, string> mmIdLookupCache;
         private static Dictionary<string, FilmDetail> mmFilmDetailCache;
 
@@ -205,10 +206,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
         }
 
         static MovieMeterAPI() {
-            if (mmIdLookupCache == null)
-                mmIdLookupCache = new Dictionary<string, string>();
-            if (mmFilmDetailCache == null)
-                mmFilmDetailCache = new Dictionary<string, FilmDetail>();
+            lock (lockCache) {
+                if (mmIdLookupCache == null)
+                    mmIdLookupCache = new Dictionary<string, string>();
+                if (mmFilmDetailCache == null)
+                    mmFilmDetailCache = new Dictionary<string, FilmDetail>();
+            }
         }
 
         #endregion
@@ -280,15 +283,19 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
             // try to correct invalid imdb input
             imdbId = Regex.Replace(imdbId, @"[^\d]", "").Trim();
 
-            if (mmIdLookupCache.ContainsKey(imdbId))
-                return mmIdLookupCache[imdbId];
+            lock (lockCache) {
+                if (mmIdLookupCache.ContainsKey(imdbId))
+                    return mmIdLookupCache[imdbId];
+            }
 
             while (true) {
                 retryCount++;
                 try {
                     string mmid = Proxy.RetrieveByImdb(getSessionKey(), imdbId);
-                    if (!mmIdLookupCache.ContainsKey(imdbId))
-                        mmIdLookupCache.Add(imdbId, mmid);
+                    lock (lockCache) {
+                        if (!mmIdLookupCache.ContainsKey(imdbId))
+                            mmIdLookupCache.Add(imdbId, mmid);
+                    }
 
                     return mmid;
                 }
@@ -314,8 +321,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
         }
 
         public FilmDetail GetMovieDetails(string movieMeterID) {
-            if (mmFilmDetailCache.ContainsKey(movieMeterID))
-                return mmFilmDetailCache[movieMeterID];
+            lock (lockCache) {
+                if (mmFilmDetailCache.ContainsKey(movieMeterID))
+                    return mmFilmDetailCache[movieMeterID];
+            }
 
             int retryCount = 0;
             while (true) {
@@ -323,13 +332,15 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                 try {
                     FilmDetail details = Proxy.RetrieveDetails(getSessionKey(), Int32.Parse(movieMeterID));
 
-                    // Update FilmDetail Cache
-                    if (!mmFilmDetailCache.ContainsKey(movieMeterID))
-                        mmFilmDetailCache.Add(movieMeterID, details);
+                    lock (lockCache) {
+                        // Update FilmDetail Cache
+                        if (!mmFilmDetailCache.ContainsKey(movieMeterID))
+                            mmFilmDetailCache.Add(movieMeterID, details);
 
-                    // Update IMDB Cache
-                    if (!mmIdLookupCache.ContainsKey(details.imdb))
-                        mmIdLookupCache.Add(details.imdb, movieMeterID);
+                        // Update IMDB Cache
+                        if (!mmIdLookupCache.ContainsKey(details.imdb))
+                            mmIdLookupCache.Add(details.imdb, movieMeterID);
+                    }
 
                     return details;
                 }
@@ -344,8 +355,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
         /// Flushes the movie information cache
         /// </summary>
         public void FlushCache() {
-            mmIdLookupCache.Clear();
-            mmFilmDetailCache.Clear();
+            lock (lockCache) {
+                mmIdLookupCache.Clear();
+                mmFilmDetailCache.Clear();
+            }
         }
 
         #endregion
