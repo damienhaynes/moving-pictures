@@ -784,27 +784,42 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                 // if we have already loaded this file, move to the next
                 if (currFile.ID != null) {
-                    logger.Debug("Skipping '{0}' because it is already in the system.", fileName);
+                    logger.Debug("SKIPPED: File='{0}', Reason='Already in the system'.", fileName);
                     continue;
                 }
 
                 // File is already in the matching system
                 if (matchLookup.ContainsKey(currFile)) {
-                    logger.Debug("Skipping '{0}' because it's being matched.", fileName);
+                    logger.Debug("SKIPPED: File='{0}', Reason='Already being matched'", fileName);
                     continue;
                 }
 
-                // Files on logical volumes should have a serial number.
-                // Blocking these files from the import process prevents unnecessary duplications
-                if (!currFile.ImportPath.IsUnc && currFile.VolumeSerial == string.Empty) {
-                    logger.Debug("Skipping '{0}' because it does not have proper volume serial.", fileName);
-                    continue;
-                }
+                // Logical Volume Check
+                if (!currFile.ImportPath.IsUnc) {
+                    
+                    // Files on logical volumes should have a serial number.
+                    // Blocking these files from the import process prevents unnecessary duplications
+                    if (currFile.VolumeSerial == string.Empty) {
+                        logger.Debug("SKIPPED: File='{0}', Reason='Missing volume serial'", fileName);
+                        continue;
+                    }
 
+                    // This logic is really about fixing pre 0.8 data that missed out on the volume serial requirement 
+                    // and were not catched in startup maintenance. We try to get the same path with an empty serial if 
+                    // it does turn up we just update the existing object and discard the new object.
+                    DBLocalMedia dupeFile = DBLocalMedia.Get(currFile.FullPath);
+                    if (dupeFile.ID != null) {
+                        dupeFile.VolumeSerial = currFile.VolumeSerial;
+                        dupeFile.MediaLabel = currFile.MediaLabel;
+                        dupeFile.Commit();
+                        logger.Debug("Updated '{0}' as an existing object. The file was removed from the importer.", fileName);
+                        continue;
+                    }
+                }
                 
                 // exclude samplefiles
                 if (VideoUtility.isSampleFile(currFile.File)) {
-                    logger.Info("Sample detected. Skipping {0} ({1} bytes)", fileName, currFile.File.Length);
+                    logger.Info("SKIPPED: File='{0}', Bytes={1}, Reason='Sample detected'", fileName, currFile.File.Length);
                     continue;
                 }
 
@@ -1044,7 +1059,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // notify the user we are processing
-            logger.Info("Retrieving details for \"" + currMatch.Selected.Movie.Title + "\"");
+            logger.Info("Retrieving details for \"{0}\"", currMatch.Selected.Movie.Title);
             OnProgress("Retrieving details for: " + currMatch.Selected.Movie.Title);
 
             // notify any listeners of the status change
@@ -1056,7 +1071,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // if automatic mediainfo retrieval is active, update media info for the file
             if (MovingPicturesCore.Settings.AutoRetrieveMediaInfo) {
-                logger.Info("Retrieving media information for: " + currMatch.Selected.Movie.Title);
+                logger.Info("Retrieving media information for: {0}", currMatch.Selected.Movie.Title);
                 OnProgress("Retrieving media information for: " + currMatch.Selected.Movie.Title);
                 if (MovieStatusChanged != null)
                     MovieStatusChanged(currMatch, MovieImporterAction.GETTING_MEDIA_INFO);
@@ -1082,7 +1097,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return;
 
             // notify any listeners of the status change
-            logger.Info("Added \"" + currMatch.Selected.Movie.Title + "\".");
+            logger.Info("Added \"{0}\".", currMatch.Selected.Movie.Title);
             if (MovieStatusChanged != null)
                 MovieStatusChanged(currMatch, MovieImporterAction.COMMITED);
         }
@@ -1147,13 +1162,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 else approvedMatches.Add(mediaMatch);
 
                 // notify any listeners
-                logger.Info("Auto-approved " + mediaMatch.LocalMediaString + " as " + mediaMatch.Selected.Movie.Title);
+                logger.Info("Auto-approved {0} as {1}", mediaMatch.LocalMediaString, mediaMatch.Selected.Movie.Title);
                 if (MovieStatusChanged != null)
                     MovieStatusChanged(mediaMatch, MovieImporterAction.APPROVED);
             }
             else {
                 matchesNeedingInput.Add(mediaMatch);
-                logger.Info("No exact match for " + mediaMatch.LocalMediaString);
+                logger.Info("No exact match for {0}", mediaMatch.LocalMediaString);
                 if (MovieStatusChanged != null)
                     MovieStatusChanged(mediaMatch, MovieImporterAction.NEED_INPUT);
             }

@@ -124,6 +124,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count * 100 / total));
                 count++;
 
+                // Eliminate null values (as of 0.8 it's either and empty string or a proper serial)
+                if (currFile.VolumeSerial == null) {
+                    currFile.VolumeSerial = string.Empty;
+                    currFile.Commit();
+                }
+
+                // Verify the serial for each object related to a logical voliume
                 if (!currFile.ImportPath.IsUnc) {
                     DriveType type = currFile.ImportPath.GetDriveType();
                     if (type != DriveType.Unknown && type != DriveType.CDRom && type != DriveType.NoRootDirectory) {
@@ -131,7 +138,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         // information is missing or the user has moved the import
                         // path to another disk (rare)
                         bool fileAvailable = currFile.IsAvailable;
-                        if ((String.IsNullOrEmpty(currFile.VolumeSerial) && fileAvailable) || (!fileAvailable && File.Exists(currFile.FullPath))) {
+                        if ((currFile.VolumeSerial == string.Empty && fileAvailable) || (!fileAvailable && File.Exists(currFile.FullPath))) {
                             currFile.UpdateVolumeInformation();
                             currFile.Commit();
                             logger.Info("Updating disk information for '{0}': Serial={1}, Label={2}", currFile.FullPath, currFile.VolumeSerial, currFile.MediaLabel);
