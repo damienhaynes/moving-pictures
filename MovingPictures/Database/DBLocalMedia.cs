@@ -151,7 +151,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool IsRemoved {
             get {
                 // Skip this check for CDRom drives
-                if (ImportPath.GetDriveType() == DriveType.CDRom)
+                if (ImportPath.IsOpticalDrive)
                     return false;
 
                 if (fileInfo == null)
@@ -162,8 +162,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // if we have a volume serial then check if the right media is inserted
                 // by verifying the volume serial number
                 bool correctMedia = true;
-                if (!String.IsNullOrEmpty(volume_serial))
-                    correctMedia = DeviceManager.GetVolumeSerial(fileInfo.DirectoryName) == volume_serial;
+                if (VolumeSerial.Length > 0)
+                    correctMedia = (DeviceManager.GetVolumeSerial(fileInfo.DirectoryName) == VolumeSerial);
 
                 // if the import path is online, we have the right media inserted and the file 
                 // is not there, we assume it has been deleted, so return true
@@ -233,7 +233,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
-        [DBFieldAttribute(Default = null, FieldName = "volume_serial", Filterable = false)]
+        [DBFieldAttribute(Default = "", FieldName = "volume_serial", Filterable = false)]
         public string VolumeSerial {
             get {
                 return volume_serial;
@@ -248,14 +248,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(Default = null, Filterable = false)]
         public string DiscId {
             get {
+                // When this object is a DVD and we don't have a DiscID yet
                 if (IsDVD && _discid == null) {
-                    if (IsImageFile)
-                        if (!IsMounted)
-                            return _discid;
- 
-                    _discid = Utility.GetDiscIdString(fileInfo.DirectoryName);
+                    // if this is an image file but not mounted
+                    // skip the disc id utility
+                    if (IsImageFile && !IsMounted)
+                        return _discid;
+                    
+                    // Calculate the DiscID
+                    DiscId = Utility.GetDiscIdString(fileInfo.DirectoryName);
                 }
                 
+                // return the DiscID
                 return _discid;            
             }
             set {
@@ -606,7 +610,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return;
 
             deleting = true;
-            logger.Info("Removing " + FullPath + " and associated movie.");
+            logger.Info("Removing '{0}' and associated movie.", FullPath);
             foreach (DBMovieInfo currMovie in AttachedMovies) {
                 foreach (DBLocalMedia otherFile in currMovie.LocalMedia) {
                     if (otherFile != this)
@@ -620,7 +624,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public static DBLocalMedia Get(string fullPath) {
-            return Get(fullPath, null);
+            return Get(fullPath, string.Empty);
         }
 
         public static DBLocalMedia GetDVD(string fullPath, string discId) {
@@ -636,8 +640,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return newFile;
         }
 
-        public static DBLocalMedia Get(string fullPath, string diskSerial) {
-            List<DBLocalMedia> resultSet = GetAll(fullPath, diskSerial);
+        public static DBLocalMedia Get(string fullPath, string volumeSerial) {
+            List<DBLocalMedia> resultSet = GetAll(fullPath, volumeSerial);
             if (resultSet.Count > 0) {
                 return resultSet[0];
             }
@@ -649,16 +653,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public static List<DBLocalMedia> GetAll(string fullPath) {
-            return GetAll(fullPath, null);
+            return GetAll(fullPath, string.Empty);  
         }
 
-        public static List<DBLocalMedia> GetAll(string fullPath, string diskSerial) {
+        public static List<DBLocalMedia> GetAll(string fullPath, string volumeSerial) {
+            
+            if (volumeSerial == null)
+                volumeSerial = string.Empty;
+            
             DBField pathField = DBField.GetField(typeof(DBLocalMedia), "FullPath");
             // using operator LIKE to make the search case insensitive
             ICriteria pathCriteria = new BaseCriteria(pathField, "like", fullPath);
             DBField serialField = DBField.GetField(typeof(DBLocalMedia), "VolumeSerial");
-            string op = (diskSerial != null) ? "=" : "is";
-            ICriteria serialCriteria = new BaseCriteria(serialField, op, diskSerial);
+            ICriteria serialCriteria = new BaseCriteria(serialField, "=", volumeSerial);
 
             ICriteria criteria = new GroupedCriteria(pathCriteria, GroupedCriteria.Operator.AND, serialCriteria);
 
