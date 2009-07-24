@@ -7,6 +7,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 using Cornerstone.MP;
+using Cornerstone.GUI.Dialogs;
 using MediaPortal.Dialogs;
 using MediaPortal.GUI.Library;
 using MediaPortal.Player;
@@ -41,6 +42,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         Dictionary<string, bool> loggedProperties;
 
         private bool loaded = false;
+
+        GUIDialogProgress initDialog;
+        private bool initComplete = false;
+        private string initProgressLastAction = string.Empty;
+        private int initProgressLastPercent = 0;     
+        private Thread initThread;
 
         private ImageSwapper backdrop;
         private AsyncImageResource cover = null;
@@ -117,38 +124,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #endregion
 
-        public MovingPicturesGUI() {
-            MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(Importer_Progress);
+        public MovingPicturesGUI() { }
 
-            // Get Moving Pictures specific autoplay setting
-            try {
-                diskInsertedAction = (DiskInsertedAction) Enum.Parse(typeof(DiskInsertedAction), MovingPicturesCore.Settings.DiskInsertionBehavior);
-            } catch {
-                diskInsertedAction = DiskInsertedAction.DETAILS;
-            }
-
-            // setup the image resources for cover and backdrop display
-            int artworkDelay = MovingPicturesCore.Settings.ArtworkLoadingDelay;
-
-            backdrop = new ImageSwapper();
-            backdrop.ImageResource.Delay = artworkDelay;
-            backdrop.PropertyOne = "#MovingPictures.Backdrop";
-
-            cover = new AsyncImageResource();
-            cover.Property = "#MovingPictures.Coverart";
-            cover.Delay = artworkDelay;
-
-            // used to prevent overzealous logging of skin properties
-            loggedProperties = new Dictionary<string, bool>();
-
-            // instantiate player
-            moviePlayer = new MoviePlayer(this);
-            moviePlayer.MovieEnded += new MoviePlayerEvent(onMovieEnded);
-            moviePlayer.MovieStopped += new MoviePlayerEvent(onMovieStopped);
-        }
-
-        ~MovingPicturesGUI() {
-        }
+        ~MovingPicturesGUI() {      }
 
         private void UpdateArtwork() {
             if (browser.SelectedMovie == null)
@@ -169,8 +147,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             backdrop.Active = skinSettings.UseBackdrop(browser.CurrentView);
         }
-
-
 
         private void ClearFocus() {
             if (facade != null) {
@@ -309,29 +285,57 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public override bool Init() {
-            bool success;
+            logger.Info("Initializing GUI...");
+            
+            // check if we can load the skin
+            bool success = Load(GUIGraphicsContext.Skin + @"\movingpictures.xml");
 
-            // initialize the moving pictures core services
-            success = Load(GUIGraphicsContext.Skin + @"\movingpictures.xml");
-            MovingPicturesCore.Initialize();
+            // start initialization of the moving pictures core services in a seperate thread
+            initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
+            initThread.Start();
 
-            // start the background importer
-            if (MovingPicturesCore.Settings.EnableImporterInGUI)
-                MovingPicturesCore.Importer.Start();
+            // ... and listen to the progress
+            MovingPicturesCore.InitializeProgress += new ProgressDelegate(onCoreInitializationProgress);
 
-            // load skin based settings from skin file
-            skinSettings = new MovingPicturesSkinSettings(_windowXmlFileName);
-
-            logger.Info("GUI Initialization Complete");
             return success;
         }
 
         public override void DeInit() {
             base.DeInit();
+
+            logger.Info("Deinitializing GUI...");
+
+            // if the plugin was not fully initialized yet
+            // abort the initialization
+            if (!initComplete && initThread.IsAlive) {
+                initThread.Abort();
+                // wait for the thread to be aborted
+                initThread.Join();
+            }    
+        
             MovingPicturesCore.Shutdown();
+            initComplete = false;
+            logger.Info("GUI Deinitialization Complete");
         }
 
         protected override void OnPageLoad() {
+
+            // Check wether the plugin is initialized.
+            if (!initComplete) {
+                
+                // if we are not initialized yet show a loading dialog
+                // this will 'block' untill loading has finished or the user 
+                // pressed cancel or ESC
+                showLoadingDialog();                
+                
+                // if the initialization is not complete the user cancelled
+                if (!initComplete) {
+                    // return to where the user came from
+                    GUIWindowManager.ShowPreviousWindow();
+                    return;
+                }
+            }
+
             // if the component didn't load properly we probably have a bad skin file
             if (facade == null) {
                 GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
@@ -395,24 +399,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             OnBrowserContentsChanged();
 
             browser.Facade = facade;
-            facade.Focus = true;
+            facade.Focus = true;           
 
             // first time setup tasks
             if (!loaded) {
                 loaded = true;
-
-                // Listen to the DeviceManager for external media activity (i.e. disks inserted)
-                logger.Debug("Listening for device changes.");
-                DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
-                DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
-
                 browser.CurrentView = browser.DefaultView;
-            }
-
-            // if we have loaded before, lets update the view to match our previous settings
-            else
+            } // if we have loaded before, lets update the view to match our previous settings
+            else {
                 browser.ReapplyView();
-            
+            }
 
             // if we are not in details view (maybe we just came back from playing a movie)
             // set the first item in the list as selected.
@@ -428,8 +424,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             backdrop.GUIImageOne = movieBackdropControl;
             backdrop.GUIImageTwo = movieBackdropControl2;
             backdrop.LoadingImage = loadingImage;
-
-
+            
             // load fanart and coverart
             UpdateArtwork();
 
@@ -443,31 +438,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         protected override void OnPageDestroy(int new_windowId) {
-            // Enable autoplay again when we are leaving the plugin
-            // But only when we are not playing something
-            if (!moviePlayer.IsPlaying)                
-                enableNativeAutoplay();
+            // only execute this when we are initialized
+            if (initComplete) {
+                // Enable autoplay again when we are leaving the plugin
+                // But only when we are not playing something
+                if (!moviePlayer.IsPlaying)
+                    enableNativeAutoplay();
 
-            base.OnPageDestroy(new_windowId);
-        }
-
-        // Disable MediaPortal's AutoPlay
-
-        /// <summary>
-        /// Disable MediaPortal AutoPlay
-        /// </summary>
-        private void disableNativeAutoplay() {
-            logger.Info("Disabling native autoplay.");
-            AutoPlay.StopListening();
-        }
-
-        /// <summary>
-        /// Enable MediaPortal AutoPlay
-        /// </summary>
-        private void enableNativeAutoplay() {
-            if (GUIGraphicsContext.CurrentState == GUIGraphicsContext.State.RUNNING) {
-                logger.Info("Re-enabling native autoplay.");
-                AutoPlay.StartListening();
+                base.OnPageDestroy(new_windowId);
             }
         }
 
@@ -529,6 +507,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public override void OnAction(MediaPortal.GUI.Library.Action action) {
+            // do nothing when we are not initialized
+            if (!initComplete)
+                return;
+
             switch (action.wID) {
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PARENT_DIR:
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_HOME:
@@ -605,6 +587,113 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         public override bool OnMessage(GUIMessage message) {
             return base.OnMessage(message);
+        }
+
+        #endregion
+
+        #region Loading and initialization
+
+        private void showLoadingDialog() {
+            initDialog = (GUIDialogProgress)GUIWindowManager.GetWindow((int)Window.WINDOW_DIALOG_PROGRESS);
+            initDialog.Reset();
+            initDialog.ShowProgressBar(true);
+            initDialog.SetHeading("Loading Moving Pictures");
+            initDialog.SetLine(1, string.Empty);
+            initDialog.SetLine(2, initProgressLastAction);
+            initDialog.SetPercentage(initProgressLastPercent);
+            initDialog.Progress();
+            initDialog.DoModal(GetID);
+        }
+
+        private void onCoreInitializationProgress(string actionName, int percentDone) {
+
+            // Update the progress variables
+            initProgressLastAction = actionName;
+            initProgressLastPercent = percentDone;
+
+            // If the progress dialog exists, update it.
+            if (initDialog != null) {
+                initDialog.SetLine(2, actionName);
+                initDialog.SetPercentage(percentDone);
+                initDialog.Progress();
+            }
+
+            // When we are finished initializing
+            if (percentDone == 100) {
+
+                // Start the background importer
+                if (MovingPicturesCore.Settings.EnableImporterInGUI) {
+                    MovingPicturesCore.Importer.Start();
+                    MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(Importer_Progress);
+                }
+
+                // Load skin based settings from skin file
+                skinSettings = new MovingPicturesSkinSettings(_windowXmlFileName);
+
+                // Get Moving Pictures specific autoplay setting
+                try {
+                    diskInsertedAction = (DiskInsertedAction)Enum.Parse(typeof(DiskInsertedAction), MovingPicturesCore.Settings.DiskInsertionBehavior);
+                }
+                catch {
+                    diskInsertedAction = DiskInsertedAction.DETAILS;
+                }
+
+                // setup the image resources for cover and backdrop display
+                int artworkDelay = MovingPicturesCore.Settings.ArtworkLoadingDelay;
+
+                // create backdrop image swapper
+                backdrop = new ImageSwapper();
+                backdrop.ImageResource.Delay = artworkDelay;
+                backdrop.PropertyOne = "#MovingPictures.Backdrop";
+
+                // create cover image swapper
+                cover = new AsyncImageResource();
+                cover.Property = "#MovingPictures.Coverart";
+                cover.Delay = artworkDelay;
+
+                // used to prevent overzealous logging of skin properties
+                loggedProperties = new Dictionary<string, bool>();
+
+                // instantiate player
+                moviePlayer = new MoviePlayer(this);
+                moviePlayer.MovieEnded += new MoviePlayerEvent(onMovieEnded);
+                moviePlayer.MovieStopped += new MoviePlayerEvent(onMovieStopped);
+
+                // Listen to the DeviceManager for external media activity (i.e. disks inserted)
+                logger.Debug("Listening for device changes.");
+                DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
+                DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
+
+                // Flag that the GUI is initialized
+                initComplete = true;
+
+                // If the initDialog is present close it
+                if (initDialog != null) {
+                    initDialog.Reset();
+                    initDialog.Close();
+                }
+
+                // Report that we completed the init
+                logger.Info("GUI Initialization Complete");
+            }
+        }
+
+        /// <summary>
+        /// Disable MediaPortal AutoPlay
+        /// </summary>
+        private void disableNativeAutoplay() {
+            logger.Info("Disabling native autoplay.");
+            AutoPlay.StopListening();
+        }
+
+        /// <summary>
+        /// Enable MediaPortal AutoPlay
+        /// </summary>
+        private void enableNativeAutoplay() {
+            if (GUIGraphicsContext.CurrentState == GUIGraphicsContext.State.RUNNING) {
+                logger.Info("Re-enabling native autoplay.");
+                AutoPlay.StartListening();
+            }
         }
 
         #endregion
