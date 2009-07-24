@@ -18,6 +18,7 @@ using Cornerstone.Database.Tables;
 using Cornerstone.GUI.Dialogs;
 using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesCore {
@@ -176,10 +177,14 @@ namespace MediaPortal.Plugins.MovingPictures {
                 try {
                     if (InitializeProgress != null) InitializeProgress(actionDescriptions[currAction], (int)(loadingProgress * 100 / loadingTotal));
                     loadingProgressDescription = actionDescriptions[currAction];
-
+                    logger.Debug("LOADING: {0}", loadingProgressDescription);
                     currAction();
                 }
                 catch (Exception ex) {
+                    // don't log error if the init was aborted on purpose
+                    if (ex.GetType() == typeof(ThreadAbortException))
+                        throw ex;
+
                     logger.ErrorException("Error: ", ex);
                 }
                 finally {
@@ -199,8 +204,14 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public static void Shutdown() {
             DeviceManager.StopMonitor();
-            _importer.Stop();
-            _processManager.CancelAllProcesses();
+            
+            // Stop Importer
+            if (_importer != null)
+                _importer.Stop();
+
+            // Cancel background processes
+            if (_processManager != null)
+                _processManager.CancelAllProcesses();
 
             _processManager = null;
             _importer = null;
