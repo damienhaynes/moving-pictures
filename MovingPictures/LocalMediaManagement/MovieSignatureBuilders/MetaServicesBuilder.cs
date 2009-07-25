@@ -8,8 +8,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
     class MetaServicesBuilder : ISignatureBuilder {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private static string urlWindowsMetaServicesQueryDiscId = "http://movie.metaservices.microsoft.com/pas_movie_B/template/GetMDRDVDByCRC.xml?CRC=";
-
+        private static string urlWindowsMetaServicesQueryDiscId = "http://metaservices.windowsmedia.com/dvdinfopages/querycrcextendedMCE.aspx?DVDID=";
         public SignatureBuilderResult UpdateSignature(MovieSignature signature) {
             if (MovingPicturesCore.Settings.EnableDiscIdLookup || signature.DiscId == null)
                 return SignatureBuilderResult.INCONCLUSIVE;
