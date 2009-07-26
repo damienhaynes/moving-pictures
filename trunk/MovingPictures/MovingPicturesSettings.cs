@@ -165,6 +165,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _automaticallyImportInsertedDVDs;
 
         [CornerstoneSetting(
+            Name = "Ignore Interactive Content on Video Disc",
+            Description = "When this option is enabled the importer will ignore the so-called interactive folders on video disc which might contain video material to be played on your PC.",
+            Groups = "|Movie Importer|Matching and Importing|",
+            Identifier = "importer_disc_ignore_interactive_content",
+            Default = true)]
+        public bool IgnoreInteractiveContentOnVideoDisc {
+            get { return _ignoreInteractiveContentOnVideoDisc; }
+            set {
+                _ignoreInteractiveContentOnVideoDisc = value;
+                OnSettingChanged("importer_disc_ignore_interactive_content");
+            }
+        }
+        private bool _ignoreInteractiveContentOnVideoDisc;
+
+        [CornerstoneSetting(
             Name = "Dataprovider Request Limit",
             Description = "The maximum of dataproviders used to update/search movie details in order of priority. Searches will stop after the first dataprovider that returns relevant results, but updating details will stop only after this limit has been reached to allow it to fill missing fields using different providers. Set this to 0 to have it try ALL enabled dataproviders (slower).",
             Groups = "|Movie Importer|Matching and Importing|",

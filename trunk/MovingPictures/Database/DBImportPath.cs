@@ -209,9 +209,31 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // Grab the list of files and validate them
             List<DBLocalMedia> rtn = new List<DBLocalMedia>();
             try {
-                List<FileInfo> fileList = VideoUtility.GetVideoFilesRecursive(Directory);
+                
+                List<FileInfo> fileList = null;
+                
+                // When the option to ignore interactive content is enabled (applies to optical drives that are internally managed)
+                // we first check for known video formats (DVD, Bluray etc..) before we are going to scan for all files on the disc.
+                if (MovingPicturesCore.Settings.IgnoreInteractiveContentOnVideoDisc && IsOpticalDrive && InternallyManaged) 
+                {
+                    string videoPath = VideoUtility.GetVideoPath(Directory.FullName);
+                    if (VideoUtility.IsVideoDisc(videoPath)) {
+                        // if we found one we can safely asume by standards that this will be the
+                        // only valid video file on the disc so we create the filelist and add only this file
+                        fileList = new List<FileInfo>();
+                        fileList.Add(new FileInfo(videoPath));
+                    }
+                }
+                
+                // if the fileList is null it means that we didn't find an 'exclusive' video file above
+                // and we are going to scan the whole tree
+                if (fileList == null)
+                    fileList = VideoUtility.GetVideoFilesRecursive(Directory);
+
+                // go through the video file list
                 foreach (FileInfo videoFile in fileList) {
 
+                    // Create or get a localmedia object from the video file path
                     DBLocalMedia newFile = DBLocalMedia.Get(videoFile.FullName, serial);
 
                     // The file is in the database
@@ -230,20 +252,30 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         if (newFile.ID != null && returnOnlyNew)
                             continue;
                     }
-
+                    
+                    // we have a new file, log it and 'connect' the import path object
                     logger.Debug("New File: {0}", videoFile.Name);
                     newFile.ImportPath = this;
 
                     // Fill in the logical volume details (are both empty when dealing with UNC)
                     newFile.VolumeSerial = serial;
                     newFile.MediaLabel = label;
+
+                    // add the localmedia object to our return list
                     rtn.Add(newFile);
                 }
             }
             catch (Exception e) {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
-                logger.ErrorException("Error scanning " + Directory.FullName, e);
+
+                
+                if (logger.IsDebugEnabled)
+                    // In debug mode we log the geeky version
+                    logger.DebugException("Error scanning '" + Directory.FullName + "'", e);
+                else
+                    // In all other modes we do it more friendlier
+                    logger.Error("Error scanning '{0}': {1}", Directory.FullName, e.Message);
             }
 
             return rtn;
