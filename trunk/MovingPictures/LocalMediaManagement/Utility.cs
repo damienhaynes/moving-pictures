@@ -4,11 +4,10 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using DirectShowLib;
-using DirectShowLib.Dvd;
 using Cornerstone.Tools;
 using MediaPortal.Util;
 using NLog;
@@ -555,43 +554,42 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         #endregion
 
-        #region DirectShowLib
 
         /// <summary>
-        /// Get Disc ID as a string
+        /// Generates a SHA1-Hash from a given filepath
         /// </summary>
-        /// <param name="path">CD/DVD path</param>
-        /// <returns>Disc ID</returns>
-        public static string GetDiscIdString(string path) {
-            long id = GetDiscId(path);
-            if (id != 0)
-                return Convert.ToString(id, 16); // HEX
+        /// <param name="filePath">path to the file</param>
+        /// <returns>hash as an hexadecimal string </returns>
+        public static string ComputeSHA1Hash(string filePath) {
+            string hashHex = null;
+            if (File.Exists(filePath)) {
+                Stream file = null;
+                try {
+                    file = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                    HashAlgorithm hashObj = new SHA1Managed();
+                    byte[] hash = hashObj.ComputeHash(file);
+                    hashHex = BitConverter.ToString(hash);
+                    logger.Debug("SHA1: Success, File='{0}', Hash='{1}'", filePath, hashHex);
+                }
+                catch (Exception e) {
+                    if (e.GetType() == typeof(ThreadAbortException))
+                        throw e;
 
-            return null;
-        }
-
-        /// <summary>
-        /// Get Disc ID as 64-bit signed integer
-        /// </summary>
-        /// <param name="path">CD/DVD path</param>
-        /// <returns>Disc ID</returns>
-        public static long GetDiscId(string path) {
-            long discID = 0;
-            logger.Debug("Generating DiscId for: " + path);
-            try {
-                IDvdInfo2 dvdInfo = (IDvdInfo2)new DVDNavigator();
-                dvdInfo.GetDiscID(path, out discID);
+                    logger.DebugException("SHA1: Failed, File='" + hashHex + "' ", e);
+                }
+                finally {
+                    if (file != null)
+                        file.Close();
+                }
             }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
-
-                logger.Error("Error while retrieving disc id for: " + path, e);
+            else {
+                // File does not exist
+                logger.Debug("SHA1: Failed, File='{0}', Reason='File is not available'", filePath);
             }
-            return discID;
-        }
 
-        #endregion
+            // Return
+            return hashHex;
+        }
 
         #region MovieHash
         

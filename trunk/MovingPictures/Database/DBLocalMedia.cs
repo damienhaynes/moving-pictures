@@ -119,12 +119,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (fileInfo != null) {
                     bool available = DeviceManager.IsAvailable(fileInfo, volume_serial);
 
-                    // If this media is a DVD in an optical drive
+                    // If this media is a DVD/Bluray in an optical drive
                     // double check the DiscID to make sure we are looking
                     // at the same disc. 
-                    if (available && IsDVD && (ImportPath.GetDriveType() == DriveType.CDRom)) {
+                    if (available && ( IsDVD || IsBluray ) && (ImportPath.GetDriveType() == DriveType.CDRom)) {
                         // Grab the current DiscID and compare it to the stored DiscID
-                        string currentDiscID = Utility.GetDiscIdString(fileInfo.DirectoryName);
+                        string currentDiscID = this.VideoFormat.GetIdentifier(FullPath);
                         // If the id's don't match the media is not available
                         if (currentDiscID != DiscId)
                             return false;
@@ -248,15 +248,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(Default = null, Filterable = false)]
         public string DiscId {
             get {
-                // When this object is a DVD and we don't have a DiscID yet
-                if (IsDVD && _discid == null) {
+                // When this object is a DVD/Bluray and we don't have a Disc ID yet
+                if (_discid == null && ( IsDVD || IsBluray ) ) {
                     // if this is an image file but not mounted
                     // skip the disc id utility
                     if (IsImageFile && !IsMounted)
                         return _discid;
                     
                     // Calculate the DiscID
-                    DiscId = Utility.GetDiscIdString(fileInfo.DirectoryName);
+                    DiscId = this.VideoFormat.GetIdentifier(FullPath);
                 }
                 
                 // return the DiscID
@@ -274,9 +274,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (fileHash == null) {
                     // Only try to get file hashes when the format is File
                     if (IsAvailable && (this.VideoFormat == VideoFormat.File))
-                        FileHash = Utility.GetMovieHashString(fileInfo.FullName);
+                        FileHash = this.VideoFormat.GetIdentifier(FullPath);
                 }
-
                 return fileHash;
             }
             set {
@@ -627,7 +626,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return Get(fullPath, string.Empty);
         }
 
-        public static DBLocalMedia GetDVD(string fullPath, string discId) {
+        public static DBLocalMedia GetDisc(string fullPath, string discId) {
             DBField discIdField = DBField.GetField(typeof(DBLocalMedia), "DiscId");
             ICriteria criteria = new BaseCriteria(discIdField, "=", discId);
             List<DBLocalMedia> resultSet = MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(criteria);

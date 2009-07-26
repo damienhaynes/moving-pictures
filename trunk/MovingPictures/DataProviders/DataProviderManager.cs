@@ -403,8 +403,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 count++;
                 // If we have not reached our dataprovider request limit make a search
                 if (count <= MovingPicturesCore.Settings.DataProviderRequestLimit || MovingPicturesCore.Settings.DataProviderRequestLimit == 0) {
-                    logger.Debug("Search: Title={0}, Provider={1}, Version={2}", movieSignature.Title, currSource.Provider.Name, currSource.Provider.Version);
                     results = currSource.Provider.Get(movieSignature);
+                    logger.Debug("SEARCH: Title='{0}', Provider='{1}', Version={2}, Results={3}", movieSignature.Title, currSource.Provider.Name, currSource.Provider.Version, results.Count);
                     // if we have results break the loop
                     if (results.Count > 0) break;
                 }
@@ -431,7 +431,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
                 if (count <= MovingPicturesCore.Settings.DataProviderRequestLimit || MovingPicturesCore.Settings.DataProviderRequestLimit == 0) {
                     UpdateResults result = currSource.Provider.Update(movie);
-                    logger.Debug("Update: Title={0}, Provider={1}, Version={2}, Result={3}", movie.Title, currSource.Provider.Name, currSource.Provider.Version, result.ToString());
+                    logger.Debug("UPDATE: Title='{0}', Provider='{1}', Version={2}, Result={3}", movie.Title, currSource.Provider.Name, currSource.Provider.Version, result.ToString());
                 }
                 else {
                     // stop update
