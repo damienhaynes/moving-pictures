@@ -429,6 +429,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;FilmAffinity.com&lt;/name&gt;
+        ///    &lt;author&gt;LRFalk01&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from FilmAffinity.com (Spanish).&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you sho [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_FilmAffinity {
+            get {
+                return ResourceManager.GetString("Script_FilmAffinity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;FilmWeb.pl&lt;/name&gt;
         ///    &lt;author&gt;LRFalk01&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from FilmWeb.pl.&lt;/description&gt;
@@ -572,15 +592,14 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;mymovies.it&lt;/name&gt;
-        ///    &lt;author&gt;Ricciolo&lt;/author&gt;
-        ///    &lt;description&gt;test&lt;/description&gt;
+        ///    &lt;author&gt;LRFalk01&lt;/author&gt;
+        ///    &lt;description&gt;Scraper to pull movie information/cover art from MyMovies.it&lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
         ///    new versions of the script the version numbers should change. EVEN FOR 
-        ///    MINOR CHANGES, you should change the version number if you are going to
-        ///    d [rest of string was truncated]&quot;;.
+        ///    MINOR CHANGES, you sho [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Script_MyMoviesItalian {
             get {
