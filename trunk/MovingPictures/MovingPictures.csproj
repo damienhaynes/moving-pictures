@@ -418,6 +418,7 @@
   <ItemGroup>
     <Content Include="DataProviders\ScraperScripts\Allocine.xml" />
     <Content Include="DataProviders\ScraperScripts\Alpacine.xml" />
+    <Content Include="DataProviders\ScraperScripts\FilmAffinity.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmWeb.xml" />
     <Content Include="DataProviders\ScraperScripts\IMPAwards.xml" />
     <Content Include="DataProviders\ScraperScripts\Kinopoisk.xml" />
