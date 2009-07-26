@@ -282,32 +282,6 @@ namespace MovingPicturesUnitTest
         }
 
         /// <summary>
-        ///A test for GetDiscIdString
-        ///</summary>
-        [TestMethod()]
-        public void GetDiscIdStringTest() {
-            string path = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = null; // TODO: Initialize to an appropriate value
-            string actual;
-            actual = Utility.GetDiscIdString(path);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for GetDiscId
-        ///</summary>
-        [TestMethod()]
-        public void GetDiscIdTest() {
-            string path = string.Empty; // TODO: Initialize to an appropriate value
-            long expected = 0; // TODO: Initialize to an appropriate value
-            long actual;
-            actual = Utility.GetDiscId(path);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
         ///A test for EnumToList
         ///</summary>
         public void EnumToListTestHelper<T>() {

@@ -1291,24 +1291,23 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // DVD / Blu-ray 
                 // Try to grab a valid video path from the disc
+                string moviePath = VideoUtility.GetVideoPath(volume);
+
+                // Try to grab the movie from our DB
+                DBLocalMedia localMedia = DBLocalMedia.Get(moviePath, serial);
+
                 DBMovieInfo movie = null;
                 int part = 1;
 
-                // If the movie path is longer than a drive name we have a 
-                if (VideoUtility.IsVideoDisc(volume)) {
+                if (localMedia.IsVideoDisc) {
 
-                    logger.Info("Video Disc Detected.");
-
-                    string moviePath = VideoUtility.GetVideoPath(volume);
-
-                    // Try to grab the movie from our DB
-                    DBLocalMedia localMedia = DBLocalMedia.Get(moviePath, serial);
+                    logger.Info("Video Disc Detected.");                 
                     
                     // For DVDs we have to make sure this is the correct
                     // media file, a simple availability check will point out 
                     // if we should requery the database using the discid
                     if (!localMedia.IsAvailable)
-                        localMedia = DBLocalMedia.GetDVD(moviePath, Utility.GetDiscIdString(Directory.GetParent(moviePath).FullName));   
+                        localMedia = DBLocalMedia.GetDisc(moviePath, localMedia.VideoFormat.GetIdentifier(moviePath));
                     
                     if (localMedia.ID != null) {
 

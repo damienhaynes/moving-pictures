@@ -199,7 +199,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             }
 
             // return the result
-            logger.Debug("{0} checked against {1}: {2}", this.baseTitle, movie.Title, result.ToString());
+            logger.Debug("MATCHING: '{0}' WITH: '{1}' RESULT: {2}", this.baseTitle, movie.Title, result.ToString());
             return result;
         }
 

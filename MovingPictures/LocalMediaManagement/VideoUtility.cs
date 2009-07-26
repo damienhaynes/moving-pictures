@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
+using DirectShowLib;
+using DirectShowLib.Dvd;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 
@@ -181,6 +182,60 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             return new MediaInfoWrapper(mainFeatureFile);
         }
+
+        /// <summary>
+        /// Get a hash representing the standard identifier for this format.
+        /// Currently supported are the DVD/Bluray Disc ID and the OpenSubtitles.org Movie Hash.
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="videoPath">path to the main video file</param>
+        /// <returns>Hexadecimal string representing the identifier or NULL</returns>
+        public static string GetIdentifier(this VideoFormat self, string videoPath) {
+            string hashID = null;
+            if (self == VideoFormat.DVD) {
+                // get the path to the video_ts folder
+                string vtsPath = videoPath.ToLower().Replace(@"\video_ts.ifo", @"\");
+                // This will get the microsoft generated DVD Disc ID
+                try {
+                    // get the disc id using the DirectShowLib method
+                    IDvdInfo2 dvdInfo = (IDvdInfo2)new DVDNavigator();
+                    long discID = 0;
+                    dvdInfo.GetDiscID(vtsPath, out discID);
+                    // if we got a disc id, we convert it to a hexadecimal string
+                    if (discID != 0) hashID = Convert.ToString(discID, 16);
+                }
+                catch (Exception e) {
+                    if (e.GetType() == typeof(ThreadAbortException))
+                        throw e;
+
+                    logger.DebugException("Disc ID: Failed, Path='" + vtsPath + "', Format='" + self.ToString() + "' ", e);
+                }
+            }
+            else if (self == VideoFormat.Bluray) {
+                // Standard for the Bluray Disc ID is to compute a SHA1 hash from the key file (will only work for retail disks)
+                string keyFile = videoPath.ToLower().Replace(@"bdmv\index.bdmv", @"AACS\Unit_Key_RO.inf");
+                if (File.Exists(keyFile))
+                    hashID = Utility.ComputeSHA1Hash(keyFile);
+                else if (File.Exists(videoPath))
+                    hashID = string.Empty;
+            }
+            else if (self == VideoFormat.File) {
+                // Compute a Movie Hash with the OpenSubtitles method (might change this to a new standard in the future)
+                hashID = Utility.GetMovieHashString(videoPath);
+            }
+
+            // Log the result
+            if (String.IsNullOrEmpty(hashID)) {
+                logger.Debug("Failed Identifier: Path='{1}', Format='{0}' ", videoPath, self);
+            }
+            else {
+                logger.Debug("Identifier: Path='{1}', Format='{0}', Hash='{2}' ", videoPath, self, hashID);
+            }
+
+            // Return the result
+            return hashID;
+        }
+    
     }
 
     /// <summary>
@@ -240,8 +295,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             VideoFormat format = GetVideoFormat(path);
             return (format != VideoFormat.NotSupported && format != VideoFormat.Unknown && format != VideoFormat.File);
         }
-
-
+        
         /// <summary>
         /// Check if the file is classified as a video sample file
         /// </summary>
