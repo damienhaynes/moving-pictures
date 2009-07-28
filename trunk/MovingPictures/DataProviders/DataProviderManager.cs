@@ -341,10 +341,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Script_Allocine);
             AddSource(typeof(ScriptableProvider), Resources.Script_MyMoviesItalian);
             AddSource(typeof(ScriptableProvider), Resources.Script_FilmWeb);
+            AddSource(typeof(ScriptableProvider), Resources.Script_Scope);
             AddSource(typeof(ScriptableProvider), Resources.Script_Kinopoisk);
             AddSource(typeof(ScriptableProvider), Resources.Script_Alpacine);
             AddSource(typeof(ScriptableProvider), Resources.Script_Sratim);
             AddSource(typeof(ScriptableProvider), Resources.Script_FilmAffinity);
+            AddSource(typeof(ScriptableProvider), Resources.Script_CSFD);
             AddSource(typeof(MyVideosProvider));
             
             // OpenSubtitles provider disabled untill further notice

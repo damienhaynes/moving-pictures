@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141521</id>
-    <version major="1" minor="2" point="7"/>
-    <published month="4" day="5" year="2009"/>
+    <version major="1" minor="2" point="8"/>
+    <published month="7" day="20" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -65,7 +65,7 @@
 	
 	<set name="rx_site_id">
       <![CDATA[
-      href="/vote.php\?film=(?<site_id>[0-9]+)&film_vote=1"
+      /level/1/film/(?<site_id>[\d]+)/ord/date/#list
       ]]>
     </set>	
 	
@@ -169,7 +169,7 @@
 	
 	<set name="rx_certification">
       <![CDATA[
-      src='/images/mpaa/(?<movieRating>[^\.]+)\.gif'
+	  src="/images/mpaa/(?<movieRating>[^\.]+).gif"
       ]]>
     </set>
 	
@@ -184,16 +184,16 @@
       <a[^>]+>(?<movieGenre>[^<]+)</a>
       ]]>
     </set>
-	
-	<set name="rx_score_votes">
+
+    <set name="rx_score_votes">
       <![CDATA[
-      30%\ss(?:[^>]+>){3}(?<movieScore>[\d]+)[^\(]+\((?<movieVotes>[^\)]+)
+	  93% rep[^>]+>(?<MovieScore>[\d.]+)[^>]+>&nbsp;&nbsp;(?<movieVotes>[\d]+)
       ]]>
     </set>
 	
 	<set name="rx_actor">
       <![CDATA[
-      <tr><td\sheight=15[^<]+<[^p]+people[^>]+>(?<movieActors>[^<]+)
+      15px" align=right><a[^>]+>(?<movieActor>[^<]+)
       ]]>
     </set>
 	
