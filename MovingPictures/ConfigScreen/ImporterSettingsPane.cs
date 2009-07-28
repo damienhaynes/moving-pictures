@@ -36,6 +36,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             nfoAutoApproveCheckBox.Setting = MovingPicturesCore.Settings["importer_autoimdb"];
             nfoAutoApproveCheckBox.IgnoreSettingName = true;
+
+            coverFromMovieFolderCheckBox.Setting = MovingPicturesCore.Settings["local_cover_from_movie_folder"];
+            coverFromMovieFolderCheckBox.IgnoreSettingName = true;
+            coverPatternTextBox.Setting = MovingPicturesCore.Settings["local_moviefolder_coverart_pattern"];
+
+            backdropFromMovieFolderCheckBox.Setting = MovingPicturesCore.Settings["local_backdrop_from_movie_folder"];
+            backdropFromMovieFolderCheckBox.IgnoreSettingName = true;
+            backdropPatternTextBox.Setting = MovingPicturesCore.Settings["local_moviefolder_backdrop_pattern"];
+
+            coverCountTextBox.Setting = MovingPicturesCore.Settings["max_covers_per_movie"];
+
+            MovingPicturesCore.Settings.SettingChanged += new Cornerstone.Database.SettingChangedDelegate(Settings_SettingChanged);
         }
 
         private void ImporterSettingsPane_Load(object sender, EventArgs e) {
@@ -50,6 +62,35 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 autoApproveTrackBar.BackColor = SystemColors.Window;
 
             updateGUI();
+        }
+
+        void Settings_SettingChanged(Cornerstone.Database.Tables.DBSetting setting, object oldValue) {
+            if (setting.Key == "dataprovider_management") {
+                updateGUI();
+            }
+        }
+
+
+        private void coverFromMovieFolderCheckBox_CheckedChanged(object sender, EventArgs e) {
+            updateGUI();
+        }
+
+        private void backdropFromMovieFolderCheckBox_CheckedChanged(object sender, EventArgs e) {
+            updateGUI();
+        }
+
+        private void coverDataSources_Click(object sender, EventArgs e) {
+            DataSourcesPopup popup = new DataSourcesPopup();
+            popup.DataSourcePane.DisplayType = DataType.COVERS;
+            popup.Owner = ParentForm;
+            popup.ShowDialog();
+        }
+
+        private void backdropSourcesButton_Click(object sender, EventArgs e) {
+            DataSourcesPopup popup = new DataSourcesPopup();
+            popup.DataSourcePane.DisplayType = DataType.BACKDROPS;
+            popup.Owner = ParentForm;
+            popup.ShowDialog();
         }
 
         private void autoApproveTrackBar_Scroll(object sender, EventArgs e) {
@@ -97,6 +138,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 nfoExtTextBox.Enabled = false;
                 nfoAutoApproveCheckBox.Enabled = false;
             }
+
+            if (!DesignMode) {
+                coverPatternTextBox.Enabled = coverFromMovieFolderCheckBox.Checked;
+                backdropPatternTextBox.Enabled = backdropFromMovieFolderCheckBox.Checked;
+            }
+
+            bool manualManagement = MovingPicturesCore.Settings.DataProviderManagementMethod == "manual";
+
+            coverDataSources.Enabled = manualManagement;
+            backdropSourcesButton.Enabled = manualManagement;
+            detailsButton.Enabled = manualManagement;
+
         }
 
         private void helpButton1_Click(object sender, EventArgs e) {

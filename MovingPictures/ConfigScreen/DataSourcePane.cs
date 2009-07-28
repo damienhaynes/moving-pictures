@@ -15,12 +15,16 @@ using NLog;
 using System.IO;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.GUI.Dialogs;
+using System.Globalization;
+using Cornerstone.Tools.Translate;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class DataSourcePane : UserControl {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private Dictionary<DBSourceInfo, ListViewItem> listItemLookup;
+
+        private const string autoTransText = "Automatically Translate Results";
 
         [ReadOnly(true)]
         public DataType DisplayType {
@@ -62,6 +66,20 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 // force an update on load
                 DisplayType = displayType;
                 updateDebugModeMenuItem();
+                generatePrioritizeLanguagesList();
+
+                updateTranslationMenuItem();
+            }
+        }
+
+        private void updateTranslationMenuItem() {
+            if (MovingPicturesCore.Settings.UseTranslator) {
+                autoTranslateMenuItem.Checked = true;
+                autoTranslateMenuItem.Text = autoTransText + ": " + MovingPicturesCore.Settings.TranslationLanguage;
+            }
+            else {
+                autoTranslateMenuItem.Checked = false;
+                autoTranslateMenuItem.Text = autoTransText;
             }
         }
 
@@ -127,7 +145,24 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
-        
+        private void generatePrioritizeLanguagesList() {
+            autoLanguageMenuItem.DropDownItems.Clear();
+            foreach (CultureInfo currCulture in MovingPicturesCore.DataProviderManager.GetAvailableLanguages()) {
+                ToolStripMenuItem newMenuItem = new ToolStripMenuItem(currCulture.DisplayName);
+                newMenuItem.Tag = currCulture;
+                newMenuItem.Click += new EventHandler(languageMenuItem_Click);
+                autoLanguageMenuItem.DropDownItems.Add(newMenuItem);
+            }
+        }
+
+        private void languageMenuItem_Click(object sender, EventArgs e) {
+            ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
+            string languageCode = ((CultureInfo)(menuItem.Tag)).TwoLetterISOLanguageName;
+            MovingPicturesCore.DataProviderManager.ArrangeDataProviders(languageCode);
+
+            reloadList();
+        }
+
         private void raisePriorityButton_Click(object sender, EventArgs e) {
             foreach (ListViewItem currItem in listView.SelectedItems) {
                 DBSourceInfo source = (DBSourceInfo)currItem.Tag;
@@ -272,7 +307,26 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             repaintListItems();
         }
 
+        private void languageSplitButton_ButtonClick(object sender, EventArgs e) {
+            languageSplitButton.ShowDropDown();
+        }
+
+        private void autoTranslateMenuItem_Click(object sender, EventArgs e) {
+            if (MovingPicturesCore.Settings.UseTranslator) {
+                MovingPicturesCore.Settings.UseTranslator = false;
+                updateTranslationMenuItem();
+                return;
+            }
+
+            TranslationPopup popup = new TranslationPopup();
+            popup.Owner = FindForm();
+            popup.ShowDialog();
+
+            updateTranslationMenuItem();
+
+        }
     }
+
     class ListViewItemComparer : IComparer {
         DBSourceInfoComparer comparer;
 

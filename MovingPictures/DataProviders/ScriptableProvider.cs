@@ -51,6 +51,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
         }
 
+        public string LanguageCode {
+            get {
+                return scraper.Language;
+            }
+        }
+
         public DateTime? Published {
             get {
                 return scraper.Published;

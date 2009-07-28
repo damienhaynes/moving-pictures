@@ -313,7 +313,7 @@ namespace Cornerstone.Tools.Translate
         /// </summary>
         /// <param name="language">The language</param>
         /// <returns>The language code of this language or code for unknown language.</returns>
-        internal static string GetLanguageCode(TranslatorLanguage language)
+        public static string GetLanguageCode(TranslatorLanguage language)
         {
             string code;
             if (!LanguageCodeDict.TryGetValue(language, out code))

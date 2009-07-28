@@ -31,13 +31,20 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // mainTabControl.SelectedIndex = 0;
 
             mainTabControl.SelectedIndex = 1;
-
         }
 
         private void MovingPicturesConfig_FormClosing(object sender, FormClosedEventArgs e) {
             if (!DesignMode) {
                 MovingPicturesCore.Importer.Stop();
                 ProgressPopup popup = new ProgressPopup(new WorkerDelegate(movieManagerPane1.Commit));
+                popup.Owner = this;
+                popup.ShowDialog();
+            }
+        }
+
+        private void MovingPicturesConfig_Shown(object sender, EventArgs e) {
+            if (MovingPicturesCore.Settings.DataProviderManagementMethod == "undefined") {
+                DataProviderSetupPopup popup = new DataProviderSetupPopup();
                 popup.Owner = this;
                 popup.ShowDialog();
             }

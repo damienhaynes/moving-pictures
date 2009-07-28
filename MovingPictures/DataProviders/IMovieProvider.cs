@@ -11,6 +11,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         string Author { get; }
         string Description { get; }
         string Language { get; }
+        string LanguageCode { get; }
 
         bool ProvidesMoviesDetails { get; }
         bool ProvidesCoverArt { get; }

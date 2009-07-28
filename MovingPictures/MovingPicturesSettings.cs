@@ -714,19 +714,50 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
-        #region Translator
+        #region Importer Language Options
+
+        [CornerstoneSetting(
+            Name = "Data Provider Management",
+            Description = "Method used to manage data providers. Valid options are 'auto', and 'manual'.",
+            Groups = "|Movie Importer|Importer Language Options|",
+            Identifier = "dataprovider_management",
+            Default = "undefined",
+            Hidden = true)]
+        public string DataProviderManagementMethod {
+            get { return _dataProviderManagementMethod; }
+            set {
+                _dataProviderManagementMethod = value;
+                OnSettingChanged("dataprovider_management");
+            }
+        }
+        private string _dataProviderManagementMethod;
+
+        [CornerstoneSetting(
+            Name = "Automatic Data Provider Language",
+            Description = "The language that the automatic data provider management service will optimize for.",
+            Groups = "|Movie Importer|Importer Language Options|",
+            Identifier = "dataprovider_auto_language",
+            Default = "en",
+            Hidden = true)]
+        public string DataProviderAutoLanguage {
+            get { return _dataProviderAutoLanguage; }
+            set {
+                _dataProviderAutoLanguage = value;
+                OnSettingChanged("dataprovider_auto_language");
+            }
+        }
+        private string _dataProviderAutoLanguage;
 
         [CornerstoneSetting(
             Name = "Use Translator Service",
             Description = "Service that will translate scraped movie information to a specified language. This service translates the following movie detail fields: genres, tagline, summary.",
-            Groups = "|Movie Importer|Translator|",
+            Groups = "|Movie Importer|Importer Language Options|",
             Identifier = "use_translator",
-            Default = false)]
-        public bool UseTranslator
-        {
+            Default = false,
+            Hidden = true)]
+        public bool UseTranslator {
             get { return _useTranslator; }
-            set
-            {
+            set {
                 _useTranslator = value;
                 OnSettingChanged("use_translator");
             }
@@ -734,18 +765,35 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _useTranslator;
 
         [CornerstoneSetting(
+            Name = "Translator Service Configured",
+            Description = "Service that will translate scraped movie information to a specified language. This service translates the following movie detail fields: genres, tagline, summary.",
+            Groups = "|Movie Importer|Importer Language Options|",
+            Identifier = "translator_configured",
+            Default = false,
+            Hidden = true)]
+        public bool TranslatorConfigured {
+            get { return _translatorConfigured; }
+            set {
+                _translatorConfigured = value;
+                OnSettingChanged("translator_configured");
+            }
+        }
+        private bool _translatorConfigured;
+
+        [CornerstoneSetting(
             Name = "Translation Language",
             Description = "The language that the translator service will attempt to tranlate scraped movie details into.",
-            Groups = "|Movie Importer|Translator|",
+            Groups = "|Movie Importer|Importer Language Options|",
             Identifier = "translate_to",
-            Default = "English")]
+            Default = "English",
+            Hidden = true)]
         public string TranslationLanguageStr
         {
             get { return _translateTo; }
             set
             {
                 _translateTo = value;
-                OnSettingChanged("use_translator");
+                OnSettingChanged("translate_to");
             }
         }
         private string _translateTo;
@@ -768,6 +816,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             set {
+                _translationLanguage = value;
                 TranslationLanguageStr = LanguageUtility.ToString(value);
             }
         } private TranslatorLanguage? _translationLanguage = null;

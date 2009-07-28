@@ -28,6 +28,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private List<DBLocalMedia> processingFiles;
         private List<DBMovieInfo> processingMovies;
         private DBSourceInfo selectedSource;
+        private bool translate;
         
         private delegate void InvokeDelegate();
         private delegate DBMovieInfo DBMovieInfoDelegate();
@@ -74,21 +75,45 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 MovingPicturesCore.DatabaseManager.ObjectInserted +=
                     new DatabaseManager.ObjectAffectedDelegate(movieInsertedListener);
-
-                addMovieRefreshMenuItems();
             }
         }
 
         private void addMovieRefreshMenuItems() {
+            // default the translator source in the drop down to imdb if the provider exists
+            DBSourceInfo translatorSource = DBSourceInfo.GetFromScriptID(874902);
+
+            refreshMovieButton.DropDownItems.Clear();
+
             ReadOnlyCollection<DBSourceInfo> sources = MovingPicturesCore.DataProviderManager.MovieDetailSources;
             foreach (DBSourceInfo currSource in sources) {
+                if (currSource.GetPriority(DataType.DETAILS) == -1)
+                    continue;
+
+                if (translatorSource == null)
+                    translatorSource = currSource;
+
                 ToolStripMenuItem newItem = new ToolStripMenuItem();
                 newItem.Name = currSource.Provider.Name + "ToolStripMenuItem";
-                newItem.Text = "Refresh from " + currSource.Provider.Name + " (" + currSource.Provider.Language + ")";
+                if (currSource.Provider.Language == "")
+                    newItem.Text = "Refresh From " + currSource.Provider.Name;
+                else
+                    newItem.Text = "Refresh From " + currSource.Provider.Name + " [" + currSource.Provider.Language + "]";
+
                 newItem.Click += new System.EventHandler(this.refreshMovieButton_Click);
                 newItem.Tag = currSource;
                 refreshMovieButton.DropDownItems.Add(newItem);
             }
+
+            if (MovingPicturesCore.Settings.UseTranslator) {
+                ToolStripMenuItem newItem = new ToolStripMenuItem();
+                newItem.Name = "TranslateItem";
+                newItem.Text = "Refresh From " + translatorSource.Provider.Name + " [Translated to " + MovingPicturesCore.Settings.TranslationLanguage.ToString() + "]";
+                newItem.Click += new System.EventHandler(this.refreshMovieButton_Click);
+                newItem.Tag = translatorSource;
+                refreshMovieButton.DropDownItems.Add(new ToolStripSeparator());
+                refreshMovieButton.DropDownItems.Add(newItem);
+            }
+
         }
 
         // loads from scratch all movies in the database into the side panel
@@ -425,8 +450,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (movieListBox.SelectedItems.Count == 0)
                 return;
 
-            if (sender is ToolStripMenuItem)
+            if (sender is ToolStripMenuItem) {
                 selectedSource = (DBSourceInfo)((ToolStripMenuItem)sender).Tag;
+                translate = ((ToolStripMenuItem)sender).Name == "TranslateItem";
+            }
             else
                 selectedSource = null;
 
@@ -439,8 +466,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 foreach (ListViewItem currItem in movieListBox.SelectedItems)
                     processingMovies.Add((DBMovieInfo)currItem.Tag);
 
-                if (movieListBox.SelectedItems.Count <= 1)
-                    refreshMovies(null);
+                if (movieListBox.SelectedItems.Count == 1) {
+                    ProgressPopup popup = new ProgressPopup(new WorkerDelegate(refreshMovies));
+                    popup.Owner = this.ParentForm;
+                    popup.ShowDialog();
+                }
                 else {
                     ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(refreshMovies));
                     popup.Owner = this.ParentForm;
@@ -450,6 +480,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 updateMoviePanel();
                 processingMovies.Clear();
             }
+        }
+
+        private void refreshMovies() {
+            refreshMovies(null);
         }
 
         private void refreshMovies(ProgressDelegate progress) {
@@ -471,11 +505,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                         MovingPicturesCore.Importer.Update(currItem, selectedSource);
                         sentToImporter++;
                     }
+                    else {
+                        if (translate) currItem.Translate();
+                    }
                 }
 
                 // just use the regular update logic
                 else {
-                    // make existing values overwritable
                     currItem.ProtectExistingValuesFromCopy(false); 
                     MovingPicturesCore.DataProviderManager.Update(currItem);
                 }
@@ -750,6 +786,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             updateMoviePanel();
             MessageBox.Show("Title sorting values (the \"Sort By\" field) has been updated.");
+        }
+
+        private void refreshMovieButton_DropDownOpening(object sender, EventArgs e) {
+            addMovieRefreshMenuItems();
         }
 
     }

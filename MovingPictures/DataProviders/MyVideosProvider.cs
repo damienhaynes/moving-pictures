@@ -35,6 +35,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         public string Language {
             get { return ""; }
         }
+        
+        public string LanguageCode {
+            get { return ""; }
+        }
 
         public bool ProvidesMoviesDetails {
             get { return true; }
