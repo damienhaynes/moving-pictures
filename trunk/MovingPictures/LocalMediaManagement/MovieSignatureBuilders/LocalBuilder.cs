@@ -46,8 +46,8 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                     rtn = match.Groups[3].Value.TrimEnd('(', '['); // trailing title string
             }
 
-            // trim and return the title
-            return rtn.Trim();
+            // If the title becomes 0 length, undo this method's processing.
+            if (rtn.Trim().Length == 0) { rtn = input; year = 0; return rtn; } else { return rtn.Trim(); }
         }
 
         #region ISignatureBuilder Members

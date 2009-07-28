@@ -13,6 +13,10 @@ namespace Cornerstone.Tools {
         // http://www.codeproject.com/cs/algorithms/Levenshtein.asp
         //
         public static int Levenshtein(String strA, String strB) {
+            // if string is null treat it as an empty string
+            if (strA == null) strA = String.Empty; 
+            if (strB == null) strB = String.Empty; 
+
             int RowLen = strA.Length;  // length of sRow
             int ColLen = strB.Length;  // length of sCol
             int RowIdx;                // iterates through sRow
