@@ -778,6 +778,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             List<DBLocalMedia> currFileSet = new List<DBLocalMedia>();
             bool alwaysGroup = MovingPicturesCore.Settings.AlwaysGroupByFolder;
 
+            // sort the paths in alphabetical order
+            importFileList.Sort(new DBLocalMediaPathComparer());
+
             foreach (DBLocalMedia currFile in importFileList) {
 
                 string fileName = currFile.File.Name;
