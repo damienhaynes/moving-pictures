@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using Cornerstone.Tools;
+using System.Threading;
 
 namespace Cornerstone.Tools.Translate {
     public class Translator {
@@ -84,15 +85,22 @@ namespace Cornerstone.Tools.Translate {
 
         //function that will be called to attempt to determine the from languange if none is given.
         private void DetectLanguage(string input) {
-            Regex reg = new Regex(@"language"".""(?<languageCode>[^""]+)");
-            string url = String.Format("http://ajax.googleapis.com/ajax/services/language/detect?v=1.0&q={0}", input);
-            WebGrabber webGrabber = new WebGrabber(url);
-            webGrabber.GetResponse();
-            string result = webGrabber.GetString();
-            Match match = reg.Match(result);
-            string matched = match.Groups["languageCode"].Value;
-            _fromLanguage = LanguageUtility.GetLanguage(matched);
-            if (_debug) logger.Debug("Translation tool: Detect Language: Source: {0} : Detected Language: {1}", result, LanguageUtility.ToString(_fromLanguage));
+            try {
+                Regex reg = new Regex(@"language"".""(?<languageCode>[^""]+)");
+                string url = String.Format("http://ajax.googleapis.com/ajax/services/language/detect?v=1.0&q={0}", input);
+                WebGrabber webGrabber = new WebGrabber(url);
+                webGrabber.GetResponse();
+                string result = webGrabber.GetString();
+                Match match = reg.Match(result);
+                string matched = match.Groups["languageCode"].Value;
+                _fromLanguage = LanguageUtility.GetLanguage(matched);
+                if (_debug) logger.Debug("Translation tool: Detect Language: Source: {0} : Detected Language: {1}", result, LanguageUtility.ToString(_fromLanguage));
+            }
+            catch (Exception e) {
+                if (e is ThreadAbortException) throw e;
+
+                _fromLanguage = LanguageUtility.GetLanguage("en");
+            }
         }
 
         //function used to clean the json responce from Google Translate.

@@ -373,6 +373,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.refreshMovieButton.Text = " Selec";
             this.refreshMovieButton.ToolTipText = "Refresh Movie Info From Internet";
             this.refreshMovieButton.ButtonClick += new System.EventHandler(this.refreshMovieButton_Click);
+            this.refreshMovieButton.DropDownOpening += new System.EventHandler(this.refreshMovieButton_DropDownOpening);
             // 
             // toolStripSeparator4
             // 

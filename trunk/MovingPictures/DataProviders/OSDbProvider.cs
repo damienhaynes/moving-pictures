@@ -42,6 +42,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             get { return new CultureInfo("en").DisplayName; }
         }
 
+        public string LanguageCode {
+            get { return "en"; }
+        }
+
         public bool ProvidesMoviesDetails {
             get { return true; }
         }

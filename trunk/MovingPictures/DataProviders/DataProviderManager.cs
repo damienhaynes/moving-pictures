@@ -12,6 +12,8 @@ using System.Collections.ObjectModel;
 using NLog;
 using System.IO;
 using Cornerstone.Tools.Translate;
+using System.Globalization;
+using System.Threading;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class DataProviderManager {
@@ -115,6 +117,109 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             updateOnly = false;
 
             MovingPicturesCore.Settings.DataProvidersInitialized = true;
+        }
+
+        #endregion
+
+        #region Automatic Management Functionailty
+
+        public HashSet<CultureInfo> GetAvailableLanguages() {
+            HashSet<CultureInfo> results = new HashSet<CultureInfo>();
+
+            foreach (DBSourceInfo currSource in detailSources) {
+                try {
+                    if (currSource.Provider.LanguageCode != "")
+                        results.Add(new CultureInfo(currSource.Provider.LanguageCode));
+                }
+                catch (Exception e) {
+                    if (e is ThreadAbortException)
+                        throw e;
+                }
+            }
+
+            return results;
+        }
+
+        public void AutoArrangeDataProviders() {
+            if (MovingPicturesCore.Settings.DataProviderManagementMethod != "auto")
+                return;
+            
+            string languageCode;
+            try { languageCode = MovingPicturesCore.Settings.DataProviderAutoLanguage; }
+            catch (ArgumentException) {
+                languageCode = "en";
+            }
+
+            ArrangeDataProviders(languageCode);
+        }
+
+        public void ArrangeDataProviders(string languageCode) {
+            foreach (DataType currType in Enum.GetValues(typeof(DataType))) {
+                int nextRank = 10;
+                foreach (DBSourceInfo currSource in getEditableList(currType)) {
+                    // special case for imdb provider. should always be used as a last resort details provider
+                    if (currSource.IsScriptable() && ((ScriptableProvider)currSource.Provider).ScriptID == 874902 &&
+                        currType == DataType.DETAILS) {
+
+                        if (languageCode != "en") {
+                            currSource.SetPriority(currType, 98);
+                            currSource.Commit();
+                        }
+                        else {
+                            currSource.SetPriority(currType, 1);
+                            currSource.Commit();
+                        }
+                    }
+
+                    // special case for themoviedb provider. should always be used for covers and backdrops
+                    else if ((currType == DataType.COVERS || currType == DataType.BACKDROPS) &&
+                              currSource.Provider is TheMovieDbProvider) {
+
+                        if (languageCode != "en") {
+                            currSource.SetPriority(currType, 98);
+                            currSource.Commit();
+                        }
+                        else {
+                            currSource.SetPriority(currType, 2);
+                            currSource.Commit();
+                        }
+                    }
+
+                    // not a generic language script and not for the selected language, disable
+                    else if (currSource.Provider.LanguageCode != "" && 
+                             currSource.Provider.LanguageCode != "various" &&
+                             currSource.Provider.LanguageCode != languageCode) {
+
+                        currSource.SetPriority(currType, -1);
+                        currSource.Commit();
+                    }
+
+                    // valid script, enable
+                    else {
+                        if (currSource.Provider is LocalProvider) {
+                            currSource.SetPriority(currType, 0);
+                            currSource.Commit();
+                        }
+                        else if (currSource.Provider is MyVideosProvider) {
+                            currSource.SetPriority(currType, 99);
+                            currSource.Commit();
+                        }
+                        else if (currSource.Provider.LanguageCode == "" || currSource.Provider.LanguageCode == "various") {
+                            currSource.SetPriority(currType, 50 + nextRank++);
+                            currSource.Commit();
+                        }
+                        else {
+                            currSource.SetPriority(currType, nextRank++);
+                            currSource.Commit();
+                        }
+                    }
+                }
+
+                // sort and normalize
+                getEditableList(currType).Sort(sorters[currType]);
+                normalizePriorities();
+            }
+
         }
 
         #endregion

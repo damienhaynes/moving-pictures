@@ -45,7 +45,13 @@
             this.raisePriorityButton = new System.Windows.Forms.ToolStripButton();
             this.lowerPriorityButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.languageSplitButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.autoLanguageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.autoTranslateMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.selectScriptVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadDefaultSourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -88,7 +94,7 @@
             // versionColumnHeader
             // 
             this.versionColumnHeader.Text = "Version";
-            this.versionColumnHeader.Width = 49;
+            this.versionColumnHeader.Width = 57;
             // 
             // languageColumnHeader
             // 
@@ -112,6 +118,8 @@
             this.raisePriorityButton,
             this.lowerPriorityButton,
             this.toolStripSeparator2,
+            this.languageSplitButton,
+            this.toolStripSeparator6,
             this.settingsButton,
             this.debugIcon});
             this.topToolStrip.Location = new System.Drawing.Point(0, 0);
@@ -137,21 +145,21 @@
             // movieDetailsToolStripMenuItem
             // 
             this.movieDetailsToolStripMenuItem.Name = "movieDetailsToolStripMenuItem";
-            this.movieDetailsToolStripMenuItem.Size = new System.Drawing.Size(204, 24);
+            this.movieDetailsToolStripMenuItem.Size = new System.Drawing.Size(188, 24);
             this.movieDetailsToolStripMenuItem.Text = "Movie Details";
             this.movieDetailsToolStripMenuItem.Click += new System.EventHandler(this.movieDetailsToolStripMenuItem_Click);
             // 
             // coversToolStripMenuItem
             // 
             this.coversToolStripMenuItem.Name = "coversToolStripMenuItem";
-            this.coversToolStripMenuItem.Size = new System.Drawing.Size(204, 24);
+            this.coversToolStripMenuItem.Size = new System.Drawing.Size(188, 24);
             this.coversToolStripMenuItem.Text = "Covers";
             this.coversToolStripMenuItem.Click += new System.EventHandler(this.coversToolStripMenuItem_Click);
             // 
             // backdropsToolStripMenuItem
             // 
             this.backdropsToolStripMenuItem.Name = "backdropsToolStripMenuItem";
-            this.backdropsToolStripMenuItem.Size = new System.Drawing.Size(204, 24);
+            this.backdropsToolStripMenuItem.Size = new System.Drawing.Size(188, 24);
             this.backdropsToolStripMenuItem.Text = "Backdrops";
             this.backdropsToolStripMenuItem.Click += new System.EventHandler(this.backdropsToolStripMenuItem_Click);
             // 
@@ -176,14 +184,14 @@
             // enableToolStripMenuItem
             // 
             this.enableToolStripMenuItem.Name = "enableToolStripMenuItem";
-            this.enableToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.enableToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
             this.enableToolStripMenuItem.Text = "Enable Selected Data Source";
             this.enableToolStripMenuItem.Click += new System.EventHandler(this.enableToolStripMenuItem_Click);
             // 
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
             this.addToolStripMenuItem.Text = "Add a New Data Source";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.addButton_Click);
             // 
@@ -248,10 +256,49 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
             // 
+            // languageSplitButton
+            // 
+            this.languageSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.languageSplitButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.autoLanguageMenuItem,
+            this.toolStripSeparator7,
+            this.autoTranslateMenuItem});
+            this.languageSplitButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.language;
+            this.languageSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.languageSplitButton.Name = "languageSplitButton";
+            this.languageSplitButton.Size = new System.Drawing.Size(32, 23);
+            this.languageSplitButton.Text = "toolStripSplitButton1";
+            this.languageSplitButton.ToolTipText = "Language Options";
+            this.languageSplitButton.ButtonClick += new System.EventHandler(this.languageSplitButton_ButtonClick);
+            // 
+            // autoLanguageMenuItem
+            // 
+            this.autoLanguageMenuItem.Name = "autoLanguageMenuItem";
+            this.autoLanguageMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.autoLanguageMenuItem.Text = "Sort by Language";
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(236, 6);
+            // 
+            // autoTranslateMenuItem
+            // 
+            this.autoTranslateMenuItem.Name = "autoTranslateMenuItem";
+            this.autoTranslateMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.autoTranslateMenuItem.Text = "Automatically Translate Results";
+            this.autoTranslateMenuItem.Click += new System.EventHandler(this.autoTranslateMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 26);
+            // 
             // settingsButton
             // 
             this.settingsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.settingsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator5,
             this.selectScriptVersionToolStripMenuItem,
             this.reloadDefaultSourcesToolStripMenuItem,
             this.toolStripSeparator3,
@@ -263,30 +310,36 @@
             this.settingsButton.ToolTipText = "Advanced Actions";
             this.settingsButton.ButtonClick += new System.EventHandler(this.settingsButton_ButtonClick);
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(197, 6);
+            // 
             // selectScriptVersionToolStripMenuItem
             // 
+            this.selectScriptVersionToolStripMenuItem.Enabled = false;
             this.selectScriptVersionToolStripMenuItem.Name = "selectScriptVersionToolStripMenuItem";
-            this.selectScriptVersionToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.selectScriptVersionToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.selectScriptVersionToolStripMenuItem.Text = "Select Version of Source";
             this.selectScriptVersionToolStripMenuItem.Click += new System.EventHandler(this.selectScriptVersionToolStripMenuItem_Click);
             // 
             // reloadDefaultSourcesToolStripMenuItem
             // 
             this.reloadDefaultSourcesToolStripMenuItem.Name = "reloadDefaultSourcesToolStripMenuItem";
-            this.reloadDefaultSourcesToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.reloadDefaultSourcesToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.reloadDefaultSourcesToolStripMenuItem.Text = "Reload Default Sources";
             this.reloadDefaultSourcesToolStripMenuItem.Click += new System.EventHandler(this.reloadDefaultSourcesToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(198, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(197, 6);
             // 
             // enableDebugModeToolStripMenuItem
             // 
             this.enableDebugModeToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.bug;
             this.enableDebugModeToolStripMenuItem.Name = "enableDebugModeToolStripMenuItem";
-            this.enableDebugModeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.enableDebugModeToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.enableDebugModeToolStripMenuItem.Text = "Enable Debug Mode";
             this.enableDebugModeToolStripMenuItem.Click += new System.EventHandler(this.toggleDebugModeToolStripMenuItem_Click);
             // 
@@ -361,5 +414,11 @@
         private System.Windows.Forms.ToolStripSplitButton addButton;
         private System.Windows.Forms.ToolStripMenuItem enableToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripSplitButton languageSplitButton;
+        private System.Windows.Forms.ToolStripMenuItem autoLanguageMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoTranslateMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     }
 }
