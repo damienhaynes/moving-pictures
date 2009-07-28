@@ -425,6 +425,29 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;ScriptableScraper&gt;
+        ///
+        ///  &lt;details&gt;
+        ///
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;CSFD.cz&lt;/name&gt;
+        ///    &lt;author&gt;Trottel&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from CSFD and IMDb.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_CSFD {
+            get {
+                return ResourceManager.GetString("Script_CSFD", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap script_delete {
             get {
                 object obj = ResourceManager.GetObject("script_delete", resourceCulture);
@@ -633,6 +656,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         internal static string Script_OFDb {
             get {
                 return ResourceManager.GetString("Script_OFDb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;Scope.dk&lt;/name&gt;
+        ///    &lt;author&gt;LRFalk01&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from Scope.dk.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHANGES, you should change the version num [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_Scope {
+            get {
+                return ResourceManager.GetString("Script_Scope", resourceCulture);
             }
         }
         
