@@ -688,6 +688,20 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
     }
 
+    public class DBLocalMediaPathComparer : IComparer<DBLocalMedia> {
+        public int Compare(DBLocalMedia mediaX, DBLocalMedia mediaY) {
+            
+            if (mediaX == null && mediaY == null)
+                return 0;
+            else if (mediaX == null)
+                return -1;
+            else if (mediaY == null)
+                return 1;
+
+            return mediaX.FullPath.CompareTo(mediaY.FullPath);
+        }
+    }
+
     public enum UpdateMediaInfoResults {
         Success,
         ImageFileNotMounted,
