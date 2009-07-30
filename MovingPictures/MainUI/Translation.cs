@@ -114,7 +114,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 		public static string RateFiveStarThree = "Good";
 		public static string RateFiveStarFour = "Superb";
 		public static string RateFiveStarFive = "Perfect";
-
+                
+        public static string RuntimeHour = "{0} hour";
+        public static string RuntimeHours = "{0} hours";
+        public static string RuntimeMinute = "{0} minute";
+        public static string RuntimeMinutes = "{0} minutes";
+        public static string RuntimeLong = "{0} and {1}";
+        public static string RuntimeShort = "{0}:{1:00}";
+  
         #endregion
 
         private static string path = string.Empty;
