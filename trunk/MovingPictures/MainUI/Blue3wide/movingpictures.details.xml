@@ -217,7 +217,7 @@ This file should contain the details view
       <type>label</type>
       <label>year</label>
       <id>0</id>
-      <posX>920</posX>
+      <posX>885</posX>
       <posY>632</posY>
       <width>840</width>
       <font>font11</font>
@@ -243,8 +243,8 @@ This file should contain the details view
       <type>label</type>
       <label>runtime</label>
       <id>0</id>
-      <posX>1050</posX>
-      <posY>632</posY>
+      <posX>885</posX>
+      <posY>608</posY>
       <width>840</width>
       <font>font11</font>
       <textcolor>ff909090</textcolor>
@@ -254,12 +254,11 @@ This file should contain the details view
     <control>
       <description>runtime</description>
       <type>label</type>
-      <label>#MovingPictures.SelectedMovie.runtime mins</label>
+      <label>#MovingPictures.SelectedMovie.extra.runtime.localized.long</label>
       <id>0</id>
-      <posX>1210</posX>
-      <posY>632</posY>
+      <posX>965</posX>
+      <posY>608</posY>
       <width>840</width>
-      <align>right</align>
       <font>font11</font>
       <textcolor>ffFFFFFF</textcolor>
       <visible>!Control.IsVisible(50)</visible>
