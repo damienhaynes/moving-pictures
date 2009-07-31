@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
-using MediaPortal.Player;
-using MediaPortal.Util;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("local_media")]
@@ -506,7 +503,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // Start to update media info
             try {
                 logger.Debug("Updating media info for '{0}'", videoPath);
-                Database.MediaInfoWrapper mInfoWrapper = this.VideoFormat.GetMediaInfo(videoPath);
+                MediaInfoWrapper mInfoWrapper = this.VideoFormat.GetMediaInfo(videoPath);
                 this.Duration = mInfoWrapper.Duration;
                 this.VideoWidth = mInfoWrapper.Width;
                 this.VideoHeight = mInfoWrapper.Height;
