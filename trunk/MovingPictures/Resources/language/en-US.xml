@@ -91,11 +91,13 @@
   <string Field="RateFiveStarFive">Perfect</string>
   
   <!-- Runtime -->
-  <string Field="RuntimeShort">{0}:{1}</string> <!-- 0 = Hours, 1 = Minutes -->
   <string Field="RuntimeHour">{0} hour</string>
   <string Field="RuntimeHours">{0} hours</string>
   <string Field="RuntimeMinute">{0} minute</string>
   <string Field="RuntimeMinutes">{0} minutes</string>
-  <string Field="RuntimeLong">{0} and {1}</string> <!-- 0 = Field:RuntimeHour(s), 1 = Field:RuntimeMinute(s) -->
-  
-</strings>
+  <string Field="RuntimeShort">{0}:{1}</string> <!-- 0 = Hour, 1 = Minute, 2 = Second -->
+  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string> <!-- 0 = Hour, 1 = Minute, 2 = Second -->
+  <string Field="RuntimeLong">{0} and {1}</string> <!-- 0 = Field:RuntimeHour(s)/RuntimeMinute(s), 1 = Field:RuntimeMinute(s)/Field:RuntimeSecond(s) -->
+  <string Field="RuntimeLongExtended">{0}, {1} and {2}</string> <!-- 0 = Field:RuntimeHour(s), 1 = Field:RuntimeMinute(s), 2 = Field:RuntimeSecond(s) -->
+
+ </strings>

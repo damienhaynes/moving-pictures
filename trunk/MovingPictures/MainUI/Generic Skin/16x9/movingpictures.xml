@@ -327,7 +327,7 @@ multiple view modes.
       <posY>570</posY>
       <textcolor>ffffff</textcolor>
       <font>font14</font>
-      <label>#MovingPictures.SelectedMovie.extra.runtime.en.pretty</label>
+      <label>#MovingPictures.SelectedMovie.runtime.localized.long</label>
       <visible>!Control.IsVisible(50)</visible>
     </control>
     
@@ -520,7 +520,7 @@ multiple view modes.
       <width>300</width>
       <textcolor>000000</textcolor>
       <font>font14</font>
-      <label>#MovingPictures.SelectedMovie.extra.runtime.en.pretty</label>
+      <label>#MovingPictures.SelectedMovie.runtime.localized.long</label>
       <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
     </control>
     

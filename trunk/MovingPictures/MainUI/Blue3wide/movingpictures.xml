@@ -697,7 +697,7 @@ multiple view modes.
 
     <control>
       <type>label</type>
-      <label>#MovingPictures.SelectedMovie.extra.runtime.localized.long</label>
+      <label>#MovingPictures.SelectedMovie.runtime.localized.long</label>
       <posX>410</posX>
       <posY>345</posY>
       <width>360</width>

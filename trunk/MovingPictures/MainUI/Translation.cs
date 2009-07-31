@@ -119,9 +119,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string RuntimeHours = "{0} hours";
         public static string RuntimeMinute = "{0} minute";
         public static string RuntimeMinutes = "{0} minutes";
-        public static string RuntimeLong = "{0} and {1}";
+        public static string RuntimeSecond = "{0} second";
+        public static string RuntimeSeconds = "{0} seconds";
+        
         public static string RuntimeShort = "{0}:{1:00}";
-  
+        public static string RuntimeShortExtended = "{0}h{1:00}m{2:00}s";
+        public static string RuntimeLong = "{0} and {1}";
+        public static string RuntimeLongExtended = "{0}, {1} and {2}";
+
         #endregion
 
         private static string path = string.Empty;
