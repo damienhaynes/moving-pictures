@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using DirectShowLib;
 using DirectShowLib.Dvd;
-using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
@@ -24,7 +23,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     }
 
     /// <summary>
-    /// Extension methods for the VideoFormat ENUM
+    /// Extension methods for the VideoFormat enumeration
     /// </summary>
     public static class VideoFormatExtensions {
 
@@ -374,7 +373,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             Dictionary<string, MediaInfoWrapper> mediaInfos = new Dictionary<string, MediaInfoWrapper>();
             foreach (string file in files) {
-                mediaInfos.Add(file, new Database.MediaInfoWrapper(file));
+                mediaInfos.Add(file, new MediaInfoWrapper(file));
             }
 
             // first filter out the fullscreen files if there are widescreen files present

@@ -11,7 +11,7 @@ using System.IO;
 
 # endregion
 
-namespace MediaPortal.Plugins.MovingPictures.Database
+namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 {
     /// <summary>
     /// This class is here to temporarily replace the MediaInfoWrapper included with MediaPortal
@@ -115,21 +115,25 @@ namespace MediaPortal.Plugins.MovingPictures.Database
         else
             _aspectRatio = "widescreen";
 
-        if (strFile.ToLower().EndsWith(".ifo")) {
+        if (strFile.ToLower().EndsWith(".ifo") && !DeviceManager.IsOpticalDrive(strFile)) {
             // mediainfo is not able to obtain duration of IFO files
             // so we use this to loop through all corresponding VOBs and add up the duration
+            // we do not do this for optical drives because there are issues with some discs
+            // taking more than 2 minutes(copy protection?)
             _duration = 0;
             string filePrefix = Path.GetFileName(strFile);
             filePrefix = filePrefix.Substring(0, filePrefix.LastIndexOf('_'));
+            MediaInfo mi = new MediaInfo();
             foreach (string file in Directory.GetFiles(Path.GetDirectoryName(strFile), filePrefix + "*.VOB")) {
-                MediaInfoWrapper wrapper = new MediaInfoWrapper(file);
-                _duration += wrapper.Duration;
+                mi.Open(file);
+                int durationPart = 0;
+                int.TryParse(_mI.Get(StreamKind.Video, 0, "PlayTime"), out durationPart);
+                _duration += durationPart;
             }
         }
         else {
             int.TryParse(_mI.Get(StreamKind.Video, 0, "PlayTime"), out _duration);
         }
-
 
         _isInterlaced = (_scanType.IndexOf("interlaced") > -1);
 
