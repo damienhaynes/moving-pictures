@@ -1471,7 +1471,34 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     SetProperty(propertyStr + ".major", major.ToString(), true);
                     SetProperty(propertyStr + ".minor", minor.ToString(), true);
 
-                } 
+                }
+                // for the movie runtime we also add some special properties
+                else if (currField.FieldName == "runtime" && tableType == typeof(DBMovieInfo)) {
+                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
+                    DBMovieInfo movie = (DBMovieInfo)obj;
+
+                    int seconds = 0;
+                    bool actualRuntime = false;
+
+                    // Check the user preference and display the runtime requested
+                    // If the user choose actual runtime and it is not available default
+                    // to the imported runtime
+                    if (MovingPicturesCore.Settings.DisplayActualRuntime && movie.ActualRuntime > 0) {
+                        // Actual runtime (as calculated by mediainfo)
+                        // convert duration from milliseconds to seconds
+                        seconds = (movie.ActualRuntime / 1000);
+                        actualRuntime = true;
+                    }
+                    else {
+                        // Runtime (as provided by the dataprovider)
+                        // convert from minutes to seconds
+                        seconds = (movie.Runtime * 60);
+                    }
+                    
+                    // Publish the runtime
+                    PublishRuntime(seconds, actualRuntime, "#MovingPictures." + prefix + ".runtime.", true);         
+                    
+                }
                 // for floats we need to make sure we use english style printing or imagelist controls
                 // will break. 
                 else if (value.GetType() == typeof(float)) {
@@ -1487,66 +1514,77 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     SetProperty(propertyStr, valueStr, forceLogging);
                 }
             }
-
-            PublishBonusDetails(obj, prefix, forceLogging);
         }
 
-        // publishing for special fields not specifically in the database
-        private void PublishBonusDetails(DatabaseTable obj, string prefix) {
-            PublishBonusDetails(obj, prefix, false);
-        }
-
-        private void PublishBonusDetails(DatabaseTable obj, string prefix, bool forceLogging) {
-            
-            if (obj is DBMovieInfo) {
-                DBMovieInfo movie = (DBMovieInfo)obj;
-                int minValue = (movie.Runtime % 60);
-                int hourValue = (movie.Runtime / 60);
-
-                // publish
-                PublishBonusDetailsRuntime(hourValue, minValue, prefix, forceLogging);
-            }
-
-            // convert mediainfo duration from milliseconds to hour & minute values
-            if (obj is DBLocalMedia) {
-                DBLocalMedia movie = (DBLocalMedia)obj;
-                int minValue = ((movie.Duration / 60000) % 60);
-                int hourValue = (movie.Duration / 3600000);
-
-                // publish
-                PublishBonusDetailsRuntime(hourValue, minValue, prefix, forceLogging);
-            }
-
-        }
-
-        private void PublishBonusDetailsRuntime(int hours, int minutes, string prefix, bool forceLogging) {
-            string runtimeLabel = "#MovingPictures." + prefix + ".extra.runtime.";
+        private void PublishRuntime(int totalSeconds, bool actualRuntime, string labelPrefix, bool forceLogging) {
             string valueStr;
-            
-            // hour component of runtime
-            SetProperty(runtimeLabel + "hour", hours.ToString(), forceLogging);
-            
-            // minute component of runtime
-            SetProperty(runtimeLabel + "minute", minutes.ToString(), forceLogging);
 
-            // give short runtime string
-            valueStr = string.Format(Translation.RuntimeShort, hours, minutes);
-            SetProperty(runtimeLabel + "short", valueStr, forceLogging);
+            // pre-0.8 prefix
+            // todo: remove these properties in 0.9 ?
+            string bcPrefix = labelPrefix.Replace(".runtime.", ".extra.runtime.");
+
+            // create the time components
+            int hours = (totalSeconds / 3600); 
+            int minutes = ((totalSeconds / 60) % 60);
+            int seconds = (totalSeconds % 60);
+            
+            // logging to true for debug purposes
+            forceLogging = true;
+
+            // publish the value indicating wether this is the actual runtime
+            SetProperty(labelPrefix + "actual", actualRuntime.ToString(), forceLogging);
+
+            // publish the runtime in total seconds 
+            SetProperty(labelPrefix + "totalseconds", totalSeconds.ToString(), forceLogging);
+
+            // publish hour component of runtime
+            SetProperty(labelPrefix + "hour", hours.ToString(), forceLogging);
+            SetProperty(bcPrefix + "hour", hours.ToString(), forceLogging);
+
+            // publish minute component of runtime
+            SetProperty(labelPrefix + "minute", minutes.ToString(), forceLogging);
+            // pre-0.8
+            SetProperty(bcPrefix + "minute", minutes.ToString(), forceLogging);
+
+            // publish second component of runtime
+            SetProperty(labelPrefix + "second", seconds.ToString(), forceLogging);
 
             // give localized hour string
             string hourLocalized = (hours != 1) ? Translation.RuntimeHours : Translation.RuntimeHour;
             hourLocalized = string.Format(hourLocalized, hours);
-            SetProperty(runtimeLabel + "localized.hours", hourLocalized, forceLogging);
+            SetProperty(labelPrefix + "localized.hour", hourLocalized, forceLogging);
 
-            // give localized minute string
+            // publish localized minute string
             string minLocalized = (minutes != 1) ? Translation.RuntimeMinutes : Translation.RuntimeMinute;
             minLocalized = string.Format(minLocalized, minutes);
-            SetProperty(runtimeLabel + "localized.minutes", minLocalized, forceLogging);
+            SetProperty(labelPrefix + "localized.minute", minLocalized, forceLogging);
 
-            // give localized long string
+            // publish localized second string
+            string secLocalized = (seconds != 1) ? Translation.RuntimeSeconds : Translation.RuntimeSecond;
+            secLocalized = string.Format(secLocalized, seconds);
+            SetProperty(labelPrefix + "localized.second", secLocalized, forceLogging);
+
+            // publish localized short string
+            valueStr = string.Format(Translation.RuntimeShort, hours, minutes, seconds);
+            SetProperty(labelPrefix + "localized.short", valueStr, forceLogging);
+            // pre-0.8
+            SetProperty(bcPrefix + "short", valueStr, forceLogging);
+
+            // publish localized extended short string
+            valueStr = string.Format(Translation.RuntimeShortExtended, hours, minutes, seconds);
+            SetProperty(labelPrefix + "localized.short.extended", valueStr, forceLogging);
+
+            // publish localized long string
             // When the duration is less than an hour it will display the localized minute string.
-            valueStr = (hours < 1) ? minLocalized : string.Format(Translation.RuntimeLong, hourLocalized, minLocalized);
-            SetProperty(runtimeLabel + "localized.long", valueStr, forceLogging);
+            valueStr = (hours < 1) ? minLocalized : string.Format(Translation.RuntimeLong, hourLocalized, minLocalized, secLocalized);
+            SetProperty(labelPrefix + "localized.long", valueStr, forceLogging);
+            // pre-0.8
+            SetProperty(bcPrefix + "en.pretty", valueStr, forceLogging);
+
+            // publish localized extended long string
+            // When the duration is less than an hour it will display the localized long string.
+            valueStr = (hours < 1) ? string.Format(Translation.RuntimeLong, minLocalized, secLocalized) : string.Format(Translation.RuntimeLongExtended, hourLocalized, minLocalized, secLocalized);
+            SetProperty(labelPrefix + "localized.long.extended", valueStr, forceLogging);
         }
 
         // all details relating to the current view and filtering status

@@ -254,7 +254,7 @@ This file should contain the details view
     <control>
       <description>runtime</description>
       <type>label</type>
-      <label>#MovingPictures.SelectedMovie.extra.runtime.localized.long</label>
+      <label>#MovingPictures.SelectedMovie.runtime.localized.long</label>
       <id>0</id>
       <posX>965</posX>
       <posY>608</posY>

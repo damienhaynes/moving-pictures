@@ -975,6 +975,23 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private bool _allow_grouping;
+
+        [CornerstoneSetting(
+            Name = "Display the actual runtime of a movie",
+            Description = "If enabled this setting will display the actual runtime of the movie instead of the runtime imported from the data provider. If there's no actual runtime in formation available it will default to the importered runtime.",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "gui_display_actual_runtime",
+            Default = true)]
+        public bool DisplayActualRuntime {
+            get { return _displayActualRuntime; }
+            set {
+                _displayActualRuntime = value;
+                OnSettingChanged("gui_display_actual_runtime");
+            }
+        }
+        private bool _displayActualRuntime;
+
+
         #endregion
 
         #region Tweaks
