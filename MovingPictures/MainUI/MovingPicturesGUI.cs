@@ -347,7 +347,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             // if the user hasn't defined any import paths they need to goto the config screen
-            if (DBImportPath.GetAll().Count == 0) {
+            if (DBImportPath.GetAllUserDefined().Count == 0) {
                 ShowMessage(Translation.NoImportPathsHeading, Translation.NoImportPathsBody);
                 GUIWindowManager.ShowPreviousWindow();
                 return;
