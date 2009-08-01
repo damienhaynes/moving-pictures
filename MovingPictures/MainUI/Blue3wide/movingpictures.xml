@@ -546,7 +546,7 @@ multiple view modes.
       <orientation>horizontal</orientation>
       <align>left</align>
       <imagesToDraw>5</imagesToDraw>
-      <percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
+      <percentage>#MovingPictures.SelectedMovie.score.localized</percentage>
       <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
     </control>
 
@@ -741,7 +741,7 @@ multiple view modes.
       <orientation>horizontal</orientation>
       <align>left</align>
       <imagesToDraw>5</imagesToDraw>
-      <percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
+      <percentage>#MovingPictures.SelectedMovie.score.localized</percentage>
       <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
     </control>
 
