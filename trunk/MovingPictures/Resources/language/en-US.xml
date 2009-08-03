@@ -6,11 +6,15 @@
 <strings>
   <string Field="ProblemLoadingSkinFile">Sorry, there was a problem loading the skin file</string>
   <string Field="SkinDoesNotSupportRatingDialog">This skin does not support the rating dialog</string>
+  <string Field="SkinDoesNotSupportPinDialog">This skin does not support the Pin Code Dialog.</string>
   <string Field="NoImportPathsHeading">No Import Paths!</string>
   <string Field="NoImportPathsBody">It doesn't look like you have\ndefined any import paths. You\nshould close MediaPortal and\nlaunch the MediaPortal\nConfiguration Screen to\nconfigure Moving Pictures.</string>
   <string Field="ShowAllMovies">Show All Movies</string>
   <string Field="ShowOnlyUnwatchedMovies">Show Only Unwatched Movies</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Show Watched and Unwatched Movies</string>
   <string Field="SortBy">Sort By</string>
+  <string Field="FilterBy">Filter By</string>
+  <string Field="AllMovies">All Movies</string>
   <string Field="ChangeView">Change View</string>
   <string Field="ListView">List View</string>
   <string Field="ThumbnailView">Thumbnail View</string>
@@ -23,6 +27,12 @@
   <string Field="MarkAsWatched">Mark as Watched</string>
   <string Field="DeleteMovie">Delete Movie</string>
   <string Field="MovieOptions">Movie Options</string>
+  <string Field="LockRestrictedMovies">Lock Restricted Movies</string>
+  <string Field="PinCodeHeader">Unlocking Restricted Content</string>
+  <string Field="PinCodePrompt">Please enter PIN code to continue:</string>
+  <string Field="InvalidPin">Invalid PIN code!</string>
+  <string Field="ParentalControlsDisabled">Parental controls are not enabled.</string>
+  <string Field="UnlockRestrictedMovies">Unlock Restricted Movies</string>
   <string Field="CannotDeleteReadOnly">Cannot delete a read-only movie.\nWould you like Moving Pictures to ignore this movie?</string>
   <string Field="CannotDeleteOffline">Not able to delete {0}\n because the file is offline</string>
   <string Field="DoYouWantToDelete">Do you want to permanently delete\n{0}\nfrom your hard drive?</string>
@@ -95,6 +105,9 @@
   <string Field="RuntimeHours">{0} hours</string>
   <string Field="RuntimeMinute">{0} minute</string>
   <string Field="RuntimeMinutes">{0} minutes</string>
+  <string Field="RuntimeSecond">{0} second</string>
+  <string Field="RuntimeSeconds">{0} seconds</string>
+  
   <string Field="RuntimeShort">{0}:{1}</string> <!-- 0 = Hour, 1 = Minute, 2 = Second -->
   <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string> <!-- 0 = Hour, 1 = Minute, 2 = Second -->
   <string Field="RuntimeLong">{0} and {1}</string> <!-- 0 = Field:RuntimeHour(s)/RuntimeMinute(s), 1 = Field:RuntimeMinute(s)/Field:RuntimeSecond(s) -->
