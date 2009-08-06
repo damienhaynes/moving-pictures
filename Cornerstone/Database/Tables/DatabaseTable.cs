@@ -120,8 +120,17 @@ namespace Cornerstone.Database.Tables {
                     if (newValue.Equals(oldValue))
                         continue;
 
-                    // finally check if we are protecting values from getting overwritten
-                    if (protectExistingValuesFromCopy && !oldValue.Equals(currField.Default))
+                    // check if the old value is the default value
+                    bool oldValueIsDefault = false;
+                    if (oldValue is string && currField.Default is string) {
+                        if (((string)oldValue).Trim().Equals(((string)currField.Default).Trim()))
+                            oldValueIsDefault = true;
+                    }
+                    else if (oldValue.Equals(currField.Default))
+                        oldValueIsDefault = true;
+                        
+                    // if we are protecting non-default values continue
+                    if (protectExistingValuesFromCopy && !oldValueIsDefault)
                         continue;
 
                     currField.SetValue(this, newValue);
