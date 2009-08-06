@@ -32,8 +32,8 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                     title = value.Trim();
 
                 if (!String.IsNullOrEmpty(title)) {
-                    keywords = Utility.TitleToKeywords(title);
-                    baseTitle = Utility.NormalizeTitle(title);
+                    keywords = title.ToKeywords();
+                    baseTitle = title.Equalize();
                 } else {
                     title = null;
                     keywords = null;
@@ -204,7 +204,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         }
 
         private int matchTitle(string title) {
-            string otherTitle = Utility.NormalizeTitle(title);
+            string otherTitle = title.Equalize();
             int score = AdvancedStringComparer.Levenshtein(baseTitle, otherTitle);
             return score;
         }

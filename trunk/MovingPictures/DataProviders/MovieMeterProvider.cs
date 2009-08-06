@@ -159,7 +159,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (films != null) {
                 foreach (Film film in films) {
                     DBMovieInfo movie = new DBMovieInfo();
-                    movie.Title = Utility.TitleToDisplayName(film.title);
+                    movie.Title = film.title.FromSortable();
                     movie.AlternateTitles.Add(film.alternative_title);
                     movie.GetSourceMovieInfo(SourceInfo).Identifier = film.filmId;
                     int year = 0;
@@ -192,7 +192,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 DBMovieInfo movie = new DBMovieInfo();
                 movie.GetSourceMovieInfo(SourceInfo).Identifier = film.filmId.ToString();
 
-                movie.Title = Utility.TitleToDisplayName(film.title);
+                movie.Title = film.title.FromSortable();
                 movie.Summary = film.plot;
                 movie.ImdbID = "tt" + film.imdb;
                 movie.DetailsURL = film.url;
