@@ -557,6 +557,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         #endregion
 
         #region Overrides
+
         public override bool Equals(object obj) {
             // make sure we have a dblocalmedia object
             if (obj == null || obj.GetType() != typeof(DBLocalMedia))
@@ -576,10 +577,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return false;
 
             // if we have a Disc Id for either both, make sure they are equal
-            if (IsDVD) {
-                if (this.DiscId != otherLocalMedia.DiscId)
-                    return false;
-            }
+            if (IsDVD && this.DiscId != otherLocalMedia.DiscId)
+                 return false;
 
             return true;
         }

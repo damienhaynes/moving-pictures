@@ -18,7 +18,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         static LocalBuilder() {
             // todo: design logic to reload these strings when there's a configurable setting for the user
             replacements = new Dictionary<string, string>();
-            replacements.Add(@"(?<!\b\w)\.", " ");  // Replace dots that are not part of acronyms with spaces
+            replacements.Add(@"(?<!\b\w)(?=[^\d])\.", " ");  // Replace dots that are not part of acronyms with spaces
             replacements.Add(@"_", " ");  // Replace underscores with spaces
             replacements.Add(@"tt\d{7}", ""); // Removes imdb numbers
         }
@@ -27,7 +27,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         private static string removeNoise(string input) {
             Regex expr = new Regex(MovingPicturesCore.Settings.NoiseFilter, RegexOptions.IgnoreCase);
             string denoisedTitle = expr.Replace(input, "");
-            denoisedTitle = Utility.TrimSpaces(denoisedTitle);
+            denoisedTitle = denoisedTitle.TrimWhiteSpace();
             return denoisedTitle;
         }
 
