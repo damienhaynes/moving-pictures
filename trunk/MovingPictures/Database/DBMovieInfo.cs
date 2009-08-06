@@ -913,7 +913,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             string tmp = tr.Translate(Genres.ToString());
             Genres.Clear();
-            Genres.AddRange(tmp.Split('|'));
+            foreach (string currGenre in tmp.Split('|'))
+                if (currGenre.Trim().Length > 0)
+                    Genres.Add(currGenre.Trim());
         }
     }
 }
