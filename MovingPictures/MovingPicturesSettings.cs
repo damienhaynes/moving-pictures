@@ -268,7 +268,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Enables pre-search lookup for title by using the unique disc id of the DVD.",
             Groups = "|Movie Importer|Preprocessing|",
             Identifier = "importer_lookup_discid",
-            Default = false)]
+            Default = true)]
         public bool EnableDiscIdLookup {
             get { return _enableDiscIdLookup; }
             set {
