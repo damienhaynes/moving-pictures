@@ -549,8 +549,23 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 if (!File.Exists(newFileName)) {
-                    newCover.Save(newFileName, ImageFormat.Png);
-                    AlternateCovers.Add(newFileName);
+                    bool saved = false;
+                    try {
+                        newCover.Save(newFileName, ImageFormat.Png);
+                        AlternateCovers.Add(newFileName);
+                        saved = true;
+                    }
+                    catch (ArgumentNullException) {
+                        logger.Debug("Error while trying to save cover: filename is missing.");
+                    }
+                    catch (System.Runtime.InteropServices.ExternalException e) {
+                        logger.DebugException("Error while trying to save cover. ", e);
+                    }
+
+                    if (!saved) {
+                        newCover.Dispose();
+                        return false;
+                    }
                 }
                 else return false;
             }
@@ -629,14 +644,29 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             // save the artwork
-            logger.Debug("Added cover art for '" + Title + "' [" + ID + "] from " + url + ".");
-            currImage.Save(filename, ImageFormat.Png);
-            AlternateCovers.Add(filename);
-            GenerateThumbnail();
-            commitNeeded = true;
+            bool saved = false;
+            try {
+                currImage.Save(filename, ImageFormat.Png);
+                AlternateCovers.Add(filename);
+                GenerateThumbnail();
+                commitNeeded = true;
+                saved = true;
+                logger.Debug("Added cover art for '" + Title + "' [" + ID + "] from " + url + ".");
+            }
+            catch (ArgumentNullException) {
+                logger.Debug("Error while trying to save cover: filename is missing.");
+            }
+            catch (System.Runtime.InteropServices.ExternalException e) {
+                logger.DebugException("Error while trying to save cover. ", e);
+            }
+            finally {
+                currImage.Dispose();
+            }
 
-            currImage.Dispose();
-            return ArtworkLoadStatus.SUCCESS;
+            if (saved)
+                return ArtworkLoadStatus.SUCCESS;
+            else
+                return ArtworkLoadStatus.FAILED;
         }
 
         // Attempts to load cover art for this movie from a given URL. Honors 
@@ -699,11 +729,27 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             // save the backdrop
-            currImage.Save(filename, ImageFormat.Jpeg);
-            currImage.Dispose();
-            _backdropFullPath = filename;
-            commitNeeded = true;
-            return ArtworkLoadStatus.SUCCESS;
+            bool saved = false;
+            try {
+                currImage.Save(filename, ImageFormat.Jpeg);
+                _backdropFullPath = filename;
+                commitNeeded = true;
+                saved = true;
+            }
+            catch (ArgumentNullException) {
+                logger.Debug("Error while trying to save backdrop: filename is missing.");
+            }
+            catch (System.Runtime.InteropServices.ExternalException e) {
+                logger.DebugException("Error while trying to save backdrop. ", e);
+            }
+            finally {
+                currImage.Dispose();
+            }
+            if (saved)
+                return ArtworkLoadStatus.SUCCESS;
+            else
+                return ArtworkLoadStatus.FAILED;
+            
         }
 
         public ArtworkLoadStatus AddBackdropFromURL(string url) {
@@ -742,11 +788,23 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 
                 // save the backdrop
-                newBackdrop.Save(newFileName, ImageFormat.Jpeg);
-                newBackdrop.Dispose();
-                _backdropFullPath = filename;
-                commitNeeded = true;
-                return true;
+                bool saved = false;
+                try {
+                    newBackdrop.Save(newFileName, ImageFormat.Jpeg);
+                    _backdropFullPath = filename;
+                    commitNeeded = true;
+                    saved = true;
+                }
+                catch (ArgumentNullException) {
+                    logger.Debug("Error while trying to save backdrop: filename is NULL.");
+                }
+                catch (System.Runtime.InteropServices.ExternalException e) {
+                    logger.DebugException("Error while trying to save backdrop. ", e);
+                }
+                finally {
+                    newBackdrop.Dispose();
+                }
+                return saved;
             }
 
             // if it's already in the folder, just store the filename in the db
@@ -835,12 +893,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             int height = (int)(cover.Height * ((float)width / (float)cover.Width));
 
             Image coverThumb = cover.GetThumbnailImage(width, height, null, IntPtr.Zero);
-            coverThumb.Save(fullname, ImageFormat.Png);
-            _coverThumbFullPath = fullname;
-            commitNeeded = true;
-
-            cover.Dispose();
-            coverThumb.Dispose();
+            try {
+                coverThumb.Save(fullname, ImageFormat.Png);
+                _coverThumbFullPath = fullname;
+                commitNeeded = true;
+            }
+            catch (ArgumentNullException) {
+                logger.Debug("Error while trying to save thumbnail: filename is NULL.");
+            }
+            catch (System.Runtime.InteropServices.ExternalException e) {
+                logger.DebugException("Error while trying to save thumbnail. ", e);
+            }
+            finally {
+                cover.Dispose();
+                coverThumb.Dispose();
+            }
         }
 
         #endregion
