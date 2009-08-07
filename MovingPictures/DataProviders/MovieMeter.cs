@@ -301,6 +301,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                 }
                 catch (WebException e) { if (!retryAfterWebException(e, retryCount)) break; }
                 catch (XmlRpcFaultException e) { logXmlRpcFaultException(e); break; }
+                catch (Exception e) { logGeneralException(e); break; }
             }
 
             return null;
@@ -318,6 +319,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                 }
                 catch (WebException e) { if (!retryAfterWebException(e, retryCount)) break; }
                 catch (XmlRpcFaultException e) { logXmlRpcFaultException(e); break; }
+                catch (Exception e) { logGeneralException(e); break; }
             }
 
             return null;
@@ -349,6 +351,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                 }
                 catch (WebException e) { if (!retryAfterWebException(e, retryCount)) break; }
                 catch (XmlRpcFaultException e) { logXmlRpcFaultException(e); break; }
+                catch (Exception e) { logGeneralException(e); break; }
             }
 
             return null;
@@ -389,8 +392,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                     }
                     catch (WebException e) { logger.DebugException("getSessionKey() Connection failed.", e); }
                     catch (XmlRpcFaultException e) { logXmlRpcFaultException(e); }
-                    //catch (ArgumentOutOfRangeException e) { }
-                    //catch (ArgumentException e) { }
+                    catch (Exception e) { logGeneralException(e); }
                 }
 
             }
@@ -428,6 +430,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
 
         private void logXmlRpcFaultException(XmlRpcFaultException e) {
             logger.Debug("XML-RPC Fault: Code={0}, String='{1}'", e.FaultCode, e.FaultString);
+        }
+
+        private void logGeneralException(Exception e) {
+            logger.DebugException(e.Message, e);
         }
 
         #endregion
