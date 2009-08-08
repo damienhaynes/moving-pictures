@@ -531,6 +531,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             lock (detailSources) sources = new List<DBSourceInfo>(detailSources);
 
             int count = 0;
+            
+            // unlock the movie fields for the first iteration
+            movie.ProtectExistingValuesFromCopy(false);
+            
             foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.DETAILS))
                     continue;
