@@ -545,9 +545,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             List<DBImportPath> paths = DBImportPath.GetAll();
 
             // clear out old watchers, if any
-            foreach (FileSystemWatcher currWatcher in fileSystemWatchers)
+            foreach (FileSystemWatcher currWatcher in fileSystemWatchers) {
                 currWatcher.EnableRaisingEvents = false;
-
+                currWatcher.Dispose();
+            }
             fileSystemWatchers.Clear();           
             
             // fill the watcher queue with import paths
@@ -598,8 +599,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     if (success) {
                         watcherQueue.Remove(importPath);
                         if (rescanQueue.Contains(importPath)) {
-                            // rescan the import path
-                            ScanPath(importPath);
+                            // initiate a rescan of the import path only when it's an UNC path
+                            // the drive based import paths will already be notified by the drive monitor.
+                            if (importPath.IsUnc)
+                                ScanPath(importPath);
+
                             // remove it from the rescan queue
                             rescanQueue.Remove(importPath);
                         }
@@ -609,7 +613,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         private void WatchImportPath(FileSystemWatcher watcher, DBImportPath importPath) {
-            // todo: figure out if Renamed has to be in this list
             watcher.Path = importPath.FullPath;
             watcher.IncludeSubdirectories = true;
             watcher.Error += OnWatcherError;
@@ -636,7 +639,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (fileSystemWatchers.Contains(watcher))
                 fileSystemWatchers.Remove(watcher);
 
-            // Clean the old watcher (?)
+            // Clean the old watcher
             watcher.Dispose();
 
             // Add the importPath to the watcher queue

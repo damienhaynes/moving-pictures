@@ -288,7 +288,7 @@
     <Compile Include="LocalMediaManagement\MovieImporter.cs" />
     <Compile Include="LocalMediaManagement\Utility.cs" />
     <Compile Include="LocalMediaManagement\VideoUtility.cs" />
-    <Compile Include="LocalMediaManagement\VolumeInfo.cs" />
+    <Compile Include="LocalMediaManagement\DriveInfoExtensions.cs" />
     <Compile Include="MainUI\ConfigConnector.cs" />
     <Compile Include="MainUI\GroupHeaders.cs" />
     <Compile Include="MainUI\MovieBrowser.cs" />
