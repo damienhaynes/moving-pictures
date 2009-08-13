@@ -239,40 +239,38 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
                 MovieMatch selectedMatch = (MovieMatch)currRow.DataBoundItem;
 
-                // Check if all files belonging to the movie are available.
+                // Check if the first file belonging to the movie is available.
+                // Because the identification process uses the first file and it's "environment"
                 bool continueRescan = false;
                 while (!continueRescan) {
                     continueRescan = true;
-                    foreach (DBLocalMedia localMedia in selectedMatch.LocalMedia) {
-                        // if the file is offline
-                        if (!localMedia.IsAvailable) {
-                            // do not continue
-                            continueRescan = false;
+                    DBLocalMedia localMedia = selectedMatch.LocalMedia[0];
 
-                            // Prompt the user to insert the media containing the files
-                            string connect = string.Empty;
-                            if (localMedia.DriveLetter != null) {
-                                if (localMedia.ImportPath.GetDriveType() == DriveType.CDRom)
-                                    connect = "Please insert the disc labeled '" + localMedia.MediaLabel + "'.";
-                                else
-                                    connect = "Please reconnect the media labeled '" + localMedia.MediaLabel + "' to " + localMedia.DriveLetter;
-                            }
-                            else {
-                                connect = "Please make sure the network share '" + localMedia.FullPath + "' is available.";
-                            }
+                    // if the file is offline
+                    if (!localMedia.IsAvailable) {
+                        // do not continue
+                        continueRescan = false;
 
-                            // Show dialog
-                            DialogResult resultInsert = MessageBox.Show(
-                            "The file or files you want to rescan are currently not available.\n\n" + connect,
-                            "File(s) not available.", MessageBoxButtons.RetryCancel);
-
-                            // if cancel is pressed stop the rescan process.
-                            if (resultInsert == DialogResult.Cancel)
-                                return;
-
-                            // break foreach loop (and recheck condition)
-                            break;
+                        // Prompt the user to insert the media containing the files
+                        string connect = string.Empty;
+                        if (localMedia.DriveLetter != null) {
+                            if (localMedia.ImportPath.GetDriveType() == DriveType.CDRom)
+                                connect = "Please insert the disc labeled '" + localMedia.MediaLabel + "'.";
+                            else
+                                connect = "Please reconnect the media labeled '" + localMedia.MediaLabel + "' to " + localMedia.DriveLetter;
                         }
+                        else {
+                            connect = "Please make sure the network share '" + localMedia.FullPath + "' is available.";
+                        }
+
+                        // Show dialog
+                        DialogResult resultInsert = MessageBox.Show(
+                        "The file or files you want to rescan are currently not available.\n\n" + connect,
+                        "File(s) not available.", MessageBoxButtons.RetryCancel);
+
+                        // if cancel is pressed stop the rescan process.
+                        if (resultInsert == DialogResult.Cancel)
+                            return;
                     }
                 }
 
