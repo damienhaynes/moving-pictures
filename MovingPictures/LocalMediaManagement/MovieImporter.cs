@@ -769,7 +769,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Grabs the files from the DBImportPath and add them to the queue for use
         // by the ScanMedia thread.
         private void ScanPath(DBImportPath importPath) {
-            ScanFiles(importPath.GetNewLocalMedia(), false);
+            List<DBLocalMedia> importPathFiles = importPath.GetNewLocalMedia();
+            if (importPathFiles != null) {
+                lock (filesAdded.SyncRoot) 
+                    filesAdded.AddRange(importPathFiles);
+            }
         }
 
         // Adds the files to the importer for processing. If a file has recently been commited 
