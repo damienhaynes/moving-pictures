@@ -19,6 +19,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Log object
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private static readonly object lockObject = new object();
+        private static Dictionary<string, DriveInfo> driveInfoPool;
 
         #endregion
 
@@ -61,6 +62,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 watcherThread.Name = "DeviceManager.WatchDisks";
 
                 driveStates = new Dictionary<string, bool>();
+                driveInfoPool = new Dictionary<string, DriveInfo>();
             }
         }
 
@@ -176,9 +178,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         try {
                             // check if the drive is available
                             bool isAvailable;
-                            VolumeInfo volume = VolumeInfo.Get(currDrive);
-                            if (volume == null) isAvailable = false;
-                            else isAvailable = volume.IsAvailable;
+                            DriveInfo driveInfo = GetDriveInfo(currDrive);
+                            if (driveInfo == null) isAvailable = false;
+                            else isAvailable = driveInfo.IsReady;
 
                             // if the previous drive state is not stored, store it and continue
                             if (!driveStates.ContainsKey(currDrive)) {
@@ -191,27 +193,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                                 // notify any listeners
                                 if (isAvailable) {
-                                    
-                                    // Refresh Serial
-                                    volume.Refresh();
 
-                                    if (volume.Type != DriveType.Network)
+                                    if (driveInfo.DriveType != DriveType.Network)
                                         logger.Info("Volume Inserted: " + currDrive);
                                     else
                                         logger.Info("Volume Online: " + currDrive);
 
                                     if (OnVolumeInserted != null)
-                                        OnVolumeInserted(currDrive, volume.Serial);
+                                        OnVolumeInserted(currDrive, driveInfo.GetVolumeSerial());
                                 }
                                 else {
                                     // if a mapped network share gets disconnected it can either show Network or NoRootDirectory
-                                    if (volume.Type != DriveType.Network && volume.Type != DriveType.NoRootDirectory)
+                                    if (driveInfo.DriveType != DriveType.Network && driveInfo.DriveType != DriveType.NoRootDirectory)
                                         logger.Info("Volume Removed: " + currDrive);
                                     else
                                         logger.Info("Volume Offline: " + currDrive);
-
-                                    // Flush cache for this volume (just to be on the safe side)
-                                    VolumeInfo.Flush(volume.Name);
 
                                     if (OnVolumeRemoved != null)
                                         OnVolumeRemoved(currDrive, null);
@@ -283,19 +279,33 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         /// <param name="fsInfo"></param>
         /// <returns></returns>
-        public static VolumeInfo GetVolumeInfo(FileSystemInfo fsInfo) {
-            return GetVolumeInfo(fsInfo.FullName);
+        public static DriveInfo GetDriveInfo(FileSystemInfo fsInfo) {
+            return GetDriveInfo(fsInfo.FullName);
         }
 
         /// <summary>
-        /// Gets the VolumeInfo object for this drive
+        /// Gets the DriveInfo object for the given path 
+        /// When the object was created before it will be returned from cache.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="driveletter">ex. E:\ </param>
         /// <returns></returns>
-        public static VolumeInfo GetVolumeInfo(string path) {
+        public static DriveInfo GetDriveInfo(string path) {
             if (!PathIsUnc(path)) {
                 string driveletter = GetDriveLetter(path);
-                return VolumeInfo.Get(driveletter);
+                if (!driveInfoPool.ContainsKey(driveletter)) {
+                    lock (lockObject) {
+                        if (!driveInfoPool.ContainsKey(driveletter)) {
+                            try {
+                                driveInfoPool.Add(driveletter, new DriveInfo(driveletter));
+                            }
+                            catch (Exception e) {
+                                logger.Error("Error adding drive object for '{0}' to cache. {1}", driveletter, e.Message);
+                                return null;
+                            }
+                        }
+                    }
+                }
+                return driveInfoPool[driveletter];
             }
             else {
                 // not a logical volume (no driveinfo)
@@ -320,7 +330,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns></returns>
         public static bool IsAvailable(FileSystemInfo fsInfo, string recordedSerial) {
             // Get Drive Information
-            VolumeInfo volume = GetVolumeInfo(fsInfo);
+            DriveInfo driveInfo = GetDriveInfo(fsInfo);
             
             // Refresh the object information (important)
             fsInfo.Refresh();
@@ -329,8 +339,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             bool fileExists = fsInfo.Exists;
 
             // Do we have a logical volume?
-            if (volume != null && fileExists) {
-                string currentSerial = volume.Serial;
+            if (driveInfo != null && fileExists) {
+                string currentSerial = driveInfo.GetVolumeSerial();
                 // if we have both the recorded and the current serial we can do this very exact
                 // by checking if the serials match
                 if (!String.IsNullOrEmpty(recordedSerial) && !String.IsNullOrEmpty(currentSerial))
@@ -348,12 +358,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="fsInfo"></param>
         /// <returns></returns>
         public static bool IsRemovable(FileSystemInfo fsInfo) {
-            try {
-                if ((fsInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
-                    return true;
-            }
-            catch (Exception) {
-                logger.Warn("Failed check if " + fsInfo.FullName + " is a reparse point");
+            if (fsInfo.Exists) {
+                try {
+                    if ((fsInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
+                        return true;
+                }
+                catch (Exception) {
+                    logger.Warn("Failed check if " + fsInfo.FullName + " is a reparse point");
+                }
             }
 
             return IsRemovable(fsInfo.FullName);
@@ -365,19 +377,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static bool IsRemovable(string path) {
-            VolumeInfo volume = GetVolumeInfo(path);
-            if (volume != null)
-                return volume.DriveInfo.IsRemovable();
+            DriveInfo driveInfo = GetDriveInfo(path);
+            if (driveInfo != null)
+                return driveInfo.IsRemovable();
             else
                 return true;
         }
 
         public static bool IsOpticalDrive(string path) {
-            VolumeInfo volume = DeviceManager.GetVolumeInfo(path);
-            if (volume != null)
-                return volume.DriveInfo.IsOptical();
-            else
-                return false;
+            DriveInfo driveInfo = DeviceManager.GetDriveInfo(path);
+            return (driveInfo != null && driveInfo.IsOptical());
         }
 
         /// <summary>
@@ -395,9 +404,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static string GetVolumeSerial(string path) {
-            VolumeInfo volume = GetVolumeInfo(path);
-            if (volume != null)
-                return volume.Serial;
+            DriveInfo driveInfo = GetDriveInfo(path);
+            if (driveInfo != null && driveInfo.IsReady)
+                return driveInfo.GetVolumeSerial();
             else
                 return string.Empty;
         }
@@ -417,9 +426,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static string GetVolumeLabel(string path) {
-            VolumeInfo volume = GetVolumeInfo(path);
-            if (volume != null)
-                return volume.Label;
+            DriveInfo driveInfo = GetDriveInfo(path);
+            if (driveInfo != null && driveInfo.IsReady)
+                return driveInfo.VolumeLabel;
             else
                 return string.Empty;
         }

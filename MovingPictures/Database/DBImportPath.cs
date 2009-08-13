@@ -157,12 +157,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     while (serial == string.Empty) {
                         
                         // Grab information for this logical volume
-                        VolumeInfo volumeInfo = DeviceManager.GetVolumeInfo(Directory);
-                        if (volumeInfo != null) {
+                        DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
+                        if (driveInfo != null && driveInfo.IsReady) {
                             // get the volume properties
-                            volume = volumeInfo.Name;
-                            label = volumeInfo.Label;
-                            serial = volumeInfo.Serial;
+                            volume = driveInfo.GetDriveLetter();
+                            label = driveInfo.VolumeLabel;
+                            serial = driveInfo.GetVolumeSerial();
+                            logger.Debug("Drive='{0}', Label='{1}', Serial='{2}'", volume, label, serial);
                         }
 
                         // check if the serial is empty
@@ -287,9 +288,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (DeviceManager.PathIsUnc(Directory.FullName))
                     return DriveType.Network;
                 else {
-                    VolumeInfo volume = DeviceManager.GetVolumeInfo(Directory);
-                    if (volume != null)
-                        return volume.Type;
+                    DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
+                    if (driveInfo != null)
+                        return driveInfo.DriveType;
                 }
             }
             return DriveType.Unknown;
