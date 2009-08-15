@@ -1109,7 +1109,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         public bool UseDynamicRefreshRateChangerWithExternalPlayer {
             get { return _useDynamicRefreshRateChangerWithExternalPlayer; }
             set {
-                _useExternalPlayer = value;
+                _useDynamicRefreshRateChangerWithExternalPlayer = value;
                 OnSettingChanged("playback_hd_change_refresh_rate");
             }
         }
