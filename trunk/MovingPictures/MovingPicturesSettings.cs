@@ -1100,6 +1100,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _useExternalPlayer;
 
+        [CornerstoneSetting(
+            Name = "Enable Dynamic Refresh Rate Changer Settings",
+            Description = "Enable the Dynamic Refresh Rate Changer when using an external player, this setting will only take effect if you have setup the Dynamic Refresh Rate Changer settings in your MediaPortal configuration.",
+            Groups = "|MediaPortal GUI|Bluray/HD-DVD Playback|",
+            Identifier = "playback_hd_change_refresh_rate",
+            Default = false)]
+        public bool UseDynamicRefreshRateChangerWithExternalPlayer {
+            get { return _useDynamicRefreshRateChangerWithExternalPlayer; }
+            set {
+                _useExternalPlayer = value;
+                OnSettingChanged("playback_hd_change_refresh_rate");
+            }
+        }
+        private bool _useDynamicRefreshRateChangerWithExternalPlayer;
+
 
         [CornerstoneSetting(
             Name = "External Player Path",
@@ -1119,7 +1134,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "External Player Arguements",
-            Description = "The command-line arguments that should be appended when calling the executable. (the variable %filename% will be replaced with the path to the movie)",
+            Description = "The command-line arguments that should be appended when calling the executable. (available variables: %filename% will be replaced with the path to the movie, %fps% will be replaced with the framerate for the movie)",
             Groups = "|MediaPortal GUI|Bluray/HD-DVD Playback|",
             Identifier = "playback_hd_arguments",
             Default = "%filename%")]

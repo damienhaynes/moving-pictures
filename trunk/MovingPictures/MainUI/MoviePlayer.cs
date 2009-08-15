@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Globalization;
 using System.Threading;
 using Cornerstone.Database.CustomTypes;
 using MediaPortal.Dialogs;
@@ -408,6 +409,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             logger.Debug("External Player: Video='{0}', FPS={1}, ExecCommandLine={2} {3}", filename, fps, execPath, arguments);
 
+            // Set Refresh Rate Based On FPS if needed
+            if (MovingPicturesCore.Settings.UseDynamicRefreshRateChangerWithExternalPlayer) {
+                double framerate = double.Parse(queuedMedia.VideoFrameRate.ToString(NumberFormatInfo.InvariantInfo), NumberFormatInfo.InvariantInfo);
+                logger.Info("Requesting new refresh rate: FPS={0}", framerate.ToString());
+                RefreshRateChanger.SetRefreshRateBasedOnFPS(framerate, filename, RefreshRateChanger.MediaType.Video);
+                if (RefreshRateChanger.RefreshRateChangePending) {
+                    TimeSpan ts = DateTime.Now - RefreshRateChanger.RefreshRateChangeExecutionTime;
+                    if (ts.TotalSeconds > RefreshRateChanger.WAIT_FOR_REFRESHRATE_RESET_MAX) {
+                        logger.Info("Refresh rate change failed. Please check your mediaportal log and configuration", RefreshRateChanger.WAIT_FOR_REFRESHRATE_RESET_MAX);
+                        RefreshRateChanger.ResetRefreshRateState();
+                    } 
+                }
+            }
+
             // Setup the external player process
             ProcessStartInfo processinfo = new ProcessStartInfo();
             processinfo.FileName = execPath;
@@ -441,6 +456,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void OnHDPlayerExited(object obj, EventArgs e) {
             
+            // Restore refresh rate if it was changed
+            if (MovingPicturesCore.Settings.UseDynamicRefreshRateChangerWithExternalPlayer && RefreshRateChanger.RefreshRateChangePending)
+                RefreshRateChanger.AdaptRefreshRate();
+
             // enable mediaportal input devices
             InputDevices.InputDevices.Init();
 
