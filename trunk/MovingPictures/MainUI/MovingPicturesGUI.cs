@@ -698,7 +698,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Context Menu Methods
 
         protected override void OnShowContextMenu() {
-            base.OnShowContextMenu();
             switch (browser.CurrentView) {
                 case BrowserViewMode.DETAILS:
                     showDetailsContext();
@@ -707,8 +706,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     showMainContext();
                     break;
             }
-
-            base.OnShowContextMenu();
         }
 
         private void showMainContext() {
@@ -1139,21 +1136,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Show the update confirmation dialog
             bool bConfirm = ShowCustomYesNo(Translation.UpdateMovieDetailsHeader, Translation.UpdateMovieDetailsBody, null, null, false);
             if (bConfirm) {
-                
                 // if confirmed do the update using the primary data provider
                 MovingPicturesCore.DataProviderManager.Update(movie);
-                
+
                 // Save the movie
                 movie.Commit();
-                
+
                 // Update MediaInfo
                 foreach (DBLocalMedia lm in movie.LocalMedia) {
                     lm.UpdateMediaInfo();
                     lm.Commit();
                 }
 
-                // Public the new movie details in the GUI
-                PublishMovieDetails(movie);
+                // Reload the facade to enforce changes in sorting and publishing
+                browser.ReloadFacade();
             }
         }
 
