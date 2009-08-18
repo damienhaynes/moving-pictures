@@ -14,6 +14,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public enum BrowserViewMode { LIST, SMALLICON, LARGEICON, FILMSTRIP, DETAILS }
     
     public class MovieBrowser {
+        
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         // lookup for GUIListItems that have been created for DBMovieInfo objects
@@ -29,26 +30,26 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // The currently selected movie.
         public DBMovieInfo SelectedMovie {
             get {
-                return selectedMovie;
+                return _selectedMovie;
             }
             set {
-                if (selectedMovie != value) {
+                if (_selectedMovie != value) {
                     updateSelectedMovie(value);
                     SyncToFacade();
                 }
             }
         }
-        private DBMovieInfo selectedMovie = null;
+        private DBMovieInfo _selectedMovie = null;
 
         // The currently selected facade index
         public int SelectedIndex {
             get {
-                return selectedIndex;
+                return _selectedIndex;
             }
             set {
-                selectedIndex = value;
+                _selectedIndex = value;
             }
-        } private int selectedIndex = 0;
+        } private int _selectedIndex = 0;
 
         /// <summary>
         /// The current view mode the browser is in. Generally this refers to either
@@ -238,7 +239,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Reapplies the current view to the GUI.
         /// </summary>
         public void ReapplyView() {
-            logger.Debug("Setting view mode to  " + currentView.ToString() + ".");
+            logger.Debug("Setting view mode to {0}.", currentView.ToString());
 
             if (facade == null)
                 return;
@@ -258,7 +259,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     break;
                 case BrowserViewMode.DETAILS:
                     if (_clearFocusAction != null) _clearFocusAction();
-
                     facade.Visible = false;
                     facade.ListView.Visible = false;
                     facade.ThumbnailView.Visible = false;
@@ -268,26 +268,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // if we are leaving details view, set focus back on the facade
             if (previousView == BrowserViewMode.DETAILS) {
-                if (_clearFocusAction != null) _clearFocusAction();
-
-                facade.Focus = true;
-                facade.Visible = true;
+                if (_clearFocusAction != null)
+                    _clearFocusAction();                
             }
 
-            // sync the selected item and facade as appropriate
-            switch (currentView) {
-                // if in details view, we dont want to update the facade because it's not in
-                // use and we just want to keep the selected movie displayed.
-                case BrowserViewMode.DETAILS:
-                    break;
-
-                // Sync
-                case BrowserViewMode.FILMSTRIP:
-                case BrowserViewMode.LIST:
-                case BrowserViewMode.SMALLICON:
-                case BrowserViewMode.LARGEICON:
-                    SyncToFacade();
-                    break;
+            if (currentView != BrowserViewMode.DETAILS) {
+                SyncToFacade();
+                facade.Focus = true;
+                facade.Visible = true;
             }
 
             if (ViewChanged != null) ViewChanged(previousView, currentView);
@@ -446,6 +434,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // populates the facade with the currently filtered list items
         public void ReloadFacade() {
+            ReloadFacade(false);
+        }
+        
+        // Populates the facade with the current filtered list items (specify true if the selection needs to be reset)
+        public void ReloadFacade(bool resetSelection) {
             if (facade == null)
                 return;
 
@@ -464,6 +457,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 GroupHeaders.AddGroupHeaders(this);
             }
 
+            // reset the selection if required.
+            if (resetSelection)
+                updateSelectedMovie(null);
+
             // reapply the current selection
             SyncToFacade();
         }
@@ -472,50 +469,63 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Updates the selected index on the facade linked to the selected movie
         /// </summary>
         public void SyncToFacade() {
-            if (facade == null || selectedMovie == null)
+            if (facade == null)
                 return;
 
             int? desiredIndex = null;
             for (int i = 0; i < facade.Count; i++) {
-                if (facade[i].TVTag == selectedMovie) {
+                
+                // in case no valid selection exists pick the first movie (not a group header)
+                if (_selectedMovie == null && facade[i].TVTag != null) {
+                    // we found the first movie so we break the loop
                     desiredIndex = i;
                     break;
                 }
+
+                // otherwise look for the correct movie
+                if (_selectedMovie != null && facade[i].TVTag == _selectedMovie) {
+                    // we found the selected movie so we break the loop
+                    desiredIndex = i;
+                    break;
+                } 
+            }
+            
+            // if we found a new index update the selected Index
+            if (desiredIndex != null && desiredIndex != _selectedIndex) {
+                _selectedIndex = (int)desiredIndex;
+                logger.Debug("SyncToFacade() SelectedIndex={0}", _selectedIndex);
             }
 
-            int setIndex = selectedIndex;
-            if (desiredIndex != null && desiredIndex != selectedIndex)
-                setIndex = (int)desiredIndex;
-
-            facade.SelectedListItemIndex = setIndex;
-            logger.Debug("SyncToFacade() SelectedIndex={0}", setIndex);
+            // set the index in the facade
+            facade.SelectedListItemIndex = _selectedIndex;
 
             // if we are in the filmstrip view also send a message
             if (CurrentView == BrowserViewMode.FILMSTRIP) {
-                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_ITEM_SELECT, facade.WindowId, 0, facade.FilmstripView.GetID, setIndex, 0, null);
+                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_ITEM_SELECT, facade.WindowId, 0, facade.FilmstripView.GetID, _selectedIndex, 0, null);
                 GUIGraphicsContext.SendMessage(msg);
-                logger.Debug("Sending a selection postcard to FilmStrip.");
+                logger.Debug("Syncing FilmStrip.");
             }
-
-           
+            
         }
 
         /// <summary>
         /// Updates the selected movie linked to the selected index on the facade
         /// </summary>
         public void SyncFromFacade() {
-            if (facade == null)
-                return;
-
             // if nothing is selected in the facade, exit
-            if (facade.SelectedListItem == null)                
+            if (facade == null || facade.SelectedListItem == null)
                 return;
 
-            selectedIndex = facade.SelectedListItemIndex;
-            logger.Debug("SyncFromFacade() SelectedIndex={0}", selectedIndex);
+            // if the selected index has changed update and log
+            if (_selectedIndex != facade.SelectedListItemIndex) {
+                _selectedIndex = facade.SelectedListItemIndex;
+                logger.Debug("SyncFromFacade() SelectedIndex={0}", _selectedIndex);
+            }
 
+            // check if the selected movie has changed also
             DBMovieInfo selectedMovieInFacade = facade.SelectedListItem.TVTag as DBMovieInfo;            
-            if (selectedMovie != selectedMovieInFacade)
+            if (_selectedMovie != selectedMovieInFacade)
+                // if so, update the selected movie object
                 updateSelectedMovie(selectedMovieInFacade);
         }
 
@@ -532,18 +542,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Updates the selected movie
         /// </summary>
         /// <param name="movie"></param>
-        private void updateSelectedMovie(DBMovieInfo movie) {
-            selectedMovie = movie;
+        private void  updateSelectedMovie(DBMovieInfo movie) {
+            _selectedMovie = movie;
 
             // log the change
-            if (selectedMovie != null)
-                logger.Debug("SelectedMovie changed: " + selectedMovie.Title);
-            else
+            if (_selectedMovie != null) {
+                logger.Debug("SelectedMovie changed: " + _selectedMovie.Title);
+            }
+            else {
+                _selectedIndex = 0;
                 logger.Debug("SelectedMovie changed: null");
+            }
 
             // notify any listeners
             if (SelectionChanged != null)
-                SelectionChanged(selectedMovie);
+                SelectionChanged(_selectedMovie);
         }
 
         // adds the given movie to the facade and creates a GUIListItem if neccesary
@@ -569,9 +582,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public void UpdateListColors(DBMovieInfo movie) {
-            if (!listItems.ContainsKey(movie)) return;
-
-            GUIListItem currItem = listItems[movie];
+            GUIListItem currItem = getMovieGuiListItem(movie);
+            if (currItem == null) return;
             currItem.IsRemote = false;
             currItem.IsPlayed = false;
 
@@ -586,21 +598,24 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         /// <summary>
-        /// Navigates the selected movie to the first movie in the list.
+        /// Refresh the artwork for a movie
         /// </summary>
-        public void JumpToBeginningOfList() {
-            if (CurrentView == BrowserViewMode.LIST) {
-                // go to the first item that is not a group header
-                for (int i = 0; i < Facade.ListView.ListItems.Count; i++) {
-                    if (Facade.ListView.ListItems[i].TVTag != null) {
-                        Facade.SelectedListItemIndex = i;
-                        break;
-                    }
-                }
-            }
-            else
-                Facade.SelectedListItemIndex = 0;
+        /// <param name="movie"></param>
+        public void RefreshArtwork(DBMovieInfo movie) {
+            GUIListItem currItem = getMovieGuiListItem(movie);
+            if (currItem == null) return;
+            // trigger 
+            currItem.RefreshCoverArt();
         }
+
+        // grab the related GUIListItem object for a movie
+        private GUIListItem getMovieGuiListItem(DBMovieInfo movie) {
+            if (!listItems.ContainsKey(movie)) 
+                return null;
+
+            return listItems[movie];
+        }
+
         #endregion
 
     }
