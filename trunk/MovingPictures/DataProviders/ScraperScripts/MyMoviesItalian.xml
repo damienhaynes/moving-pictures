@@ -15,14 +15,14 @@
     -->
     <id>874909</id>
     <version major="1" minor="0" point="1"/>
-    <published month="07" day="27" year="2009"/>
+    <published month="07" day="28" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
     -->
     <type>MovieDetailsFetcher|MovieCoverFetcher</type>
-    <language>it</language>
+    <language>it-IT</language>
 
     <!-- If set to true, additional logging will be displayed during script execution. -->
     <debug>false</debug>
@@ -59,10 +59,10 @@
 	
 	<!-- Search for movie with title as original title. -->
 	<if test="${search.year}!=0">
-	<retrieve name="search_page" url='http://www.mymovies.it/database/ricerca/avanzata/?titolo=&amp;regista=&amp;attore=&amp;id_genere=-1&amp;nazione=&amp;clausola1=-1&amp;anno_prod=${search.year}&amp;clausola2=-1&amp;stelle=-1&amp;id_manif=-1&amp;anno_manif=&amp;disponib=-1&amp;ordinamento=2&amp;submit=Inizia+ricerca+%BB&amp;titolo_orig=${search.title:safe}' />
+	<retrieve name="search_page" url='http://www.mymovies.it/database/ricerca/avanzata/?titolo=&amp;regista=&amp;attore=&amp;id_genere=-1&amp;nazione=&amp;clausola1=-1&amp;anno_prod=${search.year}&amp;clausola2=-1&amp;stelle=-1&amp;id_manif=-1&amp;anno_manif=&amp;disponib=-1&amp;ordinamento=2&amp;submit=Inizia+ricerca+%BB&amp;titolo_orig=${search.title:safe(ISO-8859-1)}' />
 	</if>
 	<if test="${search.year}=0">
-	<retrieve name="search_page" url='http://www.mymovies.it/database/ricerca/avanzata/?titolo=&amp;regista=&amp;attore=&amp;id_genere=-1&amp;nazione=&amp;clausola1=-1&amp;anno_prod=&amp;clausola2=-1&amp;stelle=-1&amp;id_manif=-1&amp;anno_manif=&amp;disponib=-1&amp;ordinamento=2&amp;submit=Inizia+ricerca+%BB&amp;titolo_orig=${search.title:safe}' />
+	<retrieve name="search_page" url='http://www.mymovies.it/database/ricerca/avanzata/?titolo=&amp;regista=&amp;attore=&amp;id_genere=-1&amp;nazione=&amp;clausola1=-1&amp;anno_prod=&amp;clausola2=-1&amp;stelle=-1&amp;id_manif=-1&amp;anno_manif=&amp;disponib=-1&amp;ordinamento=2&amp;submit=Inizia+ricerca+%BB&amp;titolo_orig=${search.title:safe(ISO-8859-1)}' />
 	</if>
 
 	<parse name="ID_Title" input="${search_page}" regex='${search_ID_Title}'/>
@@ -83,10 +83,10 @@
 	
 	<!-- Search for movie with title as Italian title. This list of results will be added to the first search list. -->
 	<if test="${search.year}!=0">
-	<retrieve name="search_page" url='http://www.mymovies.it/database/ricerca/avanzata/?regista=&amp;attore=&amp;id_genere=-1&amp;nazione=&amp;clausola1=-1&amp;anno_prod=${search.year}&amp;clausola2=-1&amp;stelle=-1&amp;id_manif=-1&amp;anno_manif=&amp;disponib=-1&amp;ordinamento=2&amp;submit=Inizia+ricerca+%BB&amp;titolo_orig=&amp;titolo=${search.title:safe}' />
+	<retrieve name="search_page" url='http://www.mymovies.it/database/ricerca/avanzata/?regista=&amp;attore=&amp;id_genere=-1&amp;nazione=&amp;clausola1=-1&amp;anno_prod=${search.year}&amp;clausola2=-1&amp;stelle=-1&amp;id_manif=-1&amp;anno_manif=&amp;disponib=-1&amp;ordinamento=2&amp;submit=Inizia+ricerca+%BB&amp;titolo_orig=&amp;titolo=${search.title:safe(ISO-8859-1)}' />
 	</if>
 	<if test="${search.year}=0">
-	<retrieve name="search_page" url='http://www.mymovies.it/database/ricerca/avanzata/?regista=&amp;attore=&amp;id_genere=-1&amp;nazione=&amp;clausola1=-1&amp;anno_prod=&amp;clausola2=-1&amp;stelle=-1&amp;id_manif=-1&amp;anno_manif=&amp;disponib=-1&amp;ordinamento=2&amp;submit=Inizia+ricerca+%BB&amp;titolo_orig=&amp;titolo=${search.title:safe}' />
+	<retrieve name="search_page" url='http://www.mymovies.it/database/ricerca/avanzata/?regista=&amp;attore=&amp;id_genere=-1&amp;nazione=&amp;clausola1=-1&amp;anno_prod=&amp;clausola2=-1&amp;stelle=-1&amp;id_manif=-1&amp;anno_manif=&amp;disponib=-1&amp;ordinamento=2&amp;submit=Inizia+ricerca+%BB&amp;titolo_orig=&amp;titolo=${search.title:safe(ISO-8859-1)}' />
 	</if>
 
 	<parse name="ID_Title" input="${search_page}" regex='${search_ID_Title}'/>
@@ -106,7 +106,7 @@
 	</if>
 
 	<if test="${movie[0].title}=">
-		<retrieve name="search_page" url='http://www.google.com/custom?domains=www.mymovies.it&amp;q=${search.title:safe}&amp;sitesearch=www.mymovies.it&amp;client=pub-1699801751737986&amp;forid=1&amp;ie=ISO-8859-1&amp;oe=ISO-8859-1&amp;cof=GALT%3A%233333FF%3BGL%3A1%3BDIV%3A%23000099%3BVLC%3A663399%3BAH%3Acenter%3BBGC%3AFFFFFF%3BLBGC%3A000099%3BALC%3A000099%3BLC%3A000099%3BT%3A666666%3BGFNT%3A999999%3BGIMP%3A999999%3BLH%3A50%3BLW%3A549%3BL%3Ahttp%3A%2F%2Fwww.mymovies.it%2Flogogoogle.gif%3BS%3Ahttp%3A%2F%2Fwww.mymovies.it%3BFORID%3A1%3B&amp;hl=it' />
+		<retrieve name="search_page" url='http://www.google.com/custom?domains=www.mymovies.it&amp;q=${search.title:safe(ISO-8859-1)}&amp;sitesearch=www.mymovies.it&amp;client=pub-1699801751737986&amp;forid=1&amp;ie=ISO-8859-1&amp;oe=ISO-8859-1&amp;cof=GALT%3A%233333FF%3BGL%3A1%3BDIV%3A%23000099%3BVLC%3A663399%3BAH%3Acenter%3BBGC%3AFFFFFF%3BLBGC%3A000099%3BALC%3A000099%3BLC%3A000099%3BT%3A666666%3BGFNT%3A999999%3BGIMP%3A999999%3BLH%3A50%3BLW%3A549%3BL%3Ahttp%3A%2F%2Fwww.mymovies.it%2Flogogoogle.gif%3BS%3Ahttp%3A%2F%2Fwww.mymovies.it%3BFORID%3A1%3B&amp;hl=it' />
 
 		<parse name="search_results_block" input="${search_page}" regex='.*'/>
 		<loop name="search_results_verified" on="search_results_block">
