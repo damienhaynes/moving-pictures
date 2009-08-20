@@ -409,14 +409,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else {
                 browser.ReapplyView();
             }
-
-            // if we are not in details view (maybe we just came back from playing a movie)
-            // set the first item in the list as selected.
-            // TODO: Why is this like this?
-            if (browser.CurrentView != BrowserViewMode.DETAILS) {
-                browser.JumpToBeginningOfList();
-                browser.SyncFromFacade();
-            }
             
             setWorkingAnimationStatus(false);
 
@@ -870,8 +862,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.CurrentSortDirection = Sort.GetLastSortDirection(newSortField);
             }
 
-            browser.ReloadFacade();
-            browser.JumpToBeginningOfList();
+            // reload facade with selection reset
+            browser.ReloadFacade(true); 
+
             SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
             SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
         }

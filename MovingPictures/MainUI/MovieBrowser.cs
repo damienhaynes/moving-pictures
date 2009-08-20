@@ -445,7 +445,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Facade Management Methods
 
         // populates the facade with the currently filtered list items
-        public void ReloadFacade() {
+        public void ReloadFacade() { 
+            ReloadFacade(false);
+        }
+        
+        // Populates the facade with the current filtered list items (specify true if the selection needs to be reset)
+        public void ReloadFacade(bool resetSelection) { 
             if (facade == null)
                 return;
 
@@ -464,6 +469,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 GroupHeaders.AddGroupHeaders(this);
             }
 
+            // reset the selection if required.
+            if (resetSelection) updateSelectedMovie(null); 
+
             // reapply the current selection
             SyncToFacade();
         }
@@ -472,27 +480,39 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Updates the selected index on the facade linked to the selected movie
         /// </summary>
         public void SyncToFacade() {
-            if (facade == null || selectedMovie == null)
+            if (facade == null)
                 return;
 
             int? desiredIndex = null;
             for (int i = 0; i < facade.Count; i++) {
-                if (facade[i].TVTag == selectedMovie) {
+                // in case no valid selection exists pick the first movie (not a group header)
+                if (selectedMovie == null && facade[i].TVTag != null) {
+                    // we found the first movie so we break the loop 
                     desiredIndex = i;
                     break;
                 }
+
+                // otherwise look for the correct movie
+                if (selectedMovie != null && facade[i].TVTag == selectedMovie) {  
+                    // we found the selected movie so we break the loop
+                    desiredIndex = i;
+                    break;
+                }
+
             }
 
-            int setIndex = selectedIndex;
-            if (desiredIndex != null && desiredIndex != selectedIndex)
-                setIndex = (int)desiredIndex;
-
-            facade.SelectedListItemIndex = setIndex;
-            logger.Debug("SyncToFacade() SelectedIndex={0}", setIndex);
+            // if we found a new index update the selected Index
+            if (desiredIndex != null && desiredIndex != selectedIndex) { 
+                selectedIndex = (int)desiredIndex;
+                logger.Debug("SyncToFacade() SelectedIndex={0}", selectedIndex);
+            } 
+            
+            // set the index in the facade
+            facade.SelectedListItemIndex = selectedIndex; 
 
             // if we are in the filmstrip view also send a message
             if (CurrentView == BrowserViewMode.FILMSTRIP) {
-                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_ITEM_SELECT, facade.WindowId, 0, facade.FilmstripView.GetID, setIndex, 0, null);
+                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_ITEM_SELECT, facade.WindowId, 0, facade.FilmstripView.GetID, selectedIndex, 0, null);
                 GUIGraphicsContext.SendMessage(msg);
                 logger.Debug("Sending a selection postcard to FilmStrip.");
             }
@@ -504,18 +524,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Updates the selected movie linked to the selected index on the facade
         /// </summary>
         public void SyncFromFacade() {
-            if (facade == null)
+            // if nothing is selected in the facade,
+            if (facade == null || facade.SelectedListItem == null)
                 return;
 
-            // if nothing is selected in the facade, exit
-            if (facade.SelectedListItem == null)                
-                return;
-
-            selectedIndex = facade.SelectedListItemIndex;
-            logger.Debug("SyncFromFacade() SelectedIndex={0}", selectedIndex);
-
-            DBMovieInfo selectedMovieInFacade = facade.SelectedListItem.TVTag as DBMovieInfo;            
+            // if the selected index has changed update and log
+            if (selectedIndex != facade.SelectedListItemIndex) {
+                selectedIndex = facade.SelectedListItemIndex;
+                logger.Debug("SyncFromFacade() SelectedIndex={0}", selectedIndex);
+            } 
+            
+            // check if the selected movie has changed also
+            DBMovieInfo selectedMovieInFacade = facade.SelectedListItem.TVTag as DBMovieInfo;
             if (selectedMovie != selectedMovieInFacade)
+                // if so, update the selected movie object 
                 updateSelectedMovie(selectedMovieInFacade);
         }
 
@@ -536,10 +558,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             selectedMovie = movie;
 
             // log the change
-            if (selectedMovie != null)
+            if (selectedMovie != null) {
                 logger.Debug("SelectedMovie changed: " + selectedMovie.Title);
-            else
+            }
+            else {
+                selectedIndex = 0;
                 logger.Debug("SelectedMovie changed: null");
+            }
 
             // notify any listeners
             if (SelectionChanged != null)
@@ -585,22 +610,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }            
         }
 
-        /// <summary>
-        /// Navigates the selected movie to the first movie in the list.
-        /// </summary>
-        public void JumpToBeginningOfList() {
-            if (CurrentView == BrowserViewMode.LIST) {
-                // go to the first item that is not a group header
-                for (int i = 0; i < Facade.ListView.ListItems.Count; i++) {
-                    if (Facade.ListView.ListItems[i].TVTag != null) {
-                        Facade.SelectedListItemIndex = i;
-                        break;
-                    }
-                }
-            }
-            else
-                Facade.SelectedListItemIndex = 0;
-        }
         #endregion
 
     }
