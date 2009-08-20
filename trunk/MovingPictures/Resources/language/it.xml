@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- Italian -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+
+<strings>
+  <string Field="ProblemLoadingSkinFile">C'è stato un problema nel caricamento della skin</string>
+  <string Field="SkinDoesNotSupportRatingDialog">La skin non supporta il dialogo di valutazione</string>
+  <string Field="NoImportPathsHeading">Nessun percorso di import!</string>
+  <string Field="NoImportPathsBody">Sembra mancare un percorso di import.\nChiudere MediaPortal e entrare nella configurazione dello stesso per configurare Moving Pictures.</string>
+  <string Field="ShowAllMovies">Mostra tutti i film</string>
+  <string Field="ShowOnlyUnwatchedMovies">Mostra solo i film non visti</string>
+  <string Field="SortBy">Ordina per</string>
+  <string Field="ChangeView">Cambia vista</string>
+  <string Field="ListView">Vista elenco</string>
+  <string Field="ThumbnailView">Vista icone piccole</string>
+  <string Field="LargeThumbnailView">Vista icone grandi</string>
+  <string Field="FilmstripView">Vista titoli</string>
+  <string Field="UpdateDetailsFromOnline">Aggiornamento online dettagli</string>
+  <string Field="CycleCoverArt">Ruota Cover-Art</string>
+  <string Field="CheckForMissingArtwork">Controlla online Artwork mancanti</string>
+  <string Field="MarkAsUnwatched">Marca come non visto</string>
+  <string Field="MarkAsWatched">Marca come visto</string>
+  <string Field="DeleteMovie">Cancella film</string>
+  <string Field="MovieOptions">Opzioni film</string>
+  <string Field="CannotDeleteReadOnly">Impossibile cancellare un film di sola lettura.\nVuoi che Moving Pictures ignori questo film ?</string>
+  <string Field="CannotDeleteOffline">Impossibile cancellare {0}\n perchè il file è offline</string>
+  <string Field="DoYouWantToDelete">Vuoi definitivamente cancellare \n{0}\ndal disco ?</string>
+  <string Field="DeleteFailed">Cancellazione fallita</string>
+  <string Field="UpdateMovieDetailsHeader">Aggiorna dettagli film</string>
+  <string Field="UpdateMovieDetailsBody">Si sta procedendo all'aggiornamento di tutti i metadati,\nsovrascrivendo le modifiche manuali di questo film.\nSi vuole continuare?</string>
+  <string Field="MediaNotAvailableHeader">Supporto non disponibile</string>
+  <string Field="MediaNotAvailableBody">Il supporto per il film selezionato non è attualmente disponibile.\nInserire o collegare il supporto {0}</string>
+  <string Field="VirtualDriveHeader">Disco virtuale non pronto</string>
+  <string Field="VirtualDriveMessage">Il disco virtuale non era pronto in tempo.\nRiprovare o cancellare la riproduzione.</string>
+  <string Field="Retry">Riprova</string>
+  <string Field="Cancel">Cancella</string>
+  <string Field="Error">Errore</string>
+  <string Field="MediaIsMissing">Il supporto per il film che è stato selezionato, manca!\nPurtroppo qualche volta qualcosa va storto...</string>
+  <string Field="FailedMountingImage">Problema durante il mount dell'immagine DVD</string>
+  <string Field="PlaybackFailedHeader">Riproduzione fallita</string>
+  <string Field="PlaybackFailed">La riproduzione non è possibile perchè l'estensione'{0}'\nnon è presente nella configurazione MediaPortal.\nAggiungere questa estensione o configurare un player esterno e riprovare.</string>
+  <string Field="MissingExternalPlayerExe">L'eseguibile per la riproduzione HD manca.\nCorreggere il percorso dell'eseguibile.</string>
+  <string Field="ResumeFromLast">Riprendere il film dall'ultima volta?</string>
+  <string Field="ResumeFrom">Ripartire da:</string>
+  <string Field="InvalidVideoDiscFormat">O l'immagine non contiene un formato video valido\no la configurazione di Daemon Tools on MediaPortal non è corretta.</string>
+  <string Field="ContinueToNextPartHeader">Continua con la parte successiva?</string>
+  <string Field="ContinueToNextPartBody">Si vuole continuare con la parte {0}?</string>
+  <string Field="Rate">Valuta</string>
+  <string Field="SelectYourRating">Seleziona la tua valutazione per {0}</string>
+  <string Field="RateHeading">Valuta il film</string>
+  <string Field="DownAbbreviation">(giù)</string>
+  <string Field="UpAbbreviation">(su)</string>
+
+  <!-- friendly names for sorting -->
+  <string Field="Title">Titolo</string>
+  <string Field="DateAdded">Aggiunto in data</string>
+  <string Field="Year">Anno</string>
+  <string Field="Certification">Certifica</string>
+  <string Field="Language">Lingua</string>
+  <string Field="Score">Punteggio</string>
+  <string Field="Runtime">Durata</string>
+  <string Field="FilePath">Percorso file</string>
+  
+  <!-- Group names for the date added sorting -->
+  <string Field="Future">Futuro</string>
+  <string Field="Today">Oggi</string>
+  <string Field="Yesterday">Ieri</string>
+  <string Field="Sunday">Domenica</string>
+  <string Field="Monday">Lunedì</string>
+  <string Field="Tuesday">Martedì</string>
+  <string Field="Wednesday">Mercoledì</string>
+  <string Field="Thursday">Giovedì</string>
+  <string Field="Friday">Venerdì</string>
+  <string Field="Saturday">Sabato</string>
+  <string Field="LastWeek">La settimana scorsa</string>
+  <string Field="TwoWeeksAgo">Due settimane fa</string>
+  <string Field="ThreeWeeksAgo">Tre settimane fa</string>
+  <string Field="LastMonth">Il mese scorso</string>
+  <string Field="TwoMonthsAgo">Due mesi fa</string>
+  <string Field="ThreeMonthsAgo">Tre mesi fa</string>
+  <string Field="EarlierThisYear">Precedenti in quest'anno</string>
+  <string Field="LastYear">L'anno scorso</string>
+  <string Field="Older">Più vecchi</string>
+  
+  <!-- Rate Movie Descriptions - 5 Stars-->
+  <string Field="RateFiveStarOne">Terribile</string>
+  <string Field="RateFiveStarTwo">Mediocre</string>
+  <string Field="RateFiveStarThree">Buono</string>
+  <string Field="RateFiveStarFour">Superbo</string>
+  <string Field="RateFiveStarFive">Perfetto</string>
+  
+  <!-- Runtime -->
+  <string Field="RuntimeHour">{0} ora</string>
+  <string Field="RuntimeHours">{0} ore</string>
+  <string Field="RuntimeMinute">{0} minuto</string>
+  <string Field="RuntimeMinutes">{0} minuti</string>
+  <string Field="RuntimeShort">{0}:{1}</string>
+  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
+  <string Field="RuntimeLong">{0} e {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} e {2}</string>
+</strings>
