@@ -1140,7 +1140,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     lm.UpdateMediaInfo();
                     lm.Commit();
                 }
-                UpdateMovieDetails();
+
+                // Reload the facade to enforce changes in sorting and publishing
+                browser.ReloadFacade(); 
             }
         }
 
