@@ -6,11 +6,15 @@
 <strings>
   <string Field="ProblemLoadingSkinFile">C'è stato un problema nel caricamento della skin</string>
   <string Field="SkinDoesNotSupportRatingDialog">La skin non supporta il dialogo di valutazione</string>
+  <string Field="SkinDoesNotSupportPinDialog">La skin non supporta il dialogo richiesta codice PIN.</string>
   <string Field="NoImportPathsHeading">Nessun percorso di import!</string>
   <string Field="NoImportPathsBody">Sembra mancare un percorso di import.\nChiudere MediaPortal e entrare nella configurazione dello stesso per configurare Moving Pictures.</string>
   <string Field="ShowAllMovies">Mostra tutti i film</string>
   <string Field="ShowOnlyUnwatchedMovies">Mostra solo i film non visti</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Mostra i film visti e non visti</string>
   <string Field="SortBy">Ordina per</string>
+  <string Field="FilterBy">Filtra per</string>
+  <string Field="AllMovies">Tutti i films</string>
   <string Field="ChangeView">Cambia vista</string>
   <string Field="ListView">Vista elenco</string>
   <string Field="ThumbnailView">Vista icone piccole</string>
@@ -23,6 +27,12 @@
   <string Field="MarkAsWatched">Marca come visto</string>
   <string Field="DeleteMovie">Cancella film</string>
   <string Field="MovieOptions">Opzioni film</string>
+  <string Field="LockRestrictedMovies">Blocca i films con restrizioni</string>
+  <string Field="PinCodeHeader">Sblocca i contenuti con restrizioni</string>
+  <string Field="PinCodePrompt">Inserire il codice PIN per continuare:</string>
+  <string Field="InvalidPin">Codice PIN non valido!</string>
+  <string Field="ParentalControlsDisabled">Controlli parentali non abilitati.</string>
+  <string Field="UnlockRestrictedMovies">Sblocca i film con restrizioni</string>
   <string Field="CannotDeleteReadOnly">Impossibile cancellare un film di sola lettura.\nVuoi che Moving Pictures ignori questo film ?</string>
   <string Field="CannotDeleteOffline">Impossibile cancellare {0}\n perchè il file è offline</string>
   <string Field="DoYouWantToDelete">Vuoi definitivamente cancellare \n{0}\ndal disco ?</string>
@@ -61,7 +71,7 @@
   <string Field="Score">Punteggio</string>
   <string Field="Runtime">Durata</string>
   <string Field="FilePath">Percorso file</string>
-  
+
   <!-- Group names for the date added sorting -->
   <string Field="Future">Futuro</string>
   <string Field="Today">Oggi</string>
@@ -82,19 +92,21 @@
   <string Field="EarlierThisYear">Precedenti in quest'anno</string>
   <string Field="LastYear">L'anno scorso</string>
   <string Field="Older">Più vecchi</string>
-  
+
   <!-- Rate Movie Descriptions - 5 Stars-->
   <string Field="RateFiveStarOne">Terribile</string>
   <string Field="RateFiveStarTwo">Mediocre</string>
   <string Field="RateFiveStarThree">Buono</string>
   <string Field="RateFiveStarFour">Superbo</string>
   <string Field="RateFiveStarFive">Perfetto</string>
-  
+
   <!-- Runtime -->
   <string Field="RuntimeHour">{0} ora</string>
   <string Field="RuntimeHours">{0} ore</string>
   <string Field="RuntimeMinute">{0} minuto</string>
   <string Field="RuntimeMinutes">{0} minuti</string>
+  <string Field="RuntimeSecond">{0} secondo</string>
+  <string Field="RuntimeSeconds">{0} secondi</string>
   <string Field="RuntimeShort">{0}:{1}</string>
   <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
   <string Field="RuntimeLong">{0} e {1}</string>
