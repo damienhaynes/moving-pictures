@@ -300,8 +300,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                     return mmid;
                 }
                 catch (WebException e) { if (!retryAfterWebException(e, retryCount)) break; }
-                catch (XmlRpcFaultException e) { logXmlRpcFaultException(e); break; }
-                catch (Exception e) { logGeneralException(e); break; }
+                catch (XmlRpcFaultException e) {
+                    logger.Debug("XML-RPC Fault: Code={0}, String='{1}'", e.FaultCode, e.FaultString);
+                    break;
+                }
+                catch (Exception e) { 
+                    logger.Error(e); 
+                    break;
+                }
             }
 
             return null;
@@ -318,8 +324,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                     return Proxy.Search(getSessionKey(), keywords);
                 }
                 catch (WebException e) { if (!retryAfterWebException(e, retryCount)) break; }
-                catch (XmlRpcFaultException e) { logXmlRpcFaultException(e); break; }
-                catch (Exception e) { logGeneralException(e); break; }
+                catch (XmlRpcFaultException e) {
+                    logger.Debug("XML-RPC Fault: Code={0}, String='{1}'", e.FaultCode, e.FaultString);
+                    break;
+                }
+                catch (Exception e) {
+                    logger.Error(e);
+                    break;
+                }
             }
 
             return null;
@@ -350,8 +362,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                     return details;
                 }
                 catch (WebException e) { if (!retryAfterWebException(e, retryCount)) break; }
-                catch (XmlRpcFaultException e) { logXmlRpcFaultException(e); break; }
-                catch (Exception e) { logGeneralException(e); break; }
+                catch (XmlRpcFaultException e) {
+                    logger.Debug("XML-RPC Fault: Code={0}, String='{1}'", e.FaultCode, e.FaultString);
+                    break;
+                }
+                catch (Exception e) {
+                    logger.Error(e);
+                    break;
+                }
             }
 
             return null;
@@ -391,8 +409,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                         sessionExpires.AddSeconds(session.valid_till);
                     }
                     catch (WebException e) { logger.DebugException("getSessionKey() Connection failed.", e); }
-                    catch (XmlRpcFaultException e) { logXmlRpcFaultException(e); }
-                    catch (Exception e) { logGeneralException(e); }
+                    catch (XmlRpcFaultException e) {
+                        logger.Debug("XML-RPC Fault: Code={0}, String='{1}'", e.FaultCode, e.FaultString);
+                    }
+                    catch (Exception e) {
+                        logger.Error(e);
+                    }
                 }
 
             }
@@ -426,14 +448,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
             }
 
             return retry;
-        }
-
-        private void logXmlRpcFaultException(XmlRpcFaultException e) {
-            logger.Debug("XML-RPC Fault: Code={0}, String='{1}'", e.FaultCode, e.FaultString);
-        }
-
-        private void logGeneralException(Exception e) {
-            logger.DebugException(e.Message, e);
         }
 
         #endregion
