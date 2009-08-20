@@ -126,7 +126,19 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         public MovingPicturesGUI() { }
 
-        ~MovingPicturesGUI() {      }      
+        ~MovingPicturesGUI() {      }
+
+        private void UpdateArtwork() {
+            if (browser.SelectedMovie == null)
+                return;
+
+            // update resources with new files
+            cover.Filename = browser.SelectedMovie.CoverFullPath;
+            backdrop.Filename = browser.SelectedMovie.BackdropFullPath;
+
+            if (browser.CurrentView != BrowserViewMode.DETAILS)
+                browser.facade.SelectedListItem.RefreshCoverArt();
+        }
 
         // set the backdrop visibility based on the skin settings
         private void SetBackdropVisibility() {
@@ -153,8 +165,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (sortMenuButton != null) sortMenuButton.Focus = false;
             if (toggleParentalControlsButton != null) toggleParentalControlsButton.Focus = false;
         }
-
-        #region Dialogs
 
         public void ShowMessage(string heading, string lines) {
             string line1 = null, line2 = null, line3 = null, line4 = null;
@@ -220,13 +230,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
-        #endregion
-
         private void OnBrowserContentsChanged() {
-            logger.Debug("OnBrowserContentsChanged Started");
             // update properties
             PublishViewDetails();
-            PublishBrowserDetails();
             
             // set the global watched indicator
             if (watchedFilteringIndicator != null && watchedFilter.Active != watchedFilteringIndicator.Visible)
@@ -249,15 +255,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (toggleParentalControlsButton != null && MovingPicturesCore.Settings.ParentalControlsEnabled != toggleParentalControlsButton.Visible)
                 toggleParentalControlsButton.Visible = MovingPicturesCore.Settings.ParentalControlsEnabled;
 
-            logger.Debug("OnBrowserContentsChanged Ended");
         }
 
-        // Perform necessary actions when the browser selection has changed
         private void OnBrowserSelectionChanged(DBMovieInfo movie) {
-            logger.Debug("OnBrowserSelectionChanged Started");
-            PublishBrowserDetails();
-            PublishMovieDetails(movie);
-            logger.Debug("OnBrowserSelectionChanged Ended");
+            UpdateMovieDetails();
         }
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
@@ -268,9 +269,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 playButton.Focus = true;
             }
 
-            PublishBrowserDetails();
-            PublishMovieDetails(browser.SelectedMovie);
+            UpdateMovieDetails();
             SetBackdropVisibility();
+            UpdateArtwork();
 
             logger.Debug("OnBrowserViewChanged Ended");
         }
@@ -396,7 +397,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             OnBrowserContentsChanged();
+
             browser.Facade = facade;
+            facade.Focus = true;           
 
             // first time setup tasks
             if (!loaded) {
@@ -410,10 +413,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // if we are not in details view (maybe we just came back from playing a movie)
             // set the first item in the list as selected.
             // TODO: Why is this like this?
-            // if (browser.CurrentView != BrowserViewMode.DETAILS) {
-                
-            //    browser.SyncFromFacade();
-            //}
+            if (browser.CurrentView != BrowserViewMode.DETAILS) {
+                browser.JumpToBeginningOfList();
+                browser.SyncFromFacade();
+            }
             
             setWorkingAnimationStatus(false);
 
@@ -423,7 +426,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             backdrop.LoadingImage = loadingImage;
             
             // load fanart and coverart
-            PublishArtwork(browser.SelectedMovie);
+            UpdateArtwork();
 
             // Take control and disable MediaPortal AutoPlay when the plugin has focus
             disableNativeAutoplay();
@@ -698,6 +701,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Context Menu Methods
 
         protected override void OnShowContextMenu() {
+            base.OnShowContextMenu();
             switch (browser.CurrentView) {
                 case BrowserViewMode.DETAILS:
                     showDetailsContext();
@@ -706,6 +710,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     showMainContext();
                     break;
             }
+
+            base.OnShowContextMenu();
         }
 
         private void showMainContext() {
@@ -864,9 +870,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.CurrentSortDirection = Sort.GetLastSortDirection(newSortField);
             }
 
-            // reload facade with selection reset
-            browser.ReloadFacade(true);
-
+            browser.ReloadFacade();
+            browser.JumpToBeginningOfList();
             SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
             SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
         }
@@ -931,7 +936,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIListItem deleteItem = new GUIListItem();
             GUIListItem rateItem = new GUIListItem();
 
-            DBMovieInfo selectedMovie = browser.SelectedMovie;
             int currID = 1;
 
             detailsItem = new GUIListItem(Translation.UpdateDetailsFromOnline);
@@ -939,15 +943,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             dialog.Add(detailsItem);
             currID++;
 
-            if (selectedMovie.AlternateCovers.Count > 1) {
+            if (browser.SelectedMovie.AlternateCovers.Count > 1) {
                 cycleArtItem = new GUIListItem(Translation.CycleCoverArt);
                 cycleArtItem.ItemId = currID;
                 dialog.Add(cycleArtItem);
                 currID++;
             }
 
-            if (selectedMovie.CoverFullPath.Trim().Length == 0 ||
-                selectedMovie.BackdropFullPath.Trim().Length == 0) {
+            if (browser.SelectedMovie.CoverFullPath.Trim().Length == 0 ||
+                browser.SelectedMovie.BackdropFullPath.Trim().Length == 0) {
 
                 retrieveArtItem = new GUIListItem(Translation.CheckForMissingArtwork);
                 retrieveArtItem.ItemId = currID;
@@ -955,7 +959,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currID++;
             }
 
-            if (selectedMovie.ActiveUserSettings.WatchedCount > 0) {
+            if (browser.SelectedMovie.ActiveUserSettings.WatchedCount > 0) {
                 unwatchedItem = new GUIListItem(Translation.MarkAsUnwatched);
                 unwatchedItem.ItemId = currID;
                 dialog.Add(unwatchedItem);
@@ -982,41 +986,43 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             if (dialog.SelectedId == detailsItem.ItemId) {
-                updateMovieDetails(selectedMovie);
+                updateDetails();
             }
             else if (dialog.SelectedId == cycleArtItem.ItemId) {
-                selectedMovie.NextCover();
-                selectedMovie.Commit();
+                browser.SelectedMovie.NextCover();
+                browser.SelectedMovie.Commit();
 
                 // update the new cover art in the facade
-                browser.facade.SelectedListItem.IconImage = selectedMovie.CoverThumbFullPath.Trim();
-                browser.facade.SelectedListItem.IconImageBig = selectedMovie.CoverThumbFullPath.Trim();
+                browser.facade.SelectedListItem.IconImage = browser.SelectedMovie.CoverThumbFullPath.Trim();
+                browser.facade.SelectedListItem.IconImageBig = browser.SelectedMovie.CoverThumbFullPath.Trim();
 
-                PublishArtwork(selectedMovie);
+                UpdateArtwork();
             }
             else if (dialog.SelectedId == retrieveArtItem.ItemId) {
-                updateMovieMissingArtwork(selectedMovie);
+                logger.Info("Updating artwork for " + browser.SelectedMovie.Title);
+                retrieveMissingArt();
             }
             else if (dialog.SelectedId == unwatchedItem.ItemId) {
-                selectedMovie.ActiveUserSettings.WatchedCount = 0;
-                selectedMovie.ActiveUserSettings.Commit();
-                PublishMovieDetails(selectedMovie);
-                browser.UpdateListColors(selectedMovie);
+                browser.SelectedMovie.ActiveUserSettings.WatchedCount = 0;
+                browser.SelectedMovie.ActiveUserSettings.Commit();
+                UpdateMovieDetails();
+                browser.UpdateListColors(browser.SelectedMovie);
                 browser.ReapplyFilters();
             }
             else if (dialog.SelectedId == watchedItem.ItemId) {
-                selectedMovie.ActiveUserSettings.WatchedCount = 1;
-                selectedMovie.ActiveUserSettings.Commit();
-                PublishMovieDetails(selectedMovie);
-                browser.UpdateListColors(selectedMovie);
+                browser.SelectedMovie.ActiveUserSettings.WatchedCount = 1;
+                browser.SelectedMovie.ActiveUserSettings.Commit();
+                UpdateMovieDetails();
+                browser.UpdateListColors(browser.SelectedMovie);
                 browser.ReapplyFilters();
             }
             else if (dialog.SelectedId == deleteItem.ItemId) {
-                deleteMovieAndFiles(selectedMovie);
+                deleteMovie();
             }
             else if (dialog.SelectedId == rateItem.ItemId) {
-                if (GetUserRating(selectedMovie))
-                    PublishMovieDetails(selectedMovie);
+                if (GetUserRating(browser.SelectedMovie)) {
+                    UpdateMovieDetails();
+                }
             }
         }
 
@@ -1082,16 +1088,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return pinCodeDialog.IsCorrect;
         }
 
-        // Will try to delete the movie from the database and its related files from the harddisk
-        private void deleteMovieAndFiles(DBMovieInfo movie) {
-            DBLocalMedia firstFile = movie.LocalMedia[0];
+        private void deleteMovie() {
+            DBLocalMedia firstFile = browser.SelectedMovie.LocalMedia[0];
 
             // if the file is available and read only, or known to be stored on optical media, prompt to ignore.
             if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || firstFile.ImportPath.IsOpticalDrive) {
                 bool bIgnore = ShowCustomYesNo("Moving Pictures", Translation.CannotDeleteReadOnly, null, null, false);
 
                 if (bIgnore) {
-                    movie.DeleteAndIgnore();
+                    browser.SelectedMovie.DeleteAndIgnore();
                     if (browser.CurrentView == BrowserViewMode.DETAILS)
                         // return to the facade screen
                         browser.CurrentView = browser.PreviousView;
@@ -1102,16 +1107,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // if the file is offline display an error dialog
             if (!firstFile.IsAvailable) {
-                ShowMessage("Moving Pictures", String.Format(Translation.CannotDeleteOffline, movie.Title));
+                ShowMessage("Moving Pictures", String.Format(Translation.CannotDeleteOffline, browser.SelectedMovie.Title));
                 return;
             }
 
             // if the file is available and not read only, confirm delete.
-            string sDoYouWant = String.Format(Translation.DoYouWantToDelete, movie.Title);
+            string sDoYouWant = String.Format(Translation.DoYouWantToDelete, browser.SelectedMovie.Title);
             bool bConfirm = ShowCustomYesNo("Moving Pictures", sDoYouWant, null, null, false);
 
             if (bConfirm) {
-                bool deleteSuccesful = movie.DeleteFiles();
+                bool deleteSuccesful = browser.SelectedMovie.DeleteFiles();
 
                 if (deleteSuccesful) {
                     if (browser.CurrentView == BrowserViewMode.DETAILS)
@@ -1119,66 +1124,44 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         browser.CurrentView = browser.PreviousView;
                 }
                 else {
-                    ShowMessage("Moving Pictures", Translation.DeleteFailed);
+                    ShowMessage("Moving Pictures", Translation.DeleteFailed, null, null, null);
                 }
             }
         }
 
         // From online, updates the details of the currently selected movie.
-        private void updateMovieDetails(DBMovieInfo movie) {
-            // Should not happens but when it happens log it for debug purposes
-            if (movie == null) {
-                logger.Debug("Attempted to do a update details for a movie object that was null");
-                // do nothing
-                return;
-            }
-           
-            // Show the update confirmation dialog
+        private void updateDetails() {
             bool bConfirm = ShowCustomYesNo(Translation.UpdateMovieDetailsHeader, Translation.UpdateMovieDetailsBody, null, null, false);
-            if (bConfirm) {
-                // if confirmed do the update using the primary data provider
-                MovingPicturesCore.DataProviderManager.Update(movie);
 
-                // Save the movie
-                movie.Commit();
-
-                // Update MediaInfo
-                foreach (DBLocalMedia lm in movie.LocalMedia) {
+            if (bConfirm && browser.SelectedMovie != null) {
+                MovingPicturesCore.DataProviderManager.Update(browser.SelectedMovie);
+                browser.SelectedMovie.Commit();
+                foreach (DBLocalMedia lm in browser.SelectedMovie.LocalMedia) {
                     lm.UpdateMediaInfo();
                     lm.Commit();
                 }
-
-                // Reload the facade to enforce changes in sorting and publishing
-                browser.ReloadFacade();
+                UpdateMovieDetails();
             }
         }
 
         // retrieves from online artwork for the currently selected movie
         // if and only if no artwork currently exists.
-        private void updateMovieMissingArtwork(DBMovieInfo movie) {
-            // Should not happens but when it happens log it for debug purposes
-            if (movie == null) {
-                logger.Debug("Attempted to update missing artwork for a movie object that was null");
-                // do nothing
+        private void retrieveMissingArt() {
+            if (browser.SelectedMovie == null)
                 return;
-            }
-            else {
-                logger.Info("Updating artwork for {0}", movie.Title);
+
+            if (browser.SelectedMovie.CoverFullPath.Trim().Length == 0) {
+                MovingPicturesCore.DataProviderManager.GetArtwork(browser.SelectedMovie);
+                browser.SelectedMovie.Commit();
             }
 
-            // Update covers
-            if (movie.CoverFullPath.Trim().Length == 0) {
-                MovingPicturesCore.DataProviderManager.GetArtwork(movie);
-                movie.Commit();
+            if (browser.SelectedMovie.BackdropFullPath.Trim().Length == 0) {
+                new LocalProvider().GetBackdrop(browser.SelectedMovie);
+                MovingPicturesCore.DataProviderManager.GetBackdrop(browser.SelectedMovie);
+                browser.SelectedMovie.Commit();
             }
 
-            // Update backdrops
-            if (movie.BackdropFullPath.Trim().Length == 0) {
-                MovingPicturesCore.DataProviderManager.GetBackdrop(movie);
-                movie.Commit();
-            }
-
-            PublishArtwork(movie);
+            UpdateArtwork();
         }
 
         #endregion
@@ -1210,16 +1193,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Rating
             if (MovingPicturesCore.Settings.AutoPromptForRating)
                 awaitingUserRatingMovie = movie;
-
-            // if we are on the details page for the movie just marked as watched and we are filtering
-            // switch the watched filter off. later need to tweak to allow movies filtered out to be displayed in details anyway.
-            // Previous solution was to switch back to LISTMODE but this was causing issues with the artwork loader.
-            if (movie == browser.SelectedMovie && watchedFilter.Active)
-                watchedFilter.Active = false;
-
+            
             // Reapply Filters
             browser.UpdateListColors(movie);
             browser.ReapplyFilters();
+
+            // if we are on the details page for the movie just marked as watched and we are filtering
+            // go back to facade since this movie is no longer selectable. later need to tweak to allow 
+            // movies filtered out to be displayed in details anyway.
+            if (movie == browser.SelectedMovie && browser.CurrentView == BrowserViewMode.DETAILS && watchedFilter.Active)
+                browser.CurrentView = browser.PreviousView;
 
             onMovieStopped(movie);
         }
@@ -1361,6 +1344,37 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region Skin and Property Settings
 
+        private void UpdateMovieDetails() {
+            if (browser.SelectedMovie == null)
+                return;
+
+            // publish details on selected movie
+            PublishDetails(browser.SelectedMovie, "SelectedMovie");
+            PublishDetails(browser.SelectedMovie.ActiveUserSettings, "UserMovieSettings");
+            PublishDetails(browser.SelectedMovie.LocalMedia[0], "LocalMedia", true);
+
+            // publish easily usable subtitles info
+            SetProperty("#MovingPictures.LocalMedia.Subtitles", browser.SelectedMovie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles", true);
+
+            // calculate and publish the selected index in the facade
+            int selectedIndex = browser.Facade.SelectedListItemIndex;
+            for (int i = 0; i < browser.Facade.SelectedListItemIndex; i++) {
+                if (browser.facade.ListView.ListItems[i].TVTag == null)
+                    selectedIndex--;
+            }
+            selectedIndex++; // make this one-based
+            SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
+
+            if (selectedMovieWatchedIndicator != null) {
+                selectedMovieWatchedIndicator.Visible = false;
+                if (browser.SelectedMovie.ActiveUserSettings != null)
+                    if (browser.SelectedMovie.ActiveUserSettings.WatchedCount > 0)
+                        selectedMovieWatchedIndicator.Visible = true;             
+             }
+
+            UpdateArtwork();
+        }
+
         public void SetProperty(string property, string value) {
             SetProperty(property, value, false);
         }
@@ -1393,77 +1407,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIPropertyManager.SetProperty(property, value);
         }
 
-        // Publish information about the browser state
-        // TODO: add more properties and remove them from the other publish methods
-        private void PublishBrowserDetails() {
-            SetProperty("#MovingPictures.Browser.SelectedIndex", browser.SelectedIndex.ToString(), true);
-        }
-
-        // Publish movie information
-        private void PublishMovieDetails(DBMovieInfo movie) {
-
-            // don't publish null objects
-            if (movie == null) {
-                // Log the attempt for debugging purposes
-                logger.Debug("Attempt was made to publish a movie object that was null.");
-                // Do nothing and return
-                return;
-            }
-            else {
-                logger.Debug("PublishMovieDetails() Started.");
-            }            
-
-            // publish details on selected movie
-            PublishDetails(movie, "SelectedMovie");
-            PublishDetails(movie.ActiveUserSettings, "UserMovieSettings");
-            PublishDetails(movie.LocalMedia[0], "LocalMedia", true);
-
-            // publish easily usable subtitles info
-            SetProperty("#MovingPictures.LocalMedia.Subtitles", movie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles", true);
-
-            // Adapt the state of the Movie Watched Indicator
-            if (selectedMovieWatchedIndicator != null) {
-                selectedMovieWatchedIndicator.Visible = false;
-                if (movie.ActiveUserSettings != null && movie.ActiveUserSettings.WatchedCount > 0)
-                    selectedMovieWatchedIndicator.Visible = true;
-            }
-
-            // Update artwork for this movie
-            PublishArtwork(movie);
-
-            logger.Debug("PublishMovieDetails() Ended.");
-        }
-
-        // Public artwork
-        private void PublishArtwork(DBMovieInfo movie) {
-            // don't publish null objects
-            if (movie == null) {
-                // Log the attempt for debugging purposes
-                logger.Debug("Attempt was made to publish artwork for movie object that was null.");
-                // Do nothing and return
-                return;
-            }
-            else {
-                logger.Debug("PublishArtwork() Started.");
-            }
-
-            // Update resources with new files
-            cover.Filename = movie.CoverFullPath;
-            backdrop.Filename = movie.BackdropFullPath;
-
-            // Trigger a refresh of the artwork
-            if (browser.CurrentView != BrowserViewMode.DETAILS)
-                browser.RefreshArtwork(movie);
-
-            logger.Debug("PublishArtwork() Ended.");
-        }
-
-        // Publish any database object (without forced logging)
+        // this does standard object publishing for any database object.
         private void PublishDetails(DatabaseTable obj, string prefix) {
             PublishDetails(obj, prefix, false);
         }
 
-        // Publish any database object
         private void PublishDetails(DatabaseTable obj, string prefix, bool forceLogging) {
             if (obj == null)
                 return;
@@ -1568,7 +1516,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
-        // Publish runtime information
         private void PublishRuntime(int totalSeconds, bool actualRuntime, string labelPrefix, bool forceLogging) {
             string valueStr;
 
@@ -1640,7 +1587,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             SetProperty(labelPrefix + "localized.long.extended", valueStr, forceLogging);
         }
 
-        // Publish view details and filtering status
+        // all details relating to the current view and filtering status
         private void PublishViewDetails() {
             string propertyStr;
             string valueStr;
@@ -1656,7 +1603,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             SetProperty(propertyStr, valueStr);
         }
 
-        // Publish details for the current filters
         private void PublishFilterDetails() {
             logger.Debug("updateing filter. properties");
             if (browser.FilterNode == null) {
