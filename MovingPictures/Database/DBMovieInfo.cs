@@ -559,7 +559,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         logger.Debug("Error while trying to save cover: filename is missing.");
                     }
                     catch (System.Runtime.InteropServices.ExternalException e) {
-                        logger.DebugException("Error while trying to save cover. ", e);
+                        logger.Error("Error while trying to save cover. ", e);
                     }
 
                     if (!saved) {
@@ -657,7 +657,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 logger.Debug("Error while trying to save cover: filename is missing.");
             }
             catch (System.Runtime.InteropServices.ExternalException e) {
-                logger.DebugException("Error while trying to save cover. ", e);
+                logger.Error("Error while trying to save cover. ", e);
             }
             finally {
                 currImage.Dispose();
@@ -740,7 +740,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 logger.Debug("Error while trying to save backdrop: filename is missing.");
             }
             catch (System.Runtime.InteropServices.ExternalException e) {
-                logger.DebugException("Error while trying to save backdrop. ", e);
+                logger.Error("Error while trying to save backdrop. ", e);
             }
             finally {
                 currImage.Dispose();
@@ -799,7 +799,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     logger.Debug("Error while trying to save backdrop: filename is NULL.");
                 }
                 catch (System.Runtime.InteropServices.ExternalException e) {
-                    logger.DebugException("Error while trying to save backdrop. ", e);
+                    logger.Error("Error while trying to save backdrop. ", e);
                 }
                 finally {
                     newBackdrop.Dispose();
@@ -902,7 +902,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 logger.Debug("Error while trying to save thumbnail: filename is NULL.");
             }
             catch (System.Runtime.InteropServices.ExternalException e) {
-                logger.DebugException("Error while trying to save thumbnail. ", e);
+                logger.Error("Error while trying to save thumbnail. ", e);
             }
             finally {
                 cover.Dispose();
