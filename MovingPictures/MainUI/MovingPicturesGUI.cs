@@ -40,6 +40,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         MovingPicturesSkinSettings skinSettings;
 
         Dictionary<string, bool> loggedProperties;
+        Dictionary<DBNode<DBMovieInfo>, string> backdropLookup = new Dictionary<DBNode<DBMovieInfo>, string>();
 
         private bool loaded = false;
 
@@ -129,15 +130,55 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         ~MovingPicturesGUI() {      }
 
         private void UpdateArtwork() {
-            if (browser.SelectedMovie == null)
-                return;
+            logger.Debug("Updating Artwork");
 
-            // update resources with new files
-            cover.Filename = browser.SelectedMovie.CoverFullPath;
-            backdrop.Filename = browser.SelectedMovie.BackdropFullPath;
+            if (browser.SelectedMovie != null)
+                cover.Filename = browser.SelectedMovie.CoverFullPath;
+            
+            backdrop.Filename = GetBackdropPath();
 
             if (browser.CurrentView != BrowserViewMode.DETAILS)
                 browser.facade.SelectedListItem.RefreshCoverArt();
+        }
+
+        private string GetBackdropPath() {
+            if (browser.CurrentView == BrowserViewMode.CATEGORIES) {
+                if (browser.SelectedNode == null)
+                    return null;
+
+                // grab the movie node settings for the selected node
+                DBMovieNodeSettings settings = browser.SelectedNode.AdditionalSettings as DBMovieNodeSettings;
+                if (settings == null) {
+                    settings = new DBMovieNodeSettings();
+                    browser.SelectedNode.AdditionalSettings = settings;
+                }
+
+                switch (settings.BackdropType) {
+                    case MenuBackdropType.FILE:
+                        return settings.BackdropFilePath;
+                    case MenuBackdropType.MOVIE:
+                        return settings.BackdropMovie.BackdropFullPath;
+                    case MenuBackdropType.RANDOM:
+                        if (backdropLookup.ContainsKey(browser.SelectedNode))
+                            return backdropLookup[browser.SelectedNode];
+
+                        DBMovieInfo randomMovie = browser.SelectedNode.GetRandomSubItem();
+                        if (randomMovie == null || randomMovie.BackdropFullPath.Trim().Length == 0)
+                            return null;
+                        
+                        backdropLookup[browser.SelectedNode] = randomMovie.BackdropFullPath;
+                        return randomMovie.BackdropFullPath;
+                }
+            }
+
+            else {
+                if (browser.SelectedMovie == null)
+                    return null;
+
+                return browser.SelectedMovie.BackdropFullPath;
+            }
+
+            return null;
         }
 
         // set the backdrop visibility based on the skin settings
@@ -154,6 +195,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (facade.ListView != null) facade.ListView.Focus = false;
                 if (facade.ThumbnailView != null) facade.ThumbnailView.Focus = false;
                 if (facade.FilmstripView != null) facade.FilmstripView.Focus = false;
+            }
+
+            if (categoriesFacade != null) {
+                categoriesFacade.Focus = false;
+                if (categoriesFacade.ListView != null) categoriesFacade.ListView.Focus = false;
+                if (categoriesFacade.ThumbnailView != null) categoriesFacade.ThumbnailView.Focus = false;
+                if (categoriesFacade.FilmstripView != null) categoriesFacade.FilmstripView.Focus = false;
             }
 
             if (cycleViewButton != null) cycleViewButton.Focus = false;
@@ -258,7 +306,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void OnBrowserSelectionChanged(DBMovieInfo movie) {
-            UpdateMovieDetails();
+            if (browser.CurrentView == BrowserViewMode.CATEGORIES)
+                UpdateCategoryDetails();
+            else
+                UpdateMovieDetails();
         }
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
@@ -399,12 +450,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             OnBrowserContentsChanged();
 
             browser.Facade = facade;
+            browser.CategoriesFacade = categoriesFacade;
             facade.Focus = true;           
 
             // first time setup tasks
             if (!loaded) {
                 loaded = true;
-                browser.CurrentView = browser.DefaultView;
+                browser.CurrentView = BrowserViewMode.CATEGORIES;
+                //browser.CurrentView = browser.DefaultView;
             } // if we have loaded before, lets update the view to match our previous settings
             else {
                 browser.ReapplyView();
@@ -422,6 +475,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // Take control and disable MediaPortal AutoPlay when the plugin has focus
             disableNativeAutoplay();
+
+            // notify if the skin doesnt support categories
+            if (categoriesFacade == null) {
+                GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+                dialog.Reset();
+                dialog.SetHeading("This skin does not support Categories...");
+                dialog.DoModal(GetID);
+                //GUIWindowManager.ShowPreviousWindow();
+                return;
+            }
 
             if (awaitingUserRatingMovie != null) {
                 GetUserRating(awaitingUserRatingMovie);
@@ -461,6 +524,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                                 browser.CurrentView = BrowserViewMode.DETAILS;
                             }
                             break;
+                    }
+                    break;
+
+                case 51:
+                    if (actionType == MediaPortal.GUI.Library.Action.ActionType.ACTION_SELECT_ITEM) {
+                        if (browser.SelectedNode.Children.Count == 0) {
+                            browser.CurrentView = browser.DefaultView;
+                        }
+
+                        browser.CurrentNode = browser.SelectedNode;
                     }
                     break;
 
@@ -512,12 +585,25 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     if (browser.CurrentView == BrowserViewMode.DETAILS)
                         // return to the facade screen
                         browser.CurrentView = browser.PreviousView;
+                    else if (browser.CurrentView == BrowserViewMode.CATEGORIES) {
+                        if (browser.CurrentNode != null)
+                            browser.CurrentNode = browser.CurrentNode.Parent;
+                        else
+                            GUIWindowManager.ShowPreviousWindow();
+                    }
                     else if (remoteFilter.Active)
                         // if a remote filter is active remove it
                         remoteFilter.Clear();
                     else {
+                        if (browser.CategoriesAvailable) {
+                            browser.CurrentView = BrowserViewMode.CATEGORIES;
+                            if (browser.CurrentNode != null)
+                                browser.CurrentNode = browser.CurrentNode.Parent;
+                        }
+                        
                         // show previous screen (exit the plug-in
-                        GUIWindowManager.ShowPreviousWindow();
+                        else 
+                            GUIWindowManager.ShowPreviousWindow();
                     }
                     break;
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PLAY:
@@ -862,9 +948,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.CurrentSortDirection = Sort.GetLastSortDirection(newSortField);
             }
 
-            // reload facade with selection reset
-            browser.ReloadFacade(true); 
-
+            browser.ReloadMovieFacade();
             SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
             SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
         }
@@ -1135,7 +1219,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
 
                 // Reload the facade to enforce changes in sorting and publishing
-                browser.ReloadFacade(); 
+                browser.ReloadMovieFacade(); 
             }
         }
 
@@ -1338,6 +1422,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #endregion
 
         #region Skin and Property Settings
+
+        private void UpdateCategoryDetails() {
+            if (browser.SelectedNode != null) {
+                PublishDetails(browser.SelectedNode, "SelectedNode");
+                PublishDetails(browser.SelectedNode.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
+            }
+
+            if (browser.CurrentNode != null) {
+                PublishDetails(browser.CurrentNode, "CurrentNode");
+                PublishDetails(browser.CurrentNode.AdditionalSettings, "CurrentNode.Extra.AdditionalSettings");
+            }
+
+            UpdateArtwork();
+        }
 
         private void UpdateMovieDetails() {
             if (browser.SelectedMovie == null)

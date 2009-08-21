@@ -69,7 +69,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private int _resumePart;
 
 
-        [DBFieldAttribute(FieldName = "resume_time", Filterable = false)]
+        [DBFieldAttribute(FieldName = "resume_time")]
         public int ResumeTime {
           get { return _resumeTime; }
 

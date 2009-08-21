@@ -7,11 +7,11 @@ This file should contain the facade view
     <control>
       <description>composite control consisting of a list control and a thumbnail panel</description>
       <type>facadeview</type>
-      <id>50</id>
+      <id>51</id>
       <control>
-        <description>Movie List</description>
+        <description>Categories List</description>
         <type>listcontrol</type>
-        <id>50</id>
+        <id>51</id>
         <posX>10</posX>
         <posY>125</posY>
         <width>400</width>
@@ -32,78 +32,6 @@ This file should contain the facade view
         <playedColor>ff444444</playedColor>
         <!-- offline movies -->
         <remoteColor>ff880000</remoteColor>
-      </control>
-      <control>
-        <description>Thumbnail Panel</description>
-        <type>thumbnailpanel</type>
-        <id>50</id>
-        <posX>150</posX>
-        <posY>135</posY>
-        <width>1076</width>
-        <height>450</height>
-        <spinPosX>1300</spinPosX>
-        <spinPosY>720</spinPosY>
-        <spinColor>ffcccccc</spinColor>
-        <textureUp>MovingPictures\page_up_nofocus.png</textureUp>
-        <textureDown>MovingPictures\page_down_nofocus.png</textureDown>
-        <textureUpFocus>MovingPictures\page_up_focus.png</textureUpFocus>
-        <textureDownFocus>MovingPictures\page_down_focus.png</textureDownFocus>
-        <itemWidth>76</itemWidth>
-        <itemHeight>103</itemHeight>
-        <textureWidth>76</textureWidth>
-        <textureHeight>103</textureHeight>
-        <thumbWidth>76</thumbWidth>
-        <thumbHeight>103</thumbHeight>
-        <thumbPosX>0</thumbPosX>
-        <thumbPosY>0</thumbPosY>
-        <!--imageFolder>movie_preview_thumb_background_nofocus.png</imageFolder>
-        <imageFolderFocus>movie_preview_thumb_background_focus.png</imageFolderFocus-->
-        <font>font12</font>
-        <suffix>|</suffix>
-        <textureWidthBig>152</textureWidthBig>
-        <textureHeightBig>205</textureHeightBig>
-        <itemWidthBig>152</itemWidthBig>
-        <itemHeightBig>205</itemHeightBig>
-        <thumbWidthBig>152</thumbWidthBig>
-        <thumbHeightBig>205</thumbHeightBig>
-        <thumbPosXBig>0</thumbPosXBig>
-        <thumbPosYBig>0</thumbPosYBig>
-        <thumbZoom>no</thumbZoom>
-        <enableFocusZoom>no</enableFocusZoom>
-        <unfocusedAlpha>150</unfocusedAlpha>
-      </control>
-      <control>
-        <description>Filmstrip view</description>
-        <type>filmstrip</type>
-        <id>50</id>
-        <posX>34</posX>
-        <posY>450</posY>
-        <width>1300</width>
-        <scrollOffset>4</scrollOffset>
-        <spinPosX>1300</spinPosX>
-        <spinPosY>720</spinPosY>
-        <spinWidth>24</spinWidth>
-        <spinHeight>24</spinHeight>
-        <spinColor>ffcccccc</spinColor>
-        <itemWidth>185</itemWidth>
-        <itemHeight>205</itemHeight>
-        <textureWidth>220</textureWidth>
-        <textureHeight>290</textureHeight>
-        <thumbWidth>170</thumbWidth>
-        <thumbHeight>230</thumbHeight>
-        <thumbPosX>20</thumbPosX>
-        <thumbPosY>20</thumbPosY>
-        <thumbs flipY="false" diffuse="Thumb_Mask.png">unfocus</thumbs>
-        <InfoImage flipY="false" diffuse="Thumb_Mask.png"></InfoImage>
-        <imageFolderFocus>MovingPictures\dvd_frame.png</imageFolderFocus>
-        <frame>MovingPictures\video_filmstrip_frame.png</frame>
-        <frameFocus>MovingPictures\video_filmstrip_frame.png</frameFocus>
-        <showFrame>no</showFrame>
-        <showFolder>no</showFolder>
-        <showBackGround>no</showBackGround>
-        <showInfoImage>no</showInfoImage>
-        <thumbAnimation effect="zoom" start="100,100" end="130,130" time="100">focus</thumbAnimation>
-        <thumbAnimation effect="zoom" start="130,130" end="100,100" time="100"></thumbAnimation>
       </control>
     </control>
   </controls>
