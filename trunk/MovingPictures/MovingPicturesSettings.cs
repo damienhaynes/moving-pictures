@@ -1310,6 +1310,26 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _categoriesMenuID;
 
+        public DBMenu<DBMovieInfo> CategoriesMenu {
+            get {
+                if (_categoriesMenu == null) {
+                    // grab or create the menu for the filtering popup
+                    string menuID = CategoriesMenuID;
+                    if (menuID == "null") {
+                        _categoriesMenu = new DBMenu<DBMovieInfo>();
+                        _categoriesMenu.Name = "Categories Menu";
+                        MovingPicturesCore.DatabaseManager.Commit(_categoriesMenu);
+                        CategoriesMenuID = _categoriesMenu.ID.ToString();
+                    }
+                    else {
+                        _categoriesMenu = MovingPicturesCore.DatabaseManager.Get<DBMenu<DBMovieInfo>>(int.Parse(menuID));
+                    }
+                }
+
+                return _categoriesMenu;
+            }
+        } private DBMenu<DBMovieInfo> _categoriesMenu = null;
+
         #endregion
 
         #endregion
