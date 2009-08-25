@@ -127,6 +127,19 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string RuntimeLong = "{0} and {1}";
         public static string RuntimeLongExtended = "{0}, {1} and {2}";
 
+        // Remote Control Numeric Alphabet
+
+        public static string RemoteNumericAlphabet0 = "";
+        public static string RemoteNumericAlphabet1 = "";
+        public static string RemoteNumericAlphabet2 = "abc";
+        public static string RemoteNumericAlphabet3 = "def";
+        public static string RemoteNumericAlphabet4 = "ghi";
+        public static string RemoteNumericAlphabet5 = "jkl";
+        public static string RemoteNumericAlphabet6 = "mno";
+        public static string RemoteNumericAlphabet7 = "pqrs";
+        public static string RemoteNumericAlphabet8 = "tuv";
+        public static string RemoteNumericAlphabet9 = "wxyz";
+
         #endregion
 
         private static string path = string.Empty;

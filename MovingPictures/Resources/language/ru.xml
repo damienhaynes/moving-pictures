@@ -78,4 +78,18 @@
   <string Field="EarlierThisYear">В этом году</string>
   <string Field="LastYear">В прошлом году</string>
   <string Field="Older">Старше</string>
+
+  <!-- Remote Control Numeric Alphabet -->
+
+  <string Field="RemoteNumericAlphabet0"></string>
+  <string Field="RemoteNumericAlphabet1"></string>
+  <string Field="RemoteNumericAlphabet2">abcАБВГ</string>
+  <string Field="RemoteNumericAlphabet3">defДЕЖЗ</string>
+  <string Field="RemoteNumericAlphabet4">ghiИЙКЛ</string>
+  <string Field="RemoteNumericAlphabet5">jklМНОП</string>
+  <string Field="RemoteNumericAlphabet6">mnoРСТУ</string>
+  <string Field="RemoteNumericAlphabet7">pqrsФХЦЧ</string>
+  <string Field="RemoteNumericAlphabet8">tuvШЩЪЫ</string>
+  <string Field="RemoteNumericAlphabet9">wxyzЬЭЮЯ</string> 
+  
 </strings>
