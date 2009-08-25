@@ -113,4 +113,17 @@
   <string Field="RuntimeLong">{0} and {1}</string> <!-- 0 = Field:RuntimeHour(s)/RuntimeMinute(s), 1 = Field:RuntimeMinute(s)/Field:RuntimeSecond(s) -->
   <string Field="RuntimeLongExtended">{0}, {1} and {2}</string> <!-- 0 = Field:RuntimeHour(s), 1 = Field:RuntimeMinute(s), 2 = Field:RuntimeSecond(s) -->
 
- </strings>
+  <!-- Remote Control Numeric Alphabet -->
+
+  <string Field="RemoteNumericAlphabet0"></string>
+  <string Field="RemoteNumericAlphabet1"></string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+
+</strings>
