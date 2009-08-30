@@ -138,7 +138,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             backdrop.Filename = GetBackdropPath();
 
             if (browser.CurrentView != BrowserViewMode.DETAILS)
-                browser.facade.SelectedListItem.RefreshCoverArt();
+                browser.RefreshArtwork(browser.SelectedMovie);
         }
 
         private string GetBackdropPath() {
@@ -181,13 +181,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return null;
         }
 
-        // set the backdrop visibility based on the skin settings
-        private void SetBackdropVisibility() {
-            if (movieBackdropControl == null)
-                return;
-
-            backdrop.Active = skinSettings.UseBackdrop(browser.CurrentView);
-        }
 
         private void ClearFocus() {
             if (facade != null) {
@@ -314,15 +307,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
             logger.Debug("OnBrowserViewChanged Started");
-            
+
             if (currentView == BrowserViewMode.DETAILS) {
                 ClearFocus();
                 playButton.Focus = true;
             }
+            else if (currentView == BrowserViewMode.CATEGORIES) {
+                UpdateCategoryDetails();
+            }
+            else {
+                UpdateMovieDetails();
+            }
 
-            UpdateMovieDetails();
-            SetBackdropVisibility();
-            UpdateArtwork();
+            // set the backdrop visibility based on the skin settings
+            if (movieBackdropControl != null)
+                backdrop.Active = skinSettings.UseBackdrop(currentView);
 
             logger.Debug("OnBrowserViewChanged Ended");
         }
@@ -370,6 +369,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         protected override void OnPageLoad() {
+            logger.Debug("OnPageLoad() Started.");
 
             // Check wether the plugin is initialized.
             if (!initComplete) {
@@ -447,11 +447,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
             }
 
-            OnBrowserContentsChanged();
+            // (re)link our backdrop image controls to the backdrop image swapper
+            backdrop.GUIImageOne = movieBackdropControl;
+            backdrop.GUIImageTwo = movieBackdropControl2;
+            backdrop.LoadingImage = loadingImage;
 
+            // (re)link the facade controls to the browser object
             browser.Facade = facade;
             browser.CategoriesFacade = categoriesFacade;
-            facade.Focus = true;           
 
             // first time setup tasks
             if (!loaded) {
@@ -459,19 +462,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.CurrentView = BrowserViewMode.CATEGORIES;
                 //browser.CurrentView = browser.DefaultView;
             } // if we have loaded before, lets update the view to match our previous settings
-            else {
-                browser.ReapplyView();
+            else {                
+                browser.ReapplyView();          
             }
             
             setWorkingAnimationStatus(false);
-
-            // (re)link our backdrop image controls to the backdrop image swapper
-            backdrop.GUIImageOne = movieBackdropControl;
-            backdrop.GUIImageTwo = movieBackdropControl2;
-            backdrop.LoadingImage = loadingImage;
-            
-            // load fanart and coverart
-            UpdateArtwork();
 
             // Take control and disable MediaPortal AutoPlay when the plugin has focus
             disableNativeAutoplay();
@@ -490,6 +485,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 GetUserRating(awaitingUserRatingMovie);
                 awaitingUserRatingMovie = null;
             }
+
+            logger.Debug("OnPageLoad() Ended.");
         }
 
         protected override void OnPageDestroy(int new_windowId) {
@@ -600,11 +597,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                             if (browser.CurrentNode != null)
                                 browser.CurrentNode = browser.CurrentNode.Parent;
                         }
-                        
                         // show previous screen (exit the plug-in
-                        else 
+                        else
                             GUIWindowManager.ShowPreviousWindow();
                     }
+                    
                     break;
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PLAY:
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_MUSIC_PLAY:
@@ -1427,6 +1424,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Skin and Property Settings
 
         private void UpdateCategoryDetails() {
+
             if (browser.SelectedNode != null) {
                 PublishDetails(browser.SelectedNode, "SelectedNode");
                 PublishDetails(browser.SelectedNode.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
@@ -1447,18 +1445,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // publish details on selected movie
             PublishDetails(browser.SelectedMovie, "SelectedMovie");
             PublishDetails(browser.SelectedMovie.ActiveUserSettings, "UserMovieSettings");
-            PublishDetails(browser.SelectedMovie.LocalMedia[0], "LocalMedia", true);
+            PublishDetails(browser.SelectedMovie.LocalMedia[0], "LocalMedia");
 
             // publish easily usable subtitles info
-            SetProperty("#MovingPictures.LocalMedia.Subtitles", browser.SelectedMovie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles", true);
+            SetProperty("#MovingPictures.LocalMedia.Subtitles", browser.SelectedMovie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles");
 
-            // calculate and publish the selected index in the facade
-            int selectedIndex = browser.Facade.SelectedListItemIndex;
-            for (int i = 0; i < browser.Facade.SelectedListItemIndex; i++) {
-                if (browser.facade.ListView.ListItems[i].TVTag == null)
-                    selectedIndex--;
-            }
-            selectedIndex++; // make this one-based
+            // publish the selected index in the facade
+            int selectedIndex = browser.SelectedIndex + 1;
             SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
 
             if (selectedMovieWatchedIndicator != null) {
@@ -1559,13 +1552,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     int minor = (int) Math.Floor(((score - major) * 10));
                     int rounded = (int)(score + 0.5f);
 
-                    // debug logging for these values are enabled for now for troubleshooting purposes
-                    SetProperty(propertyStr + ".localized", score.ToString(), true);
-                    SetProperty(propertyStr + ".invariant", score.ToString(NumberFormatInfo.InvariantInfo), true);
-                    SetProperty(propertyStr + ".rounded", rounded.ToString(), true);
-                    SetProperty(propertyStr + ".percentage", percentage.ToString(), true);
-                    SetProperty(propertyStr + ".major", major.ToString(), true);
-                    SetProperty(propertyStr + ".minor", minor.ToString(), true);
+                    SetProperty(propertyStr + ".localized", score.ToString(), forceLogging);
+                    SetProperty(propertyStr + ".invariant", score.ToString(NumberFormatInfo.InvariantInfo), forceLogging);
+                    SetProperty(propertyStr + ".rounded", rounded.ToString(), forceLogging);
+                    SetProperty(propertyStr + ".percentage", percentage.ToString(), forceLogging);
+                    SetProperty(propertyStr + ".major", major.ToString(), forceLogging);
+                    SetProperty(propertyStr + ".minor", minor.ToString(), forceLogging);
 
                 }
                 // for the movie runtime we also add some special properties
@@ -1592,7 +1584,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                     
                     // Publish the runtime
-                    PublishRuntime(seconds, actualRuntime, "#MovingPictures." + prefix + ".runtime.", true);         
+                    PublishRuntime(seconds, actualRuntime, "#MovingPictures." + prefix + ".runtime.", forceLogging);         
                     
                 }
                 // for floats we need to make sure we use english style printing or imagelist controls
