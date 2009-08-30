@@ -134,10 +134,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             if (browser.SelectedMovie != null)
                 cover.Filename = browser.SelectedMovie.CoverFullPath;
-            
-            backdrop.Filename = GetBackdropPath();
 
-            if (browser.CurrentView != BrowserViewMode.DETAILS)
+            backdrop.Filename = GetBackdropPath();
+            
+            if (browser.CurrentView != BrowserViewMode.DETAILS && browser.CurrentView != BrowserViewMode.CATEGORIES)
                 browser.RefreshArtwork(browser.SelectedMovie);
         }
 
@@ -460,9 +460,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (!loaded) {
                 loaded = true;
                 browser.CurrentView = BrowserViewMode.CATEGORIES;
-                //browser.CurrentView = browser.DefaultView;
-            } // if we have loaded before, lets update the view to match our previous settings
-            else {                
+            } 
+            else {
+                // if we have loaded before, reload the active facade
+                if (browser.CurrentView == BrowserViewMode.CATEGORIES)
+                    browser.ReloadCategoriesFacade();
+                else
+                    browser.ReloadMovieFacade();
+
+                // update the view to match our previous settings    
                 browser.ReapplyView();          
             }
             
