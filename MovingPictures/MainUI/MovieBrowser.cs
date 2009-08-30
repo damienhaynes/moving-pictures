@@ -84,14 +84,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 logger.Debug("CurrentView changed: {0}", value);
                 currentView = value;
 
-                if (currentView != BrowserViewMode.CATEGORIES)
+                // if we are in the category view reload the category facade
+                if (currentView == BrowserViewMode.CATEGORIES)
+                    ReloadCategoriesFacade();
+                else // otherwise reload the movie facade                    
                     ReloadMovieFacade();
+                
 
                 ReapplyView();
                
             }
-        }
-        private BrowserViewMode currentView;
+        } private BrowserViewMode currentView = BrowserViewMode.CATEGORIES; // starting default is CATEGORIES
 
         /// <summary>
         /// The previous view mode the browser was in before the current view mode was set.
@@ -127,10 +130,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public GUIFacadeControl Facade {
             get { return facade; }
-            set {
-                facade = value;
-                ReloadMovieFacade();
-            }
+            set { facade = value;}
         }
         public GUIFacadeControl facade;
 
@@ -139,10 +139,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public GUIFacadeControl CategoriesFacade {
             get { return _categoriesFacade; }
-            set {
-                _categoriesFacade = value;
-                ReloadCategoriesFacade();
-            }
+            set { _categoriesFacade = value;  }
         }
         public GUIFacadeControl _categoriesFacade;
 
@@ -150,7 +147,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Returns true if the skin supports categories and a categories menu has been defined.
         /// </summary>
         public bool CategoriesAvailable {
-            get { 
+            get {
                 return _categoriesFacade != null && CategoriesMenu.RootNodes.Count > 0;
             }
         }
@@ -452,6 +449,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // An initial load of all movies in the database.
         private void loadMovies() {
+            logger.Debug("loadMovies() Started");
+            
             // clear the list
             allMovies = new List<DBMovieInfo>();
             
@@ -459,8 +458,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             List<DBMovieInfo> movies = DBMovieInfo.GetAll();
             foreach (DBMovieInfo currMovie in movies)
                 allMovies.Add(currMovie);
-            
+
             onContentsChanged();
+
+            logger.Debug("loadMovies() Ended");
         }
 
         // Sets the initial settings for how movies should be sorted on launch.
@@ -590,27 +591,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 addCategoryNodeToFacade(currNode);
             }
 
-            int? desiredIndex = null;
-            for (int i = 0; i < _categoriesFacade.Count; i++) {
-                
-                // always set the desired index to the first category
-                if (desiredIndex == null) {
-                    desiredIndex = 0;
-                    // if we had no previous selection break the loop
-                    if (_selectedNode == null)
+            int desiredIndex = 0;
+            if (_selectedNode != null) {
+                for (int i = 0; i < _categoriesFacade.Count; i++) {
+                    // otherwise look for the correct category
+                    if (_categoriesFacade[i].TVTag == _selectedNode) {
+                        // we found the selected category so we break the loop
+                        desiredIndex = i;
                         break;
+                    }
                 }
-                // otherwise look for the correct category
-                if (_selectedNode != null && _categoriesFacade[i].TVTag == _selectedNode) {  
-                    // we found the selected category so we break the loop
-                    desiredIndex = i;
-                    break;
-                }
-
             }
           
             // set the index in the facade
-            _categoriesFacade.SelectedListItemIndex = (int)desiredIndex;
+            _categoriesFacade.SelectedListItemIndex = desiredIndex;
 
             logger.Debug("ReloadCategoriesFacade() Ended");
         }
@@ -648,7 +642,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Updates the selected index on the facade linked to the selected movie
         /// </summary>
         public void SyncToFacade() {
-            if (facade == null)
+            if (facade == null && facade.Count > 0)
                 return;
 
             int? desiredIndex = null;
