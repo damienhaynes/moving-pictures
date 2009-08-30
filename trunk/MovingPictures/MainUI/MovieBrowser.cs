@@ -73,18 +73,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             set {
-                logger.Debug("CurrentView:set " + value);
                 // if the skin doesnt support the categories facade, dont set it
                 if (value == BrowserViewMode.CATEGORIES && _categoriesFacade == null)
                     return;
-                logger.Debug("CurrentView:set2 " + value);
+
                 // update the state variables
                 if (currentView != value)
                     previousView = currentView;
+
+                logger.Debug("CurrentView changed: {0}", value);
                 currentView = value;
-                logger.Debug("CurrentView:set3 " + value);
+
+                if (currentView != BrowserViewMode.CATEGORIES)
+                    ReloadMovieFacade();
+
                 ReapplyView();
-                ReloadMovieFacade();
+               
             }
         }
         private BrowserViewMode currentView;
@@ -171,7 +175,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // add current node filter
                 if (value != null && value.Filter != null) 
                     Filters.Add(value.Filter);
-                
+
+                // if we are moving to the parent category set the current node
+                // as the selected node before we reload the facade
+                if (_currentNode != null && value == _currentNode.Parent)
+                    _selectedNode = _currentNode;
+
                 _currentNode = value;
                 ReloadCategoriesFacade();
             }
@@ -185,6 +194,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public DBNode<DBMovieInfo> SelectedNode {
             get { return _selectedNode; }
+            set {
+                if (_selectedNode != value) {
+                    // log the change
+                    if (value != null)
+                        logger.Debug("SelectedNode changed: " + value.Name);
+                    else {
+                        logger.Debug("SelectedNode changed: null");
+                    }
+
+                    _selectedNode = value;
+
+                    // notify any listeners
+                    if (SelectionChanged != null)
+                        SelectionChanged(selectedMovie);
+                }
+            }
         } public DBNode<DBMovieInfo> _selectedNode;
 
         public IList<DBNode<DBMovieInfo>> SubNodes {
@@ -323,7 +348,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Reapplies the current view to the GUI.
         /// </summary>
         public void ReapplyView() {
-            logger.Debug("Setting view mode to " + currentView.ToString() + ".");
+            logger.Debug("ReapplyView: {0}", currentView.ToString());
 
             if (facade == null)
                 return;
@@ -424,14 +449,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #endregion
 
         #region Core MovieBrowser Methods
-
-        private void loadCategories() {
-            if (!CategoriesAvailable)
-                return;
-
-            
-
-        }
 
         // An initial load of all movies in the database.
         private void loadMovies() {
@@ -559,20 +576,43 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // for the movie browser to be reused by other GUIs for other HTPC apps.
         #region Facade Management Methods
 
-        public void ReloadCategoriesFacade() {
-            logger.Debug("ReloadCategoriesFacade");
-            
+        public void ReloadCategoriesFacade() {          
             if (!CategoriesAvailable)
                 return;
 
-
+            logger.Debug("ReloadCategoriesFacade() Started");
+            
             CategoriesFacade.Clear();
             if (CategoriesFacade.ListView != null) CategoriesFacade.ListView.Clear();
 
             foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
-                logger.Debug("add category node: " + currNode.Name);
+                //logger.Debug("add category node: " + currNode.Name);
                 addCategoryNodeToFacade(currNode);
             }
+
+            int? desiredIndex = null;
+            for (int i = 0; i < _categoriesFacade.Count; i++) {
+                
+                // always set the desired index to the first category
+                if (desiredIndex == null) {
+                    desiredIndex = 0;
+                    // if we had no previous selection break the loop
+                    if (_selectedNode == null)
+                        break;
+                }
+                // otherwise look for the correct category
+                if (_selectedNode != null && _categoriesFacade[i].TVTag == _selectedNode) {  
+                    // we found the selected category so we break the loop
+                    desiredIndex = i;
+                    break;
+                }
+
+            }
+          
+            // set the index in the facade
+            _categoriesFacade.SelectedListItemIndex = (int)desiredIndex;
+
+            logger.Debug("ReloadCategoriesFacade() Ended");
         }
 
         // populates the facade with the currently filtered list items
@@ -580,7 +620,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (facade == null)
                 return;
 
+            logger.Debug("ReloadMovieFacade() Started");
+
             // clear and populate the facade
+            facade.Clear();
             if (facade.ListView != null) facade.ListView.Clear();
             if (facade.ThumbnailView != null) facade.ThumbnailView.Clear();
             if (facade.FilmstripView != null) facade.FilmstripView.Clear();
@@ -593,10 +636,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             if (MovingPicturesCore.Settings.AllowGrouping && CurrentView == BrowserViewMode.LIST) {
                 GroupHeaders.AddGroupHeaders(this);
-            }
+            }          
 
             // reapply the current selection
             SyncToFacade();
+
+            logger.Debug("ReloadMovieFacade() Ended");
         }
 
         /// <summary>
@@ -608,11 +653,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             int? desiredIndex = null;
             for (int i = 0; i < facade.Count; i++) {
-                // in case no valid selection exists pick the first movie (not a group header)
-                if (selectedMovie == null && facade[i].TVTag != null) {
-                    // we found the first movie so we break the loop 
+                // set the desired index to the first movie (not a group header)
+                if (desiredIndex == null && facade[i].TVTag != null) {
                     desiredIndex = i;
-                    break;
+                    // if we found the first movie and we don't have 
+                    // a movie selected we break the loop 
+                    if (selectedMovie == null)
+                        break;
                 }
 
                 // otherwise look for the correct movie
@@ -676,11 +723,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public void onCategoryNodeSelected(GUIListItem item, GUIControl parent) {
             // if this is not a message from the facade, exit
             if (parent != _categoriesFacade && parent != _categoriesFacade.ListView) return;
-
-            _selectedNode = (DBNode<DBMovieInfo>)item.TVTag;
-
-            if (SelectionChanged != null)
-                SelectionChanged(selectedMovie);
+            SelectedNode = (DBNode<DBMovieInfo>)item.TVTag;
         }
 
         // adds the given movie to the facade and creates a GUIListItem if neccesary
@@ -727,9 +770,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             UpdateListColors(newMovie);
         }
 
+        /// <summary>
+        /// Updates the color properties of the GUIListItem object for this movie
+        /// </summary>
+        /// <param name="movie"></param>
         public void UpdateListColors(DBMovieInfo movie) {
-            if (!listItems.ContainsKey(movie)) return;
-
+            if (!listItems.ContainsKey(movie))
+                return;
+            
             GUIListItem currItem = listItems[movie];
             currItem.IsRemote = false;
             currItem.IsPlayed = false;
@@ -743,6 +791,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currItem.IsPlayed = true;
             }            
         }
+
+        /// <summary>    
+        /// Triggers RefreshCoverArt() on the GUIListItem for this movie
+        /// </summary>         
+        /// <param name="movie"></param>
+        public void RefreshArtwork(DBMovieInfo movie) {
+            if (!listItems.ContainsKey(movie))
+                return;
+             
+            // Refresh the list item object              
+            listItems[movie].RefreshCoverArt();
+        }          
 
         #endregion
 

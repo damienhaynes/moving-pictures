@@ -314,6 +314,13 @@ namespace Cornerstone.Database.Tables {
             updating = false;
             OnModified();
         }
+        
+        public override int GetHashCode() {
+            if (ID != null)
+                return ID.GetHashCode();
+            else
+                return base.GetHashCode();
+        }
 
         public override string ToString() {
             return "DBNode: " + Name + " (" + ID + ")";
