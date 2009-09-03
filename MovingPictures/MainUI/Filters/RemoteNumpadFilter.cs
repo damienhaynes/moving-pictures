@@ -151,8 +151,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
 
         public static string NumPadEncode(string input) {
             string rtn = input.Trim();
-            foreach (string key in keyMap.Keys)
-                rtn = Regex.Replace(rtn, @"[" + keyMap[key] + @"]", key, RegexOptions.IgnoreCase);
+            foreach (string key in keyMap.Keys) {
+                if (keyMap[key].Length > 0)
+                    rtn = Regex.Replace(rtn, @"[" + Regex.Escape(keyMap[key]) + @"]", key, RegexOptions.IgnoreCase);
+            }
 
             return Regex.Replace(rtn, @"\s", "0", RegexOptions.IgnoreCase);
         } 
