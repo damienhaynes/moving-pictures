@@ -1225,7 +1225,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
 
                 // Reload the facade to enforce changes in sorting and publishing
-                browser.ReloadMovieFacade(); 
+                browser.ReloadMovieFacade();
+
+                // Reload the movie details because the selection won't be changed
+                UpdateMovieDetails();
             }
         }
 
