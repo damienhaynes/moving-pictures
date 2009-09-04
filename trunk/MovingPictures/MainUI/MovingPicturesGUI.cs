@@ -41,6 +41,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         Dictionary<string, bool> loggedProperties;
         Dictionary<DBNode<DBMovieInfo>, string> backdropLookup = new Dictionary<DBNode<DBMovieInfo>, string>();
+        private readonly object backdropSync = new object();
 
         private bool loaded = false;
 
@@ -157,25 +158,29 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 switch (settings.BackdropType) {
                     case MenuBackdropType.FILE:
+                        logger.Debug("BackdropType: FILE");
                         return settings.BackdropFilePath;
                     case MenuBackdropType.MOVIE:
+                        logger.Debug("BackdropType: MOVIE");
                         return settings.BackdropMovie.BackdropFullPath;
                     case MenuBackdropType.RANDOM:
-                        if (backdropLookup.ContainsKey(selectedNode))
-                            return backdropLookup[selectedNode];
+                        logger.Debug("BackdropType: RANDOM");
+                        lock (backdropSync) {
+                            if (!backdropLookup.ContainsKey(selectedNode)) {
+                                DBMovieInfo randomMovie = selectedNode.GetRandomSubItem();
+                                if (randomMovie == null || randomMovie.BackdropFullPath.Trim().Length == 0)
+                                    return null;
 
-                        DBMovieInfo randomMovie = selectedNode.GetRandomSubItem();
-                        if (randomMovie == null || randomMovie.BackdropFullPath.Trim().Length == 0)
-                            return null;
-
-                        backdropLookup[selectedNode] = randomMovie.BackdropFullPath;
-                        return randomMovie.BackdropFullPath;
+                                backdropLookup.Add(selectedNode, randomMovie.BackdropFullPath);
+                            }
+                        }
+                        return backdropLookup[selectedNode];
                 }
             }
 
             else {
                 DBMovieInfo selectedMovie = browser.SelectedMovie;
-                if (selectedMovie== null)
+                if (selectedMovie == null)
                     return null;
 
                 return selectedMovie.BackdropFullPath;
