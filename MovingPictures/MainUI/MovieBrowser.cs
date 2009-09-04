@@ -673,16 +673,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             // set the index in the facade
-            if (facade.SelectedListItemIndex != selectedIndex)
-                facade.SelectedListItemIndex = selectedIndex; 
+            if (facade.SelectedListItemIndex != selectedIndex) {
+                facade.SelectedListItemIndex = selectedIndex;
 
-            // if we are in the filmstrip view also send a message
-            if (CurrentView == BrowserViewMode.FILMSTRIP) {
-                GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_ITEM_SELECT, facade.WindowId, 0, facade.FilmstripView.GetID, selectedIndex, 0, null);
-                GUIGraphicsContext.SendMessage(msg);
-                logger.Debug("Sending a selection postcard to FilmStrip.");
+                // if we are in the filmstrip view also send a message
+                if (CurrentView == BrowserViewMode.FILMSTRIP) {
+                    GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_ITEM_SELECT, facade.WindowId, 0, facade.FilmstripView.GetID, selectedIndex, 0, null);
+                    GUIGraphicsContext.SendMessage(msg);
+                    logger.Debug("Sending a selection postcard to FilmStrip.");
+                }
             }
-
            
         }
 
