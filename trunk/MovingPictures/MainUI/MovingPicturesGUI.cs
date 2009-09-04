@@ -131,26 +131,28 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void UpdateArtwork() {
             logger.Debug("Updating Artwork");
-
-            if (browser.SelectedMovie != null)
-                cover.Filename = browser.SelectedMovie.CoverFullPath;
+            DBMovieInfo selectedMovie = browser.SelectedMovie;
+            if (selectedMovie != null)
+                cover.Filename = selectedMovie.CoverFullPath;
 
             backdrop.Filename = GetBackdropPath();
             
             if (browser.CurrentView != BrowserViewMode.DETAILS && browser.CurrentView != BrowserViewMode.CATEGORIES)
-                browser.RefreshArtwork(browser.SelectedMovie);
+                browser.RefreshArtwork(selectedMovie);
         }
 
         private string GetBackdropPath() {
             if (browser.CurrentView == BrowserViewMode.CATEGORIES) {
-                if (browser.SelectedNode == null)
+                DBNode<DBMovieInfo> selectedNode = browser.SelectedNode;
+
+                if (selectedNode == null)
                     return null;
 
                 // grab the movie node settings for the selected node
-                DBMovieNodeSettings settings = browser.SelectedNode.AdditionalSettings as DBMovieNodeSettings;
+                DBMovieNodeSettings settings = selectedNode.AdditionalSettings as DBMovieNodeSettings;
                 if (settings == null) {
                     settings = new DBMovieNodeSettings();
-                    browser.SelectedNode.AdditionalSettings = settings;
+                    selectedNode.AdditionalSettings = settings;
                 }
 
                 switch (settings.BackdropType) {
@@ -159,28 +161,28 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     case MenuBackdropType.MOVIE:
                         return settings.BackdropMovie.BackdropFullPath;
                     case MenuBackdropType.RANDOM:
-                        if (backdropLookup.ContainsKey(browser.SelectedNode))
-                            return backdropLookup[browser.SelectedNode];
+                        if (backdropLookup.ContainsKey(selectedNode))
+                            return backdropLookup[selectedNode];
 
-                        DBMovieInfo randomMovie = browser.SelectedNode.GetRandomSubItem();
+                        DBMovieInfo randomMovie = selectedNode.GetRandomSubItem();
                         if (randomMovie == null || randomMovie.BackdropFullPath.Trim().Length == 0)
                             return null;
-                        
-                        backdropLookup[browser.SelectedNode] = randomMovie.BackdropFullPath;
+
+                        backdropLookup[selectedNode] = randomMovie.BackdropFullPath;
                         return randomMovie.BackdropFullPath;
                 }
             }
 
             else {
-                if (browser.SelectedMovie == null)
+                DBMovieInfo selectedMovie = browser.SelectedMovie;
+                if (selectedMovie== null)
                     return null;
 
-                return browser.SelectedMovie.BackdropFullPath;
+                return selectedMovie.BackdropFullPath;
             }
 
             return null;
         }
-
 
         private void ClearFocus() {
             if (facade != null) {
