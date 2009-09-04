@@ -668,11 +668,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // if we found a new index update the selected Index
             if (desiredIndex != null && desiredIndex != selectedIndex) { 
                 selectedIndex = (int)desiredIndex;
+             
                 logger.Debug("SyncToFacade() SelectedIndex={0}", selectedIndex);
-            } 
-            
+            }
+
             // set the index in the facade
-            facade.SelectedListItemIndex = selectedIndex; 
+            if (facade.SelectedListItemIndex != selectedIndex)
+                facade.SelectedListItemIndex = selectedIndex; 
 
             // if we are in the filmstrip view also send a message
             if (CurrentView == BrowserViewMode.FILMSTRIP) {
