@@ -137,8 +137,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 cover.Filename = selectedMovie.CoverFullPath;
 
             backdrop.Filename = GetBackdropPath();
-            
-            if (browser.CurrentView != BrowserViewMode.DETAILS && browser.CurrentView != BrowserViewMode.CATEGORIES)
+
+            if (selectedMovie != null && browser.CurrentView != BrowserViewMode.DETAILS && browser.CurrentView != BrowserViewMode.CATEGORIES)
                 browser.RefreshArtwork(selectedMovie);
         }
 
