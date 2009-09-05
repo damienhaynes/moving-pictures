@@ -318,6 +318,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (currentView == BrowserViewMode.DETAILS) {
                 ClearFocus();
                 playButton.Focus = true;
+                UpdateMovieDetails();
             }
             else if (currentView == BrowserViewMode.CATEGORIES) {
                 UpdateCategoryDetails();
@@ -472,7 +473,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // if we have loaded before, reload the active facade
                 if (browser.CurrentView == BrowserViewMode.CATEGORIES)
                     browser.ReloadCategoriesFacade();
-                else
+                else if (browser.CurrentView != BrowserViewMode.DETAILS) 
                     browser.ReloadMovieFacade();
 
                 // update the view to match our previous settings    
