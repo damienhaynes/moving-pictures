@@ -250,7 +250,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // Regular expression patterns used by the multipart detection and cleaning methods
         private const string rxStackKeywords = @"(cd|dvd|dis[ck]|part)";
-        private const string rxStackPatterns = @"(\W*" + rxStackKeywords + @"\W*([a-c]|\d+|i+))|[\(\[]\d(of|-)\d[\)\]]$";
+        private const string rxStackPatterns = @"(\W*\b" + rxStackKeywords + @"\W*([a-c]|\d+|i+)\W*)|[\(\[]\d(of|-)\d[\)\]]$";
 
         /// <summary>
         /// Checks if a filename has stack markers (and is multi-part)
