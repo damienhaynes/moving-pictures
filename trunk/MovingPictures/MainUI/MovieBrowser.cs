@@ -577,12 +577,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // for the movie browser to be reused by other GUIs for other HTPC apps.
         #region Facade Management Methods
 
-        public void ReloadCategoriesFacade() {          
+        public void ReloadCategoriesFacade() {
             if (!CategoriesAvailable)
                 return;
 
             logger.Debug("ReloadCategoriesFacade() Started");
-            
+
             CategoriesFacade.Clear();
             if (CategoriesFacade.ListView != null) CategoriesFacade.ListView.Clear();
 
@@ -591,20 +591,26 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 addCategoryNodeToFacade(currNode);
             }
 
-            int desiredIndex = 0;
-            if (_selectedNode != null) {
-                for (int i = 0; i < _categoriesFacade.Count; i++) {
-                    // otherwise look for the correct category
-                    if (_categoriesFacade[i].TVTag == _selectedNode) {
-                        // we found the selected category so we break the loop
-                        desiredIndex = i;
-                        break;
-                    }
+            int desiredIndex = -1;
+            for (int i = 0; i < _categoriesFacade.Count; i++) {
+                
+                // if no selection exists, select the first node
+                if (_selectedNode == null) {
+                    desiredIndex = i;
+                    SelectedNode = _categoriesFacade[i].TVTag as DBNode<DBMovieInfo>;
+                    break;
                 }
+                else if (_selectedNode == _categoriesFacade[i].TVTag) { 
+                    // we found the selected category so we break the loop
+                    desiredIndex = i;
+                    break;
+                }
+
             }
-          
+
             // set the index in the facade
-            _categoriesFacade.SelectedListItemIndex = desiredIndex;
+            if (desiredIndex > -1)
+                _categoriesFacade.SelectedListItemIndex = desiredIndex;
 
             logger.Debug("ReloadCategoriesFacade() Ended");
         }
@@ -651,9 +657,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (desiredIndex == null && facade[i].TVTag != null) {
                     desiredIndex = i;
                     // if we found the first movie and we don't have 
-                    // a movie selected we break the loop 
-                    if (selectedMovie == null)
-                        break;
+                    // a movie selected we set the selected movie and return
+                    if (selectedMovie == null) {
+                        SelectedMovie = facade[i].TVTag as DBMovieInfo;
+                        return;
+                    }
                 }
 
                 // otherwise look for the correct movie
@@ -663,7 +671,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     break;
                 }
 
+                // if we didn't found the movie when we are at the end of the loop
+                // we select the first movie using the desired index
+                if (selectedMovie != null && (i == facade.Count-1)) {
+                    SelectedMovie = facade[(int)desiredIndex].TVTag as DBMovieInfo;
+                    return;
+                }
             }
+
 
             // if we found a new index update the selected Index
             if (desiredIndex != null && desiredIndex != selectedIndex) { 

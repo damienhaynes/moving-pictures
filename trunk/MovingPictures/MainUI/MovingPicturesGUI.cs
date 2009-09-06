@@ -540,11 +540,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 case 51:
                     if (actionType == MediaPortal.GUI.Library.Action.ActionType.ACTION_SELECT_ITEM) {
-                        if (browser.SelectedNode.Children.Count == 0) {
-                            browser.CurrentView = browser.DefaultView;
-                        }
-
                         browser.CurrentNode = browser.SelectedNode;
+                        if (browser.CurrentNode.Children.Count == 0) {
+                            browser.CurrentView = browser.DefaultView;
+                        }                        
                     }
                     break;
 
