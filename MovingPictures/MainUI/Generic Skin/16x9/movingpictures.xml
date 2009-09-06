@@ -548,6 +548,7 @@ multiple view modes.
       <label>#MovingPictures.SelectedMovie.title</label>
       <align>center</align>
       <textcolor>ffffff</textcolor>
+      <visible>!Control.IsVisible(51)</visible>
     </control>
 
     <control>
@@ -561,6 +562,7 @@ multiple view modes.
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.tagline</label>
       <align>center</align>
+      <visible>!Control.IsVisible(51)</visible>
     </control>
 
     <control>
@@ -580,7 +582,8 @@ multiple view modes.
       <orientation>horizontal</orientation>
       <align>left</align>
       <imagesToDraw>10</imagesToDraw>
-      <percentage>#MovingPictures.SelectedMovie.score</percentage>
+      <percentage>#MovingPictures.SelectedMovie.score.localized</percentage>
+      <visible>!Control.IsVisible(51)</visible>
     </control>
 
     <!-- ***************************** Filtering Indicator ******************************* -->
