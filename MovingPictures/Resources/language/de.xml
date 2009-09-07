@@ -79,4 +79,38 @@
   <string Field="EarlierThisYear">Anfang des Jahres</string>
   <string Field="LastYear">Letztes Jahr</string>
   <string Field="Older">Älter</string>
+  
+  <!-- Rate Movie Descriptions - 5 Stars-->
+  <string Field="RateFiveStarOne">Schlecht</string>
+  <string Field="RateFiveStarTwo">Mittelmäßig</string>
+  <string Field="RateFiveStarThree">Gut</string>
+  <string Field="RateFiveStarFour">Super</string>
+  <string Field="RateFiveStarFive">Perfekt</string>
+  
+  <!-- Runtime -->
+  <string Field="RuntimeHour">{0} Stunde</string>
+  <string Field="RuntimeHours">{0} Stunden</string>
+  <string Field="RuntimeMinute">{0} Minute</string>
+  <string Field="RuntimeMinutes">{0} Minuten</string>
+  <string Field="RuntimeSecond">{0} Sekunde</string>
+  <string Field="RuntimeSeconds">{0} Sekunden</string>
+  
+  <string Field="RuntimeShort">{0}:{1}</string> <!-- 0 = Hour, 1 = Minute, 2 = Second -->
+  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string> <!-- 0 = Hour, 1 = Minute, 2 = Second -->
+  <string Field="RuntimeLong">{0} und {1}</string> <!-- 0 = Field:RuntimeHour(s)/RuntimeMinute(s), 1 = Field:RuntimeMinute(s)/Field:RuntimeSecond(s) -->
+  <string Field="RuntimeLongExtended">{0}, {1} und {2}</string> <!-- 0 = Field:RuntimeHour(s), 1 = Field:RuntimeMinute(s), 2 = Field:RuntimeSecond(s) -->
+
+  <!-- Remote Control Numeric Alphabet -->
+
+  <string Field="RemoteNumericAlphabet0"></string>
+  <string Field="RemoteNumericAlphabet1"></string>
+  <string Field="RemoteNumericAlphabet2">abcä</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mnoö</string>
+  <string Field="RemoteNumericAlphabet7">pqrsß</string>
+  <string Field="RemoteNumericAlphabet8">tuvü</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+
 </strings>
