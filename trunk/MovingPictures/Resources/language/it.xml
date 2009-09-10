@@ -111,4 +111,17 @@
   <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
   <string Field="RuntimeLong">{0} e {1}</string>
   <string Field="RuntimeLongExtended">{0}, {1} e {2}</string>
+
+  <!-- Remote Control Numeric Alphabet -->
+
+  <string Field="RemoteNumericAlphabet0"></string>
+  <string Field="RemoteNumericAlphabet1"></string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
 </strings>
