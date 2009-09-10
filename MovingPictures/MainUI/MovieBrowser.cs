@@ -648,7 +648,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Updates the selected index on the facade linked to the selected movie
         /// </summary>
         public void SyncToFacade() {
-            if (facade == null && facade.Count > 0)
+            if (facade == null || facade.Count == 0)
                 return;
 
             int? desiredIndex = null;
