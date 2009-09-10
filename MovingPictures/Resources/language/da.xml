@@ -2,16 +2,20 @@
 <!-- Moving Pictures translation file -->
 <!-- Danish (DA) -->
 <!-- Note: English is the fallback for any strings not found in other languages -->
-<!-- Contributed by Steffansp in Issue#447 -->
+<!-- Contributed by Steffansp -->
 
 <strings>
   <string Field="ProblemLoadingSkinFile">Desværre, der var et problem med at indlæse skinfilen</string>
   <string Field="SkinDoesNotSupportRatingDialog">Dette skin understøtter ikke klassificerings dialogen</string>
+  <string Field="SkinDoesNotSupportPinDialog">Dette skin understøtter ikke adgangskodedialogen.</string>
   <string Field="NoImportPathsHeading">Ingen import stier!</string>
   <string Field="NoImportPathsBody">Det ser ud som, at du ikke har defineret\ndefined nogle import stier. Du\nskal lukke MediaPortal og\nstarte MediaPortal\nKonfiguration vinduet for\nat konfigurere Moving Pictures.</string>
   <string Field="ShowAllMovies">Vis alle film</string>
   <string Field="ShowOnlyUnwatchedMovies">Vis kun usete film</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Vis sete og usete film</string>
   <string Field="SortBy">Sorter efter</string>
+  <string Field="FilterBy">Filtrer efter</string>
+  <string Field="AllMovies">Alle film</string>
   <string Field="ChangeView">Skift syn</string>
   <string Field="ListView">Liste overblik</string>
   <string Field="ThumbnailView">Miniatureportræt overblik</string>
@@ -24,6 +28,12 @@
   <string Field="MarkAsWatched">Marker som set</string>
   <string Field="DeleteMovie">Slet film</string>
   <string Field="MovieOptions">Film muligheder</string>
+  <string Field="LockRestrictedMovies">Lås klassificerede film</string>
+  <string Field="PinCodeHeader">Åbner klassificeret indhold</string>
+  <string Field="PinCodePrompt">Skriv venligst en adgangskode for at fortsætte:</string>
+  <string Field="InvalidPin">Forkert kode!</string>
+  <string Field="ParentalControlsDisabled">Forælder kontrol er ikke slået til.</string>
+  <string Field="UnlockRestrictedMovies">Åben for klassificerede film</string>
   <string Field="CannotDeleteReadOnly">Kan ikke slette en skrivebeskyttet film.\nVil du have Moving Pictures til ignorere denne film?</string>
   <string Field="CannotDeleteOffline">Det er ikke muligt at slette {0}\n fordi filen er offline</string>
   <string Field="DoYouWantToDelete">Ønsker du at slette \n{0}\npermanent fra din harddisk?</string>
@@ -53,7 +63,7 @@
   <string Field="DownAbbreviation">(ned)</string>
   <string Field="UpAbbreviation">(op)</string>
 
-  <!-- friendly names for sorting -->
+  <!-- Group names for the date added sorting -->
   <string Field="Title">Title</string>
   <string Field="DateAdded">Dato tilføjet</string>
   <string Field="Year">År</string>
@@ -89,5 +99,30 @@
   <string Field="RateFiveStarTwo">Middelmådig</string>
   <string Field="RateFiveStarThree">God</string>
   <string Field="RateFiveStarFour">Fortrinlig</string>
-  <string Field="RateFiveStarFive">Perfekt</string> 
+  <string Field="RateFiveStarFive">Perfekt</string>
+
+  <!-- Runtime -->
+  <string Field="RuntimeHour">{0} time</string>
+  <string Field="RuntimeHours">{0} timer</string>
+  <string Field="RuntimeMinute">{0} minut</string>
+  <string Field="RuntimeMinutes">{0} minutter</string>
+  <string Field="RuntimeSecond">{0} sekund</string>
+  <string Field="RuntimeSeconds">{0} sekunder</string>
+  
+  <string Field="RuntimeShort">{0}:{1}</string>
+  <string Field="RuntimeShortExtended">{0}t{1:00}m{2:00}s</string>
+  <string Field="RuntimeLong">{0} og {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} og {2}</string>
+  
+  <!-- Remote Control Numeric Alphabet -->
+  <string Field="RemoteNumericAlphabet0"></string>
+  <string Field="RemoteNumericAlphabet1"></string>
+  <string Field="RemoteNumericAlphabet2">abcæåä</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mnoøö</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuvü</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
 </strings>
