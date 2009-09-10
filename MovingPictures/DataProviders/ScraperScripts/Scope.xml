@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141316</id>
-    <version major="1" minor="0" point="1"/>
-    <published month="7" day="27" year="2009"/>
+    <version major="1" minor="0" point="3"/>
+    <published month="9" day="10" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -90,7 +90,7 @@
 	
 	<if test='${movie[0].title}='>
 		<!-- Retrieve results using Title -->
-		<retrieve name="search_page" url="http://www.scope.dk/sogning.php?sog=${search.title}" retries='10' timeout='10000' />
+		<retrieve name="search_page" url="http://www.scope.dk/sogning.php?sog=${search.title:safe(ISO-8859-1)}" retries='10' timeout='10000' />
 	 
 		<!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
 		<parse name="details_page_block" input="${search_page}" regex="${rx_search_results}"/>
@@ -120,7 +120,7 @@
 	<!-- search google if nothing comes up on FilmAffinity. -->
 	<if test='${movie[0].title}='>
 		
-		<retrieve name="search_page" url="http://www.google.com/search?q=site%3Awww.scope.dk+${search.title:safe}" />
+		<retrieve name="search_page" url="http://www.google.com/search?q=site%3Awww.scope.dk+${search.title:safe(ISO-8859-1)}" />
 
 		<parse name="film_id" input="${search_page}" regex="${rx_search_results_google}"/>
 		<if test='${film_id[0][0]}!='>
@@ -240,6 +240,12 @@
       ]]>
     </set>
 	
+	<set name="rx_alternate_parse">
+      <![CDATA[
+      \|\s(?<Alternate>[^|]+)
+      ]]>
+    </set>
+	
     <retrieve name="details_page" url="http://www.scope.dk/film.php?id=${movie.site_id}&amp;fil=2" />
 
     <!-- Title and Year -->
@@ -328,6 +334,17 @@
 	<if test="${movie.summary}!=">
 	    <set name="movie.summary" value="${movie.summary:htmldecode}" />
 	</if>	
+	
+	<!-- IMDB id -->
+	<retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.title:safe}+(${movie.year:safe})" />
+	<parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
+	<set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
+	<!-- If no IMDB try to get it with the first alternate title. -->
+	<if test='${movie.imdb_id}='>
+		<retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.alternate_titles}+(${movie.year:safe})" />
+		<parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
+		<set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
+	</if>
   </action>
   
 <action name="get_cover_art">
