@@ -14,15 +14,15 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="1" minor="0" point="1"/>
-    <published month="07" day="28" year="2009"/>
+    <version major="1" minor="0" point="2"/>
+    <published month="09" day="10" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
     -->
     <type>MovieDetailsFetcher|MovieCoverFetcher</type>
-    <language>it-IT</language>
+    <language>it</language>
 
     <!-- If set to true, additional logging will be displayed during script execution. -->
     <debug>false</debug>
