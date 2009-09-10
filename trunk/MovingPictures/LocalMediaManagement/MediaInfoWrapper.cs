@@ -161,7 +161,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
           _is1080I = true;
         }
 
-        _isDIVX = (_videoCodec.IndexOf("dx50") > -1); // DivX 5
+        _isDIVX = (_videoCodec.IndexOf("dx50") > -1) | (_videoCodec.IndexOf("div3") > -1); // DivX 5 and DivX 3
         _isXVID = (_videoCodec.IndexOf("xvid") > -1);
         _isH264 = (_videoCodec.IndexOf("avc") > -1);
         _isMP1V = (_videoCodec.IndexOf("mpeg-1v") > -1);
