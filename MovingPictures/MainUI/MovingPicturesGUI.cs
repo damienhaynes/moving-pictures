@@ -1289,12 +1289,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (MovingPicturesCore.Settings.AutoPromptForRating)
                 awaitingUserRatingMovie = movie;
 
-            // if we are on the details page for the movie just marked as watched and we are filtering
-            // switch the watched filter off. later need to tweak to allow movies filtered out to be displayed in details anyway.
-            // Previous solution was to switch back to LISTMODE but this was causing issues with the artwork loader.
+            // If we have the played movie selected in the browser and
+            // the watched filter is active
             if (movie == browser.SelectedMovie && watchedFilter.Active)
-                watchedFilter.Active = false; 
-
+                // Check if we are on one of the listviews, and if so switch the watched filter off 
+                // so we return to our LIST with the played movie selected.
+                if (browser.CurrentView != BrowserViewMode.DETAILS && browser.CurrentView != BrowserViewMode.CATEGORIES)
+                    watchedFilter.Active = false;
+            
             // Reapply Filters
             browser.UpdateListColors(movie);
             browser.ReapplyFilters();
