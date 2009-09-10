@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141416</id>
-    <version major="1" minor="0" point="4"/>
-    <published month="7" day="26" year="2009"/>
+    <version major="1" minor="0" point="6"/>
+    <published month="7" day="28" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -42,12 +42,6 @@
     <set name="rx_search_results">
       <![CDATA[
       <b><a\shref="/es/film(?<MovieID>\d+)[^>]+>(?<MovieTitle>[^<]+)[^(]+\((?<MovieYear>\d+)
-      ]]>
-    </set>
-
-    <set name="rx_search_results_google">
-      <![CDATA[
-      <li\sclass=g>(?:[^>]+>)<a\shref="http.//www.filmaffinity.com/es/film(?<MovieID>\d+).html
       ]]>
     </set>
 	
@@ -83,7 +77,7 @@
 	
 	<if test='${movie[0].title}='>
 		<!-- Retrieve results using Title -->
-		<retrieve name="search_page" url="http://www.filmaffinity.com/es/search.php?stext=${search.title:safe}&amp;stype=all" />
+		<retrieve name="search_page" url="http://www.filmaffinity.com/es/search.php?stext=${search.title:safe(ISO-8859-1)}&amp;stype=all" />
 	 
 		<!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
 		<parse name="details_page_block" input="${search_page}" regex="${rx_search_results}"/>
@@ -120,43 +114,6 @@
 				<set name="movie[0].site_id" value="${movie_id[0][0]}"/>
 				<set name="movie[0].details_url" value="http://www.filmaffinity.com/es/film${movie_id[0][0]}.html"/>
 			</if>
-		</if>
-	</if>
-	
-	<!-- search google if nothing comes up on FilmAffinity. -->
-	<if test='${movie[0].title}='>
-		
-		<if test='${search.year}!=0'>
-			<retrieve name="search_page" url="http://www.google.com/search?q=site%3Awww.filmaffinity.com%2Fes%2F+${search.title:safe}+${search.year}" />
-		</if>
-		<if test='${search.year}=0'>
-			<retrieve name="search_page" url="http://www.google.com/search?q=site%3Awww.filmaffinity.com%2Fes%2F+${search.title:safe}" />
-		</if>
-		
-		<parse name="film_id" input="${search_page}" regex="${rx_search_results_google}"/>
-		<if test='${film_id[0][0]}!='>
-			<loop name="item_return" on="film_id">
-				<retrieve name="details_page" url="http://www.filmaffinity.com/es/film${item_return[0]}.html" />
-				
-				<add name="counter" value1="${count}" value2="${offset}" />
-				<parse name="movie_title" input="${details_page}" regex="${rx_title}"/>
-				<set name="movie[${counter}].title" value="${movie_title[0][0]:htmldecode}"/>
-				<replace name='movie[${counter}].title' input='${movie[${counter}].title}' pattern='${rx_parentheses}' with='' />
-				<!-- Check for alternate title -->
-				<parse name="movie_alternate" input="${details_page}" regex="${rx_alternate_title}"/>
-				<if test='${movie_alternate[0][0]}!='>
-					<set name='movie[${counter}].alternate_titles' value='${movie_alternate[0][0]}' />
-				</if>
-				<!-- tests the existance of a year before trying to put on in the movie info -->
-				<parse name="movie_year" input="${details_page}" regex="${rx_year}"/>
-				<if test="${movie_year[0][0]}!=">
-					<set name="movie[${counter}].year" value="${movie_year[0][0]:htmldecode}"/>
-				</if>
-				<set name="movie[${counter}].site_id" value="${item_return[0]}"/>
-				<set name="movie[${counter}].details_url" value="http://www.filmaffinity.com/es/film${item_return[0]}.html"/>
-				<subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
-				
-			</loop>
 		</if>
 	</if>
 	
@@ -245,6 +202,12 @@
 	<set name="rx_description">
       <![CDATA[
       GÉNERO\sY\sCRÍTICA(?:[^>]+>){14}(?<MovieSummary>[^\n]+)
+      ]]>
+    </set>
+	
+	<set name="rx_description_genre_test">
+      <![CDATA[
+      /\s(?<MovieGenres>[^/]+)/\ssinopsis.\s(?<MovieSummary>[^\n]+)
       ]]>
     </set>
 	
@@ -361,16 +324,40 @@
     <!-- Plot Summary -->
     <parse name="summary" input="${details_page}" regex="${rx_description_genres}"/>
 	<set name='summary' value='${summary[0][1]:striptags}' />
-	<if test="${summary!=">
+	<if test="${summary}!=">
 	    <set name="summary_clean" value="${summary:striptags}" />
 	    <set name="movie.summary" value="${summary_clean:htmldecode}" />
 	</if>
 	<if test="${summary}=">
 	    <parse name="summary" input="${details_page}" regex="${rx_description}"/>
-		<set name='summary' value='${summary[0][0]:striptags}' />
-		<if test="${summary}!=">
-			<set name="summary_clean" value="${summary:striptags}" />
-			<set name="movie.summary" value="${summary_clean:htmldecode}" />
+		<if test='${summary[0][0]:striptags}!='>
+			<!-- Do test an additional test to see if we can find the genres in the summary -->
+			<parse name="genre_summary" input="${summary[0][0]}" regex="${rx_description_genre_test}"/>
+			<if test='${genre_summary[0][0]:striptags}!='>
+				<if test='${genre_summary[0][1]:striptags}!='>
+					<!-- Add summary to movie -->
+					<set name="summary_clean" value="${genre_summary[0][1]:striptags}" />
+					<set name="movie.summary" value="${summary_clean:htmldecode}" />
+					<!-- If the above two tests pass, we should have the genres in group 0 and the summary in group 1 -->
+					<set name="genresList" value="${genre_summary[0][0]}" />
+					<parse name="genre" input="${genresList}" regex="${rx_breakPeriodList}"/>
+					<if test='${genre[0][0]}!='>
+						<!-- genres found. Add them to movie. -->
+						<set name='movie.genres' value=''/>
+						<loop name='currGenre' on='genre'>
+							<set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
+						</loop>
+					</if>				
+				</if>
+			</if>
+			<!-- Find out if movie summary has been found with genres. If not, add it. -->
+			<if test='${movie.summary}='>
+				<set name='summary' value='${summary[0][0]:striptags}' />
+				<if test="${summary}!=">
+					<set name="summary_clean" value="${summary:striptags}" />
+					<set name="movie.summary" value="${summary_clean:htmldecode}" />
+				</if>
+			</if>
 		</if>
 	</if>
 	
