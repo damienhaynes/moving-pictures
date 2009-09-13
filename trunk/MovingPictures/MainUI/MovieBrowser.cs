@@ -578,7 +578,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Facade Management Methods
 
         public void ReloadCategoriesFacade() {
-            if (!CategoriesAvailable)
+            if (!CategoriesAvailable || SubNodes.Count == 0)
                 return;
 
             logger.Debug("ReloadCategoriesFacade() Started");
@@ -591,26 +591,28 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 addCategoryNodeToFacade(currNode);
             }
 
-            int desiredIndex = -1;
-            for (int i = 0; i < _categoriesFacade.Count; i++) {
-                
-                // if no selection exists, select the first node
-                if (_selectedNode == null) {
-                    desiredIndex = i;
-                    SelectedNode = _categoriesFacade[i].TVTag as DBNode<DBMovieInfo>;
-                    break;
+            int? desiredIndex = null;
+            if (_selectedNode != null) {
+                // Find the selected category
+                for (int i = 0; i < _categoriesFacade.Count; i++) {
+                    if (_categoriesFacade[i].TVTag == _selectedNode) {
+                        // we found the selected category so we break the loop
+                        desiredIndex = i;
+                        break;
+                    }
                 }
-                else if (_selectedNode == _categoriesFacade[i].TVTag) { 
-                    // we found the selected category so we break the loop
-                    desiredIndex = i;
-                    break;
-                }
-
             }
 
-            // set the index in the facade
-            if (desiredIndex > -1)
-                _categoriesFacade.SelectedListItemIndex = desiredIndex;
+            // if no index was found pick the first selection
+            int newIndex = 0;
+            if (desiredIndex == null)
+                SelectedNode = _categoriesFacade[newIndex].TVTag as DBNode<DBMovieInfo>;
+            else
+                newIndex = (int)desiredIndex;
+
+            // set the required index in the facade
+            if (_categoriesFacade.SelectedListItemIndex != newIndex)
+                _categoriesFacade.SelectedListItemIndex = newIndex;
 
             logger.Debug("ReloadCategoriesFacade() Ended");
         }
