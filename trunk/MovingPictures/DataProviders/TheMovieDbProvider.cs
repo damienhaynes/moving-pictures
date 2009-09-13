@@ -20,9 +20,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         #region API variables
 
-        private const string apiImdbLookup = "http://api.themoviedb.org/2.0/Movie.imdbLookup?api_key=cc25933c4094ca50635f94574491f320&imdb_id=";
-        private const string apiSearch = "http://api.themoviedb.org/2.0/Movie.search?api_key=cc25933c4094ca50635f94574491f320&title=";
-        private const string apiGetInfo = "http://api.themoviedb.org/2.0/Movie.getInfo?api_key=cc25933c4094ca50635f94574491f320&id=";
+        private const string apiMovieUrl = "http://api.themoviedb.org/2.1/Movie.{0}/{1}/xml/cc25933c4094ca50635f94574491f320/";
+
+        private static string apiImdbLookup = string.Format(apiMovieUrl, "imdbLookup", "en");
+        private static string apiSearch = string.Format(apiMovieUrl, "search", "en");
+        private static string apiGetInfo = string.Format(apiMovieUrl, "getInfo", "en");
 
         #endregion
 
@@ -64,39 +66,30 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movie.BackdropFullPath.Trim().Length > 0)
                 return true;
 
-            // Resolve the source ID
-            XmlNodeList xml;
-            string tmdbID = movie.GetSourceMovieInfo(SourceInfo).Identifier;
-            if (String.IsNullOrEmpty(tmdbID)) {
-                // Check IMDB code
-                if (movie.ImdbID.Trim().Length != 9)
-                    return false;
-
-                // Use IMDB code
-                xml = getXML(apiImdbLookup + movie.ImdbID.Trim());
-                if (xml == null) return false;
-
-                // Get TMDB Id
-                XmlNodeList idNodes = xml.Item(0).SelectNodes("//id");
-                if (idNodes.Count != 0)
-                    tmdbID = idNodes[0].InnerText;
+            // do we have an id?
+            string tmdbID = getTheMovieDbId(movie);
+            if (tmdbID == null) {
+                return false;
             }
 
-            // Tro to get movie information
-            xml = getXML(apiGetInfo + tmdbID);
-            if (xml == null) return false;
+            // Try to get movie information
+            XmlNodeList xml = getXML(apiGetInfo + tmdbID);
+            if (xml == null) {
+                return false;
+            }
 
             // try to grab backdrops from the resulting xml doc
             string backdropURL = string.Empty;
-            XmlNodeList backdropNodes = xml.Item(0).SelectNodes("//backdrop");
+            XmlNodeList backdropNodes = xml.Item(0).SelectNodes("//image[@type='backdrop']");
             foreach (XmlNode currNode in backdropNodes) {
                 if (currNode.Attributes["size"].Value == "original") {
-                    backdropURL = currNode.InnerText;
-                    if (backdropURL.Trim().Length > 0)
+                    backdropURL = currNode.Attributes["url"].Value;
+                    if (backdropURL.Trim().Length > 0) {
                         if (movie.AddBackdropFromURL(backdropURL) == ArtworkLoadStatus.SUCCESS) {
                             movie.GetSourceMovieInfo(SourceInfo).Identifier = tmdbID;
                             return true;
                         }
+                    }
                 }
             }
 
@@ -108,17 +101,17 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         public List<DBMovieInfo> Get(MovieSignature movieSignature) {
            List<DBMovieInfo> results = new List<DBMovieInfo>();
            if (movieSignature == null)
-                return results;
+               return results;
 
            if (movieSignature.ImdbId != null) {
                DBMovieInfo movie = getMovieByImdb(movieSignature.ImdbId);
-               if (movie != null)
+               if (movie != null) {
                    results.Add(movie);
+                   return results;
+               }
            }
-           else {
-             results = getMoviesByTitle(movieSignature.Title);
-           }
-
+           
+           results = getMoviesByTitle(movieSignature.Title);
            return results;
         }
 
@@ -176,15 +169,15 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     case "id":
                         movie.GetSourceMovieInfo(SourceInfo).Identifier = value;
                         break;
-                    case "title":
+                    case "name":
                         movie.Title = value;
                         break;
-                    case "alternative_title":
+                    case "alternative_name":
                         // todo: remove this check when the api is fixed
                         if (value.Trim() != "None found." && value.Trim().Length > 0 )
                             movie.AlternateTitles.Add(value);
                         break;
-                    case "release":
+                    case "released":
                         DateTime date;
                         if (DateTime.TryParse(value, out date))
                             movie.Year = date.Year;      
@@ -195,7 +188,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     case "url":
                         movie.DetailsURL = value;
                         break;
-                    case "short_overview":
+                    case "overview":
                         movie.Summary = value;
                         break;
                     case "rating":
@@ -213,22 +206,31 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         if (int.TryParse(value, out runtime))
                             movie.Runtime = runtime;
                         break;
-                    case "people":
-                        foreach (XmlNode person in node.SelectNodes("person[@job='director']/name")) {
-                            movie.Directors.Add(person.InnerText.Trim());
-                        }
-                        foreach (XmlNode person in node.SelectNodes("person[@job='screenplay']/name")) {
-                            movie.Writers.Add(person.InnerText.Trim());
-                        }
-                        foreach (XmlNode person in node.SelectNodes("person[@job='actor']/name")) {
-                            movie.Actors.Add(person.InnerText.Trim());
+                    case "cast": // Actors, Directors and Writers
+                        foreach (XmlNode person in node.ChildNodes) {
+                            string name = person.Attributes["name"].Value;
+                            string job = person.Attributes["job"].Value;
+                            switch (job) {
+                                case "Director":
+                                    movie.Directors.Add(name);
+                                    break;
+                                case "Actor":
+                                    movie.Actors.Add(name);
+                                    break;
+                                case "Screenplay":
+                                    movie.Writers.Add(name);
+                                    break;
+                            }
                         }
                         break;
                     case "categories":
-                        //todo: uncomment and adapt when the genres are implemented
-                        //foreach (XmlNode category in node.SelectNodes("category/name")) {
-                        //    movie.Genres.Add(category.InnerText.Trim());
-                        //}
+                        foreach (XmlNode category in node.ChildNodes) {
+                            string genre = category.Attributes["name"].Value;
+                            string type = category.Attributes["type"].Value;
+                            if (type == "genre") {
+                                movie.Genres.Add(genre);
+                            }
+                        }
                         break;
                 }
             }
@@ -239,29 +241,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movie == null)
                 return UpdateResults.FAILED;
 
-            // try to load the id for the movie for this script
-            string tmdbId = null;
-            DBSourceMovieInfo idObj = movie.GetSourceMovieInfo(SourceInfo);
-            if (idObj != null && idObj.Identifier != null) {
-                tmdbId = idObj.Identifier;
-            } else {
-                // if we don't have a tmdb id check for imdb id
-                string imdbId = movie.ImdbID.Trim();
-                if (imdbId != string.Empty) {
-                    // if we have an imdb id we can also do a valid getInfo request
-                    // we first need to call the IMDB api search before we can move on
-                    DBMovieInfo imdbMovie = getMovieByImdb(imdbId);
-                    if (imdbMovie != null) {
-                        // if we got a movie, check for identifier again
-                        idObj = imdbMovie.GetSourceMovieInfo(SourceInfo);
-                        if (idObj != null && idObj.Identifier != null) {
-                            // we got an identifier so fill tmdbId
-                            tmdbId = idObj.Identifier;
-                        }
-                    }
-                }
-            }
-
+            string tmdbId = getTheMovieDbId(movie);
             // check if tmdbId is still null, if so request id.
             if (tmdbId == null)
                 return UpdateResults.FAILED_NEED_ID;
@@ -282,36 +262,27 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movie == null)
                 return false;
 
+            // do we have an id?
+            string tmdbID = getTheMovieDbId(movie);
+            if (tmdbID == null) {
+                return false;
+            }
+
+            // Tro to get movie information
+            XmlNodeList xml = getXML(apiGetInfo + tmdbID);
+            if (xml == null) {
+                return false;
+            }
+
             // grab coverart loading settings
             int maxCovers = MovingPicturesCore.Settings.MaxCoversPerMovie;
             int maxCoversInSession = MovingPicturesCore.Settings.MaxCoversPerSession;
-
-            XmlNodeList xml;
-            string tmdbID = movie.GetSourceMovieInfo(SourceInfo).Identifier;
-            if (String.IsNullOrEmpty(tmdbID)) {
-                // Check IMDB code
-                if (movie.ImdbID.Trim().Length != 9)
-                    return false;
-
-                // Use IMDB code
-                xml = getXML(apiImdbLookup + movie.ImdbID.Trim());
-                if (xml == null) return false;
-
-                // Get TMDB Id
-                XmlNodeList idNodes = xml.Item(0).SelectNodes("//id");
-                if (idNodes.Count != 0)
-                    tmdbID = idNodes[0].InnerText;
-            }  
-
-            // Tro to get movie information
-            xml = getXML(apiGetInfo + tmdbID);
-            if (xml == null) return false;
 
             int coversAdded = 0;
             int count = 0;
             
             // try to grab posters from the xml results
-            XmlNodeList posterNodes = xml.Item(0).SelectNodes("//poster");
+            XmlNodeList posterNodes = xml.Item(0).SelectNodes("//image[@type='poster']");
             foreach (XmlNode posterNode in posterNodes) {
                 if (posterNode.Attributes["size"].Value == "original") {
                     // if we have hit our limit quit
@@ -319,7 +290,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         return true;
 
                     // get url for cover and load it via the movie object
-                    string coverPath = posterNode.InnerText;
+                    string coverPath = posterNode.Attributes["url"].Value;
                     if (coverPath.Trim() != string.Empty)
                         if (movie.AddCoverFromURL(coverPath) == ArtworkLoadStatus.SUCCESS)
                             coversAdded++;
@@ -339,13 +310,35 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             return false;
         }
 
+        private string getTheMovieDbId(DBMovieInfo movie) {
+            string tmdbID = null;
+            DBSourceMovieInfo idObj = movie.GetSourceMovieInfo(SourceInfo);
+            if (idObj != null && idObj.Identifier != null) {
+                tmdbID = idObj.Identifier;
+            }
+            else {
+                // Translate IMDB code to MovieMeter ID
+                string imdbId = movie.ImdbID.Trim();
+                // Do an IMDB lookup
+                XmlNodeList xml = getXML(apiImdbLookup + imdbId);
+                if (xml != null) {
+                    // Get TMDB Id
+                    XmlNodeList idNodes = xml.Item(0).SelectNodes("//id");
+                    if (idNodes.Count != 0) {
+                        tmdbID = idNodes[0].InnerText;
+                    }
+                }
+            }
+            return tmdbID;
+        }
+
         // given a url, retrieves the xml result set and returns the nodelist of Item objects
         private XmlNodeList getXML(string url) {
             WebGrabber grabber = Utility.GetWebGrabberInstance(url);
             grabber.Encoding = Encoding.UTF8;
 
             if (grabber.GetResponse())
-                return grabber.GetXML("results");
+                return grabber.GetXML("OpenSearchDescription");
             else
                 return null;
         }
