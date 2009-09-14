@@ -319,10 +319,15 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
             else {
                 // Translate IMDB code to MovieMeter ID
+
+                if (movie.ImdbID == null) {
+                    return null;
+                }
+
                 string imdbId = movie.ImdbID.Trim();
                 // Do an IMDB lookup
                 XmlNodeList xml = getXML(apiImdbLookup + imdbId);
-                if (xml != null) {
+                if (xml != null && xml.Count > 0) {
                     // Get TMDB Id
                     XmlNodeList idNodes = xml.Item(0).SelectNodes("//id");
                     if (idNodes.Count != 0) {
