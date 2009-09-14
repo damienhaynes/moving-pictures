@@ -443,7 +443,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 if (filteringIndicator != null) filteringIndicator.Visible = false;
                 PublishFilterDetails();
-
+                OnBrowserContentsChanged();
             }
 
             if (recentInsertedDiskSerials == null) {              
