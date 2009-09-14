@@ -148,7 +148,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public bool CategoriesAvailable {
             get {
-                return _categoriesFacade != null && CategoriesMenu.RootNodes.Count > 0;
+                return _categoriesFacade != null && 
+                       MovingPicturesCore.Settings.CategoriesEnabled && 
+                       CategoriesMenu.RootNodes.Count > 0;
             }
         }
 

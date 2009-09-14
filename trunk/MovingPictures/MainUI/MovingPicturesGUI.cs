@@ -467,7 +467,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // first time setup tasks
             if (!loaded) {
                 loaded = true;
-                browser.CurrentView = BrowserViewMode.CATEGORIES;
+                if (browser.CategoriesAvailable)
+                    browser.CurrentView = BrowserViewMode.CATEGORIES;
+                else
+                    browser.CurrentView = browser.DefaultView;
             } 
             else {
                 // if we have loaded before, reload the active facade

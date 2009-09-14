@@ -23,7 +23,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         DBSetting clickGoesToDetails;
         DBSetting dvdInsertedAction;
         DBSetting defaultView;
-        DBSetting watchedFilterStartsOn;
 
         bool nonNumberEntered;
         bool deleteEntered;
@@ -41,17 +40,19 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             enableDeleteCheckBox.Setting = MovingPicturesCore.Settings["enable_delete_movie"];
             parentalControlsCheckBox.Setting = MovingPicturesCore.Settings["enable_parental_controls"];
             passwordTextBox.Setting = MovingPicturesCore.Settings["parental_controls_password"];
+            categoriesCheckBox.Setting = MovingPicturesCore.Settings["enable_categories"];
+            unwatchedCheckBox.Setting = MovingPicturesCore.Settings["start_watched_filter_on"];
 
             passwordTextBox.Enabled = parentalControlsCheckBox.Checked;
             parentalContolsButton.Enabled = parentalControlsCheckBox.Checked;
-
+            defineCategoriesButton.Enabled = categoriesCheckBox.Checked;
+ 
             sortFieldComboBox.Setting = MovingPicturesCore.Settings["default_sort_field"];
             sortFieldComboBox.EnumType = typeof(SortingFields);
 
             clickGoesToDetails = MovingPicturesCore.Settings["click_to_details"];
             dvdInsertedAction = MovingPicturesCore.Settings["on_disc_loaded"];
             defaultView = MovingPicturesCore.Settings["default_view"];
-            watchedFilterStartsOn = MovingPicturesCore.Settings["start_watched_filter_on"];
 
 
         }
@@ -83,12 +84,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 displayDvdDetailsRadioButton.Checked = true;
             else if (dvdInsertedAction.StringValue.Equals("NOTHING"))
                 doNothingRadioButton.Checked = true;
-
-            // configure watched filter settings
-            if ((bool)watchedFilterStartsOn.Value)
-                watchedComboBox.SelectedIndex = 1;
-            else
-                watchedComboBox.SelectedIndex = 0;
         }
 
         #region Movie Clicked Action Checkboxes
@@ -143,13 +138,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 defaultView.Value = "largethumbs";
             if (defaultViewComboBox.SelectedIndex == 3)
                 defaultView.Value = "filmstrip";
-        }
-
-        private void watchedComboBox_SelectedIndexChanged(object sender, EventArgs e) {
-            if (watchedComboBox.SelectedIndex == 0)
-                watchedFilterStartsOn.Value = false;
-            if (watchedComboBox.SelectedIndex == 1)
-                watchedFilterStartsOn.Value = true;
         }
 
         private void helpButton_Click(object sender, EventArgs e) {
@@ -283,6 +271,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void loadFiltersMenu() {
             filtersMenu = MovingPicturesCore.Settings.FilterMenu;
+        }
+
+        private void categoriesCheckBox_CheckedChanged(object sender, EventArgs e) {
+            defineCategoriesButton.Enabled = categoriesCheckBox.Checked;
         }
     }
 }

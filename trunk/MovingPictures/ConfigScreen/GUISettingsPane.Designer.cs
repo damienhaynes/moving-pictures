@@ -46,27 +46,25 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.remoteFilteringHelpLink = new System.Windows.Forms.LinkLabel();
-            this.label10 = new System.Windows.Forms.Label();
-            this.watchedComboBox = new System.Windows.Forms.ComboBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
             this.parentalContolsButton = new System.Windows.Forms.Button();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.label13 = new System.Windows.Forms.Label();
+            this.defineCategoriesButton = new System.Windows.Forms.Button();
             this.passwordTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
             this.parentalControlsCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.enableDeleteCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
-            this.sortFieldComboBox = new Cornerstone.GUI.Controls.SettingsComboBox();
             this.remoteControlCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.watchedPercentTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
             this.homeScreenTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.filterMenuButton = new System.Windows.Forms.Button();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.sortFieldComboBox = new Cornerstone.GUI.Controls.SettingsComboBox();
+            this.unwatchedCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.categoriesCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -77,15 +75,15 @@
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.Size = new System.Drawing.Size(103, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Visuals:";
+            this.label1.Text = "Layout && Visuals:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(4, 63);
+            this.label2.Location = new System.Drawing.Point(4, 185);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(60, 13);
             this.label2.TabIndex = 1;
@@ -94,11 +92,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(125, 4);
+            this.label3.Location = new System.Drawing.Point(124, 89);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(156, 13);
+            this.label3.Size = new System.Drawing.Size(131, 13);
             this.label3.TabIndex = 2;
-            this.label3.Text = "Start GUI with this view active:";
+            this.label3.Text = "By default show movies in";
             // 
             // defaultViewComboBox
             // 
@@ -109,7 +107,7 @@
             "Poster View",
             "Large Poster View",
             "Filmstrip View"});
-            this.defaultViewComboBox.Location = new System.Drawing.Point(296, 1);
+            this.defaultViewComboBox.Location = new System.Drawing.Point(262, 86);
             this.defaultViewComboBox.Name = "defaultViewComboBox";
             this.defaultViewComboBox.Size = new System.Drawing.Size(128, 21);
             this.defaultViewComboBox.TabIndex = 3;
@@ -118,7 +116,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(125, 31);
+            this.label4.Location = new System.Drawing.Point(124, 152);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(147, 13);
             this.label4.TabIndex = 4;
@@ -128,7 +126,7 @@
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Location = new System.Drawing.Point(10, 54);
+            this.groupBox3.Location = new System.Drawing.Point(10, 176);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(492, 3);
             this.groupBox3.TabIndex = 15;
@@ -163,7 +161,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(125, 70);
+            this.label5.Location = new System.Drawing.Point(125, 192);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(114, 13);
             this.label5.TabIndex = 18;
@@ -187,7 +185,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.playMovieRadioButton);
             this.panel1.Controls.Add(this.displayDetailsRadioButton);
-            this.panel1.Location = new System.Drawing.Point(259, 63);
+            this.panel1.Location = new System.Drawing.Point(259, 185);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(243, 49);
             this.panel1.TabIndex = 20;
@@ -199,7 +197,7 @@
             this.panel2.Controls.Add(this.doNothingRadioButton);
             this.panel2.Controls.Add(this.playDVDradioButton);
             this.panel2.Controls.Add(this.displayDvdDetailsRadioButton);
-            this.panel2.Location = new System.Drawing.Point(259, 127);
+            this.panel2.Location = new System.Drawing.Point(259, 249);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(243, 73);
             this.panel2.TabIndex = 21;
@@ -244,7 +242,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(125, 132);
+            this.label6.Location = new System.Drawing.Point(125, 254);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(114, 13);
             this.label6.TabIndex = 22;
@@ -254,7 +252,7 @@
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Location = new System.Drawing.Point(120, 118);
+            this.groupBox4.Location = new System.Drawing.Point(120, 240);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(380, 3);
             this.groupBox4.TabIndex = 23;
@@ -265,7 +263,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Location = new System.Drawing.Point(10, 272);
+            this.groupBox1.Location = new System.Drawing.Point(10, 394);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(492, 3);
             this.groupBox1.TabIndex = 16;
@@ -276,7 +274,7 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Location = new System.Drawing.Point(120, 206);
+            this.groupBox2.Location = new System.Drawing.Point(120, 328);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(380, 3);
             this.groupBox2.TabIndex = 24;
@@ -286,7 +284,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(125, 216);
+            this.label7.Location = new System.Drawing.Point(125, 338);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(185, 13);
             this.label7.TabIndex = 25;
@@ -295,7 +293,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(354, 216);
+            this.label8.Location = new System.Drawing.Point(354, 338);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(18, 13);
             this.label8.TabIndex = 27;
@@ -305,7 +303,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(4, 282);
+            this.label9.Location = new System.Drawing.Point(4, 404);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(56, 13);
             this.label9.TabIndex = 28;
@@ -314,7 +312,7 @@
             // remoteFilteringHelpLink
             // 
             this.remoteFilteringHelpLink.AutoSize = true;
-            this.remoteFilteringHelpLink.Location = new System.Drawing.Point(315, 345);
+            this.remoteFilteringHelpLink.Location = new System.Drawing.Point(315, 444);
             this.remoteFilteringHelpLink.Name = "remoteFilteringHelpLink";
             this.remoteFilteringHelpLink.Size = new System.Drawing.Size(68, 13);
             this.remoteFilteringHelpLink.TabIndex = 30;
@@ -322,53 +320,11 @@
             this.remoteFilteringHelpLink.Text = "What is this?";
             this.remoteFilteringHelpLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.remoteFilteringHelpLink_LinkClicked);
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(125, 282);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(91, 13);
-            this.label10.TabIndex = 31;
-            this.label10.Text = "On startup show:";
-            // 
-            // watchedComboBox
-            // 
-            this.watchedComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.watchedComboBox.FormattingEnabled = true;
-            this.watchedComboBox.Items.AddRange(new object[] {
-            "All Movies",
-            "Unwatched Movies"});
-            this.watchedComboBox.Location = new System.Drawing.Point(227, 279);
-            this.watchedComboBox.Name = "watchedComboBox";
-            this.watchedComboBox.Size = new System.Drawing.Size(121, 21);
-            this.watchedComboBox.TabIndex = 32;
-            this.watchedComboBox.SelectedIndexChanged += new System.EventHandler(this.watchedComboBox_SelectedIndexChanged);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(125, 310);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(96, 13);
-            this.label11.TabIndex = 33;
-            this.label11.Text = "On startup sort by";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Location = new System.Drawing.Point(120, 334);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(380, 3);
-            this.groupBox5.TabIndex = 35;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "groupBox5";
-            // 
             // groupBox6
             // 
             this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox6.Location = new System.Drawing.Point(120, 240);
+            this.groupBox6.Location = new System.Drawing.Point(120, 362);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(380, 3);
             this.groupBox6.TabIndex = 24;
@@ -379,7 +335,7 @@
             // 
             this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox7.Location = new System.Drawing.Point(10, 405);
+            this.groupBox7.Location = new System.Drawing.Point(10, 465);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(492, 3);
             this.groupBox7.TabIndex = 17;
@@ -390,7 +346,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(4, 417);
+            this.label12.Location = new System.Drawing.Point(4, 477);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(108, 13);
             this.label12.TabIndex = 41;
@@ -398,7 +354,7 @@
             // 
             // parentalContolsButton
             // 
-            this.parentalContolsButton.Location = new System.Drawing.Point(128, 449);
+            this.parentalContolsButton.Location = new System.Drawing.Point(128, 500);
             this.parentalContolsButton.Name = "parentalContolsButton";
             this.parentalContolsButton.Size = new System.Drawing.Size(144, 23);
             this.parentalContolsButton.TabIndex = 43;
@@ -406,51 +362,19 @@
             this.parentalContolsButton.UseVisualStyleBackColor = true;
             this.parentalContolsButton.Click += new System.EventHandler(this.parentalControlsButton_Click);
             // 
-            // groupBox8
+            // defineCategoriesButton
             // 
-            this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox8.Location = new System.Drawing.Point(122, 440);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(380, 3);
-            this.groupBox8.TabIndex = 25;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "groupBox8";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(128, 487);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(144, 23);
-            this.button1.TabIndex = 45;
-            this.button1.Text = "Modify Categories Menu";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.categoriesMenuButton_Click);
-            // 
-            // groupBox9
-            // 
-            this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox9.Location = new System.Drawing.Point(10, 478);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(492, 3);
-            this.groupBox9.TabIndex = 18;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "groupBox4";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(4, 492);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(71, 13);
-            this.label13.TabIndex = 46;
-            this.label13.Text = "Categories:";
+            this.defineCategoriesButton.Location = new System.Drawing.Point(128, 26);
+            this.defineCategoriesButton.Name = "defineCategoriesButton";
+            this.defineCategoriesButton.Size = new System.Drawing.Size(163, 23);
+            this.defineCategoriesButton.TabIndex = 45;
+            this.defineCategoriesButton.Text = "Define Movie Categories";
+            this.defineCategoriesButton.UseVisualStyleBackColor = true;
+            this.defineCategoriesButton.Click += new System.EventHandler(this.categoriesMenuButton_Click);
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(432, 415);
+            this.passwordTextBox.Location = new System.Drawing.Point(432, 475);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.PasswordChar = '●';
             this.passwordTextBox.Setting = null;
@@ -464,7 +388,7 @@
             // 
             this.parentalControlsCheckBox.AutoSize = true;
             this.parentalControlsCheckBox.IgnoreSettingName = true;
-            this.parentalControlsCheckBox.Location = new System.Drawing.Point(128, 417);
+            this.parentalControlsCheckBox.Location = new System.Drawing.Point(128, 477);
             this.parentalControlsCheckBox.Name = "parentalControlsCheckBox";
             this.parentalControlsCheckBox.Setting = null;
             this.parentalControlsCheckBox.Size = new System.Drawing.Size(284, 17);
@@ -477,7 +401,7 @@
             // 
             this.enableDeleteCheckBox.AutoSize = true;
             this.enableDeleteCheckBox.IgnoreSettingName = false;
-            this.enableDeleteCheckBox.Location = new System.Drawing.Point(128, 249);
+            this.enableDeleteCheckBox.Location = new System.Drawing.Point(128, 371);
             this.enableDeleteCheckBox.Name = "enableDeleteCheckBox";
             this.enableDeleteCheckBox.Setting = null;
             this.enableDeleteCheckBox.Size = new System.Drawing.Size(277, 17);
@@ -485,22 +409,11 @@
             this.enableDeleteCheckBox.Text = "Allow user to delete files from the GUI context menu";
             this.enableDeleteCheckBox.UseVisualStyleBackColor = true;
             // 
-            // sortFieldComboBox
-            // 
-            this.sortFieldComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sortFieldComboBox.EnumType = null;
-            this.sortFieldComboBox.FormattingEnabled = true;
-            this.sortFieldComboBox.Location = new System.Drawing.Point(227, 307);
-            this.sortFieldComboBox.Name = "sortFieldComboBox";
-            this.sortFieldComboBox.Setting = null;
-            this.sortFieldComboBox.Size = new System.Drawing.Size(121, 21);
-            this.sortFieldComboBox.TabIndex = 36;
-            // 
             // remoteControlCheckBox
             // 
             this.remoteControlCheckBox.AutoSize = true;
             this.remoteControlCheckBox.IgnoreSettingName = false;
-            this.remoteControlCheckBox.Location = new System.Drawing.Point(128, 343);
+            this.remoteControlCheckBox.Location = new System.Drawing.Point(128, 442);
             this.remoteControlCheckBox.Name = "remoteControlCheckBox";
             this.remoteControlCheckBox.Setting = null;
             this.remoteControlCheckBox.Size = new System.Drawing.Size(163, 17);
@@ -510,7 +423,7 @@
             // 
             // watchedPercentTextBox
             // 
-            this.watchedPercentTextBox.Location = new System.Drawing.Point(319, 213);
+            this.watchedPercentTextBox.Location = new System.Drawing.Point(319, 335);
             this.watchedPercentTextBox.Name = "watchedPercentTextBox";
             this.watchedPercentTextBox.Setting = null;
             this.watchedPercentTextBox.Size = new System.Drawing.Size(29, 21);
@@ -520,7 +433,7 @@
             // 
             this.homeScreenTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.homeScreenTextBox.Location = new System.Drawing.Point(296, 28);
+            this.homeScreenTextBox.Location = new System.Drawing.Point(295, 149);
             this.homeScreenTextBox.Name = "homeScreenTextBox";
             this.homeScreenTextBox.Setting = null;
             this.homeScreenTextBox.Size = new System.Drawing.Size(173, 21);
@@ -530,7 +443,7 @@
             // 
             this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox10.Location = new System.Drawing.Point(120, 366);
+            this.groupBox10.Location = new System.Drawing.Point(120, 433);
             this.groupBox10.Name = "groupBox10";
             this.groupBox10.Size = new System.Drawing.Size(380, 3);
             this.groupBox10.TabIndex = 36;
@@ -539,35 +452,100 @@
             // 
             // filterMenuButton
             // 
-            this.filterMenuButton.Location = new System.Drawing.Point(128, 376);
+            this.filterMenuButton.Location = new System.Drawing.Point(128, 403);
             this.filterMenuButton.Name = "filterMenuButton";
             this.filterMenuButton.Size = new System.Drawing.Size(111, 23);
             this.filterMenuButton.TabIndex = 47;
-            this.filterMenuButton.Text = "Modify Filter Menu";
+            this.filterMenuButton.Text = "Modify Filters Menu";
             this.filterMenuButton.UseVisualStyleBackColor = true;
             this.filterMenuButton.Click += new System.EventHandler(this.filterMenuButton_Click);
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox9.Location = new System.Drawing.Point(122, 140);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(380, 3);
+            this.groupBox9.TabIndex = 24;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "groupBox9";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(125, 116);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(93, 13);
+            this.label11.TabIndex = 33;
+            this.label11.Text = "By default sort by";
+            // 
+            // sortFieldComboBox
+            // 
+            this.sortFieldComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.sortFieldComboBox.EnumType = null;
+            this.sortFieldComboBox.FormattingEnabled = true;
+            this.sortFieldComboBox.Location = new System.Drawing.Point(224, 113);
+            this.sortFieldComboBox.Name = "sortFieldComboBox";
+            this.sortFieldComboBox.Setting = null;
+            this.sortFieldComboBox.Size = new System.Drawing.Size(121, 21);
+            this.sortFieldComboBox.TabIndex = 36;
+            // 
+            // unwatchedCheckBox
+            // 
+            this.unwatchedCheckBox.AutoSize = true;
+            this.unwatchedCheckBox.IgnoreSettingName = true;
+            this.unwatchedCheckBox.Location = new System.Drawing.Point(127, 63);
+            this.unwatchedCheckBox.Name = "unwatchedCheckBox";
+            this.unwatchedCheckBox.Setting = null;
+            this.unwatchedCheckBox.Size = new System.Drawing.Size(221, 17);
+            this.unwatchedCheckBox.TabIndex = 48;
+            this.unwatchedCheckBox.Text = "On startup show only unwatched movies";
+            this.unwatchedCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox5.Location = new System.Drawing.Point(122, 54);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(380, 3);
+            this.groupBox5.TabIndex = 25;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "groupBox5";
+            // 
+            // categoriesCheckBox
+            // 
+            this.categoriesCheckBox.AutoSize = true;
+            this.categoriesCheckBox.IgnoreSettingName = true;
+            this.categoriesCheckBox.Location = new System.Drawing.Point(127, 3);
+            this.categoriesCheckBox.Name = "categoriesCheckBox";
+            this.categoriesCheckBox.Setting = null;
+            this.categoriesCheckBox.Size = new System.Drawing.Size(166, 17);
+            this.categoriesCheckBox.TabIndex = 49;
+            this.categoriesCheckBox.Text = "Organize movies by category";
+            this.categoriesCheckBox.UseVisualStyleBackColor = true;
+            this.categoriesCheckBox.CheckedChanged += new System.EventHandler(this.categoriesCheckBox_CheckedChanged);
             // 
             // GUISettingsPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.categoriesCheckBox);
+            this.Controls.Add(this.groupBox5);
+            this.Controls.Add(this.groupBox9);
+            this.Controls.Add(this.unwatchedCheckBox);
             this.Controls.Add(this.filterMenuButton);
             this.Controls.Add(this.groupBox10);
-            this.Controls.Add(this.label13);
-            this.Controls.Add(this.groupBox9);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.defineCategoriesButton);
             this.Controls.Add(this.passwordTextBox);
-            this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.parentalContolsButton);
             this.Controls.Add(this.parentalControlsCheckBox);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.enableDeleteCheckBox);
             this.Controls.Add(this.sortFieldComboBox);
-            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.watchedComboBox);
-            this.Controls.Add(this.label10);
             this.Controls.Add(this.remoteFilteringHelpLink);
             this.Controls.Add(this.remoteControlCheckBox);
             this.Controls.Add(this.label9);
@@ -593,7 +571,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(460, 100);
             this.Name = "GUISettingsPane";
-            this.Size = new System.Drawing.Size(512, 520);
+            this.Size = new System.Drawing.Size(512, 533);
             this.Load += new System.EventHandler(this.GUISettingsPane_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -632,23 +610,21 @@
         private System.Windows.Forms.Label label9;
         private Cornerstone.GUI.Controls.SettingCheckBox remoteControlCheckBox;
         private System.Windows.Forms.LinkLabel remoteFilteringHelpLink;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.ComboBox watchedComboBox;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private Cornerstone.GUI.Controls.SettingsComboBox sortFieldComboBox;
         private Cornerstone.GUI.Controls.SettingCheckBox enableDeleteCheckBox;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Label label12;
         private Cornerstone.GUI.Controls.SettingCheckBox parentalControlsCheckBox;
         private System.Windows.Forms.Button parentalContolsButton;
-        private System.Windows.Forms.GroupBox groupBox8;
         private Cornerstone.GUI.Controls.SettingsTextBox passwordTextBox;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button defineCategoriesButton;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.Button filterMenuButton;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.Label label11;
+        private Cornerstone.GUI.Controls.SettingsComboBox sortFieldComboBox;
+        private Cornerstone.GUI.Controls.SettingCheckBox unwatchedCheckBox;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private Cornerstone.GUI.Controls.SettingCheckBox categoriesCheckBox;
     }
 }
