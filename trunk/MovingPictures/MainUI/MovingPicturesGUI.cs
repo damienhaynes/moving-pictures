@@ -158,13 +158,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 switch (settings.BackdropType) {
                     case MenuBackdropType.FILE:
-                        logger.Debug("BackdropType: FILE");
                         return settings.BackdropFilePath;
                     case MenuBackdropType.MOVIE:
-                        logger.Debug("BackdropType: MOVIE");
                         return settings.BackdropMovie.BackdropFullPath;
                     case MenuBackdropType.RANDOM:
-                        logger.Debug("BackdropType: RANDOM");
                         lock (backdropSync) {
                             if (!backdropLookup.ContainsKey(selectedNode)) {
                                 DBMovieInfo randomMovie = selectedNode.GetRandomSubItem();
