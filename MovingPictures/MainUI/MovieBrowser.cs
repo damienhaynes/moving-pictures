@@ -450,9 +450,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Core MovieBrowser Methods
 
         // An initial load of all movies in the database.
-        private void loadMovies() {
-            logger.Debug("loadMovies() Started");
-            
+        private void loadMovies() {          
             // clear the list
             allMovies = new List<DBMovieInfo>();
             
@@ -462,8 +460,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 allMovies.Add(currMovie);
 
             onContentsChanged();
-
-            logger.Debug("loadMovies() Ended");
         }
 
         // Sets the initial settings for how movies should be sorted on launch.
@@ -583,8 +579,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (!CategoriesAvailable || SubNodes.Count == 0)
                 return;
 
-            logger.Debug("ReloadCategoriesFacade() Started");
-
             CategoriesFacade.Clear();
             if (CategoriesFacade.ListView != null) CategoriesFacade.ListView.Clear();
 
@@ -615,16 +609,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // set the required index in the facade
             if (_categoriesFacade.SelectedListItemIndex != newIndex)
                 _categoriesFacade.SelectedListItemIndex = newIndex;
-
-            logger.Debug("ReloadCategoriesFacade() Ended");
         }
 
         // populates the facade with the currently filtered list items
         public void ReloadMovieFacade() {
             if (facade == null)
                 return;
-
-            logger.Debug("ReloadMovieFacade() Started");
 
             // clear and populate the facade
             facade.Clear();
@@ -644,8 +634,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // reapply the current selection
             SyncToFacade();
-
-            logger.Debug("ReloadMovieFacade() Ended");
         }
 
         /// <summary>

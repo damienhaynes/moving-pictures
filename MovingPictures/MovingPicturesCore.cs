@@ -177,7 +177,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 try {
                     if (InitializeProgress != null) InitializeProgress(actionDescriptions[currAction], (int)(loadingProgress * 100 / loadingTotal));
                     loadingProgressDescription = actionDescriptions[currAction];
-                    logger.Debug("LOADING: {0}", loadingProgressDescription);
                     currAction();
                 }
                 catch (Exception ex) {
