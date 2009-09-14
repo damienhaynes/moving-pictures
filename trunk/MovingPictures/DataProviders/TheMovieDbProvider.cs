@@ -10,6 +10,7 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
+
     class TheMovieDbProvider: InternalProvider, IMovieProvider {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         
@@ -182,7 +183,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         if (DateTime.TryParse(value, out date))
                             movie.Year = date.Year;      
                         break;
-                    case "imdb":
+                    case "imdb_id":
                         movie.ImdbID = value;
                         break;
                     case "url":
@@ -344,4 +345,5 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
     }
+
 }
