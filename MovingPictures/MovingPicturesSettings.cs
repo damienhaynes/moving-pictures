@@ -1330,6 +1330,22 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         } private DBMenu<DBMovieInfo> _categoriesMenu = null;
 
+        [CornerstoneSetting(
+            Name = "Enable Categories",
+            Description = "Enables the Categories feature in the GUI.",
+            Groups = "|MediaPortal GUI|Filtering|",
+            Identifier = "enable_categories",
+            Default = true,
+            Hidden = true)]
+        public bool CategoriesEnabled {
+            get { return _categoriesEnabled; }
+            set {
+                _categoriesEnabled = value;
+                OnSettingChanged("enable_categories");
+            }
+        }
+        private bool _categoriesEnabled;
+
         #endregion
 
         #endregion
