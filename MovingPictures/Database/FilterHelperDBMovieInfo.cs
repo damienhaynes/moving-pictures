@@ -46,7 +46,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     continue;
 
                 try {
-                    int decade = int.Parse(currSubNode.Filter.Criteria[1].Value.ToString()) / 10;
+                    int decade = (int.Parse(currSubNode.Filter.Criteria[0].Value.ToString()) + 1) / 10;
                     if (!decades.Contains(decade))
                         toRemove.Add(currSubNode);
                     else
