@@ -220,25 +220,30 @@ namespace Cornerstone.Tools {
             if (String.IsNullOrEmpty(data))
                 return null;
 
+            XmlDocument xml = new XmlDocument();
+
             // attempts to convert data into an XmlDocument
             try {
-                XmlDocument xml = new XmlDocument();
                 xml.LoadXml(data);
-                XmlNode xmlRoot = xml.FirstChild.NextSibling;
-
-                // if a root node name is given check for it
-                // return null when the root name doesn't match
-                if (rootNode != null)
-                    if (xmlRoot.Name != rootNode)
-                        return null;
-
-                // return the node list
-                return xmlRoot.ChildNodes;
             }
             catch (XmlException e) {
                 logger.ErrorException("XML Parse error: URL=" + requestUrl, e);
                 return null;
             }
+            
+            // get the document root
+            XmlElement xmlRoot = xml.DocumentElement;
+            if (xmlRoot == null)
+                return null;
+
+            // if a root node name is given check for it
+            // return null when the root name doesn't match
+            if (rootNode != null && xmlRoot.Name != rootNode)
+                return null;
+
+            // return the node list
+            return xmlRoot.ChildNodes;
+
         }
 
         #endregion
