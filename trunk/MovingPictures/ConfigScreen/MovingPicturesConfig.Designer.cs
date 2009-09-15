@@ -94,8 +94,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // movieImporterPane1
             // 
+            this.movieImporterPane1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.movieImporterPane1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.movieImporterPane1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.movieImporterPane1.Location = new System.Drawing.Point(3, 166);
             this.movieImporterPane1.MinimumSize = new System.Drawing.Size(422, 250);
             this.movieImporterPane1.Name = "movieImporterPane1";
