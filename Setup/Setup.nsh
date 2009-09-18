@@ -66,15 +66,20 @@ VIAddVersionKey LegalCopyright ""
 
 # installs main Moving Pictures DLL file.
 Section "Moving Pictures Plugin" SEC0000
-    SetOutPath $PLUGIN_DIR
-    SetOverwrite try
     
     # try to install the DLL
     retry:
-        File ..\MovingPictures\bin\Release\MovingPictures.dll
+ 		# copy all localized translations xml in the correct location
+		SetOverwrite ifnewer
+		SetOutPath $SKIN_DIR\..\language\MovingPictures
+		File "..\MovingPictures\Resources\language\*.xml"
+
+        SetOutPath $PLUGIN_DIR
+        SetOverwrite try
         File ..\MovingPictures\Resources\moving-pictures-release-notes.txt
-    
-        # if the file failed to copy, MediaPortal is probably running
+        File ..\MovingPictures\bin\Release\MovingPictures.dll
+ 		
+        # if the files failed to copy, MediaPortal is probably running
         # prompt to close MediaPortal and retry.
         IfErrors mediaportal_running everything_is_fine
         mediaportal_running:
@@ -141,6 +146,7 @@ Function .onInit
     # grab various fields from registry
     Call getMediaPortalDir
     Call getPreviousInstallInfo
+    
 FunctionEnd
 
 # Checks if the current skin should be updated, and if so,
@@ -383,4 +389,3 @@ Function FileSize
   Pop $1
   Exch $0
 FunctionEnd
-
