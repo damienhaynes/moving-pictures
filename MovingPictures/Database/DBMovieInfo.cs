@@ -211,7 +211,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _popularity;
 
-        [DBField(FieldName="date_added")]
+        [DBField(AllowAutoUpdate = false, FieldName = "date_added")]
         public DateTime DateAdded {
             get { return _dateAdded; }
 
