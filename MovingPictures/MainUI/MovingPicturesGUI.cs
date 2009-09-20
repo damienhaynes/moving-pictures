@@ -959,8 +959,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             // Reload movie facade with selection reset
+            browser.ReloadMovieFacade();
             browser.SelectedMovie = null;
-            browser.ReloadMovieFacade();            
 
             SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
             SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
