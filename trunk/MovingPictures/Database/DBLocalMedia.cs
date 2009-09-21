@@ -154,13 +154,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (fileInfo == null)
                     return true;
 
+                // make sure the file info is refreshed
                 fileInfo.Refresh();
 
-                // if we have a volume serial then check if the right media is inserted
-                // by verifying the volume serial number
                 bool correctMedia = true;
-                if (VolumeSerial.Length > 0)
+                // if this not an UNC path we should check the volume serial
+                // to check wether this is the correct media
+                if (!importPath.IsUnc && VolumeSerial.Trim().Length > 0) {
                     correctMedia = (DeviceManager.GetVolumeSerial(fileInfo.DirectoryName) == VolumeSerial);
+                }
 
                 // if the import path is online, we have the right media inserted and the file 
                 // is not there, we assume it has been deleted, so return true
