@@ -646,7 +646,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // save the artwork
             bool saved = false;
             try {
-                currImage.Save(filename, ImageFormat.Png);
+                currImage.Save(filename, ImageFormat.Jpeg);
                 AlternateCovers.Add(filename);
                 GenerateThumbnail();
                 commitNeeded = true;
@@ -887,7 +887,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return;
             }
 
-            Image cover = Image.FromFile(CoverFullPath);
+            Image cover = null;
+            try {
+                cover = Image.FromFile(CoverFullPath);
+            }
+            catch (OutOfMemoryException e) {
+                logger.DebugException("Invalid image or image format not supported.", e);
+            }
+            catch (FileNotFoundException e) {
+                logger.DebugException("File not found.", e);
+            }
+
+            if (cover == null) {
+                logger.Error("Error while trying to create thumbnail.");
+                return;
+            }
 
             int width = 175;
             int height = (int)(cover.Height * ((float)width / (float)cover.Width));
