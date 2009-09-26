@@ -422,7 +422,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 parentalControlsFilter = MovingPicturesCore.Settings.ParentalControlsFilter;
                 parentalControlsFilter.Active = MovingPicturesCore.Settings.ParentalControlsEnabled;
-                parentalControlsFilter.Invert = true;
                 browser.Filters.Add(parentalControlsFilter);
 
                 // give the browser a delegate to the method to clear focus from all existing controls
