@@ -358,7 +358,7 @@
             this.parentalContolsButton.Name = "parentalContolsButton";
             this.parentalContolsButton.Size = new System.Drawing.Size(144, 23);
             this.parentalContolsButton.TabIndex = 43;
-            this.parentalContolsButton.Text = "Define Restricted Movies";
+            this.parentalContolsButton.Text = "Define Unrestricted Movies";
             this.parentalContolsButton.UseVisualStyleBackColor = true;
             this.parentalContolsButton.Click += new System.EventHandler(this.parentalControlsButton_Click);
             // 
