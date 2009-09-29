@@ -358,6 +358,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="fsInfo"></param>
         /// <returns></returns>
         public static bool IsRemovable(FileSystemInfo fsInfo) {
+            // UNC is always removable
+            if (PathIsUnc(fsInfo.FullName))
+                return true;
+
             if (fsInfo.Exists) {
                 try {
                     if ((fsInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
@@ -377,6 +381,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         /// <returns></returns>
         public static bool IsRemovable(string path) {
+            
+            // UNC is always removable
+            if (PathIsUnc(path))
+                return true;
+
             DriveInfo driveInfo = GetDriveInfo(path);
             if (driveInfo != null)
                 return driveInfo.IsRemovable();

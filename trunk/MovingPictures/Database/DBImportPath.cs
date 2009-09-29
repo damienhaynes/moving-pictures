@@ -38,6 +38,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (!DeviceManager.IsAvailable(dirInfo))
                     return false;
 
+                // the path is available and if it's UNC then we can skip the reparse check
+                if (this.IsUnc)
+                    return true;
+
                 // we can get to the root folder, if this is a reparse point make sure the 
                 // contents are currently accessible 
                 try {
