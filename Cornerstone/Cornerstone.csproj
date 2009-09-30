@@ -4,6 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{14201B8D-31C3-4FB5-9356-9485676C147B}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -29,6 +30,22 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -71,6 +88,7 @@
     <Compile Include="Database\IDynamicFilterHelper.cs" />
     <Compile Include="Database\Tables\IFilter.cs" />
     <Compile Include="Database\Tables\GenericDatabaseTable.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="GUI\AdvancedSettingsPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -254,9 +272,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\FilterEditorPopup.resx">
       <DependentUpon>FilterEditorPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Filtering\AddNodePopup.resx">
       <DependentUpon>AddNodePopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Filtering\CategorySettingsPanel.resx">
       <DependentUpon>CategorySettingsPanel.cs</DependentUpon>
@@ -276,12 +296,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ItemSelectionPopup.resx">
       <DependentUpon>ItemSelectionPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Filtering\GenericMenuTreePanel.resx">
       <DependentUpon>GenericMenuTreePanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Filtering\GenericNodeSettingsPanel.resx">
       <DependentUpon>GenericNodeSettingsPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -301,7 +324,7 @@
     <Content Include="Images\list-remove.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
+    <ProjectReference Include="..\..\..\..\MediaPortal\Source\Stable\Databases\Databases.csproj">
       <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
       <Name>Databases</Name>
     </ProjectReference>

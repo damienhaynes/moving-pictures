@@ -125,5 +125,24 @@
   <string Field="RemoteNumericAlphabet7">pqrs</string>
   <string Field="RemoteNumericAlphabet8">tuv</string>
   <string Field="RemoteNumericAlphabet9">wxyz</string>
+  
+  <!-- Year -->
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="Unknown">Unknown</string>
+
+  <!-- Date Added -->
+  
+  <string Field="DateDay">day</string>
+  <string Field="DateDays">days</string>
+  <string Field="DateWeek">week</string>
+  <string Field="DateWeeks">weeks</string>
+  <string Field="DateMonth">month</string>
+  <string Field="DateMonths">months</string>
+  <string Field="DateYear">year</string>
+  <string Field="DateYears">years</string>
+  <string Field="DatePartThis">This {0}</string>
+  <string Field="DatePartLast">Last {0}</string>
+  <string Field="DatePartWithin">Last {0} {1}</string>
+  <string Field="DatePartAgo">{0} {1} ago</string>
 
 </strings>
