@@ -492,6 +492,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             int sentToImporter = 0;
 
             foreach (DBMovieInfo currItem in processingMovies) {
+                count++;
+                logger.Info("Refreshing movie #{0}: {1}", count, currItem.ToString());
+                
                 // if the user specified a specific source, try to update, and if failed
                 // send to the importer
                 if (selectedSource != null) {
@@ -515,13 +518,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     currItem.ProtectExistingValuesFromCopy(false); 
                     MovingPicturesCore.DataProviderManager.Update(currItem);
                 }
-
-                count++;
+                
                 if (progress != null)
                     progress("", (int)(count*100/total));
 
                 // delay a little so we dont hammer the webserver.
-                logger.Info("refreshing movie #" + count);
                 Thread.Sleep(200);
                 if (count % 5 == 0)
                     Thread.Sleep(1000);

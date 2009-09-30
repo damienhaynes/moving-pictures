@@ -1633,9 +1633,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             int minutes = ((totalSeconds / 60) % 60);
             int seconds = (totalSeconds % 60);
             
-            // logging to true for debug purposes
-            forceLogging = true;
-
             // publish the value indicating wether this is the actual runtime
             SetProperty(labelPrefix + "actual", actualRuntime.ToString(), forceLogging);
 
