@@ -389,7 +389,7 @@ namespace Cornerstone.Database.Tables {
                 // --- Weeks
                 case "w": 
                 case "W":
-                    if (part == "m" && diff == 0 || part == "M") // start of (this/diff) week (by week number)
+                    if (part == "w" && diff == 0 || part == "W") // start of (this/diff) week (by week number)
                         return newDate.GetStartOfWeek().AddDays(diff * 7);
                     else // within a week span (ago) (7 days)
                         return newDate.AddDays(diff * 7);                        
