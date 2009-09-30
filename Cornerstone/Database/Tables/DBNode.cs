@@ -135,6 +135,15 @@ namespace Cornerstone.Database.Tables {
             }
         } private DatabaseTable _additionalSettings;
 
+        [DBField]
+        public int SortOrder {
+            get { return _sortOrder; }
+            set {
+                _sortOrder = value;
+                commitNeeded = true;
+            }
+        } private int _sortOrder;
+
         #endregion
 
         public void OnModified() {
@@ -325,6 +334,15 @@ namespace Cornerstone.Database.Tables {
         public override string ToString() {
             return "DBNode: " + Name + " (" + ID + ")";
         }
+
+        public override int CompareTo(object obj) {
+            int rt = this.SortOrder.CompareTo(((DBNode<T>)obj).SortOrder);
+            if (rt == 0)
+                return this.ToString().CompareTo(obj.ToString());
+            else
+                return rt;
+        }
+
     }
 
     public interface IDBNode { }
