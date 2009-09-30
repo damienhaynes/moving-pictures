@@ -21,7 +21,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private MenuBackdropType _backdropType = MenuBackdropType.RANDOM;
 
-        [DBField]
+        [DBField (Default=null)]
         public DBMovieInfo BackdropMovie {
             get { return _backdropMovie; }
             set {
