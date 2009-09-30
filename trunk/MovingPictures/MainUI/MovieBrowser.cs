@@ -167,6 +167,19 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public DBNode<DBMovieInfo> CurrentNode {
             set {
+                // set correct sort for this node
+                if (value != null) {
+                    DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)value.AdditionalSettings;
+                    if (!nodeSettings.UseDefaultSorting) {
+                        CurrentSortField = nodeSettings.SortField;
+                        CurrentSortDirection = nodeSettings.SortDirection;
+                    }
+                    else {
+                        CurrentSortField = DefaultSortField;
+                        CurrentSortDirection = Sort.GetLastSortDirection(DefaultSortField);
+                    }
+                }
+
                 // remove previous node filter
                 if (_currentNode != null && _currentNode.Filter != null)
                     Filters.Remove(_currentNode.Filter);
@@ -275,6 +288,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         } private DBNode<DBMovieInfo> _filterNode;
 
+        public SortingFields DefaultSortField { get; set; }
         public SortingFields CurrentSortField { get; set; }
         public SortingDirections CurrentSortDirection { get; set; }
 
@@ -468,13 +482,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             string defaultSortField = MovingPicturesCore.Settings.DefaultSortField.Trim();
 
             try {
-                CurrentSortField = (SortingFields)Enum.Parse(typeof(SortingFields), defaultSortField, true);
+                DefaultSortField = (SortingFields)Enum.Parse(typeof(SortingFields), defaultSortField, true);
             }
             catch {
                 logger.Error("Invalid Sort Field provided: {0}.  Defaulting to Title", defaultSortField);
-                CurrentSortField = SortingFields.Title;
+                DefaultSortField = SortingFields.Title;
             }
 
+            CurrentSortField = DefaultSortField;
             CurrentSortDirection = Sort.GetLastSortDirection(CurrentSortField);
         }
 

@@ -7,6 +7,7 @@ using System.Reflection;
 using System.IO;
 using NLog;
 using System.Threading;
+using System.Globalization;
 using MediaPortal.GUI.Library;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
@@ -140,17 +141,45 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string RemoteNumericAlphabet8 = "tuv";
         public static string RemoteNumericAlphabet9 = "wxyz";
 
+        // Year
+        public static string DecadeShort = "{0}0s";
+        public static string Unknown = "Unknown";
+
+        // Date added
+        public static string DateDay = "day";
+        public static string DateDays = "days";
+        public static string DateWeek = "week";
+        public static string DateWeeks = "weeks";
+        public static string DateMonth = "month";
+        public static string DateMonths = "months";
+        public static string DateYear = "year";
+        public static string DateYears = "years";
+        public static string DatePartThis = "This {0}";
+        public static string DatePartLast = "Last {0}";
+        public static string DatePartWithin = "Last {0} {1}";
+        public static string DatePartAgo = "{0} {1} ago";
+
         #endregion
 
         private static string path = string.Empty;
         
 
         static Translation() {
-            string lang = GUILocalizeStrings.GetCultureName(GUILocalizeStrings.CurrentLanguage());
+            string lang;
+            
+            try {
+                lang = GUILocalizeStrings.GetCultureName(GUILocalizeStrings.CurrentLanguage());
+            }
+            catch (ArgumentException) {
+                // when running MovingPicturesConfigTester outside of the MediaPortal directory this happens unfortunately
+                // so we grab the active culture name from the system
+                lang = CultureInfo.CurrentUICulture.Name;
+            }
+
             logger.Info("Using language " + lang);
-
+            
             path = Config.GetSubFolder(Config.Dir.Language, "MovingPictures");
-
+            
             if (!System.IO.Directory.Exists(path))
                 System.IO.Directory.CreateDirectory(path);
 
@@ -203,6 +232,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             Type TransType = typeof(Translation);
             FieldInfo fi = TransType.GetField(name, BindingFlags.Public | BindingFlags.Static);
             return fi.GetValue(TransType).ToString();
+        }
+
+        public static string GetByName(string name, params object[] args) {
+            return String.Format(GetByName(name), args);
         }
     }
 

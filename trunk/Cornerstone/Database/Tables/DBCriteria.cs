@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using Cornerstone.Database.CustomTypes;
+using Cornerstone.Extensions;
 
 namespace Cornerstone.Database.Tables {
     [DBTableAttribute("criteria")]
@@ -91,6 +92,10 @@ namespace Cornerstone.Database.Tables {
                         if (value.ToString().ToLower().Equals(Value.ToString().ToLower()))
                             return true;
                     }
+                    else if (Field.Type == typeof(DateTime)) {
+                        if (((DateTime)value).Date.Equals(DoDateTimeConversion(Value)))
+                            return true;
+                    }
                     else {
                         if (value.Equals(Value))
                             return true;
@@ -104,6 +109,10 @@ namespace Cornerstone.Database.Tables {
                     }
                     else if (Field.Type == typeof(string)) {
                         if (!value.ToString().ToLower().Equals(Value.ToString().ToLower()))
+                            return true;
+                    }
+                    else if (Field.Type == typeof(DateTime)) {
+                        if (!((DateTime)value).Date.Equals(DoDateTimeConversion(Value)))
                             return true;
                     }
                     else {
@@ -131,6 +140,10 @@ namespace Cornerstone.Database.Tables {
                         if ((float)value > (float)Value)
                             return true;
                     }
+                    else if (Field.Type == typeof(DateTime)) {
+                        if (((DateTime)value).Date > DoDateTimeConversion(Value))
+                            return true;
+                    }
                     break;
 
                 case OperatorEnum.LESS_THAN:
@@ -142,8 +155,11 @@ namespace Cornerstone.Database.Tables {
                         if ((float)value < (float)Value)
                             return true;
                     }
+                    else if (Field.Type == typeof(DateTime)) {
+                        if (((DateTime)value).Date < DoDateTimeConversion(Value))
+                            return true;
+                    }
                     break;
-
                 case OperatorEnum.BEGINS_WITH:
                     if (Field.Type == typeof(StringList)) {
                         foreach (string currStr in (StringList)value) {
@@ -261,6 +277,13 @@ namespace Cornerstone.Database.Tables {
                     _value = value;
                 else if (Field.Type == typeof(StringList))
                     _value = value.ToString();
+                else if (Field.Type == typeof(DateTime)) {
+                    DateTime newValue = DateTime.Now;
+                    if (DateTime.TryParse((string)value, out newValue))
+                        _value = newValue;
+                    else
+                        _value = value.ToString();
+                }
                 else if (value is string)
                     _value = Field.ConvertString(this.DBManager, (string)value);
                 else
@@ -332,6 +355,64 @@ namespace Cornerstone.Database.Tables {
 
             return rtn;
         }
+
+        /// <summary>
+        /// Returns a calculated date value
+        /// </summary>
+        /// <param name="date">actual date or relative format string</param>
+        /// <returns>parsed date as given or calculated relative date</returns>
+        private DateTime DoDateTimeConversion(object date) {
+            DateTime newDate = DateTime.MinValue;
+            string part = null;
+            int diff = 0;
+
+            string value = date.ToString();            
+            
+            // try to parse a date from the given object
+            if (!DateTime.TryParse(date.ToString(), out newDate)) {
+                // if parsing fails we have a relative string format
+                newDate = DateTime.Today;
+                int length = value.Length-1;
+                part = value[length].ToString();
+                
+                if (length > 0) {
+                    int.TryParse(value.Substring(0, length), out diff);
+                }
+            }
+            
+            // based on the given datepart in the relative string we get our calculated date
+            // if no part is given we just return the newDate value
+            switch (part) {
+                // --- Days
+                case "d": // within day (ago) or today
+                    return newDate.AddDays(diff);
+                // --- Weeks
+                case "w": 
+                case "W":
+                    if (part == "m" && diff == 0 || part == "M") // start of (this/diff) week (by week number)
+                        return newDate.GetStartOfWeek().AddDays(diff * 7);
+                    else // within a week span (ago) (7 days)
+                        return newDate.AddDays(diff * 7);                        
+                // --- Months
+                case "m": 
+                case "M": 
+                    if (part == "m" && diff == 0 || part == "M") // start of (this/diff) month
+                        return newDate.GetStartOfMonth().AddMonths(diff);
+                    else // within a month span (ago)
+                        return newDate.AddMonths(diff);
+                // --- Years
+                case "y":
+                case "Y": 
+                    if (part == "y" && diff == 0 || part == "Y") // start of (this/diff) month
+                        return newDate.GetStartOfYear().AddYears(diff);
+                    else // within a year span (ago)
+                        return newDate.AddYears(diff);                    
+                // --- Today or parsed date value
+                default:
+                    return newDate;
+            }
+        }
+
     }
 
 
