@@ -302,12 +302,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns>True if file is a sample file</returns>
         public static bool isSampleFile(FileInfo file) {
             try {
-                // Set sample max size in bytes
-                long sampleMaxSize = MovingPicturesCore.Settings.MaxSampleFilesize * 1024 * 1024;
                 // Create the sample filter regular expression
                 Regex expr = new Regex(MovingPicturesCore.Settings.SampleRegExFilter, RegexOptions.IgnoreCase);
-                // Return result of given conditions         
-                return ((file.Length < sampleMaxSize) && expr.Match(file.Name).Success);
+                // Set sample max size in bytes and check the file size
+                long sampleMaxSize = MovingPicturesCore.Settings.MaxSampleFilesize * 1024 * 1024;
+                bool match = (file.Length < sampleMaxSize);
+                if (match) {
+                    // check the filename
+                    match = expr.Match(file.Name).Success;
+                    if (!match && MovingPicturesCore.Settings.SampleIncludeFolderName) {
+                        // check the folder name if specified
+                        match = expr.Match(file.DirectoryName).Success;
+                    }
+                }
+                // Return result of given conditions     
+                return match;
             }
             catch (Exception e) {
                 if (e is ThreadAbortException)
