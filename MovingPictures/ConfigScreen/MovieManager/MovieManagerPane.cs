@@ -29,6 +29,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private List<DBMovieInfo> processingMovies;
         private DBSourceInfo selectedSource;
         private bool translate;
+        private readonly object lockList = new object();
         
         private delegate void InvokeDelegate();
         private delegate DBMovieInfo DBMovieInfoDelegate();
@@ -51,12 +52,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         public void Commit() {
             try {
-                foreach (DBMovieInfo currMovie in listItems.Keys) {
-                    currMovie.Commit();
-                    foreach (DBLocalMedia currFile in currMovie.LocalMedia)
-                        currFile.Commit();
-                    foreach (DBUserMovieSettings currSetting in currMovie.UserSettings)
-                        currSetting.Commit();
+                lock (lockList) {
+                    foreach (DBMovieInfo currMovie in listItems.Keys) {
+                        currMovie.Commit();
+                        foreach (DBLocalMedia currFile in currMovie.LocalMedia)
+                            currFile.Commit();
+                        foreach (DBUserMovieSettings currSetting in currMovie.UserSettings)
+                            currSetting.Commit();
+                    }
                 }
             }
             catch (Exception e) {
@@ -146,7 +149,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             
             // add to list
             movieListBox.Items.Add(newItem);
-            listItems[movie] = newItem;
+            lock (lockList) {
+                listItems[movie] = newItem;
+            }
         }
 
         private void movieDeletedListener(DatabaseTable obj) {
@@ -165,13 +170,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             // remove movie from list
             DBMovieInfo movie = (DBMovieInfo)obj;
-            if (listItems.ContainsKey(movie)) {
-                listItems[movie].Selected = false;
-                updateMoviePanel();
-                updateFilePanel();
+            lock (lockList) {
+                if (listItems.ContainsKey(movie)) {
+                    listItems[movie].Selected = false;
+                    updateMoviePanel();
+                    updateFilePanel();
 
-                movieListBox.Items.Remove(listItems[movie]);
-                listItems.Remove(movie);
+                    movieListBox.Items.Remove(listItems[movie]);
+                    listItems.Remove(movie);
+                }
             }
             
         }
@@ -203,9 +210,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     break;
                 }
             }
-
-            if (reassigning)
-                listItems[(DBMovieInfo)obj].Selected = true;
+            lock (lockList) {
+                if (reassigning)
+                    listItems[(DBMovieInfo)obj].Selected = true;
+            }
 
         }
 
@@ -620,8 +628,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             if (result == System.Windows.Forms.DialogResult.OK) {
                 processingMovies = new List<DBMovieInfo>();
-                foreach (DBMovieInfo currItem in listItems.Keys)
-                    processingMovies.Add(currItem);
+
+                lock (lockList) {
+                    foreach (DBMovieInfo currItem in listItems.Keys)
+                        processingMovies.Add(currItem);
+                }
 
                 ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(refreshMovies));
                 popup.Owner = this.ParentForm;
@@ -782,8 +793,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void updateTitleSortingMenuItem_Click(object sender, EventArgs e) {
-            foreach (DBMovieInfo currItem in listItems.Keys)
-                currItem.PopulateSortBy();
+            lock (lockList) {
+                foreach (DBMovieInfo currItem in listItems.Keys)
+                    currItem.PopulateSortBy();
+            }
 
             updateMoviePanel();
             MessageBox.Show("Title sorting values (the \"Sort By\" field) has been updated.");
