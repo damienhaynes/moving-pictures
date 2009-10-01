@@ -332,7 +332,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Regular Expression Filter",
-            Description = "a regular expression that matches keywords in the filename indicating that the file is possible sample.",
+            Description = "a regular expression that matches keywords in the filename or it's parent folder indicating that the file is possible sample.",
             Groups = "|Movie Importer|Sample Filter|",
             Identifier = "importer_sample_keyword",
             Default = "sample")]
@@ -345,6 +345,20 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _sampleRegExFilter;
 
+        [CornerstoneSetting(
+            Name = "Include Parent Foldername When Matching",
+            Description = "Include the parent foldername when checking for sample keywords.",
+            Groups = "|Movie Importer|Sample Filter|",
+            Identifier = "importer_sample_include_foldername",
+            Default = false)]
+        public bool SampleIncludeFolderName {
+            get { return _sampleIncludeFolderName; }
+            set {
+                _sampleIncludeFolderName = value;
+                OnSettingChanged("importer_sample_include_foldername");
+            }
+        }
+        private bool _sampleIncludeFolderName;
 
         [CornerstoneSetting(
             Name = "Max Filesize (MB)",
