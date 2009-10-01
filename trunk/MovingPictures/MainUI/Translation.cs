@@ -170,7 +170,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             try {
                 lang = GUILocalizeStrings.GetCultureName(GUILocalizeStrings.CurrentLanguage());
             }
-            catch (ArgumentException) {
+            catch (Exception) {
                 // when running MovingPicturesConfigTester outside of the MediaPortal directory this happens unfortunately
                 // so we grab the active culture name from the system
                 lang = CultureInfo.CurrentUICulture.Name;
