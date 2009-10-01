@@ -43,7 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="self"></param>
         /// <returns></returns>
         public static bool Exists(this DriveInfo self) {
-            return (self.DriveType == DriveType.NoRootDirectory);
+            return (self.DriveType != DriveType.NoRootDirectory);
         }
 
         /// <summary>
