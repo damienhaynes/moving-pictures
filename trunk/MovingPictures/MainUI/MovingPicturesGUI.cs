@@ -708,6 +708,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // When we are finished initializing
             if (percentDone == 100) {
 
+                if (initDialog != null) {
+                    initDialog.SetLine(2, "Loading GUI...");
+                }
+
                 // Start the background importer
                 if (MovingPicturesCore.Settings.EnableImporterInGUI) {
                     MovingPicturesCore.Importer.Start();
@@ -750,6 +754,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 logger.Debug("Listening for device changes.");
                 DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
                 DeviceManager.OnVolumeRemoved += new DeviceManager.DeviceManagerEvent(OnVolumeRemoved);
+
+                // Preload categories menu if needed
+                if (MovingPicturesCore.Settings.CategoriesEnabled) {
+                    DBMenu<DBMovieInfo> menu = MovingPicturesCore.Settings.CategoriesMenu;
+                    // getting the count now will reduce initial loading time when the user first starts the plugin
+                    int i = menu.RootNodes.Count;
+                }
 
                 // Flag that the GUI is initialized
                 initComplete = true;
