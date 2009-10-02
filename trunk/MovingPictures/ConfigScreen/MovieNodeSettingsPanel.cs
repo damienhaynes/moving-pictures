@@ -86,7 +86,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // set enabled status for sub controls
             setSubControlAccessibility();
 
-            // add all sorting options to combo
+            // clear and add all sorting options to combo
+            sortFieldCombo.Items.Clear();
             Dictionary<Enum, FormatedComboBoxItem> comboItems = new Dictionary<Enum, FormatedComboBoxItem>();
             foreach (Enum currValue in Enum.GetValues(typeof(SortingFields))) {
                 FormatedComboBoxItem newItem = new FormatedComboBoxItem();
