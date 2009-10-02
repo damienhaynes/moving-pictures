@@ -182,6 +182,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 updatingFiltering = true;
 
+                // if required reset the selectedMovie
+                if (MovingPicturesCore.Settings.ResetSelectedMovieWhenSwitchingCategories) {
+                    selectedMovie = null;
+                }
+
                 // remove previous node filter
                 if (_currentNode != null && _currentNode.Filter != null)
                     Filters.Remove(_currentNode.Filter);
