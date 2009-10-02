@@ -992,7 +992,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Display the actual runtime of a movie",
-            Description = "If enabled this setting will display the actual runtime of the movie instead of the runtime imported from the data provider. If there's no actual runtime in formation available it will default to the importered runtime.",
+            Description = "If enabled this setting will display the actual runtime of the movie instead of the runtime imported from the data provider. If there's no actual runtime information available it will default to the imported runtime.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "gui_display_actual_runtime",
             Default = true)]
@@ -1005,6 +1005,20 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _displayActualRuntime;
 
+        [CornerstoneSetting(
+            Name = "Reset the selected movie when switching categories",
+            Description = "If enabled this setting will reset the selected movie when you switch between categories.",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "gui_category_reset_selection",
+            Default = true)]
+        public bool ResetSelectedMovieWhenSwitchingCategories {
+            get { return _resetSelectedMovieWhenSwitchingCategories; }
+            set {
+                _resetSelectedMovieWhenSwitchingCategories = value;
+                OnSettingChanged("gui_category_reset_selection");
+            }
+        }
+        private bool _resetSelectedMovieWhenSwitchingCategories;
 
         #endregion
 
