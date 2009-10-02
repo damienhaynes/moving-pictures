@@ -829,20 +829,24 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             GUIListItem filterItem = new GUIListItem(Translation.FilterBy + " ...");
-            filterItem.ItemId = currID++;
-            dialog.Add(filterItem);
-
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
-            sortItem.ItemId = currID++;
-            dialog.Add(sortItem);
-
             GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
-            viewItem.ItemId = currID++;
-            dialog.Add(viewItem);
-
             GUIListItem movieOptionsItem = new GUIListItem(Translation.MovieOptions + " ...");
-            movieOptionsItem.ItemId = currID++;
-            dialog.Add(movieOptionsItem);
+
+            // show these options only when we are not in the categories view
+            if (browser.CurrentView != BrowserViewMode.CATEGORIES) {
+                filterItem.ItemId = currID++;
+                dialog.Add(filterItem);
+
+                sortItem.ItemId = currID++;
+                dialog.Add(sortItem);
+
+                viewItem.ItemId = currID++;
+                dialog.Add(viewItem);
+
+                movieOptionsItem.ItemId = currID++;
+                dialog.Add(movieOptionsItem);
+            }
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             if (dialog.SelectedId == watchItem.ItemId) {
