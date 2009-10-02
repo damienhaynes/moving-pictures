@@ -180,6 +180,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                 }
 
+                updatingFiltering = true;
+
                 // remove previous node filter
                 if (_currentNode != null && _currentNode.Filter != null)
                     Filters.Remove(_currentNode.Filter);
@@ -187,6 +189,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // add current node filter
                 if (value != null && value.Filter != null) 
                     Filters.Add(value.Filter);
+
+                updatingFiltering = false;
+                ReapplyFilters();
 
                 // if we are moving to the parent category set the current node
                 // as the selected node before we reload the facade
@@ -722,11 +727,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 logger.Debug("SyncFromFacade() SelectedIndex={0}", selectedIndex);
             } 
             
-            // check if the selected movie has changed also
+            // update the selected movie object 
             DBMovieInfo selectedMovieInFacade = facade.SelectedListItem.TVTag as DBMovieInfo;
-            if (selectedMovie != selectedMovieInFacade)
-                // if so, update the selected movie object 
-                SelectedMovie = selectedMovieInFacade;
+            SelectedMovie = facade.SelectedListItem.TVTag as DBMovieInfo;               
         }
 
         // triggered when a movie was selected on the facade
