@@ -37,6 +37,9 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                 //OnProgress(count / total);
                 count++;
 
+                if (currMovie.ID == null)
+                    continue;
+
                 // get the list of elements to remove
                 List<string> toRemove = new List<string>();
                 foreach (string currCoverPath in currMovie.AlternateCovers) {
@@ -74,12 +77,24 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
                     if (currMovie.CoverFullPath.Trim().Length == 0) {
                         MovingPicturesCore.DataProviderManager.GetArtwork(currMovie);
+                        
+                        // because this operation can take some time we check again
+                        // if the movie was not deleted while we were getting artwork
+                        if (currMovie.ID == null)
+                            continue;
+                        
                         currMovie.Commit();
                     }
 
                     if (currMovie.BackdropFullPath.Trim().Length == 0) {
                         new LocalProvider().GetBackdrop(currMovie);
                         MovingPicturesCore.DataProviderManager.GetBackdrop(currMovie);
+                        
+                        // because this operation can take some time we check again
+                        // if the movie was not deleted while we were getting the backdrop
+                        if (currMovie.ID == null)
+                            continue;
+                        
                         currMovie.Commit();
                     }
                 }
