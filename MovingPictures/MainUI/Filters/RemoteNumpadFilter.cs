@@ -45,31 +45,37 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
         public HashSet<DBMovieInfo> Filter(ICollection<DBMovieInfo> input) {
             HashSet<DBMovieInfo> results = new HashSet<DBMovieInfo>();
 
-            // if we are not active, just return the inputs.
-            if (!Active) {
-                if (input is HashSet<DBMovieInfo>)
-                    return (HashSet<DBMovieInfo>)input;
-
-                foreach (DBMovieInfo currItem in input)
-                    results.Add(currItem);
-
-                return results;
-            }
-
-            // If the listFilterString contains characters
-            // filter the list using the current filter string
-
-            logger.Debug("List Filter Active: '{0}'", _listFilterString);
-
             // Filter the list with the specified critera
-            foreach (DBMovieInfo currMovie in input) {
-                if (_listFilterAction == FilterAction.StartsWith) {
-                    if (currMovie.SortBy.ToLower().StartsWith(_listFilterString))
-                        results.Add(currMovie);
+            while (results.Count == 0) {
+
+                // if we are not active, just return the inputs.
+                if (!Active) {
+                    if (input is HashSet<DBMovieInfo>)
+                        return (HashSet<DBMovieInfo>)input;
+
+                    foreach (DBMovieInfo currItem in input)
+                        results.Add(currItem);
+
+                    break;
+                }           
+
+                foreach (DBMovieInfo currMovie in input) {
+                    if (_listFilterAction == FilterAction.StartsWith) {
+                        if (currMovie.SortBy.ToLower().StartsWith(_listFilterString))
+                            results.Add(currMovie);
+                    }
+                    else {
+                        if (NumPadEncode(currMovie.Title).Contains(_listFilterString))
+                            results.Add(currMovie);
+                    }
                 }
-                else {
-                    if (NumPadEncode(currMovie.Title).Contains(_listFilterString))
-                        results.Add(currMovie);
+
+                // if the filter gives no result revert to the previous one so the user 
+                // doesn't end up with an empty list
+                if (results.Count == 0) {
+                    if (_listFilterString.Length > 0) {
+                        _listFilterString = _listFilterString.Substring(0, _listFilterString.Length - 1);
+                    }
                 }
             }
 
