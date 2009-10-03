@@ -157,6 +157,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             foreach (DBImportPath currPath in DBImportPath.GetAll()) {
                 if (currPath.Directory == null)
                     currPath.Delete();
+
+                if (currPath.InternallyManaged && currPath.GetDriveType() == DriveType.NoRootDirectory) {
+                    currPath.Delete();
+                    logger.Info("Removed system managed import path: {0} (drive does not exist)", currPath.FullPath);
+                }
+
             }
 
             float count = 0;
