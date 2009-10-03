@@ -623,7 +623,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED:
                     // if remote filtering is active, try to route the keypress through the filter
                     bool remoteFilterEnabled = MovingPicturesCore.Settings.UseRemoteControlFiltering;
-                    if (remoteFilterEnabled && browser.CurrentView != BrowserViewMode.DETAILS) {
+                    if (remoteFilterEnabled && browser.CurrentView != BrowserViewMode.DETAILS && browser.CurrentView != BrowserViewMode.CATEGORIES) {
                         // try to update the filter
                         bool changedFilter = false;
                         if (action.m_key != null)
@@ -1236,14 +1236,38 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // From online, updates the details of the currently selected movie.
         private void updateDetails() {
             bool bConfirm = ShowCustomYesNo(Translation.UpdateMovieDetailsHeader, Translation.UpdateMovieDetailsBody, null, null, false);
-
             if (bConfirm && browser.SelectedMovie != null) {
-                MovingPicturesCore.DataProviderManager.Update(browser.SelectedMovie);
-                browser.SelectedMovie.Commit();
-                foreach (DBLocalMedia lm in browser.SelectedMovie.LocalMedia) {
-                    lm.UpdateMediaInfo();
-                    lm.Commit();
-                }
+                MovieUpdater updater = new MovieUpdater(updateMovieDetails);
+                updater.BeginInvoke(browser.SelectedMovie, new AsyncCallback(movieDetailsUpdated), updater);
+            }
+        }
+
+        delegate void MovieUpdater(DBMovieInfo movie);
+
+        private void updateMovieDetails(DBMovieInfo movie) {
+            
+            // indicate that we are doing some work here
+            setWorkingAnimationStatus(true);
+            
+            MovingPicturesCore.DataProviderManager.Update(movie);
+            movie.Commit();
+            foreach (DBLocalMedia lm in movie.LocalMedia) {
+                lm.UpdateMediaInfo();
+                lm.Commit();
+            }
+
+            // indicate we are done
+            setWorkingAnimationStatus(false);
+        }
+
+        private void movieDetailsUpdated(IAsyncResult result) {
+            MovieUpdater updater = (MovieUpdater)result.AsyncState;
+
+            // End the operation
+            updater.EndInvoke(result);
+
+            // Reload the facade and movie details only when we are still in that view
+            if (browser.CurrentView != BrowserViewMode.CATEGORIES) {
 
                 // Reload the facade to enforce changes in sorting and publishing
                 browser.ReloadMovieFacade();
