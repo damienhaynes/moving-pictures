@@ -295,7 +295,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         [CornerstoneSetting(
-            Name = "Enable OSDb Hash Lookup",
+            Name = "Enable TheMovieDb.org Hash Lookup",
             Description = "Enables pre-search lookup for title, year and imdbid by using the hash/movie match.",
             Groups = "|Movie Importer|Preprocessing|",
             Identifier = "importer_lookup_hash",
@@ -308,23 +308,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private bool _enableHashLookup;
-
-
-        [CornerstoneSetting(
-            Name = "OSDb Hash Confirmed Limit",
-            Description = "Only accepts the matched movie if it's confirmed X times or more. This is to prevent false positives.",
-            Groups = "|Movie Importer|Preprocessing|",
-            Identifier = "importer_lookup_hash_seencount",
-            Default = 2)]
-        public int HashConfirmedLimit {
-            get { return _hashConfirmedLimit; }
-            set {
-                _hashConfirmedLimit = value;
-                OnSettingChanged("importer_lookup_hash_seencount");
-            }
-        }
-        private int _hashConfirmedLimit;
-
 
         #endregion
 
