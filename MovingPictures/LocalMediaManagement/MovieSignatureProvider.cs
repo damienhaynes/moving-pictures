@@ -16,7 +16,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
           lock (loadingLock) {
               if (signatureBuilders == null) {
                   signatureBuilders = new List<ISignatureBuilder>();
-                  // signatureBuilders.Add(new HashBuilder());
+                  signatureBuilders.Add(new HashBuilder());
                   signatureBuilders.Add(new LocalBuilder());
                   signatureBuilders.Add(new BlurayMetaBuilder());
                   signatureBuilders.Add(new MetaServicesBuilder());

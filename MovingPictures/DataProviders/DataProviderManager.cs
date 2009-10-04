@@ -348,9 +348,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Script_FilmAffinity);
             AddSource(typeof(ScriptableProvider), Resources.Script_CSFD);
             AddSource(typeof(MyVideosProvider));
-            
-            // OpenSubtitles provider disabled untill further notice
-            // AddSource(typeof(OSDbProvider));
 
             normalizePriorities();
         }

@@ -21,11 +21,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         #region API variables
 
-        private const string apiMovieUrl = "http://api.themoviedb.org/2.1/Movie.{0}/{1}/xml/cc25933c4094ca50635f94574491f320/";
+        private const string apiMovieUrl = "http://api.themoviedb.org/2.1/{0}/{1}/xml/cc25933c4094ca50635f94574491f320/";
 
-        private static string apiImdbLookup = string.Format(apiMovieUrl, "imdbLookup", "en");
-        private static string apiSearch = string.Format(apiMovieUrl, "search", "en");
-        private static string apiGetInfo = string.Format(apiMovieUrl, "getInfo", "en");
+        private static string apiMovieImdbLookup = string.Format(apiMovieUrl, "Movie.imdbLookup", "en");
+        private static string apiMovieSearch = string.Format(apiMovieUrl, "Movie.search", "en");
+        private static string apiMovieGetInfo = string.Format(apiMovieUrl, "Movie.getInfo", "en");
+        private static string apiHashGetInfo = string.Format(apiMovieUrl, "Hash.getInfo", "en");
 
         #endregion
 
@@ -74,7 +75,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
 
             // Try to get movie information
-            XmlNodeList xml = getXML(apiGetInfo + tmdbID);
+            XmlNodeList xml = getXML(apiMovieGetInfo + tmdbID);
             if (xml == null) {
                 return false;
             }
@@ -118,7 +119,22 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         private List<DBMovieInfo> getMoviesByTitle(string title) {
             List<DBMovieInfo> results = new List<DBMovieInfo>();
-            XmlNodeList xml = getXML(apiSearch + title);
+            XmlNodeList xml = getXML(apiMovieSearch + title);
+            if (xml == null)
+                return results;
+
+            XmlNodeList movieNodes = xml.Item(0).SelectNodes("//movie");
+            foreach (XmlNode node in movieNodes) {
+                DBMovieInfo movie = getMovieInformation(node);
+                if (movie != null)
+                    results.Add(movie);
+            }
+            return results;
+        }
+
+        public List<DBMovieInfo> GetMoviesByHash(string hash) {
+            List<DBMovieInfo> results = new List<DBMovieInfo>();
+            XmlNodeList xml = getXML(apiHashGetInfo + hash);
             if (xml == null)
                 return results;
 
@@ -132,7 +148,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         private DBMovieInfo getMovieById(string id) {
-            XmlNodeList xml = getXML(apiGetInfo + id);
+            XmlNodeList xml = getXML(apiMovieGetInfo + id);
             if (xml == null)
                 return null;
             
@@ -144,7 +160,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         private DBMovieInfo getMovieByImdb(string imdbid) {
-            XmlNodeList xml = getXML(apiImdbLookup + imdbid);
+            XmlNodeList xml = getXML(apiMovieImdbLookup + imdbid);
             if (xml == null)
                 return null;
 
@@ -270,7 +286,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
 
             // Tro to get movie information
-            XmlNodeList xml = getXML(apiGetInfo + tmdbID);
+            XmlNodeList xml = getXML(apiMovieGetInfo + tmdbID);
             if (xml == null) {
                 return false;
             }
@@ -318,7 +334,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 tmdbID = idObj.Identifier;
             }
             else {
-                // Translate IMDB code to MovieMeter ID
+                // Translate IMDB code to a TMDB ID
 
                 if (movie.ImdbID == null) {
                     return null;
@@ -326,7 +342,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
                 string imdbId = movie.ImdbID.Trim();
                 // Do an IMDB lookup
-                XmlNodeList xml = getXML(apiImdbLookup + imdbId);
+                XmlNodeList xml = getXML(apiMovieImdbLookup + imdbId);
                 if (xml != null && xml.Count > 0) {
                     // Get TMDB Id
                     XmlNodeList idNodes = xml.Item(0).SelectNodes("//id");
@@ -338,8 +354,47 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             return tmdbID;
         }
 
+        /// <summary>
+        /// Returns a movie list queries by filehash
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns></returns>
+        public static List<DBMovieInfo> GetMoviesByHashLookup(string hash) {
+            List<DBMovieInfo> results = new List<DBMovieInfo>();
+            XmlNodeList xml = getXML(apiHashGetInfo + hash);
+            if (xml == null)
+                return results;
+
+            XmlNodeList movieNodes = xml.Item(0).SelectNodes("//movie");
+            foreach (XmlNode movieNode in movieNodes) {
+
+                if (movieNode == null || movieNode.ChildNodes.Count < 2)
+                    continue;
+
+                DBMovieInfo movie = new DBMovieInfo();
+                foreach (XmlNode node in movieNode.ChildNodes) {
+                    string value = node.InnerText;
+                    switch (node.Name) {
+                        case "name":
+                            movie.Title = value;
+                            break;
+                        case "imdb_id":
+                            movie.ImdbID = value;
+                            break;
+                        case "released":
+                            DateTime date;
+                            if (DateTime.TryParse(value, out date))
+                                movie.Year = date.Year;
+                            break;
+                    }
+                }
+                results.Add(movie);
+            }
+            return results;
+        }
+
         // given a url, retrieves the xml result set and returns the nodelist of Item objects
-        private XmlNodeList getXML(string url) {
+        private static XmlNodeList getXML(string url) {
             WebGrabber grabber = Utility.GetWebGrabberInstance(url);
             grabber.Encoding = Encoding.UTF8;
 
