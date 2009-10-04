@@ -205,6 +205,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 _currentNode = value;
                 ReloadCategoriesFacade();
+                onContentsChanged();
             }
             get { return _currentNode; }
         } public DBNode<DBMovieInfo> _currentNode;
