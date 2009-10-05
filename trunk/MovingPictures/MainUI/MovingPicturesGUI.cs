@@ -50,14 +50,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private string initProgressLastAction = string.Empty;
         private int initProgressLastPercent = 0;     
         private Thread initThread;
+        private bool preventDialogOnLoad = false;
 
         private ImageSwapper backdrop;
         private AsyncImageResource cover = null;
 
         private DiskInsertedAction diskInsertedAction;
         Dictionary<string, string> recentInsertedDiskSerials;
-
-        private bool dialogActive = false;
 
         private DBMovieInfo awaitingUserRatingMovie;
         private MoviePlayer moviePlayer;
@@ -135,6 +134,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             DBMovieInfo selectedMovie = browser.SelectedMovie;
             if (selectedMovie != null)
                 cover.Filename = selectedMovie.CoverFullPath;
+            else
+                cover.Filename = string.Empty;
 
             backdrop.Filename = GetBackdropPath();
 
@@ -240,7 +241,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <returns>True if yes was clicked, False if no was clicked</returns>
         public bool ShowCustomYesNo(string heading, string lines, string yesLabel, string noLabel, bool defaultYes) {
-            dialogActive = true;
             GUIDialogYesNo dialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
             try {
                 dialog.Reset();
@@ -262,12 +262,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                 }
                 dialog.DoModal(GetID);
-                dialogActive = false;
                 return dialog.IsConfirmed;
             }
             finally {
-                dialogActive = false;
-
                 // set the standard yes/no dialog back to it's original state (yes/no buttons)
                 if (dialog != null) {
                     dialog.ClearAll();
@@ -341,9 +338,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         public override bool Init() {
             logger.Info("Initializing GUI...");
-            
+
             // check if we can load the skin
             bool success = Load(GUIGraphicsContext.Skin + @"\movingpictures.xml");
+
+            // get last active module settings 
+            bool lastActiveModuleSetting = MovingPicturesCore.MediaPortalSettings.GetValueAsBool("general", "showlastactivemodule", false);
+            int lastActiveModule = MovingPicturesCore.MediaPortalSettings.GetValueAsInt("general", "lastactivemodule", -1); 
+            preventDialogOnLoad = (lastActiveModuleSetting && (lastActiveModule == GetID));
+
+            // set some skin properties
+            SetProperty("#MovingPictures.Settings.HomeScreenName", MovingPicturesCore.Settings.HomeScreenName);
 
             // start initialization of the moving pictures core services in a seperate thread
             initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
@@ -375,10 +380,33 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         protected override void OnPageLoad() {
             logger.Debug("OnPageLoad() Started.");
-
+            
+            // if the component didn't load properly we probably have a bad skin file
+            if (facade == null) {
+                // avoid showing a dialog on load when we are the last active module being started
+                if (!preventDialogOnLoad) {
+                    GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+                    dialog.Reset();
+                    dialog.SetHeading(Translation.ProblemLoadingSkinFile);
+                    dialog.DoModal(GetID);
+                }
+                else {
+                    preventDialogOnLoad = false;
+                }
+                GUIWindowManager.ShowPreviousWindow();
+                return;
+            }
+            
             // Check wether the plugin is initialized.
             if (!initComplete) {
-                
+
+                // avoid showing a dialog on load when we are the last active module being started
+                if (preventDialogOnLoad) {
+                    preventDialogOnLoad = false;
+                    GUIWindowManager.ShowPreviousWindow();
+                    return;
+                }
+
                 // if we are not initialized yet show a loading dialog
                 // this will 'block' untill loading has finished or the user 
                 // pressed cancel or ESC
@@ -390,24 +418,34 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     GUIWindowManager.ShowPreviousWindow();
                     return;
                 }
-            }
+            }            
 
-            // if the component didn't load properly we probably have a bad skin file
-            if (facade == null) {
-                GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
-                dialog.Reset();
-                dialog.SetHeading(Translation.ProblemLoadingSkinFile);
-                dialog.DoModal(GetID);
-                GUIWindowManager.ShowPreviousWindow();
+            // notify if the skin doesnt support categories
+            if (categoriesFacade == null) {
+                // avoid showing a dialog on load when we are the last active module being started
+                if (!preventDialogOnLoad) {
+                    GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
+                    dialog.Reset();
+                    dialog.SetHeading("This skin does not support Categories...");
+                    dialog.DoModal(GetID);
+                }
+                else {
+                    preventDialogOnLoad = false;
+                }
                 return;
             }
 
             // if the user hasn't defined any import paths they need to goto the config screen
             if (DBImportPath.GetAllUserDefined().Count == 0) {
-                ShowMessage(Translation.NoImportPathsHeading, Translation.NoImportPathsBody);
+                if (!preventDialogOnLoad) {
+                    ShowMessage(Translation.NoImportPathsHeading, Translation.NoImportPathsBody);
+                }
+                else {
+                    preventDialogOnLoad = false;
+                }
                 GUIWindowManager.ShowPreviousWindow();
                 return;
-            }
+            }            
 
             if (browser == null) {
                 browser = new MovieBrowser(skinSettings);
@@ -435,8 +473,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
                 SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
 
-                SetProperty("#MovingPictures.Settings.HomeScreenName", MovingPicturesCore.Settings.HomeScreenName);
-
                 if (filteringIndicator != null) filteringIndicator.Visible = false;
                 PublishFilterDetails();
                 OnBrowserContentsChanged();
@@ -462,11 +498,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // first time setup tasks
             if (!loaded) {
-                loaded = true;
                 if (browser.CategoriesAvailable)
                     browser.CurrentView = BrowserViewMode.CATEGORIES;
                 else
                     browser.CurrentView = browser.DefaultView;
+                loaded = true;
+                preventDialogOnLoad = false;
             } 
             else {
                 // if we have loaded before, reload the active facade
@@ -482,17 +519,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             setWorkingAnimationStatus(false);
 
             // Take control and disable MediaPortal AutoPlay when the plugin has focus
-            disableNativeAutoplay();
-
-            // notify if the skin doesnt support categories
-            if (categoriesFacade == null) {
-                GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
-                dialog.Reset();
-                dialog.SetHeading("This skin does not support Categories...");
-                dialog.DoModal(GetID);
-                //GUIWindowManager.ShowPreviousWindow();
-                return;
-            }
+            disableNativeAutoplay();            
 
             if (awaitingUserRatingMovie != null) {
                 GetUserRating(awaitingUserRatingMovie);
@@ -539,10 +566,19 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 case 51:
                     if (actionType == MediaPortal.GUI.Library.Action.ActionType.ACTION_SELECT_ITEM) {
-                        browser.CurrentNode = browser.SelectedNode;
-                        if (browser.CurrentNode.Children.Count == 0) {
-                            browser.CurrentView = browser.DefaultView;
-                        }                        
+                        int children = browser.SelectedNode.Children.Count;
+
+                        // if the category is empty show a dialog and block navigating to the category
+                        if (children == 0 && browser.SelectedNode.GetFilteredItems().Count == 0) {
+                            ShowMessage(Translation.CategoryEmptyHeader, Translation.CategoryEmptyDescription);
+                        }
+                        else {
+                            browser.CurrentNode = browser.SelectedNode;
+                            if (children == 0) {
+                                browser.CurrentView = browser.DefaultView;
+                            }
+                        }
+                        
                     }
                     break;
 
@@ -695,22 +731,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void onCoreInitializationProgress(string actionName, int percentDone) {
 
             // Update the progress variables
+            if (percentDone == 100) {
+                actionName = "Loading GUI ...";
+            }            
             initProgressLastAction = actionName;
             initProgressLastPercent = percentDone;
 
             // If the progress dialog exists, update it.
             if (initDialog != null) {
-                initDialog.SetLine(2, actionName);
-                initDialog.SetPercentage(percentDone);
+                initDialog.SetLine(2, initProgressLastAction);
+                initDialog.SetPercentage(initProgressLastPercent);
                 initDialog.Progress();
             }
 
             // When we are finished initializing
             if (percentDone == 100) {
-
-                if (initDialog != null) {
-                    initDialog.SetLine(2, "Loading GUI...");
-                }
 
                 // Start the background importer
                 if (MovingPicturesCore.Settings.EnableImporterInGUI) {
@@ -1413,7 +1448,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void OnVolumeInserted(string volume, string serial) {
             // only respond when the plugin (or it's playback) is active
             // and there's no active dialog waiting for user input
-            if (GUIWindowManager.ActiveWindow != GetID && !moviePlayer.IsPlaying && !dialogActive)
+            if (GUIWindowManager.ActiveWindow != GetID && !moviePlayer.IsPlaying && !GUIWindowManager.IsRouted)
                 return;
 
             logger.Debug("OnVolumeInserted: Volume={0}, Serial={1}", volume, serial);
@@ -1543,11 +1578,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 logger.Warn("Internal .NET error from dictionary class!");
             }
 
-            // If the value is empty always add a space
+            // If the value is empty add a space
             // otherwise the property will keep 
             // displaying it's previous value
             if (String.IsNullOrEmpty(value))
-                value = " ";
+                GUIPropertyManager.SetProperty(property, " ");
 
             GUIPropertyManager.SetProperty(property, value);
         }
