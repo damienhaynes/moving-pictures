@@ -159,6 +159,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string DatePartWithin = "Last {0} {1}";
         public static string DatePartAgo = "{0} {1} ago";
 
+        // Categories
+        public static string CategoryEmptyHeader = "Category is empty";
+        public static string CategoryEmptyDescription = "There are currently no movies\nlisted in this category.";
+
         #endregion
 
         private static string path = string.Empty;

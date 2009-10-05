@@ -144,5 +144,10 @@
   <string Field="DatePartLast">Last {0}</string>
   <string Field="DatePartWithin">Last {0} {1}</string>
   <string Field="DatePartAgo">{0} {1} ago</string>
+  
+  <!-- Category -->
+  
+  <string Field="CategoryEmptyHeader">Category is empty</string>
+  <string Field="CategoryEmptyDescription">There are currently no movies\nlisted in this category."</string>
 
 </strings>
