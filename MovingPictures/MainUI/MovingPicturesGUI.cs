@@ -855,15 +855,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             GUIListItem filterItem = new GUIListItem(Translation.FilterBy + " ...");
+            filterItem.ItemId = currID++;
+            dialog.Add(filterItem);
+
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
             GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
             GUIListItem movieOptionsItem = new GUIListItem(Translation.MovieOptions + " ...");
 
             // show these options only when we are not in the categories view
             if (browser.CurrentView != BrowserViewMode.CATEGORIES) {
-                filterItem.ItemId = currID++;
-                dialog.Add(filterItem);
-
                 sortItem.ItemId = currID++;
                 dialog.Add(sortItem);
 
