@@ -576,17 +576,26 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             watchedFilters.AddRange(activeFilters);
             
             ReapplyFilters();
-            ReloadMovieFacade();
+            if (CurrentView == BrowserViewMode.CATEGORIES) {
+                ReloadCategoriesFacade();
+            }
+            else {
+                ReloadMovieFacade();
+            }
             onContentsChanged();
         }
 
         private void onFilterUpdated(IFilter<DBMovieInfo> obj) {
             logger.Debug("OnFilterUpdated: " + obj);
             ReapplyFilters();
-            ReloadMovieFacade();
 
-            // in case the current movie is no longer in the list
-            SyncFromFacade();
+            if (CurrentView == BrowserViewMode.CATEGORIES) {
+                ReloadCategoriesFacade();
+            }
+            else {
+                ReloadMovieFacade();
+                SyncFromFacade();
+            }            
             onContentsChanged();
         }
 
@@ -609,7 +618,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (CategoriesFacade.ListView != null) CategoriesFacade.ListView.Clear();
 
             foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
-                //logger.Debug("add category node: " + currNode.Name);
+                if (currNode.Children.Count == 0) {
+                    
+                    HashSet<DBMovieInfo> nodeResults = currNode.GetFilteredItems();
+                    if (nodeResults.Count == 0)
+                        continue;
+
+                    if (Filters.Count > 0) {
+                        HashSet<DBMovieInfo> filterResults = nodeResults;
+                        foreach (IFilter<DBMovieInfo> filter in Filters) {
+                            filterResults = filter.Filter(filterResults);
+                        }
+
+                        if (filterResults.Count == 0)
+                            continue;
+                    }
+                }
                 addCategoryNodeToFacade(currNode);
             }
 

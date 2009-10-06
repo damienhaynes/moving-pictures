@@ -566,19 +566,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 case 51:
                     if (actionType == MediaPortal.GUI.Library.Action.ActionType.ACTION_SELECT_ITEM) {
-                        int children = browser.SelectedNode.Children.Count;
-
-                        // if the category is empty show a dialog and block navigating to the category
-                        if (children == 0 && browser.SelectedNode.GetFilteredItems().Count == 0) {
-                            ShowMessage(Translation.CategoryEmptyHeader, Translation.CategoryEmptyDescription);
-                        }
-                        else {
-                            browser.CurrentNode = browser.SelectedNode;
-                            if (children == 0) {
-                                browser.CurrentView = browser.DefaultView;
-                            }
-                        }
-                        
+                        browser.CurrentNode = browser.SelectedNode;
+                        if (browser.CurrentNode.Children.Count == 0) {
+                            browser.CurrentView = browser.DefaultView;
+                        }                        
                     }
                     break;
 
