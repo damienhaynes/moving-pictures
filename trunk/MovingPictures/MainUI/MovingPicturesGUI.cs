@@ -268,6 +268,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void OnBrowserContentsChanged() {
             // update properties
             PublishViewDetails();
+            PublishCategoryDetails();
             
             // set the global watched indicator
             if (watchedFilteringIndicator != null && watchedFilter.Active != watchedFilteringIndicator.Visible)
@@ -294,7 +295,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void OnBrowserSelectionChanged(DBMovieInfo movie) {
             if (browser.CurrentView == BrowserViewMode.CATEGORIES)
-                UpdateCategoryDetails();
+                PublishCategoryDetails();
             else
                 PublishMovieDetails();
         }
@@ -302,11 +303,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
             if (currentView == BrowserViewMode.DETAILS) {
                 playButton.Focus = true;
-                playButton.Visible = true;
             }
             
             if (currentView == BrowserViewMode.CATEGORIES) {
-                UpdateCategoryDetails();
+                PublishCategoryDetails();
             }
             else {
                 PublishMovieDetails();
@@ -1533,7 +1533,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region Skin and Property Settings
 
-        private void UpdateCategoryDetails() {
+        private void PublishCategoryDetails() {
 
             if (browser.SelectedNode != null) {
                 PublishDetails(browser.SelectedNode, "SelectedNode");
@@ -1544,6 +1544,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 PublishDetails(browser.CurrentNode, "CurrentNode");
                 PublishDetails(browser.CurrentNode.AdditionalSettings, "CurrentNode.Extra.AdditionalSettings");
             }
+            else {
+                SetProperty("#MovingPictures.CurrentNode.name", MovingPicturesCore.Settings.HomeScreenName);
+            }
+
 
             PublishArtwork();
         }
