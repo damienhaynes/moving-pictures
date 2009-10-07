@@ -49,9 +49,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 int decade = 0;
                 if (int.TryParse(currSubNode.Filter.Criteria[0].Value.ToString(), out decade)) {
                     decade = (decade + 1) / 10;
-                    if (!decades.Contains(decade))
-                        toRemove.Add(currSubNode);
-                    else
+                    if (decades.Contains(decade))
                         nodeLookup[decade] = currSubNode;
                 }
                 else {
@@ -130,8 +128,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     toRemove.Add(currSubNode);
                 else {
                     nodeLookup[period] = currSubNode;
-                    if (currSubNode.Filter.Filter(items).Count == 0)
-                        toRemove.Add(currSubNode);
                 }
             }
 
@@ -212,22 +208,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         break;
                 }             
       
-                // check if the filter has results before adding
-                if (newFilter.Filter(items).Count > 0) {
-                    // we have results so we add it
-                    newSubNode.Filter = newFilter;
-                    
-                    // set the default sortorder for the gui
-                    DBMovieNodeSettings settings = new DBMovieNodeSettings();
-                    settings.UseDefaultSorting = false;
-                    settings.SortField = SortingFields.DateAdded;
-                    settings.SortDirection = SortingDirections.Descending;
+                
+                newSubNode.Filter = newFilter;
+                
+                // set the default sortorder for the gui
+                DBMovieNodeSettings settings = new DBMovieNodeSettings();
+                settings.UseDefaultSorting = false;
+                settings.SortField = SortingFields.DateAdded;
+                settings.SortDirection = SortingDirections.Descending;
 
-                    newSubNode.AdditionalSettings = settings;
-                    
-                    node.Children.Add(newSubNode);
-                    newSubNode.Parent = node;
-                }
+                newSubNode.AdditionalSettings = settings;
+                
+                node.Children.Add(newSubNode);
+                newSubNode.Parent = node;
             }
 
             node.Children.Sort();
