@@ -140,8 +140,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             backdrop.Filename = GetBackdropPath();
 
-            if (selectedMovie != null && browser.CurrentView != BrowserViewMode.DETAILS && browser.CurrentView != BrowserViewMode.CATEGORIES)
-                browser.RefreshArtwork(selectedMovie);
+            if (selectedMovie != null && browser.CurrentView != BrowserViewMode.DETAILS && browser.CurrentView != BrowserViewMode.CATEGORIES) {
+                GUIListItem listItem = browser.GetMovieListItem(selectedMovie);
+                if (listItem != null) listItem.RefreshCoverArt();
+            }
         }
 
         private string GetBackdropPath() {
@@ -294,8 +296,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
-            logger.Debug("OnBrowserViewChanged Started");
-
             if (currentView == BrowserViewMode.DETAILS) {
                 playButton.Focus = true;
                 playButton.Visible = true;
@@ -311,8 +311,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // set the backdrop visibility based on the skin settings
             if (movieBackdropControl != null)
                 backdrop.Active = skinSettings.UseBackdrop(currentView);
-
-            logger.Debug("OnBrowserViewChanged Ended");
         }
 
         #region GUIWindow Methods
@@ -1099,12 +1097,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 updateDetails();
             }
             else if (dialog.SelectedId == cycleArtItem.ItemId) {
+                
                 browser.SelectedMovie.NextCover();
                 browser.SelectedMovie.Commit();
 
                 // update the new cover art in the facade
-                browser.facade.SelectedListItem.IconImage = browser.SelectedMovie.CoverThumbFullPath.Trim();
-                browser.facade.SelectedListItem.IconImageBig = browser.SelectedMovie.CoverThumbFullPath.Trim();
+                GUIListItem listItem = browser.GetMovieListItem(browser.SelectedMovie);
+                if (listItem != null) {
+                    listItem.IconImage = browser.SelectedMovie.CoverThumbFullPath.Trim();
+                    listItem.IconImageBig = browser.SelectedMovie.CoverThumbFullPath.Trim();
+                    listItem.RefreshCoverArt();
+                }
 
                 UpdateArtwork();
             }

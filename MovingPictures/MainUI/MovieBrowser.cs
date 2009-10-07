@@ -21,7 +21,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // lookup for GUIListItems that have been created for DBMovieInfo objects
         private Dictionary<DatabaseTable, GUIListItem> listItems;
         private Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>> visibleMovies;
-        
+        Random random;
+
         private MovingPicturesSkinSettings skinSettings;
         private FilterUpdatedDelegate<DBMovieInfo> filterUpdatedDelegate;
 
@@ -337,8 +338,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // setup listeners for new or removed movies
             MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(onMovieDeleted);
             MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
-            
 
+            random = new Random();
             listItems = new Dictionary<DatabaseTable, GUIListItem>();
             visibleMovies = new Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
             filterUpdatedDelegate = new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
@@ -701,6 +702,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         /// <summary>
+        /// Gets the GUIListItem object associated with this movie
+        /// </summary>
+        /// <param name="movie"></param>
+        /// <returns></returns>
+        public GUIListItem GetMovieListItem(DBMovieInfo movie) {
+            if (!listItems.ContainsKey(movie))
+                return null;
+
+            return listItems[movie];
+        }
+
+        /// <summary>
         /// Updates the color properties of the GUIListItem object for this movie
         /// </summary>
         /// <param name="movie"></param>
@@ -720,30 +733,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // playedColor
                 currItem.IsPlayed = true;
             }            
-        }
-
-        /// <summary>    
-        /// Triggers RefreshCoverArt() on the GUIListItem for this movie
-        /// </summary>         
-        /// <param name="movie"></param>
-        public void RefreshArtwork(DBMovieInfo movie) {
-            if (!listItems.ContainsKey(movie))
-                return;
-             
-            // Refresh the list item object              
-            listItems[movie].RefreshCoverArt();
-        }
+        }        
 
         /// <summary>
-        /// Returns a random movie node that is currently listed in this category node
+        /// Returns a random movie that is currently listed in this category node
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
         public DBMovieInfo GetRandomMovie(DBNode<DBMovieInfo> node) {
             if (!visibleMovies.ContainsKey(node) || visibleMovies[node].Count == 0)
                 return null;
-           
-            Random random = new Random();
+
             return visibleMovies[node].ToList()[random.Next(visibleMovies[node].Count - 1)];  
         }
 
