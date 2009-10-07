@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database;
+using Cornerstone.MP.Extensions;
 using System.Collections.ObjectModel;
 using Cornerstone.Database.CustomTypes;
 using MediaPortal.Plugins.MovingPictures.MainUI.Filters;
@@ -18,6 +20,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // lookup for GUIListItems that have been created for DBMovieInfo objects
         private Dictionary<DatabaseTable, GUIListItem> listItems;
+        private Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>> visibleMovies;
         
         private MovingPicturesSkinSettings skinSettings;
         private FilterUpdatedDelegate<DBMovieInfo> filterUpdatedDelegate;
@@ -33,16 +36,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             set {
                 if (selectedMovie != value) {
+                    
+                    // set the selected movie
+                    selectedMovie = value;
+
+                    // verify the selection exists in the facade (will return alternative selection if false)
+                    selectedMovie = facade.SyncToFacade<DBMovieInfo>(selectedMovie);
+                    
+                    // register the selected index
+                    selectedIndex = facade.SelectedListItemIndex;
+                    
                     // log the change
-                    if (value != null)
-                        logger.Debug("SelectedMovie changed: " + value.Title);
+                    if (selectedMovie != null)
+                        logger.Debug("SelectedMovie changed: " + selectedMovie.Title);
                     else {
-                        selectedIndex = 0;
                         logger.Debug("SelectedMovie changed: null");
                     }
-
-                    selectedMovie = value;
-                    SyncToFacade();
 
                     // notify any listeners
                     if (SelectionChanged != null)
@@ -57,9 +66,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public int SelectedIndex {
             get {
                 return selectedIndex;
-            }
-            set {
-                selectedIndex = value;
             }
         } private int selectedIndex = 0;
 
@@ -80,18 +86,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // update the state variables
                 if (currentView != value)
                     previousView = currentView;
-
-                logger.Debug("CurrentView changed: {0}", value);
-                currentView = value;
-
-                // if we are in the category view reload the category facade
-                if (currentView == BrowserViewMode.CATEGORIES)
-                    ReloadCategoriesFacade();
-                else // otherwise reload the movie facade                    
-                    ReloadMovieFacade();
                 
-
-                ReapplyView();
+                // Set view and reload it
+                currentView = value;
+                ReloadView();
                
             }
         } private BrowserViewMode currentView = BrowserViewMode.CATEGORIES; // starting default is CATEGORIES
@@ -196,7 +194,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     Filters.Add(value.Filter);
 
                 updatingFiltering = false;
-                ReapplyFilters();
 
                 // if we are moving to the parent category set the current node
                 // as the selected node before we reload the facade
@@ -204,7 +201,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     _selectedNode = _currentNode;
 
                 _currentNode = value;
-                ReloadCategoriesFacade();
+
+                ReapplyFilters();
+                ReloadFacade();
                 onContentsChanged();
             }
             get { return _currentNode; }
@@ -338,8 +337,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // setup listeners for new or removed movies
             MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(onMovieDeleted);
             MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
+            
 
             listItems = new Dictionary<DatabaseTable, GUIListItem>();
+            visibleMovies = new Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
             filterUpdatedDelegate = new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
 
             loadMovies();
@@ -369,22 +370,30 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         /// <summary>
-        /// Reapplies the current view to the GUI.
+        /// Reloads the current view to the GUI.
         /// </summary>
-        public void ReapplyView() {
-            logger.Debug("ReapplyView: {0}", currentView.ToString());
+        public void ReloadView() {
+            logger.Debug("CurrentView: {0}", currentView.ToString());
 
-            if (facade == null)
-                return;
+            // Clear focus
+            if (_clearFocusAction != null) _clearFocusAction();
 
+            // Facade visibility
             if (currentView != BrowserViewMode.CATEGORIES && _categoriesFacade != null) {
-                _categoriesFacade.Visible = false;
-                if (_categoriesFacade.ListView != null) _categoriesFacade.ListView.Visible = false;
-                if (_categoriesFacade.ThumbnailView != null) _categoriesFacade.ThumbnailView.Visible = false;
-                if (_categoriesFacade.FilmstripView != null) _categoriesFacade.FilmstripView.Visible = false;
+                _categoriesFacade.Focus(false);
+                _categoriesFacade.Visible(false);
+            }
+            
+            if (currentView == BrowserViewMode.CATEGORIES || currentView == BrowserViewMode.DETAILS) {
+                facade.Focus(false);
+                facade.Visible(false);
             }
 
+            // Switch facade view
             switch (currentView) {
+                case BrowserViewMode.CATEGORIES:
+                    _categoriesFacade.View = GUIFacadeControl.ViewMode.List;
+                    break;
                 case BrowserViewMode.LIST:
                     facade.View = GUIFacadeControl.ViewMode.List;
                     break;
@@ -397,55 +406,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case BrowserViewMode.FILMSTRIP:
                     facade.View = GUIFacadeControl.ViewMode.Filmstrip;
                     break;
-                case BrowserViewMode.DETAILS:
-                    if (_clearFocusAction != null) _clearFocusAction();
-
-                    facade.Visible = false;
-                    facade.ListView.Visible = false;
-                    facade.ThumbnailView.Visible = false;
-                    facade.FilmstripView.Visible = false;
-                    break;
-                case BrowserViewMode.CATEGORIES:
-                    logger.Debug("Categories Facade Visible");
-                    if (_clearFocusAction != null) _clearFocusAction();
-
-                    facade.Visible = false;
-                    facade.ListView.Visible = false;
-                    facade.ThumbnailView.Visible = false;
-                    facade.FilmstripView.Visible = false;
-                    
-                    _categoriesFacade.Focus = true;
-                    _categoriesFacade.Visible = true;
-                    if (_categoriesFacade.ListView != null) _categoriesFacade.ListView.Visible = true;
-                    if (_categoriesFacade.ThumbnailView != null) _categoriesFacade.ThumbnailView.Visible = true;
-                    if (_categoriesFacade.FilmstripView != null) _categoriesFacade.FilmstripView.Visible = true;
-                    break;
             }
 
-            // if we are leaving details view, set focus back on the facade
-            if (previousView == BrowserViewMode.DETAILS || previousView == BrowserViewMode.CATEGORIES) {
-                if (_clearFocusAction != null) _clearFocusAction();
+            // Reload facade content
+            ReloadFacade();
 
+            // Set facade visibility and focus 
+            if (CurrentView == BrowserViewMode.CATEGORIES) {
+                _categoriesFacade.Focus = true;
+                _categoriesFacade.Visible = true;
+            }
+            else if (CurrentView != BrowserViewMode.DETAILS) {
                 facade.Focus = true;
                 facade.Visible = true;
             }
 
-            // sync the selected item and facade as appropriate
-            switch (currentView) {
-                // if in details view, we dont want to update the facade because it's not in
-                // use and we just want to keep the selected movie displayed.
-                case BrowserViewMode.DETAILS:
-                    break;
-
-                // Sync
-                case BrowserViewMode.FILMSTRIP:
-                case BrowserViewMode.LIST:
-                case BrowserViewMode.SMALLICON:
-                case BrowserViewMode.LARGEICON:
-                    SyncToFacade();
-                    break;
-            }
-
+            // Update listeners that the view changed
             if (ViewChanged != null) ViewChanged(previousView, currentView);
         }
 
@@ -522,7 +498,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie browser.");
             allMovies.Add((DBMovieInfo)obj);
             ReapplyFilters();
-            ReloadMovieFacade();
+            ReloadFacade();
             onContentsChanged();
         }
 
@@ -545,7 +521,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             filteredMovies.Remove(movie);
 
             // update the facade to reflect the changes
-            ReloadMovieFacade();
+            ReloadFacade();
             onContentsChanged();
         }
 
@@ -576,26 +552,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             watchedFilters.AddRange(activeFilters);
             
             ReapplyFilters();
-            if (CurrentView == BrowserViewMode.CATEGORIES) {
-                ReloadCategoriesFacade();
-            }
-            else {
-                ReloadMovieFacade();
-            }
+            ReloadFacade(); 
             onContentsChanged();
         }
 
         private void onFilterUpdated(IFilter<DBMovieInfo> obj) {
             logger.Debug("OnFilterUpdated: " + obj);
             ReapplyFilters();
-
-            if (CurrentView == BrowserViewMode.CATEGORIES) {
-                ReloadCategoriesFacade();
-            }
-            else {
-                ReloadMovieFacade();
-                SyncFromFacade();
-            }            
+            ReloadFacade();        
             onContentsChanged();
         }
 
@@ -610,55 +574,48 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // for the movie browser to be reused by other GUIs for other HTPC apps.
         #region Facade Management Methods
 
+        // reloads one of the facades depending on view settings
+        public void ReloadFacade() {
+            if (CurrentView == BrowserViewMode.CATEGORIES) {
+                ReloadCategoriesFacade();
+            }
+            else if (CurrentView != BrowserViewMode.DETAILS) {
+                ReloadMovieFacade();
+            }
+        }
+
+        // populates the category facade
         public void ReloadCategoriesFacade() {
             if (!CategoriesAvailable || SubNodes.Count == 0)
                 return;
 
-            CategoriesFacade.Clear();
-            if (CategoriesFacade.ListView != null) CategoriesFacade.ListView.Clear();
+            visibleMovies.Clear();
+            CategoriesFacade.ClearAll();
 
             foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
-                if (currNode.Children.Count == 0) {
+                //if (currNode.Children.Count == 0) {
                     
                     HashSet<DBMovieInfo> nodeResults = currNode.GetFilteredItems();
                     if (nodeResults.Count == 0)
                         continue;
 
                     if (Filters.Count > 0) {
-                        HashSet<DBMovieInfo> filterResults = nodeResults;
                         foreach (IFilter<DBMovieInfo> filter in Filters) {
-                            filterResults = filter.Filter(filterResults);
+                            nodeResults = filter.Filter(nodeResults);
                         }
 
-                        if (filterResults.Count == 0)
+                        if (nodeResults.Count == 0)
                             continue;
                     }
-                }
+
+                    visibleMovies.Add(currNode, nodeResults);
+
+                //}
                 addCategoryNodeToFacade(currNode);
             }
 
-            int? desiredIndex = null;
-            if (_selectedNode != null) {
-                // Find the selected category
-                for (int i = 0; i < _categoriesFacade.Count; i++) {
-                    if (_categoriesFacade[i].TVTag == _selectedNode) {
-                        // we found the selected category so we break the loop
-                        desiredIndex = i;
-                        break;
-                    }
-                }
-            }
-
-            // if no index was found pick the first selection
-            int newIndex = 0;
-            if (desiredIndex == null)
-                SelectedNode = _categoriesFacade[newIndex].TVTag as DBNode<DBMovieInfo>;
-            else
-                newIndex = (int)desiredIndex;
-
-            // set the required index in the facade
-            if (_categoriesFacade.SelectedListItemIndex != newIndex)
-                _categoriesFacade.SelectedListItemIndex = newIndex;
+            // Sync to facade
+            SelectedNode = _categoriesFacade.SyncToFacade<DBNode<DBMovieInfo>>(SelectedNode);
         }
 
         // populates the facade with the currently filtered list items
@@ -667,10 +624,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
 
             // clear and populate the facade
-            facade.Clear();
-            if (facade.ListView != null) facade.ListView.Clear();
-            if (facade.ThumbnailView != null) facade.ThumbnailView.Clear();
-            if (facade.FilmstripView != null) facade.FilmstripView.Clear();
+            facade.ClearAll();
 
             foreach (DBMovieInfo currMovie in FilteredMovies) 
                 addMovieToFacade(currMovie);
@@ -680,86 +634,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             if (MovingPicturesCore.Settings.AllowGrouping && CurrentView == BrowserViewMode.LIST) {
                 GroupHeaders.AddGroupHeaders(this);
-            }          
+            }
 
             // reapply the current selection
-            SyncToFacade();
-        }
-
-        /// <summary>
-        /// Updates the selected index on the facade linked to the selected movie
-        /// </summary>
-        public void SyncToFacade() {
-            if (facade == null || facade.Count == 0)
-                return;
-
-            int? desiredIndex = null;
-            for (int i = 0; i < facade.Count; i++) {
-                // set the desired index to the first movie (not a group header)
-                if (desiredIndex == null && facade[i].TVTag != null) {
-                    desiredIndex = i;
-                    // if we found the first movie and we don't have 
-                    // a movie selected we set the selected movie and return
-                    if (selectedMovie == null) {
-                        SelectedMovie = facade[i].TVTag as DBMovieInfo;
-                        return;
-                    }
-                }
-
-                // otherwise look for the correct movie
-                if (selectedMovie != null && facade[i].TVTag == selectedMovie) {  
-                    // we found the selected movie so we break the loop
-                    desiredIndex = i;
-                    break;
-                }
-
-                // if we didn't found the movie when we are at the end of the loop
-                // we select the first movie using the desired index
-                if (selectedMovie != null && (i == facade.Count-1)) {
-                    SelectedMovie = facade[(int)desiredIndex].TVTag as DBMovieInfo;
-                    return;
-                }
-            }
-
-
-            // if we found a new index update the selected Index
-            if (desiredIndex != null && desiredIndex != selectedIndex) { 
-                selectedIndex = (int)desiredIndex;
-             
-                logger.Debug("SyncToFacade() SelectedIndex={0}", selectedIndex);
-            }
-
-            // set the index in the facade
-            if (facade.SelectedListItemIndex != selectedIndex) {
-                facade.SelectedListItemIndex = selectedIndex;
-
-                // if we are in the filmstrip view also send a message
-                if (CurrentView == BrowserViewMode.FILMSTRIP) {
-                    GUIMessage msg = new GUIMessage(GUIMessage.MessageType.GUI_MSG_ITEM_SELECT, facade.WindowId, 0, facade.FilmstripView.GetID, selectedIndex, 0, null);
-                    GUIGraphicsContext.SendMessage(msg);
-                    logger.Debug("Sending a selection postcard to FilmStrip.");
-                }
-            }
-           
-        }
-
-        /// <summary>
-        /// Updates the selected movie linked to the selected index on the facade
-        /// </summary>
-        public void SyncFromFacade() {
-            // if nothing is selected in the facade,
-            if (facade == null || facade.SelectedListItem == null)
-                return;
-
-            // if the selected index has changed update and log
-            if (selectedIndex != facade.SelectedListItemIndex) {
-                selectedIndex = facade.SelectedListItemIndex;
-                logger.Debug("SyncFromFacade() SelectedIndex={0}", selectedIndex);
-            } 
-            
-            // update the selected movie object 
-            DBMovieInfo selectedMovieInFacade = facade.SelectedListItem.TVTag as DBMovieInfo;
-            SelectedMovie = facade.SelectedListItem.TVTag as DBMovieInfo;               
+            SelectedMovie = facade.SyncToFacade<DBMovieInfo>(SelectedMovie);
         }
 
         // triggered when a movie was selected on the facade
@@ -768,13 +646,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (parent != facade && parent != facade.FilmstripView && parent != facade.ThumbnailView &&
                 parent != facade.ListView) return;
 
-            SyncFromFacade();
+            SelectedMovie = item.TVTag as DBMovieInfo;
         }
 
         public void onCategoryNodeSelected(GUIListItem item, GUIControl parent) {
             // if this is not a message from the facade, exit
             if (parent != _categoriesFacade && parent != _categoriesFacade.ListView) return;
-            SelectedNode = (DBNode<DBMovieInfo>)item.TVTag;
+
+            SelectedNode = item.TVTag as DBNode<DBMovieInfo>;
         }
 
         // adds the given movie to the facade and creates a GUIListItem if neccesary
@@ -853,7 +732,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
              
             // Refresh the list item object              
             listItems[movie].RefreshCoverArt();
-        }          
+        }
+
+        /// <summary>
+        /// Returns a random movie node that is currently listed in this category node
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public DBMovieInfo GetRandomMovie(DBNode<DBMovieInfo> node) {
+            if (!visibleMovies.ContainsKey(node) || visibleMovies[node].Count == 0)
+                return null;
+           
+            Random random = new Random();
+            return visibleMovies[node].ToList()[random.Next(visibleMovies[node].Count - 1)];  
+        }
 
         #endregion
 

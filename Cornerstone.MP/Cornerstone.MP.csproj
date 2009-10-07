@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncImageResource.cs" />
+    <Compile Include="Extensions\GUIFacadeControlExtensions.cs" />
     <Compile Include="GUIGeneralRating.cs" />
     <Compile Include="GUIPinCodeDialog.cs" />
     <Compile Include="ImageSwapper.cs" />
@@ -52,11 +53,11 @@
     <Compile Include="SkinSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaPortal\Core\Core.csproj">
+    <ProjectReference Include="..\..\..\..\MediaPortal\Source\Stable\Core\Core.csproj">
       <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MediaPortal\Dialogs\Dialogs.csproj">
+    <ProjectReference Include="..\..\..\..\MediaPortal\Source\Stable\Dialogs\Dialogs.csproj">
       <Project>{396C5208-5D46-4A11-92C1-FD0F2F42D7DD}</Project>
       <Name>Dialogs</Name>
     </ProjectReference>

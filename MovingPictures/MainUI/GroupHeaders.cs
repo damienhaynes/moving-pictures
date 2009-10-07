@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.Database;
+using Cornerstone.MP.Extensions;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
@@ -150,27 +151,29 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // if this is not a message from the facade, exit
             if (parent != Browser.Facade && parent != Browser.Facade.ListView) return;
 
-            lock (Browser) {
+            GUIFacadeControl facade = Browser.Facade;
 
-                if (Browser.Facade.SelectedListItem != item) return;
+            lock (facade) {
 
-                int newIndex = Browser.Facade.SelectedListItemIndex;
+                if (facade.SelectedListItem != item) return;
+
+                int newIndex = facade.SelectedListItemIndex;
                 int oldIndex = Browser.SelectedIndex;
-                int lastIndex = Browser.Facade.Count - 1;
+                int lastIndex = facade.Count - 1;
                 logger.Debug("onGroupHeaderSelected CurrentIndex {0} OldIndex {1}", newIndex, oldIndex);
 
                 if (newIndex < oldIndex && !(newIndex == 0 && oldIndex == lastIndex)) {
                     // MOVE UP
                     logger.Debug("Jumping Up");
                     if (newIndex == 0)
-                        Browser.Facade.SelectedListItemIndex = lastIndex;
+                        facade.SelectIndex(lastIndex);
                     else
-                        Browser.Facade.OnAction(new MediaPortal.GUI.Library.Action(MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_UP, 0, 0));
+                        facade.OnAction(new MediaPortal.GUI.Library.Action(MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_UP, 0, 0));
                 }
                 else {
                     // MOVE DOWN
                     logger.Debug("Jumping Down");
-                    Browser.Facade.OnAction(new MediaPortal.GUI.Library.Action(MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_DOWN, 0, 0));
+                    facade.OnAction(new MediaPortal.GUI.Library.Action(MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_DOWN, 0, 0));
                 }
             }
         }
