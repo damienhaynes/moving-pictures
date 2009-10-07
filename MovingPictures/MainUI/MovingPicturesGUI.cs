@@ -130,8 +130,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         ~MovingPicturesGUI() {      }
 
-        private void UpdateArtwork() {
-            logger.Debug("Updating Artwork");
+        private void PublishArtwork() {
+            logger.Debug("Publishing Artwork");
             DBMovieInfo selectedMovie = browser.SelectedMovie;
             if (selectedMovie != null)
                 cover.Filename = selectedMovie.CoverFullPath;
@@ -141,9 +141,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             backdrop.Filename = GetBackdropPath();
 
             if (selectedMovie != null && browser.CurrentView != BrowserViewMode.DETAILS && browser.CurrentView != BrowserViewMode.CATEGORIES) {
-                GUIListItem listItem = browser.GetMovieListItem(selectedMovie);
-                if (listItem != null) listItem.RefreshCoverArt();
+                RefreshMovieArtwork(selectedMovie);
             }
+        }
+
+        private void RefreshMovieArtwork(DBMovieInfo movie) {
+            GUIListItem listItem = browser.GetMovieListItem(movie);
+            if (listItem != null) listItem.RefreshCoverArt();
         }
 
         private string GetBackdropPath() {
@@ -292,7 +296,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (browser.CurrentView == BrowserViewMode.CATEGORIES)
                 UpdateCategoryDetails();
             else
-                UpdateMovieDetails();
+                PublishMovieDetails();
         }
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
@@ -305,7 +309,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 UpdateCategoryDetails();
             }
             else {
-                UpdateMovieDetails();
+                PublishMovieDetails();
             }
 
             // set the backdrop visibility based on the skin settings
@@ -1094,7 +1098,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             if (dialog.SelectedId == detailsItem.ItemId) {
-                updateDetails();
+                updateMovieDetails();
             }
             else if (dialog.SelectedId == cycleArtItem.ItemId) {
                 
@@ -1109,23 +1113,23 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     listItem.RefreshCoverArt();
                 }
 
-                UpdateArtwork();
+                PublishArtwork();
             }
             else if (dialog.SelectedId == retrieveArtItem.ItemId) {
                 logger.Info("Updating artwork for " + browser.SelectedMovie.Title);
-                retrieveMissingArt();
+                updateMovieArtwork();
             }
             else if (dialog.SelectedId == unwatchedItem.ItemId) {
                 browser.SelectedMovie.ActiveUserSettings.WatchedCount = 0;
                 browser.SelectedMovie.ActiveUserSettings.Commit();
-                UpdateMovieDetails();
+                PublishMovieDetails();
                 browser.UpdateListColors(browser.SelectedMovie);
                 browser.ReapplyFilters();
             }
             else if (dialog.SelectedId == watchedItem.ItemId) {
                 browser.SelectedMovie.ActiveUserSettings.WatchedCount = 1;
                 browser.SelectedMovie.ActiveUserSettings.Commit();
-                UpdateMovieDetails();
+                PublishMovieDetails();
                 browser.UpdateListColors(browser.SelectedMovie);
                 browser.ReapplyFilters();
             }
@@ -1134,7 +1138,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (dialog.SelectedId == rateItem.ItemId) {
                 if (GetUserRating(browser.SelectedMovie)) {
-                    UpdateMovieDetails();
+                    PublishMovieDetails();
                 }
             }
         }
@@ -1242,8 +1246,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
-        // From online, updates the details of the currently selected movie.
-        private void updateDetails() {
+        #endregion
+
+        #region Movie Update Methods
+
+        delegate DBMovieInfo MovieUpdater(DBMovieInfo movie);
+
+        // Updates the details of the currently selected movie using the preferred dataprovider. (async)
+        private void updateMovieDetails() {
             bool bConfirm = ShowCustomYesNo(Translation.UpdateMovieDetailsHeader, Translation.UpdateMovieDetailsBody, null, null, false);
             if (bConfirm && browser.SelectedMovie != null) {
                 MovieUpdater updater = new MovieUpdater(updateMovieDetails);
@@ -1251,13 +1261,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
-        delegate void MovieUpdater(DBMovieInfo movie);
+        private DBMovieInfo updateMovieDetails(DBMovieInfo movie) {
 
-        private void updateMovieDetails(DBMovieInfo movie) {
-            
             // indicate that we are doing some work here
             setWorkingAnimationStatus(true);
-            
+
+            logger.Info("Updating movie details for '{0}'", movie.Title);
+
             MovingPicturesCore.DataProviderManager.Update(movie);
             movie.Commit();
             foreach (DBLocalMedia lm in movie.LocalMedia) {
@@ -1267,13 +1277,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // indicate we are done
             setWorkingAnimationStatus(false);
+
+            return movie;
         }
 
         private void movieDetailsUpdated(IAsyncResult result) {
             MovieUpdater updater = (MovieUpdater)result.AsyncState;
 
             // End the operation
-            updater.EndInvoke(result);
+            DBMovieInfo movie = updater.EndInvoke(result);
+
+            logger.Info("Finished updating details for '{0}'", movie.Title);
 
             // Reload the active facade to enforce changes in sorting and publishing
             browser.ReapplyFilters();
@@ -1283,28 +1297,58 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (browser.CurrentView != BrowserViewMode.CATEGORIES) {
 
                 // Reload the movie details because the selection won't be changed
-                UpdateMovieDetails();
+                PublishMovieDetails();
             }
         }
 
-        // retrieves from online artwork for the currently selected movie
-        // if and only if no artwork currently exists.
-        private void retrieveMissingArt() {
-            if (browser.SelectedMovie == null)
-                return;
+        // Updates the artwork of the currently selected movie using the preferred dataprovider. (async)
+        private void updateMovieArtwork() {
+            if (browser.SelectedMovie != null) {
+                MovieUpdater updater = new MovieUpdater(updateMovieArtwork);
+                updater.BeginInvoke(browser.SelectedMovie, new AsyncCallback(movieArtworkUpdated), updater);
+            }
+        }
 
-            if (browser.SelectedMovie.CoverFullPath.Trim().Length == 0) {
-                MovingPicturesCore.DataProviderManager.GetArtwork(browser.SelectedMovie);
-                browser.SelectedMovie.Commit();
+        private DBMovieInfo updateMovieArtwork(DBMovieInfo movie) {
+            // indicate that we are doing some work here
+            setWorkingAnimationStatus(true);
+
+            logger.Info("Updating covers for '{0}'", movie.Title);
+
+            if (movie.CoverFullPath.Trim().Length == 0) {
+                MovingPicturesCore.DataProviderManager.GetArtwork(movie);
+                movie.Commit();
             }
 
-            if (browser.SelectedMovie.BackdropFullPath.Trim().Length == 0) {
-                new LocalProvider().GetBackdrop(browser.SelectedMovie);
-                MovingPicturesCore.DataProviderManager.GetBackdrop(browser.SelectedMovie);
-                browser.SelectedMovie.Commit();
+            logger.Info("Updating backdrop for '{0}'", movie.Title);
+
+            if (movie.BackdropFullPath.Trim().Length == 0) {
+                new LocalProvider().GetBackdrop(movie);
+                MovingPicturesCore.DataProviderManager.GetBackdrop(movie);
+                movie.Commit();
             }
 
-            UpdateArtwork();
+            // indicate we are done
+            setWorkingAnimationStatus(false);
+
+            return movie;
+        }
+
+        private void movieArtworkUpdated(IAsyncResult result) {
+            MovieUpdater updater = (MovieUpdater)result.AsyncState;
+
+            // End the operation
+            DBMovieInfo movie = updater.EndInvoke(result);
+
+            logger.Info("Finished updating artwork for '{0}'", movie.Title);
+
+            // Update Artwork
+            if (browser.SelectedMovie == movie) {
+                PublishArtwork();
+            }
+            else {
+                RefreshMovieArtwork(movie);
+            }
         }
 
         #endregion
@@ -1501,10 +1545,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 PublishDetails(browser.CurrentNode.AdditionalSettings, "CurrentNode.Extra.AdditionalSettings");
             }
 
-            UpdateArtwork();
+            PublishArtwork();
         }
 
-        private void UpdateMovieDetails() {
+        private void PublishMovieDetails() {
             if (browser.SelectedMovie == null)
                 return;
 
@@ -1527,7 +1571,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         selectedMovieWatchedIndicator.Visible = true;             
              }
 
-            UpdateArtwork();
+            PublishArtwork();
         }
 
         public void SetProperty(string property, string value) {
