@@ -7,6 +7,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 using Cornerstone.MP;
+using Cornerstone.MP.Extensions;
 using Cornerstone.GUI.Dialogs;
 using MediaPortal.Dialogs;
 using MediaPortal.GUI.Library;
@@ -165,7 +166,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     case MenuBackdropType.RANDOM:
                         lock (backdropSync) {
                             if (!backdropLookup.ContainsKey(selectedNode)) {
-                                DBMovieInfo randomMovie = selectedNode.GetRandomSubItem();
+                                DBMovieInfo randomMovie = browser.GetRandomMovie(selectedNode);
                                 if (randomMovie == null || randomMovie.BackdropFullPath.Trim().Length == 0)
                                     return null;
 
@@ -188,20 +189,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void ClearFocus() {
-            if (facade != null) {
-                facade.Focus = false;
-                if (facade.ListView != null) facade.ListView.Focus = false;
-                if (facade.ThumbnailView != null) facade.ThumbnailView.Focus = false;
-                if (facade.FilmstripView != null) facade.FilmstripView.Focus = false;
-            }
-
-            if (categoriesFacade != null) {
-                categoriesFacade.Focus = false;
-                if (categoriesFacade.ListView != null) categoriesFacade.ListView.Focus = false;
-                if (categoriesFacade.ThumbnailView != null) categoriesFacade.ThumbnailView.Focus = false;
-                if (categoriesFacade.FilmstripView != null) categoriesFacade.FilmstripView.Focus = false;
-            }
-
             if (cycleViewButton != null) cycleViewButton.Focus = false;
             if (viewMenuButton != null) viewMenuButton.Focus = false;
             if (filterButton != null) filterButton.Focus = false;
@@ -310,11 +297,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             logger.Debug("OnBrowserViewChanged Started");
 
             if (currentView == BrowserViewMode.DETAILS) {
-                ClearFocus();
                 playButton.Focus = true;
-                UpdateMovieDetails();
+                playButton.Visible = true;
             }
-            else if (currentView == BrowserViewMode.CATEGORIES) {
+            
+            if (currentView == BrowserViewMode.CATEGORIES) {
                 UpdateCategoryDetails();
             }
             else {
@@ -506,14 +493,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 preventDialogOnLoad = false;
             } 
             else {
-                // if we have loaded before, reload the active facade
-                if (browser.CurrentView == BrowserViewMode.CATEGORIES)
-                    browser.ReloadCategoriesFacade();
-                else if (browser.CurrentView != BrowserViewMode.DETAILS) 
-                    browser.ReloadMovieFacade();
-
-                // update the view to match our previous settings    
-                browser.ReapplyView();          
+                // if we have loaded before, reload the view
+                browser.ReloadView();          
             }
             
             setWorkingAnimationStatus(false);
@@ -567,7 +548,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case 51:
                     if (actionType == MediaPortal.GUI.Library.Action.ActionType.ACTION_SELECT_ITEM) {
                         browser.CurrentNode = browser.SelectedNode;
-                        if (browser.CurrentNode.Children.Count == 0) {
+                        if (browser.SubNodes.Count == 0) {
                             browser.CurrentView = browser.DefaultView;
                         }                        
                     }
@@ -632,9 +613,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         remoteFilter.Clear();
                     else {
                         if (browser.CategoriesAvailable) {
-                            browser.CurrentView = BrowserViewMode.CATEGORIES;
                             if (browser.CurrentNode != null)
                                 browser.CurrentNode = browser.CurrentNode.Parent;
+                            browser.CurrentView = BrowserViewMode.CATEGORIES;
                         }
                         // show previous screen (exit the plug-in
                         else
@@ -682,7 +663,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     break;
 
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PAGE_UP:
-                    lock (browser) {
+                    lock (browser.Facade) {
                         base.OnAction(action);
 
                         if ((browser.CurrentView == BrowserViewMode.LIST
@@ -793,7 +774,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // If the initDialog is present close it
                 if (initDialog != null) {
-                    initDialog.Reset();
                     initDialog.Close();
                 }
 
@@ -1292,11 +1272,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // End the operation
             updater.EndInvoke(result);
 
+            // Reload the active facade to enforce changes in sorting and publishing
+            browser.ReapplyFilters();
+            browser.ReloadFacade();
+
             // Reload the facade and movie details only when we are still in that view
             if (browser.CurrentView != BrowserViewMode.CATEGORIES) {
-
-                // Reload the facade to enforce changes in sorting and publishing
-                browser.ReloadMovieFacade();
 
                 // Reload the movie details because the selection won't be changed
                 UpdateMovieDetails();
@@ -1771,7 +1752,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void PublishFilterDetails() {
-            logger.Debug("updateing filter. properties");
+            logger.Debug("updating filter properties");
             if (browser.FilterNode == null) {
                 if (filteringIndicator != null) filteringIndicator.Visible = false;
                 SetProperty("#MovingPictures.Filter.Combined", " ");
