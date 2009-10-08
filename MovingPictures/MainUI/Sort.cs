@@ -211,7 +211,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (rtn == 0)
                     rtn = movieX.ID.GetValueOrDefault(0).CompareTo(movieY.ID.GetValueOrDefault(0));
 
-                if (_sortDirection == SortingDirections.Descending)
+                if (_sortDirection != SortingDirections.Descending)
                     rtn = -rtn;
 
                 return rtn;
