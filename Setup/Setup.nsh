@@ -14,12 +14,14 @@
 Var MEDIAPORTAL_DIR
 Var PLUGIN_DIR
 Var SKIN_DIR
+Var DB_DIR
 Var CURR_SKIN
 Var CURR_SKIN_WIDTH
 Var CURR_SKIN_HEIGHT
 Var CURR_SKIN_ASPECT_RATIO
 Var GENERIC_SKIN_TAG_VALUE
 Var INSTALL_NUMBER
+Var CURR_DATE
 
 # MUI Symbol Definitions
 !define MUI_FINISHPAGE_NOAUTOCLOSE
@@ -87,6 +89,7 @@ Section "Moving Pictures Plugin" SEC0000
             Abort
     everything_is_fine:
     
+	Call backupDatabase
     Call updateRegistry
 SectionEnd
 
@@ -145,6 +148,8 @@ Function .onInit
     
     # grab various fields from registry
     Call getMediaPortalDir
+	Call getSkinDir
+	Call getDatabaseDir
     Call getPreviousInstallInfo
     
 FunctionEnd
@@ -295,9 +300,17 @@ FunctionEnd
 Function backupOldSkinFiles
     ${If} ${FileExists} $SKIN_DIR\$CURR_SKIN\movingpictures.xml
         # create dir and backup existing skin files
-        CreateDirectory "$SKIN_DIR\$CURR_SKIN\MovingPictures_Backup\$INSTALL_NUMBER\Media\MovingPictures"
-        CopyFiles /SILENT "$SKIN_DIR\$CURR_SKIN\movingpictures*.xml" "$SKIN_DIR\$CURR_SKIN\MovingPictures_Backup\$INSTALL_NUMBER\"
-        CopyFiles /SILENT "$SKIN_DIR\$CURR_SKIN\Media\MovingPictures\*.*" "$SKIN_DIR\$CURR_SKIN\MovingPictures_Backup\$INSTALL_NUMBER\Media\MovingPictures\"
+        CreateDirectory "$SKIN_DIR$CURR_SKIN\MovingPictures_Backup\$CURR_DATE\$INSTALL_NUMBER\Media\MovingPictures"
+        CopyFiles /SILENT "$SKIN_DIR$CURR_SKIN\movingpictures*.xml" "$SKIN_DIR$CURR_SKIN\MovingPictures_Backup\$CURR_DATE\$INSTALL_NUMBER\"
+        CopyFiles /SILENT "$SKIN_DIR$CURR_SKIN\Media\MovingPictures\*.*" "$SKIN_DIR$CURR_SKIN\MovingPictures_Backup\$CURR_DATE\$INSTALL_NUMBER\Media\MovingPictures\"
+    ${EndIf}
+FunctionEnd
+
+Function backupDatabase
+    ${If} ${FileExists} $DB_DIR\movingpictures.db3
+        # create dir and backup existing database
+        CreateDirectory "$DB_DIR\MovingPictures_Backup\$CURR_DATE\$INSTALL_NUMBER"
+        CopyFiles /SILENT "$DB_DIRmovingpictures.db3" "$DB_DIRMovingPictures_Backup\$CURR_DATE\$INSTALL_NUMBER\movingpictures.db3"
     ${EndIf}
 FunctionEnd
 
@@ -323,7 +336,17 @@ Function getMediaPortalDir
     
     # store our output folders
     StrCpy $PLUGIN_DIR "$MEDIAPORTAL_DIR\plugins\Windows"
-	
+		
+	Pop $2
+    Pop $1
+	Pop $0
+FunctionEnd
+
+Function getSkinDir
+    Push $0
+	Push $1
+    Push $2
+
 	#grab the skin folder
 	${xml::LoadFile} "$MEDIAPORTAL_DIR\MediaPortalDirs.xml" $1
     IntCmp $1 -1 fail
@@ -333,8 +356,6 @@ Function getMediaPortalDir
     IntCmp $1 -1 fail
     ${xml::GetText} $2 $1
     IntCmp $1 -1 fail
-	
-    # verify the skin folder was found properly
     
     #check_for_new_path_on_vista_or_win7
         ExpandEnvStrings $SKIN_DIR $2
@@ -349,7 +370,41 @@ Function getMediaPortalDir
 	fail:
 		MessageBox MB_OK|MB_ICONEXCLAMATION $(BAD_SKIN_PATH)	
 	done:
-		
+	
+	Pop $2
+    Pop $1
+	Pop $0
+FunctionEnd
+
+Function getDatabaseDir
+    Push $0
+	Push $1
+    Push $2
+
+	#grab the database folder
+	${xml::LoadFile} "$MEDIAPORTAL_DIR\MediaPortalDirs.xml" $1
+    IntCmp $1 -1 fail
+    ${xml::RootElement} $0 $1
+    IntCmp $1 -1 fail
+    ${xml::XPathNode} "//Config/Dir[@id='Database']/Path" $1
+    IntCmp $1 -1 fail
+    ${xml::GetText} $2 $1
+    IntCmp $1 -1 fail
+    
+    #check_for_new_path_on_vista_or_win7
+        ExpandEnvStrings $DB_DIR $2
+        IfFileExists $DB_DIR\*.* done check_for_relative_path
+	check_for_relative_path:
+		StrCpy $DB_DIR "$MEDIAPORTAL_DIR\$DB_DIR"
+		IfFileExists $DB_DIR\*.* done check_for_new_xp_path
+    check_for_new_xp_path:
+        ${StrReplace} $DB_DIR "%ProgramData%" "%ALLUSERSPROFILE%\Application Data" $2
+        ExpandEnvStrings $DB_DIR $DB_DIR
+        IfFileExists $DB_DIR\*.* done fail
+	fail:
+		MessageBox MB_OK|MB_ICONEXCLAMATION $(BAD_DB_PATH)	
+	done:
+	
 	Pop $2
     Pop $1
 	Pop $0
@@ -367,6 +422,24 @@ Function getPreviousInstallInfo
     # this is needed to always have a unique backup dir
     IntOp $INSTALL_NUMBER $INSTALL_NUMBER + 1       
     WriteRegStr HKEY_LOCAL_MACHINE "${REGKEY}" InstallCount $INSTALL_NUMBER     
+	
+	## grab the current date. alao used for file backup purposes
+	Push $0
+	Push $1
+	Push $2
+	Push $3
+	Push $4
+	Push $5
+	Push $6
+	${GetTime} "" "L" $0 $1 $2 $3 $4 $5 $6
+	StrCpy $CURR_DATE "$1-$0-$2"
+	Pop $6
+	Pop $5
+	Pop $4
+	Pop $3
+	Pop $2
+	Pop $1
+	
 FunctionEnd
 
 # stores the version number (and other relevant data) of moving pictures 
