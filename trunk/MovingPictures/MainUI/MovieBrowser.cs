@@ -173,14 +173,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // set correct sort for this node
                 if (value != null) {
                     DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)value.AdditionalSettings;
-                    if (!nodeSettings.UseDefaultSorting) {
-                        CurrentSortField = nodeSettings.SortField;
-                        CurrentSortDirection = nodeSettings.SortDirection;
+                    
+                    // store the default sort settings if default sorting is used
+                    if (nodeSettings.UseDefaultSorting) {
+                        nodeSettings.UseDefaultSorting = false;
+                        nodeSettings.SortField = DefaultSortField;
+                        nodeSettings.SortDirection = SortingDirections.Ascending;
+                        nodeSettings.Commit();
                     }
-                    else {
-                        CurrentSortField = DefaultSortField;
-                        CurrentSortDirection = Sort.GetLastSortDirection(DefaultSortField);
-                    }
+
+                    // set the sorting fields
+                    CurrentSortField = nodeSettings.SortField;
+                    CurrentSortDirection = nodeSettings.SortDirection;
                 }
 
                 updatingFiltering = true;
