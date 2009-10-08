@@ -153,7 +153,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             GUIFacadeControl facade = Browser.Facade;
 
-            lock (Browser) {
+            lock (Browser.SyncRoot) {
 
                 if (facade.SelectedListItem != item) return;
 

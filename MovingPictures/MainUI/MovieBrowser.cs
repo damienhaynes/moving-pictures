@@ -30,34 +30,38 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region Properties
 
+        /// <summary>
+        /// Gets an object that can be used to synchronize access to the movie browser
+        /// </summary>
+        public object SyncRoot {
+            get {
+                return syncRoot;
+            }
+        } private readonly object syncRoot = new object();
+
         // The currently selected movie.
         public DBMovieInfo SelectedMovie {
             get {
                 return selectedMovie;
             }
             set {
-                if (selectedMovie != value) {
-                    
-                    // set the selected movie
-                    selectedMovie = value;
+                lock (SyncRoot) {
+                    if (selectedMovie != value) {
+                        
+                        // set the selected movie
+                        if (selectedMovie != null) {
+                            selectedMovie = value;
+                        }
+                        else {
+                            // resets the selected movie to the first movie in the list
+                            selectedMovie = facade.SyncToFacade<DBMovieInfo>(null, out selectedIndex);
+                        }
 
-                    // verify the selection exists in the facade (will return alternative selection if false)
-                    selectedMovie = facade.SyncToFacade<DBMovieInfo>(selectedMovie);
-                    
-                    // register the selected index
-                    selectedIndex = facade.SelectedListItemIndex;
-                    
-                    // log the change
-                    if (selectedMovie != null)
+                        // notify any listeners
                         logger.Debug("SelectedMovie changed: " + selectedMovie.Title);
-                    else {
-                        logger.Debug("SelectedMovie changed: null");
+                        if (SelectionChanged != null)
+                            SelectionChanged(selectedMovie);
                     }
-
-                    // notify any listeners
-                    if (SelectionChanged != null)
-                        SelectionChanged(selectedMovie);
-
                 }
             }
         }
@@ -638,23 +642,24 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             // reapply the current selection
-            SelectedMovie = facade.SyncToFacade<DBMovieInfo>(SelectedMovie);
+            SelectedMovie = facade.SyncToFacade<DBMovieInfo>(selectedMovie, out selectedIndex);        
         }
 
         // triggered when a movie was selected on the facade
         public void onMovieItemSelected(GUIListItem item, GUIControl parent) {
-            // if this is not a message from the facade, exit
-            if (parent != facade && parent != facade.FilmstripView && parent != facade.ThumbnailView &&
-                parent != facade.ListView) return;
+            if (facade == null || facade.SelectedListItem == null || !facade.IsRelated(parent) )
+                return;
 
-            SelectedMovie = item.TVTag as DBMovieInfo;
+            selectedIndex = facade.SelectedListItemIndex;
+            SelectedMovie = facade.SelectedListItem.TVTag as DBMovieInfo;
         }
 
         public void onCategoryNodeSelected(GUIListItem item, GUIControl parent) {
             // if this is not a message from the facade, exit
-            if (parent != _categoriesFacade && parent != _categoriesFacade.ListView) return;
+            if (_categoriesFacade == null || _categoriesFacade.SelectedListItem == null || !_categoriesFacade.IsRelated(parent))
+                return;
 
-            SelectedNode = item.TVTag as DBNode<DBMovieInfo>;
+            SelectedNode = _categoriesFacade.SelectedListItem.TVTag as DBNode<DBMovieInfo>;
         }
 
         // adds the given movie to the facade and creates a GUIListItem if neccesary
