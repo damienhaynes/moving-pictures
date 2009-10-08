@@ -982,6 +982,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.CurrentSortDirection = Sort.GetLastSortDirection(newSortField);
             }
 
+            // If we are in a category store the sorting used
+            if (browser.CurrentNode != null) {
+                DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)browser.CurrentNode.AdditionalSettings;
+                nodeSettings.SortField = browser.CurrentSortField;
+                nodeSettings.SortDirection = browser.CurrentSortDirection;
+                nodeSettings.Commit();
+            }
+
             // Reload movie facade with selection reset
             browser.ReloadMovieFacade();
             browser.SelectedMovie = null;
