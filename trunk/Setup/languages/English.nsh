@@ -5,6 +5,7 @@
 !insertmacro LANG_STRING INVALID_SKIN1 "Could not determine the aspect ratio of the "
 !insertmacro LANG_STRING INVALID_SKIN2 " skin. The$\nGeneric Skin will not be installed for "
 !insertmacro LANG_STRING BAD_SKIN_PATH "Could not locate Skins directory. Skin files will not be installed!" 
+!insertmacro LANG_STRING BAD_DB_PATH "Could not locate Database directory. Database will not be backed up."
 
 !insertmacro LANG_STRING DLL_DESCRIPTION "The Moving Pictures plug-in."
 !insertmacro LANG_STRING GENERIC_SKIN_DESCRIPTION "If selected, this will be install the Generic Skin files for skins that do not currently support Moving Pictures. All existing files will be backed up." 
