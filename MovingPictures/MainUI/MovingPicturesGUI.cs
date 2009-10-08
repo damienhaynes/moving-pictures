@@ -420,8 +420,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
                 else {
                     preventDialogOnLoad = false;
+                    GUIWindowManager.ShowPreviousWindow();
+                    return;
                 }
-                return;
             }
 
             // if the user hasn't defined any import paths they need to goto the config screen
