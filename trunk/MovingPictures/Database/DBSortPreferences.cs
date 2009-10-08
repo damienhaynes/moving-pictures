@@ -20,7 +20,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private bool _sortTitleAscending;
 
-        [DBFieldAttribute(Default = "True")]
+        [DBFieldAttribute(Default = "False")]
         public bool SortDateAddedAscending {
             get { return _sortDateAddedAscending; }
             set {
@@ -31,7 +31,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private bool _sortDateAddedAscending;
 
-        [DBFieldAttribute(Default = "True")]
+        [DBFieldAttribute(Default = "False")]
         public bool SortYearAscending {
             get { return _sortYearAscending; }
             set {
@@ -64,7 +64,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private bool _sortLanguageAscending;
 
-        [DBFieldAttribute(Default = "True")]
+        [DBFieldAttribute(Default = "False")]
         public bool SortScoreAscending {
             get { return _sortScoreAscending; }
             set {
@@ -75,7 +75,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private bool _sortScoreAscending;
 
-        [DBFieldAttribute(Default = "True")]
+        [DBFieldAttribute(Default = "False")]
         public bool SortPopularityAscending {
             get { return _sortPopularityAscending; }
             set {
