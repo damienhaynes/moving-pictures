@@ -129,7 +129,9 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 stringData = ReadFile(variables);
 
             // Set variable
-            setVariable(variables, parsedName, stringData);
+            if (stringData != null) {
+                setVariable(variables, parsedName, stringData);
+            }
         }
 
         // Retrieves an URL
