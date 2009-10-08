@@ -58,7 +58,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         }
 
                         // notify any listeners
-                        logger.Debug("SelectedMovie changed: " + selectedMovie.Title);
+                        if (selectedMovie != null) {
+                            logger.Debug("SelectedMovie changed: " + selectedMovie.Title);
+                        }
+                        else {
+                            logger.Debug("SelectedMovie changed: NULL");
+                        }
                         if (SelectionChanged != null)
                             SelectionChanged(selectedMovie);
                     }
