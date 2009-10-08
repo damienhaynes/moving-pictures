@@ -84,7 +84,7 @@
             this.toolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripSplitButton1.Name = "toolStripSplitButton1";
             this.toolStripSplitButton1.Size = new System.Drawing.Size(31, 20);
-            this.toolStripSplitButton1.Text = "addCriteriaButton";
+            this.toolStripSplitButton1.Text = "Add Criteria";
             this.toolStripSplitButton1.ButtonClick += new System.EventHandler(this.addCriteriaButton_ButtonClick);
             // 
             // addNewRuleToolStripMenuItem
@@ -121,7 +121,7 @@
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(31, 20);
-            this.toolStripButton1.Text = "removeCriteriaButton";
+            this.toolStripButton1.Text = "Remove Criteria";
             this.toolStripButton1.Click += new System.EventHandler(this.removeCriteriaButton_Click);
             // 
             // label2
