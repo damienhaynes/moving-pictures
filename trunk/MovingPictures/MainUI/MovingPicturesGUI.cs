@@ -985,6 +985,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // If we are in a category store the sorting used
             if (browser.CurrentNode != null) {
                 DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)browser.CurrentNode.AdditionalSettings;
+                nodeSettings.UseDefaultSorting = false;
                 nodeSettings.SortField = browser.CurrentSortField;
                 nodeSettings.SortDirection = browser.CurrentSortDirection;
                 nodeSettings.Commit();
