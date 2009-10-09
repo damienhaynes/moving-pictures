@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
@@ -52,8 +53,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         public void Commit() {
             try {
-                lock (lockList) {
-                    foreach (DBMovieInfo currMovie in listItems.Keys) {
+                foreach (DBMovieInfo currMovie in listItems.Keys.ToList()) {
+                    if (currMovie.ID != null) {
                         currMovie.Commit();
                         foreach (DBLocalMedia currFile in currMovie.LocalMedia)
                             currFile.Commit();
@@ -627,12 +628,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                                 "Refresh All Movies", MessageBoxButtons.OKCancel);
 
             if (result == System.Windows.Forms.DialogResult.OK) {
-                processingMovies = new List<DBMovieInfo>();
-
-                lock (lockList) {
-                    foreach (DBMovieInfo currItem in listItems.Keys)
-                        processingMovies.Add(currItem);
-                }
+                
+                // create movie list copy from dictionary
+                processingMovies = listItems.Keys.ToList();
 
                 ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(refreshMovies));
                 popup.Owner = this.ParentForm;
@@ -793,8 +791,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void updateTitleSortingMenuItem_Click(object sender, EventArgs e) {
-            lock (lockList) {
-                foreach (DBMovieInfo currItem in listItems.Keys)
+            foreach (DBMovieInfo currItem in listItems.Keys.ToList()) {
                     currItem.PopulateSortBy();
             }
 
