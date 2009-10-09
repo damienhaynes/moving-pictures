@@ -197,13 +197,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     selectedMovie = null;
                 }
 
-                // remove previous node filter
-                if (_currentNode != null && _currentNode.Filter != null)
-                    Filters.Remove(_currentNode.Filter);
+                // remove previous node filters
+                if (_currentNode != null)
+                    removeFilters(_currentNode);
 
-                // add current node filter
-                if (value != null && value.Filter != null) 
-                    Filters.Add(value.Filter);
+                // add current node filters
+                if (value != null)
+                    addFilters(value); 
 
                 updatingFiltering = false;
 
@@ -607,24 +607,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             CategoriesFacade.ClearAll();
 
             foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
-                //if (currNode.Children.Count == 0) {
-                    
-                    HashSet<DBMovieInfo> nodeResults = currNode.GetFilteredItems();
-                    if (nodeResults.Count == 0)
-                        continue;
+                HashSet<DBMovieInfo> nodeResults = currNode.GetFilteredItems();
+                if (nodeResults.Count == 0)
+                    continue;
 
-                    if (Filters.Count > 0) {
-                        foreach (IFilter<DBMovieInfo> filter in Filters) {
-                            nodeResults = filter.Filter(nodeResults);
-                        }
-
-                        if (nodeResults.Count == 0)
-                            continue;
+                if (Filters.Count > 0) {
+                    foreach (IFilter<DBMovieInfo> filter in Filters) {
+                        nodeResults = filter.Filter(nodeResults);
                     }
 
-                    visibleMovies.Add(currNode, nodeResults);
+                    if (nodeResults.Count == 0)
+                        continue;
+                }
 
-                //}
+                visibleMovies.Add(currNode, nodeResults);
                 addCategoryNodeToFacade(currNode);
             }
 
