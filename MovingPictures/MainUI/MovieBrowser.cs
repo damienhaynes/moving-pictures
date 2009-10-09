@@ -64,8 +64,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         else {
                             logger.Debug("SelectedMovie changed: NULL");
                         }
-                        if (SelectionChanged != null)
-                            SelectionChanged(selectedMovie);
+                        if (MovieSelectionChanged != null)
+                            MovieSelectionChanged(selectedMovie);
                     }
                 }
             }
@@ -240,8 +240,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     _selectedNode = value;
 
                     // notify any listeners
-                    if (SelectionChanged != null)
-                        SelectionChanged(selectedMovie);
+                    if (NodeSelectionChanged != null)
+                        NodeSelectionChanged(_selectedNode);
                 }
             }
         } public DBNode<DBMovieInfo> _selectedNode;
@@ -332,10 +332,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Events
 
         public delegate void ContentsChangedDelegate();
-        public delegate void SelectionChangedDelegate(DBMovieInfo obj);
+        public delegate void MovieSelectionChangedDelegate(DBMovieInfo obj);
+        public delegate void NodeSelectionChangedDelegate(DBNode<DBMovieInfo> obj);
         public delegate void ViewChangedDelegate(BrowserViewMode previousView, BrowserViewMode currentView);
         
-        public event SelectionChangedDelegate SelectionChanged;
+        public event MovieSelectionChangedDelegate MovieSelectionChanged;
+        public event NodeSelectionChangedDelegate NodeSelectionChanged;
         public event ContentsChangedDelegate ContentsChanged;
         public event ViewChangedDelegate ViewChanged;
         
