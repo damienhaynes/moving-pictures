@@ -242,6 +242,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
             }
 
+            sendToImporterToolStripMenuItem.Enabled = true;
             advancedButton.Enabled = true;
             playMovieButton.Enabled = true;
             
