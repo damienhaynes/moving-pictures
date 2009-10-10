@@ -192,7 +192,9 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             if (InitializeProgress != null) InitializeProgress("Done!", 100);
-
+            
+            // stop listening
+            DatabaseMaintenanceManager.MaintenanceProgress -= new ProgressDelegate(DatabaseMaintenanceManager_MaintenanceProgress);
             launchBackgroundTasks();
         }
 
