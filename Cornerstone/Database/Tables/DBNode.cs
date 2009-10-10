@@ -136,13 +136,13 @@ namespace Cornerstone.Database.Tables {
         } private DatabaseTable _additionalSettings;
 
         [DBField]
-        public int SortOrder {
-            get { return _sortOrder; }
+        public int SortPosition {
+            get { return _sortPosition; }
             set {
-                _sortOrder = value;
+                _sortPosition = value;
                 commitNeeded = true;
             }
-        } private int _sortOrder;
+        } private int _sortPosition;
 
         #endregion
 
@@ -336,7 +336,7 @@ namespace Cornerstone.Database.Tables {
         }
 
         public override int CompareTo(object obj) {
-            int rt = this.SortOrder.CompareTo(((DBNode<T>)obj).SortOrder);
+            int rt = this.SortPosition.CompareTo(((DBNode<T>)obj).SortPosition);
             if (rt == 0)
                 return this.ToString().CompareTo(obj.ToString());
             else

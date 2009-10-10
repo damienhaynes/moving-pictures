@@ -261,6 +261,7 @@ namespace Cornerstone.GUI.Filtering {
             treeView.Nodes.Clear();
 
             // add root nodes. children will be recursively added as well
+            _menu.RootNodes.Sort();
             foreach (DBNode<T> currNode in _menu.RootNodes) 
                 treeView.Nodes.Add(createTreeNode(currNode));
             
@@ -280,6 +281,7 @@ namespace Cornerstone.GUI.Filtering {
             }
 
             node.UpdateDynamicNode();
+            node.Children.Sort();
 
             setVisualProperties(treeNode);
             updateFilteredItems(treeNode, false);
@@ -744,7 +746,74 @@ namespace Cornerstone.GUI.Filtering {
             if (node.Children.Count == 0) {
                 updateFilteredItems(e.Node, true);
             }
-        }       
+        }
+
+        private void moveUpButton_Click(object sender, EventArgs e) {
+            if (treeView.SelectedNode == null || !(treeView.SelectedNode.Tag is DBNode<T>))
+                return;
+
+            // grab the dbnode
+            DBNode<T> node = treeView.SelectedNode.Tag as DBNode<T>;
+            
+            // and the collection it belongs to
+            List<DBNode<T>> collection;
+            if (node.Parent == null) collection = _menu.RootNodes;
+            else collection = node.Parent.Children;
+
+            // attempt to move the node in the collection and if successful reflect the change on the GUI
+            if (collection.MoveUp(node, true)) {
+                if (node.Parent != null)
+                    node.Parent.Commit();
+                else
+                    _menu.Commit();
+
+                TreeNode treeNode = treeView.SelectedNode;
+                
+                TreeNodeCollection treeCollection;
+                if (treeNode.Parent == null) treeCollection = treeView.Nodes;
+                else treeCollection = treeNode.Parent.Nodes;
+
+                int newIndex = treeCollection.IndexOf(treeNode) - 1;
+                treeCollection.RemoveAt(newIndex + 1);
+                treeCollection.Insert(newIndex, treeNode);
+
+                treeView.SelectedNode = treeNode;
+            }
+        }
+
+        private void moveDownButton_Click(object sender, EventArgs e) {
+            if (treeView.SelectedNode == null || !(treeView.SelectedNode.Tag is DBNode<T>))
+                return;
+
+            // grab the dbnode
+            DBNode<T> node = treeView.SelectedNode.Tag as DBNode<T>;
+
+            // and the collection it belongs to
+            List<DBNode<T>> collection;
+            if (node.Parent == null) collection = _menu.RootNodes;
+            else collection = node.Parent.Children;
+
+            // attempt to move the node in the collection and if successful 
+            // commit and reflect the change on the GUI
+            if (collection.MoveDown(node, true)) {
+                if (node.Parent != null)
+                    node.Parent.Commit();
+                else
+                    _menu.Commit();
+
+                TreeNode treeNode = treeView.SelectedNode;
+
+                TreeNodeCollection treeCollection;
+                if (treeNode.Parent == null) treeCollection = treeView.Nodes;
+                else treeCollection = treeNode.Parent.Nodes;
+
+                int newIndex = treeCollection.IndexOf(treeNode) + 1;
+                treeCollection.RemoveAt(newIndex - 1);
+                treeCollection.Insert(newIndex, treeNode);
+
+                treeView.SelectedNode = treeNode;
+            }
+        }   
     }
 
     public interface IMenuTreePanel {

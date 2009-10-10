@@ -246,7 +246,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         } public DBNode<DBMovieInfo> _selectedNode;
 
-        public IList<DBNode<DBMovieInfo>> SubNodes {
+        public List<DBNode<DBMovieInfo>> SubNodes {
             get {
                 if (CurrentNode != null)
                     return CurrentNode.Children;
@@ -605,6 +605,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             visibleMovies.Clear();
             CategoriesFacade.ClearAll();
+            SubNodes.Sort();
 
             foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
                 HashSet<DBMovieInfo> nodeResults = currNode.GetFilteredItems();
