@@ -15,6 +15,7 @@ using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using NLog;
 using System.Diagnostics;
 using Cornerstone.GUI.Dialogs;
+using System.Threading;
 
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
@@ -435,9 +436,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     selectedMatch.PossibleMatches.Add(selectedMovie);
                     selectedMatch.Selected = selectedMovie;
 
-             
-                    // Manually Assign Movie
-                    MovingPicturesCore.Importer.ManualAssign(selectedMatch);
+                    ThreadStart actions = delegate {
+                        // Manually Assign Movie
+                        MovingPicturesCore.Importer.ManualAssign(selectedMatch);
+                    };
+                    
+                    Thread thread = new Thread(actions);
+                    thread.Name = "ManualUpdateThread";
+                    thread.Start();
                 }
             }
         }

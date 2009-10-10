@@ -102,6 +102,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         #endregion
 
+        public delegate void MatchActionDelegate(MovieMatch match);
+
         // sends progress update events to any available listeners
         public delegate void ImportProgressHandler(int percentDone, int taskCount, int taskTotal, string taskDescription);
         public event ImportProgressHandler Progress;
