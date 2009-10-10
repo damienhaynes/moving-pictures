@@ -25,9 +25,12 @@
         private void InitializeComponent() {
             this.treeView = new System.Windows.Forms.TreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.addNodeButton = new System.Windows.Forms.ToolStripButton();
             this.removeNodeButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.moveUpButton = new System.Windows.Forms.ToolStripButton();
+            this.moveDownButton = new System.Windows.Forms.ToolStripButton();
             this.advancedButton = new System.Windows.Forms.ToolStripSplitButton();
             this.convertToRegularMenuItemButton = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
@@ -65,14 +68,27 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNodeButton,
             this.removeNodeButton,
+            this.toolStripSeparator2,
+            this.moveUpButton,
+            this.moveDownButton,
             this.toolStripSeparator1,
             this.advancedButton});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.toolStrip1.Location = new System.Drawing.Point(189, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(33, 77);
+            this.toolStrip1.Size = new System.Drawing.Size(33, 148);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(31, 6);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(31, 6);
             // 
             // addNodeButton
             // 
@@ -97,10 +113,28 @@
             this.removeNodeButton.ToolTipText = "Remove Menu Item";
             this.removeNodeButton.Click += new System.EventHandler(this.removeNodeButton_Click);
             // 
-            // toolStripSeparator1
+            // moveUpButton
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(31, 6);
+            this.moveUpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.moveUpButton.Image = global::Cornerstone.Properties.Resources.arrow_up;
+            this.moveUpButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.moveUpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.moveUpButton.Name = "moveUpButton";
+            this.moveUpButton.Size = new System.Drawing.Size(31, 20);
+            this.moveUpButton.Text = "Move Category Up";
+            this.moveUpButton.Click += new System.EventHandler(this.moveUpButton_Click);
+            // 
+            // moveDownButton
+            // 
+            this.moveDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.moveDownButton.Image = global::Cornerstone.Properties.Resources.arrow_down;
+            this.moveDownButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.moveDownButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.moveDownButton.Name = "moveDownButton";
+            this.moveDownButton.Size = new System.Drawing.Size(31, 20);
+            this.moveDownButton.Text = "Move Category Down";
+            this.moveDownButton.ToolTipText = "Move Category Down";
+            this.moveDownButton.Click += new System.EventHandler(this.moveDownButton_Click);
             // 
             // advancedButton
             // 
@@ -147,5 +181,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSplitButton advancedButton;
         private System.Windows.Forms.ToolStripMenuItem convertToRegularMenuItemButton;
+        private System.Windows.Forms.ToolStripButton moveDownButton;
+        private System.Windows.Forms.ToolStripButton moveUpButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
