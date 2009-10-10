@@ -185,6 +185,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void movieInsertedListener(DatabaseTable obj) {
+            // if this is not a movie object, break
+            if (obj.GetType() != typeof(DBMovieInfo))
+                return;
+
             // This ensures we are thread safe. Makes sure this method is run by
             // the thread that created this panel.
             if (InvokeRequired) {
@@ -194,10 +198,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 this.Invoke(method, parameters);
                 return;
             }
-
-            // if this is not a movie object, break
-            if (obj.GetType() != typeof(DBMovieInfo))
-                return;
 
             // add movie to the list
             addMovie((DBMovieInfo)obj);
