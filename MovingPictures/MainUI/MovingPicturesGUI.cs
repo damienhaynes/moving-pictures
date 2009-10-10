@@ -1296,13 +1296,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Reload the active facade to enforce changes in sorting and publishing
             browser.ReapplyFilters();
             browser.ReloadFacade();
-
-            // Reload the facade and movie details only when we are still in that view
-            if (browser.CurrentView != BrowserViewMode.CATEGORIES) {
-
-                // Reload the movie details because the selection won't be changed
-                PublishMovieDetails(browser.SelectedMovie);
-            }
         }
 
         // Updates the artwork of the currently selected movie using the preferred dataprovider. (async)
