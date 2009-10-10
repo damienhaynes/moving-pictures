@@ -49,7 +49,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     if (selectedMovie != value) {
                         
                         // set the selected movie
-                        if (selectedMovie != null) {
+                        if (value != null) {
                             selectedMovie = value;
                         }
                         else {
@@ -175,27 +175,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public DBNode<DBMovieInfo> CurrentNode {
             set {
-                // set correct sort for this node
-                if (value != null) {
-                    DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)value.AdditionalSettings;
-
-                    // set the sorting fields
-                    if (!nodeSettings.UseDefaultSorting) {
-                        CurrentSortField = nodeSettings.SortField;
-                        CurrentSortDirection = nodeSettings.SortDirection;
-                    } 
-                    else {
-                        CurrentSortField = DefaultSortField;
-                        CurrentSortDirection = SortingDirections.Ascending;
-                    }
-                }
-
+                // disable filter events
                 updatingFiltering = true;
-
-                // if required reset the selectedMovie
-                if (MovingPicturesCore.Settings.ResetSelectedMovieWhenSwitchingCategories) {
-                    selectedMovie = null;
-                }
 
                 // remove previous node filters
                 if (_currentNode != null)
@@ -203,8 +184,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // add current node filters
                 if (value != null)
-                    addFilters(value); 
+                    addFilters(value);
 
+                // enable filter events
                 updatingFiltering = false;
 
                 // if we are moving to the parent category set the current node
@@ -212,11 +194,31 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (_currentNode != null && value == _currentNode.Parent)
                     _selectedNode = _currentNode;
 
+                // set the new node as current node
                 _currentNode = value;
+
+                // set the sorting options
+                if (_currentNode != null) {
+                    DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)_currentNode.AdditionalSettings;
+
+                    // set the sorting fields
+                    if (!nodeSettings.UseDefaultSorting) {
+                        CurrentSortField = nodeSettings.SortField;
+                        CurrentSortDirection = nodeSettings.SortDirection;
+                    }
+                    else {
+                        CurrentSortField = DefaultSortField;
+                        CurrentSortDirection = SortingDirections.Ascending;
+                    }
+                }
+
+                // if required reset the selectedMovie
+                if (MovingPicturesCore.Settings.ResetSelectedMovieWhenSwitchingCategories) {
+                    selectedMovie = null;
+                }
 
                 ReapplyFilters();
                 ReloadFacade();
-                onContentsChanged();
             }
             get { return _currentNode; }
         } public DBNode<DBMovieInfo> _currentNode;
@@ -357,7 +359,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             visibleMovies = new Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
             filterUpdatedDelegate = new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
 
-            loadMovies();
+            // load all movies once
+            allMovies = DBMovieInfo.GetAll();
             initSortingDefaults();
         }
 
@@ -464,19 +467,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region Core MovieBrowser Methods
 
-        // An initial load of all movies in the database.
-        private void loadMovies() {          
-            // clear the list
-            allMovies = new List<DBMovieInfo>();
-            
-            // populate the list
-            List<DBMovieInfo> movies = DBMovieInfo.GetAll();
-            foreach (DBMovieInfo currMovie in movies)
-                allMovies.Add(currMovie);
-
-            onContentsChanged();
-        }
-
         // Sets the initial settings for how movies should be sorted on launch.
         private void initSortingDefaults() {
             // set default sort method
@@ -513,7 +503,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             allMovies.Add((DBMovieInfo)obj);
             ReapplyFilters();
             ReloadFacade();
-            onContentsChanged();
         }
 
         // Listens for newly removed items from the database manager.
@@ -536,7 +525,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // update the facade to reflect the changes
             ReloadFacade();
-            onContentsChanged();
         }
 
         private void removeFilters(DBNode<DBMovieInfo> node) {
@@ -567,14 +555,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             
             ReapplyFilters();
             ReloadFacade(); 
-            onContentsChanged();
         }
 
         private void onFilterUpdated(IFilter<DBMovieInfo> obj) {
             logger.Debug("OnFilterUpdated: " + obj);
             ReapplyFilters();
             ReloadFacade();        
-            onContentsChanged();
         }
 
         private void onContentsChanged() {
@@ -596,6 +582,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else if (CurrentView != BrowserViewMode.DETAILS) {
                 ReloadMovieFacade();
             }
+
+            // content has changed
+            onContentsChanged();
         }
 
         // populates the category facade
