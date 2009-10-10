@@ -16,16 +16,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         // Loops through all local files in the system and removes anything that's invalid.
         public static void RemoveInvalidFiles() {
+           
             logger.Info("Checking for invalid file entries in the database.");
 
             float count = 0;
-            float total = DBLocalMedia.GetAll().Count;
+            List<DBLocalMedia> files = DBLocalMedia.GetAll();
+            float total = files.Count;
             
             int cleaned = 0;
-            foreach (DBLocalMedia currFile in DBLocalMedia.GetAll()) {
-                if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count*100/total));
+            
+            foreach (DBLocalMedia currFile in files) {
+                if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count * 100 / total));
                 count++;
-                
+
                 // Skip previously deleted files
                 if (currFile.ID == null)
                     continue;
