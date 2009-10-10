@@ -728,9 +728,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private void OnFileRenamed(object source, RenamedEventArgs e) {
             List<DBLocalMedia> localMediaRenamed = new List<DBLocalMedia>();
 
+            logger.Debug("OnRenamedEvent: ChangeType={0}, OldFullPath='{1}', FullPath='{2}'", e.ChangeType.ToString(), e.OldFullPath, e.FullPath);
+
             if (File.Exists(e.FullPath)) {
+
+                // if the old filename still exists then this probably isn't a reliable rename event
+                if (File.Exists(e.OldFullPath))
+                    return;
+
                 DBLocalMedia localMedia = DBLocalMedia.Get(e.OldFullPath, DeviceManager.GetVolumeSerial(e.FullPath));
-                
                 // if this file is not in our database, return
                 if (localMedia.ID == null)
                     return;
@@ -740,6 +746,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 logger.Info("Watched file '{0}' was renamed to '{1}'", e.OldFullPath, e.FullPath);
             }
             else if (Directory.Exists(e.FullPath)) {
+
+                // if the old directory still exists then this probably isn't a reliable rename event
+                if (Directory.Exists(e.OldFullPath))
+                    return;
+                
                 // This is a directory so we are going to get all localmedia that uses 
                 // this directory we can do this by adding a % character to the end of 
                 // the path as the sqlite query behind it uses LIKE as operator.
