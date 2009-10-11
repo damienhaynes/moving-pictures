@@ -134,61 +134,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         ~MovingPicturesGUI() {      }
 
-        private void PublishArtwork(DBMovieInfo movie) {
-            if (movie == null)
-                return;
-
-            logger.Debug("Publishing Movie Artwork");
-
-            cover.Filename = movie.CoverFullPath;
-            backdrop.Filename = movie.BackdropFullPath;
-            
-            RefreshMovieArtwork(movie);
-        }
-
-        private void PublishArtwork(DBNode<DBMovieInfo> node) {
-            if (node == null)
-                return;
-
-            logger.Debug("Publishing Category Artwork");
-
-            cover.Filename = string.Empty;
-
-            // grab the node settings
-            DBMovieNodeSettings settings = node.AdditionalSettings as DBMovieNodeSettings;
-            if (settings == null) {
-                settings = new DBMovieNodeSettings();
-                node.AdditionalSettings = settings;
-            }
-
-            // grab the backdrop
-            switch (settings.BackdropType) {
-                case MenuBackdropType.FILE:
-                    backdrop.Filename = settings.BackdropFilePath;
-                    break;
-                case MenuBackdropType.MOVIE:
-                    backdrop.Filename = settings.BackdropMovie.BackdropFullPath;
-                    break;
-                case MenuBackdropType.RANDOM:
-                    lock (backdropSync) {
-                        if (!backdropLookup.ContainsKey(node)) {
-                            DBMovieInfo randomMovie = browser.GetRandomMovie(node);
-                            if (randomMovie == null || randomMovie.BackdropFullPath.Trim().Length == 0)
-                                backdrop.Filename = null;
-
-                            backdropLookup.Add(node, randomMovie.BackdropFullPath);
-                        }
-                    }
-                    backdrop.Filename = backdropLookup[node];
-                    break;
-            }
-        }
-
-        private void RefreshMovieArtwork(DBMovieInfo movie) {
-            GUIListItem listItem = browser.GetMovieListItem(movie);
-            if (listItem != null) listItem.RefreshCoverArt();
-        }
-
         private void ClearFocus() {
             if (cycleViewButton != null) cycleViewButton.Focus = false;
             if (viewMenuButton != null) viewMenuButton.Focus = false;
@@ -452,7 +397,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ClearFocusAction = new MovieBrowser.ClearFocusDelegate(ClearFocus);
 
                 // setup browser events
-                browser.MovieSelectionChanged += new MovieBrowser.MovieSelectionChangedDelegate(Publisher);
+                browser.MovieSelectionChanged += new MovieBrowser.MovieSelectionChangedDelegate(MovieDetailsPublisher);
                 browser.NodeSelectionChanged += new MovieBrowser.NodeSelectionChangedDelegate(PublishCategoryDetails);
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
                 browser.ViewChanged +=new MovieBrowser.ViewChangedDelegate(OnBrowserViewChanged);
@@ -1535,62 +1480,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region Skin and Property Settings
 
-        // Delays publishing new movie details to speed up GUI while browsing fast
-        private void Publisher(DBMovieInfo movie) {
-            
-            if (MovingPicturesCore.Settings.DetailsLoadingDelay < (int)(AnimationTimer.TickCount - lastPublished)) {
-                lastPublished = AnimationTimer.TickCount;
-                PublishMovieDetails(movie);
-                return;              
-            }
-
-            lastPublished = AnimationTimer.TickCount;
-
-            // Delay publishing the details by the ms specified in settings
-            if (publishTimer == null) {
-                publishTimer = new Timer(delegate { PublishMovieDetails(browser.SelectedMovie); }, null, 0, Timeout.Infinite);
-            }
-            else {
-                publishTimer.Change(MovingPicturesCore.Settings.DetailsLoadingDelay, Timeout.Infinite);
-            }           
-            
-        }
-
-        private void PublishCategoryDetails(DBNode<DBMovieInfo> node) {
-            if (node == null)
-                return;
-            
-            PublishDetails(node, "SelectedNode");
-            PublishDetails(node.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
-            PublishArtwork(node);
-        }
-
-        private void PublishMovieDetails(DBMovieInfo movie) {
-            if (movie == null)
-                return;
-
-            // publish details on selected movie
-            PublishDetails(movie, "SelectedMovie");
-            PublishDetails(movie.ActiveUserSettings, "UserMovieSettings");
-            PublishDetails(movie.LocalMedia[0], "LocalMedia");
-
-            // publish easily usable subtitles info
-            SetProperty("#MovingPictures.LocalMedia.Subtitles", movie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles");
-
-            // publish the selected index in the facade
-            int selectedIndex = browser.SelectedIndex + 1;
-            SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
-
-            if (selectedMovieWatchedIndicator != null) {
-                selectedMovieWatchedIndicator.Visible = false;
-                if (movie.ActiveUserSettings != null)
-                    if (movie.ActiveUserSettings.WatchedCount > 0)
-                        selectedMovieWatchedIndicator.Visible = true;             
-             }
-
-            PublishArtwork(movie);
-        }
-
         public void SetProperty(string property, string value) {
             SetProperty(property, value, false);
         }
@@ -1623,11 +1512,90 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIPropertyManager.SetProperty(property, value);
         }
 
-        // this does standard object publishing for any database object.
+        /// <summary>
+        /// Publishes movie details to the skin. If multiple requests are done within a short period of time the publishing is delayed 
+        /// and only the last request is then published to the skin. This will speed up browsing on "heavy" skins that show a lot of
+        /// detail on the current selection.
+        /// </summary>
+        /// <param name="movie">the movie that needs to be published</param>
+        private void MovieDetailsPublisher(DBMovieInfo movie) {
+            
+            if (MovingPicturesCore.Settings.DetailsLoadingDelay < (int)(AnimationTimer.TickCount - lastPublished)) {
+                lastPublished = AnimationTimer.TickCount;
+                PublishMovieDetails(movie);
+                return;              
+            }
+
+            lastPublished = AnimationTimer.TickCount;
+
+            // Delay publishing the details by the ms specified in settings
+            if (publishTimer == null) {
+                publishTimer = new Timer(delegate { PublishMovieDetails(browser.SelectedMovie); }, null, 0, Timeout.Infinite);
+            }
+            else {
+                publishTimer.Change(MovingPicturesCore.Settings.DetailsLoadingDelay, Timeout.Infinite);
+            }           
+            
+        }
+        
+        /// <summary>
+        /// Publishes movie details to the skin instantly
+        /// </summary>
+        /// <param name="movie"></param>
+        private void PublishMovieDetails(DBMovieInfo movie) {
+            if (movie == null)
+                return;
+
+            // publish details on selected movie
+            PublishDetails(movie, "SelectedMovie");
+            PublishDetails(movie.ActiveUserSettings, "UserMovieSettings");
+            PublishDetails(movie.LocalMedia[0], "LocalMedia");
+
+            // publish easily usable subtitles info
+            SetProperty("#MovingPictures.LocalMedia.Subtitles", movie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles");
+
+            // publish the selected index in the facade
+            int selectedIndex = browser.SelectedIndex + 1;
+            SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
+
+            if (selectedMovieWatchedIndicator != null) {
+                selectedMovieWatchedIndicator.Visible = false;
+                if (movie.ActiveUserSettings != null)
+                    if (movie.ActiveUserSettings.WatchedCount > 0)
+                        selectedMovieWatchedIndicator.Visible = true;             
+             }
+
+            PublishArtwork(movie);
+        }
+
+        /// <summary>
+        /// Publishes categorie (node) details to the skin instantly
+        /// </summary>
+        /// <param name="node"></param>
+        private void PublishCategoryDetails(DBNode<DBMovieInfo> node) {
+            if (node == null)
+                return;
+
+            PublishDetails(node, "SelectedNode");
+            PublishDetails(node.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
+            PublishArtwork(node);
+        }
+
+        /// <summary>
+        /// Publishes standard object details to the skin
+        /// </summary>
+        /// <param name="obj">any object derived from databasetable</param>
+        /// <param name="prefix">prefix for the generated skin properties</param>
         private void PublishDetails(DatabaseTable obj, string prefix) {
             PublishDetails(obj, prefix, false);
         }
 
+        /// <summary>
+        /// Publishes standard object details to the skin
+        /// </summary>
+        /// <param name="obj">any object derived from databasetable</param>
+        /// <param name="prefix">prefix for the generated skin properties</param>
+        /// <param name="forceLogging">indicate wether to log all properties</param>
         private void PublishDetails(DatabaseTable obj, string prefix, bool forceLogging) {
             if (obj == null)
                 return;
@@ -1731,6 +1699,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
+        /// <summary>
+        /// Calculates and publishes information about the runtime to the skin
+        /// </summary>
+        /// <param name="totalSeconds">the runtime in seconds</param>
+        /// <param name="actualRuntime">indicates wether this information is the actual runtime</param>
+        /// <param name="labelPrefix">>prefix for the generated skin properties</param>
+        /// <param name="forceLogging">indicate wether to log all properties</param>
         private void PublishRuntime(int totalSeconds, bool actualRuntime, string labelPrefix, bool forceLogging) {
             string valueStr;
 
@@ -1799,7 +1774,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             SetProperty(labelPrefix + "localized.long.extended", valueStr, forceLogging);
         }
 
-        // all details relating to the current view and filtering status
+        /// <summary>
+        /// Publishes details about the current view  to the skin
+        /// </summary>
         private void PublishViewDetails() {
             string propertyStr;
             string valueStr;
@@ -1815,6 +1792,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             SetProperty(propertyStr, valueStr);
         }
 
+        /// <summary>
+        /// Publishes details about the filters  to the skin
+        /// </summary>
         private void PublishFilterDetails() {
             logger.Debug("updating filter properties");
             if (browser.FilterNode == null) {
@@ -1836,6 +1816,73 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.Filter.Category", browser.FilterNode.Parent.Name);
             }
 
+        }
+        
+        /// <summary>
+        /// Publishes movie related artwork  to the skin
+        /// </summary>
+        /// <param name="movie"></param>
+        private void PublishArtwork(DBMovieInfo movie) {
+            if (movie == null)
+                return;
+
+            logger.Debug("Publishing Movie Artwork");
+
+            cover.Filename = movie.CoverFullPath;
+            backdrop.Filename = movie.BackdropFullPath;
+
+            RefreshMovieArtwork(movie);
+        }
+        
+        /// <summary>
+        /// Publishes category (node) related artwork to the skin
+        /// </summary>
+        /// <param name="node"></param>
+        private void PublishArtwork(DBNode<DBMovieInfo> node) {
+            if (node == null)
+                return;
+
+            logger.Debug("Publishing Category Artwork");
+
+            cover.Filename = string.Empty;
+
+            // grab the node settings
+            DBMovieNodeSettings settings = node.AdditionalSettings as DBMovieNodeSettings;
+            if (settings == null) {
+                settings = new DBMovieNodeSettings();
+                node.AdditionalSettings = settings;
+            }
+
+            // grab the backdrop
+            switch (settings.BackdropType) {
+                case MenuBackdropType.FILE:
+                    backdrop.Filename = settings.BackdropFilePath;
+                    break;
+                case MenuBackdropType.MOVIE:
+                    backdrop.Filename = settings.BackdropMovie.BackdropFullPath;
+                    break;
+                case MenuBackdropType.RANDOM:
+                    lock (backdropSync) {
+                        if (!backdropLookup.ContainsKey(node)) {
+                            DBMovieInfo randomMovie = browser.GetRandomMovie(node);
+                            if (randomMovie == null || randomMovie.BackdropFullPath.Trim().Length == 0)
+                                backdrop.Filename = null;
+
+                            backdropLookup.Add(node, randomMovie.BackdropFullPath);
+                        }
+                    }
+                    backdrop.Filename = backdropLookup[node];
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Forces a refresh of the artwork allocated to the GUIListItem of this movie
+        /// </summary>
+        /// <param name="movie"></param>
+        private void RefreshMovieArtwork(DBMovieInfo movie) {
+            GUIListItem listItem = browser.GetMovieListItem(movie);
+            if (listItem != null) listItem.RefreshCoverArt();
         }
 
         #endregion
