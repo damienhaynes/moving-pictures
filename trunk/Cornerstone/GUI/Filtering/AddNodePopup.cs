@@ -29,6 +29,11 @@ namespace Cornerstone.GUI.Filtering {
             set { _table = value; }
         } private Type _table;
 
+        public bool ForceTopLevel {
+            get { return _forceTopLevel; }
+            set { _forceTopLevel = value; }
+        } private bool _forceTopLevel;
+
         public DBField DynamicFilteringField {
             get { return ((ComboFieldWrapper)fieldComboBox.SelectedItem).Field; }
         }
@@ -86,6 +91,10 @@ namespace Cornerstone.GUI.Filtering {
 
         private void AddNodePopup_Load(object sender, EventArgs e) {
             generateFieldList();
+            if (ForceTopLevel) {
+                rootCheckBox.Checked = true;
+                rootCheckBox.Enabled = false;
+            }
         }
 
         private void dynamicNodeRadioButton_CheckedChanged(object sender, EventArgs e) {
