@@ -62,6 +62,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private DBMovieInfo awaitingUserRatingMovie;
         private MoviePlayer moviePlayer;
         double _lastCommandTime = 0;
+
+        private double lastPublished = 0;
+        private Timer publishTimer;
+
         #endregion
 
         #region GUI Controls
@@ -448,7 +452,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ClearFocusAction = new MovieBrowser.ClearFocusDelegate(ClearFocus);
 
                 // setup browser events
-                browser.MovieSelectionChanged += new MovieBrowser.MovieSelectionChangedDelegate(PublishMovieDetails);
+                browser.MovieSelectionChanged += new MovieBrowser.MovieSelectionChangedDelegate(Publisher);
                 browser.NodeSelectionChanged += new MovieBrowser.NodeSelectionChangedDelegate(PublishCategoryDetails);
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
                 browser.ViewChanged +=new MovieBrowser.ViewChangedDelegate(OnBrowserViewChanged);
@@ -1530,6 +1534,27 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #endregion
 
         #region Skin and Property Settings
+
+        // Delays publishing new movie details to speed up GUI while browsing fast
+        private void Publisher(DBMovieInfo movie) {
+            
+            if (MovingPicturesCore.Settings.DetailsLoadingDelay < (int)(AnimationTimer.TickCount - lastPublished)) {
+                lastPublished = AnimationTimer.TickCount;
+                PublishMovieDetails(movie);
+                return;              
+            }
+
+            lastPublished = AnimationTimer.TickCount;
+
+            // Delay publishing the details by the ms specified in settings
+            if (publishTimer == null) {
+                publishTimer = new Timer(delegate { PublishMovieDetails(browser.SelectedMovie); }, null, 0, Timeout.Infinite);
+            }
+            else {
+                publishTimer.Change(MovingPicturesCore.Settings.DetailsLoadingDelay, Timeout.Infinite);
+            }           
+            
+        }
 
         private void PublishCategoryDetails(DBNode<DBMovieInfo> node) {
             if (node == null)
