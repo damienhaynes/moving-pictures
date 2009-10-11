@@ -1022,6 +1022,20 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private int _artworkLoadingDelay;
 
+        [CornerstoneSetting(
+            Name = "Details Loading Delay",
+            Description = "The number of milliseconds that Moving Pictures waits before it show the details about the current selection when traversing movies in the GUI. Increasing this value can improve performance if you are experiencing slow down with rapid movements in the GUI.",
+            Groups = "|MediaPortal GUI|Tweaks|",
+            Identifier = "gui_details_delay",
+            Default = 250)]
+        public int DetailsLoadingDelay {
+            get { return _detailsLoadingDelay; }
+            set {
+                _detailsLoadingDelay = value;
+                OnSettingChanged("gui_details_delay");
+            }
+        }
+        private int _detailsLoadingDelay;
 
         [CornerstoneSetting(
             Name = "Use Remote Control Filtering",

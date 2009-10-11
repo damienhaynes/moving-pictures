@@ -149,32 +149,27 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // triggered when a group header was selected on the facade
         private static void onGroupHeaderSelected(GUIListItem item, GUIControl parent) {
             // if this is not a message from the facade, exit
-            if (parent != Browser.Facade && parent != Browser.Facade.ListView) return;
-
             GUIFacadeControl facade = Browser.Facade;
+            if (!facade.IsRelated(parent) || facade.SelectedListItem != item)
+                return;           
 
-            lock (Browser.SyncRoot) {
+            int newIndex = facade.SelectedListItemIndex;
+            int oldIndex = Browser.SelectedIndex;
+            int lastIndex = facade.Count - 1;
+            logger.Debug("onGroupHeaderSelected CurrentIndex {0} OldIndex {1}", newIndex, oldIndex);
 
-                if (facade.SelectedListItem != item) return;
-
-                int newIndex = facade.SelectedListItemIndex;
-                int oldIndex = Browser.SelectedIndex;
-                int lastIndex = facade.Count - 1;
-                logger.Debug("onGroupHeaderSelected CurrentIndex {0} OldIndex {1}", newIndex, oldIndex);
-
-                if (newIndex < oldIndex && !(newIndex == 0 && oldIndex == lastIndex)) {
-                    // MOVE UP
-                    logger.Debug("Jumping Up");
-                    if (newIndex == 0)
-                        facade.SelectIndex(lastIndex);
-                    else
-                        facade.OnAction(new MediaPortal.GUI.Library.Action(MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_UP, 0, 0));
-                }
-                else {
-                    // MOVE DOWN
-                    logger.Debug("Jumping Down");
-                    facade.OnAction(new MediaPortal.GUI.Library.Action(MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_DOWN, 0, 0));
-                }
+            if (newIndex < oldIndex && !(newIndex == 0 && oldIndex == lastIndex)) {
+                // MOVE UP
+                logger.Debug("Jumping Up");
+                if (newIndex == 0)
+                    facade.SelectIndex(lastIndex);
+                else
+                    facade.OnAction(new MediaPortal.GUI.Library.Action(MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_UP, 0, 0));
+            }
+            else {
+                // MOVE DOWN
+                logger.Debug("Jumping Down");
+                facade.OnAction(new MediaPortal.GUI.Library.Action(MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_DOWN, 0, 0));
             }
         }
     }
