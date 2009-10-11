@@ -110,6 +110,13 @@ namespace Cornerstone.GUI.Filtering {
         private void addNodeButton_Click(object sender, EventArgs e) {
             AddNodePopup popup = new AddNodePopup();
             popup.Table = typeof(T);
+
+            DBNode<T> node = null;
+            if (treeView.SelectedNode.Tag is DBNode<T>)
+                node = (DBNode<T>)treeView.SelectedNode.Tag;
+            if (node.DynamicNode)
+                popup.ForceTopLevel = true;
+            
             popup.ShowDialog();
 
             if (popup.CloseState == AddNodePopup.CloseStateEnum.ADD_BASIC) {
