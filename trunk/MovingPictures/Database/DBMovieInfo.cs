@@ -498,23 +498,40 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public void DeleteCurrentCover() {
             if (AlternateCovers.Count == 0)
                 return;
-            
-            try {
-                FileInfo coverFile = new FileInfo(CoverFullPath);
-                if (coverFile.Exists)
-                    coverFile.Delete();
 
-                FileInfo thumbFile = new FileInfo(CoverThumbFullPath);
-                if (thumbFile.Exists)
-                    thumbFile.Delete();
-            }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
+            string coverFilePath = CoverFullPath;
+            string coverThumbFilePath = CoverThumbFullPath;
+
+            // delete thumbnail
+            if (coverThumbFilePath.Trim().Length > 0) {
+                FileInfo thumbFile = new FileInfo(coverThumbFilePath);
+                if (thumbFile.Exists) {
+                    try {
+                        thumbFile.Delete();
+                    }
+                    catch (Exception e) {
+                        if (e.GetType() == typeof(ThreadAbortException))
+                            throw e;
+                    }
+                }
             }
 
-            AlternateCovers.Remove(CoverFullPath);
+            // delete cover
+            if (coverFilePath.Trim().Length > 0) {
+                FileInfo coverFile = new FileInfo(coverFilePath);
+                if (coverFile.Exists) {
+                    try {
+                        coverFile.Delete();
+                    }
+                    catch (Exception e) {
+                        if (e.GetType() == typeof(ThreadAbortException))
+                            throw e;
+                    }
+                }
+            }
+
             CoverFullPath = "";
+            AlternateCovers.Remove(coverFilePath);
             commitNeeded = true;
         }
 
