@@ -10,6 +10,7 @@ using Cornerstone.Database;
 using Cornerstone.MP.Extensions;
 using System.Collections.ObjectModel;
 using Cornerstone.Database.CustomTypes;
+using Cornerstone.Collections;
 using MediaPortal.Plugins.MovingPictures.MainUI.Filters;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
@@ -20,8 +21,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // lookup for GUIListItems that have been created for DBMovieInfo objects
         private Dictionary<DatabaseTable, GUIListItem> listItems;
-        private Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>> visibleMovies;
-        Random random;
+        private Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>> availableMovies;
+        private CachedDictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>> possibleMovies;
 
         private MovingPicturesSkinSettings skinSettings;
         private FilterUpdatedDelegate<DBMovieInfo> filterUpdatedDelegate;
@@ -359,9 +360,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(onMovieDeleted);
             MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
 
-            random = new Random();
             listItems = new Dictionary<DatabaseTable, GUIListItem>();
-            visibleMovies = new Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
+            availableMovies = new Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
+            
+            // This list will hold a cached result for all possible movies a node and it's children have
+            possibleMovies = new CachedDictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
+            possibleMovies.ExpireAfter = new TimeSpan(0, 0, 300);
+
             filterUpdatedDelegate = new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
 
             // load all movies once
@@ -506,6 +511,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // that the new item should be filtered out by the ActiveFilters
             logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie browser.");
             allMovies.Add((DBMovieInfo)obj);
+            possibleMovies.Clear();
             ReapplyFilters();
             ReloadFacade();
         }
@@ -527,6 +533,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             DBMovieInfo movie = (DBMovieInfo)obj;
             allMovies.Remove(movie);
             filteredMovies.Remove(movie);
+
+            foreach (HashSet<DBMovieInfo> list in possibleMovies.Values) {
+                list.Remove(movie);
+            }
 
             // update the facade to reflect the changes
             ReloadFacade();
@@ -597,12 +607,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (!CategoriesAvailable || SubNodes.Count == 0)
                 return;
 
-            visibleMovies.Clear();
+            availableMovies.Clear();
             CategoriesFacade.ClearAll();
             SubNodes.Sort();
 
             foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
-                HashSet<DBMovieInfo> nodeResults = currNode.GetFilteredItems();
+                
+                if (possibleMovies.HasExpired(currNode))
+                    possibleMovies[currNode] = currNode.GetPossibleFilteredItems();
+
+                HashSet<DBMovieInfo> nodeResults = possibleMovies[currNode];
                 if (nodeResults.Count == 0)
                     continue;
 
@@ -615,7 +629,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         continue;
                 }
 
-                visibleMovies.Add(currNode, nodeResults);
+                availableMovies.Add(currNode, nodeResults);
                 addCategoryNodeToFacade(currNode);
             }
 
@@ -738,19 +752,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // playedColor
                 currItem.IsPlayed = true;
             }            
-        }        
+        }
+
 
         /// <summary>
-        /// Returns a random movie that is currently listed in this category node
+        /// Returns a list of available movies for this node (applying active filters)
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        public DBMovieInfo GetRandomMovie(DBNode<DBMovieInfo> node) {
-            if (!visibleMovies.ContainsKey(node) || visibleMovies[node].Count == 0)
-                return null;
+        public HashSet<DBMovieInfo> GetAvailableMovies(DBNode<DBMovieInfo> node) {
+            if (!availableMovies.ContainsKey(node))
+                return new HashSet<DBMovieInfo>();
 
-            return visibleMovies[node].ToList()[random.Next(visibleMovies[node].Count - 1)];  
-        }
+            // return all visible movies
+            return availableMovies[node];
+        }        
 
         #endregion
 

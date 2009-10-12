@@ -1038,6 +1038,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         private int _detailsLoadingDelay;
 
         [CornerstoneSetting(
+            Name = "Category Random Artwork Refresh Interval",
+            Description = "The number of seconds that Moving Pictures waits before renewing the backdrop when a category (using random backdrop) is selected.",
+            Groups = "|MediaPortal GUI|Tweaks|",
+            Identifier = "gui_artwork_random_refresh",
+            Default = 120)]
+        public int CategoryRandomArtworkRefreshInterval {
+            get { return _categoryRandomArtworkRefreshInterval; }
+            set {
+                _categoryRandomArtworkRefreshInterval = value;
+                OnSettingChanged("gui_artwork_random_refresh");
+            }
+        }
+        private int _categoryRandomArtworkRefreshInterval;
+
+        [CornerstoneSetting(
             Name = "Use Remote Control Filtering",
             Description = "Enables the Remote Controle Filter, set to false if you want to use the default mediaportal remote control functionality.",
             Groups = "|MediaPortal GUI|Tweaks|",
