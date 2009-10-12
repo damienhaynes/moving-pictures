@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using System.Linq;
 using System.Xml;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 using Cornerstone.MP;
+using Cornerstone.Collections;
+using Cornerstone.Extensions;
 using Cornerstone.MP.Extensions;
 using Cornerstone.GUI.Dialogs;
 using MediaPortal.Dialogs;
@@ -41,7 +44,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         MovingPicturesSkinSettings skinSettings;
 
         Dictionary<string, bool> loggedProperties;
-        Dictionary<DBNode<DBMovieInfo>, string> backdropLookup = new Dictionary<DBNode<DBMovieInfo>, string>();
+        CachedDictionary<DBNode<DBMovieInfo>, DBMovieInfo> activeMovieLookup = new CachedDictionary<DBNode<DBMovieInfo>, DBMovieInfo>();
         private readonly object backdropSync = new object();
 
         private bool loaded = false;
@@ -130,7 +133,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #endregion
 
-        public MovingPicturesGUI() { }
+        public MovingPicturesGUI() {
+        }
 
         ~MovingPicturesGUI() {      }
 
@@ -238,6 +242,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // invisible based on if functionality is turned on
             if (toggleParentalControlsButton != null && MovingPicturesCore.Settings.ParentalControlsEnabled != toggleParentalControlsButton.Visible)
                 toggleParentalControlsButton.Visible = MovingPicturesCore.Settings.ParentalControlsEnabled;
+
+            // Re-publish the category artwork
+            if (browser.CurrentView == BrowserViewMode.CATEGORIES && browser.SelectedNode != null)
+                PublishArtwork(browser.SelectedNode);
 
         }
 
@@ -683,6 +691,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // setup the image resources for cover and backdrop display
                 int artworkDelay = MovingPicturesCore.Settings.ArtworkLoadingDelay;
+
+                // setup the time for the random category backdrop refresh
+                activeMovieLookup.ExpireAfter = new TimeSpan(0, 0, MovingPicturesCore.Settings.CategoryRandomArtworkRefreshInterval);
 
                 // create backdrop image swapper
                 backdrop = new ImageSwapper();
@@ -1862,16 +1873,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     backdrop.Filename = settings.BackdropMovie.BackdropFullPath;
                     break;
                 case MenuBackdropType.RANDOM:
+                    DBMovieInfo movie = null;
+                    HashSet<DBMovieInfo> movies = browser.GetAvailableMovies(node);
                     lock (backdropSync) {
-                        if (!backdropLookup.ContainsKey(node)) {
-                            DBMovieInfo randomMovie = browser.GetRandomMovie(node);
-                            if (randomMovie == null || randomMovie.BackdropFullPath.Trim().Length == 0)
-                                backdrop.Filename = null;
-
-                            backdropLookup.Add(node, randomMovie.BackdropFullPath);
+                        // Check if this node has an active movie cached and if it's still active.
+                        if (!activeMovieLookup.HasExpired(node) && movies.Contains(activeMovieLookup[node])) {
+                            movie = activeMovieLookup[node];
+                        } else {
+                            // grab a new random movie from the visible movies that has a backdrop
+                            movie = movies.Where(m => m.BackdropFullPath.Trim().Length > 0).ToList().Random();
+                            // if we found one add it to our lookup list to speed up future requests
+                            if (movie != null) activeMovieLookup[node] = movie;
                         }
                     }
-                    backdrop.Filename = backdropLookup[node];
+                    // change the backdrop or set to null 
+                    backdrop.Filename = (movie != null) ? movie.BackdropFullPath : null;
                     break;
             }
         }
