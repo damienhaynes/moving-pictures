@@ -107,16 +107,20 @@ namespace Cornerstone.Tools {
            
             while (!completed) {
                 tryCount++;
-                try {
-                    if (_allowUnsafeHeader)
-                        SetAllowUnsafeHeaderParsing(true);
+                
+                if (_allowUnsafeHeader)
+                    SetAllowUnsafeHeaderParsing(true);
 
-                    request.Proxy = WebRequest.DefaultWebProxy;
-                    request.UserAgent = userAgent;
-                    request.Timeout = timeout + (timeoutIncrement * tryCount);
-                    request.CookieContainer = new CookieContainer();
-                    if (cookieHeader != null)
-                        request.CookieContainer.SetCookies(request.RequestUri, cookieHeader);
+                request.Proxy = WebRequest.DefaultWebProxy;
+                request.Proxy.Credentials = CredentialCache.DefaultCredentials;
+
+                request.UserAgent = userAgent;
+                request.Timeout = timeout + (timeoutIncrement * tryCount);
+                request.CookieContainer = new CookieContainer();
+                if (cookieHeader != null)
+                    request.CookieContainer.SetCookies(request.RequestUri, cookieHeader);
+
+                try {
                     response = (HttpWebResponse)request.GetResponse();
                     cookieHeader = request.CookieContainer.GetCookieHeader(request.RequestUri);
 
