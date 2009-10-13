@@ -24,8 +24,10 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
         public override void Work() {
             logger.Info("File maintenance started in the background.");
+            DateTime start = DateTime.Now;
             DatabaseMaintenanceManager.RemoveInvalidFiles();
-            logger.Info("File maintenance finished.");
+            TimeSpan duration = DateTime.Now - start;
+            logger.Info("File maintenance finished. ({0} seconds)", Math.Round(duration.TotalSeconds,1).ToString());
         }
     }
 }

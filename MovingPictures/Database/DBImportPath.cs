@@ -236,6 +236,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     fileList = VideoUtility.GetVideoFilesRecursive(Directory);
 
                 // go through the video file list
+                DriveType type = GetDriveType();
                 foreach (FileInfo videoFile in fileList) {
 
                     // Create or get a localmedia object from the video file path
@@ -257,16 +258,34 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         if (newFile.ID != null && returnOnlyNew)
                             continue;
                     }
+                    else if (!IsOpticalDrive && !IsUnc) {
+                        // Verify the new file, if we find a similar file it could be that the serial has changed
+                        List<DBLocalMedia> otherFiles = DBLocalMedia.GetAll(newFile.FullPath);
+                        if (otherFiles.Count == 1) {
+                            DBLocalMedia otherFile = otherFiles[0];
+                            if (type != DriveType.Unknown && type != DriveType.CDRom && type != DriveType.NoRootDirectory) {
+                                bool fileAvailable = otherFile.IsAvailable;
+                                if ((String.IsNullOrEmpty(otherFile.VolumeSerial) && fileAvailable) || (!fileAvailable && File.Exists(otherFile.FullPath))) {
+                                    // the disk serial was updated for this file
+                                    otherFile.VolumeSerial = serial;
+                                    otherFile.MediaLabel = label;
+                                    otherFile.Commit();
+                                    logger.Info("Disk information updated for '{0}'", otherFile.FullPath);
+                                    continue;
+                                }
+                            }
+                        }
+                     }
                     
-                    // we have a new file, log it and 'connect' the import path object
-                    logger.Debug("New File: {0}", videoFile.Name);
+                    // NEW FILE
+                    
+                    // Add additional file information
                     newFile.ImportPath = this;
-
-                    // Fill in the logical volume details (are both empty when dealing with UNC)
                     newFile.VolumeSerial = serial;
                     newFile.MediaLabel = label;
-
+                    
                     // add the localmedia object to our return list
+                    logger.Debug("New File: {0}", videoFile.Name);
                     rtn.Add(newFile);
                 }
             }
@@ -319,7 +338,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public override string ToString() {
             return FullPath;
         }
-
 
         #endregion
 
