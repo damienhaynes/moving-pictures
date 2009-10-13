@@ -287,6 +287,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 currNode.UpdateDynamicNode();
                 currNode.Commit();
             }
+
+            // Preload categories by forcing a count of all the root nodes
+            if (MovingPicturesCore.Settings.CategoriesEnabled) {
+                menu = MovingPicturesCore.Settings.CategoriesMenu;
+                int i = menu.RootNodes.Count;
+            }
         }
     }
 }

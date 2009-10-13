@@ -23,10 +23,9 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         }
 
         public override void Work() {
-            foreach (DBLocalMedia currFile in MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(null)) {
-                if (currFile.ID != null && currFile.IsRemoved)
-                    currFile.Delete();
-            }
+            logger.Info("File maintenance started in the background.");
+            DatabaseMaintenanceManager.RemoveInvalidFiles();
+            logger.Info("File maintenance finished.");
         }
     }
 }
