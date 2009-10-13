@@ -111,6 +111,7 @@ namespace Cornerstone.Tools {
                     if (_allowUnsafeHeader)
                         SetAllowUnsafeHeaderParsing(true);
 
+                    request.Proxy = WebRequest.DefaultWebProxy;
                     request.UserAgent = userAgent;
                     request.Timeout = timeout + (timeoutIncrement * tryCount);
                     request.CookieContainer = new CookieContainer();
