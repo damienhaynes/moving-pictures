@@ -130,10 +130,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             actionDescriptions.Add(newAction, "Initializing Path Settings...");
             initActions.Add(newAction);
 
-            newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidFiles);
-            actionDescriptions.Add(newAction, "Removing invalid file entries...");
-            initActions.Add(newAction);
-
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidMovies);
             actionDescriptions.Add(newAction, "Removing invalid movie entries...");
             initActions.Add(newAction);
