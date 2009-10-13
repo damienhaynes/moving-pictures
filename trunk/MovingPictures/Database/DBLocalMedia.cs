@@ -650,21 +650,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public static List<DBLocalMedia> GetAll(string fullPath) {
-            return GetAll(fullPath, string.Empty);  
+            return GetAll(fullPath, null);  
         }
 
         public static List<DBLocalMedia> GetAll(string fullPath, string volumeSerial) {
             
-            if (volumeSerial == null)
-                volumeSerial = string.Empty;
-            
             DBField pathField = DBField.GetField(typeof(DBLocalMedia), "FullPath");
             // using operator LIKE to make the search case insensitive
             ICriteria pathCriteria = new BaseCriteria(pathField, "like", fullPath);
-            DBField serialField = DBField.GetField(typeof(DBLocalMedia), "VolumeSerial");
-            ICriteria serialCriteria = new BaseCriteria(serialField, "=", volumeSerial);
 
-            ICriteria criteria = new GroupedCriteria(pathCriteria, GroupedCriteria.Operator.AND, serialCriteria);
+            ICriteria criteria = pathCriteria;
+            if (volumeSerial != null) {
+                DBField serialField = DBField.GetField(typeof(DBLocalMedia), "VolumeSerial");
+                ICriteria serialCriteria = new BaseCriteria(serialField, "=", volumeSerial);
+                criteria = new GroupedCriteria(pathCriteria, GroupedCriteria.Operator.AND, serialCriteria);
+            }
 
             List<DBLocalMedia> resultSet = MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(criteria);
             return resultSet;
