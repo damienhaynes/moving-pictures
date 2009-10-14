@@ -23,6 +23,8 @@ namespace Cornerstone.GUI.Filtering {
     public partial class GenericMenuTreePanel<T> : UserControl, IMenuTreePanel, IFieldDisplaySettingsOwner
         where T : DatabaseTable {
 
+        private enum DropPositionEnum { Before, Inside, After, None }
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private Dictionary<DBNode<T>, TreeNode> treeNodeLookup = new Dictionary<DBNode<T>,TreeNode>();
@@ -31,12 +33,21 @@ namespace Cornerstone.GUI.Filtering {
         private Stack<DBNode<T>> pendingModification = new Stack<DBNode<T>>();
         private Stack<DBNode<T>> finishedModification = new Stack<DBNode<T>>();
 
-        TreeNode previousNode = null;
-        Color previousForeColor;
-        Color previousBackColor;
+        TreeNode movingNode = null;       // node that is being dragged around by a drag and drop op
+        TreeNode highlightedNode = null;  // node that is currently highlighted due to a drag and drop op
+        TreeNode previousNode = null;     // last node to be hovered over in drag and drop op
+        TreeNode targetNode = null;      // current node to be hovered over in drag and drop op
+
+        DropPositionEnum dropPosition;
+        Color originalForeColor;
+        Color originalBackColor;
+
+        int insertIndex;
 
         Font bold;
         Font regular;
+
+        bool dragBarVisible = false;
 
         public GenericMenuTreePanel() {
             InitializeComponent();
@@ -537,64 +548,76 @@ namespace Cornerstone.GUI.Filtering {
         }
 
         private void treeView_DragDrop(object sender, DragEventArgs e) {
-            // reset highlight color for last highlighted node
-            if (previousNode != null) {
-                previousNode.ForeColor = previousForeColor;
-                previousNode.BackColor = previousBackColor;
-            }
+            clearDragDropMarkup();
 
-            // grab the item being moved
-            TreeNode movedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            if (movedNode == null) return;
-
-            // grab the new parent node
-            Point pt = treeView.PointToClient(new Point(e.X, e.Y));
-            TreeNode newParent = treeView.GetNodeAt(pt);
-
-            // grab the old parent
-            TreeNode oldParent = movedNode.Parent;
-
-            if (oldParent == newParent || newParent == movedNode)
+            if (dropPosition == DropPositionEnum.None)
                 return;
 
-            // remove from old parent node
+            // grab the item being moved
+            movingNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
+            if (movingNode == null) return;
+
+            // grab the target node
+            Point pt = treeView.PointToClient(new Point(e.X, e.Y));
+            targetNode = treeView.GetNodeAt(pt);
+
+            // grab the old parent
+            TreeNode oldParent = movingNode.Parent;
+
+            // remove node from treeview and internal menu system
             if (oldParent != null) {
-                oldParent.Nodes.Remove(movedNode);
-                ((DBNode<T>)oldParent.Tag).Children.Remove((DBNode<T>)movedNode.Tag);
+                oldParent.Nodes.Remove(movingNode);
+                ((DBNode<T>)oldParent.Tag).Children.Remove((DBNode<T>)movingNode.Tag);
                 setVisualProperties(oldParent);
             }
-            // or remove from treeview root if necessary
             else {
-                treeView.Nodes.Remove(movedNode);
-                _menu.RootNodes.Remove((DBNode<T>)movedNode.Tag);
+                treeView.Nodes.Remove(movingNode);
+                _menu.RootNodes.Remove((DBNode<T>)movingNode.Tag);
             }
 
-            // move to the root
-            if (newParent == null) {
-                _menu.RootNodes.Add((DBNode<T>)movedNode.Tag);
-                ((DBNode<T>)movedNode.Tag).Parent = null;
-            }
-            // or move to new node if necessary
-            else {
-                ((DBNode<T>)newParent.Tag).Children.Add((DBNode<T>)movedNode.Tag);
-                ((DBNode<T>)movedNode.Tag).Parent = (DBNode<T>)newParent.Tag;
-            }
-
-            // update the node in a new thread while displaying a progress dialog
-            this.movedNode = movedNode;
-            this.newParent = newParent;
+            // do the heavy lifting in a new thread while displaying a progress dialog
             ProgressPopup popup = new ProgressPopup(new WorkerDelegate(updateMovedNodeDragDrop));
             popup.Owner = FindForm();
             popup.Text = "Updating Moved Menu Item";
+            
+            // node will be reinserted by the callback method when work is complete
             popup.WorkComplete += new WorkCompleteDelegate(updateMovedNode_Complete);
             popup.ShowDialogDelayed(300);
         }
 
-        TreeNode movedNode;
-        TreeNode newParent;
         private void updateMovedNodeDragDrop() {
-            setVisualProperties(movedNode);
-            updateFilteredItems(movedNode, false);          
+            DBNode<T> targetDbNode = ((DBNode<T>)targetNode.Tag);
+            DBNode<T> movingDbNode = ((DBNode<T>)movingNode.Tag);
+            DBNode<T> parentDbNode = null; 
+
+            // grab the collection of the parent (used if we are doing a before or after drop)
+            List<DBNode<T>> parentCollection;
+            if (targetNode.Parent == null)
+                parentCollection = _menu.RootNodes;
+            else {
+                parentCollection = targetDbNode.Parent.Children;
+                parentDbNode = targetDbNode;
+            }
+
+            // relocate node in internal menu system
+            if (dropPosition == DropPositionEnum.Before) {
+                parentCollection.Insert(parentCollection.IndexOf(targetDbNode), movingDbNode);
+                movingDbNode.Parent = parentDbNode;
+                parentCollection.Normalize(true);
+            }
+            else if (dropPosition == DropPositionEnum.After) {
+                parentCollection.Insert(parentCollection.IndexOf(targetDbNode) + 1, movingDbNode);
+                movingDbNode.Parent = parentDbNode;
+                parentCollection.Normalize(true);
+            }
+            else {
+                targetDbNode.Children.Add(movingDbNode);
+                movingDbNode.Parent = targetDbNode;
+            }
+
+            // rebuild visual properties and children of the moved node
+            setVisualProperties(movingNode);
+            updateFilteredItems(movingNode, false);          
         }
 
         private void updateMovedNode_Complete() {
@@ -603,62 +626,173 @@ namespace Cornerstone.GUI.Filtering {
                 return;
             }
 
-            // move to the root
-            if (newParent == null)
-                try {
-                    treeView.Nodes.Add(movedNode);
+            // grab the collection of the parent (used if we are doing a before or after drop)
+            TreeNodeCollection parentCollection;
+            if (targetNode.Parent == null)
+                parentCollection = treeView.Nodes;
+            else
+                parentCollection = targetNode.Parent.Nodes;
+
+            // place the node back in the tree
+            try {
+                if (dropPosition == DropPositionEnum.Before)
+                    parentCollection.Insert(parentCollection.IndexOf(targetNode), movingNode);
+                else if (dropPosition == DropPositionEnum.After)
+                    parentCollection.Insert(parentCollection.IndexOf(targetNode) + 1, movingNode);
+                else {
+                    targetNode.Nodes.Add(movingNode);
                 }
-                catch (Exception ) { }
-            // or move to new node if necessary
-            else {
-                try {
-                    newParent.Nodes.Add(movedNode);
-                    setVisualProperties(newParent);
-                }
-                catch (Exception) { }
             }
+            catch (Exception) { }
         }
 
         private void treeView_DragOver(object sender, DragEventArgs e) {
-            // grab the node currently being hovered over
-            Point pt = treeView.PointToClient(new Point(e.X, e.Y));
-            TreeNode newParent = treeView.GetNodeAt(pt);
-
             // grab the item being moved
-            TreeNode selectedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            if (selectedNode == null) return;
+            movingNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
+            if (movingNode == null) return;
 
-            // if hovering over itself a child, or own parent, dont accept drops
-            if (newParent == selectedNode || newParent == selectedNode.Parent || isChild(selectedNode, newParent)) {
-                e.Effect = DragDropEffects.None;
+            // grab the node currently being hovered over
+            Point mousePos = treeView.PointToClient(new Point(e.X, e.Y));
+            targetNode = treeView.GetNodeAt(mousePos);
 
-                // reset previous node highlight color
-                if (previousNode != null) {
-                    previousNode.ForeColor = previousForeColor;
-                    previousNode.BackColor = previousBackColor;
-                }
-
-                return;
+            // bounds for the current node being hovered over (if one exists)
+            Point upperLeft = new Point();
+            Point bottomRight = new Point();
+            if (targetNode != null) {
+                upperLeft = new Point(targetNode.Bounds.Left, targetNode.Bounds.Top);
+                bottomRight = new Point(targetNode.Bounds.Right, targetNode.Bounds.Bottom);
             }
+
+            // if we are hovering over a real node, it's not a child of the one we are moving, and the parent 
+            // of the current node is not dynamic, then it's okay for a border drop (before or after a node)
+            bool borderDropOk = targetNode != null &&   
+                                targetNode != movingNode &&
+                                !isChild(movingNode, targetNode) &&  
+                                !((DBNode<T>)targetNode.Tag).AutoGenerated;
+
+            // if we are hovering over a real node that is not the one we are moving or it's parent, child
+            // or grandchild and it is not a dynamic node, then it's okay for an inner drop
+            bool innerDropOk = targetNode != null &&
+                               targetNode != movingNode &&
+                               targetNode != movingNode.Parent &&
+                               !isChild(movingNode, targetNode) &&
+                               !((DBNode<T>)targetNode.Tag).DynamicNode &&
+                               !((DBNode<T>)targetNode.Tag).AutoGenerated;
+
+
+            // determine the action to be taken based on current status
+            if (borderDropOk && mousePos.Y < upperLeft.Y + 4)
+                dropPosition = DropPositionEnum.Before;
+            else if (borderDropOk && !targetNode.IsExpanded && mousePos.Y > bottomRight.Y - 4)
+                dropPosition = DropPositionEnum.After;
+            else if (innerDropOk)
+                dropPosition = DropPositionEnum.Inside;
             else
-                e.Effect = DragDropEffects.Move;
+                dropPosition = DropPositionEnum.None;
+
+            switch (dropPosition) {
+                case DropPositionEnum.None:
+                    e.Effect = DragDropEffects.None;
+                    clearDragDropMarkup();
+                    break;
+                case DropPositionEnum.Before:
+                case DropPositionEnum.After:
+                    e.Effect = DragDropEffects.Move;
+                    drawDragBar(dropPosition);
+                    break;
+                case DropPositionEnum.Inside:
+                    e.Effect = DragDropEffects.Move;
+                    highlightCurrentNode();
+                    break;
+            }
+
+            previousNode = targetNode;
+        }
+
+        private void clearDragDropMarkup() {
+            // reset previous node highlight color if needed
+            if (highlightedNode != null) {
+                highlightedNode.ForeColor = originalForeColor;
+                highlightedNode.BackColor = originalBackColor;
+                highlightedNode = null;
+            }
+
+            // remove the dragbar if needed
+            if (dragBarVisible) {
+                Refresh();
+                dragBarVisible = false;
+            }
+        }
+
+        private void drawDragBar(DropPositionEnum position) {
+            if (previousNode != targetNode)
+                Refresh();
+
+            Point upperLeft = new Point(targetNode.Bounds.Left, targetNode.Bounds.Top);
+            Point bottomRight = new Point(targetNode.Bounds.Right, targetNode.Bounds.Bottom);
 
             // reset previous node highlight color
-            if (previousNode != null && previousNode != newParent) {
-                previousNode.ForeColor = previousForeColor;
-                previousNode.BackColor = previousBackColor;
+            if (highlightedNode != null) {
+                highlightedNode.ForeColor = originalForeColor;
+                highlightedNode.BackColor = originalBackColor;
+                highlightedNode = null;
+            }
+
+            int leftPos, rightPos, vertPos;
+            leftPos = upperLeft.X - 22;
+            rightPos = treeView.Width - 4;
+
+            if (position == DropPositionEnum.Before) 
+                vertPos = upperLeft.Y;
+            else 
+                vertPos = bottomRight.Y;
+
+            // edge marker
+            Point[] LeftTriangle = new Point[5]{
+                new Point(leftPos, vertPos - 3), 
+                new Point(leftPos, vertPos + 3), 
+                new Point(leftPos + 3, vertPos), 
+                new Point(leftPos + 3, vertPos - 1), 
+                new Point(leftPos, vertPos - 4)};
+
+            Point[] RightTriangle = new Point[5]{
+                new Point(rightPos, vertPos - 3),
+                new Point(rightPos, vertPos + 3),
+                new Point(rightPos - 3, vertPos),
+                new Point(rightPos - 3, vertPos - 1),
+                new Point(rightPos, vertPos - 4)};
+
+            Graphics g = treeView.CreateGraphics();
+            g.FillPolygon(System.Drawing.Brushes.Black, LeftTriangle);
+            g.FillPolygon(System.Drawing.Brushes.Black, RightTriangle);
+            g.DrawLine(new System.Drawing.Pen(Color.Black, 2),
+              new Point(leftPos, vertPos),
+              new Point(rightPos, vertPos));
+
+            dragBarVisible = true;
+        }
+
+        private void highlightCurrentNode() {
+            // reset previous node highlight color
+            if (highlightedNode != null && highlightedNode != targetNode) {
+                highlightedNode.ForeColor = originalForeColor;
+                highlightedNode.BackColor = originalBackColor;
+                highlightedNode = null;
             }
 
             // store reversion settings and highlight the node currently hovering over
-            if (newParent != null && previousNode != newParent) {
-                previousNode = newParent;
-                previousForeColor = newParent.ForeColor;
-                previousBackColor = newParent.BackColor;
-                newParent.BackColor = SystemColors.Highlight;
-                newParent.ForeColor = SystemColors.HighlightText;
+            if (highlightedNode == null) {
+                highlightedNode = targetNode;
+                originalForeColor = targetNode.ForeColor;
+                originalBackColor = targetNode.BackColor;
+                targetNode.BackColor = SystemColors.Highlight;
+                targetNode.ForeColor = SystemColors.HighlightText;
 
+                if (dragBarVisible) {
+                    Refresh();
+                    dragBarVisible = false;
+                }
             }
-
         }
 
         private void treeView_DragEnter(object sender, DragEventArgs e) {
