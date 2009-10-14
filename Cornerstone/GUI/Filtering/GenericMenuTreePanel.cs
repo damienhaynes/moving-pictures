@@ -123,9 +123,9 @@ namespace Cornerstone.GUI.Filtering {
             popup.Table = typeof(T);
 
             DBNode<T> node = null;
-            if (treeView.SelectedNode.Tag is DBNode<T>)
+            if (treeView.SelectedNode != null && treeView.SelectedNode.Tag is DBNode<T>)
                 node = (DBNode<T>)treeView.SelectedNode.Tag;
-            if (node.DynamicNode)
+            if (node == null || node.DynamicNode)
                 popup.ForceTopLevel = true;
             
             popup.ShowDialog();
