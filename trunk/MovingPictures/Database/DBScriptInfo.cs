@@ -47,19 +47,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public override int GetHashCode() {
-            return Provider.GetHashCode();
+            if (Provider != null)
+                return Provider.GetHashCode();
+
+            return base.GetHashCode();
         }
 
         public override string ToString() {
-            try {
+            if (Provider != null)
                 return "DBScriptInfo: " + Provider.Name + " (" + Provider.Version + ")";
-            }
-            catch (Exception e) {
-                if (e is ThreadAbortException)
-                    throw e;
 
-                return base.ToString();
-            }
+            return base.ToString();
+            
         }
     }
 }
