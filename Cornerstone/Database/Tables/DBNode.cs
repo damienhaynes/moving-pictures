@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using Cornerstone.Database.CustomTypes;
 using System.Windows.Forms;
 using System.Threading;
@@ -174,27 +175,14 @@ namespace Cornerstone.Database.Tables {
         /// </summary>
         /// <returns></returns>
         public HashSet<T> GetFilteredItems() {
-            // TODO: Refactor to remove bulk of logic and use GetAllFilters()
+            
+            // seed all items
+            HashSet<T> results = new HashSet<T>(DBManager.Get<T>(null));
 
-            HashSet<T> results = new HashSet<T>();
-
-            // apply the filter for the currently selected node
-            if (Filter != null)
-                results = Filter.Filter(DBManager.Get<T>(null));
-
-            // or seed with all items
-            else {
-                results = new HashSet<T>(); 
-                foreach (T currItem in DBManager.Get<T>(null))
-                    results.Add(currItem);
-            }
-
-            // apply the filter for all parent nodes
-            DBNode<T> currNode = this.Parent;
-            while (currNode != null) {
-                if (currNode.Filter != null)
-                    results = currNode.Filter.Filter(results);
-                currNode = currNode.Parent;
+            // apply filters
+            HashSet<IFilter<T>> filters = GetAllFilters();
+            foreach (IFilter<T> filter in filters) {
+                results = filter.Filter(results);
             }
 
             return results;
@@ -203,11 +191,8 @@ namespace Cornerstone.Database.Tables {
         public HashSet<IFilter<T>> GetAllFilters() {
             HashSet<IFilter<T>> results = new HashSet<IFilter<T>>();
 
-            if (Filter != null)
-                results.Add(Filter);
-
             // apply the filter for all parent nodes
-            DBNode<T> currNode = this.Parent;
+            DBNode<T> currNode = this;
             while (currNode != null) {
                 if (currNode.Filter != null)
                     results.Add(currNode.Filter);
@@ -322,13 +307,6 @@ namespace Cornerstone.Database.Tables {
 
             updating = false;
             OnModified();
-        }
-        
-        public override int GetHashCode() {
-            if (ID != null)
-                return ID.GetHashCode();
-            else
-                return base.GetHashCode();
         }
 
         public override string ToString() {

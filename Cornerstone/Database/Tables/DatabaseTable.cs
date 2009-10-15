@@ -10,6 +10,9 @@ using Cornerstone.Database.CustomTypes;
 
 namespace Cornerstone.Database.Tables {
     public abstract class DatabaseTable: IComparable {
+
+        private int hashcode = 0;
+
         #region Properties
 
         public int? ID {
@@ -180,6 +183,23 @@ namespace Cornerstone.Database.Tables {
 
         #endregion
 
+        public override int GetHashCode() {
+            // this logic is to ensure the same hashcode is returned during the lifetime of this object
+            if (hashcode != 0)
+                return hashcode;
+
+            if (ID != null)
+                hashcode = (int)ID;
+            else
+                hashcode = -base.GetHashCode();
+
+            return hashcode;
+        }
+
+        public override string ToString() {
+            return this.GetType().Name + " (" + this.GetHashCode() + ")"; 
+        }
+
         #region IComparable Members
 
         public virtual int CompareTo(object obj) {
@@ -203,5 +223,4 @@ namespace Cornerstone.Database.Tables {
         }
     }
 }
-
 
