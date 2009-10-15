@@ -534,10 +534,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             allMovies.Remove(movie);
             filteredMovies.Remove(movie);
 
-            foreach (HashSet<DBMovieInfo> list in possibleMovies.Values) {
-                list.Remove(movie);
-            }
-
             // update the facade to reflect the changes
             ReloadFacade();
         }
@@ -607,30 +603,33 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (!CategoriesAvailable || SubNodes.Count == 0)
                 return;
 
-            availableMovies.Clear();
             CategoriesFacade.ClearAll();
-            SubNodes.Sort();
+            availableMovies.Clear();
 
-            foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
-                
-                if (possibleMovies.HasExpired(currNode))
-                    possibleMovies[currNode] = currNode.GetPossibleFilteredItems();
+            if (filteredMovies.Count > 0) {
+                SubNodes.Sort();
+                foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
 
-                HashSet<DBMovieInfo> nodeResults = possibleMovies[currNode];
-                if (nodeResults.Count == 0)
-                    continue;
+                    // get base list
+                    if (possibleMovies.HasExpired(currNode))
+                        possibleMovies[currNode] = currNode.GetPossibleFilteredItems();
 
-                if (Filters.Count > 0) {
-                    foreach (IFilter<DBMovieInfo> filter in Filters) {
-                        nodeResults = filter.Filter(nodeResults);
-                    }
+                    // base list is empty so skip this node
+                    if (possibleMovies[currNode].Count == 0)
+                        continue;
 
+                    // intersect with the filtered movie list meaning that what is 
+                    // not in the filtered movies list will be removed from the base list
+                    HashSet<DBMovieInfo> nodeResults = new HashSet<DBMovieInfo>(possibleMovies[currNode]);
+                    nodeResults.IntersectWith(filteredMovies);
+
+                    // final list is empty so skip this node
                     if (nodeResults.Count == 0)
                         continue;
-                }
 
-                availableMovies.Add(currNode, nodeResults);
-                addCategoryNodeToFacade(currNode);
+                    availableMovies.Add(currNode, nodeResults);
+                    addCategoryNodeToFacade(currNode);
+                }
             }
 
             // Sync to facade
