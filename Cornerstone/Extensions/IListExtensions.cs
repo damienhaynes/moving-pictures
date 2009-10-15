@@ -20,7 +20,7 @@ namespace Cornerstone.Extensions {
                 randomizer = new Random();
             
             if (list.Count > 1)
-                return list[randomizer.Next(list.Count - 1)];
+                return list[randomizer.Next(list.Count)];
             else
                 return list[0];
         }
