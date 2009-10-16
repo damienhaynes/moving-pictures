@@ -14,7 +14,7 @@ using Cornerstone.Collections;
 using MediaPortal.Plugins.MovingPictures.MainUI.Filters;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
-    public enum BrowserViewMode { LIST, SMALLICON, LARGEICON, FILMSTRIP, DETAILS, CATEGORIES }
+    public enum BrowserViewMode { INIT, LIST, SMALLICON, LARGEICON, FILMSTRIP, DETAILS, CATEGORIES }
     
     public class MovieBrowser {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -93,7 +93,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             get {
                 return currentView;
             }
-
             set {
                 // if the skin doesnt support the categories facade, dont set it
                 if (value == BrowserViewMode.CATEGORIES && _categoriesFacade == null)
@@ -108,7 +107,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 ReloadView();
                
             }
-        } private BrowserViewMode currentView = BrowserViewMode.CATEGORIES; // starting default is CATEGORIES
+        } private BrowserViewMode currentView; 
 
         /// <summary>
         /// The previous view mode the browser was in before the current view mode was set.
@@ -184,47 +183,70 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // disable filter events
                 updatingFiltering = true;
 
-                // remove previous node filters
-                if (_currentNode != null)
+                if (_currentNode != null) {
+
+                    // remove filters of the current node
                     removeFilters(_currentNode);
 
-                // add current node filters
-                if (value != null)
-                    addFilters(value);
+                    // if we are moving to the parent category set the current node
+                    // as the selected node before we reload the facade
+                    if (value == _currentNode.Parent) {
+                        _selectedNode = _currentNode;
 
-                // enable filter events
-                updatingFiltering = false;
-
-                // if we are moving to the parent category set the current node
-                // as the selected node before we reload the facade
-                if (_currentNode != null && value == _currentNode.Parent)
-                    _selectedNode = _currentNode;
+                        // if required reset the selectedMovie
+                        if (MovingPicturesCore.Settings.ResetSelectedMovieWhenSwitchingCategories) {
+                            selectedMovie = null;
+                        }
+                    }
+                }
 
                 // set the new node as current node
                 _currentNode = value;
 
-                // set the sorting options
+                // prepare settings for the new node
                 if (_currentNode != null) {
-                    DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)_currentNode.AdditionalSettings;
+                    // add current node filters
+                    addFilters(value);
 
-                    // set the sorting fields
-                    if (!nodeSettings.UseDefaultSorting) {
-                        CurrentSortField = nodeSettings.SortField;
-                        CurrentSortDirection = nodeSettings.SortDirection;
+                    // setup the sorting
+                    if (_currentNode != null) {
+                        DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)_currentNode.AdditionalSettings;
+                        if (!nodeSettings.UseDefaultSorting) {
+                            // using category settings
+                            CurrentSortField = nodeSettings.SortField;
+                            CurrentSortDirection = nodeSettings.SortDirection;
+                        }
+                        else {
+                            // using default settings
+                            CurrentSortField = DefaultSortField;
+                            CurrentSortDirection = Sort.GetLastSortDirection(CurrentSortField);
+                        }
                     }
-                    else {
-                        CurrentSortField = DefaultSortField;
-                        CurrentSortDirection = SortingDirections.Ascending;
-                    }
+
                 }
 
-                // if required reset the selectedMovie
-                if (MovingPicturesCore.Settings.ResetSelectedMovieWhenSwitchingCategories) {
-                    selectedMovie = null;
+                // enable filter events and reapply all filters
+                updatingFiltering = false;
+                ReapplyFilters();                
+
+                // evaluate where we are
+                if ( SubNodes == null || SubNodes.Count == 0) {
+                    // we don't have any sub categories to show so we switch to 
+                    // the default view if we are not in that view
+                    if (CurrentView != DefaultView)
+                        CurrentView = DefaultView;
+                }
+                else if (CurrentView != BrowserViewMode.CATEGORIES) {
+                    // we have sub categories to show so switch to 
+                    // category view if we are not in that view
+                    CurrentView = BrowserViewMode.CATEGORIES;
+                }
+                else {
+                    // we are already in the correct view so 
+                    // we only have to reload the facade
+                    ReloadFacade();
                 }
 
-                ReapplyFilters();
-                ReloadFacade();
             }
             get { return _currentNode; }
         } public DBNode<DBMovieInfo> _currentNode;
@@ -606,7 +628,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             CategoriesFacade.ClearAll();
             availableMovies.Clear();
 
-            if (filteredMovies.Count > 0) {
+            if (FilteredMovies.Count > 0) {
                 SubNodes.Sort();
                 foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
 
