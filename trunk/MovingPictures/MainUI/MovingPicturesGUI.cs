@@ -415,7 +415,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 if (filteringIndicator != null) filteringIndicator.Visible = false;
                 PublishFilterDetails();
-                OnBrowserContentsChanged();
             }
 
             if (recentInsertedDiskSerials == null) {              
@@ -439,7 +438,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // first time setup tasks
             if (!loaded) {
                 if (browser.CategoriesAvailable)
-                    browser.CurrentView = BrowserViewMode.CATEGORIES;
+                    browser.CurrentNode = null;
                 else
                     browser.CurrentView = browser.DefaultView;
                 loaded = true;
@@ -501,9 +500,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case 51:
                     if (actionType == MediaPortal.GUI.Library.Action.ActionType.ACTION_SELECT_ITEM) {
                         browser.CurrentNode = browser.SelectedNode;
-                        if (browser.SubNodes.Count == 0) {
-                            browser.CurrentView = browser.DefaultView;
-                        }                        
                     }
                     break;
 
@@ -552,30 +548,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     GUIWindowManager.ShowPreviousWindow();
                     break;
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PREVIOUS_MENU:
+                    
                     if (browser.CurrentView == BrowserViewMode.DETAILS)
-                        // return to the facade screen
+                        // return to the one of the facade screens
                         browser.CurrentView = browser.PreviousView;
-                    else if (browser.CurrentView == BrowserViewMode.CATEGORIES) {
-                        if (browser.CurrentNode != null)
-                            browser.CurrentNode = browser.CurrentNode.Parent;
-                        else
-                            GUIWindowManager.ShowPreviousWindow();
-                    }
                     else if (remoteFilter.Active)
                         // if a remote filter is active remove it
                         remoteFilter.Clear();
-                    else {
-                        if (browser.CategoriesAvailable) {
-                            if (browser.CurrentNode != null)
-                                browser.CurrentNode = browser.CurrentNode.Parent;
-                            browser.CurrentView = BrowserViewMode.CATEGORIES;
-                        }
+                    else if (browser.CategoriesAvailable && browser.CurrentNode != null)
+                        // go to the parent category
+                        browser.CurrentNode = browser.CurrentNode.Parent;
+                    else
                         // show previous screen (exit the plug-in
-                        else
-                            GUIWindowManager.ShowPreviousWindow();
-                    }
-                    
-                    break;
+                        GUIWindowManager.ShowPreviousWindow();
+
+                        break;
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PLAY:
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_MUSIC_PLAY:
                     // don't be confused, this in some cases is the generic PLAY action
