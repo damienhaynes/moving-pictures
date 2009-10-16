@@ -45,8 +45,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 Thread initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
                 initThread.Start();
-                configScr = new MovingPicturesConfig();
                 loadingPopup.ShowDialog();
+                configScr = new MovingPicturesConfig();
             }
             catch (Exception e) {
                 logger.FatalException("Unexpected error from plug-in initialization!", e);
