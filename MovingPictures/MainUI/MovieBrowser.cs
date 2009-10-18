@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Threading;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
@@ -22,12 +23,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // lookup for GUIListItems that have been created for DBMovieInfo objects
         private Dictionary<DatabaseTable, GUIListItem> listItems;
         private Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>> availableMovies;
-        private CachedDictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>> possibleMovies;
+        private Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>> possibleMovies;
 
         private MovingPicturesSkinSettings skinSettings;
         private FilterUpdatedDelegate<DBMovieInfo> filterUpdatedDelegate;
 
         bool updatingFiltering = false;
+        bool refreshFacade = false;
+        Timer refreshFacadeTimer;
 
         #region Properties
 
@@ -300,8 +303,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public ICollection<DBMovieInfo> FilteredMovies {
             get {
-                if (filteredMovies == null)
+                if (filteredMovies == null || refreshFacade)
                     ReapplyFilters();
+
                 return filteredMovies; 
             }
         }
@@ -381,13 +385,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // setup listeners for new or removed movies
             MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(onMovieDeleted);
             MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
+            MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(onMovieUpdated);
 
             listItems = new Dictionary<DatabaseTable, GUIListItem>();
             availableMovies = new Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
-            
-            // This list will hold a cached result for all possible movies a node and it's children have
-            possibleMovies = new CachedDictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
-            possibleMovies.ExpireAfter = new TimeSpan(0, 0, 300);
+            possibleMovies = new Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
 
             filterUpdatedDelegate = new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
 
@@ -481,7 +483,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public void ReapplyFilters() {
             // (re)initialize the filtered movie list
             filteredMovies = new HashSet<DBMovieInfo>();
-            filteredMovies.Clear();
 
             // trim it down to satisfy the filters.
             bool first = true;
@@ -533,9 +534,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // that the new item should be filtered out by the ActiveFilters
             logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie browser.");
             allMovies.Add((DBMovieInfo)obj);
-            possibleMovies.Clear();
-            ReapplyFilters();
-            ReloadFacade();
+
+            onMovieContentsChange();
+        }
+
+        private void onMovieUpdated(DatabaseTable obj) {
+            // if this is not a movie or related localmedia object, break
+            if (obj.GetType() != typeof(DBMovieInfo)) {
+                if (obj.GetType() != typeof(DBLocalMedia))
+                    return;
+                else if (((DBLocalMedia)obj).AttachedMovies.Count == 0)
+                    return;
+            }
+
+            onMovieContentsChange();
         }
 
         // Listens for newly removed items from the database manager.
@@ -554,10 +566,28 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             logger.Info("Removing " + ((DBMovieInfo)obj).Title + " from list.");
             DBMovieInfo movie = (DBMovieInfo)obj;
             allMovies.Remove(movie);
-            filteredMovies.Remove(movie);
 
-            // update the facade to reflect the changes
-            ReloadFacade();
+            onMovieContentsChange();
+        }
+
+        private void onMovieContentsChange() {
+            // flag that we need a refresh
+            lock (SyncRoot) {
+                refreshFacade = true;
+            }
+
+            // if we are in the details screen we don't have to set a timer to perform the reload
+            if (CurrentView == BrowserViewMode.DETAILS)
+                return;
+
+            // Initiate a refresh to be performed 5 seconds after the last update
+            if (refreshFacadeTimer == null) {
+                refreshFacadeTimer = new Timer(RefreshFacade, null, 5000, Timeout.Infinite);
+            }
+            else {
+                refreshFacadeTimer.Change(5000, Timeout.Infinite);
+            }
+            
         }
 
         private void removeFilters(DBNode<DBMovieInfo> node) {
@@ -614,11 +644,32 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (CurrentView != BrowserViewMode.DETAILS) {
                 ReloadMovieFacade();
-            }
+            }            
 
             // content has changed
             onContentsChanged();
         }
+
+        /// <summary>
+        /// Reloads the facade as result from a delayed refresh
+        /// </summary>
+        /// <param name="state"></param>
+        private void RefreshFacade(object state) {
+            // If we are in details view we don't need to do a reload
+            if (CurrentView == BrowserViewMode.DETAILS )
+                return;
+
+            // Check if we still need to reload
+            lock (SyncRoot) {
+                if (!refreshFacade)
+                    return;
+            }
+            
+            // Reload
+            logger.Debug("Refreshing Visible Facade After Receiving Movie Updates");
+            ReloadFacade();
+        }
+
 
         // populates the category facade
         public void ReloadCategoriesFacade() {
@@ -629,11 +680,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             availableMovies.Clear();
 
             if (FilteredMovies.Count > 0) {
+
+                bool reload = false;
+                lock (SyncRoot) {
+                    reload = refreshFacade;
+                    refreshFacade = false;
+                }
+
                 SubNodes.Sort();
                 foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
 
                     // get base list
-                    if (possibleMovies.HasExpired(currNode))
+                    if (!possibleMovies.ContainsKey(currNode) || reload)
                         possibleMovies[currNode] = currNode.GetPossibleFilteredItems();
 
                     // base list is empty so skip this node
@@ -668,6 +726,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             foreach (DBMovieInfo currMovie in FilteredMovies) 
                 addMovieToFacade(currMovie);
+
+            lock (SyncRoot) {
+                refreshFacade = false;
+            }
             
             // sort it using our basic sorter
             facade.Sort(new GUIListItemMovieComparer(this.CurrentSortField, this.CurrentSortDirection));
@@ -716,7 +778,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // add the listitem
             _categoriesFacade.Add(listItems[newNode]);
-            //UpdateListColors(newMovie);
         }
 
         // adds the given movie to the facade and creates a GUIListItem if neccesary
