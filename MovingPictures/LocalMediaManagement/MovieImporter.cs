@@ -9,6 +9,7 @@ using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
+using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 using MediaPortal.Profile;
 using NLog;
 
@@ -480,6 +481,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                     SetupFileSystemWatchers();
                     int checkWatchers= 0;
+                    bool initialScan = true;
 
                     // do an initial scan on all paths
                     // grab all the files in our import paths
@@ -496,11 +498,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     }
                     if (Progress != null) Progress(100, 0, 0, "Done!");
 
-
                     // monitor existing paths for change
                     while (true) {
                         Thread.Sleep(1000);
-
 
                         // if the filesystem scanner found any files, add them
                         lock (filesAdded.SyncRoot) {
@@ -515,6 +515,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                                 ScanFiles(fileList, false);
                                 filesAdded.Clear();
                             }
+                        }
+
+                        // Launch the background task after the initial scan has completed
+                        if (initialScan) {
+                            MovingPicturesCore.LaunchBackgroundTasks();
+                            initialScan = false;
                         }
 
                         checkWatchers++;
@@ -817,33 +823,48 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     continue;
                 }
 
-                // Logical Volume Check
-                if (!currFile.ImportPath.IsUnc) {
-                    
-                    // Files on logical volumes should have a serial number.
-                    // Blocking these files from the import process prevents unnecessary duplications
-                    if (currFile.VolumeSerial == string.Empty) {
-                        logger.Debug("SKIPPED: File='{0}', Reason='Missing volume serial'", fileName);
-                        continue;
+                // Files on logical volumes should have a serial number.
+                // Blocking these files from the import process prevents unnecessary duplications
+                if (!currFile.ImportPath.IsUnc && currFile.VolumeSerial == string.Empty) {
+                    logger.Debug("SKIPPED: File='{0}', Reason='Missing volume serial'", fileName);
+                    continue;
+                }
+
+                // exclude samplefiles and ignore them
+                if (VideoUtility.isSampleFile(currFile.File)) {
+                    logger.Info("Ignoring: File='{0}', Bytes={1}, Reason='Sample detected'", fileName, currFile.File.Length);
+                    currFile.Ignored = true;
+                    currFile.Commit();
+                    continue;
+                }
+
+                // catch files that were moved/renamed while the plugin was not running
+                if (!currFile.ImportPath.IsOpticalDrive) {
+
+                    List<DBLocalMedia> existingMedia = null;
+                    if ((currFile.IsDVD || currFile.IsBluray) && currFile.DiscId != null)
+                        existingMedia = DBLocalMedia.GetEntriesByDiscId(currFile.DiscId);
+                    else if (currFile.FileHash != null)
+                        existingMedia = DBLocalMedia.GetEntriesByHash(currFile.FileHash);
+
+                    if (existingMedia != null && existingMedia.Count > 0) {
+                        bool moved = false;
+                        foreach (DBLocalMedia oldMedia in existingMedia) {
+                            if (oldMedia.IsRemoved) {
+                                logger.Info("File '{0}' was moved/renamed to '{1}'. Updating existing entry.", oldMedia.FullPath, currFile.FullPath);
+                                // update our old media object with the new information
+                                oldMedia.ImportPath = currFile.ImportPath;
+                                oldMedia.File = currFile.File;
+                                oldMedia.UpdateVolumeInformation();
+                                oldMedia.Commit();
+                                moved = true;
+                                break;
+                            }
+                        }
+                        // if we updated a moved/renamed file we can discard it from the list
+                        if (moved) continue;
                     }
 
-                    // This logic is really about fixing pre 0.8 data that missed out on the volume serial requirement 
-                    // and were not catched in startup maintenance. We try to get the same path with an empty serial if 
-                    // it does turn up we just update the existing object and discard the new object.
-                    DBLocalMedia dupeFile = DBLocalMedia.Get(currFile.FullPath);
-                    if (dupeFile.ID != null) {
-                        dupeFile.VolumeSerial = currFile.VolumeSerial;
-                        dupeFile.MediaLabel = currFile.MediaLabel;
-                        dupeFile.Commit();
-                        logger.Debug("Updated '{0}' as an existing object. The file was removed from the importer.", fileName);
-                        continue;
-                    }
-                }
-                
-                // exclude samplefiles
-                if (VideoUtility.isSampleFile(currFile.File)) {
-                    logger.Info("SKIPPED: File='{0}', Bytes={1}, Reason='Sample detected'", fileName, currFile.File.Length);
-                    continue;
                 }
 
                 // if we have no previous files, move on so we can check if the next file

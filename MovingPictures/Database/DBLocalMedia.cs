@@ -625,9 +625,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public static DBLocalMedia GetDisc(string fullPath, string discId) {
-            DBField discIdField = DBField.GetField(typeof(DBLocalMedia), "DiscId");
-            ICriteria criteria = new BaseCriteria(discIdField, "=", discId);
-            List<DBLocalMedia> resultSet = MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(criteria);
+            List<DBLocalMedia> resultSet = GetEntriesByDiscId(discId);
             if (resultSet.Count > 0)
                 return resultSet[0];
 
@@ -635,6 +633,28 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             newFile.FullPath = fullPath;
 
             return newFile;
+        }
+
+        /// <summary>
+        /// Returns a list of DBLocalMedia objects that match the filehash
+        /// </summary>
+        /// <param name="filehash"></param>
+        /// <returns></returns>
+        public static List<DBLocalMedia> GetEntriesByHash(string filehash) {
+            DBField fileHashField = DBField.GetField(typeof(DBLocalMedia), "FileHash");
+            ICriteria criteria = new BaseCriteria(fileHashField, "=", filehash);
+            return MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(criteria);
+        }
+
+        /// <summary>
+        /// Returns a list of DBLocalMedia objects that match the discid
+        /// </summary>
+        /// <param name="filehash"></param>
+        /// <returns></returns>
+        public static List<DBLocalMedia> GetEntriesByDiscId(string discId) {
+            DBField discIdField = DBField.GetField(typeof(DBLocalMedia), "DiscId");
+            ICriteria criteria = new BaseCriteria(discIdField, "=", discId);
+            return MovingPicturesCore.DatabaseManager.Get<DBLocalMedia>(criteria);
         }
 
         public static DBLocalMedia Get(string fullPath, string volumeSerial) {
