@@ -187,7 +187,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             
             // stop listening
             DatabaseMaintenanceManager.MaintenanceProgress -= new ProgressDelegate(DatabaseMaintenanceManager_MaintenanceProgress);
-            launchBackgroundTasks();
         }
 
         static void DatabaseMaintenanceManager_MaintenanceProgress(string actionName, int percentDone) {
@@ -323,11 +322,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                 Directory.CreateDirectory(Settings.BackdropThumbsFolder);
         }
 
-        private static void launchBackgroundTasks() {
+        internal static void LaunchBackgroundTasks() {
             logger.Info("Launching Background Processes...");
+            ProcessManager.StartProcess(new FileSyncProcess());
             ProcessManager.StartProcess(new MediaInfoUpdateProcess());
             ProcessManager.StartProcess(new UpdateArtworkProcess());
-            ProcessManager.StartProcess(new FileSyncProcess());
         }
 
         private static void checkVersionInfo() {
