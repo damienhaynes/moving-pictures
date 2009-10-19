@@ -35,6 +35,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 // remove files without an import path
                 if (currFile.ImportPath == null || currFile.ImportPath.ID == null) {
+                    logger.Info("Removing: {0} (no import path)", currFile.FullPath);
                     currFile.Delete();
                     cleaned++;
                     continue;
@@ -42,11 +43,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 // Remove Orphan Files
                 if (currFile.AttachedMovies.Count == 0 && !currFile.Ignored) {
-                    logger.Info("Removing " + currFile.FullPath + " (orphan)");
+                    logger.Info("Removing: {0} (orphan)", currFile.FullPath);
                     currFile.Delete();
                     cleaned++;
                     continue;
                 }
+
+                // Remove entries from the database that have their file removed
+                if (currFile.IsRemoved) {
+                    logger.Info("Removing: {0} (file is removed)", currFile.FullPath);
+                    currFile.Delete();
+                    cleaned++;
+                }
+
             }
             
             logger.Info("Removed {0} file entries.", cleaned.ToString());
