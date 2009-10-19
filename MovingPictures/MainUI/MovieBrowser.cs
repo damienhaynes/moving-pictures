@@ -30,6 +30,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         bool updatingFiltering = false;
         bool refreshFacade = false;
+        DateTime refreshToday = DateTime.Today;
         Timer refreshFacadeTimer;
 
         #region Properties
@@ -685,6 +686,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 lock (SyncRoot) {
                     reload = refreshFacade;
                     refreshFacade = false;
+                }
+
+                // filters using relative date criteria need a refresh when the day changes
+                if (refreshToday < DateTime.Today) {
+                    refreshToday = DateTime.Today;
+                    reload = true;
                 }
 
                 SubNodes.Sort();
