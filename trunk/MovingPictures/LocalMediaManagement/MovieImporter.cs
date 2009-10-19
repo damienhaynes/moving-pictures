@@ -1,6 +1,9 @@
 using System;
+using System.Linq;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Threading;
 using Cornerstone.Database;
@@ -90,14 +93,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         } private ArrayList filesAdded;
 
         // Files that have recently been removed from the filesystem.
-        public ArrayList FilesDeleted {
-            get { return ArrayList.ReadOnly(filesDeleted); }
-        } private ArrayList filesDeleted;
-
+        ObservableCollection<DBLocalMedia> filesDeleted;
+        Timer filesDeletedTimer;
+        
         // list of watcher objects that monitor the filesystem for changes
         List<FileSystemWatcher> fileSystemWatchers;
         List<DBImportPath> watcherQueue;
-        List<DBImportPath> rescanQueue;
+        List<DBImportPath> rescanQueue;        
         Dictionary<FileSystemWatcher, DBImportPath> pathLookup;
         int watcherInterval;
 
@@ -134,7 +136,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             commitedMatches = ArrayList.Synchronized(new ArrayList());
 
             filesAdded = ArrayList.Synchronized(new ArrayList());
-            filesDeleted = ArrayList.Synchronized(new ArrayList());
+            filesDeleted = new ObservableCollection<DBLocalMedia>();
+            filesDeleted.CollectionChanged += new NotifyCollectionChangedEventHandler(onFileRemoved);
 
             matchLookup = new Dictionary<DBLocalMedia, MovieMatch>();
             allMatches = ArrayList.Synchronized(new ArrayList());
@@ -713,9 +716,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             localMediaRemoved = DBLocalMedia.GetAll(e.FullPath + '%', DeviceManager.GetVolumeSerial(e.FullPath));
 
             // Loop through the remove files list and process
-            foreach (DBLocalMedia removedFile in localMediaRemoved) {
-                logger.Info("Watcher flagged {0} for removal from the database.", removedFile.File.Name);
-                
+            foreach (DBLocalMedia removedFile in localMediaRemoved) {          
                 // if the file is not in our system anymore there's nothing to do
                 // todo: this is not entirely true because the file could be sitting in the match system
                 // waiting for user input  we would have to  remove it there also.
@@ -728,8 +729,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     continue;
                 }
 
-                // Remove the file
-                removedFile.Delete();
+                // Mark the file for removal
+                lock (filesDeleted) {
+                    filesDeleted.Add(removedFile);
+                    logger.Info("Watcher flagged {0} for removal from the database.", removedFile.File.Name);
+                }
             }
         }
 
@@ -783,6 +787,43 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
             
             logger.Info("Watcher updated {0} local media records that were affected by a rename event.", renamed);
+        }
+
+        // triggers when a new file is flagged for removal
+        private void onFileRemoved(object sender, NotifyCollectionChangedEventArgs e) {
+            // only take action when a new item is added to the list
+            if (e.Action != NotifyCollectionChangedAction.Add)
+                return;
+
+            // period to wait before removing the files after the last file has been added to the collection.
+            int gracePeriod = 5000;
+
+            // start/modify the timer   
+            if (filesDeletedTimer == null)
+                filesDeletedTimer = new Timer(processRemovedFiles, null, gracePeriod, Timeout.Infinite);
+            else
+                filesDeletedTimer.Change(gracePeriod, Timeout.Infinite);
+        }
+
+        // processes files that are flagged for removal
+        private void processRemovedFiles(object state) {
+            List<DBLocalMedia> deleteFiles = new List<DBLocalMedia>();
+            
+            // get a list of files marked for removal
+            lock (filesDeleted) {
+                deleteFiles = filesDeleted.ToList();
+                filesDeleted.Clear();
+            }
+
+            // remove the files from the database
+            foreach (DBLocalMedia deletedFile in deleteFiles) {
+                // check if the object was not deleted before and is actually removed
+                if (deletedFile.ID != null && deletedFile.IsRemoved) {
+                    // log and removed the file from the database
+                    logger.Info("Removing: {0}", deletedFile.File.Name);
+                    deletedFile.Delete();
+                }
+            }
         }
 
         // Grabs the files from the DBImportPath and add them to the queue for use
