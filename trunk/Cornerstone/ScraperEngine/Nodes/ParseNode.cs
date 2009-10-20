@@ -95,6 +95,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 return;
             }
 
+            setVariable(variables, parsedName + ".count", matches.Count.ToString());
+
             if (matches.Count == 0) {
                 if (DebugMode) logger.Debug("Parse node returned no results... " + xmlNode.OuterXml);
                 return;
@@ -125,6 +127,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 XPathDocument xml = new XPathDocument(new StringReader(parsedInput));
                 XPathNavigator navigator = xml.CreateNavigator();
                 XPathNodeIterator nodes = navigator.Select(query);
+
+                setVariable(variables, parsedName + ".count", nodes.Count.ToString());
 
                 while (nodes.MoveNext()) {
                     XPathNavigator node = nodes.Current;
