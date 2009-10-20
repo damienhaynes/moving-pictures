@@ -225,10 +225,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // Log the result
             if (String.IsNullOrEmpty(hashID)) {
-                logger.Debug("Failed Identifier: Path='{1}', Format='{0}' ", videoPath, self);
+                logger.Debug("Failed Identifier: Path='{0}', Format='{1}' ", videoPath, self);
             }
             else {
-                logger.Debug("Identifier: Path='{1}', Format='{0}', Hash='{2}' ", videoPath, self, hashID);
+                logger.Debug("Identifier: Path='{0}', Format='{1}', Hash='{2}' ", videoPath, self, hashID);
             }
 
             // Return the result
