@@ -180,18 +180,24 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedFile = parseString(variables, file);
             string fileContents = string.Empty;
 
-            if (DebugMode) logger.Debug("Reading file: {0}", parsedFile);
+            if (System.IO.File.Exists(parsedFile)) {
 
-            try {
-                StreamReader streamReader = new StreamReader(parsedFile);
-                fileContents = streamReader.ReadToEnd();
-                streamReader.Close();
+                if (DebugMode) logger.Debug("Reading file: {0}", parsedFile);
+
+                try {
+                    StreamReader streamReader = new StreamReader(parsedFile);
+                    fileContents = streamReader.ReadToEnd();
+                    streamReader.Close();
+                }
+                catch (Exception e) {
+                    if (e is ThreadAbortException)
+                        throw e;
+
+                    logger.Warn("Could not read file: " + parsedFile, e);
+                }
             }
-            catch (Exception e) {
-                if (e is ThreadAbortException)
-                    throw e;
-
-                logger.Warn("Could not read file: " + parsedFile, e);
+            else {
+                if (DebugMode) logger.Debug("File does not exist: {0}", parsedFile);
             }
 
             return fileContents;
