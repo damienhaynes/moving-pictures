@@ -993,21 +993,23 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIListItem rateItem = new GUIListItem();
 
             int currID = 1;
+            int selectedIndex = browser.SelectedIndex;
+            DBMovieInfo selectedMovie = browser.SelectedMovie;
 
             detailsItem = new GUIListItem(Translation.UpdateDetailsFromOnline);
             detailsItem.ItemId = currID;
             dialog.Add(detailsItem);
             currID++;
 
-            if (browser.SelectedMovie.AlternateCovers.Count > 1) {
+            if (selectedMovie.AlternateCovers.Count > 1) {
                 cycleArtItem = new GUIListItem(Translation.CycleCoverArt);
                 cycleArtItem.ItemId = currID;
                 dialog.Add(cycleArtItem);
                 currID++;
             }
 
-            if (browser.SelectedMovie.CoverFullPath.Trim().Length == 0 ||
-                browser.SelectedMovie.BackdropFullPath.Trim().Length == 0) {
+            if (selectedMovie.CoverFullPath.Trim().Length == 0 ||
+                selectedMovie.BackdropFullPath.Trim().Length == 0) {
 
                 retrieveArtItem = new GUIListItem(Translation.CheckForMissingArtwork);
                 retrieveArtItem.ItemId = currID;
@@ -1015,7 +1017,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currID++;
             }
 
-            if (browser.SelectedMovie.ActiveUserSettings.WatchedCount > 0) {
+            if (selectedMovie.ActiveUserSettings.WatchedCount > 0) {
                 unwatchedItem = new GUIListItem(Translation.MarkAsUnwatched);
                 unwatchedItem.ItemId = currID;
                 dialog.Add(unwatchedItem);
@@ -1042,47 +1044,45 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             if (dialog.SelectedId == detailsItem.ItemId) {
-                updateMovieDetails();
+                updateMovieDetails(selectedMovie);
             }
             else if (dialog.SelectedId == cycleArtItem.ItemId) {
-                
-                browser.SelectedMovie.NextCover();
-                browser.SelectedMovie.Commit();
+
+                selectedMovie.NextCover();
+                selectedMovie.Commit();
 
                 // update the new cover art in the facade
-                GUIListItem listItem = browser.GetMovieListItem(browser.SelectedMovie);
+                GUIListItem listItem = browser.GetMovieListItem(selectedMovie);
                 if (listItem != null) {
-                    listItem.IconImage = browser.SelectedMovie.CoverThumbFullPath.Trim();
-                    listItem.IconImageBig = browser.SelectedMovie.CoverThumbFullPath.Trim();
+                    listItem.IconImage = selectedMovie.CoverThumbFullPath.Trim();
+                    listItem.IconImageBig = selectedMovie.CoverThumbFullPath.Trim();
                     listItem.RefreshCoverArt();
                 }
 
-                PublishArtwork(browser.SelectedMovie);
+                PublishArtwork(selectedMovie);
             }
             else if (dialog.SelectedId == retrieveArtItem.ItemId) {
-                logger.Info("Updating artwork for " + browser.SelectedMovie.Title);
-                updateMovieArtwork();
+                logger.Info("Updating artwork for " + selectedMovie.Title);
+                updateMovieArtwork(selectedMovie);
             }
             else if (dialog.SelectedId == unwatchedItem.ItemId) {
-                browser.SelectedMovie.ActiveUserSettings.WatchedCount = 0;
-                browser.SelectedMovie.ActiveUserSettings.Commit();
-                PublishMovieDetails(browser.SelectedMovie);
-                browser.UpdateListColors(browser.SelectedMovie);
-                browser.ReapplyFilters();
+                logger.Info("Marking '{0}' as unwatched.", selectedMovie.Title);
+                updateMovieWatchedCount(selectedMovie, 0);
+                browser.SelectedIndex = selectedIndex;
+               
             }
             else if (dialog.SelectedId == watchedItem.ItemId) {
-                browser.SelectedMovie.ActiveUserSettings.WatchedCount = 1;
-                browser.SelectedMovie.ActiveUserSettings.Commit();
-                PublishMovieDetails(browser.SelectedMovie);
-                browser.UpdateListColors(browser.SelectedMovie);
-                browser.ReapplyFilters();
+                logger.Info("Marking '{0}' as watched.", selectedMovie.Title);
+                updateMovieWatchedCount(selectedMovie, 1);
+                browser.SelectedIndex = selectedIndex;
             }
             else if (dialog.SelectedId == deleteItem.ItemId) {
-                deleteMovie();
+                deleteMovie(selectedMovie);
+                browser.SelectedIndex = selectedIndex;
             }
             else if (dialog.SelectedId == rateItem.ItemId) {
-                if (GetUserRating(browser.SelectedMovie)) {
-                    PublishMovieDetails(browser.SelectedMovie);
+                if (GetUserRating(selectedMovie)) {
+                    PublishMovieDetails(selectedMovie);
                 }
             }
         }
@@ -1149,15 +1149,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return pinCodeDialog.IsCorrect;
         }
 
-        private void deleteMovie() {
-            DBLocalMedia firstFile = browser.SelectedMovie.LocalMedia[0];
+        private void deleteMovie(DBMovieInfo movie) {
+            DBLocalMedia firstFile = movie.LocalMedia[0];
 
             // if the file is available and read only, or known to be stored on optical media, prompt to ignore.
             if ((firstFile.IsAvailable && firstFile.File.IsReadOnly) || firstFile.ImportPath.IsOpticalDrive) {
                 bool bIgnore = ShowCustomYesNo("Moving Pictures", Translation.CannotDeleteReadOnly, null, null, false);
 
                 if (bIgnore) {
-                    browser.SelectedMovie.DeleteAndIgnore();
+                    movie.DeleteAndIgnore();
                     if (browser.CurrentView == BrowserViewMode.DETAILS)
                         // return to the facade screen
                         browser.CurrentView = browser.PreviousView;
@@ -1173,11 +1173,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             // if the file is available and not read only, confirm delete.
-            string sDoYouWant = String.Format(Translation.DoYouWantToDelete, browser.SelectedMovie.Title);
+            string sDoYouWant = String.Format(Translation.DoYouWantToDelete, movie.Title);
             bool bConfirm = ShowCustomYesNo("Moving Pictures", sDoYouWant, null, null, false);
 
             if (bConfirm) {
-                bool deleteSuccesful = browser.SelectedMovie.DeleteFiles();
+                bool deleteSuccesful = movie.DeleteFiles();
 
                 if (deleteSuccesful) {
                     if (browser.CurrentView == BrowserViewMode.DETAILS)
@@ -1194,18 +1194,39 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region Movie Update Methods
 
-        delegate DBMovieInfo MovieUpdater(DBMovieInfo movie);
+        delegate DBMovieInfo MovieUpdateWorker(DBMovieInfo movie);
 
-        // Updates the details of the currently selected movie using the preferred dataprovider. (async)
-        private void updateMovieDetails() {
-            bool bConfirm = ShowCustomYesNo(Translation.UpdateMovieDetailsHeader, Translation.UpdateMovieDetailsBody, null, null, false);
-            if (bConfirm && browser.SelectedMovie != null) {
-                MovieUpdater updater = new MovieUpdater(updateMovieDetails);
-                updater.BeginInvoke(browser.SelectedMovie, new AsyncCallback(movieDetailsUpdated), updater);
+        /// <summary>
+        /// Updates the movie's watched counter
+        /// </summary>
+        /// <param name="movie"></param>
+        /// <param name="newWatchedCount">new watched count</param>
+        private void updateMovieWatchedCount(DBMovieInfo movie, int newWatchedCount) {
+            movie.ActiveUserSettings.WatchedCount = newWatchedCount;
+            movie.ActiveUserSettings.Commit();
+            browser.UpdateListColors(movie);
+            browser.ReapplyFilters();
+            if (browser.CurrentView == BrowserViewMode.DETAILS) {
+                PublishMovieDetails(movie);
+            }
+            else {
+                browser.ReloadMovieFacade();
             }
         }
 
-        private DBMovieInfo updateMovieDetails(DBMovieInfo movie) {
+        /// <summary>
+        /// Updates the movie details in a background thread using the preferred dataprovider.
+        /// </summary>
+        /// <param name="movie"></param>
+        private void updateMovieDetails(DBMovieInfo movie) {
+            bool bConfirm = ShowCustomYesNo(Translation.UpdateMovieDetailsHeader, Translation.UpdateMovieDetailsBody, null, null, false);
+            if (bConfirm && movie != null) {
+                MovieUpdateWorker updater = new MovieUpdateWorker(movieDetailsUpdateWorker);
+                updater.BeginInvoke(movie, new AsyncCallback(movieDetailsUpdateFinished), updater);
+            }
+        }
+
+        private DBMovieInfo movieDetailsUpdateWorker(DBMovieInfo movie) {
 
             // indicate that we are doing some work here
             setWorkingAnimationStatus(true);
@@ -1225,8 +1246,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return movie;
         }
 
-        private void movieDetailsUpdated(IAsyncResult result) {
-            MovieUpdater updater = (MovieUpdater)result.AsyncState;
+        private void movieDetailsUpdateFinished(IAsyncResult result) {
+            MovieUpdateWorker updater = (MovieUpdateWorker)result.AsyncState;
 
             // End the operation
             DBMovieInfo movie = updater.EndInvoke(result);
@@ -1238,15 +1259,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             browser.ReloadFacade();
         }
 
-        // Updates the artwork of the currently selected movie using the preferred dataprovider. (async)
-        private void updateMovieArtwork() {
-            if (browser.SelectedMovie != null) {
-                MovieUpdater updater = new MovieUpdater(updateMovieArtwork);
-                updater.BeginInvoke(browser.SelectedMovie, new AsyncCallback(movieArtworkUpdated), updater);
+        /// <summary>
+        /// Updates the movie artwork in a background thread using the preferred dataprovider.
+        /// </summary>
+        /// <param name="movie"></param>
+        private void updateMovieArtwork(DBMovieInfo movie) {
+            if (movie != null) {
+                MovieUpdateWorker updater = new MovieUpdateWorker(movieArtworkUpdateWorker);
+                updater.BeginInvoke(movie, new AsyncCallback(movieArtworkUpdateFinished), updater);
             }
         }
 
-        private DBMovieInfo updateMovieArtwork(DBMovieInfo movie) {
+        private DBMovieInfo movieArtworkUpdateWorker(DBMovieInfo movie) {
             // indicate that we are doing some work here
             setWorkingAnimationStatus(true);
 
@@ -1271,8 +1295,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return movie;
         }
 
-        private void movieArtworkUpdated(IAsyncResult result) {
-            MovieUpdater updater = (MovieUpdater)result.AsyncState;
+        private void movieArtworkUpdateFinished(IAsyncResult result) {
+            MovieUpdateWorker updater = (MovieUpdateWorker)result.AsyncState;
 
             // End the operation
             DBMovieInfo movie = updater.EndInvoke(result);
