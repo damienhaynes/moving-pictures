@@ -87,6 +87,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             get {
                 return selectedIndex;
             }
+            set {
+                if (Facade.Count > 1) {
+                    if (value < Facade.Count)
+                        Facade.SelectIndex(value);
+                    else
+                        Facade.SelectIndex(Facade.Count - 1);
+                }
+            }
         } private int selectedIndex = 0;
 
         /// <summary>
