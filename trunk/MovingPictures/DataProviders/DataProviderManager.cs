@@ -321,7 +321,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             logger.Info("Loading existing data sources...");
 
             foreach (DBSourceInfo currSource in DBSourceInfo.GetAll())
-                addToLists(currSource);
+                updateListsWith(currSource);
 
             detailSources.Sort(sorters[DataType.DETAILS]);
             coverSources.Sort(sorters[DataType.COVERS]);
@@ -381,7 +381,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                                 logger.Warn("Script version number already loaded. Reloading because in Debug Mode.");
                                 currScript.Contents = scriptContents;
                                 currScript.Reload();
+                                updateListsWith(currSource);
                                 currScript.Commit();
+                                normalizePriorities();
                                 return AddSourceResult.SUCCESS_REPLACED;
                             }
                             else {
@@ -395,8 +397,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     if (uniqueDate || DebugMode) {
                         currSource.Scripts.Add(newScript);
                         currSource.SelectedScript = newScript;
+                        updateListsWith(currSource);
                         newScript.Commit();
                         currSource.Commit();
+                        normalizePriorities();
 
                         if (uniqueDate)
                             return AddSourceResult.SUCCESS;
@@ -420,7 +424,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             newSource.SelectedScript = newScript;
 
             // add and commit
-            addToLists(newSource);
+            updateListsWith(newSource);
             newScript.Commit();
             newSource.Commit();
             normalizePriorities();
@@ -440,7 +444,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             DBSourceInfo newSource = new DBSourceInfo();
             newSource.ProviderType = providerType;
             newSource.Commit();
-            addToLists(newSource);
+            updateListsWith(newSource);
             normalizePriorities();
 
             return AddSourceResult.SUCCESS;
@@ -455,23 +459,37 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             source.Delete();
         }
 
-        private void addToLists(DBSourceInfo newSource) {
+        private void updateListsWith(DBSourceInfo newSource) {
             if (newSource.ProviderType == null) {
                logger.Info("Removing invalid provider.");
                newSource.Delete();
                return;
             }
 
-            lock (allSources) allSources.Add(newSource);
+            lock (allSources) 
+                if (!allSources.Contains(newSource)) 
+                    allSources.Add(newSource);
 
-            if (newSource.Provider.ProvidesBackdrops)
-                lock (backdropSources) backdropSources.Add(newSource);
+            lock (backdropSources) {
+                if (newSource.Provider.ProvidesBackdrops && !backdropSources.Contains(newSource))
+                    backdropSources.Add(newSource);
+                else if (!newSource.Provider.ProvidesBackdrops && backdropSources.Contains(newSource))
+                    backdropSources.Remove(newSource);
+            }
 
-            if (newSource.Provider.ProvidesCoverArt)
-                lock (coverSources) coverSources.Add(newSource);
+            lock (coverSources) {
+                if (newSource.Provider.ProvidesCoverArt && !coverSources.Contains(newSource))
+                    coverSources.Add(newSource);
+                else if (!newSource.Provider.ProvidesCoverArt && coverSources.Contains(newSource))
+                    coverSources.Remove(newSource);
+            }
 
-            if (newSource.Provider.ProvidesMoviesDetails)
-                lock (detailSources) detailSources.Add(newSource);
+            lock (detailSources) {
+                if (newSource.Provider.ProvidesMoviesDetails && !detailSources.Contains(newSource))
+                    detailSources.Add(newSource);
+                else if (!newSource.Provider.ProvidesMoviesDetails && detailSources.Contains(newSource))
+                    detailSources.Remove(newSource);
+            }
         }
 
         // reinitializes all the priorities based on existing list order.
