@@ -357,7 +357,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _backdropFullPath;
 
-        [DBField(AllowAutoUpdate = false, FieldName="details_url", Filterable=false)]
+        [DBField(FieldName="details_url", Filterable=false)]
         public String DetailsURL {
             get {
                 return _detailsUrl;
