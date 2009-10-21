@@ -277,16 +277,26 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             int coversAdded = 0;
             int count = 0;
-            while (results.ContainsKey("cover_art[" + count + "].url")) {
+            while (results.ContainsKey("cover_art[" + count + "].url") || results.ContainsKey("cover_art[" + count + "].file")) {
                 // if we have hit our limit quit
                 if (movie.AlternateCovers.Count >= maxCovers || coversAdded >= maxCoversInSession)
                     return true;
 
                 // get url for cover and load it via the movie object
-                string coverPath = results["cover_art[" + count + "].url"];
-                if (coverPath.Trim() != string.Empty)
-                    if (movie.AddCoverFromURL(coverPath) == ArtworkLoadStatus.SUCCESS)
-                        coversAdded++;
+                if (results.ContainsKey("cover_art[" + count + "].url")) {
+                    string coverPath = results["cover_art[" + count + "].url"];
+                    if (coverPath.Trim() != string.Empty)
+                        if (movie.AddCoverFromURL(coverPath) == ArtworkLoadStatus.SUCCESS)
+                            coversAdded++;
+                }
+
+                // get file for cover and load it via the movie object
+                if (results.ContainsKey("cover_art[" + count + "].file")) {
+                    string coverPath = results["cover_art[" + count + "].file"];
+                    if (coverPath.Trim() != string.Empty)
+                        if (movie.AddCoverFromFile(coverPath))
+                            coversAdded++;
+                }
 
                 count++;
             }
@@ -325,16 +335,26 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return false;
             }
 
-            int count = 0;
-            string backdropURL = string.Empty;
 
             // Loop through all the results until a valid backdrop is found
-            // todo: support multiple backdrops
-            while (results.ContainsKey("backdrop[" + count + "].url")) {
-                backdropURL = results["backdrop[" + count + "].url"]; 
-                if (backdropURL.Trim().Length > 0)
-                    if (movie.AddBackdropFromURL(backdropURL) == ArtworkLoadStatus.SUCCESS)
+            int count = 0;
+            while (results.ContainsKey("backdrop[" + count + "].url") || results.ContainsKey("backdrop[" + count + "].file")) {
+
+                // attempt to load via a URL
+                if (results.ContainsKey("backdrop[" + count + "].url")) {
+                    string backdropURL = results["backdrop[" + count + "].url"];
+                    if (backdropURL.Trim().Length > 0)
+                        if (movie.AddBackdropFromURL(backdropURL) == ArtworkLoadStatus.SUCCESS)
                             return true;
+                }
+
+                // attempt to load via a file
+                if (results.ContainsKey("backdrop[" + count + "].file")) {
+                    string backdropFile = results["backdrop[" + count + "].file"];
+                    if (backdropFile.Trim().Length > 0)
+                        if (movie.AddBackdropFromFile(backdropFile))
+                            return true;
+                }
 
                 count++;
             }
