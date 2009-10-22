@@ -873,9 +873,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                 // exclude samplefiles and ignore them
                 if (VideoUtility.isSampleFile(currFile.File)) {
-                    logger.Info("Ignoring: File='{0}', Bytes={1}, Reason='Sample detected'", fileName, currFile.File.Length);
-                    currFile.Ignored = true;
-                    currFile.Commit();
+                    logger.Info("SKIPPED: File='{0}', Bytes={1}, Reason='Sample detected'", fileName, currFile.File.Length);
                     continue;
                 }
 
