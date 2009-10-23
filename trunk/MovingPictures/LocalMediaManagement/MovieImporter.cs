@@ -520,9 +520,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             }
                         }
 
-                        // Launch the background task after the initial scan has completed
+                        // Launch the FileSyncProcess after the initial scan has completed
                         if (initialScan) {
-                            MovingPicturesCore.LaunchBackgroundTasks();
+                            MovingPicturesCore.ProcessManager.StartProcess(new FileSyncProcess());
                             initialScan = false;
                         }
 
