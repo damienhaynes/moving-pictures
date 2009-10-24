@@ -1386,6 +1386,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _categoriesEnabled;
 
+        [CornerstoneSetting(
+            Name = "Dynamic Actor Category Limit",
+            Description = "When an Actor based dynamic category is created, an actor must be in this number of movies you own to be included in the list.",
+            Groups = "|MediaPortal GUI|Filtering|",
+            Identifier = "actor_limit",
+            Default = 2)]
+        public int ActorLimit {
+            get { return _actorLimit; }
+            set {
+                _actorLimit = value;
+                OnSettingChanged("actor_limit");
+            }
+        }
+        private int _actorLimit;
+
         #endregion
 
         #endregion
