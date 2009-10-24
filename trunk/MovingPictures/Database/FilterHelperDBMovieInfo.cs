@@ -20,7 +20,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 UpdateDateAdded(node);
                 return true;
             }
-
+            
+            if (node.BasicFilteringField == DBField.GetFieldByDBName(typeof(DBMovieInfo), "actors")) {
+                UpdateActors(node);
+                return true;
+            }
 
             return false;
         }
@@ -225,6 +229,24 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             node.Children.Sort();
             
+        }
+
+        private void UpdateActors(DBNode<DBMovieInfo> node) {
+            node.UpdateDynamicNodeGeneric();
+
+            List<DBNode<DBMovieInfo>> toRemove = new List<DBNode<DBMovieInfo>>();
+            foreach (DBNode<DBMovieInfo> currNode in node.Children) {
+                if (currNode.DBManager == null)
+                    currNode.DBManager = MovingPicturesCore.DatabaseManager;
+
+                if (currNode.GetFilteredItems().Count < MovingPicturesCore.Settings.ActorLimit) {
+                    toRemove.Add(currNode);
+                }
+            }
+
+            foreach(DBNode<DBMovieInfo> currNode in toRemove) 
+               node.Children.Remove(currNode);
+
         }
 
         private DBCriteria<DBMovieInfo> createCriteria(DBNode<DBMovieInfo> node, DBCriteria<DBMovieInfo>.OperatorEnum opEnum, object value) {
