@@ -103,32 +103,26 @@ namespace Cornerstone.Tools {
 
         public bool GetResponse() {
             bool completed = false;
-            int tryCount = 0; 
-           
+            int tryCount = 0;
+
+            // enable unsafe header parsing if needed
+            if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(true);
+
+            // setup some request properties
+            request.Proxy = WebRequest.DefaultWebProxy;
+            request.Proxy.Credentials = CredentialCache.DefaultCredentials;
+            request.UserAgent = userAgent;
+            request.CookieContainer = new CookieContainer();
+
             while (!completed) {
                 tryCount++;
-                
-                if (_allowUnsafeHeader)
-                    SetAllowUnsafeHeaderParsing(true);
 
-                request.Proxy = WebRequest.DefaultWebProxy;
-                request.Proxy.Credentials = CredentialCache.DefaultCredentials;
-
-                request.UserAgent = userAgent;
                 request.Timeout = timeout + (timeoutIncrement * tryCount);
-                request.CookieContainer = new CookieContainer();
                 if (cookieHeader != null)
                     request.CookieContainer.SetCookies(request.RequestUri, cookieHeader);
 
                 try {
                     response = (HttpWebResponse)request.GetResponse();
-                    cookieHeader = request.CookieContainer.GetCookieHeader(request.RequestUri);
-
-                    // Debug
-                    if (_debug) {
-                        logger.Debug("GetResponse: URL={0}, UserAgent={1}, CookieHeader={3}", requestUrl, userAgent, cookieHeader);
-                    }
-
                     completed = true;
                 }
                 catch (WebException e) {
@@ -154,9 +148,6 @@ namespace Cornerstone.Tools {
                         logger.Warn("Connection failed: Reached retry limit of " + maxRetries + ". URL=" + requestUrl);
                         return false;
                     }
-                    else {
-                        //logger.Debug("Connection retry (" + tryCount.ToString() + "): URL=" + requestUrl + ", Status=" + e.Status.ToString() + ". ");
-                    }
 
                     // If we did not experience a timeout but some other error
                     // use the timeout value as a pause between retries
@@ -164,11 +155,33 @@ namespace Cornerstone.Tools {
                         Thread.Sleep(timeout + (timeoutIncrement * tryCount));
                     }
                 }
+                catch (NotSupportedException e) {
+                    logger.Error("Connection failed.", e);
+                    return false;
+                }
+                catch (ProtocolViolationException e) {
+                    logger.Error("Connection failed.", e);
+                    return false;
+                }
+                catch (InvalidOperationException e) {
+                    logger.Error("Connection failed.", e);
+                    return false;
+                }
                 finally {
-                    if (_allowUnsafeHeader) 
-                        SetAllowUnsafeHeaderParsing(false);
+                    // disable unsafe header parsing if it was enabled
+                    if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(false);
                 }
             }
+
+            // persist the cookie header
+            cookieHeader = request.CookieContainer.GetCookieHeader(request.RequestUri);
+
+            // Debug
+            if (_debug) logger.Debug("GetResponse: URL={0}, UserAgent={1}, CookieHeader={3}", requestUrl, userAgent, cookieHeader);
+
+            // disable unsafe header parsing if it was enabled
+            if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(false);
+
             return true;
         }
 
