@@ -341,6 +341,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 }
 
                 string imdbId = movie.ImdbID.Trim();
+                if (imdbId.Length == 0)
+                    return null;
+
                 // Do an IMDB lookup
                 XmlNodeList xml = getXML(apiMovieImdbLookup + imdbId);
                 if (xml != null && xml.Count > 0) {
