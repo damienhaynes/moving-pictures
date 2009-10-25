@@ -83,13 +83,16 @@
   <string Field="Thursday">Thursday</string>
   <string Field="Friday">Friday</string>
   <string Field="Saturday">Saturday</string>
+  <string Field="ThisWeek">This Week</string>
   <string Field="LastWeek">Last Week</string>
   <string Field="TwoWeeksAgo">Two Weeks Ago</string>
   <string Field="ThreeWeeksAgo">Three Weeks Ago</string>
+  <string Field="ThisMonth">This Month</string>
   <string Field="LastMonth">Last Month</string>
   <string Field="TwoMonthsAgo">Two Months Ago</string>
   <string Field="ThreeMonthsAgo">Three Months Ago</string>
   <string Field="EarlierThisYear">Earlier This Year</string>
+  <string Field="ThisYear">This Year</string>
   <string Field="LastYear">Last Year</string>
   <string Field="Older">Older</string>
   
@@ -140,14 +143,15 @@
   <string Field="DateMonths">months</string>
   <string Field="DateYear">year</string>
   <string Field="DateYears">years</string>
-  <string Field="DatePartThis">This {0}</string>
-  <string Field="DatePartLast">Last {0}</string>
-  <string Field="DatePartWithin">Last {0} {1}</string>
+  <string Field="DatePartWithinDays">Last {0} days</string>
+  <string Field="DatePartWithinWeeks">Last {0} weeks</string>
+  <string Field="DatePartWithinMonths">Last {0} months</string>
+  <string Field="DatePartWithinYears">Last {0} years</string>
   <string Field="DatePartAgo">{0} {1} ago</string>
   
   <!-- Category -->
   
   <string Field="CategoryEmptyHeader">Category is empty</string>
-  <string Field="CategoryEmptyDescription">There are currently no movies\nlisted in this category."</string>
+  <string Field="CategoryEmptyDescription">There are currently no movies\nlisted in this category.</string>
 
 </strings>

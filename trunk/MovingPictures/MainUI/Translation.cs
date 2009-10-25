@@ -100,13 +100,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Friday = "Friday";
         public static string Saturday = "Saturday";
         public static string LastWeek = "Last Week";
+        public static string ThisWeek = "This Week";
         public static string TwoWeeksAgo = "Two Weeks Ago";
         public static string ThreeWeeksAgo = "Three Weeks Ago";
         public static string LastMonth = "Last Month";
+        public static string ThisMonth = "This Month";
         public static string TwoMonthsAgo = "Two Months Ago";
         public static string ThreeMonthsAgo = "Three Months Ago";
         public static string EarlierThisYear = "Earlier This Year";
         public static string LastYear = "Last Year";
+        public static string ThisYear = "This Year";
         public static string Older = "Older";
 		
 		// Rate Movie Descriptions - 5 Stars
@@ -154,9 +157,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string DateMonths = "months";
         public static string DateYear = "year";
         public static string DateYears = "years";
-        public static string DatePartThis = "This {0}";
-        public static string DatePartLast = "Last {0}";
-        public static string DatePartWithin = "Last {0} {1}";
+        public static string DatePartWithinDays = "Last {0} days";
+        public static string DatePartWithinWeeks = "Last {0} weeks";
+        public static string DatePartWithinMonths = "Last {0} months";
+        public static string DatePartWithinYears = "Last {0} years";
         public static string DatePartAgo = "{0} {1} ago";
 
         // Categories
