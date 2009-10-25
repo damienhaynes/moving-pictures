@@ -158,25 +158,25 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 
                 switch(period) {
                     case "WithinLastSevenDays":
-                        newSubNode.Name = Translation.GetByName("DatePartWithin", "7", Translation.DateDays);
+                        newSubNode.Name = Translation.GetByName("DatePartWithinDays", "7");
                         newFilter.CriteriaGrouping = DBFilter<DBMovieInfo>.CriteriaGroupingEnum.ONE;
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL, "-7d"));
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN, "-7d"));
                         break;
                     case "WithinLastTwoWeeks":
-                        newSubNode.Name = Translation.GetByName("DatePartWithin", "14", Translation.DateDays);
+                        newSubNode.Name = Translation.GetByName("DatePartWithinDays", "14");
                         newFilter.CriteriaGrouping = DBFilter<DBMovieInfo>.CriteriaGroupingEnum.ONE;
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL, "-14d"));
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN, "-14d"));
                         break;
                     case "WithinLastThirtyDays":
-                        newSubNode.Name = Translation.GetByName("DatePartWithin", "30", Translation.DateDays);
+                        newSubNode.Name = Translation.GetByName("DatePartWithinDays", "30");
                         newFilter.CriteriaGrouping = DBFilter<DBMovieInfo>.CriteriaGroupingEnum.ONE;
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL, "-30d"));
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN, "-30d"));
                         break;
                     case "LastMonth":
-                        newSubNode.Name = Translation.GetByName("DatePartLast", Translation.DateMonth);
+                        newSubNode.Name = Translation.LastMonth;
                         newFilter.CriteriaGrouping = DBFilter<DBMovieInfo>.CriteriaGroupingEnum.ALL;
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.LESS_THAN, "M"));
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN, "-1M"));
@@ -194,13 +194,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN, "-3M"));
                         break;
                     case "ThisYear":
-                        newSubNode.Name = Translation.GetByName("DatePartThis", Translation.DateYear);
+                        newSubNode.Name = Translation.ThisYear;
                         newFilter.CriteriaGrouping = DBFilter<DBMovieInfo>.CriteriaGroupingEnum.ONE;
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL, "Y"));
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN, "Y"));
                         break;
                     case "LastYear":
-                        newSubNode.Name = Translation.GetByName("DatePartLast", Translation.DateYear);
+                        newSubNode.Name = Translation.LastYear;
                         newFilter.CriteriaGrouping = DBFilter<DBMovieInfo>.CriteriaGroupingEnum.ALL;
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.LESS_THAN, "Y"));
                         newFilter.Criteria.Add(createCriteria(node, DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN, "-1Y"));

@@ -1778,8 +1778,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // publish localized long string
             // When the duration is less than an hour it will display the localized minute string.
-            valueStr = (hours < 1) ? minLocalized : string.Format(Translation.RuntimeLong, hourLocalized, minLocalized, secLocalized);
+            if (hours > 0) {
+                if (minutes > 0) // show hours and minutes
+                    valueStr = string.Format(Translation.RuntimeLong, hourLocalized, minLocalized, secLocalized);
+                else // display hours
+                    valueStr = hourLocalized;
+            } else { // display minutes
+                valueStr = minLocalized;
+            }            
             SetProperty(labelPrefix + "localized.long", valueStr, forceLogging);
+            
             // pre-0.8
             SetProperty(bcPrefix + "en.pretty", valueStr, forceLogging);
 
