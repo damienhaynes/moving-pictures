@@ -1206,12 +1206,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             movie.ActiveUserSettings.Commit();
             browser.UpdateListColors(movie);
             browser.ReapplyFilters();
-            if (browser.CurrentView == BrowserViewMode.DETAILS) {
-                PublishMovieDetails(movie);
-            }
-            else {
+            if (browser.CurrentView != BrowserViewMode.DETAILS) {
                 browser.ReloadMovieFacade();
             }
+            PublishMovieDetails(movie);
         }
 
         /// <summary>
