@@ -4,6 +4,30 @@ This file should contain the facade view
 -->
 <window>
   <controls>
+	<control>      
+      <type>facadeview</type>
+      <id>51</id>
+	  <animation effect="slide" time="150" start="0,-300">WindowOpen</animation>
+	  <animation effect="slide" time="250" end="800,0">WindowClose</animation>
+      <control>
+        <description>Categories List</description>
+        <type>listcontrol</type>
+        <id>51</id>
+        <onleft>51</onleft>
+        <onright>51</onright>
+        <posX>786</posX>
+        <posY>270</posY>        
+		<height>420</height>
+        <textXOff>-30</textXOff>
+        <textXOff3>10</textXOff3>
+        <IconXOff>1980</IconXOff>        
+        <spinPosX>1549</spinPosX>
+        <spinPosY>690</spinPosY>
+        <spinAlign>Right</spinAlign>
+        <spinColor>ff006698</spinColor>
+        <spinCanFocus>no</spinCanFocus>
+      </control>
+    </control>
     <control>
       <type>facadeview</type>
       <id>50</id>
@@ -12,11 +36,11 @@ This file should contain the facade view
         <description>Movie List</description>
         <type>listcontrol</type>
         <id>50</id>
-        <onleft>3</onleft>
-        <onright>3</onright>
+        <onleft>2</onleft>
+        <onright>2</onright>
         <posX>786</posX>
-        <posY>252</posY>
-        <height>490</height>
+        <posY>270</posY>        
+		<height>420</height>
         <textXOff>-30</textXOff>
         <textXOff3>10</textXOff3>
         <IconXOff>1980</IconXOff>        
@@ -100,6 +124,61 @@ This file should contain the facade view
             <enableFocusZoom>no</enableFocusZoom>
         </control>
     </control>
-
+	
+	<!-- Media Counts -->   
+    <control>
+      <description>Media Count Label</description>
+      <type>label</type>
+      <label>MOVIES:</label>
+      <id>0</id>
+      <posX>1070</posX>
+      <posY>685</posY>
+      <font>font13</font>
+      <textcolor>ffffffff</textcolor>
+      <visible>facadeview.list+Control.IsVisible(50)</visible>
+    </control>
+	<control>
+      <type>label</type>
+      <id>0</id>
+      <posX>1248</posX>
+      <posY>685</posY>
+      <width>350</width>
+      <font>font13</font>
+	  <textcolor>ffa9d0f7</textcolor>
+      <align>right</align>
+      <label>#MovingPictures.general.filteredmoviecount</label>
+	  <visible>facadeview.list+Control.IsVisible(50)</visible>
+    </control>
+	
+	<!-- Selected Category Facade Item -->	
+	<control>
+		<description>Default Image</description>
+		<type>image</type>
+		<id>1</id>
+		<posX>125</posX>
+		<posY>175</posY>
+		<width>454</width>
+		<height>455</height>
+		<texture flipY="true" diffuse="Thumb_Mask.png">Categories\Movies.png</texture>
+		<keepaspectratio>yes</keepaspectratio>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>			
+		<visible>Control.IsVisible(51)+!Control.HasThumb(100)</visible>
+	</control>
+	<control>
+		<description>Default Image</description>
+		<type>image</type>
+		<id>100</id>
+		<posX>125</posX>
+		<posY>175</posY>
+		<width>454</width>
+		<height>455</height>
+		<texture flipY="true" diffuse="Thumb_Mask.png">Categories\#MovingPictures.SelectedNode.name.png</texture>	
+		<keepaspectratio>yes</keepaspectratio>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>			
+		<visible>Control.IsVisible(51)</visible>
+	</control>
+	
   </controls>
 </window>
