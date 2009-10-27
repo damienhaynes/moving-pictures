@@ -83,13 +83,16 @@
   <string Field="Thursday">Giovedì</string>
   <string Field="Friday">Venerdì</string>
   <string Field="Saturday">Sabato</string>
+  <string Field="ThisWeek">Questa settimana</string>
   <string Field="LastWeek">La settimana scorsa</string>
   <string Field="TwoWeeksAgo">Due settimane fa</string>
   <string Field="ThreeWeeksAgo">Tre settimane fa</string>
+  <string Field="ThisMonth">Questo mese</string>
   <string Field="LastMonth">Il mese scorso</string>
   <string Field="TwoMonthsAgo">Due mesi fa</string>
   <string Field="ThreeMonthsAgo">Tre mesi fa</string>
   <string Field="EarlierThisYear">Precedenti in quest'anno</string>
+  <string Field="ThisYear">Quest'anno</string>
   <string Field="LastYear">L'anno scorso</string>
   <string Field="Older">Più vecchi</string>
 
@@ -124,4 +127,21 @@
   <string Field="RemoteNumericAlphabet7">pqrs</string>
   <string Field="RemoteNumericAlphabet8">tuv</string>
   <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="Unknown">Sconosciuto</string>
+  <string Field="DateDay">giorno</string>
+  <string Field="DateDays">giorni</string>
+  <string Field="DateWeek">settimana</string>
+  <string Field="DateWeeks">settimane</string>
+  <string Field="DateMonth">mese</string>
+  <string Field="DateMonths">mesi</string>
+  <string Field="DateYear">anno</string>
+  <string Field="DateYears">anni</string>
+  <string Field="DatePartWithinDays">Ultimi {0} giorni</string>
+  <string Field="DatePartWithinWeeks">Ultime {0} settimane</string>
+  <string Field="DatePartWithinMonths">Ultimi {0} mesi</string>
+  <string Field="DatePartWithinYears">Ultimi {0} anni</string>
+  <string Field="DatePartAgo">{0} {1} fa</string>
+  <string Field="CategoryEmptyHeader">Categoria vuota</string>
+  <string Field="CategoryEmptyDescription">Non ci sono films elencati\nin questa categoria</string>
 </strings>
