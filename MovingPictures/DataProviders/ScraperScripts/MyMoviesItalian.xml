@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="1" minor="0" point="2"/>
-    <published month="09" day="10" year="2009"/>
+    <version major="1" minor="0" point="3"/>
+    <published month="10" day="26" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -150,12 +150,12 @@
 
       <set name="it_summary">
         <![CDATA[
-      <p\sstyle="text.align.justify.">[^\w]+(?<movieSummary>[^\n]+)
+     <div\sid="recensione">.*<div\sstyle="text-align:right;">
       ]]>
       </set>	  
 	  <set name="score">
         <![CDATA[
-      <i>mymonetro</i>\s(?<rating>[^s]+)\s
+      0px 11px 7px 11px">(?<rating>[^s]+)<
       ]]>
       </set>	  
 	  <set name="rx_people">
@@ -210,13 +210,13 @@
 
 	    <!-- Plot Summary -->
 	    <parse name='summaryit' input ='${details_page}' regex='${it_summary}'/>
-	    <set name="movie.summary" value="${summaryit[0][0]:striptags}" />
+	    <set name="movie.summary" value="${summaryit[0]:striptags}" />
 	    <set name="movie.summary" value="${movie.summary:htmldecode}" />
 	  
         <!-- IMDB id -->
         <retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.title:safe}+(${movie.year:safe})" />
         <parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
-        <set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
+        <set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>		
     </if>
   </action>
 
