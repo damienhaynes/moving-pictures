@@ -270,9 +270,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(Default = null, Filterable = false)]
         public string FileHash {
             get {
-                if (fileHash == null) {
-                    // Only try to get file hashes when the format is File
-                    if (IsAvailable && (this.VideoFormat == VideoFormat.File))
+                if (fileHash == null && IsAvailable) {
+                    // Only try to get file hashes when the format is File or when it's an image
+                    if (this.VideoFormat == VideoFormat.File || this.IsImageFile)
                         FileHash = this.VideoFormat.GetIdentifier(FullPath);
                 }
                 return fileHash;
@@ -416,19 +416,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(AllowManualFilterInput = false)]
         public VideoFormat VideoFormat {
             get {
-
-                // If we do not know the video format check it
-                if (_videoFormat == VideoFormat.NotSupported)             
+                // Get the video format (for the first time or when an image is mounted)
+                if (_videoFormat == VideoFormat.NotSupported || (_videoFormat == VideoFormat.Unknown && IsMounted))             
                     // store the format, so we can skip this check in the future
-                    VideoFormat = VideoUtility.GetVideoFormat(this.GetVideoPath());
-
-                // For image files it only make sense to look for the VideoFormat
-                // when the image is mounted, so skip the check when this is not the case
-                if (_videoFormat == VideoFormat.Unknown) {
-                    if (IsImageFile)
-                        if (!IsMounted)
-                            return _videoFormat;
-                }
+                    VideoFormat = VideoUtility.GetVideoFormat(this.GetVideoPath());             
 
                 return _videoFormat;
             }
