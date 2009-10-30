@@ -9,6 +9,7 @@ using System.Threading;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using Cornerstone.Tools;
+using Cornerstone.Extensions;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
@@ -95,6 +96,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Files that have recently been removed from the filesystem.
         ObservableCollection<DBLocalMedia> filesDeleted;
         Timer filesDeletedTimer;
+
+        // Files that were queued during processing
+        ObservableCollection<DBLocalMedia> filesQueue;
+        Timer filesQueueTimer;
         
         // list of watcher objects that monitor the filesystem for changes
         List<FileSystemWatcher> fileSystemWatchers;
@@ -138,6 +143,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             filesAdded = ArrayList.Synchronized(new ArrayList());
             filesDeleted = new ObservableCollection<DBLocalMedia>();
             filesDeleted.CollectionChanged += new NotifyCollectionChangedEventHandler(onFileRemoved);
+            filesQueue = new ObservableCollection<DBLocalMedia>();
+            filesQueue.CollectionChanged += new NotifyCollectionChangedEventHandler(onFileQueued);
 
             matchLookup = new Dictionary<DBLocalMedia, MovieMatch>();
             allMatches = ArrayList.Synchronized(new ArrayList());
@@ -485,6 +492,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     SetupFileSystemWatchers();
                     int checkWatchers= 0;
                     bool initialScan = true;
+                    List<DBLocalMedia> fileList = new List<DBLocalMedia>();
 
                     // do an initial scan on all paths
                     // grab all the files in our import paths
@@ -508,16 +516,19 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         // if the filesystem scanner found any files, add them
                         lock (filesAdded.SyncRoot) {
                             if (filesAdded.Count > 0) {
-                                List<DBLocalMedia> fileList = new List<DBLocalMedia>();
                                 foreach (object currFile in filesAdded) {
                                     DBLocalMedia addedFile = (DBLocalMedia)currFile;
                                     if (!fileList.Contains(addedFile))
                                         fileList.Add((DBLocalMedia)currFile);
                                 }
-
-                                ScanFiles(fileList, false);
-                                filesAdded.Clear();
+                                filesAdded.Clear();                           
                             }
+                        }
+                        
+                        // Process the new files
+                        if (fileList.Count > 0) {
+                            ScanFiles(fileList, false);
+                            fileList.Clear();
                         }
 
                         // Launch the FileSyncProcess after the initial scan has completed
@@ -826,6 +837,39 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         }
 
+        // triggers when a new file is flagged as being queued
+        private void onFileQueued(object sender, NotifyCollectionChangedEventArgs e) {
+            // only take action when a new item is added to the list
+            if (e.Action != NotifyCollectionChangedAction.Add)
+                return;
+
+            // period to wait before queued files are readded to the system
+            int retryTime = 30000;
+
+            // start/modify the timer   
+            if (filesQueueTimer == null)
+                filesQueueTimer = new Timer(processQueuedFiles, null, retryTime, Timeout.Infinite);
+            else
+                filesQueueTimer.Change(retryTime, Timeout.Infinite);
+        }
+
+        // processes files that were flagged as locked
+        private void processQueuedFiles(object state) {
+            List<DBLocalMedia> queuedFiles = new List<DBLocalMedia>();
+
+            // get a list of files
+            lock (filesQueue) {
+                queuedFiles = filesQueue.ToList();
+                filesQueue.Clear();
+            }
+
+            // put the queued files back into the system
+            lock (filesAdded.SyncRoot) {
+                filesAdded.AddRange(queuedFiles);
+            }
+
+        }
+
         // Grabs the files from the DBImportPath and add them to the queue for use
         // by the ScanMedia thread.
         private void ScanPath(DBImportPath importPath) {
@@ -874,6 +918,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // exclude samplefiles and ignore them
                 if (VideoUtility.isSampleFile(currFile.File)) {
                     logger.Info("SKIPPED: File='{0}', Bytes={1}, Reason='Sample detected'", fileName, currFile.File.Length);
+                    continue;
+                }
+
+                // Locked files are put in the files queue (to be processed later)
+                if (currFile.File.IsLocked()) {
+                    filesQueue.Add(currFile);
+                    logger.Info("DELAYED: File='{0}', Reason='File is locked'", fileName);
                     continue;
                 }
 
