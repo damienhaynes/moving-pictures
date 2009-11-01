@@ -130,6 +130,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         [SkinControl(17)]
         protected GUIImage filteringIndicator = null;
 
+        [SkinControl(18)]
+        protected GUIImage movieStartIndicator = null;
 
         #endregion
 
@@ -450,6 +452,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             
             setWorkingAnimationStatus(false);
+            if (movieStartIndicator != null)
+                movieStartIndicator.Visible = false;
 
             // Take control and disable MediaPortal AutoPlay when the plugin has focus
             disableNativeAutoplay();            
@@ -1323,9 +1327,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
             }
 
+            if (movieStartIndicator != null) {
+                movieStartIndicator.Visible = true;
+                GUIWindowManager.Process();
+            }
+
             // Play movie
             moviePlayer.Play(browser.SelectedMovie);
-         }
+            if (movieStartIndicator != null)
+                movieStartIndicator.Visible = false;
+        }
 
         private void onMovieStopped(DBMovieInfo movie) {
             // If we or stopping in another windows enable native auto-play again
