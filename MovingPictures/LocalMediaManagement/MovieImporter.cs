@@ -928,15 +928,19 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     continue;
                 }
 
-                // catch files that were moved/renamed while the plugin was not running
+                // Check file with existing localmedia (only for writable media)
                 if (!currFile.ImportPath.IsOpticalDrive) {
 
+                    #region Moved/Renamed Files
+
+                    // catch files that were moved/renamed while the plugin was not running
                     List<DBLocalMedia> existingMedia = null;
                     if ((currFile.IsDVD || currFile.IsBluray) && currFile.DiscId != null)
                         existingMedia = DBLocalMedia.GetEntriesByDiscId(currFile.DiscId);
                     else if (currFile.FileHash != null)
                         existingMedia = DBLocalMedia.GetEntriesByHash(currFile.FileHash);
 
+                    // process existing media if applicable
                     if (existingMedia != null && existingMedia.Count > 0) {
                         bool moved = false;
                         foreach (DBLocalMedia oldMedia in existingMedia) {
@@ -954,6 +958,63 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         // if we updated a moved/renamed file we can discard it from the list
                         if (moved) continue;
                     }
+
+                    #endregion
+
+                    #region Additional Multipart Files
+
+                    DirectoryInfo currDir = currFile.File.Directory;
+                    DBLocalMedia partnerMedia = null;
+                    
+                    // check for folder multipart
+                    if (Utility.isFolderMultipart(currDir.Name)) {
+                        List<DBLocalMedia>  possiblePartners = DBLocalMedia.GetAll(currDir.Parent.FullName + "%");
+                        foreach (DBLocalMedia partner in possiblePartners) {
+                            if (!partner.Ignored && Utility.isFolderMultipart(partner.File.Directory.Name)) {
+                                partnerMedia = partner;
+                                break;
+                            }
+                        }
+                    }
+
+                    // check for file multipart
+                    if (partnerMedia == null && (alwaysGroup || Utility.isFileMultiPart(currFile.File))) {
+                        List<DBLocalMedia> possiblePartners = DBLocalMedia.GetAll(currFile.File.DirectoryName + "%");
+                        foreach (DBLocalMedia partner in possiblePartners) {
+                            if (!partner.Ignored) {
+                                
+                                if (alwaysGroup) {
+                                    partnerMedia = partner;
+                                    break;
+                                }
+                                if (AdvancedStringComparer.Levenshtein(currFile.File.Name, partner.File.Name) < 3) {
+                                    partnerMedia = partner;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // associate this file with an existing partner
+                    if (partnerMedia != null && partnerMedia.AttachedMovies.Count == 1) {
+                        DBMovieInfo movie = partnerMedia.AttachedMovies[0];
+                        movie.LocalMedia.Add(currFile);
+                        
+                        // Sort on path and recommit part numbers for all related media
+                        movie.LocalMedia.Sort(new DBLocalMediaPathComparer());
+                        for (int i = 0; i < movie.LocalMedia.Count; i++) {
+                            DBLocalMedia media = movie.LocalMedia[i];
+                            media.Part = i + 1;
+                            media.Commit();
+                        }
+
+                        // Commit movie, log and move to next file
+                        movie.Commit();
+                        logger.Info("File '{0}' was associated with existing movie '{1}' as an additional multi-part media (part {2}).", currFile.FullPath, movie.Title, currFile.Part);
+                        continue;
+                    }
+
+                    #endregion
 
                 }
 
