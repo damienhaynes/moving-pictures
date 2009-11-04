@@ -935,7 +935,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
                     // catch files that were moved/renamed while the plugin was not running
                     List<DBLocalMedia> existingMedia = null;
-                    if ((currFile.IsDVD || currFile.IsBluray) && currFile.DiscId != null)
+                    if (!currFile.IsImageFile && (currFile.IsDVD || currFile.IsBluray) && currFile.DiscId != null)
                         existingMedia = DBLocalMedia.GetEntriesByDiscId(currFile.DiscId);
                     else if (currFile.FileHash != null)
                         existingMedia = DBLocalMedia.GetEntriesByHash(currFile.FileHash);
