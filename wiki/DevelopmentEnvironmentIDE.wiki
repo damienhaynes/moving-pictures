@@ -26,7 +26,7 @@ So let's get these projects added. Right click the solution node in the Solution
 *NOTE: The tester project has been moved and there is one additional Moving Pictures project required for a working development environment. This document will be updated with details, but in the meantime, just make sure you add all projects under the Moving Pictures folder. You should have everything you need, it is just organized slightly differently.*
 
 {{{
-PluginDev\MovingPictures\MovingPicturesConfigTester\MovingPicturesConfigTester.csproj
+PluginDev\MovingPictures\Testing\MovingPicturesConfigTester\MovingPicturesConfigTester.csproj
 
 PluginDev\MediaPortal\Core\Core.csproj
 PluginDev\MediaPortal\Database\Database.csproj
