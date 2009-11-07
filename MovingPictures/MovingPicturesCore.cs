@@ -130,21 +130,24 @@ namespace MediaPortal.Plugins.MovingPictures {
             actionDescriptions.Add(newAction, "Initializing Path Settings...");
             initActions.Add(newAction);
 
-            newAction = new WorkerDelegate(DatabaseMaintenanceManager.RemoveInvalidMovies);
-            actionDescriptions.Add(newAction, "Removing invalid movie entries...");
-            initActions.Add(newAction);
-
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateImportPaths);
-            actionDescriptions.Add(newAction, "Updating import paths...");
+            actionDescriptions.Add(newAction, "Updating Import Paths...");
             initActions.Add(newAction);
 
-            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateUserSettings);
-            actionDescriptions.Add(newAction, "Updating user settings...");
-            initActions.Add(newAction);
+            // only perform the following tasks (one time) when we are upgrading from a previous version
+            if (MovingPicturesCore.GetDBVersionNumber() < ver) {
+                
+                // local media
+                newAction = new WorkerDelegate(DatabaseMaintenanceManager.PerformFileInformationUpgradeCheck);
+                actionDescriptions.Add(newAction, "Performing File Information Upgrade Check...");
+                initActions.Add(newAction);
 
-            newAction = new WorkerDelegate(DatabaseMaintenanceManager.UpdateDateAddedFields);
-            actionDescriptions.Add(newAction, "Updating sorting metadata...");
-            initActions.Add(newAction);
+                // movies
+                newAction = new WorkerDelegate(DatabaseMaintenanceManager.PerformMovieInformationUpgradeCheck);
+                actionDescriptions.Add(newAction, "Performing Movie Information Upgrade Check...");
+                initActions.Add(newAction);
+
+            }            
 
             newAction = new WorkerDelegate(checkVersionInfo);
             actionDescriptions.Add(newAction, "Initializing Version Information...");
@@ -152,6 +155,10 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             newAction = new WorkerDelegate(DataProviderManager.Initialize);
             actionDescriptions.Add(newAction, "Initializing Data Provider Manager...");
+            initActions.Add(newAction);
+
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.VerifyMovieInformation);
+            actionDescriptions.Add(newAction, "Updating Movie Information...");
             initActions.Add(newAction);
 
             newAction = new WorkerDelegate(DatabaseMaintenanceManager.VerifyFilterMenu);
