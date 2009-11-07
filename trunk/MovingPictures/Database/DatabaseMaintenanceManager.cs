@@ -6,6 +6,7 @@ using NLog;
 using Cornerstone.GUI.Dialogs;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database;
+using System.Reflection;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public class DatabaseMaintenanceManager {
@@ -61,66 +62,59 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             logger.Info("Removed {0} file entries.", cleaned.ToString());
             if (MaintenanceProgress != null) MaintenanceProgress("", 100);
         }
-
-        // Loops through all movie in the system and removed anything that's invalid
-        public static void RemoveInvalidMovies() {
-            logger.Info("Checking for invalid movie entries in the database.");
+        
+        // Loops through all movie in the system to verify them
+        public static void VerifyMovieInformation() {
+            logger.Info("Updating Movie Information...");
 
             float count = 0;
-            float total = DBMovieInfo.GetAll().Count;
+            List<DBMovieInfo> movies = DBMovieInfo.GetAll();
+            List<DBUser> users = DBUser.GetAll();
+            float total = movies.Count;
 
-            int cleaned = 0;
-            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
+            int removed = 0;
+            int settings = 0;
+            foreach (DBMovieInfo movie in movies) {
                 if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count * 100 / total));
                 count++;
+
+                // Skip uncommited files
+                if (movie.ID == null)
+                    continue;
+
+                #region Remove movie without attached local media
 
                 // Remove movie with no files
-                if (currMovie.LocalMedia.Count == 0) {
-                    logger.Info("'{0}' was removed from the system because it had no local media.", currMovie.Title);
-                    currMovie.Delete();
-                    cleaned++;
+                if (movie.LocalMedia.Count == 0) {
+                    logger.Info("'{0}' was removed from the system because it had no local media.", movie.Title);
+                    movie.Delete();
+                    removed++;
                     continue;
                 }
-            }
 
-            logger.Info("Removed {0} movie entries.", cleaned.ToString());
-            if (MaintenanceProgress != null) MaintenanceProgress("", 100);
-        }
+                #endregion
 
-        // Updates missing user settings for a movie
-        public static void UpdateUserSettings() {
+                #region Add missing user settings
 
-            float count = 0;
-            float total = DBMovieInfo.GetAll().Count + DBUserMovieSettings.GetAll().Count; 
-
-            // add missing user settings
-            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
-                if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count * 100 / total));
-                count++;
-                
-                if (currMovie.UserSettings.Count == 0) {
-                    logger.Info(currMovie.Title + " was missing UserMovingSettings, adding now.");
-                    foreach (DBUser currUser in DBUser.GetAll()) {
+                if (movie.UserSettings.Count == 0) {
+                    logger.Info("'{0}' was missing UserMovingSettings, adding now.", movie.Title);
+                    foreach (DBUser currUser in users) {
                         DBUserMovieSettings userSettings = new DBUserMovieSettings();
                         userSettings.User = currUser;
                         userSettings.Commit();
-                        currMovie.UserSettings.Add(userSettings);
+                        movie.UserSettings.Add(userSettings);
                         userSettings.CommitNeeded = false;
                     }
-                    currMovie.Commit();
+                    movie.Commit();
+                    settings++;
                 }
+
+                #endregion
+
             }
 
-            // Remove Orphan User Settings
-            List<DBUserMovieSettings> allUserSettings = DBUserMovieSettings.GetAll();
-            foreach (DBUserMovieSettings currSetting in allUserSettings) {
-                if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count * 100 / total));
-                count++;
-
-                if (currSetting.AttachedMovies.Count == 0)
-                    currSetting.Delete();
-            }
-
+            logger.Info("Removed {0} movie entries.", removed.ToString());
+            logger.Info("Updated {0} movie entries with default user setting.", settings.ToString());
             if (MaintenanceProgress != null) MaintenanceProgress("", 100);
         }
 
@@ -191,32 +185,89 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             if (MaintenanceProgress != null) MaintenanceProgress("", 100);
         }
+        
+        // One time upgrade tasks for movie information
+        public static void PerformMovieInformationUpgradeCheck() {
+            Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+            logger.Info("Performing Movie Information Upgrade Check...");
 
-        public static void UpdateDateAddedFields() {
-            // update date added fields
-            if (MovingPicturesCore.GetDBVersionNumber() < new Version("0.7.1")) {
-                List<DBMovieInfo> movies = DBMovieInfo.GetAll();
-                movies.Sort(delegate(DBMovieInfo movieX, DBMovieInfo movieY) {
-                    return movieX.ID.GetValueOrDefault(0).CompareTo(movieY.ID.GetValueOrDefault(0));
-                });
+            float count = 0;
+            List<DBMovieInfo> movies = DBMovieInfo.GetAll();
+            float total = movies.Count;
 
-                float total = movies.Count;
+            foreach (DBMovieInfo movie in movies) {
+                if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count * 100 / total));
+                count++;
 
-                for (int i = 0; i < movies.Count; i++) {
-                    if (MaintenanceProgress != null) MaintenanceProgress("", (int)(i * 100 / total));
+                // Skip uncommited files
+                if (movie.ID == null)
+                    continue;
 
-                    if (movies[i].LocalMedia[0].IsAvailable && movies[i].LocalMedia[0].File.Extension.ToLower() != ".ifo") {
-                        movies[i].DateAdded = movies[i].LocalMedia[0].File.CreationTime;
+                #region Upgrades required for 0.7.1
+
+                if (MovingPicturesCore.GetDBVersionNumber() < new Version("0.7.1")) {
+
+                    if (movie.LocalMedia.Count > 0 && movie.LocalMedia[0].ImportPath != null) {
+                        if (movie.LocalMedia[0].ImportPath.IsOpticalDrive && movie.LocalMedia[0].IsAvailable) {
+                            movie.DateAdded = movie.LocalMedia[0].File.CreationTime;
+                        }
+                        else {
+                            movie.DateAdded = movie.DateAdded.AddSeconds((double)movie.ID);
+                        }
                     }
-                    else {
-                        // add 1 minute for offline media and dvds, to retain the same order
-                        if (i > 0)
-                            movies[i].DateAdded = movies[i - 1].DateAdded.AddMinutes(1);
-                    }
 
-                    movies[i].Commit();
+                    
                 }
+
+                #endregion
+
+                // commit movie
+                movie.Commit();
             }
+
+            if (MaintenanceProgress != null) MaintenanceProgress("", 100);
+        }
+
+        // One time upgrades tasks for file information
+        public static void PerformFileInformationUpgradeCheck() {
+            Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+            logger.Info("Performing File Information Upgrade Check...");
+
+            float count = 0;
+            List<DBLocalMedia> files = DBLocalMedia.GetAll();
+            float total = files.Count;
+
+            foreach (DBLocalMedia currFile in files) {
+                if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count * 100 / total));
+                count++;
+
+                // Skip uncommited files
+                if (currFile.ID == null)
+                    continue;
+
+                #region Upgrades required for 0.8.0
+
+                if (MovingPicturesCore.GetDBVersionNumber() < new Version("0.8.0")) {
+                    
+                    // Disk Information Upgrade
+                    if (!currFile.ImportPath.IsOpticalDrive && !currFile.ImportPath.IsUnc && currFile.ImportPath.IsAvailable) {
+                        // Skip optical drives, unc paths and unavailable files
+                        if (String.IsNullOrEmpty(currFile.VolumeSerial)) {
+                            // perform update
+                            currFile.UpdateVolumeInformation();
+                            logger.Info("Disk information updated for '{0}'", currFile.FullPath);
+                        }
+                    }
+
+                }
+
+                #endregion
+
+                // commit file
+                currFile.Commit();
+            }
+
+            if (MaintenanceProgress != null) MaintenanceProgress("", 100);
         }
 
         public static void VerifyFilterMenu() {
