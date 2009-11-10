@@ -706,7 +706,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
 					
                 	// this should not happen but if it does log a warning
-                	if (availableMovies.Contains(currNode) {
+                	if (availableMovies.ContainsKey(currNode)) {
                 	    logger.Warn("Category contains a duplicate child node: {0}", currNode);
                 		continue;
             		}
