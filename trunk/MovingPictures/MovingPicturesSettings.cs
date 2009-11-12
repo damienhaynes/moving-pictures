@@ -180,8 +180,23 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _ignoreInteractiveContentOnVideoDisc;
 
         [CornerstoneSetting(
-            Name = "Dataprovider Request Limit",
-            Description = "The maximum of dataproviders used to update/search movie details in order of priority. Searches will stop after the first dataprovider that returns relevant results, but updating details will stop only after this limit has been reached to allow it to fill missing fields using different providers. Set this to 0 to have it try ALL enabled dataproviders (slower).",
+            Name = "Minimum Possible Match Threshold",
+            Description = "The minimum number of possible matches that must be found before Moving Pictures will stop searching via additional data providers. Enter 0 to retrieve search results from all active data providers.",
+            Groups = "|Movie Importer|Matching and Importing|",
+            Identifier = "importer_dataprovider_movie_limit",
+            Default = 3)]
+        public int MinimumMatches {
+            get { return _minimumMatches; }
+            set {
+                _minimumMatches = value;
+                OnSettingChanged("importer_dataprovider_movie_limit");
+            }
+        }
+        private int _minimumMatches;
+
+        [CornerstoneSetting(
+            Name = "Data Provider Request Limit",
+            Description = "The maximum number of data providers to use when updating missing movie details. Enter 0 to use all active data providers.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_dataprovider_request_limit",
             Default = 3)]
