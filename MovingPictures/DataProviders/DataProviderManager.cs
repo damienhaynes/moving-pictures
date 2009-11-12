@@ -519,27 +519,22 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             lock (detailSources) sources = new List<DBSourceInfo>(detailSources);
 
             List<DBMovieInfo> results = new List<DBMovieInfo>();
-            int count = 0;
+            int matchCount = 0;
             // Try each datasource (ordered by their priority) to get results
             foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.DETAILS))
                     continue;
 
-                count++;
-                // If we have not reached our dataprovider request limit make a search
-                if (count <= MovingPicturesCore.Settings.DataProviderRequestLimit || MovingPicturesCore.Settings.DataProviderRequestLimit == 0) {
-                    results = currSource.Provider.Get(movieSignature);
-                    logger.Debug("SEARCH: Title='{0}', Provider='{1}', Version={2}, Results={3}", movieSignature.Title, currSource.Provider.Name, currSource.Provider.Version, results.Count);
-                    // if we have results break the loop
-                    if (results.Count > 0) break;
-                }
-                else {
-                    // limit has been reached so stop
+                // if we have reached the minimum number of possible matches required, we are done
+                if (results.Count >= MovingPicturesCore.Settings.MinimumMatches &&
+                    MovingPicturesCore.Settings.MinimumMatches != 0)
                     break;
-                }
+
+                // search with the current provider
+                results.AddRange(currSource.Provider.Get(movieSignature));
+                logger.Debug("SEARCH: Title='{0}', Provider='{1}', Version={2}, Number of Results={3}", movieSignature.Title, currSource.Provider.Name, currSource.Provider.Version, results.Count);
             }
 
-            // return results;
             return results;
         }
 
@@ -547,7 +542,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             List<DBSourceInfo> sources;
             lock (detailSources) sources = new List<DBSourceInfo>(detailSources);
 
-            int count = 0;
+            int providerCount = 0;
             
             // unlock the movie fields for the first iteration
             movie.ProtectExistingValuesFromCopy(false);
@@ -556,9 +551,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 if (currSource.IsDisabled(DataType.DETAILS))
                     continue;
 
-                count++;
+                providerCount++;
 
-                if (count <= MovingPicturesCore.Settings.DataProviderRequestLimit || MovingPicturesCore.Settings.DataProviderRequestLimit == 0) {
+                if (providerCount <= MovingPicturesCore.Settings.DataProviderRequestLimit || MovingPicturesCore.Settings.DataProviderRequestLimit == 0) {
                     UpdateResults result = currSource.Provider.Update(movie);
                     logger.Debug("UPDATE: Title='{0}', Provider='{1}', Version={2}, Result={3}", movie.Title, currSource.Provider.Name, currSource.Provider.Version, result.ToString());
                 }

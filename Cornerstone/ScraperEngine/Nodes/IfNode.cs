@@ -31,20 +31,22 @@ namespace Cornerstone.ScraperEngine.Nodes {
         public override void Execute(Dictionary<string, string> variables) {
             if (DebugMode) logger.Debug("executing if: " + xmlNode.OuterXml);
 
-            string parsedTest = parseString(variables, test);
-            if (DebugMode) logger.Debug("executing if: " + parsedTest);
-
             // try to split the test on the operator, quit if we fail
             Regex splitter = new Regex("\\s*(.*?)\\s*(>=|<=|!=|=|<|>)\\s*(.*)$");
-            Match match = splitter.Match(parsedTest);
+            Match match = splitter.Match(test);
             if (match.Groups.Count != 4) {
-                logger.Error("Error parsing test for: " + parsedTest);
+                logger.Error("Error parsing test for: " + test);
                 return;
             }
 
             string left  = match.Groups[1].Value;
             string op    = match.Groups[2].Value;
             string right = match.Groups[3].Value;
+            
+            left = parseString(variables, left);
+            right = parseString(variables, right);
+
+            if (DebugMode) logger.Debug("if node left value: " + left + "     right value: " + right);
 
             float leftNum = 0;
             float rightNum = 0;
