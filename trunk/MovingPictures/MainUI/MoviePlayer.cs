@@ -27,7 +27,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private MovingPicturesGUI _gui;
         private bool customIntroPlayed = false;
         private bool mountedPlayback = false;
-        private bool listenToExternalPlayerEvents = true;
+        private bool listenToExternalPlayerEvents = false;
         private DBLocalMedia queuedMedia;
         private int _activePart;
         private bool _resumeActive = false;
