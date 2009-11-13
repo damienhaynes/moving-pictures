@@ -47,7 +47,7 @@
 				<description>Cycle View</description>
 				<type>button</type>
 				<id>2</id>
-				<label>Cycle View</label>
+				<label>#MovingPictures.Translation.CycleView</label>
 				<onright>50</onright>
 				<onup>17</onup>
 				<ondown>3</ondown>
@@ -56,7 +56,7 @@
 				<description>Change View</description>
 				<type>button</type>
 				<id>3</id>
-				<label>Change View ...</label>
+				<label>#MovingPictures.Translation.ChangeView ...</label>
 				<onright>50</onright>
 				<onup>2</onup>
 				<ondown>4</ondown>
@@ -65,7 +65,7 @@
 				<description>Filter By</description>
 				<type>button</type>
 				<id>4</id>
-				<label>Filter By ...</label>
+				<label>#MovingPictures.Translation.FilterBy ...</label>
 				<onright>50</onright>
 				<onup>3</onup>
 				<ondown>14</ondown>
@@ -74,7 +74,7 @@
 				<description>Sort By</description>
 				<type>button</type>
 				<id>14</id>
-				<label>Sort By: #MovingPictures.Sort.Field</label>					
+				<label>#MovingPictures.Translation.SortBy: #MovingPictures.Sort.Field</label>					
 				<onright>50</onright>
 				<onup>4</onup>
 				<ondown>15</ondown>
@@ -104,7 +104,7 @@
 			</control>
 			<control>
 				<id>0</id>
-				<label>Sort Direction</label>
+				<label>#MovingPictures.Translation.SortDirection</label>
 				<type>image</type>
 				<width>16</width>
 				<height>16</height>

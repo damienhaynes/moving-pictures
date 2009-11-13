@@ -163,7 +163,7 @@ This file should contain the details view
     <control>
       <description>director</description>
       <type>label</type>
-      <label>Directors</label>
+      <label>#MovingPictures.Translation.Directors</label>
       <id>0</id>
       <posX>363</posX>
       <posY>598</posY>
@@ -188,7 +188,7 @@ This file should contain the details view
     <control>
       <description>writer</description>
       <type>label</type>
-      <label>Writers</label>
+      <label>#MovingPictures.Translation.Writers</label>
       <id>0</id>
       <posX>363</posX>
       <posY>622</posY>
@@ -213,7 +213,7 @@ This file should contain the details view
     <control>
       <description>actors</description>
       <type>label</type>
-      <label>344</label>
+      <label>#MovingPictures.Translation.Actors</label>
       <id>0</id>
       <posX>363</posX>
       <posY>646</posY>
@@ -238,7 +238,7 @@ This file should contain the details view
     <control>
       <description>year</description>
       <type>label</type>
-      <label>345</label>
+      <label>#MovingPictures.Translation.Year</label>
       <id>0</id>
       <posX>885</posX>
       <posY>622</posY>
@@ -263,7 +263,7 @@ This file should contain the details view
     <control>
       <description>runtime</description>
       <type>label</type>
-      <label>Runtime</label>
+      <label>#MovingPictures.Translation.Runtime</label>
       <id>0</id>
       <posX>885</posX>
       <posY>598</posY>
