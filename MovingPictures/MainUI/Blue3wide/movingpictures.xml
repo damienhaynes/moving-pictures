@@ -280,7 +280,7 @@ multiple view modes.
     <control>
       <description>Directors Label Shadow</description>
       <type>label</type>
-      <label>Director</label>
+      <label>#MovingPictures.Translation.Director</label>
       <posX>309</posX>
       <posY>321</posY>
       <font>font11</font>
@@ -290,7 +290,7 @@ multiple view modes.
     <control>
       <description>Directors Label</description>
       <type>label</type>
-      <label>Director</label>
+      <label>#MovingPictures.Translation.Director</label>
       <posX>308</posX>
       <posY>320</posY>
       <font>font11</font>
@@ -323,7 +323,7 @@ multiple view modes.
     <control>
       <description>Writers Label Shadow</description>
       <type>label</type>
-      <label>Writer</label>
+      <label>#MovingPictures.Translation.Writer</label>
       <posX>509</posX>
       <posY>321</posY>
       <font>font11</font>
@@ -333,7 +333,7 @@ multiple view modes.
     <control>
       <description>Writers Label</description>
       <type>label</type>
-      <label>Writer</label>
+      <label>#MovingPictures.Translation.Writer</label>
       <posX>508</posX>
       <posY>320</posY>
       <font>font11</font>
@@ -381,7 +381,7 @@ multiple view modes.
 	<control>
 	  <id>0</id>
       <type>label</type>
-      <label>STAR RATING:</label>
+      <label>#MovingPictures.Translation.StarRating:</label>
       <posX>30</posX>
       <posY>670</posY>
       <width>150</width>
@@ -461,7 +461,7 @@ multiple view modes.
 
     <control>
       <type>label</type>
-      <label>STAR RATING:</label>
+      <label>#MovingPictures.Translation.StarRating:</label>
       <posX>750</posX>
       <posY>630</posY>
       <width>360</width>
@@ -646,7 +646,7 @@ multiple view modes.
 
     <control>
       <type>label</type>
-      <label>Rated #MovingPictures.SelectedMovie.certification</label>
+      <label>#MovingPictures.Translation.Rated #MovingPictures.SelectedMovie.certification</label>
       <posX>410</posX>
       <posY>365</posY>
       <width>360</width>
@@ -656,7 +656,7 @@ multiple view modes.
 
     <control>
       <type>label</type>
-      <label>STAR RATING:</label>
+      <label>#MovingPictures.Translation.StarRating:</label>
       <posX>410</posX>
       <posY>425</posY>
       <width>360</width>

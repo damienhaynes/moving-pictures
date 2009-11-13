@@ -129,7 +129,7 @@ This file should contain the facade view
     <control>
       <description>Media Count Label</description>
       <type>label</type>
-      <label>MOVIES:</label>
+      <label>#MovingPictures.Translation.Movies:</label>
       <id>0</id>
       <posX>1070</posX>
       <posY>685</posY>
