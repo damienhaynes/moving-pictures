@@ -507,8 +507,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         public static void UnMount(string imagePath) {
-            if (IsMounted(imagePath))
+            if (IsMounted(imagePath)) {
                 DaemonTools.UnMount();
+                logger.Info("Unmounted: Image='{0}'", imagePath);
+            }
         }
 
         public static string GetMountedVideoDiscPath(string imagePath) {
