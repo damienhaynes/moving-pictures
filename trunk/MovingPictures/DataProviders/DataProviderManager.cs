@@ -518,9 +518,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             List<DBSourceInfo> sources;
             lock (detailSources) sources = new List<DBSourceInfo>(detailSources);
 
-            List<DBMovieInfo> results = new List<DBMovieInfo>();
-            int matchCount = 0;
             // Try each datasource (ordered by their priority) to get results
+            List<DBMovieInfo> results = new List<DBMovieInfo>();
             foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.DETAILS))
                     continue;
@@ -531,8 +530,15 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     break;
 
                 // search with the current provider
-                results.AddRange(currSource.Provider.Get(movieSignature));
-                logger.Debug("SEARCH: Title='{0}', Provider='{1}', Version={2}, Number of Results={3}", movieSignature.Title, currSource.Provider.Name, currSource.Provider.Version, results.Count);
+                List<DBMovieInfo> newResults = currSource.Provider.Get(movieSignature);
+
+                // tag the results with the current source
+                foreach (DBMovieInfo currMovie in newResults)
+                    currMovie.PrimarySource = currSource;
+
+                // add results to our total result list and log what we found
+                results.AddRange(newResults);
+                logger.Debug("SEARCH: Title='{0}', Provider='{1}', Version={2}, Number of Results={3}", movieSignature.Title, currSource.Provider.Name, currSource.Provider.Version, newResults.Count);
             }
 
             return results;
@@ -541,21 +547,27 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         public void Update(DBMovieInfo movie) {
             List<DBSourceInfo> sources;
             lock (detailSources) sources = new List<DBSourceInfo>(detailSources);
-
-            int providerCount = 0;
             
             // unlock the movie fields for the first iteration
             movie.ProtectExistingValuesFromCopy(false);
             
+            // first update from the primary source of this data
+            UpdateResults success = movie.PrimarySource.Provider.Update(movie);
+            logger.Debug("UPDATE: Title='{0}', Provider='{1}', Version={2}, Result={3}", movie.Title, movie.PrimarySource.Provider.Name, movie.PrimarySource.Provider.Version, success.ToString());
+
+            int providerCount = 1;
             foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.DETAILS))
+                    continue;
+
+                if (currSource == movie.PrimarySource)
                     continue;
 
                 providerCount++;
 
                 if (providerCount <= MovingPicturesCore.Settings.DataProviderRequestLimit || MovingPicturesCore.Settings.DataProviderRequestLimit == 0) {
-                    UpdateResults result = currSource.Provider.Update(movie);
-                    logger.Debug("UPDATE: Title='{0}', Provider='{1}', Version={2}, Result={3}", movie.Title, currSource.Provider.Name, currSource.Provider.Version, result.ToString());
+                    success = currSource.Provider.Update(movie);
+                    logger.Debug("UPDATE: Title='{0}', Provider='{1}', Version={2}, Result={3}", movie.Title, currSource.Provider.Name, currSource.Provider.Version, success.ToString());
                 }
                 else {
                     // stop update
@@ -565,7 +577,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 if (MovingPicturesCore.Settings.UseTranslator) {
                     movie.Translate();
                 }
-
             }
         }
 

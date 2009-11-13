@@ -285,6 +285,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
         } RelationList<DBMovieInfo, DBSourceMovieInfo> _sourceIDs;
 
+        [DBField(FieldName = "primary_source", Filterable = false, AllowAutoUpdate = false)]
+        public DBSourceInfo PrimarySource {
+            get { return _primarySource; }
+
+            set {
+                _primarySource = value;
+                commitNeeded = true;
+            }
+        } private DBSourceInfo _primarySource;
+
         [DBRelation(AutoRetrieve = true, Filterable = false)]
         public RelationList<DBMovieInfo, DBWatchedHistory> WatchedHistory {
             get {

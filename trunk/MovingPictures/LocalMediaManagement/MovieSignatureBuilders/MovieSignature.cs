@@ -5,6 +5,7 @@ using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
+using System.Collections.ObjectModel;
 
 namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
 
@@ -181,6 +182,13 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             result.TitleScore = matchTitle(movie.Title);
             result.YearScore = matchYear(movie.Year);
             result.ImdbMatch = matchImdb(movie.ImdbID);
+            
+            // check if this match came from our #1 details provider
+            ReadOnlyCollection<DBSourceInfo> detailSources = MovingPicturesCore.DataProviderManager.MovieDetailSources;
+            if (detailSources.Count > 0 && detailSources[0] == movie.PrimarySource)
+                result.FromTopSource = true;
+            else
+                result.FromTopSource = false;
 
             // If we don't have a perfect score on the original title
             // iterate through the available alternate titles and check
@@ -269,6 +277,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         public int YearScore;
         public bool ImdbMatch;
         public string AlternateTitle;
+        public bool FromTopSource;
 
         #endregion
 
@@ -288,7 +297,10 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         /// </summary>
         /// <returns>True, if the result can be auto-approved</returns>
         public bool AutoApprove() {
-            
+
+            if (MovingPicturesCore.Settings.AutoApproveOnlyPrimarySource && !FromTopSource)
+                return false;
+
             // IMDB Auto-Approval
             if (ImdbMatch && MovingPicturesCore.Settings.AutoApproveOnIMDBMatch)
                 return true;
