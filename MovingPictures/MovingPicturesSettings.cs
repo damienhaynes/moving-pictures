@@ -115,6 +115,22 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _autoApproveOnAlternateTitle;
 
         [CornerstoneSetting(
+            Name = "Only Auto Approve from Primary Data Source",
+            Description = "When enabled this option will auto-approve matches only from the primary data source. Other matches will be available, but not auto approved.",
+            Groups = "|Movie Importer|Matching and Importing|",
+            Identifier = "importer_autoapprove_primary_source",
+            Default = true,
+            Hidden = false)]
+        public bool AutoApproveOnlyPrimarySource {
+            get { return _autoApproveOnlyPrimarySource; }
+            set {
+                _autoApproveOnlyPrimarySource = value;
+                OnSettingChanged("importer_autoapprove_primary_source");
+            }
+        }
+        private bool _autoApproveOnlyPrimarySource;
+
+        [CornerstoneSetting(
             Name = "Always Group Files In The Same Folder",
             Description = "When enabled this option will ALWAYS group multiple files in one folder together (assuming a multi-part movie).",
             Groups = "|Movie Importer|Matching and Importing|",

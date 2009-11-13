@@ -1533,7 +1533,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             else
                 movieList = MovingPicturesCore.DataProviderManager.Get(signature);
 
+            DBSourceInfo lastSource = null;
+            bool multipleSources = false;
             foreach (DBMovieInfo currMovie in movieList) {
+                if (lastSource == null)
+                    lastSource = currMovie.PrimarySource;
+
+                // check if our list of possible matches is from multiple sources
+                if (lastSource != currMovie.PrimarySource)
+                    multipleSources = true;
 
                 // Create a Possible Match object
                 PossibleMatch currMatch = new PossibleMatch();
@@ -1547,6 +1555,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // Add the match to the ranked movie list
                 rankedMovieList.Add(currMatch);
             }
+
+            // if we have multiple sources, make sure we display info about where each possible
+            // match is coming from
+            if (multipleSources)
+                foreach (PossibleMatch currMatch in rankedMovieList) 
+                    currMatch.DisplaySourceInfo = true;
 
             mediaMatch.PossibleMatches = rankedMovieList;
         }
@@ -1674,6 +1688,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public class PossibleMatch : IComparable {
         private DBMovieInfo movie;
         private MatchResult matchValue;
+        private bool _displaySourceInfo = false;
 
         public DBMovieInfo Movie {
             get { return movie; }
@@ -1683,6 +1698,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         public MatchResult Result {
             get { return matchValue; }
             set { matchValue = value; }
+        }
+
+        public bool DisplaySourceInfo {
+            get { return _displaySourceInfo; }
+            set { _displaySourceInfo = value; }
         }
 
         // This is silly, but required for how the DataGridView ComboBox Cell handles data.
@@ -1701,6 +1721,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     // if we have a year value for the possible match include it in the display member
                     displayTitle += " (" + this.movie.Year.ToString() + ")";
                 }
+
+                if (this.movie.PrimarySource != null && this.DisplaySourceInfo)
+                    displayTitle += " [" + this.movie.PrimarySource.Provider.Name + "]";
 
                 return displayTitle;
             }
