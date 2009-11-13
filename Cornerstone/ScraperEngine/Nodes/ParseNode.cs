@@ -140,7 +140,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 if (e.GetType() == typeof(ThreadAbortException))
                     throw e;
 
-                logger.DebugException("Scraper PARSE XPATH exception", e);
+                logger.Error("Scraper Script XPATH parsing failed: {0}", e.Message);
             }
         }
 
