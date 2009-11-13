@@ -29,6 +29,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string ShowWatchedAndUnwatchedMovies = "Show Watched and Unwatched Movies";
         public static string ShowOnlyUnwatchedMovies = "Show Only Unwatched Movies";
         public static string SortBy = "Sort By";
+        public static string SortDirection = "Sort Direction";
         public static string FilterBy = "Filter By";
         public static string AllMovies = "All Movies";
         public static string ChangeView = "Change View";
@@ -37,6 +38,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string LargeThumbnailView = "Large Thumbnail View";
         public static string FilmstripView = "Filmstrip View";
         public static string UpdateDetailsFromOnline = "Update Details from Online";
+        public static string CycleView = "Cycle View";
         public static string CycleCoverArt = "Cycle Cover-Art";
         public static string CheckForMissingArtwork = "Check for Missing Artwork Online";
         public static string MarkAsUnwatched = "Mark as Unwatched";
@@ -78,6 +80,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string DownAbbreviation = "(dn)";
         public static string UpAbbreviation = "(up)";
 
+        public static string Movie = "Movie";
+        public static string Movies = "Movies";
+        public static string Director = "Director";
+        public static string Directors = "Directors";
+        public static string Actor = "Actor";
+        public static string Actors = "Actors";
+        public static string Genre = "Genre";
+        public static string Genres = "Genres";
+        public static string Writer = "Writers";
+        public static string Writers = "Writers";
+        public static string StarRating = "Star Rating";
 
         // friendly names for sorting
         public static string Title = "Title";
@@ -245,7 +258,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     Type transType = typeof(Translation);
                     FieldInfo[] fields = transType.GetFields(BindingFlags.Public | BindingFlags.Static);
                     foreach (FieldInfo field in fields) {
-                        translation.Add(field.Name, field.GetValue(transType).ToString());
+                        translations.Add(field.Name, field.GetValue(transType).ToString());
                     }
                 }
                 return translations;
@@ -254,7 +267,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         public static string GetByName(string name)
         {
-            return Translations[name];
+            return Strings[name];
         }
 
         public static string GetByName(string name, params object[] args) {
