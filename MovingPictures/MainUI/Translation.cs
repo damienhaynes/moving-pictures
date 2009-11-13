@@ -20,6 +20,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// if that also fails it will use the hardcoded strings as a last resort.
         /// </summary>
         #region Translatable Fields
+
         public static string ProblemLoadingSkinFile = "Sorry, there was a problem loading the skin file";
         public static string SkinDoesNotSupportRatingDialog = "This skin does not support the Rating Dialog.";
         public static string SkinDoesNotSupportPinDialog = "This skin does not support the Pin Code Dialog.";
@@ -170,7 +171,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #endregion
 
         private static string path = string.Empty;
-        
 
         static Translation() {
             string lang;
@@ -235,16 +235,32 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return TranslatedStrings.Count;
         }
 
+        /// <summary>
+        /// Gets the translated strings collection in the active language
+        /// </summary>
+        public static Dictionary<string, string> Strings {
+            get {
+                if (translations == null) {
+                    translations = new Dictionary<string, string>();
+                    Type transType = typeof(Translation);
+                    FieldInfo[] fields = transType.GetFields(BindingFlags.Public | BindingFlags.Static);
+                    foreach (FieldInfo field in fields) {
+                        translation.Add(field.Name, field.GetValue(transType).ToString());
+                    }
+                }
+                return translations;
+            }
+        } private static Dictionary<string, string> translations;
+
         public static string GetByName(string name)
         {
-            Type TransType = typeof(Translation);
-            FieldInfo fi = TransType.GetField(name, BindingFlags.Public | BindingFlags.Static);
-            return fi.GetValue(TransType).ToString();
+            return Translations[name];
         }
 
         public static string GetByName(string name, params object[] args) {
             return String.Format(GetByName(name), args);
         }
+
     }
 
 }

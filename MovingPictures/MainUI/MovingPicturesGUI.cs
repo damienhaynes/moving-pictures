@@ -412,6 +412,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
                 browser.ViewChanged +=new MovieBrowser.ViewChangedDelegate(OnBrowserViewChanged);
 
+                // Load all available translation strings
+                foreach (string name in Translation.Strings.Keys) {
+                    SetProperty("#MovingPictures.Translation." + key, Translation.Strings[name]);
+                }
+
                 SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
                 SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
 
