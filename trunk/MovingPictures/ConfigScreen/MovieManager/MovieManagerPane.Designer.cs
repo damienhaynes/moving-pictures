@@ -51,6 +51,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.updateMediaInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendToImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateTitleSortingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateDateSortingDateAddedFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteMovieButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -217,7 +218,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.loadCoverArtFromFileToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.folder_image;
             this.loadCoverArtFromFileToolStripMenuItem.Name = "loadCoverArtFromFileToolStripMenuItem";
-            this.loadCoverArtFromFileToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.loadCoverArtFromFileToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.loadCoverArtFromFileToolStripMenuItem.Text = "Load Cover Art From File";
             this.loadCoverArtFromFileToolStripMenuItem.Click += new System.EventHandler(this.loadCoverArtFromFileToolStripMenuItem_Click);
             // 
@@ -225,7 +226,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.loadCoverArtFromURLToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.world_add;
             this.loadCoverArtFromURLToolStripMenuItem.Name = "loadCoverArtFromURLToolStripMenuItem";
-            this.loadCoverArtFromURLToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.loadCoverArtFromURLToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.loadCoverArtFromURLToolStripMenuItem.Text = "Load Cover Art From URL";
             this.loadCoverArtFromURLToolStripMenuItem.Click += new System.EventHandler(this.loadCoverArtFromURLToolStripMenuItem_Click);
             // 
@@ -289,14 +290,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // movieDetailsToolStripMenuItem
             // 
             this.movieDetailsToolStripMenuItem.Name = "movieDetailsToolStripMenuItem";
-            this.movieDetailsToolStripMenuItem.Size = new System.Drawing.Size(171, 24);
+            this.movieDetailsToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
             this.movieDetailsToolStripMenuItem.Text = "Movie Details";
             this.movieDetailsToolStripMenuItem.Click += new System.EventHandler(this.movieDetailsToolStripMenuItem_Click);
             // 
             // fileDetailsToolStripMenuItem
             // 
             this.fileDetailsToolStripMenuItem.Name = "fileDetailsToolStripMenuItem";
-            this.fileDetailsToolStripMenuItem.Size = new System.Drawing.Size(171, 24);
+            this.fileDetailsToolStripMenuItem.Size = new System.Drawing.Size(187, 24);
             this.fileDetailsToolStripMenuItem.Text = "File Details";
             this.fileDetailsToolStripMenuItem.Click += new System.EventHandler(this.fileDetailsToolStripMenuItem_Click);
             // 
@@ -307,7 +308,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.advancedButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.updateMediaInfoToolStripMenuItem,
             this.sendToImporterToolStripMenuItem,
-            this.updateTitleSortingMenuItem});
+            this.updateTitleSortingMenuItem,
+            this.updateDateSortingDateAddedFieldToolStripMenuItem});
             this.advancedButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cog;
             this.advancedButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.advancedButton.Name = "advancedButton";
@@ -319,7 +321,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.updateMediaInfoToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.page_gear;
             this.updateMediaInfoToolStripMenuItem.Name = "updateMediaInfoToolStripMenuItem";
-            this.updateMediaInfoToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.updateMediaInfoToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.updateMediaInfoToolStripMenuItem.Text = "Update MediaInfo";
             this.updateMediaInfoToolStripMenuItem.Click += new System.EventHandler(this.updateMediaInfoToolStripMenuItem_Click);
             // 
@@ -327,16 +329,23 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.sendToImporterToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_down;
             this.sendToImporterToolStripMenuItem.Name = "sendToImporterToolStripMenuItem";
-            this.sendToImporterToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.sendToImporterToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.sendToImporterToolStripMenuItem.Text = "Send To Importer";
             this.sendToImporterToolStripMenuItem.Click += new System.EventHandler(this.sendToImporterToolStripMenuItem_Click);
             // 
             // updateTitleSortingMenuItem
             // 
             this.updateTitleSortingMenuItem.Name = "updateTitleSortingMenuItem";
-            this.updateTitleSortingMenuItem.Size = new System.Drawing.Size(255, 22);
+            this.updateTitleSortingMenuItem.Size = new System.Drawing.Size(276, 22);
             this.updateTitleSortingMenuItem.Text = "Update Title Sorting (Sort By Field)";
             this.updateTitleSortingMenuItem.Click += new System.EventHandler(this.updateTitleSortingMenuItem_Click);
+            // 
+            // updateDateSortingDateAddedFieldToolStripMenuItem
+            // 
+            this.updateDateSortingDateAddedFieldToolStripMenuItem.Name = "updateDateSortingDateAddedFieldToolStripMenuItem";
+            this.updateDateSortingDateAddedFieldToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.updateDateSortingDateAddedFieldToolStripMenuItem.Text = "Update Date Sorting (Date Added Field)";
+            this.updateDateSortingDateAddedFieldToolStripMenuItem.Click += new System.EventHandler(this.updateDateSortingMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
@@ -542,5 +551,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private ToolStripButton watchedToggleButton;
         private ToolStripButton unwatchedToggleButton;
         private ToolStripMenuItem updateTitleSortingMenuItem;
+        private ToolStripMenuItem updateDateSortingDateAddedFieldToolStripMenuItem;
     }
 }
