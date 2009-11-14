@@ -349,6 +349,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Script_CSFD);
             AddSource(typeof(ScriptableProvider), Resources.Script_MyMoviesLocal);
             AddSource(typeof(ScriptableProvider), Resources.Script_XBMC);
+            AddSource(typeof(ScriptableProvider), Resources.Script_Filmtipset);
             AddSource(typeof(MyVideosProvider));
 
             normalizePriorities();

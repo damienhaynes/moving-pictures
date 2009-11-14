@@ -44,6 +44,7 @@ Var CURR_DATE
 
 # Installer languages
 !insertmacro LANG_LOAD "English"
+!insertmacro LANG_LOAD "Danish"
 
 # set the build filename based on environment variables
 !ifdef RELEASE
@@ -140,6 +141,8 @@ SectionEnd
 
 # startup tasks
 Function .onInit
+    !insertmacro MUI_LANGDLL_DISPLAY
+
     InitPluginsDir
     
     # set the main plugin as selected and read only in selection list

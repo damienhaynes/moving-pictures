@@ -72,7 +72,7 @@
   <string Field="Score">Score</string>
   <string Field="Runtime">Spilletid</string>
   <string Field="FilePath">File sti</string>
-  
+
   <!-- Group names for the date added sorting -->
   <string Field="Future">Fremtid</string>
   <string Field="Today">I dag</string>
@@ -84,16 +84,19 @@
   <string Field="Thursday">Torsdag</string>
   <string Field="Friday">Fredag</string>
   <string Field="Saturday">Lørdag</string>
+  <string Field="ThisWeek">Denne uge</string>
   <string Field="LastWeek">Sidste uge</string>
   <string Field="TwoWeeksAgo">For 2 uger siden</string>
   <string Field="ThreeWeeksAgo">For 3 uger siden</string>
-  <string Field="LastMonth">Sidste månede</string>
+  <string Field="ThisMonth">Denne måned</string>
+  <string Field="LastMonth">Sidste måned</string>
   <string Field="TwoMonthsAgo">For 2 måneder siden</string>
   <string Field="ThreeMonthsAgo">For 3 måneder siden</string>
   <string Field="EarlierThisYear">Tidligere i år</string>
+  <string Field="ThisYear">I år</string>
   <string Field="LastYear">Sidste år</string>
   <string Field="Older">Ældre</string>
-  
+
   <!-- Rate Movie Descriptions - 5 Stars-->
   <string Field="RateFiveStarOne">Forfærdelig</string>
   <string Field="RateFiveStarTwo">Middelmådig</string>
@@ -113,10 +116,8 @@
   <string Field="RuntimeShortExtended">{0}t{1:00}m{2:00}s</string>
   <string Field="RuntimeLong">{0} og {1}</string>
   <string Field="RuntimeLongExtended">{0}, {1} og {2}</string>
-  
+
   <!-- Remote Control Numeric Alphabet -->
-  <string Field="RemoteNumericAlphabet0"></string>
-  <string Field="RemoteNumericAlphabet1"></string>
   <string Field="RemoteNumericAlphabet2">abcæåä</string>
   <string Field="RemoteNumericAlphabet3">def</string>
   <string Field="RemoteNumericAlphabet4">ghi</string>
@@ -125,4 +126,27 @@
   <string Field="RemoteNumericAlphabet7">pqrs</string>
   <string Field="RemoteNumericAlphabet8">tuvü</string>
   <string Field="RemoteNumericAlphabet9">wxyz</string>
+
+  <!-- Year -->
+  <string Field="DecadeShort">{0}0erne</string>
+  <string Field="Unknown">Ukendt</string>
+
+  <!-- Date Added -->
+  <string Field="DateDay">dag</string>
+  <string Field="DateDays">dage</string>
+  <string Field="DateWeek">uge</string>
+  <string Field="DateWeeks">uger</string>
+  <string Field="DateMonth">måned</string>
+  <string Field="DateMonths">måneder</string>
+  <string Field="DateYear">år</string>
+  <string Field="DateYears">år</string>
+  <string Field="DatePartWithinDays">Sidste {0} dage</string>
+  <string Field="DatePartWithinWeeks">Sidste {0} uger</string>
+  <string Field="DatePartWithinMonths">Sidste {0} måneder</string>
+  <string Field="DatePartWithinYears">Sidste {0} år</string>
+  <string Field="DatePartAgo">{0} {1} siden</string>
+
+  <!-- Category -->
+  <string Field="CategoryEmptyHeader">Kategorien er tom</string>
+  <string Field="CategoryEmptyDescription">Der er ingen film i denne\nkategori.</string>
 </strings>
