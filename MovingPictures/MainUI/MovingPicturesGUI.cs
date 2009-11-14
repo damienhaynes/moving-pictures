@@ -1275,6 +1275,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Reload the active facade to enforce changes in sorting and publishing
             browser.ReapplyFilters();
             browser.ReloadFacade();
+
+            // Re-publish when this movie is still the selected movie
+            if (browser.SelectedMovie == movie) {
+                PublishMovieDetails(movie);
+            }
         }
 
         /// <summary>
