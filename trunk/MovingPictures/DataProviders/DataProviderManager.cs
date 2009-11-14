@@ -552,10 +552,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             movie.ProtectExistingValuesFromCopy(false);
             
             // first update from the primary source of this data
-            UpdateResults success = movie.PrimarySource.Provider.Update(movie);
-            logger.Debug("UPDATE: Title='{0}', Provider='{1}', Version={2}, Result={3}", movie.Title, movie.PrimarySource.Provider.Name, movie.PrimarySource.Provider.Version, success.ToString());
+            int providerCount = 0;
+            if (movie.PrimarySource != null) {
+                UpdateResults success = movie.PrimarySource.Provider.Update(movie);
+                logger.Debug("UPDATE: Title='{0}', Provider='{1}', Version={2}, Result={3}", movie.Title, movie.PrimarySource.Provider.Name, movie.PrimarySource.Provider.Version, success.ToString());
+                providerCount++;
+            }
 
-            int providerCount = 1;
             foreach (DBSourceInfo currSource in sources) {
                 if (currSource.IsDisabled(DataType.DETAILS))
                     continue;
@@ -566,7 +569,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 providerCount++;
 
                 if (providerCount <= MovingPicturesCore.Settings.DataProviderRequestLimit || MovingPicturesCore.Settings.DataProviderRequestLimit == 0) {
-                    success = currSource.Provider.Update(movie);
+                    UpdateResults success = currSource.Provider.Update(movie);
                     logger.Debug("UPDATE: Title='{0}', Provider='{1}', Version={2}, Result={3}", movie.Title, currSource.Provider.Name, currSource.Provider.Version, success.ToString());
                 }
                 else {
