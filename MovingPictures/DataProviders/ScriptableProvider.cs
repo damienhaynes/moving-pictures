@@ -205,7 +205,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // load params
             foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo))) {
-                if (currField.GetValue(movie) != null)
+                if (currField.AutoUpdate && currField.GetValue(movie) != null)
                     paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
             }
 

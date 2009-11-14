@@ -311,7 +311,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
 
             // notify any listeners of the status change
-            logger.Info("User approved " + match.LocalMediaString + "as " + match.Selected.Movie.Title);
+            logger.Info("User approved " + match.LocalMediaString + " as " + match.Selected.Movie.Title);
             if (MovieStatusChanged != null)
                 MovieStatusChanged(match, MovieImporterAction.APPROVED);
         }
@@ -347,6 +347,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             foreach (DBLocalMedia currFile in match.LocalMedia) {
                 currFile.Ignored = false;
             }
+
+            match.PossibleMatches.Clear();
 
             lock (priorityPendingMatches) {
                 match.HighPriority = true;
