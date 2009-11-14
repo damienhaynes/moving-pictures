@@ -111,8 +111,15 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 logger.Debug("ImdbID Found: {0}", s);
             }
             else {
-                s = null;
-                logger.Debug("No ImdbID Found.");
+                match = Regex.Match(s, @"title\?\d{7}", RegexOptions.IgnoreCase);
+                if (match.Success) {
+                    s = "tt" + match.Value.Substring(6, 7);
+                    logger.Debug("ImdbID Found: {0}", s);
+                }
+                else {
+                    s = null;
+                    logger.Debug("No ImdbID Found.");
+                }
             }
 
             // return the string
