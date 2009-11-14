@@ -897,11 +897,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 listItem.ItemId = value;
 
                 if (field == browser.CurrentSortField) {
-                    if (browser.CurrentSortDirection == SortingDirections.Ascending)
-                        listItem.Label2 = Translation.UpAbbreviation;
-                    else
-                        listItem.Label2 = Translation.DownAbbreviation;
-                        
+                    // indicate the current sort direction using a graphic image, if the file does not exist
+                    // use a string label to represent the sort direction
+                    if (browser.CurrentSortDirection == SortingDirections.Ascending) {
+                        string filename = GUIGraphicsContext.Skin + @"\Media\movingpictures_SortAscending.png";
+                        if (!System.IO.File.Exists(filename))
+                            listItem.Label2 = Translation.DownAbbreviation;
+                        else
+                            listItem.IconImage = filename;
+                    }
+                    else {
+                        string filename = GUIGraphicsContext.Skin + @"\Media\movingpictures_SortDescending.png";
+                        if (!System.IO.File.Exists(filename))
+                            listItem.Label2 = Translation.UpAbbreviation;
+                        else
+                            listItem.IconImage = filename;
+                    }
                 }
                 dialog.Add(listItem);
             }
