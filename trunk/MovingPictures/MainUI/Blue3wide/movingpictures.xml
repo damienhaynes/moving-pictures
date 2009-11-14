@@ -726,7 +726,7 @@ multiple view modes.
       <posY>370</posY>
       <width>300</width>
       <font>font12</font>
-      <label>Writer</label>
+      <label>#MovingPictures.Translation.Writer</label>
       <textcolor>ffFFFFFF</textcolor>
       <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
     </control>
