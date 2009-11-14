@@ -797,11 +797,37 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
 
             updateMoviePanel();
-            MessageBox.Show("Title sorting values (the \"Sort By\" field) has been updated.");
+            MessageBox.Show("Title sorting values (the \"Sort By\" field) have been updated.");
         }
 
         private void refreshMovieButton_DropDownOpening(object sender, EventArgs e) {
             addMovieRefreshMenuItems();
+        }
+
+        private void updateDateSortingMenuItem_Click(object sender, EventArgs e) {
+            ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(updateDateSortingWorker));
+            popup.Owner = this.ParentForm;
+            popup.ShowDialog();
+
+            updateMoviePanel();
+        }
+
+        private void updateDateSortingWorker(ProgressDelegate progress) {
+            bool success = true;
+            int count = 0;
+            int total = listItems.Keys.Count;
+
+            foreach (DBMovieInfo currItem in listItems.Keys.ToList()) {
+                success = currItem.PopulateDateAdded() && success;
+                count++;
+
+                progress("", (int)((count / (total + 1.0)) * 100));
+            }
+
+            if (success)
+                MessageBox.Show("Date sorting values have been updated.");
+            else
+                MessageBox.Show("Some movies could not be updated because they are offline.");
         }
 
     }

@@ -1008,6 +1008,36 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
+        public bool PopulateDateAdded() {
+            String dateOption = MovingPicturesCore.Settings.DateImportOption;
+
+            if (dateOption == null)
+                dateOption = "created";
+
+            if (LocalMedia.Count == 0 || LocalMedia[0].ImportPath.GetDriveType() == DriveType.CDRom)
+                dateOption = "current";
+
+            switch (dateOption) {
+                case "modified":
+                    if (!LocalMedia[0].IsAvailable)
+                        return false;
+                    
+                    DateAdded = LocalMedia[0].File.LastWriteTime;
+                    break;
+                case "current":
+                    DateAdded = DateTime.Now;
+                    break;
+                default:
+                    if (!LocalMedia[0].IsAvailable)
+                        return false;
+
+                    DateAdded = LocalMedia[0].File.CreationTime;
+                    break;
+            }
+
+            return true;
+        }
+
         public void Translate() {
             Translate(MovingPicturesCore.Settings.TranslationLanguage);
         }

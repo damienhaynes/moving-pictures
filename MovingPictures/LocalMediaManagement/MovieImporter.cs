@@ -1415,11 +1415,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 userSettings.CommitNeeded = false;
             }
 
-            if (movie.LocalMedia[0].ImportPath.GetDriveType() == DriveType.CDRom)
-                movie.DateAdded = DateTime.Now;
-            else
-                movie.DateAdded = movie.LocalMedia[0].File.CreationTime;
-            
+            movie.PopulateDateAdded();
+                    
             movie.Commit();
         }
 

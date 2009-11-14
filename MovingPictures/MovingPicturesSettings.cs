@@ -240,6 +240,22 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _useMediaInfo;
 
+        [CornerstoneSetting(
+            Name = "\"Date Added\" Population Method",
+            Description = "Determines which date to use for the 'Date Added' field when importing and adding a movie to the database. To update values for existing movies you must refresh your Date Added values from the Movie Manager.    Options are: created, modified, or current.",
+            Groups = "|Movie Importer|Matching and Importing|",
+            Identifier = "date_import_option",
+            Default = "created")]
+        public string DateImportOption {
+            get { return _dateImportOption; }
+            set {
+                _dateImportOption = value;
+                OnSettingChanged("date_import_option");
+            }
+        }
+        private string _dateImportOption;
+
+
         #endregion
 
         #region Preprocessing
