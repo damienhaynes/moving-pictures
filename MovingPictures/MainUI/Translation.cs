@@ -298,7 +298,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // W
         public static string Wednesday = "Wednesday";
-        public static string Writer = "Writers";
+        public static string Writer = "Writer";
         public static string Writers = "Writers";
 
         // Y
