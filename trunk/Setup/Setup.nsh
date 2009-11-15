@@ -6,6 +6,11 @@
 !define URL www.moving-pictures.tv
 !define REGKEY "SOFTWARE\${Name}"
 
+# Required MediaPortal Version
+!define MP_MAJOR 1
+!define MP_MINOR 0
+!define MP_POINT 2
+
 # grab version from DLL
 !system "GetVersion.exe"
 !include "Version.txt"
@@ -154,6 +159,7 @@ Function .onInit
     
     # grab various fields from registry
     Call getMediaPortalDir
+    Call verifyMediaPortalVer
 	Call getSkinDir
 	Call getDatabaseDir
     Call getPreviousInstallInfo
@@ -414,6 +420,26 @@ Function getDatabaseDir
 	Pop $2
     Pop $1
 	Pop $0
+FunctionEnd
+
+Function verifyMediaPortalVer
+    GetDllVersion "$MEDIAPORTAL_DIR\MediaPortal.exe" $R0 $R1
+    IntOp $R2 $R0 / 0x00010000
+    IntOp $R3 $R0 & 0x0000FFFF
+    IntOp $R4 $R1 / 0x00010000
+    IntOp $R5 $R1 & 0x0000FFFF
+    
+
+    IntCmp $R2 ${MP_MAJOR} check_minor_ver fail success 
+    check_minor_ver:
+        IntCmp $R3 ${MP_MINOR} check_point_ver fail success 
+    check_point_ver:
+        IntCmp $R4 ${MP_POINT} success fail success 
+    fail:
+        MessageBox MB_OK|MB_ICONEXCLAMATION "$(OLD_VER1)${MP_MAJOR}.${MP_MINOR}.${MP_POINT}$(OLD_VER2)"
+        Abort
+    success:
+    
 FunctionEnd
 
 # grabs the install number counter from the registry and increments
