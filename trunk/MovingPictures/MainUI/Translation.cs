@@ -280,6 +280,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Thursday = "Thursday";
         public static string Title = "Title";
         public static string Today = "Today";
+        public static string ToggleParentalLock = "Toggle Parental Lock";
         public static string Tuesday = "Tuesday";
         public static string TwoMonthsAgo = "Two Months Ago";
         public static string TwoWeeksAgo = "Two Weeks Ago";
