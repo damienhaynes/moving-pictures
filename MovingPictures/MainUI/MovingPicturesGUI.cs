@@ -1331,9 +1331,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // Publish it when the current selection is this movie
                 PublishArtwork(movie);
             }
-            
+
             // Refresh the artwork on the related list item
             RefreshMovieArtwork(movie);
+
         }
 
         #endregion
@@ -1883,8 +1884,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             cover.Filename = movie.CoverFullPath;
             backdrop.Filename = movie.BackdropFullPath;
-
-            RefreshMovieArtwork(movie);
         }
         
         /// <summary>
