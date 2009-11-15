@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using System.Text.RegularExpressions;
 using MediaPortal.Configuration;
 using MediaPortal.GUI.Library;
 using NLog;
@@ -110,11 +111,28 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         public static string GetByName(string name)
         {
+            if (!Strings.ContainsKey(name))
+                return name;
+
             return Strings[name];
         }
 
         public static string GetByName(string name, params object[] args) {
             return String.Format(GetByName(name), args);
+        }
+
+        /// <summary>
+        /// Takes an input string and replaces all ${named} variables with the proper translation if available
+        /// </summary>
+        /// <param name="input">a string containing ${named} variables that represent the translation keys</param>
+        /// <returns>translated input string</returns>
+        public static string ParseString(string input) {
+            Regex replacements = new Regex(@"\$\{([^\}]+)\}");
+            MatchCollection matches = replacements.Matches(input);
+            foreach(Match match in matches) {
+                input = input.Replace(match.Value, GetByName(match.Groups[1].Value));
+            }
+            return input;
         }
 
         #endregion

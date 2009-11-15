@@ -788,7 +788,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // if needed, create a new GUIListItem
             if (!listItems.ContainsKey(newNode)) {
                 GUIListItem currItem = new GUIListItem();
-                currItem.Label = newNode.Name;
+                
+                // Try to parse the category name and execute  translations if needed
+                currItem.Label = Translation.ParseString(newNode.Name);
                 //currItem.IconImage = newMovie.CoverThumbFullPath.Trim();
                 //currItem.IconImageBig = newMovie.CoverThumbFullPath.Trim();
                 currItem.TVTag = newNode;

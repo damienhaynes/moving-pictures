@@ -1740,6 +1740,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 else {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = currField.GetValue(obj).ToString().Trim();
+
+                    // Category names have an extra translation check
+                    if (currField.FieldName == "name" && tableType == typeof(DBNode<DBMovieInfo>))
+                        valueStr = Translation.ParseString(valueStr);
+
                     SetProperty(propertyStr, valueStr, forceLogging);
                 }
             }
