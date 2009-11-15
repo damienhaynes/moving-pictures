@@ -799,30 +799,6 @@ multiple view modes.
       <height>48</height>
       <texture>lock.png</texture>
     </control>
-	<control>
-      <description>Sort Field Name</description>
-      <type>label</type>
-      <id>0</id>
-      <posX>1220</posX>
-      <posY>240</posY>
-      <label>Sorted By: #MovingPictures.Sort.Field</label>
-      <align>right</align>
-      <font>font11</font>
-      <textcolor>ffa9d0f7</textcolor>
-      <animation effect="fade" time="250">WindowOpen</animation>
-      <animation effect="fade" time="250">WindowClose</animation>
-    </control>	
-	<control>      
-      <type>image</type>
-      <id>1</id>
-      <posX>1230</posX>
-      <posY>245</posY>
-      <width>16</width>
-      <height>16</height>
-	  <align>left</align>	  
-      <texture>movingpictures_Sort#MovingPictures.Sort.Direction.png</texture>	  
-	  <animation effect="fade" time="250">WindowOpen</animation>
-      <animation effect="fade" time="250">WindowClose</animation>
-    </control>
+
   </controls>
 </window>

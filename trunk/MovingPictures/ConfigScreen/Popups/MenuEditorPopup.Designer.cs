@@ -205,6 +205,7 @@
             fieldProperty23.ColumnWidth = null;
             fieldProperty23.DisplayName = "Primary Source";
             fieldProperty23.FieldName = "PrimarySource";
+            fieldProperty23.Visible = false;
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty1);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty2);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty3);
