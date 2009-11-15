@@ -5,7 +5,7 @@
 !insertmacro LANG_STRING INVALID_SKIN1 "Kunne ikke bestemme synsviklen for"
 !insertmacro LANG_STRING INVALID_SKIN2 " skinnet. Fælles$\n skinnet vil derfor ikke blive installeret for "
 !insertmacro LANG_STRING BAD_SKIN_PATH "Kunne ikke finde skin mappen. Skin filerne vil IKKE blive installeret!" 
-!insertmacro LANG_STRING BAD_DB_PATH "Kunne ikke finde Database bibliotek. Databasen vil ikke blive bakket op."
+!insertmacro LANG_STRING BAD_DB_PATH "Kunne ikke finde database mappen. Databasen vil ikke blive sikkerhedskopieret."
 
 !insertmacro LANG_STRING DLL_DESCRIPTION "Moving Pictures plug-in'et."
 !insertmacro LANG_STRING GENERIC_SKIN_DESCRIPTION "Hvis valgt, vil dette installere fælles skin filerne for skin der på nuværende tidspunkt ikke understøtter Moving Pictures. Alle eksisterende filer vil blive sikkerhedskopiret." 
