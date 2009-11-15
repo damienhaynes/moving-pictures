@@ -146,6 +146,7 @@
   <string Field="Thursday">Thursday</string>
   <string Field="Title">Title</string>
   <string Field="Today">Today</string>
+  <string Field="ToggleParentalLock">Toggle Parental Lock</string>
   <string Field="Tuesday">Tuesday</string>
   <string Field="TwoMonthsAgo">Two Months Ago</string>
   <string Field="TwoWeeksAgo">Two Weeks Ago</string>
