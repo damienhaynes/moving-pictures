@@ -72,6 +72,9 @@ namespace Cornerstone.Database.Tables {
 
             // handle NONE type criteria
             if (CriteriaGrouping == CriteriaGroupingEnum.NONE) {
+                foreach (T currItem in input)
+                    results.Add(currItem);
+
                 HashSet<T> excludeItems = new HashSet<T>();
                 foreach (T currItem in input)
                     excludeItems.Add(currItem);

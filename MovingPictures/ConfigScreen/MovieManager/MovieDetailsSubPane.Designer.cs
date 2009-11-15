@@ -59,6 +59,7 @@
             Cornerstone.GUI.Controls.FieldProperty fieldProperty34 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty35 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty36 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty37 = new Cornerstone.GUI.Controls.FieldProperty();
             this.userMovieDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.movieDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.SuspendLayout();
@@ -173,6 +174,10 @@
             fieldProperty35.FieldName = "AlternateTitles";
             fieldProperty36.DisplayName = "Date Added";
             fieldProperty36.FieldName = "DateAdded";
+            fieldProperty37.ColumnWidth = null;
+            fieldProperty37.DisplayName = "Primary Source";
+            fieldProperty37.FieldName = "PrimarySource";
+            fieldProperty37.Visible = false;
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty7);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty8);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty9);
@@ -203,6 +208,7 @@
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty34);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty35);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty36);
+            this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty37);
             this.movieDetailsList.ForeColor = System.Drawing.SystemColors.ControlText;
             this.movieDetailsList.Location = new System.Drawing.Point(0, 0);
             this.movieDetailsList.Name = "movieDetailsList";

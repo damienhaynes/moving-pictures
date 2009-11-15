@@ -49,6 +49,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             Cornerstone.GUI.Controls.FieldProperty fieldProperty21 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty22 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty23 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty24 = new Cornerstone.GUI.Controls.FieldProperty();
             this.okButton = new System.Windows.Forms.Button();
             this.filterEditorPane1 = new Cornerstone.GUI.Filtering.FilterEditorPane();
             this.SuspendLayout();
@@ -157,6 +158,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             fieldProperty23.DisplayName = "Details URL";
             fieldProperty23.FieldName = "DetailsURL";
             fieldProperty23.Visible = false;
+            fieldProperty24.ColumnWidth = null;
+            fieldProperty24.DisplayName = "Primary Source";
+            fieldProperty24.FieldName = "PrimarySource";
+            fieldProperty24.Visible = false;
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty1);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty2);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty3);
@@ -180,6 +185,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty21);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty22);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty23);
+            fieldDisplaySettings1.FieldProperties.Add(fieldProperty24);
             fieldDisplaySettings1.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
             this.filterEditorPane1.FieldDisplaySettings = fieldDisplaySettings1;
             this.filterEditorPane1.Location = new System.Drawing.Point(12, 12);
