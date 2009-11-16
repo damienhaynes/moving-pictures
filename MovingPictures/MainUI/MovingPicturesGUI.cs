@@ -414,7 +414,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // Load all available translation strings
                 foreach (string name in Translation.Strings.Keys) {
-                    SetProperty("#MovingPictures.Translation." + name, Translation.Strings[name]);
+                    SetProperty("#MovingPictures.Translation." + name + ".Label", Translation.Strings[name]);
                 }
 
                 SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
