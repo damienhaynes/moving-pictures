@@ -197,7 +197,7 @@ namespace Cornerstone.Database.Tables {
         }
 
         public override string ToString() {
-            return this.GetType().Name + " (" + this.GetHashCode() + ")"; 
+            return GetType().Name + " (" + ID + ")";
         }
 
         #region IComparable Members
