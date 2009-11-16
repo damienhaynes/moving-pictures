@@ -50,6 +50,7 @@ Var CURR_DATE
 # Installer languages
 !insertmacro LANG_LOAD "English"
 !insertmacro LANG_LOAD "Danish"
+!insertmacro LANG_LOAD "Swedish"
 
 # set the build filename based on environment variables
 !ifdef RELEASE
@@ -63,6 +64,7 @@ CRCCheck on
 XPStyle on
 ShowInstDetails hide
 Name "${NAME}"
+Icon "logo.ico"
 VIProductVersion ${VERSION}
 VIAddVersionKey ProductName "${NAME}"
 VIAddVersionKey CompanyName "${NAME}"
