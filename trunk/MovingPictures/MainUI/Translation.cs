@@ -225,8 +225,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string MissingExternalPlayerExe = "The executable for HD playback is missing.\nPlease correct the path to the executable.";
         public static string Monday = "Monday";
         public static string Movie = "Movie";
+        public static string MovieDetails = "Movie Details";
         public static string MovieOptions = "Movie Options";
         public static string Movies = "Movies";
+
+        // N
         public static string NoImportPathsBody = "It doesn't look like you have\ndefined any import paths. You\nshould close MediaPortal and\nlaunch the MediaPortal\nConfiguration Screen to\nconfigure Moving Pictures.";
         public static string NoImportPathsHeading = "No Import Paths!";
 

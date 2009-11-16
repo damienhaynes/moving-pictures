@@ -768,7 +768,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             dialog.Reset();
             dialog.SetHeading("Moving Pictures");  // not translated because it's a proper noun
 
+            GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
+            GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
+            GUIListItem movieOptionsItem = new GUIListItem(Translation.MovieOptions + " ...");
+
             int currID = 1;
+
+            // if we are not in categories view make Movie Options the primary selection
+            if (browser.CurrentView != BrowserViewMode.CATEGORIES) {
+                movieOptionsItem.ItemId = currID++;
+                dialog.Add(movieOptionsItem);
+            }
+
             GUIListItem watchItem = new GUIListItem(watchedFilter.Active ? Translation.ShowWatchedAndUnwatchedMovies : Translation.ShowOnlyUnwatchedMovies);
             watchItem.ItemId = currID++;
             dialog.Add(watchItem);
@@ -783,10 +794,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             filterItem.ItemId = currID++;
             dialog.Add(filterItem);
 
-            GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
-            GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
-            GUIListItem movieOptionsItem = new GUIListItem(Translation.MovieOptions + " ...");
-
             // show these options only when we are not in the categories view
             if (browser.CurrentView != BrowserViewMode.CATEGORIES) {
                 sortItem.ItemId = currID++;
@@ -794,9 +801,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 viewItem.ItemId = currID++;
                 dialog.Add(viewItem);
-
-                movieOptionsItem.ItemId = currID++;
-                dialog.Add(movieOptionsItem);
             }
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);

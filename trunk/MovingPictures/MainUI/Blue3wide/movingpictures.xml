@@ -609,7 +609,7 @@ multiple view modes.
       <posY>280</posY>
       <width>300</width>
       <font>font12</font>
-      <label>Movie Details</label>
+      <label>#MovingPictures.Translation.MovieDetails</label>
       <textcolor>ffFFFFFF</textcolor>
       <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
     </control>
@@ -702,7 +702,7 @@ multiple view modes.
       <posY>280</posY>
       <width>300</width>
       <font>font12</font>
-      <label>Director</label>
+      <label>#MovingPictures.Translation.Director</label>
       <textcolor>ffFFFFFF</textcolor>
       <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
     </control>

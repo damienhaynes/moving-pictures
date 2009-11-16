@@ -75,6 +75,7 @@
   <string Field="MissingExternalPlayerExe">The executable for HD playback is missing.\nPlease correct the path to the executable.</string>
   <string Field="Monday">Monday</string>
   <string Field="Movie">Movie</string>
+  <string Field="MovieDetails">Movie Details</string>
   <string Field="MovieOptions">Movie Options</string>
   <string Field="Movies">Movies</string>
   <!-- N -->
