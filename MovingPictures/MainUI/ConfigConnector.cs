@@ -13,7 +13,7 @@ using MediaPortal.Configuration;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     //MediaPortal.Plugins.MovingPictures.Properties.Resources.mp_config_icon
-    [PluginIcons("MediaPortal.Plugins.MovingPictures.mp_config_icon.png", "MediaPortal.Plugins.MovingPictures.mp_config_icon.png")]
+    [PluginIcons("MediaPortal.Plugins.MovingPictures.Resources.Images.icon_normal.png", "MediaPortal.Plugins.MovingPictures.Resources.Images.icon_faded.png")]
     public class ConfigConnector: ISetupForm {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();

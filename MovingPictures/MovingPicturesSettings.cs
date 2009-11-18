@@ -1311,7 +1311,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     string filterID = MovingPicturesCore.Settings.ParentalContolsFilterID;
                     if (filterID == "null") {
                         _parentalControlsFilter = new DBFilter<DBMovieInfo>();
-                        _parentalControlsFilter.Name = "Parental Controls Filter";
+                        _parentalControlsFilter.Name = "Children's Movies";
                         MovingPicturesCore.DatabaseManager.Commit(_parentalControlsFilter);
                         ParentalContolsFilterID = _parentalControlsFilter.ID.ToString();
                     }
