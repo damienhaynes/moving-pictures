@@ -550,6 +550,8 @@
     <Content Include="Resources\Images\font.png" />
     <Content Include="Resources\Images\grey_bug.png" />
     <Content Include="Resources\Images\help.png" />
+    <EmbeddedResource Include="Resources\Images\icon_faded.png" />
+    <EmbeddedResource Include="Resources\Images\icon_normal.png" />
     <Content Include="Resources\Images\ignored.png" />
     <Content Include="Resources\Images\information.png" />
     <Content Include="Resources\Images\list-add.png" />
