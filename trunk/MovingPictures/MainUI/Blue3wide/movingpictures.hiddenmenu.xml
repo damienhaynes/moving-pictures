@@ -3,7 +3,6 @@
 <!--            :: HIDDEN MENU ::            -->
 <window>
 	<controls>
-
 		<control>
 		  <type>actiongroup</type>
 		  <description>action menu</description>
