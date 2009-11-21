@@ -459,6 +459,7 @@
     <Content Include="DataProviders\ScraperScripts\MyMoviesItalian.xml" />
     <Content Include="DataProviders\ScraperScripts\MyMoviesLocal.xml" />
     <Content Include="DataProviders\ScraperScripts\OFDb.xml" />
+    <Content Include="DataProviders\ScraperScripts\Ptgate.xml" />
     <Content Include="DataProviders\ScraperScripts\Scope.xml" />
     <Content Include="DataProviders\ScraperScripts\Sratim.xml" />
     <Content Include="DataProviders\ScraperScripts\xbmc.xml" />

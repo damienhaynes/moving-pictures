@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="3" point="1"/>
-    <published month="6" day="28" year="2009"/>
+    <version major="1" minor="3" point="2"/>
+    <published month="11" day="18" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -151,6 +151,18 @@
        ]]>
       </set>
 
+	  <set name="rx_tagline">
+        <![CDATA[
+      <h5>Tagline.</h5>[^>]+>[^\p{L}]+(?<movieTagline>[^<]+)
+       ]]>
+      </set>
+	  
+      <set name="rx_language">
+        <![CDATA[
+      <a\shref=./Sections/Languages/[^/]+/">\s+([^<]+)</a>
+      ]]>
+      </set>
+
       <set name="rx_plot">
         <![CDATA[
       <p class="plotpar">\s*(.+?)<i>.*?</i>.*?</p>
@@ -211,7 +223,7 @@
       <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
 
       <!-- Tagline -->
-      <parse name="tagline" input="${details_page}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
+      <parse name="tagline" input="${details_page}" regex='${rx_tagline}'/>
       <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
 
       <!-- Score -->
@@ -223,7 +235,7 @@
       <set name='movie.popularity' value='${votes[0][0]:htmldecode}'/>
 
       <!-- Language -->
-      <parse name="language" input="${details_page}" regex='&lt;h5&gt;Language:&lt;/h5&gt;\s+&lt;a href="/Sections/Languages/[^/]+/"&gt;\s+([^&lt;]+)&lt;/a&gt;'/>
+      <parse name="language" input="${details_page}" regex='${rx_language}'/>
       <set name='movie.language' value='${language[0][0]:htmldecode}'/>
 
       <!-- Plot Summary -->
