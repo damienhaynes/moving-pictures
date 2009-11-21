@@ -3,182 +3,208 @@
 This file should contain the facade view
 -->
 <window>
-  <controls>
-	<control>      
-      <type>facadeview</type>
-      <id>51</id>
-	  <animation effect="slide" time="150" start="0,-300">WindowOpen</animation>
-	  <animation effect="slide" time="250" end="800,0">WindowClose</animation>
-      <control>
-        <description>Categories List</description>
-        <type>listcontrol</type>
-        <id>51</id>
-        <onleft>51</onleft>
-        <onright>51</onright>
-        <posX>786</posX>
-        <posY>270</posY>        
-		<height>420</height>
-        <textXOff>-30</textXOff>
-        <textXOff3>10</textXOff3>
-        <IconXOff>1980</IconXOff>        
-        <spinPosX>1549</spinPosX>
-        <spinPosY>690</spinPosY>
-        <spinAlign>Right</spinAlign>
-        <spinColor>ff006698</spinColor>
-        <spinCanFocus>no</spinCanFocus>
-      </control>
-    </control>
-    <control>
-      <type>facadeview</type>
-      <id>50</id>
-      <control>
-        <visible>Control.IsVisible(50)</visible>
-        <description>Movie List</description>
-        <type>listcontrol</type>
-        <id>50</id>
-        <onleft>2</onleft>
-        <onright>2</onright>
-        <posX>786</posX>
-        <posY>270</posY>        
-		<height>420</height>
-        <textXOff>-30</textXOff>
-        <textXOff3>10</textXOff3>
-        <IconXOff>1980</IconXOff>        
-        <spinPosX>1549</spinPosX>
-        <spinPosY>690</spinPosY>
-        <spinAlign>Right</spinAlign>
-        <spinColor>ff006698</spinColor>
-        <spinCanFocus>no</spinCanFocus>
-        <!-- group headers -->
-        <textcolor3>ff3E99D7</textcolor3>
-      </control>
-      <control>
-        <visible>Control.IsVisible(50)</visible>
-        <description>Filmstrip view</description>
-        <type>filmstrip</type>
-        <id>50</id>
-        <onup>3</onup>
-        <posX>12</posX>
-        <posY>512</posY>
-        <width>1280</width>
-        <scrollOffset>4</scrollOffset>
-        <spinPosX>1300</spinPosX>
-        <spinPosY>720</spinPosY>
-        <spinWidth>24</spinWidth>
-        <spinHeight>24</spinHeight>
-        <spinColor>ffcccccc</spinColor>
-        <itemWidth>142</itemWidth>
-        <itemHeight>156</itemHeight>
-        <textureWidth>120</textureWidth>
-        <textureHeight>170</textureHeight>
-        <thumbWidth>106</thumbWidth>
-        <thumbHeight>156</thumbHeight>
-        <thumbPosX>7</thumbPosX>
-        <thumbPosY>7</thumbPosY>
-        <thumbs flipY="true" diffuse="diffusemirrorwide.png" />
-        <font>font10</font>
-        <InfoImage></InfoImage>
-        <imageFolder>Picture_cover.png</imageFolder>
-        <imageFolderFocus>-</imageFolderFocus>
-        <frame>-</frame>
-        <frameFocus>Picture_cover.png</frameFocus>
-        <showFrame>yes</showFrame>
-        <showFolder>yes</showFolder>
-        <showBackGround>no</showBackGround>
-        <showInfoImage>no</showInfoImage>
-        <thumbAnimation effect="zoom" start="100,100" end="120,120" time="110">focus</thumbAnimation>
-        <thumbAnimation effect="zoom" start="120,120" end="100,100" time="110">unfocus</thumbAnimation>
-      </control>
-        <control>
-          <description>Thumbnail Panel</description>
-          <type>thumbnailpanel</type>
-          <id>50</id>
-          <onleft>3</onleft>
-          <posX>30</posX>
-          <posY>245</posY>
-          <unfocusedAlpha>100</unfocusedAlpha>
-          <width>700</width>
-          <height>420</height>
-          <imageFolder>Picture_cover.png</imageFolder>
-          <imageFolderFocus>Picture_cover.png</imageFolderFocus>
-          <font>font10</font>
-            <!-- smallicons -->
-            <itemWidth>135</itemWidth>
-            <itemHeight>200</itemHeight>
-            <textureWidth>120</textureWidth>
-            <textureHeight>170</textureHeight>
-            <thumbWidth>106</thumbWidth>
-            <thumbHeight>156</thumbHeight>
-            <thumbPosX>7</thumbPosX>
-            <thumbPosY>7</thumbPosY>
-            <!-- largeicons -->
-            <itemWidthBig>135</itemWidthBig>
-            <itemHeightBig>200</itemHeightBig>
-            <textureWidthBig>120</textureWidthBig>
-            <textureHeightBig>170</textureHeightBig>
-            <thumbWidthBig>106</thumbWidthBig>
-            <thumbHeightBig>156</thumbHeightBig>
-            <thumbPosXBig>7</thumbPosXBig>
-            <thumbPosYBig>7</thumbPosYBig>
-            <thumbZoom>yes</thumbZoom>
-            <enableFocusZoom>no</enableFocusZoom>
-        </control>
-    </control>
+	<controls>
+		<control>      
+			<type>facadeview</type>
+			<id>51</id>
+			<animation effect="slide" time="150" start="0,-300">WindowOpen</animation>
+			<animation effect="slide" time="250" end="800,0">WindowClose</animation>
+			<control>
+				<description>Categories List</description>
+				<type>listcontrol</type>
+				<id>51</id>
+				<onleft>51</onleft>
+				<onright>51</onright>
+				<posX>786</posX>
+				<posY>290</posY>       
+				<height>420</height>
+				<width>475</width>
+				<textXOff>-30</textXOff>
+				<textXOff3>10</textXOff3>
+				<IconXOff>1980</IconXOff>        
+				<spinWidth>46</spinWidth>
+				<spinHeight>33</spinHeight>
+				<spinPosX>1170</spinPosX>
+				<spinPosY>670</spinPosY>
+				<spinAlign>Right</spinAlign>
+				<spinColor>ffffffff</spinColor>
+				<spinCanFocus>no</spinCanFocus>
+			</control>
+		</control>
+		<control>
+			<type>facadeview</type>
+			<id>50</id>
+			<control>
+				<visible>Control.IsVisible(50)</visible>
+				<description>Movie List</description>
+				<type>listcontrol</type>
+				<id>50</id>
+				<onleft>2</onleft>
+				<onright>2</onright>
+				<width>475</width>
+				<posX>786</posX>
+				<posY>290</posY>        
+				<height>420</height>
+				<textXOff>-30</textXOff>
+				<textXOff3>10</textXOff3>
+				<IconXOff>1980</IconXOff>        
+				<spinWidth>46</spinWidth>
+				<spinHeight>33</spinHeight>
+				<spinPosX>1170</spinPosX>
+				<spinPosY>670</spinPosY>
+				<spinAlign>Right</spinAlign>
+				<spinColor>ffffffff</spinColor>
+				<spinCanFocus>no</spinCanFocus>
+				<!-- group headers -->
+				<textcolor3>ff3E99D7</textcolor3>
+			</control>
+			<control>
+				<visible>Control.IsVisible(50)</visible>
+				<description>Filmstrip view</description>
+				<type>filmstrip</type>
+				<id>50</id>
+				<onup>3</onup>
+				<posX>12</posX>
+				<posY>512</posY>
+				<width>1280</width>
+				<textXOff>0</textXOff>
+				<textYOff>1500</textYOff>
+				<scrollOffset>4</scrollOffset>
+				<spinPosX>1220</spinPosX>
+				<spinPosY>690</spinPosY>
+				<spinWidth>24</spinWidth>
+				<spinHeight>24</spinHeight>
+				<spinAlign>Right</spinAlign>
+				<spinColor>ffffffff</spinColor>
+				<spinCanFocus>no</spinCanFocus>
+				<itemWidth>142</itemWidth>
+				<itemHeight>156</itemHeight>
+				<textureWidth>120</textureWidth>
+				<textureHeight>170</textureHeight>
+				<thumbWidth>106</thumbWidth>
+				<thumbHeight>156</thumbHeight>
+				<thumbPosX>7</thumbPosX>
+				<thumbPosY>7</thumbPosY>
+				<thumbs flipY="true" diffuse="diffusemirrorwide.png" />
+				<font>font10</font>
+				<InfoImage></InfoImage>
+				<imageFolder>Picture_cover.png</imageFolder>
+				<imageFolderFocus>-</imageFolderFocus>
+				<frame>-</frame>
+				<frameFocus>Picture_cover.png</frameFocus>
+				<showFrame>yes</showFrame>
+				<showFolder>yes</showFolder>
+				<showBackGround>no</showBackGround>
+				<showInfoImage>no</showInfoImage>
+				<thumbAnimation effect="zoom" start="100,100" end="120,120" time="110">focus</thumbAnimation>				
+			</control>
+			<control>
+				<description>Thumbnail Panel</description>
+				<type>thumbnailpanel</type>
+				<id>50</id>
+				<onleft>2</onleft>
+				<onright>2</onright>
+				<ondown>2</ondown>
+				<onup>2</onup>
+				<textureUp>-</textureUp>
+				<textureDown>-</textureDown>
+				<textXOff>0</textXOff>
+				<textYOff>1500</textYOff>
+				<posX>530</posX>
+				<posY>230</posY>
+				<width>750</width>
+				<height>480</height>
+				<!-- Small Icons 0.66 aspect ratio -->
+				<itemWidth>100</itemWidth>
+				<itemHeight>145</itemHeight>
+				<textureWidth>100</textureWidth>
+				<textureHeight>144</textureHeight>
+				<thumbWidth>90</thumbWidth>
+				<thumbHeight>135</thumbHeight>
+				<thumbPosX>5</thumbPosX>
+				<thumbPosY>5</thumbPosY>				
+				<!-- Large Icons 0.66 aspect ratio -->
+				<textureWidthBig>148</textureWidthBig>
+				<textureHeightBig>217</textureHeightBig>
+				<itemWidthBig>147</itemWidthBig>
+				<itemHeightBig>215</itemHeightBig>
+				<thumbWidthBig>132</thumbWidthBig>
+				<thumbHeightBig>200</thumbHeightBig>
+				<thumbPosXBig>8</thumbPosXBig>
+				<thumbPosYBig>8</thumbPosYBig>
+				<font>font12</font>
+				<suffix>|</suffix>			
+				<enableFocusZoom>no</enableFocusZoom>
+				<spinWidth>46</spinWidth>
+				<spinHeight>33</spinHeight>
+				<spinPosX>1170</spinPosX>
+				<spinPosY>670</spinPosY>
+				<spinAlign>Right</spinAlign>
+				<spinColor>ffffffff</spinColor>
+				<spinCanFocus>no</spinCanFocus>
+				<textureUp>page_up_nofocus.png</textureUp>
+				<textureDown>page_down_nofocus.png</textureDown>
+				<textureUpFocus>page_up_focus.png</textureUpFocus>
+				<textureDownFocus>page_down_focus.png</textureDownFocus>	
+				<unfocusedAlpha>100</unfocusedAlpha>
+			</control>
+		</control>
 	
-	<!-- Media Counts -->   
-    <control>
-      <description>Media Count Label</description>
-      <type>label</type>
-      <label>#MovingPictures.Translation.Movies.Label:</label>
-      <id>0</id>
-      <posX>1070</posX>
-      <posY>685</posY>
-      <font>font13</font>
-      <textcolor>ffffffff</textcolor>
-      <visible>facadeview.list+Control.IsVisible(50)</visible>
-    </control>
-	<control>
-      <type>label</type>
-      <id>0</id>
-      <posX>1248</posX>
-      <posY>685</posY>
-      <width>350</width>
-      <font>font13</font>
-	  <textcolor>ffa9d0f7</textcolor>
-      <align>right</align>
-      <label>#MovingPictures.general.filteredmoviecount</label>
-	  <visible>facadeview.list+Control.IsVisible(50)</visible>
-    </control>
+		<!-- Movie Count -->
+		<control>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>800</posX>
+		  <posY>670</posY>
+		  <width>350</width>
+		  <font>font11</font>
+		  <textcolor>ffFFFFFF</textcolor>
+		  <align>left</align>
+		  <label>#MovingPictures.general.filteredmoviecount #MovingPictures.Translation.Movies.Label</label>
+		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		</control>
+		<control>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>530</posX>
+		  <posY>667</posY>
+		  <width>350</width>
+		  <font>font11</font>
+		  <textcolor>ffFFFFFF</textcolor>
+		  <align>left</align>
+		  <label>#MovingPictures.general.filteredmoviecount #MovingPictures.Translation.Movies.Label</label>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		</control>
+		
+		<!-- Selected Category Facade Item -->	
+		<control>
+			<description>Default Image</description>
+			<type>image</type>
+			<id>1</id>
+			<posX>125</posX>
+			<posY>175</posY>
+			<width>454</width>
+			<height>455</height>
+			<texture flipY="true" diffuse="Thumb_Mask.png">Categories\Movies.png</texture>
+			<keepaspectratio>yes</keepaspectratio>
+			<animation effect="fade" time="250">WindowOpen</animation>
+			<animation effect="fade" time="250">WindowClose</animation>			
+			<visible>Control.IsVisible(51)+!Control.HasThumb(100)</visible>
+		</control>
+		<control>
+			<description>Default Image</description>
+			<type>image</type>
+			<id>100</id>
+			<posX>125</posX>
+			<posY>175</posY>
+			<width>454</width>
+			<height>455</height>
+			<texture flipY="true" diffuse="Thumb_Mask.png">Categories\#MovingPictures.SelectedNode.name.png</texture>	
+			<keepaspectratio>yes</keepaspectratio>
+			<animation effect="fade" time="250">WindowOpen</animation>
+			<animation effect="fade" time="250">WindowClose</animation>			
+			<visible>Control.IsVisible(51)</visible>
+		</control>
 	
-	<!-- Selected Category Facade Item -->	
-	<control>
-		<description>Default Image</description>
-		<type>image</type>
-		<id>1</id>
-		<posX>125</posX>
-		<posY>175</posY>
-		<width>454</width>
-		<height>455</height>
-		<texture flipY="true" diffuse="Thumb_Mask.png">Categories\Movies.png</texture>
-		<keepaspectratio>yes</keepaspectratio>
-		<animation effect="fade" time="250">WindowOpen</animation>
-		<animation effect="fade" time="250">WindowClose</animation>			
-		<visible>Control.IsVisible(51)+!Control.HasThumb(100)</visible>
-	</control>
-	<control>
-		<description>Default Image</description>
-		<type>image</type>
-		<id>100</id>
-		<posX>125</posX>
-		<posY>175</posY>
-		<width>454</width>
-		<height>455</height>
-		<texture flipY="true" diffuse="Thumb_Mask.png">Categories\#MovingPictures.SelectedNode.name.png</texture>	
-		<keepaspectratio>yes</keepaspectratio>
-		<animation effect="fade" time="250">WindowOpen</animation>
-		<animation effect="fade" time="250">WindowClose</animation>			
-		<visible>Control.IsVisible(51)</visible>
-	</control>
-	
-  </controls>
+	</controls>
 </window>

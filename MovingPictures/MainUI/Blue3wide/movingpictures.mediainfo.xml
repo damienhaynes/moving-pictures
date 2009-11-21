@@ -9,8 +9,8 @@
 		  <id>0</id>
 		  <posX>360</posX>
 		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
 		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
 		</control>
@@ -19,10 +19,10 @@
 		  <description>Video Resolution</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>461</posX>
+		  <posX>438</posX>
 		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
 		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
 		</control>
@@ -31,10 +31,10 @@
 		  <description>Video Aspect Ratio</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>562</posX>
+		  <posX>516</posX>
 		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
 		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
 		</control>
@@ -43,10 +43,10 @@
 		  <description>Audio Codec</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>663</posX>
+		  <posX>594</posX>
 		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
 		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
 		</control>
@@ -55,10 +55,10 @@
 		  <description>Audio Channels</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>764</posX>
+		  <posX>672</posX>
 		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
 		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
 		</control>
@@ -67,10 +67,10 @@
 		  <description>Subtitles</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>865</posX>
+		  <posX>750</posX>
 		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
 		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
 		</control>
@@ -81,9 +81,9 @@
 		  <type>image</type>
 		  <id>0</id>
 		  <posX>302</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posY>655</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
 		  <visible>Control.IsVisible(50)+facadeview.list</visible>
 		</control>
@@ -92,10 +92,10 @@
 		  <description>Video Resolution</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>403</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>380</posX>
+		  <posY>655</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
 		  <visible>Control.IsVisible(50)+facadeview.list</visible>
 		</control>
@@ -104,10 +104,10 @@
 		  <description>Video Aspect Ratio</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>504</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>458</posX>
+		  <posY>655</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
 		  <visible>Control.IsVisible(50)+facadeview.list</visible>
 		</control>
@@ -116,10 +116,10 @@
 		  <description>Audio Codec</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>605</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>536</posX>
+		  <posY>655</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
 		  <visible>Control.IsVisible(50)+facadeview.list</visible>
 		</control>
@@ -128,10 +128,10 @@
 		  <description>Audio Channels</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>706</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>614</posX>
+		  <posY>655</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
 		  <visible>Control.IsVisible(50)+facadeview.list</visible>
 		</control>
@@ -140,10 +140,10 @@
 		  <description>Subtitles</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>807</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>692</posX>
+		  <posY>655</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
 		  <visible>Control.IsVisible(50)+facadeview.list</visible>
 		</control>
@@ -153,10 +153,10 @@
 		  <description>Video Codec</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>35</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>20</posX>
+		  <posY>590</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
 		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
@@ -165,10 +165,10 @@
 		  <description>Video Resolution</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>136</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>98</posX>
+		  <posY>590</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
 		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
@@ -177,10 +177,10 @@
 		  <description>Video Aspect Ratio</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>237</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>176</posX>
+		  <posY>590</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
 		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
@@ -189,10 +189,10 @@
 		  <description>Audio Codec</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>338</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>254</posX>
+		  <posY>590</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
 		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
@@ -201,10 +201,10 @@
 		  <description>Audio Channels</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>439</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>332</posX>
+		  <posY>590</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
 		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
@@ -213,12 +213,85 @@
 		  <description>Subtitles</description>
 		  <type>image</type>
 		  <id>0</id>
-		  <posX>540</posX>
-		  <posY>670</posY>
-		  <width>111</width>
-		  <height>63</height>
+		  <posX>410</posX>
+		  <posY>590</posY>
+		  <width>89</width>
+		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
 		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
+		</control>
+		
+		<!-- Media logos [Filmstrip View] -->
+		<control>
+		  <description>Video Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>410</posX>
+		  <posY>12</posY>
+		  <width>89</width>
+		  <height>50</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
+		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		</control>
+
+		<control>
+		  <description>Video Resolution</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>488</posX>
+		  <posY>12</posY>
+		  <width>89</width>
+		  <height>50</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
+		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		</control>
+
+		<control>
+		  <description>Video Aspect Ratio</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>566</posX>
+		  <posY>12</posY>
+		  <width>89</width>
+		  <height>50</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
+		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		</control>
+
+		<control>
+		  <description>Audio Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>644</posX>
+		  <posY>12</posY>
+		  <width>89</width>
+		  <height>50</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
+		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		</control>
+
+		<control>
+		  <description>Audio Channels</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>722</posX>
+		  <posY>12</posY>
+		  <width>89</width>
+		  <height>50</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
+		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		</control>
+
+		<control>
+		  <description>Subtitles</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>800</posX>
+		  <posY>12</posY>
+		  <width>89</width>
+		  <height>50</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
+		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
 		</control>
 		
 	</controls>

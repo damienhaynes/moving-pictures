@@ -116,6 +116,10 @@ Section "Blue3wide Skin Support" SEC0002
         
         SetOutPath $SKIN_DIR\Blue3wide\Media\Logos
         File "..\MovingPictures\MainUI\Blue3wide\Media\Logos\*.*"  
+
+        SetOutPath $SKIN_DIR\Blue3wide\Media\Categories
+        File "..\MovingPictures\MainUI\Blue3wide\Media\Categories\*.*"  
+
     ${EndIf}
 SectionEnd
 
