@@ -1721,7 +1721,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     displayTitle += " (" + this.movie.Year.ToString() + ")";
                 }
 
-                if (this.movie.PrimarySource != null && this.DisplaySourceInfo)
+                if (DisplaySourceInfo && movie.PrimarySource != null && this.movie.PrimarySource.Provider != null)
                     displayTitle += " [" + this.movie.PrimarySource.Provider.Name + "]";
 
                 return displayTitle;

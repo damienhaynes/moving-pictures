@@ -350,6 +350,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Script_MyMoviesLocal);
             AddSource(typeof(ScriptableProvider), Resources.Script_XBMC);
             AddSource(typeof(ScriptableProvider), Resources.Script_Filmtipset);
+            AddSource(typeof(ScriptableProvider), Resources.Script_Ptgate);
             AddSource(typeof(MyVideosProvider));
 
             normalizePriorities();
@@ -554,7 +555,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             
             // first update from the primary source of this data
             int providerCount = 0;
-            if (movie.PrimarySource != null) {
+            if (movie.PrimarySource != null && movie.PrimarySource.Provider != null) {
                 UpdateResults success = movie.PrimarySource.Provider.Update(movie);
                 logger.Debug("UPDATE: Title='{0}', Provider='{1}', Version={2}, Result={3}", movie.Title, movie.PrimarySource.Provider.Name, movie.PrimarySource.Provider.Version, success.ToString());
                 providerCount++;

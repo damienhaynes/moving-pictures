@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="1" minor="0" point="3"/>
-    <published month="10" day="26" year="2009"/>
+    <version major="1" minor="0" point="4"/>
+    <published month="11" day="16" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -244,6 +244,11 @@
         <img\swidth="420"[^/]+//www.mymovies.it/filmclub/(?<coverArt>[^"]+)
         ]]>
       </set>
+	  <set name="rx_alternateCover">
+        <![CDATA[
+        src=.(?<coverArt>[^"]+).\swidth=.150px.\sheight=.215px.
+        ]]>
+      </set>
 	  
 	  <parse name='poster_pages' input='${details_page}' regex='${rx_coverPages}' />
 	  <if test='${poster_pages[0][0]}!='>
@@ -260,6 +265,13 @@
 		<if test='${singlePoster[0][0]}!='>
 			<set name="cover_art[0].url" value="http://www.mymovies.it/filmclub/${singlePoster[0][0]}" />
 		</if>
+	  </if>
+	  <if test='${cover_art[0].url}='>
+		<retrieve name="details_page" url="http://www.mymovies.it/dizionario/recensione.asp?id=${movie.site_id}"/>
+		<parse name="cover_url" input="${details_page}" regex="${rx_alternateCover}"/>
+		<if test='${cover_url[0][0]}!='>
+			<set name="cover_art[0].url" value="${cover_url[0][0]}" />
+		</if>		
 	  </if>
 
     </if>
