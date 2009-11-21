@@ -250,7 +250,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (MovingPicturesCore.GetDBVersionNumber() < new Version("0.8.0")) {
                     
                     // Disk Information Upgrade
-                    if (!currFile.ImportPath.IsOpticalDrive && !currFile.ImportPath.IsUnc && currFile.ImportPath.IsAvailable) {
+                    if (!currFile.ImportPath.IsOpticalDrive && currFile.ImportPath.IsAvailable) {
                         // Skip optical drives, unc paths and unavailable files
                         if (String.IsNullOrEmpty(currFile.VolumeSerial)) {
                             // perform update
