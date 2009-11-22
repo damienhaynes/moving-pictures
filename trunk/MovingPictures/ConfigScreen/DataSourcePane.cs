@@ -232,7 +232,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 reader.Close();
 
                 // and add it to the manager
-                DataProviderManager.AddSourceResult addResult = MovingPicturesCore.DataProviderManager.AddSource(typeof(ScriptableProvider), script);
+                DataProviderManager.AddSourceResult addResult = MovingPicturesCore.DataProviderManager.AddSource(typeof(ScriptableProvider), script, true);
 
                 if (addResult == DataProviderManager.AddSourceResult.FAILED_VERSION) {
                     MessageBox.Show("A script with this Version and ID is already loaded.", "Load Script Failed");

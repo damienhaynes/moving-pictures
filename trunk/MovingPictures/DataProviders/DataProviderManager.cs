@@ -357,6 +357,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public AddSourceResult AddSource(Type providerType, string scriptContents) {
+            return AddSource(providerType, scriptContents, false);
+        }
+        
+        public AddSourceResult AddSource(Type providerType, string scriptContents, bool active) {
             IScriptableMovieProvider newProvider = (IScriptableMovieProvider)Activator.CreateInstance(providerType);
 
             DBScriptInfo newScript = new DBScriptInfo();
@@ -425,12 +429,17 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             newSource.ProviderType = providerType;
             newSource.Scripts.Add(newScript);
             newSource.SelectedScript = newScript;
-
+            
             // add and commit
             updateListsWith(newSource);
             newScript.Commit();
             newSource.Commit();
             normalizePriorities();
+
+            // if not set to active, disable the new source by default
+            if (!active) 
+                foreach (DataType currType in Enum.GetValues(typeof(DataType)))
+                    SetDisabled(newSource, currType, true);
 
             return AddSourceResult.SUCCESS;
         }

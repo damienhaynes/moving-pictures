@@ -313,7 +313,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     approveButtonEnabled = true;
                 }
 
-                if (!selectedMatch.LocalMedia[0].Ignored)
+                if (selectedMatch.LocalMedia.Count > 0 && !selectedMatch.LocalMedia[0].Ignored)
                     ignoreButtonEnabled = true;
             }
 
