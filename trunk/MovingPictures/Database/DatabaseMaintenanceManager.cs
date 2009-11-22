@@ -309,47 +309,72 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 currNode.UpdateDynamicNode();
                 currNode.Commit();
             }
-
-            // REMOVE THIS PLEASES
-            // Preload categories by forcing a count of all the root nodes
-            if (MovingPicturesCore.Settings.CategoriesEnabled) {
-                menu = MovingPicturesCore.Settings.CategoriesMenu;
-                int i = menu.RootNodes.Count;
-            }
-
         }
 
         public static void VerifyCategoryMenu() {
             DBMenu<DBMovieInfo> menu = MovingPicturesCore.Settings.CategoriesMenu;
 
             if (menu.RootNodes.Count == 0) {
+                int position = 1;
+
+                DBNode<DBMovieInfo> allNode = new DBNode<DBMovieInfo>();
+                allNode.Name = "All Movies";
+                allNode.DynamicNode = false;
+                allNode.Filter = new DBFilter<DBMovieInfo>();
+                allNode.SortPosition = position++;
+                allNode.DBManager = MovingPicturesCore.DatabaseManager;
+                menu.RootNodes.Add(allNode);
+
+                DBNode<DBMovieInfo> unwatchedNode = new DBNode<DBMovieInfo>();
+                unwatchedNode.Name = "Unwatched Movies";
+                unwatchedNode.DynamicNode = false;
+                unwatchedNode.Filter = new DBFilter<DBMovieInfo>();
+                DBCriteria<DBMovieInfo> criteria = new DBCriteria<DBMovieInfo>();
+                criteria.Field = DBField.GetFieldByDBName(typeof(DBUserMovieSettings), "watched");
+                criteria.Relation = DBRelation.GetRelation(typeof(DBMovieInfo), typeof(DBUserMovieSettings), "");
+                criteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL;
+                criteria.Value = "0";
+                unwatchedNode.Filter.Criteria.Add(criteria);
+                unwatchedNode.SortPosition = position++;
+                unwatchedNode.DBManager = MovingPicturesCore.DatabaseManager;
+                menu.RootNodes.Add(unwatchedNode);
+
+                DBNode<DBMovieInfo> recentNode = new DBNode<DBMovieInfo>();
+                recentNode.Name = "Recently Added Movies";
+                recentNode.DynamicNode = false;
+                recentNode.Filter = new DBFilter<DBMovieInfo>();
+                DBCriteria<DBMovieInfo> recentCriteria = new DBCriteria<DBMovieInfo>();
+                recentCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "date_added");
+                recentCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN;
+                recentCriteria.Value = "-30d";
+                recentNode.Filter.Criteria.Add(recentCriteria);
+                recentNode.SortPosition = position++;
+                recentNode.DBManager = MovingPicturesCore.DatabaseManager;
+                menu.RootNodes.Add(recentNode);
+
                 DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
                 genreNode.DynamicNode = true;
                 genreNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "genres");
                 genreNode.Name = "Genre";
+                genreNode.SortPosition = position++;
                 genreNode.DBManager = MovingPicturesCore.DatabaseManager;
                 menu.RootNodes.Add(genreNode);
-
-                DBNode<DBMovieInfo> yearNode = new DBNode<DBMovieInfo>();
-                yearNode.DynamicNode = true;
-                yearNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "year");
-                yearNode.Name = yearNode.BasicFilteringField.Name;
-                yearNode.DBManager = MovingPicturesCore.DatabaseManager;
-                menu.RootNodes.Add(yearNode);
 
                 DBNode<DBMovieInfo> certNode = new DBNode<DBMovieInfo>();
                 certNode.DynamicNode = true;
                 certNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "certification");
                 certNode.Name = certNode.BasicFilteringField.Name;
                 certNode.DBManager = MovingPicturesCore.DatabaseManager;
+                certNode.SortPosition = position++;
                 menu.RootNodes.Add(certNode);
 
-                DBNode<DBMovieInfo> dateNode = new DBNode<DBMovieInfo>();
-                dateNode.DynamicNode = true;
-                dateNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "date_added");
-                dateNode.Name = "Date Added";
-                dateNode.DBManager = MovingPicturesCore.DatabaseManager;
-                menu.RootNodes.Add(dateNode);
+                DBNode<DBMovieInfo> yearNode = new DBNode<DBMovieInfo>();
+                yearNode.DynamicNode = true;
+                yearNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "year");
+                yearNode.Name = yearNode.BasicFilteringField.Name;
+                yearNode.SortPosition = position++;
+                yearNode.DBManager = MovingPicturesCore.DatabaseManager;
+                menu.RootNodes.Add(yearNode);
 
                 menu.Commit();
             }
@@ -357,12 +382,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             foreach (DBNode<DBMovieInfo> currNode in menu.RootNodes) {
                 currNode.UpdateDynamicNode();
                 currNode.Commit();
-            }
-
-            // Preload categories by forcing a count of all the root nodes
-            if (MovingPicturesCore.Settings.CategoriesEnabled) {
-                menu = MovingPicturesCore.Settings.CategoriesMenu;
-                int i = menu.RootNodes.Count;
             }
         }
     }
