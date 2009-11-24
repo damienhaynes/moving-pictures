@@ -140,6 +140,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         ~MovingPicturesGUI() {      }
 
+        public bool IsActive {
+            get {
+                return (GetID == GUIWindowManager.ActiveWindow);
+            }
+        }
+
         private void ClearFocus() {
             if (cycleViewButton != null) cycleViewButton.Focus = false;
             if (viewMenuButton != null) viewMenuButton.Focus = false;
@@ -456,6 +462,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ReloadView();          
             }
             
+            // Enable browser auto-refresh
+            browser.AutoRefresh = true;
+            
             setWorkingAnimationStatus(false);
             if (movieStartIndicator != null)
                 movieStartIndicator.Visible = false;
@@ -474,6 +483,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         protected override void OnPageDestroy(int new_windowId) {
             // only execute this when we are initialized
             if (initComplete) {
+
+                // Disable browser auto-refresh
+                browser.AutoRefresh = false;
+
                 // Enable autoplay again when we are leaving the plugin
                 // But only when we are not playing something
                 if (!moviePlayer.IsPlaying)

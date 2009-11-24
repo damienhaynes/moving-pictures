@@ -44,6 +44,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         } private readonly object syncRoot = new object();
 
+        public bool AutoRefresh { get; set; }
+
         // The currently selected movie.
         public DBMovieInfo SelectedMovie {
             get {
@@ -391,6 +393,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public MovieBrowser(MovingPicturesSkinSettings skinSettings) {
             this.skinSettings = skinSettings;
 
+            AutoRefresh = false;
+
             // setup listeners for new or removed movies
             MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(onMovieDeleted);
             MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
@@ -586,7 +590,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             // if we are in the details screen we don't have to set a timer to perform the reload
-            if (CurrentView == BrowserViewMode.DETAILS)
+            if (!AutoRefresh || CurrentView == BrowserViewMode.DETAILS)
                 return;
 
             // Initiate a refresh to be performed 5 seconds after the last update
@@ -665,7 +669,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// <param name="state"></param>
         private void RefreshFacade(object state) {
             // If we are in details view we don't need to do a reload
-            if (CurrentView == BrowserViewMode.DETAILS )
+            if (!AutoRefresh || CurrentView == BrowserViewMode.DETAILS )
                 return;
 
             // Check if we still need to reload
