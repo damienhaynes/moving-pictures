@@ -1697,8 +1697,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     int minor = (int) Math.Floor(((score - major) * 10));
                     int rounded = (int)(score + 0.5f);
 
-                    SetProperty(propertyStr + ".localized", score.ToString(), forceLogging);
-                    SetProperty(propertyStr + ".invariant", score.ToString(NumberFormatInfo.InvariantInfo), forceLogging);
+                    NumberFormatInfo localizedScoreFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
+                    localizedScoreFormat.NumberDecimalDigits = 1;
+
+                    NumberFormatInfo invariantScoreFormat = (NumberFormatInfo)CultureInfo.InvariantCulture.NumberFormat.Clone();
+                    invariantScoreFormat.NumberDecimalDigits = 1;
+
+                    SetProperty(propertyStr + ".localized", score.ToString("N", localizedScoreFormat), forceLogging);
+                    SetProperty(propertyStr + ".invariant", score.ToString("N", invariantScoreFormat), forceLogging);
                     SetProperty(propertyStr + ".rounded", rounded.ToString(), forceLogging);
                     SetProperty(propertyStr + ".percentage", percentage.ToString(), forceLogging);
                     SetProperty(propertyStr + ".major", major.ToString(), forceLogging);
