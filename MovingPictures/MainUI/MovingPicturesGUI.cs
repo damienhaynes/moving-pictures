@@ -864,6 +864,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // build menu
                 foreach (DBNode<DBMovieInfo> currNode in nodeList) {
+
+                    HashSet<DBMovieInfo> possibleMovies = currNode.GetPossibleFilteredItems();
+                    if (possibleMovies.Count == 0)
+                        continue;
+
+                    possibleMovies.IntersectWith(browser.FilteredMovies);
+                    if (possibleMovies.Count == 0)
+                        continue;
+
                     GUIListItem newListItem = new GUIListItem(currNode.Name);
                     newListItem.ItemId = currID++;
                     dialog.Add(newListItem);
