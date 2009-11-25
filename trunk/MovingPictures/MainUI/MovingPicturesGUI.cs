@@ -255,6 +255,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // Publish filter details
             PublishFilterDetails();
+
+            // Publish sort details
+            if (browser.CurrentView != BrowserViewMode.CATEGORIES && browser.CurrentView != BrowserViewMode.DETAILS) {
+                SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
+                SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
+            }
         }
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
