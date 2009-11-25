@@ -229,32 +229,38 @@ This file should contain the list view
 		</control>
 
 		<control>
-		  <type>imagelist</type>
+		  <type>image</type>
 		  <id>101</id>
 		  <posX>30</posX>
-		  <posY>645</posY>      
-		  <textureWidth>23</textureWidth>
-		  <textureHeight>22</textureHeight>
-		  <subitems>
-			<subitem>-.png</subitem>
-			<subitem>starwhite.png</subitem>
-		  </subitems>
-		  <orientation>horizontal</orientation>
-		  <align>left</align>
-		  <imagesToDraw>10</imagesToDraw>
-		  <percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
+		  <posY>665</posY>      
+		  <width>115</width>
+		  <height>22</height>		  
+		  <align>left</align>		  
+		  <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
 		  <visible>facadeview.list+Control.IsVisible(50)</visible>
 		</control>
 		<control>
 		  <id>0</id>
 		  <type>label</type>
-		  <label>#MovingPictures.Translation.StarRating.Label:  #MovingPictures.SelectedMovie.score.localized / 10</label>
+		  <label>#MovingPictures.Translation.StarRating.Label</label>
 		  <posX>30</posX>
-		  <posY>670</posY>
-		  <width>200</width>
+		  <posY>638</posY>
+		  <width>260</width>
 		  <font>font11</font>
+		  <textcolor>ffa9d0f7</textcolor>
 		  <visible>facadeview.list+Control.IsVisible(50)</visible>
 		</control>		
+		<control>
+		  <id>0</id>
+		  <type>label</type>
+		  <label>#MovingPictures.SelectedMovie.score.localized / 10</label>
+		  <posX>170</posX>
+		  <posY>663</posY>
+		  <width>260</width>
+		  <font>font11</font>
+		  <textcolor>ffFFFFFF</textcolor>
+		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		</control>
 		
 	</controls>
 </window>
