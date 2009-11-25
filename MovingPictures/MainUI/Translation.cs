@@ -253,6 +253,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string RateFiveStarThree = "Good";
         public static string RateFiveStarTwo = "Mediocre";
         public static string RateHeading = "Rate Movie";
+        public static string RecentlyAddedMovies = "Recently Added Movies";
         public static string RemoteNumericAlphabet0 = "";
         public static string RemoteNumericAlphabet1 = "";
         public static string RemoteNumericAlphabet2 = "abc";
@@ -309,6 +310,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // U
         public static string Unknown = "Unknown";
         public static string UnlockRestrictedMovies = "Unlock Restricted Movies";
+        public static string UnwatchedMovies = "Unwatched Movies";
         public static string UpAbbreviation = "(up)";
         public static string UpdateDetailsFromOnline = "Update Details from Online";
         public static string UpdateMovieDetailsBody = "You are about to refresh all movie metadata, overwriting\nany custom modifications to this film. Do you want\nto continue?";

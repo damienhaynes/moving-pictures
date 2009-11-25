@@ -99,6 +99,7 @@
   <string Field="RateFiveStarThree">Good</string>
   <string Field="RateFiveStarTwo">Mediocre</string>
   <string Field="RateHeading">Rate Movie</string>
+  <string Field="RecentlyAddedMovies">Recently Added Movies</string>
   <string Field="RemoteNumericAlphabet0">
   </string>
   <string Field="RemoteNumericAlphabet1">
@@ -154,6 +155,7 @@
   <!-- U -->
   <string Field="Unknown">Unknown</string>
   <string Field="UnlockRestrictedMovies">Unlock Restricted Movies</string>
+  <string Field="UnwatchedMovies">Unwatched Movies</string>
   <string Field="UpAbbreviation">(up)</string>
   <string Field="UpdateDetailsFromOnline">Update Details from Online</string>
   <string Field="UpdateMovieDetailsBody">You are about to refresh all movie metadata, overwriting\nany custom modifications to this film. Do you want\nto continue?</string>

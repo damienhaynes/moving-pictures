@@ -318,7 +318,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 int position = 1;
 
                 DBNode<DBMovieInfo> allNode = new DBNode<DBMovieInfo>();
-                allNode.Name = "All Movies";
+                allNode.Name = "${AllMovies}";
                 allNode.DynamicNode = false;
                 allNode.Filter = new DBFilter<DBMovieInfo>();
                 allNode.SortPosition = position++;
@@ -326,7 +326,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 menu.RootNodes.Add(allNode);
 
                 DBNode<DBMovieInfo> unwatchedNode = new DBNode<DBMovieInfo>();
-                unwatchedNode.Name = "Unwatched Movies";
+                unwatchedNode.Name = "${UnwatchedMovies}";
                 unwatchedNode.DynamicNode = false;
                 unwatchedNode.Filter = new DBFilter<DBMovieInfo>();
                 DBCriteria<DBMovieInfo> criteria = new DBCriteria<DBMovieInfo>();
@@ -340,7 +340,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 menu.RootNodes.Add(unwatchedNode);
 
                 DBNode<DBMovieInfo> recentNode = new DBNode<DBMovieInfo>();
-                recentNode.Name = "Recently Added Movies";
+                recentNode.Name = "${RecentlyAddedMovies}";
                 recentNode.DynamicNode = false;
                 recentNode.Filter = new DBFilter<DBMovieInfo>();
                 DBCriteria<DBMovieInfo> recentCriteria = new DBCriteria<DBMovieInfo>();
@@ -355,7 +355,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
                 genreNode.DynamicNode = true;
                 genreNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "genres");
-                genreNode.Name = "Genre";
+                genreNode.Name = "${Genre}";
                 genreNode.SortPosition = position++;
                 genreNode.DBManager = MovingPicturesCore.DatabaseManager;
                 menu.RootNodes.Add(genreNode);
@@ -363,7 +363,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 DBNode<DBMovieInfo> certNode = new DBNode<DBMovieInfo>();
                 certNode.DynamicNode = true;
                 certNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "certification");
-                certNode.Name = certNode.BasicFilteringField.Name;
+                certNode.Name = "${" + certNode.BasicFilteringField.Name + "}";
                 certNode.DBManager = MovingPicturesCore.DatabaseManager;
                 certNode.SortPosition = position++;
                 menu.RootNodes.Add(certNode);
@@ -371,7 +371,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 DBNode<DBMovieInfo> yearNode = new DBNode<DBMovieInfo>();
                 yearNode.DynamicNode = true;
                 yearNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "year");
-                yearNode.Name = yearNode.BasicFilteringField.Name;
+                yearNode.Name = "${" + yearNode.BasicFilteringField.Name + "}";
                 yearNode.SortPosition = position++;
                 yearNode.DBManager = MovingPicturesCore.DatabaseManager;
                 menu.RootNodes.Add(yearNode);
