@@ -44,8 +44,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         MovingPicturesSkinSettings skinSettings;
 
         Dictionary<string, bool> loggedProperties;
+        private readonly object propertySync = new object();
         CachedDictionary<DBNode<DBMovieInfo>, DBMovieInfo> activeMovieLookup = new CachedDictionary<DBNode<DBMovieInfo>, DBMovieInfo>();
         private readonly object backdropSync = new object();
+        
 
         private bool loaded = false;
 
@@ -714,8 +716,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 cover.Property = "#MovingPictures.Coverart";
                 cover.Delay = artworkDelay;
 
-                // used to prevent overzealous logging of skin properties
-                loggedProperties = new Dictionary<string, bool>();
+                
 
                 // instantiate player
                 moviePlayer = new MoviePlayer(this);
@@ -1564,7 +1565,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 forceLogging = true;
 
             try {
-                lock (loggedProperties) {
+                lock (propertySync) {
+                   
+                    if (loggedProperties == null)
+                        loggedProperties = new Dictionary<string, bool>();
+
                     if (!loggedProperties.ContainsKey(property) || forceLogging) {
                         logger.Debug(property + " = \"" + value + "\"");
                         loggedProperties[property] = true;
