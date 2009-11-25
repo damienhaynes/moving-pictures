@@ -255,11 +255,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // Publish filter details
             PublishFilterDetails();
-
-            // Re-publish the category artwork
-            if (browser.CurrentView == BrowserViewMode.CATEGORIES && browser.SelectedNode != null)
-                PublishArtwork(browser.SelectedNode);
-
         }
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
@@ -267,12 +262,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (playButton != null) playButton.Focus = true;
             }
             
-            if (currentView == BrowserViewMode.CATEGORIES) {
-                PublishCategoryDetails(browser.SelectedNode);
-            }
-            else {
+            if (currentView != BrowserViewMode.CATEGORIES)
                 PublishMovieDetails(browser.SelectedMovie);
-            }
 
             // set the backdrop visibility based on the skin settings
             if (movieBackdropControl != null)

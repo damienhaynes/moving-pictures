@@ -274,20 +274,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public DBNode<DBMovieInfo> SelectedNode {
             get { return _selectedNode; }
             set {
-                if (_selectedNode != value) {
-                    // log the change
-                    if (value != null)
-                        logger.Debug("SelectedNode changed: " + value.Name);
-                    else {
-                        logger.Debug("SelectedNode changed: null");
-                    }
-
-                    _selectedNode = value;
-
-                    // notify any listeners
-                    if (NodeSelectionChanged != null)
-                        NodeSelectionChanged(_selectedNode);
+                // log the change
+                if (value != null)
+                    logger.Debug("SelectedNode changed: " + value.Name);
+                else {
+                    logger.Debug("SelectedNode changed: null");
                 }
+
+                _selectedNode = value;
+
+                // notify any listeners
+                if (NodeSelectionChanged != null)
+                    NodeSelectionChanged(_selectedNode);
             }
         } public DBNode<DBMovieInfo> _selectedNode;
 
@@ -743,7 +741,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             // Sync to facade
-            SelectedNode = _categoriesFacade.SyncToFacade<DBNode<DBMovieInfo>>(SelectedNode);
+            int index;
+            DBNode<DBMovieInfo> node = _categoriesFacade.SyncToFacade<DBNode<DBMovieInfo>>(SelectedNode, out index);
+            if (index == 0)
+                SelectedNode = node;
         }
 
         // populates the facade with the currently filtered list items
