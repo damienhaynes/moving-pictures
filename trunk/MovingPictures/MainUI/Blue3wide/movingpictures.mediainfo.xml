@@ -222,6 +222,7 @@
 		</control>
 		
 		<!-- Media logos [Filmstrip View] -->
+		<!--
 		<control>
 		  <description>Video Codec</description>
 		  <type>image</type>
@@ -293,6 +294,6 @@
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
 		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
 		</control>
-		
+		-->
 	</controls>
 </window>

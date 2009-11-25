@@ -253,6 +253,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (toggleParentalControlsButton != null && MovingPicturesCore.Settings.ParentalControlsEnabled != toggleParentalControlsButton.Visible)
                 toggleParentalControlsButton.Visible = MovingPicturesCore.Settings.ParentalControlsEnabled;
 
+            // Publish filter details
+            PublishFilterDetails();
+
             // Re-publish the category artwork
             if (browser.CurrentView == BrowserViewMode.CATEGORIES && browser.SelectedNode != null)
                 PublishArtwork(browser.SelectedNode);
@@ -1708,14 +1711,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     SetProperty(propertyStr, valueStr, forceLogging);
 
                     // add each value individually
-                    for (int i = 0; i < max; i++) {
+                    for (int i = 0; i < maxStringListElements; i++) {
                         // note, the "extra" in the middle is needed due to a bug in skin parser
                         propertyStr = "#MovingPictures." + prefix + ".extra." + currField.FieldName + "." + (i + 1);
-                        valueStr = valueStrList[i];
+                        if (i < max) {
+                            valueStr = valueStrList[i];
+                        } else {
+                            valueStr = null;
+                        }
                         SetProperty(propertyStr, valueStr, forceLogging);
                     }
-
-                   
                 }
                 // for the movie score we add some special properties to give skinners more options
                 else if (currField.FieldName == "score" && tableType == typeof(DBMovieInfo)) {
@@ -1903,16 +1908,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.Filter.Category", " ");
             }
             else if (browser.FilterNode.Parent == null) {
-                if (filteringIndicator != null) filteringIndicator.Visible = true;
                 SetProperty("#MovingPictures.Filter.Combined", browser.FilterNode.Name);
                 SetProperty("#MovingPictures.Filter.Name", browser.FilterNode.Name);
                 SetProperty("#MovingPictures.Filter.Category", " ");
+                if (filteringIndicator != null) filteringIndicator.Visible = true;
             }
             else {
-                if (filteringIndicator != null) filteringIndicator.Visible = true;
                 SetProperty("#MovingPictures.Filter.Combined", browser.FilterNode.Parent.Name + ": " + browser.FilterNode.Name);
                 SetProperty("#MovingPictures.Filter.Name", browser.FilterNode.Name);
                 SetProperty("#MovingPictures.Filter.Category", browser.FilterNode.Parent.Name);
+                if (filteringIndicator != null) filteringIndicator.Visible = true;
             }
 
         }

@@ -255,23 +255,15 @@ This file should contain the list view
 		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
 		</control>	
 		<control>
-		  <description>Star Image List</description>
-		  <type>imagelist</type>
+		  <description>Star Images</description>
+		  <type>image</type>
 		  <id>1001</id>
-		  <posX>410</posX>
+		  <posX>408</posX>
 		  <posY>428</posY>
 		  <width>115</width>
-		  <height>13</height>
-		  <textureWidth>23</textureWidth>
-		  <textureHeight>22</textureHeight>
-		  <subitems>
-			<subitem>-.png</subitem>
-			<subitem>starwhite.png</subitem>
-		  </subitems>
-		  <orientation>horizontal</orientation>
-		  <align>left</align>
-		  <imagesToDraw>10</imagesToDraw>
-		  <percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
+		  <height>23</height>		
+		  <align>left</align>		  
+		  <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
 		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
 		</control>	
 		<control>
@@ -374,7 +366,7 @@ This file should contain the list view
 		  <description>Writer Shadow</description>
 		  <id>0</id>
 		  <type>textbox</type>
-		  <label>#MovingPictures.SelectedMovie.writers</label>
+		  <label>#MovingPictures.SelectedMovie.extra.writers.1</label>
 		  <posX>876</posX>
 		  <posY>361</posY>
 		  <width>360</width>
@@ -385,7 +377,7 @@ This file should contain the list view
 		<control>
 		  <id>0</id>
 		  <type>textbox</type>
-		  <label>#MovingPictures.SelectedMovie.writers</label>
+		  <label>#MovingPictures.SelectedMovie.extra.writers.1</label>
 		  <posX>875</posX>
 		  <posY>360</posY>
 		  <width>360</width>

@@ -172,27 +172,20 @@ This file should contain the list view
 		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
 		</control>		
 		<control>
-		  <type>imagelist</type>
+		  <type>image</type>
 		  <id>1001</id>
-		  <posX>189</posX>
-		  <posY>638</posY>
+		  <posX>230</posX>
+		  <posY>640</posY>		  
 		  <width>115</width>
-		  <textureWidth>23</textureWidth>
-		  <textureHeight>22</textureHeight>
-		  <subitems>
-			<subitem>-.png</subitem>
-			<subitem>starwhite.png</subitem>
-		  </subitems>
-		  <orientation>horizontal</orientation>
-		  <align>left</align>
-		  <imagesToDraw>10</imagesToDraw>
-		  <percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
+		  <height>22</height>		 
+		  <align>left</align>		  
+		  <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
 		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
 		</control>		
 		<control>
 		  <type>label</type>
 		  <label>#MovingPictures.SelectedMovie.score.localized / 10</label>
-		  <posX>190</posX>
+		  <posX>231</posX>
 		  <posY>663</posY>
 		  <width>360</width>
 		  <font>font11</font>		  

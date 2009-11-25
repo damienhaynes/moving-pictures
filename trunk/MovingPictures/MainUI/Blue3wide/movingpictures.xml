@@ -57,6 +57,15 @@ multiple view modes.
 		  <posY>-50</posY>
 		  <width>0</width>
 		</control>
+		
+		<control>
+		  <description>Visibile when movies are filtered.</description>
+		  <type>image</type>
+		  <id>17</id>
+		  <posX>-50</posX>
+		  <posY>-50</posY>
+		  <width>0</width>
+		</control>
 
 		<!--            :: BACKGROUNDS :: MOVIE BACKDROP :: OVERLAYS ::            -->
 
@@ -133,8 +142,8 @@ multiple view modes.
 		  <id>0</id>
 		  <posX>0</posX>
 		  <posY>0</posY>
-		  <width>1280</width>
-		  <height>720</height>
+		  <width>1282</width>
+		  <height>723</height>
 		  <texture>movieviewbg.png</texture>
 		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
 		</control>
@@ -211,6 +220,34 @@ multiple view modes.
 		  <texture>lock.png</texture>
 		  <animation effect="fade" time="250">WindowOpen</animation>
 		  <animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Current Category</description>
+		  <type>label</type>
+		  <id>16</id>
+		  <posX>127</posX>
+		  <posY>12</posY>
+		  <width>900</width>
+		  <font>font11</font>		  
+		  <label>#MovingPictures.CurrentNode.name</label>
+		  <textcolor>ffa9d0f7</textcolor>		  
+		  <animation effect="fade" time="250">WindowOpen</animation>
+		  <animation effect="fade" time="250">WindowClose</animation>
+		  <visible>[Control.IsVisible(50)|Control.IsVisible(51)]+!Control.IsVisible(17)</visible>
+		</control>
+		<control>
+		  <description>Current Category / Filter</description>
+		  <type>label</type>
+		  <id>16</id>
+		  <posX>127</posX>
+		  <posY>12</posY>
+		  <width>900</width>
+		  <font>font11</font>		  
+		  <label>#MovingPictures.CurrentNode.name / #MovingPictures.Filter.Name</label>
+		  <textcolor>ffa9d0f7</textcolor>		  
+		  <animation effect="fade" time="250">WindowOpen</animation>
+		  <animation effect="fade" time="250">WindowClose</animation>
+		  <visible>[Control.IsVisible(50)|Control.IsVisible(51)]+Control.IsVisible(17)</visible>
 		</control>
 
 	</controls>
