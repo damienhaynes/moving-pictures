@@ -32,6 +32,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         bool refreshFacade = false;
         DateTime refreshToday = DateTime.Today;
         Timer refreshFacadeTimer;
+        private readonly object syncRefresh = new object();
 
         #region Properties
 
@@ -314,8 +315,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public ICollection<DBMovieInfo> FilteredMovies {
             get {
-                if (filteredMovies == null || refreshFacade)
-                    ReapplyFilters();
+                lock (syncRefresh) {
+                    if (filteredMovies == null || refreshFacade)
+                        ReapplyFilters();
+                }
 
                 return filteredMovies; 
             }
@@ -585,7 +588,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void onMovieContentsChange() {
             // flag that we need a refresh
-            lock (SyncRoot) {
+            lock (syncRefresh) {
                 refreshFacade = true;
             }
 
@@ -594,13 +597,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
 
             // Initiate a refresh to be performed 5 seconds after the last update
-            if (refreshFacadeTimer == null) {
-                refreshFacadeTimer = new Timer(RefreshFacade, null, 5000, Timeout.Infinite);
+            lock (syncRefresh) {
+                if (refreshFacadeTimer == null) {
+                    refreshFacadeTimer = new Timer(RefreshFacade, null, 5000, Timeout.Infinite);
+                }
+                else {
+                    refreshFacadeTimer.Change(5000, Timeout.Infinite);
+                }
             }
-            else {
-                refreshFacadeTimer.Change(5000, Timeout.Infinite);
-            }
-            
+
         }
 
         private void removeFilters(DBNode<DBMovieInfo> node) {
@@ -673,7 +678,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
 
             // Check if we still need to reload
-            lock (SyncRoot) {
+            lock (syncRefresh) {
                 if (!refreshFacade)
                     return;
             }
@@ -695,7 +700,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (FilteredMovies.Count > 0) {
 
                 bool reload = false;
-                lock (SyncRoot) {
+                lock (syncRefresh) {
                     reload = refreshFacade;
                     refreshFacade = false;
                 }
@@ -752,7 +757,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             foreach (DBMovieInfo currMovie in FilteredMovies) 
                 addMovieToFacade(currMovie);
 
-            lock (SyncRoot) {
+            lock (syncRefresh) {
                 refreshFacade = false;
             }
             
