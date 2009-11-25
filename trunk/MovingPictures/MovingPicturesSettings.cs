@@ -1450,6 +1450,25 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
+        #region Debugging
+
+        [CornerstoneSetting(
+            Name = "Skinners Debug Mode",
+            Description = "Enabling this will log all changes to skin properties when logging is set to debug.",
+            Groups = "|Internal|",
+            Identifier = "enable_debug_allskinproperties",
+            Default = false )]
+        public bool LogAllSkinPropertyChanges {
+            get { return _logAllSkinPropertyChanges; }
+            set {
+                _logAllSkinPropertyChanges = value;
+                OnSettingChanged("enable_debug_allskinproperties");
+            }
+        }
+        private bool _logAllSkinPropertyChanges;
+
+        #endregion
+
         #endregion
 
         #region Internal Settings

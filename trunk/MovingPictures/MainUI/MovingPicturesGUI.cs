@@ -1560,6 +1560,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (property == null)
                 return;
 
+            if (MovingPicturesCore.Settings.LogAllSkinPropertyChanges)
+                forceLogging = true;
+
             try {
                 lock (loggedProperties) {
                     if (!loggedProperties.ContainsKey(property) || forceLogging) {
