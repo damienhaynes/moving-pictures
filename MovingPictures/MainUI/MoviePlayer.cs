@@ -704,7 +704,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // store the duration of the file if it is not set
         private void updateMediaDuration(DBLocalMedia localMedia) {
             if (localMedia.Duration == 0) {
-                localMedia.Duration = (int)g_Player.Player.Duration;
+                logger.Debug("UpdateMediaDuration: LocalMedia={0}, Format={1}, Duration={2}", localMedia.FullPath, localMedia.VideoFormat, g_Player.Player.Duration.ToString(NumberFormatInfo.InvariantInfo));
+                localMedia.Duration = ((int)g_Player.Player.Duration) * 1000;
                 localMedia.Commit();
             }
         }
