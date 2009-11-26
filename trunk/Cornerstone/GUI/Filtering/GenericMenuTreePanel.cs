@@ -42,8 +42,6 @@ namespace Cornerstone.GUI.Filtering {
         Color originalForeColor;
         Color originalBackColor;
 
-        int insertIndex;
-
         Font bold;
         Font regular;
 

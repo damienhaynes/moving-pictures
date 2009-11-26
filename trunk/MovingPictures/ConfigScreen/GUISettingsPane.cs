@@ -41,7 +41,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             parentalControlsCheckBox.Setting = MovingPicturesCore.Settings["enable_parental_controls"];
             passwordTextBox.Setting = MovingPicturesCore.Settings["parental_controls_password"];
             categoriesCheckBox.Setting = MovingPicturesCore.Settings["enable_categories"];
-            unwatchedCheckBox.Setting = MovingPicturesCore.Settings["start_watched_filter_on"];
 
             passwordTextBox.Enabled = parentalControlsCheckBox.Checked;
             parentalContolsButton.Enabled = parentalControlsCheckBox.Checked;

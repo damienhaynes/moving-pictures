@@ -958,23 +958,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         [CornerstoneSetting(
-            Name = "Show Only Unwatched Movies on Startup",
-            Description = "When Moving Pictures starts up, if this option is set to true only Unwatched movies will be displayed until the user changes the filtering options.",
-            Groups = "|MediaPortal GUI|Interface Options|",
-            Identifier = "start_watched_filter_on",
-            Default = false,
-            Hidden = true)]
-        public bool ShowUnwatchedOnStartup {
-            get { return _showOnlyUnwatchedMoviesonStartup; }
-            set {
-                _showOnlyUnwatchedMoviesonStartup = value;
-                OnSettingChanged("start_watched_filter_on");
-            }
-        }
-        private bool _showOnlyUnwatchedMoviesonStartup;
-
-
-        [CornerstoneSetting(
             Name = "Allow user to delete files from the GUI context menu",
             Description = "Enables a delete menu item, which allows you to delete movies from your hard drive.",
             Groups = "|MediaPortal GUI|Interface Options|",
