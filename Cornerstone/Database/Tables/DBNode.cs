@@ -191,7 +191,7 @@ namespace Cornerstone.Database.Tables {
         public HashSet<IFilter<T>> GetAllFilters() {
             HashSet<IFilter<T>> results = new HashSet<IFilter<T>>();
 
-            // apply the filter for all parent nodes
+            // get the filters for all parent nodes
             DBNode<T> currNode = this;
             while (currNode != null) {
                 if (currNode.Filter != null)

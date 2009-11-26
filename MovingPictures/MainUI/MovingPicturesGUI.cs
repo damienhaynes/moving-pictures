@@ -38,7 +38,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         MovieBrowser browser;
         RemoteNumpadFilter remoteFilter;
-        WatchedFlagFilter watchedFilter;
         DBFilter<DBMovieInfo> parentalControlsFilter;
 
         MovingPicturesSkinSettings skinSettings;
@@ -101,9 +100,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         [SkinControl(7)]
         protected GUIButtonControl textToggleButton = null;
-
-        [SkinControl(8)]
-        protected GUILabelControl watchedFilteringIndicator = null;
 
         [SkinControl(9)]
         protected GUILabelControl selectedMovieWatchedIndicator = null;
@@ -232,10 +228,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.CurrentNode.name", MovingPicturesCore.Settings.HomeScreenName);
             }
             
-            // set the global watched indicator
-            if (watchedFilteringIndicator != null && watchedFilter.Active != watchedFilteringIndicator.Visible)
-                watchedFilteringIndicator.Visible = watchedFilter.Active;
-
             // set the label for the remoteFiltering indicator
             if (remoteFilteringIndicator != null && remoteFilter.Active) {
                 SetProperty("#MovingPictures.Filter.Label", remoteFilter.Text);
@@ -402,10 +394,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // add available filters to browser
                 remoteFilter = new RemoteNumpadFilter();
                 browser.Filters.Add(remoteFilter);
-
-                watchedFilter = new WatchedFlagFilter();
-                watchedFilter.Active = MovingPicturesCore.Settings.ShowUnwatchedOnStartup;
-                browser.Filters.Add(watchedFilter);
 
                 parentalControlsFilter = MovingPicturesCore.Settings.ParentalControlsFilter;
                 parentalControlsFilter.Active = MovingPicturesCore.Settings.ParentalControlsEnabled;
@@ -794,10 +782,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 dialog.Add(movieOptionsItem);
             }
 
-            GUIListItem watchItem = new GUIListItem(watchedFilter.Active ? Translation.ShowWatchedAndUnwatchedMovies : Translation.ShowOnlyUnwatchedMovies);
-            watchItem.ItemId = currID++;
-            dialog.Add(watchItem);
-
             GUIListItem parentalControlsItem = new GUIListItem(parentalControlsFilter.Active ? Translation.UnlockRestrictedMovies : Translation.LockRestrictedMovies);
             if (MovingPicturesCore.Settings.ParentalControlsEnabled) {
                 parentalControlsItem.ItemId = currID++;
@@ -818,10 +802,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
-            if (dialog.SelectedId == watchItem.ItemId) {
-                watchedFilter.Active = !watchedFilter.Active;
-            }
-            else if (dialog.SelectedId == filterItem.ItemId) {
+            if (dialog.SelectedId == filterItem.ItemId) {
                 showFilterContext();
             }
             else if (dialog.SelectedId == sortItem.ItemId) {
@@ -839,13 +820,26 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private bool showFilterContext() {
-            return showFilterContext(MovingPicturesCore.Settings.FilterMenu.RootNodes, true);
+            return showFilterContext(MovingPicturesCore.Settings.FilterMenu.RootNodes, browser.FilterNode != null, null);
         }
 
-        private bool showFilterContext(ICollection<DBNode<DBMovieInfo>> nodeList, bool showClearMenuItem) {
+        private bool showFilterContext(ICollection<DBNode<DBMovieInfo>> nodeList, bool showClearMenuItem, HashSet<DBMovieInfo> availableMovies) {
             if (nodeList.Count == 0) {
                 ShowMessage("No Filters", "There are no filters to display.");
                 return false;
+            }
+
+            // build list of available movies if no filter were currently applied
+            if (availableMovies == null) {
+                availableMovies = new HashSet<DBMovieInfo>();
+                foreach (DBMovieInfo currMovie in browser.AllMovies) {
+                    availableMovies.Add(currMovie);
+                }
+
+                if (browser.CurrentNode != null) {
+                    foreach (DBFilter<DBMovieInfo> currFilter in browser.CurrentNode.GetAllFilters()) 
+                        availableMovies = currFilter.Filter(availableMovies);
+                }
             }
 
             while (true) {
@@ -865,13 +859,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // build menu
                 foreach (DBNode<DBMovieInfo> currNode in nodeList) {
-
                     HashSet<DBMovieInfo> possibleMovies = currNode.GetPossibleFilteredItems();
                     if (possibleMovies.Count == 0)
                         continue;
 
-                    possibleMovies.IntersectWith(browser.FilteredMovies);
+                    possibleMovies.IntersectWith(availableMovies);
                     if (possibleMovies.Count == 0)
+                        continue;
+
+                    if (browser.FilterNode == currNode)
                         continue;
 
                     GUIListItem newListItem = new GUIListItem(currNode.Name);
@@ -904,7 +900,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                     // handle sub menus if needed
                     else {
-                        if (showFilterContext(selectedNode.Children, false))
+                        if (showFilterContext(selectedNode.Children, false, availableMovies))
                             return true;
                     }
                 }
@@ -1400,14 +1396,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Rating
             if (MovingPicturesCore.Settings.AutoPromptForRating)
                 awaitingUserRatingMovie = movie;
-
-            // If we have the played movie selected in the browser and
-            // the watched filter is active
-            if (movie == browser.SelectedMovie && watchedFilter.Active)
-                // Check if we are on one of the listviews, and if so switch the watched filter off 
-                // so we return to our LIST with the played movie selected.
-                if (browser.CurrentView != BrowserViewMode.DETAILS && browser.CurrentView != BrowserViewMode.CATEGORIES)
-                    watchedFilter.Active = false;
             
             // Reapply Filters
             browser.UpdateListColors(movie);
