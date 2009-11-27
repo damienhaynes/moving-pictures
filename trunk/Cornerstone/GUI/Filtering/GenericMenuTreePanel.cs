@@ -20,6 +20,8 @@ namespace Cornerstone.GUI.Filtering {
         public TreeNode Parent;
     }
 
+    public delegate string TranslationParserDelegate(string input);
+
     public partial class GenericMenuTreePanel<T> : UserControl, IMenuTreePanel, IFieldDisplaySettingsOwner
         where T : DatabaseTable {
 
@@ -102,6 +104,11 @@ namespace Cornerstone.GUI.Filtering {
             }
         } private DatabaseManager _dbManager;
 
+        public TranslationParserDelegate TranslationParser {
+            get { return _translationParser; }
+            set { _translationParser = value; }
+        } TranslationParserDelegate _translationParser = null;
+
         #endregion
 
 
@@ -175,6 +182,7 @@ namespace Cornerstone.GUI.Filtering {
                 treeView.Nodes.Add(treeNode);
             }
 
+            treeView.SelectedNode = treeNode;
             treeView.EndUpdate();
         }
 
@@ -239,6 +247,7 @@ namespace Cornerstone.GUI.Filtering {
                 treeView.Nodes.Add(treeNode);
             }
 
+            treeView.SelectedNode = treeNode;
             treeView.EndUpdate();
             ResumeLayout();
         }
@@ -291,7 +300,7 @@ namespace Cornerstone.GUI.Filtering {
             if (treeNodeLookup.ContainsKey(node))
                 return treeNodeLookup[node];
             else {
-                treeNode = new TreeNode(node.Name);
+                treeNode = new TreeNode();
                 treeNode.Tag = node;
                 treeNodeLookup[node] = treeNode;
             }
@@ -402,7 +411,12 @@ namespace Cornerstone.GUI.Filtering {
             DBNode<T> node = null;
             if (treeNode.Tag is DBNode<T>) {
                 node = (DBNode<T>)treeNode.Tag;
-                treeNode.Text = node.Name;
+
+                string displayName = node.Name;
+                if (TranslationParser != null)
+                    displayName = TranslationParser(node.Name);
+
+                treeNode.Text = displayName;
             }
 
             if (node != null && node.Children.Count > 0 && node.Filter != null) {
@@ -967,5 +981,10 @@ namespace Cornerstone.GUI.Filtering {
             get;
             set;
         }
+
+        TranslationParserDelegate TranslationParser {
+            get;
+            set;
+        } 
     }
 }

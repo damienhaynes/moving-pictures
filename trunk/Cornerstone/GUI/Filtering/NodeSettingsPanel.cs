@@ -49,6 +49,13 @@ namespace Cornerstone.GUI.Filtering {
             }
         }
 
+        [ReadOnly(true)]
+        public TranslationParserDelegate TranslationParser {
+            get { return ((INodeSettingsPanel)genericNodeSettingsPanel).TranslationParser; }
+            set { ((INodeSettingsPanel)genericNodeSettingsPanel).TranslationParser = value; }
+        } 
+
+
         #endregion
 
         #region IFieldDisplaySettingsOwner Members

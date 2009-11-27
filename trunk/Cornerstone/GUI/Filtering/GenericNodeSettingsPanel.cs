@@ -82,6 +82,11 @@ namespace Cornerstone.GUI.Filtering {
             }
         } private FieldDisplaySettings _fieldSettings = null;
 
+        public TranslationParserDelegate TranslationParser {
+            get { return _translationParser; }
+            set { _translationParser = value; }
+        } TranslationParserDelegate _translationParser = null;
+
         public void OnFieldPropertiesChanged() {
             //initControls();
         }
@@ -101,7 +106,11 @@ namespace Cornerstone.GUI.Filtering {
                 return;
             }
 
-            nameTextBox.Text = _node.Name;
+            string displayName = _node.Name;
+            if (TranslationParser != null)
+                displayName = TranslationParser(_node.Name);
+
+            nameTextBox.Text = displayName;
             nameTextBox.Enabled = true;
 
             if (_node.Filter == null) {
@@ -161,6 +170,11 @@ namespace Cornerstone.GUI.Filtering {
     public interface INodeSettingsPanel {
         string DisplayName { get; set; }
         DatabaseManager DBManager { get; set; }
+
+        TranslationParserDelegate TranslationParser {
+            get;
+            set;
+        } 
 
         IDBNode Node {
             get;

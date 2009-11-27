@@ -33,6 +33,12 @@ namespace Cornerstone.GUI.Filtering {
             set { ((IMenuTreePanel)genericMenuTreePanel).Menu = value; }
         }
 
+        [ReadOnly(true)]
+        public TranslationParserDelegate TranslationParser {
+            get { return ((IMenuTreePanel)genericMenuTreePanel).TranslationParser; }
+            set { ((IMenuTreePanel)genericMenuTreePanel).TranslationParser = value; }
+        } 
+
         #endregion
 
         #region IFieldDisplaySettingsOwner Members

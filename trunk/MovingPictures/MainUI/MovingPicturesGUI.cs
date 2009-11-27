@@ -829,7 +829,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return false;
             }
 
-            // build list of available movies if no filter were currently applied
+            // build list of available movies as if no filter were currently applied
+            // used for checking which filter nodes have movies to display
             if (availableMovies == null) {
                 availableMovies = new HashSet<DBMovieInfo>();
                 foreach (DBMovieInfo currMovie in browser.AllMovies) {
@@ -845,7 +846,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             while (true) {
                 IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
                 dialog.Reset();
-                dialog.SetHeading("Moving Pictures - " + Translation.FilterBy);
+                dialog.SetHeading(Translation.FilterBy);
 
                 Dictionary<int, DBNode<DBMovieInfo>> nodeLookup = new Dictionary<int, DBNode<DBMovieInfo>>();
 
@@ -870,7 +871,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     if (browser.FilterNode == currNode)
                         continue;
 
-                    GUIListItem newListItem = new GUIListItem(currNode.Name);
+                    GUIListItem newListItem = new GUIListItem(Translation.ParseString(currNode.Name));
                     newListItem.ItemId = currID++;
                     dialog.Add(newListItem);
 
@@ -911,7 +912,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
-            dialog.SetHeading("Moving Pictures - " + Translation.SortBy);
+            dialog.SetHeading(Translation.SortBy);
 
             foreach (int value in Enum.GetValues(typeof(SortingFields))) {
                 SortingFields field = (SortingFields)Enum.Parse(typeof(SortingFields), value.ToString());
