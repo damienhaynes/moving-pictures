@@ -314,7 +314,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public ICollection<DBMovieInfo> FilteredMovies {
             get {
                 lock (syncRefresh) {
-                    if (filteredMovies == null || refreshFacade)
+                    if (filteredMovies == null)
                         ReapplyFilters();
                 }
 
@@ -495,18 +495,25 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// called if an existing filter has been modified.
         /// </summary>
         public void ReapplyFilters() {
-            // (re)initialize the filtered movie list
-            filteredMovies = new HashSet<DBMovieInfo>();
+            lock (syncRefresh) {
 
-            // trim it down to satisfy the filters.
-            bool first = true;
-            foreach (IFilter<DBMovieInfo> currFilter in Filters) {
-                if (first)
-                    filteredMovies = currFilter.Filter(allMovies);
-                else 
-                    filteredMovies = currFilter.Filter(filteredMovies);
+                // (re)initialize the filtered movie list
+                filteredMovies = new HashSet<DBMovieInfo>();
 
-                first = false;
+                // clear the available movie cache because it partly is 
+                // derived from filtered movies
+                availableMovies.Clear();
+
+                // trim it down to satisfy the filters.
+                bool first = true;
+                foreach (IFilter<DBMovieInfo> currFilter in Filters) {
+                    if (first)
+                        filteredMovies = currFilter.Filter(allMovies);
+                    else 
+                        filteredMovies = currFilter.Filter(filteredMovies);
+
+                    first = false;
+                }
             }
         }
 
@@ -585,17 +592,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void onMovieContentsChange() {
+            
             // flag that we need a refresh
+            // and clear our cached movie lists
             lock (syncRefresh) {
+                
                 refreshFacade = true;
-            }
+                filteredMovies = null;
+                possibleMovies.Clear();
 
-            // if we are in the details screen we don't have to set a timer to perform the reload
-            if (!AutoRefresh || CurrentView == BrowserViewMode.DETAILS)
-                return;
+                // if we are in the details screen we don't have to set a timer to perform the reload
+                if (!AutoRefresh || CurrentView == BrowserViewMode.DETAILS)
+                    return;
 
-            // Initiate a refresh to be performed 5 seconds after the last update
-            lock (syncRefresh) {
+                // Initiate a refresh to be performed 5 seconds after the last update
                 if (refreshFacadeTimer == null) {
                     refreshFacadeTimer = new Timer(RefreshFacade, null, 5000, Timeout.Infinite);
                 }
@@ -603,7 +613,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     refreshFacadeTimer.Change(5000, Timeout.Infinite);
                 }
             }
-
         }
 
         private void removeFilters(DBNode<DBMovieInfo> node) {
@@ -693,58 +702,23 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
 
             CategoriesFacade.ClearAll();
-            availableMovies.Clear();
 
-            if (FilteredMovies.Count > 0) {
-
-                bool reload = false;
-                lock (syncRefresh) {
-                    reload = refreshFacade;
-                    refreshFacade = false;
-                }
-
-                // filters using relative date criteria need a refresh when the day changes
-                if (refreshToday < DateTime.Today) {
-                    refreshToday = DateTime.Today;
-                    reload = true;
-                }
-
-                SubNodes.Sort();
-                foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
-					
-                	// this should not happen but if it does log a warning
-                	if (availableMovies.ContainsKey(currNode)) {
-                	    logger.Warn("Category contains a duplicate child node: {0}", currNode);
-                		continue;
-            		}
-                	
-                    // get base list
-                    if (!possibleMovies.ContainsKey(currNode) || reload)
-                        possibleMovies[currNode] = currNode.GetPossibleFilteredItems();
-
-                    // base list is empty so skip this node
-                    if (possibleMovies[currNode].Count == 0)
-                        continue;
-
-                    // intersect with the filtered movie list meaning that what is 
-                    // not in the filtered movies list will be removed from the base list
-                    HashSet<DBMovieInfo> nodeResults = new HashSet<DBMovieInfo>(possibleMovies[currNode]);
-                    nodeResults.IntersectWith(filteredMovies);
-
-                    // final list is empty so skip this node
-                    if (nodeResults.Count == 0)
-                        continue;
-
-                    availableMovies.Add(currNode, nodeResults);
-                    addCategoryNodeToFacade(currNode);
+            // Refresh the facade
+            lock (syncRefresh) {
+                refreshFacade = false;
+                if (FilteredMovies.Count > 0) {
+                    SubNodes.Sort();
+                    foreach (DBNode<DBMovieInfo> currNode in SubNodes) {
+                        if (HasAvailableMovies(currNode))
+                            addCategoryNodeToFacade(currNode);
+                    }
                 }
             }
 
             // Sync to facade
             int index;
             DBNode<DBMovieInfo> node = _categoriesFacade.SyncToFacade<DBNode<DBMovieInfo>>(SelectedNode, out index);
-            if (index == 0)
-                SelectedNode = node;
+            if (index == 0) SelectedNode = node;
         }
 
         // populates the facade with the currently filtered list items
@@ -755,18 +729,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // clear and populate the facade
             facade.ClearAll();
 
-            foreach (DBMovieInfo currMovie in FilteredMovies) 
-                addMovieToFacade(currMovie);
-
             lock (syncRefresh) {
                 refreshFacade = false;
-            }
-            
-            // sort it using our basic sorter
-            facade.Sort(new GUIListItemMovieComparer(this.CurrentSortField, this.CurrentSortDirection));
 
-            if (MovingPicturesCore.Settings.AllowGrouping && CurrentView == BrowserViewMode.LIST) {
-                GroupHeaders.AddGroupHeaders(this);
+                foreach (DBMovieInfo currMovie in FilteredMovies) 
+                    addMovieToFacade(currMovie);
+
+                // sort it using our basic sorter
+                facade.Sort(new GUIListItemMovieComparer(this.CurrentSortField, this.CurrentSortDirection));
+
+                if (MovingPicturesCore.Settings.AllowGrouping && CurrentView == BrowserViewMode.LIST) {
+                    GroupHeaders.AddGroupHeaders(this);
+                }
             }
 
             // reapply the current selection
@@ -869,19 +843,58 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }            
         }
 
+        /// <summary>
+        /// Returns a value indicating wether this node has available movies
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public bool HasAvailableMovies(DBNode<DBMovieInfo> node) {
+            lock (syncRefresh) {
+                HashSet<DBMovieInfo> results = GetAvailableMovies(node);
+                return (results.Count > 0);
+            }
+        }
 
         /// <summary>
-        /// Returns a list of available movies for this node (applying active filters)
+        /// Returns a list of available movies for this node (includes active filters)
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
         public HashSet<DBMovieInfo> GetAvailableMovies(DBNode<DBMovieInfo> node) {
-            if (!availableMovies.ContainsKey(node))
-                return new HashSet<DBMovieInfo>();
-
-            // return all visible movies
+            lock (syncRefresh) {
+                if (FilteredMovies.Count == 0) {
+                    availableMovies[node] = new HashSet<DBMovieInfo>();
+                }
+                else if (!availableMovies.ContainsKey(node)) {
+                    HashSet<DBMovieInfo> nodeResults = new HashSet<DBMovieInfo>(GetPossibleMovies(node));
+                    // intersect with the filtered movie list meaning that what is 
+                    // not in the filtered movies list will be removed from the base list
+                    nodeResults.IntersectWith(FilteredMovies);
+                    availableMovies[node] = nodeResults;
+                }
+            }
             return availableMovies[node];
-        }        
+        }
+
+        /// <summary>
+        /// Returns a list of possible movies for this node
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public HashSet<DBMovieInfo> GetPossibleMovies(DBNode<DBMovieInfo> node) {
+            lock (syncRefresh) {
+                if (!possibleMovies.ContainsKey(node)) {
+                    possibleMovies[node] = node.GetPossibleFilteredItems();
+                }
+            }
+            return possibleMovies[node];
+        }
+
+        // TODO replace commented out code with a special "midnight" timer that calls the OnMovieContentsChanged event (effectively clearing the cache once every day at midnight)
+        // filters using relative date criteria need a refresh when the day changes
+        // if (refreshToday < DateTime.Today) {
+        //    refreshToday = DateTime.Today;
+        //}
 
         #endregion
 

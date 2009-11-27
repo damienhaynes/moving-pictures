@@ -820,27 +820,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private bool showFilterContext() {
-            return showFilterContext(MovingPicturesCore.Settings.FilterMenu.RootNodes, browser.FilterNode != null, null);
+            return showFilterContext(MovingPicturesCore.Settings.FilterMenu.RootNodes, browser.FilterNode != null);
         }
 
-        private bool showFilterContext(ICollection<DBNode<DBMovieInfo>> nodeList, bool showClearMenuItem, HashSet<DBMovieInfo> availableMovies) {
+        private bool showFilterContext(ICollection<DBNode<DBMovieInfo>> nodeList, bool showClearMenuItem) {
             if (nodeList.Count == 0) {
                 ShowMessage("No Filters", "There are no filters to display.");
                 return false;
-            }
-
-            // build list of available movies as if no filter were currently applied
-            // used for checking which filter nodes have movies to display
-            if (availableMovies == null) {
-                availableMovies = new HashSet<DBMovieInfo>();
-                foreach (DBMovieInfo currMovie in browser.AllMovies) {
-                    availableMovies.Add(currMovie);
-                }
-
-                if (browser.CurrentNode != null) {
-                    foreach (DBFilter<DBMovieInfo> currFilter in browser.CurrentNode.GetAllFilters()) 
-                        availableMovies = currFilter.Filter(availableMovies);
-                }
             }
 
             while (true) {
@@ -850,7 +836,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 Dictionary<int, DBNode<DBMovieInfo>> nodeLookup = new Dictionary<int, DBNode<DBMovieInfo>>();
 
-                // ad clear menu item as necessary
+                // add clear menu item as necessary
                 int currID = 1;
                 GUIListItem clearListItem = new GUIListItem(Translation.AllMovies);
                 if (showClearMenuItem) {
@@ -860,15 +846,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // build menu
                 foreach (DBNode<DBMovieInfo> currNode in nodeList) {
-                    HashSet<DBMovieInfo> possibleMovies = currNode.GetPossibleFilteredItems();
-                    if (possibleMovies.Count == 0)
-                        continue;
 
-                    possibleMovies.IntersectWith(availableMovies);
-                    if (possibleMovies.Count == 0)
-                        continue;
-
-                    if (browser.FilterNode == currNode)
+                    // don't show this node when it's already active or if it has no results
+                    if (browser.FilterNode == currNode || !browser.HasAvailableMovies(currNode))
                         continue;
 
                     GUIListItem newListItem = new GUIListItem(Translation.ParseString(currNode.Name));
@@ -896,12 +876,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     if (selectedNode.Children.Count == 0 && selectedNode.Filter != null) {
                         browser.FilterNode = selectedNode;
                         PublishFilterDetails();
-
                         return true;
                     }
                     // handle sub menus if needed
                     else {
-                        if (showFilterContext(selectedNode.Children, false, availableMovies))
+                        if (showFilterContext(selectedNode.Children, false))
                             return true;
                     }
                 }
@@ -1894,15 +1873,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.Filter.Category", " ");
             }
             else if (browser.FilterNode.Parent == null) {
-                SetProperty("#MovingPictures.Filter.Combined", browser.FilterNode.Name);
-                SetProperty("#MovingPictures.Filter.Name", browser.FilterNode.Name);
+                SetProperty("#MovingPictures.Filter.Combined", Translation.ParseString(browser.FilterNode.Name));
+                SetProperty("#MovingPictures.Filter.Name", Translation.ParseString(browser.FilterNode.Name));
                 SetProperty("#MovingPictures.Filter.Category", " ");
                 if (filteringIndicator != null) filteringIndicator.Visible = true;
             }
             else {
-                SetProperty("#MovingPictures.Filter.Combined", browser.FilterNode.Parent.Name + ": " + browser.FilterNode.Name);
-                SetProperty("#MovingPictures.Filter.Name", browser.FilterNode.Name);
-                SetProperty("#MovingPictures.Filter.Category", browser.FilterNode.Parent.Name);
+                SetProperty("#MovingPictures.Filter.Combined", Translation.ParseString(browser.FilterNode.Parent.Name) + ": " + Translation.ParseString(browser.FilterNode.Name));
+                SetProperty("#MovingPictures.Filter.Name", Translation.ParseString(browser.FilterNode.Name));
+                SetProperty("#MovingPictures.Filter.Category", Translation.ParseString(browser.FilterNode.Parent.Name));
                 if (filteringIndicator != null) filteringIndicator.Visible = true;
             }
 
