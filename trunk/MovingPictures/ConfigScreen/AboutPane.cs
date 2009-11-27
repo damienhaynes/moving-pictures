@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using System.Reflection;
 using System.Diagnostics;
+using MediaPortal.Plugins.MovingPictures.Properties;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class AboutPane : UserControl {
@@ -36,5 +37,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             ProcessStartInfo process = new ProcessStartInfo("http://forum.team-mediaportal.com/moving-pictures-284/");
             Process.Start(process);
         }
+
+        private void getInvolvedButton_Click(object sender, EventArgs e) {
+            ProcessStartInfo processInfo = new ProcessStartInfo(Resources.GetInvolvedURL);
+            Process.Start(processInfo);
+        }
+
+        private void donateButton_Click(object sender, EventArgs e) {
+            ProcessStartInfo processInfo = new ProcessStartInfo(Resources.DonateURL);
+            Process.Start(processInfo);
+        }
+
     }
 }

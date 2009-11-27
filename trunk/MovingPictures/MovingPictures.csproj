@@ -86,6 +86,12 @@
     <Compile Include="ConfigScreen\AutoDataSourcesPanel.Designer.cs">
       <DependentUpon>AutoDataSourcesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\ContributersScrollPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\ContributersScrollPanel.Designer.cs">
+      <DependentUpon>ContributersScrollPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\DataProviderSetupPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -549,6 +555,7 @@
     <None Include="Properties\RevisionInfo.cs" />
     <None Include="Resources\Images\splash_small.jpg" />
     <None Include="Resources\Images\splash_large.jpg" />
+    <None Include="Resources\Images\brick.png" />
     <Content Include="Resources\Images\eye.png" />
     <Content Include="Resources\Images\eye_grey.png" />
     <Content Include="Resources\Images\accept.png" />
@@ -572,6 +579,9 @@
     <Content Include="Resources\Images\font.png" />
     <Content Include="Resources\Images\grey_bug.png" />
     <Content Include="Resources\Images\help.png" />
+    <EmbeddedResource Include="ConfigScreen\ContributersScrollPanel.resx">
+      <DependentUpon>ContributersScrollPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Images\icon_faded.png" />
     <EmbeddedResource Include="Resources\Images\icon_normal.png" />
     <Content Include="Resources\Images\ignored.png" />
@@ -583,6 +593,7 @@
     <Content Include="Resources\Images\MediaPlay.png" />
     <Content Include="Resources\Images\MediaStop.png" />
     <None Include="Resources\Images\mp_config_icon.png" />
+    <Content Include="Resources\Images\money.png" />
     <Content Include="Resources\Images\noatunplay.png" />
     <Content Include="Resources\Images\noatunstop.png" />
     <None Include="Resources\Images\page_white_edit.png" />
@@ -594,6 +605,7 @@
     <Content Include="Resources\Images\television.png" />
     <Content Include="Resources\Images\tick.png" />
     <Content Include="Resources\Images\world_add.png" />
+    <None Include="Resources\Images\wrench.png" />
     <Content Include="Resources\Images\zoom.png" />
     <Content Include="Resources\language\da.xml" />
     <Content Include="Resources\language\de.xml" />

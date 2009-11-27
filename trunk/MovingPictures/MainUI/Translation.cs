@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using MediaPortal.Configuration;
 using MediaPortal.GUI.Library;
 using NLog;
+using MediaPortal.Localisation;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public static class Translation {
@@ -25,7 +26,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         static Translation() {
             string lang;
             
-            /*
             try {
                 lang = GUILocalizeStrings.GetCultureName(GUILocalizeStrings.CurrentLanguage());
             }
@@ -34,11 +34,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // so we grab the active culture name from the system            
                 lang = CultureInfo.CurrentUICulture.Name;
             }
-            */
-
-            // temporarily commented out above MediaPortal based language lookup because it invokes
-            // Direct3D, causing problems in the config.
-            lang = CultureInfo.CurrentUICulture.Name;
+                        
             logger.Info("Using language " + lang);
             
             path = Config.GetSubFolder(Config.Dir.Language, "MovingPictures");

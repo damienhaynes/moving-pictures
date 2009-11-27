@@ -214,7 +214,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private ImporterSettingsPane importerSettingsPane1;
         private System.Windows.Forms.TabPage guiTab;
         private System.Windows.Forms.TabPage aboutTabPage;
-        private AboutPane aboutPane1;
         private GUISettingsPane guiSettingsPane1;
+        private AboutPane aboutPane1;
     }
 }
