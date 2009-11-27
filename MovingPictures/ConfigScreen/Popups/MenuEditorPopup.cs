@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Database;
+using MediaPortal.Plugins.MovingPictures.MainUI;
+using Cornerstone.GUI.Filtering;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     public partial class MenuEditorPopup : Form {
@@ -22,6 +24,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             MenuTree.SelectedNodeChanged += new DBNodeEventHandler(MenuTree_SelectedNodeChanged);
             nodeSettingsPanel.DBManager = MovingPicturesCore.DatabaseManager;
             MenuTree.DBManager = MovingPicturesCore.DatabaseManager;
+            
+            TranslationParserDelegate parserDelegate = new TranslationParserDelegate(Translation.ParseString);
+            MenuTree.TranslationParser = parserDelegate;
+            nodeSettingsPanel.TranslationParser = parserDelegate;
         }
 
         void MenuTree_SelectedNodeChanged(IDBNode node, Type type) {

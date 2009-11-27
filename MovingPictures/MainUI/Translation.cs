@@ -25,15 +25,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         static Translation() {
             string lang;
             
+            /*
             try {
                 lang = GUILocalizeStrings.GetCultureName(GUILocalizeStrings.CurrentLanguage());
             }
             catch (Exception) {
                 // when running MovingPicturesConfigTester outside of the MediaPortal directory this happens unfortunately
-                // so we grab the active culture name from the system
+                // so we grab the active culture name from the system            
                 lang = CultureInfo.CurrentUICulture.Name;
             }
+            */
 
+            // temporarily commented out above MediaPortal based language lookup because it invokes
+            // Direct3D, causing problems in the config.
+            lang = CultureInfo.CurrentUICulture.Name;
             logger.Info("Using language " + lang);
             
             path = Config.GetSubFolder(Config.Dir.Language, "MovingPictures");
@@ -109,8 +114,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return TranslatedStrings.Count;
         }
 
-        public static string GetByName(string name)
-        {
+        public static string GetByName(string name) {
             if (!Strings.ContainsKey(name))
                 return name;
 
