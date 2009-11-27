@@ -134,8 +134,14 @@ namespace Cornerstone.GUI.Filtering {
         }
 
         private void nameTextBox_TextChanged(object sender, EventArgs e) {
-            if (_node != null && !updating)
-                _node.Name = nameTextBox.Text;
+            if (_node != null && !updating) {
+                string displayName = _node.Name;
+                if (TranslationParser != null)
+                    displayName = TranslationParser(_node.Name);
+
+                if (nameTextBox.Text != displayName)
+                    _node.Name = nameTextBox.Text;
+            }
         }
 
         private void addEditFilterButton_Click(object sender, EventArgs e) {

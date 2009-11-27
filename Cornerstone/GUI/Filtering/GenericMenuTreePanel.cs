@@ -827,7 +827,14 @@ namespace Cornerstone.GUI.Filtering {
             if (e.CancelEdit || e.Label == null)
                 return;
 
-            ((DBNode<T>)treeView.SelectedNode.Tag).Name = e.Label;
+            DBNode<T> node = (DBNode<T>)treeView.SelectedNode.Tag;
+
+            string displayName = node.Name;
+            if (TranslationParser != null)
+                displayName = TranslationParser(node.Name);
+
+            if (e.Label != displayName)
+                node.Name = e.Label;
         }
 
         private void treeView_KeyDown(object sender, KeyEventArgs e) {
