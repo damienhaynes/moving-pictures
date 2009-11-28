@@ -201,7 +201,7 @@ namespace Cornerstone.Database.CustomTypes {
 
     // The public interface for the RelationList class. This allows use of the Relationlist class
     // without knowing it's generic types. Unfortunately C# wont allow a 
-    // (RelatilonList<DatabaseTable, DatabaseTable>) style cast.
+    // (RelationList<DatabaseTable, DatabaseTable>) style cast.
     public interface IRelationList: IList, IDynamic {
         DBRelation MetaData {
             get;

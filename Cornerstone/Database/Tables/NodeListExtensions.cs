@@ -6,7 +6,7 @@ using System.Text;
 namespace Cornerstone.Database.Tables {
     public static class NodeListExtensions {
 
-        public static void Normalize<T>(this List<DBNode<T>> list, bool commit) where T : DatabaseTable {
+        public static void Normalize<T>(this IList<DBNode<T>> list, bool commit) where T : DatabaseTable {
             int index = 0;
             foreach (DBNode<T> currNode in list) {
                 if (currNode.SortPosition != index) {
@@ -40,7 +40,7 @@ namespace Cornerstone.Database.Tables {
             return true;
         }
 
-        public static void Normalize<T>(this List<DBNode<T>> list) where T : DatabaseTable {
+        public static void Normalize<T>(this IList<DBNode<T>> list) where T : DatabaseTable {
             list.Normalize(false);
         }
 
