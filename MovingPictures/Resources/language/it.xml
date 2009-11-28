@@ -86,6 +86,7 @@
   <string Field="RateFiveStarThree">Buono</string>
   <string Field="RateFiveStarTwo">Mediocre</string>
   <string Field="RateHeading">Valuta il film</string>
+  <string Field="RecentlyAddedMovies">Films aggiunti di recente</string>
   <string Field="RemoteNumericAlphabet2">abc</string>
   <string Field="RemoteNumericAlphabet3">def</string>
   <string Field="RemoteNumericAlphabet4">ghi</string>
@@ -134,6 +135,7 @@
   <string Field="TwoWeeksAgo">Due settimane fa</string>
   <string Field="Unknown">Sconosciuto</string>
   <string Field="UnlockRestrictedMovies">Sblocca i film con restrizioni</string>
+  <string Field="UnwatchedMovies">Films da vedere</string>
   <string Field="UpAbbreviation">(su)</string>
   <string Field="UpdateDetailsFromOnline">Aggiornamento online dettagli</string>
   <string Field="UpdateMovieDetailsBody">Si sta procedendo all'aggiornamento di tutti i metadati,\nsovrascrivendo le modifiche manuali di questo film.\nSi vuole continuare?</string>
