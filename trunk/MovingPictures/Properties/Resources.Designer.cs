@@ -202,6 +202,15 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to http://en.moving-pictures.tv/wiki/Filter_Editor.
+        /// </summary>
+        internal static string FilterEditorURL {
+            get {
+                return ResourceManager.GetString("FilterEditorURL", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap find {
             get {
                 object obj = ResourceManager.GetObject("find", resourceCulture);
@@ -322,6 +331,15 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to http://en.moving-pictures.tv/wiki/Menu_Editor.
+        /// </summary>
+        internal static string MenuEditorURL {
+            get {
+                return ResourceManager.GetString("MenuEditorURL", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap money {
             get {
                 object obj = ResourceManager.GetObject("money", resourceCulture);
@@ -363,6 +381,15 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             get {
                 object obj = ResourceManager.GetObject("page_white_edit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://en.moving-pictures.tv/wiki/Parental_Controls.
+        /// </summary>
+        internal static string ParentalControlsURL {
+            get {
+                return ResourceManager.GetString("ParentalControlsURL", resourceCulture);
             }
         }
         

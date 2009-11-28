@@ -133,6 +133,15 @@ namespace Cornerstone.GUI {
                 AttachedFilter = newFilter;
             }
 
+            Control currControl = this;
+            while (currControl != null) {
+                if (currControl.Site != null && currControl.Site.DesignMode) {
+                    updateScreen();
+                    return;
+                }
+                currControl = currControl.Parent;
+            }
+
             //updateScreen();
             //criteriaListPanel1.Focus();
 

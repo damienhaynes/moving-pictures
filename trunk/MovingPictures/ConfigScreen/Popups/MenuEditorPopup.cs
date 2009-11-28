@@ -9,6 +9,9 @@ using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.MainUI;
 using Cornerstone.GUI.Filtering;
+using Cornerstone.GUI;
+using System.Diagnostics;
+using MediaPortal.Plugins.MovingPictures.Properties;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
     public partial class MenuEditorPopup : Form {
@@ -17,13 +20,19 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             get { return movieNodeSettingsPanel.Visible; }
             set { movieNodeSettingsPanel.Visible = value; }
         }
-        
+
         public MenuEditorPopup() {
             InitializeComponent();
 
             MenuTree.SelectedNodeChanged += new DBNodeEventHandler(MenuTree_SelectedNodeChanged);
             nodeSettingsPanel.DBManager = MovingPicturesCore.DatabaseManager;
             MenuTree.DBManager = MovingPicturesCore.DatabaseManager;
+
+            nodeSettingsPanel.ShowFilterHelpButton = true;
+            nodeSettingsPanel.FilterHelpAction = new HelpActionDelegate(delegate {
+                ProcessStartInfo processInfo = new ProcessStartInfo(Resources.FilterEditorURL);
+                Process.Start(processInfo);
+            });
             
             TranslationParserDelegate parserDelegate = new TranslationParserDelegate(Translation.ParseString);
             MenuTree.TranslationParser = parserDelegate;
@@ -45,6 +54,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
 
         private void okButton_Click(object sender, EventArgs e) {
             Close();
+        }
+
+        private void helpButton_Click(object sender, EventArgs e) {
+            ProcessStartInfo processInfo = new ProcessStartInfo(Resources.MenuEditorURL);
+            Process.Start(processInfo);
         }
     }
 }
