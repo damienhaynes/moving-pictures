@@ -13,6 +13,7 @@ using MediaPortal.Plugins.MovingPictures.MainUI;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.GUI.Dialogs;
+using Cornerstone.GUI;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class GUISettingsPane : UserControl {
@@ -154,6 +155,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             // attach the filter, show the popup, and if necisarry, save the results
             popup.FilterPane.AttachedFilter = MovingPicturesCore.Settings.ParentalControlsFilter;
+            popup.ShowHelpButton = true;
+            popup.HelpAction = new HelpActionDelegate(delegate {
+                ProcessStartInfo processInfo = new ProcessStartInfo(Resources.ParentalControlsURL);
+                Process.Start(processInfo);
+            });
+
             popup.ShowDialog();
             MovingPicturesCore.Settings.ParentalControlsFilter.Commit();
         }
@@ -172,7 +179,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             loadingPopup.Owner = FindForm();
             loadingPopup.Text = "Loading Menu...";
             loadingPopup.ShowDialog();
-
+            
             popup.MenuTree.Menu = categoriesMenu;
             popup.ShowDialog();
 

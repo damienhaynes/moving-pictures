@@ -53,7 +53,19 @@ namespace Cornerstone.GUI.Filtering {
         public TranslationParserDelegate TranslationParser {
             get { return ((INodeSettingsPanel)genericNodeSettingsPanel).TranslationParser; }
             set { ((INodeSettingsPanel)genericNodeSettingsPanel).TranslationParser = value; }
-        } 
+        }
+
+        [ReadOnly(true)]
+        public bool ShowFilterHelpButton {
+            get { return ((INodeSettingsPanel)genericNodeSettingsPanel).ShowFilterHelpButton; }
+            set { ((INodeSettingsPanel)genericNodeSettingsPanel).ShowFilterHelpButton = value; }
+        }
+
+        [ReadOnly(true)]
+        public HelpActionDelegate FilterHelpAction {
+            get { return ((INodeSettingsPanel)genericNodeSettingsPanel).FilterHelpAction; }
+            set { ((INodeSettingsPanel)genericNodeSettingsPanel).FilterHelpAction = value; }
+        }
 
 
         #endregion

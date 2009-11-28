@@ -87,6 +87,16 @@ namespace Cornerstone.GUI.Filtering {
             set { _translationParser = value; }
         } TranslationParserDelegate _translationParser = null;
 
+        public bool ShowFilterHelpButton {
+            get;
+            set;
+        }
+
+        public HelpActionDelegate FilterHelpAction {
+            get;
+            set;
+        }
+
         public void OnFieldPropertiesChanged() {
             //initControls();
         }
@@ -149,6 +159,8 @@ namespace Cornerstone.GUI.Filtering {
             popup.FilterEditorPanel.FieldDisplaySettings = FieldDisplaySettings;
             popup.FilterEditorPanel.DisplayName = DisplayName;
             popup.FilterEditorPanel.DBManager = DBManager;
+            popup.ShowHelpButton = ShowFilterHelpButton;
+            popup.HelpAction = FilterHelpAction;
 
             DBFilter<T> filter = _node.Filter;
             if (filter == null) {
@@ -177,10 +189,10 @@ namespace Cornerstone.GUI.Filtering {
         string DisplayName { get; set; }
         DatabaseManager DBManager { get; set; }
 
-        TranslationParserDelegate TranslationParser {
-            get;
-            set;
-        } 
+        TranslationParserDelegate TranslationParser { get; set; }
+
+        bool ShowFilterHelpButton { get; set; }
+        HelpActionDelegate FilterHelpAction { get; set; }
 
         IDBNode Node {
             get;
