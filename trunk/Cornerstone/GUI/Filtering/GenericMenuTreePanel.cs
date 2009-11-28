@@ -13,6 +13,7 @@ using Cornerstone.Database;
 using Cornerstone.Properties;
 using Cornerstone.GUI.Dialogs;
 using NLog;
+using Cornerstone.Database.CustomTypes;
 
 namespace Cornerstone.GUI.Filtering {
     internal struct NodeModifiedDetails {
@@ -171,6 +172,7 @@ namespace Cornerstone.GUI.Filtering {
             treeView.BeginUpdate();
             if (parentTreeNode != null && !forceRoot) {
                 parent.Children.Add(newNode);
+                parent.Children.Normalize(true);
                 newNode.Parent = parent;
                 
                 parentTreeNode.Nodes.Add(treeNode);
@@ -179,6 +181,7 @@ namespace Cornerstone.GUI.Filtering {
             }
             else {
                 _menu.RootNodes.Add(newNode);
+                _menu.RootNodes.Normalize(true);
                 treeView.Nodes.Add(treeNode);
             }
 
@@ -236,6 +239,7 @@ namespace Cornerstone.GUI.Filtering {
             treeView.BeginUpdate();
             if (parentTreeNode != null && !forceNewNodeRoot) {
                 parent.Children.Add(newNode);
+                parent.Children.Normalize(true);
                 newNode.Parent = parent;
 
                 parentTreeNode.Nodes.Add(treeNode);
@@ -244,6 +248,7 @@ namespace Cornerstone.GUI.Filtering {
             }
             else {
                 _menu.RootNodes.Add(newNode);
+                _menu.RootNodes.Normalize(true);
                 treeView.Nodes.Add(treeNode);
             }
 
@@ -602,13 +607,18 @@ namespace Cornerstone.GUI.Filtering {
             DBNode<T> movingDbNode = ((DBNode<T>)movingNode.Tag);
             DBNode<T> parentDbNode = null; 
 
-            // grab the collection of the parent (used if we are doing a before or after drop)
-            List<DBNode<T>> parentCollection;
-            if (targetNode.Parent == null)
-                parentCollection = _menu.RootNodes;
-            else {
-                parentCollection = targetDbNode.Parent.Children;
-                parentDbNode = targetDbNode;
+            // grab the collection of the parent if we are doing a before or after drop
+            List<DBNode<T>> parentCollection = null;
+            if (dropPosition == DropPositionEnum.Before || dropPosition == DropPositionEnum.After) {
+                if (targetNode.Parent == null) {
+                    parentCollection = _menu.RootNodes;
+                    ((RelationList<DBMenu<T>, DBNode<T>>)parentCollection).CommitNeeded = true;
+                }
+                else {
+                    parentCollection = targetDbNode.Parent.Children;
+                    parentDbNode = targetDbNode;
+                    ((RelationList<DBNode<T>, DBNode<T>>)parentCollection).CommitNeeded = true;
+                }
             }
 
             // relocate node in internal menu system
@@ -623,8 +633,10 @@ namespace Cornerstone.GUI.Filtering {
                 parentCollection.Normalize(true);
             }
             else {
-                targetDbNode.Children.Add(movingDbNode);
                 movingDbNode.Parent = targetDbNode;
+                targetDbNode.Children.Add(movingDbNode);
+                targetDbNode.Children.Normalize(true);
+                targetDbNode.Children.CommitNeeded = true;
             }
 
             // rebuild visual properties and children of the moved node
