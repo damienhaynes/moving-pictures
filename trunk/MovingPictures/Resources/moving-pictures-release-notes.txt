@@ -1,4 +1,4 @@
-Moving Pictures 0.7.4
+Moving Pictures 1.0.0
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -23,9 +23,127 @@ will only be installed for skins not supporting Moving Pictures). The generic sk
 is meant to be a temporary solution to allow all users to enjoy Moving Pictures 
 even if their favorite skin has not yet added support. 
 
-
-
 Change Log
+================================================================================
+1.0.0
+--------------------------------------------------------------------------------
+GUI Enhancements
+--------------------------------------------------------------------------------
+Issue #38:      Added new Categories menuing system. You can now navighate your movies 
+                via a completely customizable menu.
+               
+Issue #38:      Added Filtering context menu.
+
+Issue #17:      Added MediaInfo (and Logos) Support.
+
+Issue #11:      Added Parental Controls to limit access to a user defined set of movies.
+
+Issue #20:      Added multi-lingual support to GUI. 
+
+Issue #437:     Various colors are now available in the GUI facade to indicate 
+                watched movies and offline movies.
+                
+Issue #323:     Group headers are now available in the movie list.                
+                
+Issue #291:     It is now possible to rate a movie after watching it.
+                
+Issue #285:     When possible, actual runtime is now displayed rather than the value 
+                scraped from internet.
+
+Issue #511:     A working animation is now available to the skin when 
+                Moving Pictures is performing processing in the background.               
+                
+Issue #401:     Automatic refresh rate change is now supported for external playback.
+
+Issue #369:     Mounted image files will now be unmounted after playback.
+                
+Issue #394:     Multiple alphabet layouts are now available for the remote control filter.
+                
+--------------------------------------------------------------------------------
+Importer / Configuration Screen Enhancements
+--------------------------------------------------------------------------------                
+                
+Issue #277:     Multiple data source will now be searched when looking for a movie to
+                match a file. Multiple data sources will also be used when updating
+                movie details.
+                
+Issue #317:     Moved and renamed files are now automatically detected and a reimport
+                is no longer necessary.
+
+Issue #494:     The data provider system can now be configured automatically by language.
+                If a script is not available, machine translation is available.
+                
+Issue #165:     The importer is now capable of pulling full movie details from the 
+                MyVideos database.
+                
+Issue #373:     Scraper scripts can now be written to import backdrops.
+                
+Issue #390:     Scraper scripts can now be written to import data from a text file in the 
+                file system.
+
+Issue #382:     "Interactive Content" on imported video disks is now ignored (configurable).
+
+Issue #53:      It is now possible to change the default for the "sort by" field 
+                to keep preceding articles at the front. i.e. "The Matrix" rather 
+                than "Matrix, The".
+                
+--------------------------------------------------------------------------------
+General Enhancements
+--------------------------------------------------------------------------------
+                
+Issue #465:     Moving Pictures now starts up much faster.
+                
+Issue #389:     The installer will now backup the database when upgrading to a 
+                new version.
+
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #495:     Fixed bug causing a MediaPortal crash when scrolling very fast 
+                through the movie list.
+                
+Issue #414:     After stopping a movie, that movie will still be selected in the 
+                movie list.
+                
+Issue #355:     Added options to modify what value is used for the 'Date Added'
+                field when importing a movie.
+                
+Issue #472:     Fixed bug causing movie duplication in some situations when a 
+                network drive is disconnected and then reconnected.
+                
+Issue #416:     MovingPictures (and MediaPortal) will no longer steal focus from 
+                an external player when the remote is used.
+                
+Issue #480:     Fixed rounding issues with the star rating.
+
+
+Issue #413:     Fixed unhandled error when loading backdrops with a bad path.
+
+Issue #527:     Improved multi-part movie detection.
+
+Issue #211:     Corrected a bug sometimes causing after playback incorrect 
+                details to be displayed in Details View.
+                
+Issue #515:     When exiting and re-entering Moving Pictures, the previously 
+                selected movie will now still be selected.
+                
+Issue #461:     Fixed rare crash in the Manual Movie Import dialog.
+
+Issue #583:     Moving Pictures will no longer error out when the play button is 
+                not implemented by the skin.
+                
+Issue #397:     Deleting a movie from the GUI will now always remove it from the 
+                Facade.
+                
+Issue #510:     When a movie's details are updated, it's sort position will also 
+                update if needed.
+                
+Issue #532:     Score is now imported as a real number rather than an integer.
+
+Issue #535:     Saved image files now have a mtaching file type and extension.
+
+Issue #435:     Manual Import Path entry now validates input.                
+                
 ================================================================================
 0.7.5
 --------------------------------------------------------------------------------
