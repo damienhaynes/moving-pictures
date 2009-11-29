@@ -13,24 +13,24 @@
   <string Field="CannotDeleteReadOnly">Kann keine schreibgeschützen Dateien löschen.\nSoll Moving Pictures diesen Film ignorieren?</string>
   <string Field="CategoryEmptyDescription">Momentan sind keine Filme\nin dieser Kategorie vorhanden.</string>
   <string Field="CategoryEmptyHeader">Kategorie ist leer</string>
-  <string Field="Certification">Certification</string>
+  <string Field="Certification">Altersfreigaben</string>
   <string Field="ChangeView">Ansicht ändern</string>
-  <string Field="CheckForMissingArtwork">Suche online nach fehlendem Cover/Poster</string>
+  <string Field="CheckForMissingArtwork">Suche online nach fehlenden Postern</string>
   <string Field="ContinueToNextPartBody">Mit dem Teil {0} fortsetzen?</string>
   <string Field="ContinueToNextPartHeader">Mit dem nächsten Teil fortsetzen?</string>
-  <string Field="CycleCoverArt">Wechsle Cover/Poster</string>
+  <string Field="CycleCoverArt">Wechsle Poster</string>
   <string Field="CycleView">Ansicht wechseln</string>
   <!-- D -->
-  <string Field="DateAdded">hinzugefügt am</string>
+  <string Field="DateAdded">Erstelldatum</string>
   <string Field="DateDay">Tag</string>
-  <string Field="DateDays">Tage</string>
+  <string Field="DateDays">Tagen</string>
   <string Field="DateMonth">Monat</string>
-  <string Field="DateMonths">Monate</string>
+  <string Field="DateMonths">Monaten</string>
   <string Field="DatePartAgo">Vor {0} {1}</string>
-  <string Field="DatePartWithinDays">Letzen {0} Tage</string>
-  <string Field="DatePartWithinMonths">Letzen {0} Monate</string>
-  <string Field="DatePartWithinWeeks">Letzen {0} Wochen</string>
-  <string Field="DatePartWithinYears">Letzen {0} Jahre</string>
+  <string Field="DatePartWithinDays">Letzten {0} Tage</string>
+  <string Field="DatePartWithinMonths">Letzten {0} Monate</string>
+  <string Field="DatePartWithinWeeks">Letzten {0} Woche</string>
+  <string Field="DatePartWithinYears">Letzten {0} Jahre</string>
   <string Field="DateWeek">Woche</string>
   <string Field="DateWeeks">Wochen</string>
   <string Field="DateYear">Jahr</string>
@@ -57,10 +57,10 @@
   <string Field="Genres">Genres</string>
   <!-- I -->
   <string Field="InvalidPin">Falscher PIN Code!</string>
-  <string Field="InvalidVideoDiscFormat">Entweder das Image-File enthält kein\ngültiges Videodiscformat oder deine Daemon Tools\nMediaportal Konfiguration ist nicht korrekt.</string>
+  <string Field="InvalidVideoDiscFormat">Entweder das Image-File enthält kein\ngültiges Videodiscformat oder die Daemon Tools\nMediaportal Konfiguration ist nicht korrekt.</string>
   <!-- L -->
   <string Field="Language">Sprache</string>
-  <string Field="LargeThumbnailView">Grosse Vorschaubilde</string>
+  <string Field="LargeThumbnailView">Grosse Vorschaubilder</string>
   <string Field="LastMonth">Letzten Monat</string>
   <string Field="LastWeek">Letzte Woche</string>
   <string Field="LastYear">Letztes Jahr</string>
@@ -70,7 +70,7 @@
   <string Field="MarkAsUnwatched">Als ungesehen markieren</string>
   <string Field="MarkAsWatched">Als gesehen markieren</string>
   <string Field="MediaIsMissing">Das Medium für den gewählten Film ist nicht vorhanden!\nLeider ging irgendetwas schief...</string>
-  <string Field="MediaNotAvailableBody">Das Medium für den gewählten Film ist zur Zeit\nnicht verfügbar. Bitte verbinde oder lege folgenden\nDatenträger ein: {0}</string>
+  <string Field="MediaNotAvailableBody">Das Medium für den gewählten Film ist zur Zeit\nnicht verfügbar. Bitte verbinden oder folgenden\nDatenträger einlegen: {0}</string>
   <string Field="MediaNotAvailableHeader">Medium nicht verfügbar</string>
   <string Field="MissingExternalPlayerExe">Die Anwendung für HD-Wiedergabe ist nicht vorhanden.\nBitte den Pfad zu der Anwendung angeben/korrigieren.</string>
   <string Field="Monday">Montag</string>
@@ -99,10 +99,9 @@
   <string Field="RateFiveStarThree">Gut</string>
   <string Field="RateFiveStarTwo">Mittelmäßig</string>
   <string Field="RateHeading">Film bewerten</string>
-  <string Field="RemoteNumericAlphabet0">
-  </string>
-  <string Field="RemoteNumericAlphabet1">
-  </string>
+  <string Field="RecentlyAddedMovies">Neu hinzugefügte Filme</string>
+  <string Field="RemoteNumericAlphabet0"></string>
+  <string Field="RemoteNumericAlphabet1"></string>
   <string Field="RemoteNumericAlphabet2">abc</string>
   <string Field="RemoteNumericAlphabet3">def</string>
   <string Field="RemoteNumericAlphabet4">ghi</string>
@@ -114,7 +113,7 @@
   <string Field="ResumeFrom">Fortsetzen bei</string>
   <string Field="ResumeFromLast">Wiedergabe an letzter Position fortsetzen?</string>
   <string Field="Retry">Wiederholen</string>
-  <string Field="Runtime">Runtime</string>
+  <string Field="Runtime">Laufzeit</string>
   <string Field="RuntimeHour">{0} Stunde</string>
   <string Field="RuntimeHours">{0} Stunden</string>
   <string Field="RuntimeLong">{0} und {1}</string>
@@ -141,22 +140,23 @@
   <string Field="ThisMonth">Diesen Monat</string>
   <string Field="ThisWeek">Diese Woche</string>
   <string Field="ThisYear">Dieses Jahr</string>
-  <string Field="ThreeMonthsAgo">Vor 3 Monaten</string>
-  <string Field="ThreeWeeksAgo">Vor 3 Wochen</string>
+  <string Field="ThreeMonthsAgo">Vor drei Monaten</string>
+  <string Field="ThreeWeeksAgo">Vor drei Wochen</string>
   <string Field="ThumbnailView">Kleine Vorschaubilder</string>
   <string Field="Thursday">Donnerstag</string>
   <string Field="Title">Titel</string>
   <string Field="Today">Heute</string>
-  <string Field="ToggleParentalLock">Kinderschutz umschalten</string>
+  <string Field="ToggleParentalLock">Kinderschutz ein/aus</string>
   <string Field="Tuesday">Dienstag</string>
-  <string Field="TwoMonthsAgo">Vor 2 Monaten</string>
-  <string Field="TwoWeeksAgo">Vor 2 Wochen</string>
+  <string Field="TwoMonthsAgo">Vor zwei Monaten</string>
+  <string Field="TwoWeeksAgo">Vor zwei Wochen</string>
   <!-- U -->
   <string Field="Unknown">Unbekannt</string>
   <string Field="UnlockRestrictedMovies">Eingeschränkte Filme freigeben</string>
+  <string Field="UnwatchedMovies">Ungesehene Filme</string>
   <string Field="UpAbbreviation">(auf)</string>
-  <string Field="UpdateDetailsFromOnline">Aktualisiere Daten aus Online Quellen</string>
-  <string Field="UpdateMovieDetailsBody">Du bist im Begriff alle Film-Metadaten zu aktualisieren.\nDies wird alle benutzerdefinierten Änderungen überschreiben.\nWillst du fortfahren?</string>
+  <string Field="UpdateDetailsFromOnline">Filmdaten updaten</string>
+  <string Field="UpdateMovieDetailsBody">Alle benutzerdefinierten Änderungen werden\nbei diesem Vorgang überschrieben.\nTrotzdem fortfahren?</string>
   <string Field="UpdateMovieDetailsHeader">Aktualisiere Filmdetails</string>
   <!-- V -->
   <string Field="VirtualDriveHeader">Virtuelles Laufwerk ist nicht verfügbar</string>

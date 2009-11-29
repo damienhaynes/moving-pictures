@@ -54,6 +54,7 @@ Var CURR_DATE
 !insertmacro LANG_LOAD "French"
 !insertmacro LANG_LOAD "German"
 !insertmacro LANG_LOAD "Spanish"
+!insertmacro LANG_LOAD "Italian"
 
 # set the build filename based on environment variables
 !ifdef RELEASE
