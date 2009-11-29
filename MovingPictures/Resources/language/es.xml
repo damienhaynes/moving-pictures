@@ -86,6 +86,7 @@
   <string Field="RateFiveStarThree">Buena</string>
   <string Field="RateFiveStarTwo">Mediocre</string>
   <string Field="RateHeading">Puntuar Película</string>
+  <string Field="RecentlyAddedMovies">Películas añadidas recientemente</string>
   <string Field="RemoteNumericAlphabet2">abc</string>
   <string Field="RemoteNumericAlphabet3">def</string>
   <string Field="RemoteNumericAlphabet4">ghi</string>
@@ -134,6 +135,7 @@
   <string Field="TwoWeeksAgo">Hace Dos Semanas</string>
   <string Field="Unknown">Desconocido</string>
   <string Field="UnlockRestrictedMovies">Desbloquear películas restringidas</string>
+  <string Field="UnwatchedMovies">Películas no Vistas</string>
   <string Field="UpAbbreviation">(arr)</string>
   <string Field="UpdateDetailsFromOnline">Actualizar Detalles Online</string>
   <string Field="UpdateMovieDetailsBody">Va a refrescar todos los datos de la película, sobreescribiendo\ncualquier modificación hecha sobre el film.\n¿Quiere continuar?</string>

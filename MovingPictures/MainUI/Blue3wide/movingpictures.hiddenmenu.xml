@@ -82,7 +82,7 @@
 				<description>Parental Controls</description>
 				<type>button</type>
 				<id>15</id>
-				<label>Toggle Parental Controls</label>
+				<label>#MovingPictures.Translation.ToggleParentalLock.Label</label>
 				<onright>50</onright>
 				<ondown>10</ondown>
 				<onup>14</onup>

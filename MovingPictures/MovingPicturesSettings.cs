@@ -993,7 +993,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Show group headers when sorting the movies",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "allow_grouping",
-            Default = true)]
+            Default = false)]
         public bool AllowGrouping {
             get { return _allow_grouping; }
             set {
