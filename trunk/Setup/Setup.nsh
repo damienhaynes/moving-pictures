@@ -126,29 +126,29 @@ SectionEnd
 
 # Loops through each skin folder and sends them off
 # for processing and possible generic skin installation
-Section "Generic Skin Support" SEC0001
+#Section "Generic Skin Support" SEC0001
     # loop through folders in the skin folder 
-    FindFirst $0 $1 "$SKIN_DIR\*.*"
-    directory_loop:
+#    FindFirst $0 $1 "$SKIN_DIR\*.*"
+#    directory_loop:
         # if no results, quit
-        StrCmp $1 "" directory_loop_done
+#        StrCmp $1 "" directory_loop_done
         
         # if this is the current or previous directory, skip
-        StrCmp $1 "." next
-        StrCmp $1 ".." next
+#        StrCmp $1 "." next
+#        StrCmp $1 ".." next
 
         # if this is a folder check the movingpictures.xml
-        IfFileExists "$SKIN_DIR\$1\*.*" 0 not_a_directory
-            StrCpy $CURR_SKIN $1
-			Call processCurrentSkin            
-        not_a_directory:
+#        IfFileExists "$SKIN_DIR\$1\*.*" 0 not_a_directory
+#            StrCpy $CURR_SKIN $1
+#			Call processCurrentSkin            
+#        not_a_directory:
         
         # setup iteration variables for next loop
-        next:
-        FindNext $0 $1
-        goto directory_loop
-    directory_loop_done:
-SectionEnd
+#        next:
+#        FindNext $0 $1
+#        goto directory_loop
+#    directory_loop_done:
+#SectionEnd
 
 # set description text for install components
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -169,6 +169,7 @@ Function .onInit
     
     # grab various fields from registry
     Call getMediaPortalDir
+    Call getPluginDir
     Call verifyMediaPortalVer
 	Call getSkinDir
 	Call getDatabaseDir
@@ -356,9 +357,40 @@ Function getMediaPortalDir
         Abort
     mediaportal_found:
     
-    # store our output folders
-    StrCpy $PLUGIN_DIR "$MEDIAPORTAL_DIR\plugins\Windows"
-		
+	Pop $2
+    Pop $1
+	Pop $0
+FunctionEnd
+
+Function getPluginDir
+    Push $0
+	Push $1
+    Push $2
+
+	#grab the plugins folder
+	${xml::LoadFile} "$MEDIAPORTAL_DIR\MediaPortalDirs.xml" $1
+    IntCmp $1 -1 fail
+    ${xml::RootElement} $0 $1
+    IntCmp $1 -1 fail
+    ${xml::XPathNode} "//Config/Dir[@id='Plugins']/Path" $1
+    IntCmp $1 -1 fail
+    ${xml::GetText} $2 $1
+    IntCmp $1 -1 fail
+    
+    #check_for_new_path_on_vista_or_win7
+        ExpandEnvStrings $PLUGIN_DIR "$2\Windows"
+        IfFileExists $PLUGIN_DIR\*.* done check_for_relative_path
+	check_for_relative_path:
+		StrCpy $PLUGIN_DIR "$MEDIAPORTAL_DIR\$PLUGIN_DIR"
+		IfFileExists $PLUGIN_DIR\*.* done check_for_new_xp_path
+    check_for_new_xp_path:
+        ${StrReplace} $PLUGIN_DIR "%ProgramData%" "%ALLUSERSPROFILE%\Application Data" $2
+        ExpandEnvStrings $PLUGIN_DIR $PLUGIN_DIR
+        IfFileExists $PLUGIN_DIR\*.* done fail
+	fail:
+		StrCpy $PLUGIN_DIR "$MEDIAPORTAL_DIR\plugins\Windows"
+	done:
+	
 	Pop $2
     Pop $1
 	Pop $0
