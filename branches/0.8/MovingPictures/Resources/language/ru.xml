@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!-- Moving Pictures translation file -->
+<!-- Russuan (RU) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<!-- Contributed by mitiok2002 in Issue#20 -->
+
+<strings>
+  <string Field="ProblemLoadingSkinFile">Проблема при загрузке skin-файла...</string>
+  <string Field="NoImportPathsHeading">Отсутствуют пути для импорта!</string>
+  <string Field="NoImportPathsBody">Похоже что вы не определили\nни одного пути для импорта. Вам\nследует закрыть MediaPortal и\nзапустить MediaPortal\nConfiguration Screen для\nнастройки Moving Pictures.</string>
+  <string Field="ShowAllMovies">Все фильмы</string>
+  <string Field="ShowOnlyUnwatchedMovies">Только непросмотренные фильмы</string>
+  <string Field="SortBy">Сорт.</string>
+  <string Field="ChangeView">Изм. вид</string>
+  <string Field="ListView">Список</string>
+  <string Field="ThumbnailView">Иконки</string>
+  <string Field="LargeThumbnailView">Большие иконки</string>
+  <string Field="FilmstripView">Обложки</string>
+  <string Field="UpdateDetailsFromOnline">Обновить данные из Internet</string>
+  <string Field="CycleCoverArt">Следующая Обложка</string>
+  <string Field="CheckForMissingArtwork">Проверить постеры в Internet</string>
+  <string Field="MarkAsUnwatched">Отметить как непросмотренный</string>
+  <string Field="MarkAsWatched">Отметить как просмотренный</string>
+  <string Field="DeleteMovie">Удалить фильм</string>
+  <string Field="CannotDeleteReadOnly">Файл только для чтения, невозможно удалить.\nВы хотите чтобы Moving Pictures пропустил этот фильм?</string>
+  <string Field="CannotDeleteOffline">Не возможно удалить {0}\n т.к. файл отсутствует</string>
+  <string Field="DoYouWantToDelete">Вы деуствительно хотите удалить \n{0}\nс жесткого диска?</string>
+  <string Field="DeleteFailed">Ошибка при удалении</string>
+  <string Field="UpdateMovieDetailsHeader">Обновить данные о фильме</string>
+  <string Field="UpdateMovieDetailsBody">Вы собираетесь все данные по фильму, все ручные \nисправления будут отменены. Продолжать?</string>
+  <string Field="MediaNotAvailableHeader">Источник не доступен</string>
+  <string Field="MediaNotAvailableBody">Источник для фильма не доступен в настоящий\nмомент. Пожалуйста, подключите или вставьте\nисточник: {0}</string>
+  <string Field="VirtualDriveHeader">Вирутальный диск не готов</string>
+  <string Field="VirtualDriveMessage">Виртуальные диск не готов. Пожалуйста, попробуйте\nеще раз или отмените воспроизведение.</string>
+  <string Field="Retry">Повтор</string>
+  <string Field="Cancel">Отмена</string>
+  <string Field="Error">Ошибка</string>
+  <string Field="MediaIsMissing">Источник, который вы выбрали для фильма отсутствует!\nЧто то пошло не так...</string>
+  <string Field="FailedMountingImage">Ошибка при сборке образа DVD</string>
+  <string Field="PlaybackFailedHeader">Ошибка при воспроизведении</string>
+  <string Field="PlaybackFailed">Воспроизведение не возможно, т.к. '{0}'\n расширение не записано в конфигурации Mediaportal.\nДобавьте расширение или используйте внешний плейер.</string>
+  <string Field="MissingExternalPlayerExe">Внешний плейер не найден.\nИсправьте путь к файлу плейера.</string>
+  <string Field="ResumeFromLast">Воспроизвести, где остановились?</string>
+  <string Field="ResumeFrom">Воспроизведение с:</string>
+  <string Field="InvalidVideoDiscFormat">Либо файл образа записан неправильно,\n либо конфигурация Daemon Tools\nв MediaPortal не корректна.</string>
+  <string Field="ContinueToNextPartHeader">Продолжить со след. части?</string>
+  <string Field="ContinueToNextPartBody">Хотите продолжить со части {0}?</string>
+  <string Field="Rate">Оценить</string>
+  <string Field="SelectYourRating">Поставить оценку для {0}</string>
+  
+      <!-- friendly names for sorting -->
+  <string Field="Title">Название</string>
+  <string Field="DateAdded">Добавлено</string>
+  <string Field="Year">Год</string>
+  <string Field="Certification">Рейтинг MPAA</string>
+  <string Field="Language">Язык</string>
+  <string Field="Score">Рейтинг</string>
+  <string Field="Runtime">Время</string>
+  <string Field="FilePath">Путь</string>
+  
+	  <!-- Group names for the date added sorting -->
+  <string Field="Future">В будущем</string>
+  <string Field="Today">Сегодня</string>
+  <string Field="Yesterday">Вчера</string>
+  <string Field="Sunday">Воскресенье</string>
+  <string Field="Monday">Понедельник</string>
+  <string Field="Tuesday">Вторник</string>
+  <string Field="Wednesday">Среда</string>
+  <string Field="Thursday">Четверг</string>
+  <string Field="Friday">Пятница</string>
+  <string Field="Saturday">Суббота</string>
+  <string Field="LastWeek">Неделю назад</string>
+  <string Field="TwoWeeksAgo">Две недели назад</string>
+  <string Field="ThreeWeeksAgo">Три недели назад</string>
+  <string Field="LastMonth">Месяц назад</string>
+  <string Field="TwoMonthsAgo">Два месяца назад</string>
+  <string Field="ThreeMonthsAgo">Три месяца назад</string>
+  <string Field="EarlierThisYear">В этом году</string>
+  <string Field="LastYear">В прошлом году</string>
+  <string Field="Older">Старше</string>
+
+  <!-- Remote Control Numeric Alphabet -->
+
+  <string Field="RemoteNumericAlphabet0"></string>
+  <string Field="RemoteNumericAlphabet1"></string>
+  <string Field="RemoteNumericAlphabet2">abcАБВГ</string>
+  <string Field="RemoteNumericAlphabet3">defДЕЖЗ</string>
+  <string Field="RemoteNumericAlphabet4">ghiИЙКЛ</string>
+  <string Field="RemoteNumericAlphabet5">jklМНОП</string>
+  <string Field="RemoteNumericAlphabet6">mnoРСТУ</string>
+  <string Field="RemoteNumericAlphabet7">pqrsФХЦЧ</string>
+  <string Field="RemoteNumericAlphabet8">tuvШЩЪЫ</string>
+  <string Field="RemoteNumericAlphabet9">wxyzЬЭЮЯ</string> 
+  
+</strings>
