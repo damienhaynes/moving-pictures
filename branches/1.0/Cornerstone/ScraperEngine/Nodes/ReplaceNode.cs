@@ -28,38 +28,41 @@ namespace Cornerstone.ScraperEngine.Nodes {
     public ReplaceNode(XmlNode xmlNode, bool debugMode)
       : base(xmlNode, debugMode) {
 
-      // try to grab the input string
-      try { input = xmlNode.Attributes["input"].Value; }
-      catch (Exception e) {
-        if (e.GetType() == typeof(ThreadAbortException))
-          throw e;
+        // Load attributes
+        foreach (XmlAttribute attr in xmlNode.Attributes) {
+            switch (attr.Name) {
+                case "input":
+                    input = attr.Value;
+                    break;
+                case "pattern":
+                    pattern = attr.Value;
+                    break;
+                case "with":
+                    replacement = attr.Value;
+                    break;
+            }
+        }
 
-        logger.Error("Missing INPUT attribute on: " + xmlNode.OuterXml);
-        loadSuccess = false;
-        return;
-      }
+        // Validate INPUT attribute
+        if (input == null) {
+            logger.Error("Missing INPUT attribute on: " + xmlNode.OuterXml);
+            loadSuccess = false;
+            return;
+        }
 
-      // try to grab the regex pattern
-      try { pattern = xmlNode.Attributes["pattern"].Value; }
-      catch (Exception e) {
-        if (e.GetType() == typeof(ThreadAbortException))
-          throw e;
+        // Validate PATTERN attribute
+        if (pattern == null) {
+            logger.Error("Missing PATTERN attribute on: " + xmlNode.OuterXml);
+            loadSuccess = false;
+            return;
+        }
 
-        logger.Error("Missing PATTERN attribute on: " + xmlNode.OuterXml);
-        loadSuccess = false;
-        return;
-      }
-
-      // try to grab the regex pattern
-      try { replacement = xmlNode.Attributes["with"].Value; }
-      catch (Exception e) {
-        if (e.GetType() == typeof(ThreadAbortException))
-          throw e;
-
-        logger.Error("Missing WITH attribute on: " + xmlNode.OuterXml);
-        loadSuccess = false;
-        return;
-      } 
+        // Validate WITH attribute
+        if (replacement == null) {
+            logger.Error("Missing WITH attribute on: " + xmlNode.OuterXml);
+            loadSuccess = false;
+            return;
+        }
 
     }
 

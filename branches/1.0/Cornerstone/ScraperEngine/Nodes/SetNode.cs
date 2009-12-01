@@ -21,36 +21,31 @@ namespace Cornerstone.ScraperEngine.Nodes {
             : base(xmlNode, debugMode) {
 
             if (DebugMode) logger.Debug("executing set: " + xmlNode.OuterXml);
-            
-            // try to grab the value
-            try { value = xmlNode.Attributes["value"].Value; }
-            catch (Exception e) {
-              if (e.GetType() == typeof(ThreadAbortException))
-                throw e;
 
-              loadSuccess = false;
+            // Load attributes
+            foreach (XmlAttribute attr in xmlNode.Attributes) {
+                switch (attr.Name) {
+                    case "value":
+                        value = attr.Value;
+                        break;
+                }
             }
-            
+
             // get the innervalue
             string innerValue = xmlNode.InnerText.Trim();
-            
-            // Display an error if two values are set 
-            if (loadSuccess && !innerValue.Equals(String.Empty)) {
-              logger.Error("Ambiguous assignment on: " + xmlNode.OuterXml);
-              loadSuccess = false;
-              return;
-            }
 
-            // Display an error if no values are set
-            if (!loadSuccess && innerValue.Equals(String.Empty)) {
-              logger.Error("Missing VALUE attribute on: " + xmlNode.OuterXml);
-              return;
-            }
-
-            // Use the innerValue if we don't have a VALUE attribute
-            if (!loadSuccess && !innerValue.Equals(String.Empty)) {
-              loadSuccess = true;
-              value = innerValue;              
+            // Validate TEST attribute
+            if (value == null) {
+                value = innerValue;
+                if (innerValue.Equals(String.Empty)) {
+                    logger.Error("Missing VALUE attribute on: " + xmlNode.OuterXml);
+                    loadSuccess = false;
+                    return;
+                }
+            } else if (!innerValue.Equals(String.Empty)) {
+                logger.Error("Ambiguous assignment on: " + xmlNode.OuterXml);
+                loadSuccess = false;
+                return;
             }
 
         }
