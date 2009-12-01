@@ -26,29 +26,38 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             if (DebugMode) logger.Debug("executing loop: " + xmlNode.OuterXml);
 
-            // try to grab the looping variable
-            try { loopingVariable = xmlNode.Attributes["on"].Value; }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
+            // Load attributes
+            foreach (XmlAttribute attr in xmlNode.Attributes) {
+                switch (attr.Name) {
+                    case "on":
+                        loopingVariable = attr.Value;
+                        break;
+                    case "limit":
+                        try {
+                            limit = int.Parse(attr.Value);
+                        }
+                        catch (Exception e) {
+                            if (e.GetType() == typeof(ThreadAbortException))
+                                throw e;
 
+                            logger.Error("Invalid value for LIMIT attribute on: " + xmlNode.OuterXml);
+                        }
+                        break;
+                }
+            }
+
+            // Validate ON attribute
+            if (loopingVariable == null) {
                 logger.Error("Missing ON attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
             }
 
-            // try to grab the limit variable
-            string limitStr;
-            try { 
-                limitStr = xmlNode.Attributes["limit"].Value;
-                limit = int.Parse(limitStr);
-            }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
-                
+            // Validate LIMIT attribute
+            if (limit == int.MinValue) {
                 limit = 10;
             }
+
         }
 
         public override void Execute(Dictionary<string, string> variables) {

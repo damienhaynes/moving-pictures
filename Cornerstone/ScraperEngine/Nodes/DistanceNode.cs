@@ -19,23 +19,28 @@ namespace Cornerstone.ScraperEngine.Nodes {
         public DistanceNode(XmlNode xmlNode, bool debugMode)
             : base(xmlNode, debugMode) {
 
-            // try to grab the first value
-            try { string1 = xmlNode.Attributes["string1"].Value; }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
+            // Load attributes
+            foreach (XmlAttribute attr in xmlNode.Attributes) {
+                switch (attr.Name) {
+                    case "string1":
+                        string1 = attr.Value;
+                        break;
+                    case "string2":
+                        string2 = attr.Value;
+                        break;
+                }
+            }
 
+
+            // Validate STRING1 attribute
+            if (string1 == null) {
                 logger.Error("Missing STRING1 attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
             }
 
-            // try to grab the second value
-            try { string2 = xmlNode.Attributes["string2"].Value; }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
-
+            // Validate STRING2 attribute
+            if (string2 == null) {
                 logger.Error("Missing STRING2 attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
