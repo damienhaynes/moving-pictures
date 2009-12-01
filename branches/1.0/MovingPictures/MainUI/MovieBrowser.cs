@@ -225,6 +225,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                     // setup the sorting
                     if (_currentNode != null) {
+                        if (_currentNode.AdditionalSettings == null)
+                            _currentNode.AdditionalSettings = new DBMovieNodeSettings();
+
                         DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)_currentNode.AdditionalSettings;
                         if (!nodeSettings.UseDefaultSorting) {
                             // using category settings
