@@ -1072,7 +1072,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else if (dialog.SelectedId == cycleArtItem.ItemId) {
 
                 selectedMovie.NextCover();
+                browser.AutoRefresh = false;
                 selectedMovie.Commit();
+                browser.AutoRefresh = true;
 
                 // update the new cover art in the facade
                 GUIListItem listItem = browser.GetMovieListItem(selectedMovie);
