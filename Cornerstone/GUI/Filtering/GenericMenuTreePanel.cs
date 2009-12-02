@@ -49,6 +49,7 @@ namespace Cornerstone.GUI.Filtering {
         Font regular;
 
         bool dragBarVisible = false;
+        bool rebuildingNode = false;
 
         public GenericMenuTreePanel() {
             InitializeComponent();
@@ -500,6 +501,7 @@ namespace Cornerstone.GUI.Filtering {
                 pendingModification.Push((DBNode<T>)node);
 
                 // temporarily remove the node
+                rebuildingNode = true;
                 if (details.Parent == null)
                     treeView.Nodes.Remove(treeNode);
                 else
@@ -539,6 +541,8 @@ namespace Cornerstone.GUI.Filtering {
             TreeNode treeNode = treeNodeLookup[node];
             NodeModifiedDetails details = modificationDetails[node];
 
+            rebuildingNode = false;
+
             // re-add the node
             try {
                 if (details.Parent == null)
@@ -550,7 +554,6 @@ namespace Cornerstone.GUI.Filtering {
                 if (e is ThreadAbortException)
                     throw e;
             }
-
 
             treeView.SelectedNode = treeNode;
             modificationDetails.Remove(node);
@@ -859,6 +862,9 @@ namespace Cornerstone.GUI.Filtering {
         }
 
         private void treeView_AfterSelect(object sender, TreeViewEventArgs e) {
+            if (rebuildingNode)
+                return;
+
             if (treeView.SelectedNode.Tag is DBNode<T>) {
                 if (SelectedNodeChanged != null)
                     SelectedNodeChanged((IDBNode)treeView.SelectedNode.Tag, typeof(T));
