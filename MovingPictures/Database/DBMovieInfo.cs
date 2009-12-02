@@ -153,7 +153,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _certification;
         
         
-        [DBField(AllowManualFilterInput=false)]
+        [DBField(AllowManualFilterInput=true)]
         public string Language {
             get { return _language; }
 
