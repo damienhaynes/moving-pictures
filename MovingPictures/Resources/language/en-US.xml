@@ -132,6 +132,7 @@
   <string Field="SelectYourRating">Select your rating for {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Show Only Unwatched Movies</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Show Watched and Unwatched Movies</string>
+  <string Field="SkinDoesNotSupportCategories">This skin does not support Categories.</string>
   <string Field="SkinDoesNotSupportPinDialog">This skin does not support the Pin Code Dialog.</string>
   <string Field="SkinDoesNotSupportRatingDialog">This skin does not support the Rating Dialog.</string>
   <string Field="SortBy">Sort By</string>

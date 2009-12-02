@@ -367,7 +367,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (!preventDialogOnLoad) {
                     GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
                     dialog.Reset();
-                    dialog.SetHeading("This skin does not support Categories...");
+                    dialog.SetHeading(Translation.SkinDoesNotSupportCategories);
                     dialog.DoModal(GetID);
                 }
                 else {
