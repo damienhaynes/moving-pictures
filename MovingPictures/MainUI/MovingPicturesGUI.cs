@@ -530,6 +530,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case 4:
                     showFilterContext();
                     browser.Focus();
+                    if (filterButton != null) filterButton.Focus = false;
                     break;
 
                 // a click on the play button
@@ -541,12 +542,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case 14:
                     showSortContext();
                     browser.Focus();
+                    if (sortMenuButton != null) sortMenuButton.Focus = false;
                     break;
 
                 // parental controls button clicked
                 case 15:
                     toggleParentalControls();
                     browser.Focus();
+                    if (toggleParentalControlsButton != null) toggleParentalControlsButton.Focus = false;
                     break;
             }
 
