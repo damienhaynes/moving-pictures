@@ -173,7 +173,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
         _isWMV = (_videoCodec.IndexOf("wmv") > -1); // wmv3 = WMV9
         // missing cvid etc
         _isAC3 = (System.Text.RegularExpressions.Regex.IsMatch(_audioCodec, "ac-?3"));
-        _isMP3 = (_audioCodec.IndexOf("mpeg-1 audio layer 3") > -1);
+        _isMP3 = (_audioCodec.IndexOf("mpeg-1 audio layer 3") > -1) || (_audioCodec.IndexOf("mpeg-2 audio layer 3") > -1);
         _isMP2A = (_audioCodec.IndexOf("mpeg-1 audio layer 2") > -1);
         _isDTS = (_audioCodec.IndexOf("dts") > -1);
         _isOGG = (_audioCodec.IndexOf("ogg") > -1);
