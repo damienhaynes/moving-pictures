@@ -253,6 +253,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
                 SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
             }
+
         }
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
@@ -528,6 +529,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // a click on the filter button
                 case 4:
                     showFilterContext();
+                    browser.Focus();
                     break;
 
                 // a click on the play button
@@ -538,11 +540,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // a click on the sort menu button
                 case 14:
                     showSortContext();
+                    browser.Focus();
                     break;
 
                 // parental controls button clicked
                 case 15:
                     toggleParentalControls();
+                    browser.Focus();
                     break;
             }
 
@@ -953,6 +957,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
             SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
+
         }
 
         private void showChangeViewContext() {
