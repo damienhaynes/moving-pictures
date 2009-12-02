@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Moving Pictures translation file -->
-<!-- English (US) -->
+<!-- MP-TV-Series translation file -->
+<!-- German -->
 <!-- Note: English is the fallback for any strings not found in other languages -->
 <strings>
-  <!-- A -->
   <string Field="Actor">Schauspieler</string>
   <string Field="Actors">Schauspieler</string>
   <string Field="AllMovies">Alle Filme</string>
-  <!-- C -->
   <string Field="Cancel">Abbrechen</string>
   <string Field="CannotDeleteOffline">Kann {0}\n nicht löschen, da die Datei offline ist</string>
   <string Field="CannotDeleteReadOnly">Kann keine schreibgeschützen Dateien löschen.\nSoll Moving Pictures diesen Film ignorieren?</string>
@@ -20,7 +18,6 @@
   <string Field="ContinueToNextPartHeader">Mit dem nächsten Teil fortsetzen?</string>
   <string Field="CycleCoverArt">Wechsle Poster</string>
   <string Field="CycleView">Ansicht wechseln</string>
-  <!-- D -->
   <string Field="DateAdded">Erstelldatum</string>
   <string Field="DateDay">Tag</string>
   <string Field="DateDays">Tagen</string>
@@ -42,23 +39,18 @@
   <string Field="Directors">Regisseure</string>
   <string Field="DownAbbreviation">(ab)</string>
   <string Field="DoYouWantToDelete">Soll der Film\n{0}\ndauerhaft von der Festplatte gelöscht werden?</string>
-  <!-- E -->
   <string Field="EarlierThisYear">Anfang des Jahres</string>
   <string Field="Error">Fehler</string>
-  <!-- F -->
   <string Field="FailedMountingImage">Leider konnte das DVD-Image nicht eingebunden werden.</string>
   <string Field="FilePath">Dateipfad</string>
   <string Field="FilmstripView">Filmstrip</string>
   <string Field="FilterBy">Filtere nach</string>
   <string Field="Friday">Freitag</string>
   <string Field="Future">Zukunft</string>
-  <!-- G -->
   <string Field="Genre">Genre</string>
   <string Field="Genres">Genres</string>
-  <!-- I -->
   <string Field="InvalidPin">Falscher PIN Code!</string>
   <string Field="InvalidVideoDiscFormat">Entweder das Image-File enthält kein\ngültiges Videodiscformat oder die Daemon Tools\nMediaportal Konfiguration ist nicht korrekt.</string>
-  <!-- L -->
   <string Field="Language">Sprache</string>
   <string Field="LargeThumbnailView">Grosse Vorschaubilder</string>
   <string Field="LastMonth">Letzten Monat</string>
@@ -66,7 +58,6 @@
   <string Field="LastYear">Letztes Jahr</string>
   <string Field="ListView">Liste</string>
   <string Field="LockRestrictedMovies">Eingeschränkte Filme sperren</string>
-  <!-- M -->
   <string Field="MarkAsUnwatched">Als ungesehen markieren</string>
   <string Field="MarkAsWatched">Als gesehen markieren</string>
   <string Field="MediaIsMissing">Das Medium für den gewählten Film ist nicht vorhanden!\nLeider ging irgendetwas schief...</string>
@@ -78,19 +69,15 @@
   <string Field="MovieDetails">Film Details</string>
   <string Field="MovieOptions">Film Optionen</string>
   <string Field="Movies">Filme</string>
-  <!-- N -->
   <string Field="NoImportPathsBody">Es sind keine Importpfade definiert.\nSie sollten Mediaportal schließen und\ndie Konfiguration von Mediaportal öffnen,\num Moving Pictures zu konfigurieren.</string>
   <string Field="NoImportPathsHeading">Keine Importpfade!</string>
-  <!-- O -->
   <string Field="Older">Älter</string>
-  <!-- P -->
   <string Field="ParentalControlsDisabled">Die Kindersicherung ist ausgeschaltet.</string>
   <string Field="PinCodeHeader">Eingeschränkte Filme freigeben</string>
   <string Field="PinCodePrompt">Bitte PIN Code eingeben um fortzufahren:</string>
   <string Field="PlaybackFailed">Wiedergabe nicht möglich, weil die Erweiterung '{0}' nicht in der Mediaportalkonfiguration aufgeführt ist.\nBitte diese Dateierweiterung hinzufügen oder einen externen Player\neinrichten und noch einmal versuchen.</string>
   <string Field="PlaybackFailedHeader">Wiedergabe fehlgeschlagen</string>
   <string Field="ProblemLoadingSkinFile">Leider gab es ein Problem beim Laden der Skin-Datei ...</string>
-  <!-- R -->
   <string Field="Rate">Bewerten</string>
   <string Field="Rated">Bewertet</string>
   <string Field="RateFiveStarFive">Perfekt</string>
@@ -100,8 +87,10 @@
   <string Field="RateFiveStarTwo">Mittelmäßig</string>
   <string Field="RateHeading">Film bewerten</string>
   <string Field="RecentlyAddedMovies">Neu hinzugefügte Filme</string>
-  <string Field="RemoteNumericAlphabet0"></string>
-  <string Field="RemoteNumericAlphabet1"></string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
   <string Field="RemoteNumericAlphabet2">abc</string>
   <string Field="RemoteNumericAlphabet3">def</string>
   <string Field="RemoteNumericAlphabet4">ghi</string>
@@ -124,19 +113,18 @@
   <string Field="RuntimeSeconds">{0} Sekunden</string>
   <string Field="RuntimeShort">{0}:{1:00}</string>
   <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
-  <!-- S -->
   <string Field="Saturday">Samstag</string>
   <string Field="Score">Punktzahl</string>
   <string Field="SelectYourRating">Wähle deine Bewertung für {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Zeige nur ungesehene Filme</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Zeige gesehene und ungesehene Filme</string>
+  <string Field="SkinDoesNotSupportCategories">Dieser Skin unterstützt die Anzeige von Kategorien nicht.</string>
   <string Field="SkinDoesNotSupportPinDialog">Dieser Skin unterstützt den PIN Code Dialog nicht.</string>
   <string Field="SkinDoesNotSupportRatingDialog">Dieser Skin unterstützt den Bewertungsdialog nicht.</string>
   <string Field="SortBy">Sortiere nach</string>
   <string Field="SortDirection">Sortier Richtung</string>
   <string Field="StarRating">Bewertung</string>
   <string Field="Sunday">Sonntag</string>
-  <!-- T -->
   <string Field="ThisMonth">Diesen Monat</string>
   <string Field="ThisWeek">Diese Woche</string>
   <string Field="ThisYear">Dieses Jahr</string>
@@ -150,7 +138,6 @@
   <string Field="Tuesday">Dienstag</string>
   <string Field="TwoMonthsAgo">Vor zwei Monaten</string>
   <string Field="TwoWeeksAgo">Vor zwei Wochen</string>
-  <!-- U -->
   <string Field="Unknown">Unbekannt</string>
   <string Field="UnlockRestrictedMovies">Eingeschränkte Filme freigeben</string>
   <string Field="UnwatchedMovies">Ungesehene Filme</string>
@@ -158,14 +145,11 @@
   <string Field="UpdateDetailsFromOnline">Filmdaten updaten</string>
   <string Field="UpdateMovieDetailsBody">Alle benutzerdefinierten Änderungen werden\nbei diesem Vorgang überschrieben.\nTrotzdem fortfahren?</string>
   <string Field="UpdateMovieDetailsHeader">Aktualisiere Filmdetails</string>
-  <!-- V -->
   <string Field="VirtualDriveHeader">Virtuelles Laufwerk ist nicht verfügbar</string>
   <string Field="VirtualDriveMessage">Das virtuelle Laufwerk stand nicht rechtzeitig zur Verfügung.\nBitte erneut versuchen oder die Wiedergabe abbrechen.</string>
-  <!-- W -->
   <string Field="Wednesday">Mittwoch</string>
   <string Field="Writer">Author</string>
   <string Field="Writers">Authoren</string>
-  <!-- Y -->
   <string Field="Year">Jahr</string>
   <string Field="Yesterday">Gestern</string>
 </strings>
