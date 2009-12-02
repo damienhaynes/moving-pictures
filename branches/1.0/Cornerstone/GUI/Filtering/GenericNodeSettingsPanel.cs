@@ -145,11 +145,11 @@ namespace Cornerstone.GUI.Filtering {
 
         private void nameTextBox_TextChanged(object sender, EventArgs e) {
             if (_node != null && !updating) {
-                string displayName = _node.Name;
+                string currentName = _node.Name;
                 if (TranslationParser != null)
-                    displayName = TranslationParser(_node.Name);
+                    currentName = TranslationParser(_node.Name);
 
-                if (nameTextBox.Text != displayName)
+                if (nameTextBox.Text != currentName)
                     _node.Name = nameTextBox.Text;
             }
         }
