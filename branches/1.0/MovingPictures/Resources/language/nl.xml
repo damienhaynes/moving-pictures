@@ -130,6 +130,7 @@
   <string Field="SelectYourRating">Selecteer uw waardering voor {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Toon Enkel Onbekeken Films</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Toon Bekeken en Onbekeken Films</string>
+  <string Field="SkinDoesNotSupportCategories">Deze skin ondersteunt het weergeven van categorieën niet.</string>
   <string Field="SkinDoesNotSupportPinDialog">Deze skin ondersteunt het PIN Code Dialoog niet.</string>
   <string Field="SkinDoesNotSupportRatingDialog">Deze skin ondersteunt het Waarderings Dialoog niet.</string>
   <string Field="SortBy">Sorteer Volgens</string>

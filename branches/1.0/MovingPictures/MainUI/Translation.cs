@@ -285,6 +285,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string SelectYourRating = "Select your rating for {0}";
         public static string ShowOnlyUnwatchedMovies = "Show Only Unwatched Movies";
         public static string ShowWatchedAndUnwatchedMovies = "Show Watched and Unwatched Movies";
+        public static string SkinDoesNotSupportCategories = "This skin does not support Categories.";
         public static string SkinDoesNotSupportPinDialog = "This skin does not support the Pin Code Dialog.";
         public static string SkinDoesNotSupportRatingDialog = "This skin does not support the Rating Dialog.";
         public static string SortBy = "Sort By";
