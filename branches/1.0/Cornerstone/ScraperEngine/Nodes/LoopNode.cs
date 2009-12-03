@@ -15,7 +15,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         public int Limit {
             get { return limit; }
-        } protected int limit;
+        } protected int limit = 10;
 
         #endregion
 
@@ -52,12 +52,6 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 loadSuccess = false;
                 return;
             }
-
-            // Validate LIMIT attribute
-            if (limit == int.MinValue) {
-                limit = 10;
-            }
-
         }
 
         public override void Execute(Dictionary<string, string> variables) {
