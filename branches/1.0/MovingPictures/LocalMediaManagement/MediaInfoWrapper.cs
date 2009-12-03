@@ -113,7 +113,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
             }
         }
 
-        if (_mI.Get(StreamKind.Video, 0, "AspectRatio/String") == "4/3")
+        string aspectStr = _mI.Get(StreamKind.Video, 0, "AspectRatio/String");
+        if (aspectStr == "4/3" || aspectStr == "4:3")
             _aspectRatio = "fullscreen";
         else
             _aspectRatio = "widescreen";
