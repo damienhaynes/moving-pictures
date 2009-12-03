@@ -114,8 +114,9 @@
   <string Field="SelectYourRating">Seleziona la tua valutazione per {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Mostra solo i film non visti</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Mostra i film visti e non visti</string>
+  <string Field="SkinDoesNotSupportCategories">La skin non supporta le categorie.</string>
   <string Field="SkinDoesNotSupportPinDialog">La skin non supporta il dialogo richiesta codice PIN.</string>
-  <string Field="SkinDoesNotSupportRatingDialog">La skin non supporta il dialogo di valutazione</string>
+  <string Field="SkinDoesNotSupportRatingDialog">La skin non supporta il dialogo di valutazione.</string>
   <string Field="SortBy">Ordina per</string>
   <string Field="SortDirection">Direzione di ordinamento</string>
   <string Field="StarRating">Valutazione</string>
