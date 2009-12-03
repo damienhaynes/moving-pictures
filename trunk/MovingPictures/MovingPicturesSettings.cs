@@ -1323,6 +1323,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _parentalContolsPassword;
 
+        [CornerstoneSetting(
+            Name = "Parental Controls Timeout",
+            Description = "If set, this will reenable the parental filter after the system is idle for x minutes.  Use 0 to disable the timeout.",
+            Groups = "|MediaPortal GUI|Parental Controls|",
+            Identifier = "parental_controls_timeout",
+            Default = 10,
+            Hidden = false)]
+        public int ParentalControlsTimeout {
+            get { return _parentalControlsTimeout; }
+            set {
+                _parentalControlsTimeout = value;
+                OnSettingChanged("parental_controls_timeout");
+            }
+        }
+        private int _parentalControlsTimeout;
         #endregion
 
         #region Filtering

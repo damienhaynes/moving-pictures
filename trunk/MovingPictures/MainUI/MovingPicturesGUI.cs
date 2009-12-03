@@ -69,6 +69,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private double lastPublished = 0;
         private Timer publishTimer;
+        private Timer parentalFilterTimer;
 
         #endregion
 
@@ -479,8 +480,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // Enable autoplay again when we are leaving the plugin
                 // But only when we are not playing something
-                if (!moviePlayer.IsPlaying)
+                if (!moviePlayer.IsPlaying) {
                     enableNativeAutoplay();
+
+                    if (MovingPicturesCore.Settings.ParentalControlsEnabled && parentalControlsFilter.Active == false) {
+                        parentalControlsFilter.Active = true;
+                        if (parentalFilterTimer != null) {
+                            parentalFilterTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                        }
+                    }
+                }
 
                 base.OnPageDestroy(new_windowId);
             }
@@ -547,6 +556,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             base.OnClicked(controlId, control, actionType);
+            ResetParentalFilterTimer();
         }
 
         public override void OnAction(MediaPortal.GUI.Library.Action action) {
@@ -629,6 +639,23 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 default:
                     base.OnAction(action);
                     break;
+            }
+
+            ResetParentalFilterTimer();
+
+        }
+
+        private void ResetParentalFilterTimer() {
+            if (MovingPicturesCore.Settings.ParentalControlsEnabled && parentalControlsFilter.Active == false && MovingPicturesCore.Settings.ParentalControlsTimeout > 0) {
+                if (parentalFilterTimer == null) {
+                    parentalFilterTimer = new Timer(delegate {
+                            logger.Info("Reactivating parental filter after {0} minutes idle", MovingPicturesCore.Settings.ParentalControlsTimeout);
+                            parentalControlsFilter.Active = true;
+                    }, null, MovingPicturesCore.Settings.ParentalControlsTimeout * 60 * 1000, Timeout.Infinite);
+                }
+                else {
+                    parentalFilterTimer.Change(MovingPicturesCore.Settings.ParentalControlsTimeout * 60 * 1000, Timeout.Infinite);
+                }
             }
         }
 
@@ -1357,6 +1384,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 GUIWindowManager.Process();
             }
 
+            if (parentalFilterTimer != null)
+                parentalFilterTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+
             // Play movie
             moviePlayer.Play(browser.SelectedMovie);
             if (movieStartIndicator != null)
@@ -1369,6 +1399,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // if we would re-enter the plugin, autoplay will be disabled again.
             if (GetID != GUIWindowManager.ActiveWindow)
                 enableNativeAutoplay();
+
+            ResetParentalFilterTimer();
         }           
 
         private void onMovieEnded(DBMovieInfo movie) {
