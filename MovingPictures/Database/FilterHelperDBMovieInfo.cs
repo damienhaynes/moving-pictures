@@ -13,20 +13,35 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public override bool UpdateDynamicNode(DBNode<DBMovieInfo> node) {
             if (node.BasicFilteringField == DBField.GetFieldByDBName(typeof(DBMovieInfo), "year")) {
                 UpdateYear(node);
+                TranslateName(node);
                 return true;
             }
 
             if (node.BasicFilteringField == DBField.GetFieldByDBName(typeof(DBMovieInfo), "date_added")) {
                 UpdateDateAdded(node);
+                TranslateName(node);
                 return true;
             }
             
             if (node.BasicFilteringField == DBField.GetFieldByDBName(typeof(DBMovieInfo), "actors")) {
                 UpdateActors(node);
+                TranslateName(node);
                 return true;
             }
 
-            return false;
+            // for all other dynamic nodes, use generic processing but use a translated name
+            node.UpdateDynamicNodeGeneric();
+            TranslateName(node);
+            return true;
+        }
+
+        // check if a translation exists for the given field, and if so, use that escape
+        // sequence rather than the DB Field Name
+        private void TranslateName(DBNode<DBMovieInfo> node) {
+            string transString = "${" + node.BasicFilteringField.Name + "}";
+            string result = Translation.ParseString(transString);
+            if (result != node.BasicFilteringField.Name)
+                node.Name = transString;
         }
 
         private void UpdateYear(DBNode<DBMovieInfo> node) {

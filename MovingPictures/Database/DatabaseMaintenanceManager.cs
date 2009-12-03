@@ -375,7 +375,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
                 genreNode.DynamicNode = true;
                 genreNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "genres");
-                genreNode.Name = "${Genre}";
+                genreNode.Name = "${Genres}";
                 genreNode.SortPosition = position++;
                 genreNode.DBManager = MovingPicturesCore.DatabaseManager;
                 menu.RootNodes.Add(genreNode);
