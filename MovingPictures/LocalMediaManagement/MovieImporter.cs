@@ -448,6 +448,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // add match to the committed list
             commitedMatches.Add(match);
 
+            // grab mediainfo
+            UpdateMediaInfo(match);
+
             // notify any listeners of the status change
             logger.Info("User manually assigned " + match.LocalMediaString + "as " + match.Selected.Movie.Title);
             if (MovieStatusChanged != null)
