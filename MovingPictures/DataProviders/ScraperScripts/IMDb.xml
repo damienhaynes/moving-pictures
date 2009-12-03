@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="3" point="2"/>
-    <published month="11" day="18" year="2009"/>
+    <version major="1" minor="3" point="3"/>
+    <published month="12" day="02" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -80,7 +80,7 @@
 
     <!-- Retrieve other results using Title -->
     
-    <retrieve name="search_page" url="http://akas.imdb.com/find?s=tt;q=${search.title:safe}" />
+    <retrieve name="search_page" url="http://akas.imdb.com/find?s=tt;q=${search.title:safe(ISO-8859-1)}" />
  
     <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
     <parse name="details_page_block" input="${search_page}" regex="${rx_details_page_block}"/>
