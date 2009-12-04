@@ -32,6 +32,7 @@ namespace Cornerstone.GUI.Filtering {
 
         private Dictionary<DBNode<T>, TreeNode> treeNodeLookup = new Dictionary<DBNode<T>,TreeNode>();
         private HashSet<DBNode<T>> updatingNodes = new HashSet<DBNode<T>>();
+        private HashSet<DBNode<T>> watchedNodes = new HashSet<DBNode<T>>();
         private Dictionary<DBNode<T>, NodeModifiedDetails> modificationDetails = new Dictionary<DBNode<T>, NodeModifiedDetails>();
         private Stack<DBNode<T>> pendingModification = new Stack<DBNode<T>>();
         private Stack<DBNode<T>> finishedModification = new Stack<DBNode<T>>();
