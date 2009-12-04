@@ -621,27 +621,27 @@
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\MediaPortal\Source\Stable\Core\Core.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Core\Core.csproj">
       <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MediaPortal\Source\Stable\Databases\Databases.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
       <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
       <Name>Databases</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MediaPortal\Source\Stable\Dialogs\Dialogs.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Dialogs\Dialogs.csproj">
       <Project>{396C5208-5D46-4A11-92C1-FD0F2F42D7DD}</Project>
       <Name>Dialogs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MediaPortal\Source\Stable\DirectShowLib\DirectShowLib.csproj">
+    <ProjectReference Include="..\..\MediaPortal\DirectShowLib\DirectShowLib.csproj">
       <Project>{CE009BFA-5EF6-4153-B2A1-2FA79698A9AE}</Project>
       <Name>DirectShowLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MediaPortal\Source\Stable\RemotePlugins\RemotePlugins.csproj">
+    <ProjectReference Include="..\..\MediaPortal\RemotePlugins\RemotePlugins.csproj">
       <Project>{0A234721-1F13-4DF8-9B1E-64D9E3111203}</Project>
       <Name>RemotePlugins</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MediaPortal\Source\Stable\Utils\Utils.csproj">
+    <ProjectReference Include="..\..\MediaPortal\Utils\Utils.csproj">
       <Project>{6DA0E4DF-6230-4642-98B5-E690BB6942BB}</Project>
       <Name>Utils</Name>
     </ProjectReference>

@@ -14,14 +14,10 @@ namespace Cornerstone.GUI.Filtering {
     public partial class GenericNodeSettingsPanel<T> : UserControl, IFieldDisplaySettingsOwner, INodeSettingsPanel 
         where T : DatabaseTable {
 
-        DBNodeEventHandler nodeModifiedHandler;
-
         private bool updating = false;
 
         public GenericNodeSettingsPanel() {
             InitializeComponent();
-
-            nodeModifiedHandler = new DBNodeEventHandler(NodeModified);
         }
 
         [Category("Cornerstone Settings")]
@@ -45,14 +41,14 @@ namespace Cornerstone.GUI.Filtering {
 
         public IDBNode Node {
             set {
-                if (value is DBNode<T> || value == null) {
-                    if (_node != null)
-                        _node.Modified -= nodeModifiedHandler;
+                if (_node != null)
+                    _node.Modified -= new DBNodeEventHandler(NodeModified); 
 
+                if (value is DBNode<T> || value == null) {
                     _node = (DBNode<T>)value;
 
                     if (_node != null)
-                        _node.Modified += nodeModifiedHandler;                    
+                        _node.Modified += new DBNodeEventHandler(NodeModified);             
                 }
 
                 PopulateControls();
@@ -61,7 +57,7 @@ namespace Cornerstone.GUI.Filtering {
             get {
                 return _node;
             }
-        } private DBNode<T> _node;
+        } private DBNode<T> _node = null;
 
         [Category("Cornerstone Settings")]
         [Description("Manage the type of database table this control connects to and which fields should be displayed.")]
@@ -101,7 +97,7 @@ namespace Cornerstone.GUI.Filtering {
             //initControls();
         }
 
-        void NodeModified(IDBNode node, Type type) {
+        private void NodeModified(IDBNode node, Type type) {
             PopulateControls();
         }
 

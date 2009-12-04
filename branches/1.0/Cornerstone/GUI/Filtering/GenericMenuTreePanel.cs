@@ -65,7 +65,12 @@ namespace Cornerstone.GUI.Filtering {
 
             bold = new Font(treeView.Font.Name, treeView.Font.Size, FontStyle.Bold, treeView.Font.Unit);
             regular = new Font(treeView.Font.Name, treeView.Font.Size, FontStyle.Regular, treeView.Font.Unit);
+        }
 
+        private void removeEventHandlers() {
+            foreach (DBNode<T> currNode in watchedNodes) {
+                currNode.Modified -= new DBNodeEventHandler(nodeModified); ;
+            }
         }
 
         #region IFieldDisplaySettingsOwner Members
@@ -326,6 +331,7 @@ namespace Cornerstone.GUI.Filtering {
 
             treeNode.Collapse();
             node.Modified += new DBNodeEventHandler(nodeModified);
+            watchedNodes.Add(node);
 
             return treeNode;
         }
@@ -991,7 +997,7 @@ namespace Cornerstone.GUI.Filtering {
 
                 treeView.SelectedNode = treeNode;
             }
-        }   
+        }
     }
 
     public interface IMenuTreePanel {
