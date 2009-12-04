@@ -1,4 +1,5 @@
-﻿namespace Cornerstone.GUI.Filtering {
+﻿using Cornerstone.Database.Tables;
+namespace Cornerstone.GUI.Filtering {
     partial class GenericNodeSettingsPanel<T> {
         /// <summary> 
         /// Required designer variable.
@@ -13,6 +14,10 @@
             if (disposing && (components != null)) {
                 components.Dispose();
             }
+
+            if (disposing && _node != null)
+                _node.Modified -= new DBNodeEventHandler(NodeModified); ;
+
             base.Dispose(disposing);
         }
 

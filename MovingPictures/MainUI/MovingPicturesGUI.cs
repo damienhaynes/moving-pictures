@@ -362,7 +362,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }            
 
             // notify if the skin doesnt support categories
-            if (categoriesFacade == null) {
+            if (categoriesFacade == null && MovingPicturesCore.Settings.CategoriesEnabled) {
                 // avoid showing a dialog on load when we are the last active module being started
                 if (!preventDialogOnLoad) {
                     GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
