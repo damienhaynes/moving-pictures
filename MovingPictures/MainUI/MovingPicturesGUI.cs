@@ -328,7 +328,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (!preventDialogOnLoad) {
                     GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
                     dialog.Reset();
-                    dialog.SetHeading(Translation.ProblemLoadingSkinFile);
+                    dialog.SetHeading(Translation.Error);
+                    dialog.SetLine(1, Translation.ProblemLoadingSkinFile);
                     dialog.DoModal(GetID);
                 }
                 else {
@@ -367,7 +368,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (!preventDialogOnLoad) {
                     GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
                     dialog.Reset();
-                    dialog.SetHeading("This skin does not support Categories...");
+                    dialog.SetHeading(Translation.Error);
+                    dialog.SetLine(1, "This skin does not support Categories...");
                     dialog.DoModal(GetID);
                 }
                 else {
