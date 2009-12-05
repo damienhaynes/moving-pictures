@@ -124,6 +124,25 @@ Section "Blue3wide Skin Support" SEC0002
     ${EndIf}
 SectionEnd
 
+Section "Blue3 Skin Support" SEC0003
+    ${If} ${FileExists} $SKIN_DIR\Blue3\*.*
+        SetOverwrite ifnewer
+
+        SetOutPath $SKIN_DIR\Blue3
+        File "..\MovingPictures\MainUI\Blue3\*.*"
+
+        SetOutPath $SKIN_DIR\Blue3\Media
+        File "..\MovingPictures\MainUI\Blue3\Media\*.*"  
+        
+        SetOutPath $SKIN_DIR\Blue3\Media\Logos
+        File "..\MovingPictures\MainUI\Blue3\Media\Logos\*.*"  
+
+        SetOutPath $SKIN_DIR\Blue3\Media\Categories
+        File "..\MovingPictures\MainUI\Blue3\Media\Categories\*.*"  
+
+    ${EndIf}
+SectionEnd
+
 # Loops through each skin folder and sends them off
 # for processing and possible generic skin installation
 #Section "Generic Skin Support" SEC0001
@@ -155,6 +174,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0000} $(DLL_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0001} $(GENERIC_SKIN_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0002} $(BLUE3WIDE_SKIN_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC0003} $(BLUE3_SKIN_DESCRIPTION)  
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 # startup tasks
