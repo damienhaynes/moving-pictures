@@ -232,6 +232,7 @@ namespace Cornerstone.GUI.Filtering {
             logger.Debug("addDynamicNode_TreeNodeCreated");
             TreeNode treeNode = asyncOutput;
             DBNode<T> newNode = treeNode.Tag as DBNode<T>;
+            asyncOutput = null;
 
             // find the appropriate parent
             TreeNode parentTreeNode = treeView.SelectedNode;
@@ -269,6 +270,7 @@ namespace Cornerstone.GUI.Filtering {
         private bool forceNewNodeRoot;
         private void createTreeNodeAsyncWorker() {
             asyncOutput = createTreeNode(asyncInput);
+            asyncInput = null;
         }
 
         private void removeNode() {
@@ -286,8 +288,25 @@ namespace Cornerstone.GUI.Filtering {
                     treeView.SelectedNode.Parent.Nodes.Remove(treeView.SelectedNode);
                 }
 
+
+                clearReferences(selectedNode);
                 selectedNode.Delete();
             }
+        }
+
+        private void clearReferences(DBNode<T> node) {
+            if (node == null) 
+                return;
+
+            if (treeNodeLookup.ContainsKey(node)) 
+                treeNodeLookup.Remove(node);
+
+            if (watchedNodes.Contains(node))
+                watchedNodes.Remove(node);
+
+            if (node.Children != null)
+                foreach (DBNode<T> childNode in node.Children) 
+                    clearReferences(childNode);
         }
 
         private void RepopulateTree() {
