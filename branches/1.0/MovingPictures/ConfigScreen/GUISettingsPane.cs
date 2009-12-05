@@ -28,6 +28,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         bool nonNumberEntered;
         bool deleteEntered;
 
+        MenuEditorPopup menuEditorPopup = null;
+
         public GUISettingsPane() {
             InitializeComponent();
 
@@ -171,17 +173,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void categoriesMenuButton_Click(object sender, EventArgs e) {
-            MenuEditorPopup popup = new MenuEditorPopup();
-            popup.MenuTree.FieldDisplaySettings.Table = typeof(DBMovieInfo);
+            menuEditorPopup = new MenuEditorPopup();
+            menuEditorPopup.MenuTree.FieldDisplaySettings.Table = typeof(DBMovieInfo);
 
             categoriesMenu = null;
             ProgressPopup loadingPopup = new ProgressPopup(new WorkerDelegate(loadCategoriesMenu));
             loadingPopup.Owner = FindForm();
             loadingPopup.Text = "Loading Menu...";
             loadingPopup.ShowDialog();
-            
-            popup.MenuTree.Menu = categoriesMenu;
-            popup.ShowDialog();
+       
+            menuEditorPopup.ShowDialog();
+            menuEditorPopup = null;
 
             MovingPicturesCore.DatabaseManager.BeginTransaction();
             ProgressPopup savingPopup = new ProgressPopup(new WorkerDelegate(categoriesMenu.Commit));
@@ -203,6 +205,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             else {
                 categoriesMenu = MovingPicturesCore.DatabaseManager.Get<DBMenu<DBMovieInfo>>(int.Parse(menuID));
             }
+
+            menuEditorPopup.MenuTree.Menu = categoriesMenu;
         }
 
         // Handle the KeyDown event to determine the type of character entered into the control.
@@ -254,8 +258,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void filterMenuButton_Click(object sender, EventArgs e) {
-            MenuEditorPopup popup = new MenuEditorPopup();
-            popup.MenuTree.FieldDisplaySettings.Table = typeof(DBMovieInfo);
+            menuEditorPopup = new MenuEditorPopup();
+            menuEditorPopup.MenuTree.FieldDisplaySettings.Table = typeof(DBMovieInfo);
 
             categoriesMenu = null;
             ProgressPopup loadingPopup = new ProgressPopup(new WorkerDelegate(loadFiltersMenu));
@@ -263,9 +267,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             loadingPopup.Text = "Loading Menu...";
             loadingPopup.ShowDialog();
 
-            popup.MenuTree.Menu = filtersMenu;
-            popup.ShowMovieNodeSettings = false;
-            popup.ShowDialog();
+            menuEditorPopup.ShowMovieNodeSettings = false;
+            menuEditorPopup.ShowDialog();
+            menuEditorPopup = null;
 
             MovingPicturesCore.DatabaseManager.BeginTransaction();
             ProgressPopup savingPopup = new ProgressPopup(new WorkerDelegate(filtersMenu.Commit));
@@ -277,6 +281,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void loadFiltersMenu() {
             filtersMenu = MovingPicturesCore.Settings.FilterMenu;
+            menuEditorPopup.MenuTree.Menu = filtersMenu;
         }
 
         private void categoriesCheckBox_CheckedChanged(object sender, EventArgs e) {
