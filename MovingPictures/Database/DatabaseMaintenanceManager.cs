@@ -7,6 +7,7 @@ using Cornerstone.GUI.Dialogs;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database;
 using System.Reflection;
+using MediaPortal.Plugins.MovingPictures.MainUI;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public class DatabaseMaintenanceManager {
@@ -359,18 +360,28 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 unwatchedNode.DBManager = MovingPicturesCore.DatabaseManager;
                 menu.RootNodes.Add(unwatchedNode);
 
+
                 DBNode<DBMovieInfo> recentNode = new DBNode<DBMovieInfo>();
                 recentNode.Name = "${RecentlyAddedMovies}";
                 recentNode.DynamicNode = false;
                 recentNode.Filter = new DBFilter<DBMovieInfo>();
+                recentNode.SortPosition = position++;
+                recentNode.DBManager = MovingPicturesCore.DatabaseManager;
+                
                 DBCriteria<DBMovieInfo> recentCriteria = new DBCriteria<DBMovieInfo>();
                 recentCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "date_added");
                 recentCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN;
                 recentCriteria.Value = "-30d";
                 recentNode.Filter.Criteria.Add(recentCriteria);
-                recentNode.SortPosition = position++;
-                recentNode.DBManager = MovingPicturesCore.DatabaseManager;
+
+                DBMovieNodeSettings additionalSettings = new DBMovieNodeSettings();
+                additionalSettings.UseDefaultSorting = false;
+                additionalSettings.SortField = SortingFields.DateAdded;
+                additionalSettings.SortDirection = SortingDirections.Descending;
+                recentNode.AdditionalSettings = additionalSettings;
+
                 menu.RootNodes.Add(recentNode);
+
 
                 DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
                 genreNode.DynamicNode = true;
