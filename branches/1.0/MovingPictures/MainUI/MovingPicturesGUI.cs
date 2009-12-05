@@ -260,13 +260,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (currentView == BrowserViewMode.DETAILS) {
                 if (playButton != null) playButton.Focus = true;
             }
-            
-            if (currentView != BrowserViewMode.CATEGORIES)
-                PublishMovieDetails(browser.SelectedMovie);
 
             // set the backdrop visibility based on the skin settings
             if (movieBackdropControl != null)
                 backdrop.Active = skinSettings.UseBackdrop(currentView);
+
+            if (currentView != BrowserViewMode.CATEGORIES)
+                PublishMovieDetails(browser.SelectedMovie);
         }
 
         #region GUIWindow Methods

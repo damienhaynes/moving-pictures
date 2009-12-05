@@ -25,7 +25,8 @@ multiple view modes.
 	<define>#filmstrip.available:true</define>       	<!-- Set to true if this skin implements the filmstrip view -->
 	<define>#filmstrip.backdrop.used:true</define>   	<!-- true if backdrop (fanart) should be displayed in this view -->
 
-	<define>#details.backdrop.used:true</define>   	<!-- true if backdrop (fanart) should be displayed in this view -->
+	<define>#categories.backdrop.used:true</define>     <!-- true if backdrop (fanart) should be displayed in this view -->
+    <define>#details.backdrop.used:true</define>        <!-- true if backdrop (fanart) should be displayed in this view -->
 
 	<controls>		
 		<!--            :: DUMMY CONTROLS ::             -->
