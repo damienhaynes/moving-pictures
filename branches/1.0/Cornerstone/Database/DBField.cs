@@ -149,7 +149,7 @@ namespace Cornerstone.Database {
                         if (attribute.Default == "")
                             return false;
                         else
-                            return attribute.Default == "true" || attribute.Default.ToString() == "1";
+                            return attribute.Default.ToLower() == "true" || attribute.Default.ToString() == "1";
                     case DBDataType.DATE_TIME:
                         if (attribute.Default == "")
                             return DateTime.Now;
