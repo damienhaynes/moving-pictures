@@ -66,7 +66,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case SortingFields.Language:
                     return movie.Language.Trim().ToUpper();
                 case SortingFields.Score:
-                    return movie.Score.ToString();
+                    return Math.Round(movie.Score).ToString();
                 case SortingFields.Runtime:
                     return "";
                 case SortingFields.FilePath:
