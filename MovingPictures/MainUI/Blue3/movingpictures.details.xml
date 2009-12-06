@@ -41,7 +41,7 @@ This file should contain the details view
       <posY>275</posY>
       <width>193</width>
       <height>285</height>
-      <texture flipY="true" diffuse="diffusemirrorwide.png">#MovingPictures.Coverart</texture>
+      <texture>#MovingPictures.Coverart</texture>
       <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
     </control>
     <control>
