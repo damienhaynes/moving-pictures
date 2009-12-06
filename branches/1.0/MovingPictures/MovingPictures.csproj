@@ -478,13 +478,13 @@
     <Content Include="MainUI\Blue3wide\Media\dialogprogressbg.png" />
     <Content Include="MainUI\Blue3wide\Media\diffusemirrorwide.png" />
     <Content Include="MainUI\Blue3wide\Media\filmstrip_overlay.png" />
-    <Content Include="MainUI\Blue3wide\Media\glassoverlay.png" />
     <Content Include="MainUI\Blue3wide\Media\glassoverlay2.png" />
     <Content Include="MainUI\Blue3wide\Media\glasstitlebar.png" />
     <Content Include="MainUI\Blue3wide\Media\hover_moving pictures.png" />
     <Content Include="MainUI\Blue3wide\Media\Lock.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\fullscreen.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\hd.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\vc-1.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\widescreen.png" />
     <Content Include="MainUI\Blue3wide\Media\mainoverlay.png" />
     <Content Include="MainUI\Blue3wide\Media\movieviewbg.png" />
@@ -504,7 +504,6 @@
     <Content Include="MainUI\Blue3wide\Media\star7.png" />
     <Content Include="MainUI\Blue3wide\Media\star8.png" />
     <Content Include="MainUI\Blue3wide\Media\star9.png" />
-    <Content Include="MainUI\Blue3wide\Media\starwhite.png" />
     <Content Include="MainUI\Blue3wide\Media\UserRatingStarOff.png" />
     <Content Include="MainUI\Blue3wide\Media\UserRatingStarOn.png" />
     <Content Include="MainUI\Blue3wide\movingpictures.details.xml" />
@@ -526,6 +525,7 @@
     <Content Include="MainUI\Blue3\Media\Lock.png" />
     <Content Include="MainUI\Blue3\Media\Logos\fullscreen.png" />
     <Content Include="MainUI\Blue3\Media\Logos\hd.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\vc-1.png" />
     <Content Include="MainUI\Blue3\Media\Logos\widescreen.png" />
     <Content Include="MainUI\Blue3\Media\movingpictures_detailsoverlay.png" />
     <Content Include="MainUI\Blue3\Media\movingpictures_SortAscending.png" />
