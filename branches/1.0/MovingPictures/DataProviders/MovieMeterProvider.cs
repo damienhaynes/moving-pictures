@@ -154,6 +154,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         private List<DBMovieInfo> getMoviesByTitle(string title) {
+            int popularity = 100;
+
             List<DBMovieInfo> results = new List<DBMovieInfo>();
             Film[] films = Api.Search(title);
             if (films != null) {
@@ -162,6 +164,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     movie.Title = film.title.FromSortable();
                     movie.AlternateTitles.Add(film.alternative_title);
                     movie.GetSourceMovieInfo(SourceInfo).Identifier = film.filmId;
+                    movie.Popularity = popularity--;
+
                     int year = 0;
                     if (int.TryParse(film.year, out year))
                         movie.Year = year;
