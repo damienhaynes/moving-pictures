@@ -1610,7 +1610,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // Delay publishing the details by the ms specified in settings
             if (publishTimer == null) {
-                publishTimer = new Timer(delegate { PublishMovieDetails(browser.SelectedMovie); }, null, 0, Timeout.Infinite);
+                publishTimer = new Timer(delegate { PublishMovieDetails(browser.SelectedMovie); }, null, MovingPicturesCore.Settings.DetailsLoadingDelay, Timeout.Infinite);
             }
             else {
                 publishTimer.Change(MovingPicturesCore.Settings.DetailsLoadingDelay, Timeout.Infinite);
