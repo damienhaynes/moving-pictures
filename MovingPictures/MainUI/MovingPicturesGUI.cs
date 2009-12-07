@@ -1693,7 +1693,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     SetProperty(propertyStr, "", forceLogging);
                 }
-
+                else if (currField.FieldName == "user" && tableType == typeof(DBUserMovieSettings)) {
+                    // rename the "user" field to "username" to prevent overlapping variable names
+                    propertyStr = "#MovingPictures." + prefix + ".username";
+                    valueStr = currField.GetValue(obj).ToString().Trim();
+                    SetProperty(propertyStr, valueStr, forceLogging);
+                }
                 else if (value.GetType() == typeof(StringList)) {
 
                     // make sure we dont go overboard with listing elements :P
