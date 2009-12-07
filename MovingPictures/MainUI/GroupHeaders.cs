@@ -131,9 +131,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // create label text
             string labelText = "--- " + groupLabel + " ";
             float textwidth = 0; float textheight = 0;
+            int iterationCap = 100;
             while (textwidth <= Browser.Facade.ListView.Width) {
                 GUIFontManager.GetFont(Browser.Facade.ListView.FontName).GetTextExtent(labelText, ref textwidth, ref textheight);
                 labelText += "-";
+
+                if (iterationCap-- <= 0)
+                    break;
             }
             // remove 1 char
             labelText = labelText.Substring(0, labelText.Length - 1);
