@@ -67,7 +67,16 @@ multiple view modes.
 		  <posY>-50</posY>
 		  <width>0</width>
 		</control>
-
+		
+		<control>
+		  <description>Visibile when movie playback has started</description>
+		  <type>image</type>
+		  <id>18</id>
+		  <posX>-50</posX>
+		  <posY>-50</posY>
+		  <width>0</width>
+		</control>
+		
 		<!--            :: BACKGROUNDS :: MOVIE BACKDROP :: OVERLAYS ::            -->
 
 		<control>
@@ -250,6 +259,20 @@ multiple view modes.
 		  <animation effect="fade" time="250">WindowClose</animation>
 		  <visible>[Control.IsVisible(50)|Control.IsVisible(51)]+Control.IsVisible(17)</visible>
 		</control>
+
+		<!-- Dim background when movie starts -->
+		<!-- This is to provide feedback to the user something is happening when there are long pauses before playback -->
+		<control>
+			<description>Movie Start Indicator</description>
+			 <type>image</type>
+			 <id>0</id>			 
+			 <posX>0</posX>
+			 <posY>0</posY>  
+			 <width>1280</width>
+			 <height>720</height>
+			 <texture>backgroundtop2.png</texture>	
+			 <visible>Control.IsVisible(18)+!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+		</control>		
 
 	</controls>
 </window>
