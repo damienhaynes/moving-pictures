@@ -67,7 +67,7 @@ This file should contain the list view
 		  <type>label</type>
 		  <id>0</id>
 		  <posX>31</posX>
-		  <posY>71</posY>
+		  <posY>76</posY>
 		  <width>670</width>
 		  <font>font18</font>
 		  <label>#MovingPictures.SelectedMovie.title</label>
@@ -79,7 +79,7 @@ This file should contain the list view
 		  <type>label</type>
 		  <id>0</id>
 		  <posX>30</posX>
-		  <posY>70</posY>
+		  <posY>75</posY>
 		  <width>670</width>
 		  <font>font18</font>
 		  <label>#MovingPictures.SelectedMovie.title</label>
@@ -91,7 +91,7 @@ This file should contain the list view
 		  <type>image</type>
 		  <id>101</id>
 		  <posX>302</posX>
-		  <posY>40</posY>      
+		  <posY>50</posY>      
 		  <width>115</width>
 		  <height>22</height>		  
 		  <align>left</align>		  
