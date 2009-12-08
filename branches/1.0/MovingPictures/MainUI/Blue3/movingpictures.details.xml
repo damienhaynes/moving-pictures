@@ -173,18 +173,18 @@ This file should contain the details view
 	  <posY>-50</posY>	
 	  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
 	</control>
-	<!--<control>
+	<control>
 	  <description>User Star Rating Value</description>
 	  <id>0</id>
 	  <type>label</type>
-	  <label>(Rated: #MovingPictures.UserMovieSettings.user_rating / 5)</label>
+	  <label>(#MovingPictures.Translation.Rated.Label: #MovingPictures.UserMovieSettings.user_rating / 5)</label>
 	  <posX>425</posX>
 	  <posY>378</posY>
 	  <width>200</width>
 	  <align>left</align>
 	  <font>font12</font>	  
 	  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+Control.HasText(199)</visible>
-	</control>-->
+	</control>
 	
     <control>
       <description>Summary</description>
