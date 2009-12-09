@@ -66,13 +66,36 @@
 		<control>
 		  <description>Subtitles</description>
 		  <type>image</type>
-		  <id>0</id>
+		  <id>87</id>
 		  <posX>750</posX>
 		  <posY>670</posY>
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
 		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+		</control>
+		
+		<control>
+		  <description>Video Format - Shift Left</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>750</posX>
+		  <posY>670</posY>
+		  <width>89</width>
+		  <height>50</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videoformat.png</texture>
+		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+!Control.HasThumb(87)</visible>
+		</control>
+		<control>
+		  <description>Video Format</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>828</posX>
+		  <posY>670</posY>
+		  <width>89</width>
+		  <height>50</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videoformat.png</texture>
+		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+Control.HasThumb(87)</visible>
 		</control>
 		
 		<!-- Media logos [List View] -->
@@ -146,7 +169,7 @@
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
 		  <visible>Control.IsVisible(50)+facadeview.list</visible>
-		</control>
+		</control>			
 		
 		<!-- Media logos [Thumbnails View] -->
 		<control>
