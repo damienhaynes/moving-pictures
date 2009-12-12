@@ -1,9 +1,9 @@
 <ScriptableScraper>
   <details>
     <!-- These details are for display purposes only. -->
-    <name>XBMC</name>
+    <name>XBMC (Local)</name>
     <author>LRFalk01</author>
-    <description>This script pulls data from an XBMC Nfo export.</description>
+    <description>This script pulls data from an XBMC NFO export.</description>
     
     <!-- 
     These fields uniquely identify the script. The ID should never 
@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141320</id>
-    <version major="1" minor="0" point="0"/>
-    <published month="10" day="22" year="2009"/>
+    <version major="1" minor="0" point="1"/>
+    <published month="12" day="12" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 

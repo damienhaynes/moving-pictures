@@ -188,6 +188,7 @@ Function .onInit
     SectionSetFlags ${SEC0000} $0
     
     # grab various fields from registry
+    SetShellVarContext all
     Call getMediaPortalDir
     Call getPluginDir
     Call verifyMediaPortalVer
@@ -404,7 +405,7 @@ Function getPluginDir
 		StrCpy $PLUGIN_DIR "$MEDIAPORTAL_DIR\$PLUGIN_DIR"
 		IfFileExists $PLUGIN_DIR\*.* done check_for_new_xp_path
     check_for_new_xp_path:
-        ${StrReplace} $PLUGIN_DIR "%ProgramData%" "%ALLUSERSPROFILE%\Application Data" $2
+        ${StrReplace} $PLUGIN_DIR "%ProgramData%" $APPDATA $2
         ExpandEnvStrings $PLUGIN_DIR $PLUGIN_DIR
         IfFileExists $PLUGIN_DIR\*.* done fail
 	fail:
@@ -438,7 +439,7 @@ Function getSkinDir
 		StrCpy $SKIN_DIR "$MEDIAPORTAL_DIR\$SKIN_DIR"
 		IfFileExists $SKIN_DIR\*.* done check_for_new_xp_path
     check_for_new_xp_path:
-        ${StrReplace} $SKIN_DIR "%ProgramData%" "%ALLUSERSPROFILE%\Application Data" $2
+        ${StrReplace} $SKIN_DIR "%ProgramData%" $APPDATA $2
         ExpandEnvStrings $SKIN_DIR $SKIN_DIR
         IfFileExists $SKIN_DIR\*.* done fail
 	fail:
@@ -472,7 +473,7 @@ Function getDatabaseDir
 		StrCpy $DB_DIR "$MEDIAPORTAL_DIR\$DB_DIR"
 		IfFileExists $DB_DIR\*.* done check_for_new_xp_path
     check_for_new_xp_path:
-        ${StrReplace} $DB_DIR "%ProgramData%" "%ALLUSERSPROFILE%\Application Data" $2
+        ${StrReplace} $DB_DIR "%ProgramData%" $APPDATA $2
         ExpandEnvStrings $DB_DIR $DB_DIR
         IfFileExists $DB_DIR\*.* done fail
 	fail:
