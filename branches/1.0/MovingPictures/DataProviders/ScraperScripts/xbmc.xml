@@ -33,7 +33,7 @@
 		(?<genres><movie>)
 	  ]]>
 	</set>
-	<set name="filename" value="${search.basepath}\${search.clean_filename}" />
+	<set name="filename" value="${search.basepath}\${search.filename_noext}" />
 	
 	<retrieve name="file" file="${filename}.nfo" encoding="UTF-8"/>
 	<parse name="fileCheck" input="${file}" regex="${rx_file_check}" />
@@ -70,6 +70,9 @@
 			
 			<retrieve name="file" file="${movie.site_id}.nfo" encoding="UTF-8"/>
 			<parse name="result" input="${file}" xpath="//movie" />
+			
+			<set name="movie.title" value="${result[0].title}" />
+			<set name="movie.year" value="${result[0].year}" />
 			
 			<set name='movie.score' value='${result[0].rating}' />
 			<set name='movie.votes' value='${result[0].votes}' />
