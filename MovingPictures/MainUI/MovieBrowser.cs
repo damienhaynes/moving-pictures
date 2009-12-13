@@ -419,7 +419,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Rotates the current view.
         /// </summary>
         public void CycleView() {
-            if (CurrentView == BrowserViewMode.DETAILS)
+            if (CurrentView == BrowserViewMode.DETAILS || CurrentView == BrowserViewMode.CATEGORIES)
                 return;
 
             BrowserViewMode newView = CurrentView;

@@ -1659,6 +1659,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             PublishDetails(node, "SelectedNode");
             PublishDetails(node.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
             PublishArtwork(node);
+
+            // publish category node name in a format that can always be used as a filename.
+            SetProperty("#MovingPictures.SelectedNode.FileFriendlyName", Utility.CreateFilename(Translation.ParseString(node.Name)));
+
         }
 
         /// <summary>

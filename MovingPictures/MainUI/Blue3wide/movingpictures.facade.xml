@@ -202,7 +202,7 @@ This file should contain the facade view
 			<posY>175</posY>
 			<width>454</width>
 			<height>455</height>
-			<texture flipY="true" diffuse="Thumb_Mask.png">Categories\#MovingPictures.SelectedNode.name.png</texture>	
+			<texture flipY="true" diffuse="Thumb_Mask.png">Categories\#MovingPictures.SelectedNode.FileFriendlyName.png</texture>	
 			<keepaspectratio>yes</keepaspectratio>
 			<animation effect="fade" time="250">WindowOpen</animation>
 			<animation effect="fade" time="250">WindowClose</animation>			
