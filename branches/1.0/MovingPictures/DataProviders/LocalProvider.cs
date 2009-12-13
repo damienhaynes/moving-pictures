@@ -135,7 +135,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             DirectoryInfo backdropFolder = new DirectoryInfo(backdropFolderPath);
 
             string safeName = Utility.CreateFilename(movie.Title.Replace(' ', '.'));
-            Regex oldBackdropRegex = new Regex("^{?" + Regex.Escape(safeName) + "}? \\[-?\\d+\\]\\.jpg");
+            Regex oldBackdropRegex = new Regex("^{?" + Regex.Escape(safeName) + "}? \\[-?\\d+\\]\\.(jpg|png)");
 
             foreach (FileInfo currFile in backdropFolder.GetFiles()) {
                 if (oldBackdropRegex.IsMatch(currFile.Name)) {
@@ -208,7 +208,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             DirectoryInfo coverFolder = new DirectoryInfo(coverartFolderPath);
             
             string safeName = Utility.CreateFilename(movie.Title.Replace(' ', '.'));
-            Regex oldCoverRegex = new Regex("^{?" + Regex.Escape(safeName) + "}? \\[-?\\d+\\]\\.jpg");
+            Regex oldCoverRegex = new Regex("^{?" + Regex.Escape(safeName) + "}? \\[-?\\d+\\]\\.(jpg|png)");
             
             foreach (FileInfo currFile in coverFolder.GetFiles()) {
                 if (oldCoverRegex.IsMatch(currFile.Name)) {
