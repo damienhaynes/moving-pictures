@@ -40,6 +40,7 @@ namespace Cornerstone.MP {
                     logger.Info("Clearing Properties");
                     _imageResource.Property = _propertyTwo;
                     _imageResource.Property = _propertyOne;
+                    _imageResource.Filename = null;
                 }
             }
         }
