@@ -1974,7 +1974,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                             movie = activeMovieLookup[node];
                         } else {
                             // grab a new random movie from the visible movies that has a backdrop
-                            movie = movies.Where(m => m.BackdropFullPath.Trim().Length > 0).ToList().Random();
+                            movie = movies.Where(m => m.BackdropFullPath != null && m.BackdropFullPath.Trim().Length > 0).ToList().Random();
                             // if we found one add it to our lookup list to speed up future requests
                             if (movie != null) activeMovieLookup[node] = movie;
                         }
