@@ -99,6 +99,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return UseBackdropInListView;
                 case BrowserViewMode.DETAILS:
                     return UseBackdropInDetailsView;
+                case BrowserViewMode.CATEGORIES:
+                    return UseBackdropInCategoriesView;
                 default:
                     logger.Warn("No \"UseBackdrop\" skin setting for " + view.ToString() + " view.");
                     return true;
@@ -159,6 +161,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             private set { _useBackdropInDetailsView = value; }
         }
         private bool _useBackdropInDetailsView;
+
+
+        /// <summary>
+        /// True if the backdrop should be used in the categories view.
+        /// </summary>
+        [SkinSetting("#categories.backdrop.used", true)]
+        public bool UseBackdropInCategoriesView {
+            get { return _useBackdropInCategoriesView; }
+            private set { _useBackdropInCategoriesView = value; }
+        }
+        private bool _useBackdropInCategoriesView;
+
 
         #endregion
     }

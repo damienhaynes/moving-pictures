@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+This file should contain the list view
+-->
+<window>
+	<controls>
+	
+		<control>
+		  <description>Movie Title Shadow</description>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>40</posX>
+		  <posY>71</posY>
+		  <width>680</width>
+		  <font>font18</font>
+		  <align>center</align>
+		  <label>#MovingPictures.SelectedMovie.title</label>
+		  <textcolor>ff222222</textcolor>
+		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+		</control>
+		<control>
+		  <description>Movie Title</description>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>39</posX>
+		  <posY>70</posY>
+		  <width>680</width>
+		  <font>font18</font>
+		  <align>center</align>
+		  <label>#MovingPictures.SelectedMovie.title</label>
+		  <textcolor>ffFFFFFF</textcolor>
+		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+		</control>
+		
+		<control>
+		  <description>Movie Genre Shadow</description>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>40</posX>
+		  <posY>91</posY>
+		  <width>680</width>
+		  <font>font14</font>
+		  <align>center</align>
+		  <label>#MovingPictures.SelectedMovie.genres</label>
+		  <textcolor>ff222222</textcolor>
+		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+		</control>
+		<control>
+		  <description>Movie Genre</description>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>39</posX>
+		  <posY>90</posY>
+		  <width>680</width>
+		  <font>font14</font>
+		  <align>center</align>
+		  <label>#MovingPictures.SelectedMovie.genres</label>
+		  <textcolor>ffa9d0f7</textcolor>
+		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+		</control>
+
+		<control>
+		  <description>Star Images</description>
+		  <type>image</type>
+		  <id>1001</id>
+		  <posX>325</posX>
+		  <posY>100</posY>
+		  <width>115</width>
+		  <height>23</height>		
+		  <align>center</align>		  
+		  <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
+		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+		</control>		
+		
+	</controls>
+</window>

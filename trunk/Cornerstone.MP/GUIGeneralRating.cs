@@ -97,9 +97,7 @@ namespace Cornerstone.MP {
         }
 
 		public override void DoModal(int ParentID) {
-            if (!LoadSkin()) {
-                throw new System.ArgumentNullException("Rating dialog is not supported in this skin!");
-            }
+		    LoadSkin();
 			AllocResources();
 			InitControls();
 			UpdateStarVisibility();

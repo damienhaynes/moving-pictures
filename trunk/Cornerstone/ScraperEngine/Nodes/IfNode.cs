@@ -16,12 +16,17 @@ namespace Cornerstone.ScraperEngine.Nodes {
         public IfNode(XmlNode xmlNode, bool debugMode)
             : base(xmlNode, debugMode) {
 
-            // try to grab the test string
-            try { test = xmlNode.Attributes["test"].Value; }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
+            // Load attributes
+            foreach (XmlAttribute attr in xmlNode.Attributes) {
+                switch (attr.Name) {
+                    case "test":
+                        test = attr.Value;
+                        break;
+                }
+            }
 
+            // Validate TEST attribute
+            if (test == null) {
                 logger.Error("Missing TEST attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;

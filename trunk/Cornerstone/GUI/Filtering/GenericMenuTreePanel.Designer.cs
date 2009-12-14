@@ -13,6 +13,10 @@
             if (disposing && (components != null)) {
                 components.Dispose();
             }
+
+            if (disposing)
+                removeEventHandlers();
+
             base.Dispose(disposing);
         }
 

@@ -25,7 +25,8 @@ multiple view modes.
 	<define>#filmstrip.available:true</define>       	<!-- Set to true if this skin implements the filmstrip view -->
 	<define>#filmstrip.backdrop.used:true</define>   	<!-- true if backdrop (fanart) should be displayed in this view -->
 
-	<define>#details.backdrop.used:true</define>   	<!-- true if backdrop (fanart) should be displayed in this view -->
+    <define>#categories.backdrop.used:true</define>     <!-- true if backdrop (fanart) should be displayed in this view -->
+    <define>#details.backdrop.used:true</define>   	    <!-- true if backdrop (fanart) should be displayed in this view -->
 
 	<controls>
 
@@ -66,7 +67,16 @@ multiple view modes.
 		  <posY>-50</posY>
 		  <width>0</width>
 		</control>
-
+		
+		<control>
+		  <description>Visibile when movie playback has started</description>
+		  <type>image</type>
+		  <id>18</id>
+		  <posX>-50</posX>
+		  <posY>-50</posY>
+		  <width>0</width>
+		</control>
+		
 		<!--            :: BACKGROUNDS :: MOVIE BACKDROP :: OVERLAYS ::            -->
 
 		<control>
@@ -250,5 +260,32 @@ multiple view modes.
 		  <visible>[Control.IsVisible(50)|Control.IsVisible(51)]+Control.IsVisible(17)</visible>
 		</control>
 
+		<!-- Dim background when movie starts -->
+		<!-- This is to provide feedback to the user something is happening when there are long pauses before playback -->
+		<control>
+			<description>Movie Start Indicator</description>
+			 <type>image</type>
+			 <id>0</id>			 
+			 <posX>0</posX>
+			 <posY>0</posY>  
+			 <width>1280</width>
+			 <height>720</height>
+			 <texture>backgroundtop2.png</texture>	
+			 <visible>Control.IsVisible(18)+!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+		</control>		
+
+		<control>
+			<description>Working Animation</description>
+			<type>animation</type>
+			<id>13</id>
+			<posX>550</posX>
+			<posY>80</posY>
+			<width>96</width>
+			<height>96</height>
+			<textures>common.waiting.1.png;common.waiting.2.png;common.waiting.3.png;common.waiting.4.png;common.waiting.5.png;common.waiting.6.png;common.waiting.7.png;common.waiting.8.png</textures>
+			<Duration>0:0:01.5</Duration>
+			<keepaspectratio>yes</keepaspectratio>		
+		</control>	
+	
 	</controls>
 </window>

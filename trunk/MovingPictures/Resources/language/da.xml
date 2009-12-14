@@ -76,6 +76,7 @@
   <string Field="MissingExternalPlayerExe">Den eksekverbare fil til HD afspilning mangler.\nVælg en korrekt sti til den eksekverbare fil.</string>
   <string Field="Monday">Mandag</string>
   <string Field="Movie">Film</string>
+  <string Field="MovieDetails">Film fakta</string>
   <string Field="MovieOptions">Film muligheder</string>
   <string Field="Movies">Film</string>
   <!-- N -->
@@ -89,7 +90,7 @@
   <string Field="PinCodePrompt">Indtast venligst en adgangskode for at fortsætte:</string>
   <string Field="PlaybackFailed">Afspilning var ikke mulig på grund af, at '{0}'\nfiletypenavn ikke er listet i mediaportal konfigurationen.\nTilføj dette filetypenavn eller sæt en ekstern afspiller op\nog prøv igen.</string>
   <string Field="PlaybackFailedHeader">Afspilningen mislykkedes</string>
-  <string Field="ProblemLoadingSkinFile">Desværre, der var et problem med at indlæse skinfilen</string>
+  <string Field="ProblemLoadingSkinFile">Der var desværre et problem med at indlæse skinfilen</string>
   <!-- R -->
   <string Field="Rate">Vurder</string>
   <string Field="Rated">Vurderet</string>
@@ -99,6 +100,7 @@
   <string Field="RateFiveStarThree">God</string>
   <string Field="RateFiveStarTwo">Middelmådig</string>
   <string Field="RateHeading">Vurder film</string>
+  <string Field="RecentlyAddedMovies">Nylig tilføjet</string>
   <string Field="RemoteNumericAlphabet0">
   </string>
   <string Field="RemoteNumericAlphabet1">
@@ -147,12 +149,14 @@
   <string Field="Thursday">Torsdag</string>
   <string Field="Title">Title</string>
   <string Field="Today">I dag</string>
+  <string Field="ToggleParentalLock">Toggle Parental Lock</string>
   <string Field="Tuesday">Tirsdag</string>
   <string Field="TwoMonthsAgo">For 2 måneder siden</string>
   <string Field="TwoWeeksAgo">For 2 uger siden</string>
   <!-- U -->
   <string Field="Unknown">Ukendt</string>
   <string Field="UnlockRestrictedMovies">Åben for klassificerede film</string>
+  <string Field="UnwatchedMovies">Usete film</string>
   <string Field="UpAbbreviation">(op)</string>
   <string Field="UpdateDetailsFromOnline">Opdater oplysninger fra nettet</string>
   <string Field="UpdateMovieDetailsBody">Du er ved at opdatere alle film opslyninger\n overskrivning vil fjerne dine egne ændringer af denne film.\nVil du fortsætte?</string>

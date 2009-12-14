@@ -1,9 +1,9 @@
 <ScriptableScraper>
   <details>
     <!-- These details are for display purposes only. -->
-    <name>XBMC</name>
+    <name>XBMC (Local)</name>
     <author>LRFalk01</author>
-    <description>This script pulls data from an XBMC Nfo export.</description>
+    <description>This script pulls data from an XBMC NFO export.</description>
     
     <!-- 
     These fields uniquely identify the script. The ID should never 
@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141320</id>
-    <version major="1" minor="0" point="0"/>
-    <published month="10" day="22" year="2009"/>
+    <version major="1" minor="0" point="1"/>
+    <published month="12" day="12" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -33,7 +33,7 @@
 		(?<genres><movie>)
 	  ]]>
 	</set>
-	<set name="filename" value="${search.basepath}\${search.clean_filename}" />
+	<set name="filename" value="${search.basepath}\${search.filename_noext}" />
 	
 	<retrieve name="file" file="${filename}.nfo" encoding="UTF-8"/>
 	<parse name="fileCheck" input="${file}" regex="${rx_file_check}" />
@@ -70,6 +70,9 @@
 			
 			<retrieve name="file" file="${movie.site_id}.nfo" encoding="UTF-8"/>
 			<parse name="result" input="${file}" xpath="//movie" />
+			
+			<set name="movie.title" value="${result[0].title}" />
+			<set name="movie.year" value="${result[0].year}" />
 			
 			<set name='movie.score' value='${result[0].rating}' />
 			<set name='movie.votes' value='${result[0].votes}' />

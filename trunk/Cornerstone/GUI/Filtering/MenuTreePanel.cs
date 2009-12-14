@@ -9,13 +9,22 @@ using Cornerstone.Database;
 using System.Drawing;
 
 namespace Cornerstone.GUI.Filtering {
-    public class MenuTreePanel: UserControl, IMenuTreePanel, IFieldDisplaySettingsOwner {
+    public class MenuTreePanel : UserControl, IMenuTreePanel, IFieldDisplaySettingsOwner, IDisposable {
 
         private Control genericMenuTreePanel;
 
         public MenuTreePanel() {
             InitializeComponent();
         }
+
+
+        #region IDisposable Members
+
+        void IDisposable.Dispose() {
+            genericMenuTreePanel.Dispose();
+        }
+
+        #endregion
 
         #region IMenuTreePanel Members
 
@@ -106,5 +115,6 @@ namespace Cornerstone.GUI.Filtering {
             if (SelectedNodeChanged != null)
                 SelectedNodeChanged(node, type);
         }
+
     }
 }
