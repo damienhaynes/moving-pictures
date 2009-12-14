@@ -1,29 +1,125 @@
-Moving Pictures 1.0.0
+Moving Pictures 1.0.1
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
-plug-in itself along with the 16x9 and 4x3 Generic Moving Pictures skin files. 
+plug-in itself along with Blue3Wide (16x9) and Blue 3 (4x3)skin support.
 If you have any problems or questions about the plug-in you can visit the 
 forums to interact with the community and developers, or you can visit the 
-(always in progress, but very new) Moving Pictures wiki for a user's guide 
-and frequently asked questions document. 
+Moving Pictures Wiki for access to the user's guide and frequently asked questions.
 
 Moving Pictures Forum:          http://forum.team-mediaportal.com/moving-pictures-284/
 Moving Pictures Wiki:           http://moving-pictures.tv
 Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
-
-
-The Generic Skin Files
-----------------------
-If your skin does not support Moving Pictures, don't fret, you can still use the
-Moving Pictures with the Generic Skin. But if your skin DOES supports Moving 
-Pictures it is strongly recommended you do NOT use the generic skin (by default it
-will only be installed for skins not supporting Moving Pictures). The generic skin 
-is meant to be a temporary solution to allow all users to enjoy Moving Pictures 
-even if their favorite skin has not yet added support. 
-
 Change Log
+================================================================================
+1.0.1
+--------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+Issue #641:     Blue3 (4x3) support has been added to the standard Moving 
+                Pictures install.
+                
+Issue #627:     User created dynamic categories will now use translated text 
+                when available.
+                
+Issue #395:     Blue3 and Blue3Wide will now dim when movie playback has been 
+                triggered but playback has not yet begun. This is now available 
+                to all skin designers as well.
+                
+Issue #590:     A skin designer can now disable backdrops in category view.
+
+Issue #691:     The primary scraper used to pull movie information is now 
+                listed in the Movie Manager (read only).
+                
+Issue #667:     Item Selection popups in category and filtering menus is 
+                now sorted alphabetically.
+
+Issue #675:     Added new skin property containing the selected category name, 
+                but cleaned for filename usage. Use of this will help with 
+                custom artwork for categories with names like "Family / Kids".
+                
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #662:     Resolved a bug causing covers and backdrops to sometimes 
+                become corrupted after download. This was in some cases 
+                causing a false positive from virus scanners as an image file 
+                with an exploit (rather than simply a corrupted image file).
+                
+Issue #622:     When adding a filter to a newly created category, the filter 
+                will no longer duplicate a previously selected node (name or 
+                sometimes the entire node).
+                
+Issue #602:     Fixed bug causing the Rate Dialog to never be invokable.
+
+Issue #499:     Blue3 and Blue3Wide thumbnail and filmstrip views will now be 
+                dimmed when focus has been lost.
+                
+Issue #689:     Moving Pictures will no longer revert to regular view mode 
+                (as opposed to categories) when a stray mouse click is made
+                outside the facade.
+                
+Issue #627:     Corrected translation quirks with the Date Added category.
+
+Issue #631:     For new installs the default name for the genres node has been 
+                changed from "Genre" to "Genres".
+                
+Issue #644:     Added localization for "Skin doesn't support categories" message.
+
+Issue #654:     User Rating property is now available to the skin.
+
+Issue #670:     Blue3 skins now display a working animation when task is is 
+                running e.g. online update.
+                
+Issue #636:     Corrected the default sort direction for new installs and 
+                upgrades.
+
+Issue #501:     Corrected bug causing installer to fail when installing on 
+                an XP system with localized system directories.
+                
+Issue #635:     Fixed bug causing the Details View backdrop to not display 
+                if the facade backdrop was disabled on the previous screen.
+                
+Issue #647:     Fixed bug causing all files to be flagged as widescreen if 
+                running MediaInfo 0.7.20.
+                
+Issue #652:     XBMC importer script will now update title fields and year 
+                when simply doing an update (rather than a search).
+                
+Issue #621:     Eliminated unneeded facade refresh calls that occured after 
+                cycling cover art.
+                
+Issue #639:     It is now possible to use "contains" type filtering on the
+                language field.
+                 
+Issue #640:     Facade will now regain focus after clicking a button on the 
+                screen (most usually on the hidden menu).
+                
+Issue #649:     IMDB scraper now pulls correct results when search string 
+                contains an accented character.
+                
+Issue #650:     It is no longer necessary to disable the selected filter to 
+                see the full list of alternate filters. This should fix Year 
+                based filtering issues.
+                
+Issue #653:     The XBMC scraper will now correctly locate NFO files for
+                multipart movies.
+                
+Issue #690:     Fixed bug causing backdrops to not load when existing and 
+                entering details view in some situations.
+                
+Issue #645:     Modified several error dialogs to properly use the dialog body 
+                to report the error.
+
+--------------------------------------------------------------------------------
+Translation Changes
+--------------------------------------------------------------------------------
+Issue #642:     Updated Nederlands/Dutch translation.
+Issue #646:     Updated Italian translation.
+Issue #661:     Updated Danish translation.
+Issue #679:     Updated Spanish translation.
+
 ================================================================================
 1.0.0
 --------------------------------------------------------------------------------
