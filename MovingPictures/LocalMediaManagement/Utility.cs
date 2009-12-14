@@ -249,8 +249,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Multi-part / Stacking
 
         // Regular expression patterns used by the multipart detection and cleaning methods
-        private const string rxStackKeywords = @"(cd|dvd|dis[ck]|part)";
-        private const string rxStackPatterns = @"(\W*\b" + rxStackKeywords + @"\W*([a-c]|\d+|i+)\W*)|[\(\[]\d(of|-)\d[\)\]]$";
+        // Matches the substrings "cd/dvd/disc/disk/part #" or "(# of #)"
+        private const string rxStackPattern = @"(\W*\b(cd|dvd|dis[ck]|part)\W*([a-f]|\d+|i+)\W*)|\W\d+\W*(of|-)\W*\d+\W$";
 
         /// <summary>
         /// Checks if a filename has stack markers (and is multi-part)
@@ -259,7 +259,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns>true if multipart, false if not</returns>
         public static bool isFileMultiPart(string fileName) {
             fileName = Path.GetFileNameWithoutExtension(fileName);
-            Regex expr = new Regex(rxStackPatterns + @"|[^\s\d](\d+)$|([a-c])$", RegexOptions.IgnoreCase);
+            Regex expr = new Regex(rxStackPattern, RegexOptions.IgnoreCase);
             return expr.Match(fileName).Success;
         }
 
@@ -273,7 +273,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="name"></param>
         /// <returns></returns>
         public static bool isFolderMultipart(string name) {
-            Regex expr = new Regex(@"^" + rxStackKeywords + @"\W*\d+$", RegexOptions.IgnoreCase);
+            Regex expr = new Regex(rxStackPattern, RegexOptions.IgnoreCase);
             return expr.Match(name).Success;
         }
 
@@ -289,16 +289,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             
             // If file is classified as multipart clean the stack markers.
             if (isFileMultiPart(fileName)) {                
-
-                Regex expr = new Regex(rxStackPatterns, RegexOptions.IgnoreCase);
-                Match match = expr.Match(cleanFileName);
-
-                // if we have a match on this expression we will remove the complete match.
-                if (match.Success)
-                    cleanFileName = expr.Replace(cleanFileName, "");
-                // no match means we just remove one character
-                else
-                    cleanFileName = cleanFileName.Substring(0, (cleanFileName.Length - 1));
+                Regex expr = new Regex(rxStackPattern, RegexOptions.IgnoreCase);
+                cleanFileName = expr.Replace(cleanFileName, "");
             }
 
             // Return cleanFileName cleaned filename
