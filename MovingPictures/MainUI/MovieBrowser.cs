@@ -225,6 +225,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                     // setup the sorting
                     if (_currentNode != null) {
+                        if (_currentNode.AdditionalSettings == null)
+                            _currentNode.AdditionalSettings = new DBMovieNodeSettings();
+
                         DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)_currentNode.AdditionalSettings;
                         if (!nodeSettings.UseDefaultSorting) {
                             // using category settings
@@ -416,7 +419,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Rotates the current view.
         /// </summary>
         public void CycleView() {
-            if (CurrentView == BrowserViewMode.DETAILS)
+            if (CurrentView == BrowserViewMode.DETAILS || CurrentView == BrowserViewMode.CATEGORIES)
                 return;
 
             BrowserViewMode newView = CurrentView;
@@ -476,15 +479,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Reload facade content
             ReloadFacade();
 
-            // Set facade visibility and focus 
-            if (CurrentView == BrowserViewMode.CATEGORIES) {
-                _categoriesFacade.Focus = true;
-                _categoriesFacade.Visible = true;
-            }
-            else if (CurrentView != BrowserViewMode.DETAILS) {
-                facade.Focus = true;
-                facade.Visible = true;
-            }
+            // Set facade visibility and focus
+            Focus();
 
             // Update listeners that the view changed
             if (ViewChanged != null) ViewChanged(previousView, currentView);
@@ -745,6 +741,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // reapply the current selection
             SelectedMovie = facade.SyncToFacade<DBMovieInfo>(selectedMovie, out selectedIndex);        
+        }
+
+        /// <summary>
+        /// Enable focus on the active facade
+        /// </summary>
+        public void Focus() {
+            if (CurrentView == BrowserViewMode.CATEGORIES) {
+                _categoriesFacade.Focus = true;
+                _categoriesFacade.Visible = true;
+            }
+            else if (CurrentView != BrowserViewMode.DETAILS) {
+                facade.Focus = true;
+                facade.Visible = true;
+            }
         }
 
         // triggered when a movie was selected on the facade

@@ -21,31 +21,28 @@ namespace Cornerstone.ScraperEngine.Nodes {
         public SortNode(XmlNode xmlNode, bool debugMode)
             : base(xmlNode, debugMode) {
 
-            // try to grab the sort direction member
-            try { 
-                string dirStr = xmlNode.Attributes["direction"].Value; 
-                dirStr = dirStr.ToLower().Trim();
-                if (dirStr == "desc" || dirStr == "descending")
-                    direction = DirectionType.DESCENDING;
-                else if (dirStr == "asc" || dirStr == "ascending")
-                    direction = DirectionType.ASCENDING;
-                else {
-                    logger.Error("Invalid sort direction on: " + xmlNode.OuterXml);
+            // Load attributes
+            foreach (XmlAttribute attr in xmlNode.Attributes) {
+                switch (attr.Name) {
+                    case "direction":
+                        string dirStr = attr.Value.ToLower().Trim();
+                        if (dirStr == "desc" || dirStr == "descending")
+                            direction = DirectionType.DESCENDING;
+                        else if (dirStr == "asc" || dirStr == "ascending")
+                            direction = DirectionType.ASCENDING;
+                        else {
+                            logger.Error("Invalid sort direction on: " + xmlNode.OuterXml);
+                        }
+                        break;
+                    case "by":
+                        sortBy = attr.Value;
+                        break;
+
                 }
             }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
 
-                direction = DirectionType.ASCENDING;
-            }
-
-            // try to grab the sortby member
-            try { sortBy = xmlNode.Attributes["by"].Value; }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
-
+             // Validate BY attribute
+            if (sortBy == null) {
                 logger.Error("Missing BY attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;

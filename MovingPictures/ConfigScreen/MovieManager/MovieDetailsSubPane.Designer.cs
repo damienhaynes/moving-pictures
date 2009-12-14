@@ -177,7 +177,8 @@
             fieldProperty37.ColumnWidth = null;
             fieldProperty37.DisplayName = "Primary Source";
             fieldProperty37.FieldName = "PrimarySource";
-            fieldProperty37.Visible = false;
+            fieldProperty37.Visible = true;
+            fieldProperty37.ReadOnly = true;
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty7);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty8);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty9);

@@ -254,19 +254,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
                 SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
             }
+
         }
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
             if (currentView == BrowserViewMode.DETAILS) {
                 if (playButton != null) playButton.Focus = true;
             }
-            
-            if (currentView != BrowserViewMode.CATEGORIES)
-                PublishMovieDetails(browser.SelectedMovie);
 
             // set the backdrop visibility based on the skin settings
             if (movieBackdropControl != null)
                 backdrop.Active = skinSettings.UseBackdrop(currentView);
+
+            if (currentView != BrowserViewMode.CATEGORIES)
+                PublishMovieDetails(browser.SelectedMovie);
         }
 
         #region GUIWindow Methods
@@ -363,7 +364,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }            
 
             // notify if the skin doesnt support categories
-            if (categoriesFacade == null) {
+            if (categoriesFacade == null && MovingPicturesCore.Settings.CategoriesEnabled) {
                 // avoid showing a dialog on load when we are the last active module being started
                 if (!preventDialogOnLoad) {
                     GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
@@ -539,6 +540,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // a click on the filter button
                 case 4:
                     showFilterContext();
+                    browser.Focus();
+                    if (filterButton != null) filterButton.Focus = false;
                     break;
 
                 // a click on the play button
@@ -549,11 +552,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // a click on the sort menu button
                 case 14:
                     showSortContext();
+                    browser.Focus();
+                    if (sortMenuButton != null) sortMenuButton.Focus = false;
                     break;
 
                 // parental controls button clicked
                 case 15:
                     toggleParentalControls();
+                    browser.Focus();
+                    if (toggleParentalControlsButton != null) toggleParentalControlsButton.Focus = false;
                     break;
             }
 
@@ -849,13 +856,27 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private bool showFilterContext() {
-            return showFilterContext(MovingPicturesCore.Settings.FilterMenu.RootNodes, browser.FilterNode != null);
+            return showFilterContext(MovingPicturesCore.Settings.FilterMenu.RootNodes, browser.FilterNode != null, null);
         }
 
-        private bool showFilterContext(ICollection<DBNode<DBMovieInfo>> nodeList, bool showClearMenuItem) {
+        private bool showFilterContext(ICollection<DBNode<DBMovieInfo>> nodeList, bool showClearMenuItem, HashSet<DBMovieInfo> availableMovies) {
             if (nodeList.Count == 0) {
                 ShowMessage("No Filters", "There are no filters to display.");
                 return false;
+            }
+
+            // build list of available movies as if no filter were currently applied
+            // used for checking which filter nodes have movies to display
+            if (availableMovies == null) {
+                availableMovies = new HashSet<DBMovieInfo>();
+                foreach (DBMovieInfo currMovie in browser.AllMovies) {
+                    availableMovies.Add(currMovie);
+                }
+
+                if (browser.CurrentNode != null) {
+                    foreach (DBFilter<DBMovieInfo> currFilter in browser.CurrentNode.GetAllFilters()) 
+                        availableMovies = currFilter.Filter(availableMovies);
+                }
             }
 
             while (true) {
@@ -875,9 +896,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // build menu
                 foreach (DBNode<DBMovieInfo> currNode in nodeList) {
+                    HashSet<DBMovieInfo> possibleMovies = currNode.GetPossibleFilteredItems();
+                    if (possibleMovies.Count == 0)
+                        continue;
 
-                    // don't show this node when it's already active or if it has no results
-                    if (browser.FilterNode == currNode || !browser.HasAvailableMovies(currNode))
+                    possibleMovies.IntersectWith(availableMovies);
+                    if (possibleMovies.Count == 0)
+                        continue;
+
+                    if (browser.FilterNode == currNode)
                         continue;
 
                     GUIListItem newListItem = new GUIListItem(Translation.ParseString(currNode.Name));
@@ -909,7 +936,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                     // handle sub menus if needed
                     else {
-                        if (showFilterContext(selectedNode.Children, false))
+                        if (showFilterContext(selectedNode.Children, false, availableMovies))
                             return true;
                     }
                 }
@@ -982,6 +1009,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
             SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
+
         }
 
         private void showChangeViewContext() {
@@ -1101,7 +1129,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else if (dialog.SelectedId == cycleArtItem.ItemId) {
 
                 selectedMovie.NextCover();
+                browser.AutoRefresh = false;
                 selectedMovie.Commit();
+                browser.AutoRefresh = true;
 
                 // update the new cover art in the facade
                 GUIListItem listItem = browser.GetMovieListItem(selectedMovie);
@@ -1612,7 +1642,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // Delay publishing the details by the ms specified in settings
             if (publishTimer == null) {
-                publishTimer = new Timer(delegate { PublishMovieDetails(browser.SelectedMovie); }, null, 0, Timeout.Infinite);
+                publishTimer = new Timer(delegate { PublishMovieDetails(browser.SelectedMovie); }, null, MovingPicturesCore.Settings.DetailsLoadingDelay, Timeout.Infinite);
             }
             else {
                 publishTimer.Change(MovingPicturesCore.Settings.DetailsLoadingDelay, Timeout.Infinite);
@@ -1661,6 +1691,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             PublishDetails(node, "SelectedNode");
             PublishDetails(node.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
             PublishArtwork(node);
+
+            // publish category node name in a format that can always be used as a filename.
+            SetProperty("#MovingPictures.SelectedNode.FileFriendlyName", Utility.CreateFilename(Translation.ParseString(node.Name)));
+
         }
 
         /// <summary>
@@ -1695,7 +1729,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     SetProperty(propertyStr, "", forceLogging);
                 }
-
+                else if (currField.FieldName == "user" && tableType == typeof(DBUserMovieSettings)) {
+                    // rename the "user" field to "username" to prevent overlapping variable names
+                    propertyStr = "#MovingPictures." + prefix + ".username";
+                    valueStr = currField.GetValue(obj).ToString().Trim();
+                    SetProperty(propertyStr, valueStr, forceLogging);
+                }
                 else if (value.GetType() == typeof(StringList)) {
 
                     // make sure we dont go overboard with listing elements :P
@@ -1971,7 +2010,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                             movie = activeMovieLookup[node];
                         } else {
                             // grab a new random movie from the visible movies that has a backdrop
-                            movie = movies.Where(m => m.BackdropFullPath.Trim().Length > 0).ToList().Random();
+                            movie = movies.Where(m => m.BackdropFullPath != null && m.BackdropFullPath.Trim().Length > 0).ToList().Random();
                             // if we found one add it to our lookup list to speed up future requests
                             if (movie != null) activeMovieLookup[node] = movie;
                         }

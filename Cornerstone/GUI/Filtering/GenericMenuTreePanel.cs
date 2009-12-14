@@ -32,6 +32,7 @@ namespace Cornerstone.GUI.Filtering {
 
         private Dictionary<DBNode<T>, TreeNode> treeNodeLookup = new Dictionary<DBNode<T>,TreeNode>();
         private HashSet<DBNode<T>> updatingNodes = new HashSet<DBNode<T>>();
+        private HashSet<DBNode<T>> watchedNodes = new HashSet<DBNode<T>>();
         private Dictionary<DBNode<T>, NodeModifiedDetails> modificationDetails = new Dictionary<DBNode<T>, NodeModifiedDetails>();
         private Stack<DBNode<T>> pendingModification = new Stack<DBNode<T>>();
         private Stack<DBNode<T>> finishedModification = new Stack<DBNode<T>>();
@@ -49,6 +50,7 @@ namespace Cornerstone.GUI.Filtering {
         Font regular;
 
         bool dragBarVisible = false;
+        bool rebuildingNode = false;
 
         public GenericMenuTreePanel() {
             InitializeComponent();
@@ -64,7 +66,12 @@ namespace Cornerstone.GUI.Filtering {
 
             bold = new Font(treeView.Font.Name, treeView.Font.Size, FontStyle.Bold, treeView.Font.Unit);
             regular = new Font(treeView.Font.Name, treeView.Font.Size, FontStyle.Regular, treeView.Font.Unit);
+        }
 
+        private void removeEventHandlers() {
+            foreach (DBNode<T> currNode in watchedNodes) {
+                currNode.Modified -= new DBNodeEventHandler(nodeModified); ;
+            }
         }
 
         #region IFieldDisplaySettingsOwner Members
@@ -225,6 +232,7 @@ namespace Cornerstone.GUI.Filtering {
             logger.Debug("addDynamicNode_TreeNodeCreated");
             TreeNode treeNode = asyncOutput;
             DBNode<T> newNode = treeNode.Tag as DBNode<T>;
+            asyncOutput = null;
 
             // find the appropriate parent
             TreeNode parentTreeNode = treeView.SelectedNode;
@@ -262,6 +270,7 @@ namespace Cornerstone.GUI.Filtering {
         private bool forceNewNodeRoot;
         private void createTreeNodeAsyncWorker() {
             asyncOutput = createTreeNode(asyncInput);
+            asyncInput = null;
         }
 
         private void removeNode() {
@@ -279,8 +288,25 @@ namespace Cornerstone.GUI.Filtering {
                     treeView.SelectedNode.Parent.Nodes.Remove(treeView.SelectedNode);
                 }
 
+
+                clearReferences(selectedNode);
                 selectedNode.Delete();
             }
+        }
+
+        private void clearReferences(DBNode<T> node) {
+            if (node == null) 
+                return;
+
+            if (treeNodeLookup.ContainsKey(node)) 
+                treeNodeLookup.Remove(node);
+
+            if (watchedNodes.Contains(node))
+                watchedNodes.Remove(node);
+
+            if (node.Children != null)
+                foreach (DBNode<T> childNode in node.Children) 
+                    clearReferences(childNode);
         }
 
         private void RepopulateTree() {
@@ -325,6 +351,7 @@ namespace Cornerstone.GUI.Filtering {
 
             treeNode.Collapse();
             node.Modified += new DBNodeEventHandler(nodeModified);
+            watchedNodes.Add(node);
 
             return treeNode;
         }
@@ -500,6 +527,7 @@ namespace Cornerstone.GUI.Filtering {
                 pendingModification.Push((DBNode<T>)node);
 
                 // temporarily remove the node
+                rebuildingNode = true;
                 if (details.Parent == null)
                     treeView.Nodes.Remove(treeNode);
                 else
@@ -539,6 +567,8 @@ namespace Cornerstone.GUI.Filtering {
             TreeNode treeNode = treeNodeLookup[node];
             NodeModifiedDetails details = modificationDetails[node];
 
+            rebuildingNode = false;
+
             // re-add the node
             try {
                 if (details.Parent == null)
@@ -550,7 +580,6 @@ namespace Cornerstone.GUI.Filtering {
                 if (e is ThreadAbortException)
                     throw e;
             }
-
 
             treeView.SelectedNode = treeNode;
             modificationDetails.Remove(node);
@@ -859,6 +888,9 @@ namespace Cornerstone.GUI.Filtering {
         }
 
         private void treeView_AfterSelect(object sender, TreeViewEventArgs e) {
+            if (rebuildingNode)
+                return;
+
             if (treeView.SelectedNode.Tag is DBNode<T>) {
                 if (SelectedNodeChanged != null)
                     SelectedNodeChanged((IDBNode)treeView.SelectedNode.Tag, typeof(T));
@@ -985,7 +1017,7 @@ namespace Cornerstone.GUI.Filtering {
 
                 treeView.SelectedNode = treeNode;
             }
-        }   
+        }
     }
 
     public interface IMenuTreePanel {

@@ -143,15 +143,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public override string ToString() {
-            try {
-                return "DBSourceInfo: " + SelectedScript.Provider.Name;
-            }
-            catch (Exception e) {
-                if (e is ThreadAbortException)
-                    throw e;
-
+            if (Provider != null)
+                return Provider.Name;
+            else
                 return base.ToString();
-            }
         }
 
         #region Static Methods

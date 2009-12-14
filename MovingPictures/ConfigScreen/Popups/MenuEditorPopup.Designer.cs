@@ -349,7 +349,7 @@
             // 
             // helpButton
             // 
-            this.helpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.helpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.helpButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.helpButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.help;
             this.helpButton.Location = new System.Drawing.Point(622, 385);

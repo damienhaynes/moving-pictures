@@ -26,42 +26,42 @@ namespace Cornerstone.ScraperEngine.Nodes {
         public MathNode(XmlNode xmlNode, bool debugMode)
             : base(xmlNode, debugMode) {
 
-            // try to grab the first value
-            try { value1 = xmlNode.Attributes["value1"].Value; }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
+            // Load attributes
+            string resultTypeStr = null;
+            foreach (XmlAttribute attr in xmlNode.Attributes) {
+                switch (attr.Name) {
+                    case "value1":
+                        value1 = attr.Value;
+                        break;
+                    case "value2":
+                        value2 = attr.Value;
+                        break;
+                    case "result_type":
+                        resultTypeStr = attr.Value;
+                        break;
+                }
+            }
 
+            // Validate VALUE1 attribute
+            if (value1 == null) {
                 logger.Error("Missing VALUE1 attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
             }
 
-            // try to grab the second value
-            try { value2 = xmlNode.Attributes["value2"].Value; }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
-
+            // Validate VALUE2 attribute
+            if (value2 == null) {
                 logger.Error("Missing VALUE2 attribute on: " + xmlNode.OuterXml);
                 loadSuccess = false;
                 return;
             }
 
-            // try to grab the desired result type
-            string resultTypeStr;
-            try { resultTypeStr = xmlNode.Attributes["result_type"].Value; }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
-
-                resultTypeStr = "INT";
-            }
-
-            if (resultTypeStr.ToUpper().Equals("FLOAT"))
+            // Validate RESULT_TYPE attribute
+            if (resultTypeStr != null && resultTypeStr.ToUpper().Equals("FLOAT"))
                 resultType = ResultTypeEnum.FLOAT;
             else
                 resultType = ResultTypeEnum.INT;
+
         }
     }
     

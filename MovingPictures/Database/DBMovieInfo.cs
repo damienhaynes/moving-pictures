@@ -153,7 +153,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _certification;
         
         
-        [DBField(AllowManualFilterInput=false)]
+        [DBField(AllowManualFilterInput=true)]
         public string Language {
             get { return _language; }
 
@@ -574,7 +574,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // if the file isnt in the cover folder, generate a name and save it there
             if (!alreadyInFolder) {
                 string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
-                string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
+                string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].png";
                 if (!File.Exists(newFileName)) {
                     bool saved = false;
                     try {
@@ -587,6 +587,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     }
                     catch (System.Runtime.InteropServices.ExternalException e) {
                         logger.Error("Error while trying to save cover. ", e);
+                        try {
+                            if (File.Exists(newFileName))
+                                File.Delete(newFileName);
+                        }
+                        catch (Exception) { }
                     }
 
                     if (!saved) {
@@ -627,7 +632,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // genrate a filename for a movie. should be unique based on the url hash
             string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
-            string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].jpg";
+            string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].png";
             
             // if we already have a file for this movie from this URL, move on
             if (File.Exists(filename)) {
@@ -673,7 +678,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // save the artwork
             bool saved = false;
             try {
-                currImage.Save(filename, ImageFormat.Jpeg);
+                currImage.Save(filename, ImageFormat.Png);
                 AlternateCovers.Add(filename);
                 GenerateThumbnail();
                 commitNeeded = true;
@@ -685,6 +690,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
             catch (System.Runtime.InteropServices.ExternalException e) {
                 logger.Error("Error while trying to save cover. ", e);
+                try {
+                    if (File.Exists(filename))
+                        File.Delete(filename);
+                }
+                catch (Exception) { }
             }
             finally {
                 currImage.Dispose();
@@ -711,7 +721,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             
             // generate a filename for a movie. should be unique based on the url hash
             string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
-            string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].jpg";
+            string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].png";
 
             // if we already have a file for this movie from this URL, move on
             if (File.Exists(filename)) {
@@ -758,7 +768,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // save the backdrop
             bool saved = false;
             try {
-                currImage.Save(filename, ImageFormat.Jpeg);
+                currImage.Save(filename, ImageFormat.Png);
                 _backdropFullPath = filename;
                 commitNeeded = true;
                 saved = true;
@@ -768,6 +778,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
             catch (System.Runtime.InteropServices.ExternalException e) {
                 logger.Error("Error while trying to save backdrop. ", e);
+                try {
+                    if (File.Exists(filename))
+                        File.Delete(filename);
+                }
+                catch (Exception) { }
             }
             finally {
                 currImage.Dispose();
@@ -812,12 +827,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // if the file isnt in the backdrop folder, generate a name and save it there
             if (!alreadyInFolder) {
                 string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
-                string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
+                string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].png";
                 
                 // save the backdrop
                 bool saved = false;
                 try {
-                    newBackdrop.Save(newFileName, ImageFormat.Jpeg);
+                    newBackdrop.Save(newFileName, ImageFormat.Png);
                     _backdropFullPath = filename;
                     commitNeeded = true;
                     saved = true;
@@ -827,6 +842,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 }
                 catch (System.Runtime.InteropServices.ExternalException e) {
                     logger.Error("Error while trying to save backdrop. ", e);
+                    try {
+                        if (File.Exists(newFileName))
+                            File.Delete(newFileName);
+                    }
+                    catch (Exception) { }
                 }
                 finally {
                     newBackdrop.Dispose();
@@ -944,6 +964,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
             catch (System.Runtime.InteropServices.ExternalException e) {
                 logger.Error("Error while trying to save thumbnail. ", e);
+                try {
+                    if (File.Exists(fullname))
+                        File.Delete(fullname);
+                }
+                catch (Exception) { }
             }
             finally {
                 cover.Dispose();

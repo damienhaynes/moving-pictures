@@ -10,6 +10,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using Cornerstone.GUI.DesignMode;
 using Cornerstone.Database.CustomTypes;
+using System.Collections;
 
 namespace Cornerstone.GUI.Controls {
     [Designer(typeof(DBObjectListDesigner))]
@@ -18,7 +19,7 @@ namespace Cornerstone.GUI.Controls {
         #region Properties
 
         [Category("Cornerstone Settings")]
-        [Description("If set to true, columns will nto be displayed and list items will use the ToString() method for contents.")]
+        [Description("If set to false, columns will not be displayed and list items will use the ToString() method for contents.")]
         [DefaultValue(true)]
         public bool DisplayColumns {
             get { return _displayColumns; }
@@ -89,6 +90,8 @@ namespace Cornerstone.GUI.Controls {
             this.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             this.FullRowSelect = true;
             VisibleChanged += new EventHandler(DBObjectListEditor_VisibleChanged);
+
+            this.ListViewItemSorter = new ListViewItemComparer();
         }
 
         void DBObjectListEditor_VisibleChanged(object sender, EventArgs e) {
@@ -134,6 +137,8 @@ namespace Cornerstone.GUI.Controls {
 
             if (autoSize)
                 this.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+
+            Sort();
         }
 
         private void BuildColumns() {
@@ -177,5 +182,22 @@ namespace Cornerstone.GUI.Controls {
 
         #endregion
 
+    }
+
+    // Implements the manual sorting of items by columns.
+    internal class ListViewItemComparer : IComparer {
+        private int col;
+        
+        public ListViewItemComparer() {
+            col = 0;
+        }
+        
+        public ListViewItemComparer(int column) {
+            col = column;
+        }
+
+        public int Compare(object x, object y) {
+            return String.Compare(((ListViewItem)x).SubItems[col].Text, ((ListViewItem)y).SubItems[col].Text);
+        }
     }
 }

@@ -288,7 +288,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (!customIntroPlayed) {
                 DBMovieInfo queuedMovie = queuedMedia.AttachedMovies[0];
                 // Only play custom intro for we are not resuming
-                if (queuedMovie.UserSettings == null || queuedMovie.UserSettings.Count == 0 || queuedMovie.ActiveUserSettings.ResumeTime == 0) {
+                if (queuedMovie.UserSettings == null || queuedMovie.UserSettings.Count == 0 || queuedMovie.ActiveUserSettings.ResumeTime < 30) {
                     string custom_intro = MovingPicturesCore.Settings.CustomIntroLocation;
 
                     // Check if the custom intro is specified by user and exists

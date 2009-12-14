@@ -124,6 +124,25 @@ Section "Blue3wide Skin Support" SEC0002
     ${EndIf}
 SectionEnd
 
+Section "Blue3 Skin Support" SEC0003
+    ${If} ${FileExists} $SKIN_DIR\Blue3\*.*
+        SetOverwrite ifnewer
+
+        SetOutPath $SKIN_DIR\Blue3
+        File "..\MovingPictures\MainUI\Blue3\*.*"
+
+        SetOutPath $SKIN_DIR\Blue3\Media
+        File "..\MovingPictures\MainUI\Blue3\Media\*.*"  
+        
+        SetOutPath $SKIN_DIR\Blue3\Media\Logos
+        File "..\MovingPictures\MainUI\Blue3\Media\Logos\*.*"  
+
+        SetOutPath $SKIN_DIR\Blue3\Media\Categories
+        File "..\MovingPictures\MainUI\Blue3\Media\Categories\*.*"  
+
+    ${EndIf}
+SectionEnd
+
 # Loops through each skin folder and sends them off
 # for processing and possible generic skin installation
 #Section "Generic Skin Support" SEC0001
@@ -155,6 +174,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0000} $(DLL_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0001} $(GENERIC_SKIN_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0002} $(BLUE3WIDE_SKIN_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC0003} $(BLUE3_SKIN_DESCRIPTION)  
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 # startup tasks
@@ -168,6 +188,7 @@ Function .onInit
     SectionSetFlags ${SEC0000} $0
     
     # grab various fields from registry
+    SetShellVarContext all
     Call getMediaPortalDir
     Call getPluginDir
     Call verifyMediaPortalVer
@@ -384,7 +405,7 @@ Function getPluginDir
 		StrCpy $PLUGIN_DIR "$MEDIAPORTAL_DIR\$PLUGIN_DIR"
 		IfFileExists $PLUGIN_DIR\*.* done check_for_new_xp_path
     check_for_new_xp_path:
-        ${StrReplace} $PLUGIN_DIR "%ProgramData%" "%ALLUSERSPROFILE%\Application Data" $2
+        ${StrReplace} $PLUGIN_DIR "%ProgramData%" $APPDATA $2
         ExpandEnvStrings $PLUGIN_DIR $PLUGIN_DIR
         IfFileExists $PLUGIN_DIR\*.* done fail
 	fail:
@@ -418,7 +439,7 @@ Function getSkinDir
 		StrCpy $SKIN_DIR "$MEDIAPORTAL_DIR\$SKIN_DIR"
 		IfFileExists $SKIN_DIR\*.* done check_for_new_xp_path
     check_for_new_xp_path:
-        ${StrReplace} $SKIN_DIR "%ProgramData%" "%ALLUSERSPROFILE%\Application Data" $2
+        ${StrReplace} $SKIN_DIR "%ProgramData%" $APPDATA $2
         ExpandEnvStrings $SKIN_DIR $SKIN_DIR
         IfFileExists $SKIN_DIR\*.* done fail
 	fail:
@@ -452,7 +473,7 @@ Function getDatabaseDir
 		StrCpy $DB_DIR "$MEDIAPORTAL_DIR\$DB_DIR"
 		IfFileExists $DB_DIR\*.* done check_for_new_xp_path
     check_for_new_xp_path:
-        ${StrReplace} $DB_DIR "%ProgramData%" "%ALLUSERSPROFILE%\Application Data" $2
+        ${StrReplace} $DB_DIR "%ProgramData%" $APPDATA $2
         ExpandEnvStrings $DB_DIR $DB_DIR
         IfFileExists $DB_DIR\*.* done fail
 	fail:

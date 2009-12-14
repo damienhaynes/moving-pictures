@@ -113,7 +113,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
             }
         }
 
-        if (_mI.Get(StreamKind.Video, 0, "AspectRatio/String") == "4/3")
+        string aspectStr = _mI.Get(StreamKind.Video, 0, "AspectRatio/String");
+        if (aspectStr == "4/3" || aspectStr == "4:3")
             _aspectRatio = "fullscreen";
         else
             _aspectRatio = "widescreen";
@@ -166,14 +167,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
         _isDIVX = (_videoCodec.IndexOf("dx50") > -1) | (_videoCodec.IndexOf("div3") > -1); // DivX 5 and DivX 3
         _isXVID = (_videoCodec.IndexOf("xvid") > -1);
-        _isH264 = (_videoCodec.IndexOf("avc") > -1);
+        _isH264 = (_videoCodec.IndexOf("avc") > -1 || _videoCodec.IndexOf("h264") > -1);
         _isMP1V = (_videoCodec.IndexOf("mpeg-1v") > -1);
         _isMP2V = (_videoCodec.IndexOf("mpeg-2v") > -1);
         _isMP4V = (_videoCodec.IndexOf("fmp4") > -1); // add more
         _isWMV = (_videoCodec.IndexOf("wmv") > -1); // wmv3 = WMV9
         // missing cvid etc
         _isAC3 = (System.Text.RegularExpressions.Regex.IsMatch(_audioCodec, "ac-?3"));
-        _isMP3 = (_audioCodec.IndexOf("mpeg-1 audio layer 3") > -1);
+        _isMP3 = (_audioCodec.IndexOf("mpeg-1 audio layer 3") > -1) || (_audioCodec.IndexOf("mpeg-2 audio layer 3") > -1);
         _isMP2A = (_audioCodec.IndexOf("mpeg-1 audio layer 2") > -1);
         _isDTS = (_audioCodec.IndexOf("dts") > -1);
         _isOGG = (_audioCodec.IndexOf("ogg") > -1);

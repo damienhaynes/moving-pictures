@@ -49,7 +49,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         }
 
         private void MenuEditorPopup_FormClosing(object sender, FormClosingEventArgs e) {
-
+            MenuTree.Dispose();
+            nodeSettingsPanel.Dispose();
         }
 
         private void okButton_Click(object sender, EventArgs e) {

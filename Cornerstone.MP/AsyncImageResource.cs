@@ -119,7 +119,7 @@ namespace Cornerstone.MP {
 
             set {
                 if (value == null)
-                    return;
+                    value = " ";
 
                 Thread newThread = new Thread(new ParameterizedThreadStart(setFilenameWorker));
                 newThread.Name = "AsyncImageResource.setFilenameWorker";

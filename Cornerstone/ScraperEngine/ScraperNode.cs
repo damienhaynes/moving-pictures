@@ -59,12 +59,18 @@ namespace Cornerstone.ScraperEngine {
                 }
 
             if (nodeSettings.LoadNameAttribute) {
-                // try to grab the name of the node (variable name for results)
-                try { name = xmlNode.Attributes["name"].Value; }
-                catch (Exception e) {
-                    if (e.GetType() == typeof(ThreadAbortException))
-                        throw e;
 
+                // Load attributes
+                foreach (XmlAttribute attr in xmlNode.Attributes) {
+                    switch (attr.Name) {
+                        case "name":
+                            name = attr.Value;
+                            break;
+                    }
+                }
+
+               // Validate NAME attribute
+                if (name == null) {
                     logger.Error("Missing NAME attribute on: " + xmlNode.OuterXml);
                     loadSuccess = false;
                     return;
