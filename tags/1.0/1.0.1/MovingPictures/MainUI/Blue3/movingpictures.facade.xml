@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file should contain the facade view
+-->
+<window>
+	<controls>
+		<control>      
+			<type>facadeview</type>
+			<id>51</id>
+			<animation effect="slide" time="150" start="0,-300">WindowOpen</animation>
+			<animation effect="slide" time="250" end="800,0">WindowClose</animation>				
+			<control>				
+				<description>Categories List</description>
+				<type>listcontrol</type>
+				<id>51</id>
+				<onleft>51</onleft>
+				<onright>51</onright>
+				<posX>360</posX>
+				<posY>115</posY>
+				<width>355</width>
+				<height>425</height>
+				<textXOff>0</textXOff>
+				<textXOff3>10</textXOff3>
+				<scrollOffset>5</scrollOffset>
+				<IconXOff>1980</IconXOff>        
+				<spinWidth>18</spinWidth>
+				<spinHeight>18</spinHeight>
+				<spinPosX>675</spinPosX>
+				<spinPosY>495</spinPosY>
+				<spinColor>ffffffff</spinColor>
+				<spinCanFocus>no</spinCanFocus>
+			</control>
+		</control>
+		<control>
+			<description>group element</description>
+			<type>group</type>
+			<control>
+				<type>facadeview</type>
+				<id>50</id>
+				<control>
+					<visible>Control.IsVisible(50)</visible>
+					<description>Movie List</description>
+					<type>listcontrol</type>
+					<id>50</id>
+					<onleft>2</onleft>
+					<onright>2</onright>
+					<posX>360</posX>
+					<posY>118</posY>
+					<width>355</width>
+					<height>425</height>
+					<textXOff>0</textXOff>
+					<textXOff3>10</textXOff3>
+					<scrollOffset>5</scrollOffset>
+					<IconXOff>1980</IconXOff>        
+					<spinWidth>18</spinWidth>
+					<spinHeight>18</spinHeight>
+					<spinPosX>675</spinPosX>
+					<spinPosY>495</spinPosY>
+					<!-- group headers -->
+					<textcolor3>ff3E99D7</textcolor3>
+				</control>
+				<control>
+					<visible>Control.IsVisible(50)</visible>
+					<description>Filmstrip view</description>
+					<type>filmstrip</type>
+					<id>50</id>
+					<onup>3</onup>
+					<posX>12</posX>
+					<posY>220</posY>
+					<width>720</width>
+					<textXOff>0</textXOff>
+					<textYOff>1500</textYOff>
+					<scrollOffset>2</scrollOffset>
+					<spinPosX>670</spinPosX>
+					<spinPosY>550</spinPosY>
+					<spinWidth>18</spinWidth>
+					<spinHeight>18</spinHeight>
+					<spinAlign>Right</spinAlign>
+					<spinColor>ffffffff</spinColor>
+					<spinCanFocus>no</spinCanFocus>
+					<itemWidth>142</itemWidth>
+					<itemHeight>156</itemHeight>
+					<textureWidth>120</textureWidth>
+					<textureHeight>170</textureHeight>
+					<thumbWidth>106</thumbWidth>
+					<thumbHeight>156</thumbHeight>
+					<thumbPosX>7</thumbPosX>
+					<thumbPosY>7</thumbPosY>				
+					<InfoImage></InfoImage>				
+					<imageFolder>Picture_cover.png</imageFolder>
+					<imageFolderFocus>-</imageFolderFocus>
+					<frame>-</frame>
+					<frameFocus>Picture_cover.png</frameFocus>
+					<showFrame>yes</showFrame>
+					<showFolder>yes</showFolder>
+					<showBackGround>no</showBackGround>
+					<showInfoImage>no</showInfoImage>
+					<thumbAnimation effect="zoom" start="100,100" end="180,180" time="700" tween="circle" ease="inout" >focus</thumbAnimation>
+					<thumbAnimation effect="zoom" start="170,170" end="100,100" time="900" tween="back" ease="inout">unfocus</thumbAnimation>	
+				</control>
+				<control>
+					<description>Thumbnail Panel</description>
+					<type>thumbnailpanel</type>
+					<id>50</id>
+					<onleft>2</onleft>
+					<onright>2</onright>				
+					<textureUp>-</textureUp>
+					<textureDown>-</textureDown>
+					<textXOff>0</textXOff>
+					<textYOff>1500</textYOff>
+					<posX>60</posX>
+					<posY>105</posY>
+					<width>700</width>
+					<height>480</height>
+					<!-- Small Icons 0.66 aspect ratio -->
+					<itemWidth>100</itemWidth>
+					<itemHeight>145</itemHeight>
+					<textureWidth>100</textureWidth>
+					<textureHeight>144</textureHeight>
+					<thumbWidth>90</thumbWidth>
+					<thumbHeight>135</thumbHeight>
+					<thumbPosX>5</thumbPosX>
+					<thumbPosY>5</thumbPosY>				
+					<!-- Large Icons 0.66 aspect ratio -->
+					<textureWidthBig>148</textureWidthBig>
+					<textureHeightBig>217</textureHeightBig>
+					<itemWidthBig>147</itemWidthBig>
+					<itemHeightBig>215</itemHeightBig>
+					<thumbWidthBig>132</thumbWidthBig>
+					<thumbHeightBig>200</thumbHeightBig>
+					<thumbPosXBig>8</thumbPosXBig>
+					<thumbPosYBig>8</thumbPosYBig>
+					<font>font12</font>
+					<suffix>|</suffix>			
+					<enableFocusZoom>no</enableFocusZoom>
+					<spinWidth>18</spinWidth>
+					<spinHeight>18</spinHeight>
+					<spinPosX>615</spinPosX>
+					<spinPosY>545</spinPosY>
+					<spinAlign>Right</spinAlign>
+					<spinColor>ffffffff</spinColor>
+					<spinCanFocus>no</spinCanFocus>
+					<textureUp>page_up_nofocus.png</textureUp>
+					<textureDown>page_down_nofocus.png</textureDown>
+					<textureUpFocus>page_up_focus.png</textureUpFocus>
+					<textureDownFocus>page_down_focus.png</textureDownFocus>	
+					<unfocusedAlpha>100</unfocusedAlpha>
+					<dimColor>30ffffff</dimColor>
+				</control>
+			</control>
+		</control>
+	
+		<!-- Movie Count -->
+		<control>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>709</posX>
+		  <posY>95</posY>
+		  <width>350</width>
+		  <font>font13</font>
+		  <textcolor>ffFFFFFF</textcolor>
+		  <align>right</align>
+		  <label>#MovingPictures.general.filteredmoviecount #MovingPictures.Translation.Movies.Label</label>
+		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		</control>
+		<control>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>60</posX>
+		  <posY>540</posY>
+		  <width>350</width>
+		  <font>font13</font>
+		  <textcolor>ffFFFFFF</textcolor>
+		  <align>left</align>
+		  <label>#MovingPictures.general.filteredmoviecount #MovingPictures.Translation.Movies.Label</label>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		</control>
+		<control>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>20</posX>
+		  <posY>550</posY>
+		  <width>350</width>
+		  <font>font13</font>
+		  <textcolor>ffFFFFFF</textcolor>
+		  <align>left</align>
+		  <label>#MovingPictures.general.filteredmoviecount #MovingPictures.Translation.Movies.Label</label>
+		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+		</control>
+		
+		<!-- Selected Category Facade Item -->	
+		<control>
+			<description>Default Image</description>
+			<type>image</type>
+			<id>1</id>
+			<posX>20</posX>
+			<posY>150</posY>
+			<width>300</width>
+			<height>300</height>
+			<texture flipY="true" diffuse="Thumb_Mask.png">Categories\Movies.png</texture>
+			<keepaspectratio>yes</keepaspectratio>
+			<animation effect="fade" time="250">WindowOpen</animation>
+			<animation effect="fade" time="250">WindowClose</animation>			
+			<visible>Control.IsVisible(51)+facadeview.list+!Control.HasThumb(100)</visible>
+		</control>
+		<control>
+			<description>Default Image</description>
+			<type>image</type>
+			<id>100</id>
+			<posX>20</posX>
+			<posY>150</posY>
+			<width>300</width>
+			<height>300</height>
+			<texture flipY="true" diffuse="Thumb_Mask.png">Categories\#MovingPictures.SelectedNode.FileFriendlyName.png</texture>	
+			<keepaspectratio>yes</keepaspectratio>
+			<animation effect="fade" time="250">WindowOpen</animation>
+			<animation effect="fade" time="250">WindowClose</animation>			
+			<visible>Control.IsVisible(51)+facadeview.list</visible>
+		</control>
+	
+	</controls>
+</window>
