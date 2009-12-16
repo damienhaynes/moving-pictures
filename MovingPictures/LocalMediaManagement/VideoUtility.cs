@@ -212,11 +212,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
             else if (self == VideoFormat.Bluray) {
                 // Standard for the Bluray Disc ID is to compute a SHA1 hash from the key file (will only work for retail disks)
-                string keyFile = videoPath.ToLower().Replace(@"bdmv\index.bdmv", @"AACS\Unit_Key_RO.inf");
-                if (File.Exists(keyFile))
-                    hashID = Utility.ComputeSHA1Hash(keyFile);
-                else if (File.Exists(videoPath))
-                    hashID = string.Empty;
+                string path = videoPath.ToLower();
+                if (path.EndsWith(@"bdmv\index.bdmv")) {
+                    string keyFile = path.Replace(@"bdmv\index.bdmv", @"AACS\Unit_Key_RO.inf");
+                    if (File.Exists(keyFile))
+                        hashID = Utility.ComputeSHA1Hash(keyFile);
+                    else if (File.Exists(videoPath))
+                        hashID = string.Empty;
+                }
             }
             else if (self == VideoFormat.File) {
                 // Compute a Movie Hash with the OpenSubtitles method (might change this to a new standard in the future)
