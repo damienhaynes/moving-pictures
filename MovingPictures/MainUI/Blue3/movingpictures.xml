@@ -148,7 +148,7 @@ multiple view modes.
 		<!-- Top Bar Controls -->
 		<control>      
 		  <type>image</type>
-		  <id>1</id>
+		  <id>0</id>
 		  <posX>50</posX>
 		  <posY>-10</posY>
 		  <width>70</width>
