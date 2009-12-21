@@ -285,6 +285,7 @@
     <Compile Include="DataProviders\MyVideosProvider.cs" />
     <Compile Include="DataProviders\ScriptableProvider.cs" />
     <Compile Include="LocalMediaManagement\DeviceManager.cs" />
+    <Compile Include="LocalMediaManagement\MovieRenamer.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\BlurayMetaBuilder.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\HashBuilder.cs">
       <SubType>Code</SubType>

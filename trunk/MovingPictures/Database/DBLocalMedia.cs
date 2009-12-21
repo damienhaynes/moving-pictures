@@ -232,6 +232,21 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
+        [DBFieldAttribute(AllowDynamicFiltering = false)]
+        public string OriginalFileName {
+            get {
+                if (_originalFileName == " ")
+                    return String.Empty;
+
+                return _originalFileName;
+            }
+
+            set {
+                _originalFileName = value;
+                commitNeeded = true;
+            }
+        } private string _originalFileName;
+
         [DBFieldAttribute(Default = "", FieldName = "volume_serial", Filterable = false)]
         public string VolumeSerial {
             get {
