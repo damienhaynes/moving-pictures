@@ -366,7 +366,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             listenToExternalPlayerEvents = true;
             
             // Play the file using the mediaportal player
-            bool success = g_Player.Play(media);
+            bool success = g_Player.Play(media.Trim());
 
             // We stop listening to external player events
             listenToExternalPlayerEvents = false;

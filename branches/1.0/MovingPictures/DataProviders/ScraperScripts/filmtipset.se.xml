@@ -14,8 +14,8 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="4" point="2"/>
-	<published month="10" day="15" year="2009"/>
+	<version major="1" minor="4" point="3"/>
+	<published month="12" day="20" year="2009"/>
 
 	<!--
 	These fields are used for categorization purposes. Seperate multiple 
@@ -97,9 +97,9 @@
 			<parse name="site_id" input="${search_page}" regex="${rx_site_id}"/>
 			<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
 
-			<set name="movie[0].title" value="${title[0]}"/>
+			<set name="movie[0].title" value="${title[0]:htmldecode}"/>
 			<if test="${movie[0].title}!=${year_alt[0][0]}">
-				<set name="movie[0].alternate_titles" value="${year_alt[0][0]}"/>
+				<set name="movie[0].alternate_titles" value="${year_alt[0][0]:htmldecode}"/>
 			</if>
 			<set name="movie[0].year" value="${year_alt[0][1]}"/>
 			<set name="movie[0].site_id" value="${site_id[0][0]}"/>
@@ -112,11 +112,12 @@
 		<parse name="search_results_verified" input="${search_page}" regex="${rx_search_results_block}"/>
 		<loop name="search_movielist" on="search_results_verified" limit="5">
 			<parse name="search_title" input="${search_movielist}" regex="${rx_search_title}"/>
-			<set name="movie[${count}].title" value="${search_title[0][0]}"/>
+			<set name="movie[${count}].title" value="${search_title[0][0]:htmldecode}"/>
 
 			<parse name="search_orig_title" input="${search_movielist}" regex="${rx_search_orig_title}"/>
-			<if test="${movie[${count}].title}!=${search_orig_title[0][0]:striptags}">
-				<set name="movie[${count}].alternate_titles" value="${search_orig_title[0][0]:striptags}"/>
+			<set name="search_orig_title[0][0]" value="${search_orig_title[0][0]:striptags}"/>
+			<if test="${movie[${count}].title}!=${search_orig_title[0][0]:htmldecode}">
+				<set name="movie[${count}].alternate_titles" value="${search_orig_title[0][0]:htmldecode}"/>
 			</if>
 
 			<parse name="search_year" input="${search_movielist}" regex="${rx_search_year}"/>
