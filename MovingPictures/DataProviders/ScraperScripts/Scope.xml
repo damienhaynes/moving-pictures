@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141316</id>
-    <version major="1" minor="0" point="3"/>
-    <published month="9" day="10" year="2009"/>
+    <version major="1" minor="0" point="4"/>
+    <published month="12" day="21" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -47,13 +47,13 @@
 	
     <set name="rx_search_results">
       <![CDATA[
-      <td><a\shref="film.php.id=(?<MovieID>\d+)">(?<MovieTitle>[^<]+)</a>(?:[^>]+>){2}(?<MovieYear>\d{4})
+      <a\shref="film/(?<MovieID>\d+)[^>]+>(?<MovieTitle>[^<]+)</a>(?:[^>]+>){2}(?<MovieYear>\d{4})
       ]]>
     </set>
 
     <set name="rx_search_results_google">
       <![CDATA[
-      <li\sclass[^>]+>(?:[^>]+>)<a\shref="http.//www.scope.dk/film.php.id=(?<MovieID>\d+)"
+      <li\sclass[^>]+>(?:[^>]+>)<a\shref="http.//www.scope.dk/film/(?<MovieID>\d+)"
       ]]>
     </set>
 	
@@ -65,25 +65,25 @@
 	
 	<set name="rx_title">
       <![CDATA[
-      overskrift_stor(?:[^>]+>){2}(?<MovieTitle>[^<]+)
+      <h2>\n\t{3}(?<MovieTitle>[^\t]+)\t{2}<
       ]]>
     </set>
 	
 	<set name="rx_year">
       <![CDATA[
-      overskrift_mellem"[^"]+"aarstal.php[^>]+>(?<MovieYear>[^<]+)
+      Produktionsår[^\n]+\n(?:[^>]+>)(?<MovieYear>[^<]+)
       ]]>
     </set>
 	
 	<set name="rx_parentheses">
       <![CDATA[
-      \(.+\)
+	  (?<MovieID>\([^)]+\))
       ]]>
     </set>	
 	
 	<set name="rx_alternate_google">
       <![CDATA[
-      overskrift_mellem">.(?<MovieAlternate>[^,]+),\s<a\shref="aarstal.php
+      <h2>\n[^(]+\((?<MovieAlternate>[^)]+)
       ]]>
     </set>
 	
@@ -111,13 +111,13 @@
 				  <set name="movie[${counter}].year" value="${item_return[2]:htmldecode}"/>
 			  </if>
 			  <set name="movie[${counter}].site_id" value="${item_return[0]}"/>
-			  <set name="movie[${counter}].details_url" value="http://www.scope.dk/film.php?id=${item_return[0]}&amp;fil=2"/>
+			  <set name="movie[${counter}].details_url" value="http://www.scope.dk/film/${item_return[0]}"/>
 			  <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
 			</loop>
 		</if>
 	</if>
 	
-	<!-- search google if nothing comes up on FilmAffinity. -->
+	<!-- search google if nothing comes up on Scope. -->
 	<if test='${movie[0].title}='>
 		
 		<retrieve name="search_page" url="http://www.google.com/search?q=site%3Awww.scope.dk+${search.title:safe(ISO-8859-1)}" />
@@ -155,7 +155,7 @@
 	<if test='${movie[0].title}='>
 		<parse name="movie_search" input="${search.title}" regex="${rx_id_check}"/>
 		<if test='${search.title}=${movie_search[0][0]}'>
-			<retrieve name="search_page" url="http://www.scope.dk/film.php?id=${search.title}&amp;fil=2" />
+			<retrieve name="search_page" url="http://www.scope.dk/film/${search.title}" />
 			<parse name="movie_title" input="${search_page}" regex="${rx_title}"/>
 			<set name="movie[0].title" value="${movie_title[0][0]:htmldecode}"/>
 			
@@ -165,7 +165,7 @@
 				<set name="movie[0].year" value="${movie_year[0][0]:htmldecode}"/>
 			</if>
 			<set name="movie[0].site_id" value="${movie_search[0][0]}"/>
-			<set name="movie[0].details_url" value="http://www.scope.dk/film.php?id=${movie_search[0][0]}&amp;fil=2"/>
+			<set name="movie[0].details_url" value="http://www.scope.dk/film/${movie_search[0][0]}"/>
 		</if>
 	</if>
 	
@@ -182,19 +182,19 @@
 
 	<set name="rx_score">
       <![CDATA[
-      Scope.score(?:[^\n]+\n){2}[^\d]+(?<MovieScore>\d+)
+      scope.dk/gfx/stjerner/gul.gif
       ]]>
     </set>
 	
 	<set name="rx_actors">
       <![CDATA[
-	  Medvirkende(?:[^>]+>){5}[^\n]+\n(?:[^>]+>)(?<MovieActors>[^\n]+)
+	  Medvirkende[^\n]+\n(?:[^>]+>)(?<MovieActors>[^\n]+)
       ]]>
     </set>
 	
 	<set name="rx_writers">
       <![CDATA[
-      Manuskript[^\n]+\n(?:[^>]+>)(?<MovieDirector>[^\n]+)
+      Manuskript<[^\n]+\n(?:[^>]+>)(?<MovieDirector>[^\n]+)
       ]]>
     </set>
 	
@@ -206,31 +206,31 @@
 	
 	<set name="rx_title">
       <![CDATA[
-      overskrift_stor(?:[^>]+>){2}(?<MovieTitle>[^<]+)
+      <h2>\n\t{3}(?<MovieTitle>[^\t]+)\t{2}<
       ]]>
     </set>
 	
 	<set name="rx_alternate">
       <![CDATA[
-      overskrift_mellem">.(?<MovieAlternate>[^,]+),\s<a\shref="aarstal.php
+      <h2>\n[^(]+\((?<MovieAlternate>[^)]+)
       ]]>
     </set>
 	
 	<set name="rx_year">
       <![CDATA[
-      overskrift_mellem"[^"]+"aarstal.php[^>]+>(?<MovieYear>[^<]+)
+      Produktionsår[^\n]+\n(?:[^>]+>)(?<MovieYear>[^<]+)
       ]]>
     </set>
 	
 	<set name="rx_genres">
       <![CDATA[
-      >Genre</td>(?:[^>]+>)(?<MovieGenres>[^\n]+)
+      th>Genre</th[^\n]+\n(?:[^>]+>)(?<MovieGenres>[^\n]+)
       ]]>
     </set>
 	
 	<set name="rx_description">
       <![CDATA[
-      overskrift_mellem">Handling(?:[^>]+>){3}\n(?<MovieSummary>[^\n]+)
+      <div\sid="film-top-middle">\n(?<MovieSummary>[^\n]+)
       ]]>
     </set>
 	
@@ -240,18 +240,24 @@
       ]]>
     </set>
 	
-	<set name="rx_alternate_parse">
+	<set name="rx_parentheses">
       <![CDATA[
-      \|\s(?<Alternate>[^|]+)
+	  (?<MovieID>\([^)]+\))
       ]]>
-    </set>
+    </set>	
 	
     <retrieve name="details_page" url="http://www.scope.dk/film.php?id=${movie.site_id}&amp;fil=2" />
 
     <!-- Title and Year -->
     <parse name="title" input="${details_page}" regex="${rx_title}"/>
     <set name="movie.title" value="${title[0][0]:htmldecode}"/>
-
+	
+	<parse name='altCheck' input="${movie.title}" regex="${rx_parentheses}"/>
+	<if test='${altCheck[0][0]}!='>
+		<replace name='movie.alternate_titles' input='${title[0][0]:htmldecode}' pattern='\(' with='' />
+		<replace name='movie.alternate_titles' input='${movie.alternate_titles}' pattern='\)' with='' />
+		<replace name='movie.title' input='${item_return[1]}' pattern='${rx_parentheses}' with='' />
+	</if>
 	<parse name="alternate" input="${details_page}" regex="${rx_alternate}"/>
 	<if test='${alternate[0][0]}!='>
 		<set name="movie.alternate_titles" value="${alternate[0][0]:htmldecode}"/>
@@ -316,11 +322,10 @@
     
     
     <!-- Score -->
-	<retrieve name="score_page" url="http://www.scope.dk/film.php?id=${movie.site_id}&amp;fil=1" />
-    <parse name="score" input="${score_page}" regex="${rx_score}"/>
-	<if test='${score[0][0]}!='>
-		<divide name='movie.score' value1='${score[0][0]}' value2='10' />
-	</if>
+    <parse name="score" input="${details_page}" regex="${rx_score}"/>
+	<set name='scoreCount' value='${score.count}' />
+	<multiply name='scoreCount' value1='${scoreCount}' value2='2' />
+	<set name='movie.score' value='${scoreCount}' />
 
     
     <!-- Popularity -->
@@ -336,14 +341,16 @@
 	</if>	
 	
 	<!-- IMDB id -->
-	<retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.title:safe}+(${movie.year:safe})" />
-	<parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
-	<set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
-	<!-- If no IMDB try to get it with the first alternate title. -->
 	<if test='${movie.imdb_id}='>
-		<retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.alternate_titles}+(${movie.year:safe})" />
+		<retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.title:safe}+(${movie.year:safe})" />
 		<parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
 		<set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
+		<!-- If no IMDB try to get it with the first alternate title. -->
+		<if test='${movie.imdb_id}='>
+			<retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.alternate_titles}+(${movie.year:safe})" />
+			<parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
+			<set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
+		</if>
 	</if>
   </action>
   
