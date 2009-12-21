@@ -34,7 +34,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager {
                 return movie;
             }
             set {
-                if (value is DBMovieInfo)
+                if (value is DBMovieInfo || value == null)
                     movie = value as DBMovieInfo;
 
                 updateControls();
@@ -62,8 +62,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager {
 
             // populate file list combo
             fileList.Items.Clear();
-            movie.LocalMedia.Sort(new DBLocalMediaComparer());
-            foreach (DBLocalMedia currFile in movie.LocalMedia)
+            List<DBLocalMedia> files = new List<DBLocalMedia>();
+            files.AddRange(movie.LocalMedia);
+            files.Sort(new DBLocalMediaComparer());
+            foreach (DBLocalMedia currFile in files)
                 fileList.Items.Add(currFile);
 
             // select first file            
@@ -90,6 +92,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager {
             ((DBLocalMedia)fileList.Items[index]).Part = partB;
             ((DBLocalMedia)fileList.Items[index - 1]).Part = partA;
 
+            movie.LocalMedia.Sort(new DBLocalMediaComparer());
+            movie.Commit();
+
             updateControls();
             fileList.SelectedIndex = index - 1;
         }
@@ -104,6 +109,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager {
             int partB = ((DBLocalMedia)fileList.Items[index + 1]).Part;
             ((DBLocalMedia)fileList.Items[index]).Part = partB;
             ((DBLocalMedia)fileList.Items[index + 1]).Part = partA;
+
+            movie.LocalMedia.Sort(new DBLocalMediaComparer());
+            movie.Commit();
 
             updateControls();
             fileList.SelectedIndex = index + 1;

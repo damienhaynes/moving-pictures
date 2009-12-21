@@ -79,6 +79,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 MovingPicturesCore.DatabaseManager.ObjectInserted +=
                     new DatabaseManager.ObjectAffectedDelegate(movieInsertedListener);
+
+                MovingPicturesCore.DatabaseManager.ObjectUpdated +=
+                    new DatabaseManager.ObjectAffectedDelegate(localMediaUpdatedListener);
             }
         }
 
@@ -216,6 +219,34 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     listItems[(DBMovieInfo)obj].Selected = true;
             }
 
+        }
+
+        // if a dblocalmedia object is updated and it happens to belong to the currently
+        // selected movie, and we are on the file details tab, we need to update.
+        private void localMediaUpdatedListener(DatabaseTable obj) {
+            if (!fileDetailsSubPane.Visible)
+                return;
+
+            DBLocalMedia file = obj as DBLocalMedia;
+            if (file == null) return;
+
+            // This ensures we are thread safe. Makes sure this method is run by
+            // the thread that created this panel.
+            if (InvokeRequired) {
+                Delegate method = new DatabaseManager.ObjectAffectedDelegate(localMediaUpdatedListener);
+                object[] parameters = new object[] { obj };
+                this.Invoke(method, parameters);
+                return;
+            }
+
+            if (file.AttachedMovies.Count > 0) {
+                foreach (DBMovieInfo currMovie in file.AttachedMovies) {
+                    if (CurrentMovie == currMovie) {
+                        updateFilePanel();
+                        return;
+                    }
+                }
+            }
         }
 
         private void updateMoviePanel() {
@@ -830,6 +861,130 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 MessageBox.Show("Some movies could not be updated because they are offline.");
         }
 
+        private void updateFileNameToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (CurrentMovie == null)
+                return;
+
+            // Check if all files belonging to the movie are available.
+            bool continueReassign = false;
+            while (!continueReassign) {
+                continueReassign = true;
+                foreach (DBLocalMedia localMedia in CurrentMovie.LocalMedia) {
+                    // if the file is offline
+                    if (!localMedia.IsAvailable) {
+                        // do not continue
+                        continueReassign = false;
+
+                        // Prompt the user to insert the media containing the files
+                        string connect = string.Empty;
+                        if (localMedia.DriveLetter != null) {
+                            if (localMedia.ImportPath.GetDriveType() == DriveType.CDRom)
+                                connect = "Cannot rename a file on a CD/DVD.";
+                            else
+                                connect = "Please reconnect the media labeled '" + localMedia.MediaLabel + "' to " + localMedia.DriveLetter;
+                        }
+                        else {
+                            connect = "Please make sure the network share '" + localMedia.FullPath + "' is available.";
+                        }
+
+                        // Show dialog
+                        DialogResult resultInsert = MessageBox.Show(
+                        "The file or files you want to rename are currently not available.\n\n" + connect,
+                        "File(s) not available.", MessageBoxButtons.RetryCancel);
+
+                        // if cancel is pressed stop the reassign process.
+                        if (resultInsert == DialogResult.Cancel)
+                            return;
+
+                        // break foreach loop (and recheck condition)
+                        break;
+                    }
+                }
+            }
+
+            // If we made it this far all files are available and we can notify the user
+            // about what the reassign process is going to do.
+            DialogResult result = MessageBox.Show(
+                    "You are about to rename this file or set of files.\n\n" +
+                    "Are you sure you want to continue?",
+                    "Rename Movie File", MessageBoxButtons.YesNo);
+
+            if (result == System.Windows.Forms.DialogResult.Yes) {
+                List<DBLocalMedia> localMedia = new List<DBLocalMedia>(CurrentMovie.LocalMedia);
+
+                MovieRenamer FileRename = new MovieRenamer();
+                FileRename.StartRename(CurrentMovie);
+            }
+        }
+
+        //medthod to undo a file name change processed by the MovieFileRenamer class.
+        private void returnToOriginalFileNameToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (CurrentMovie == null)
+                return;
+
+            //do a check to see if the first file in this movie has been renamed. If not, halt.
+            if (CurrentMovie.LocalMedia[0].OriginalFileName == String.Empty) {
+                DialogResult noOriginal = MessageBox.Show(
+                    "It is not possible to revert to the previous\n" +
+                    "filename because the current movie has not been\n" +
+                    "renamed.",
+                    "Error", MessageBoxButtons.OK);
+                return;
+            }
+
+            // Check if all files belonging to the movie are available.
+            bool continueReassign = false;
+            while (!continueReassign) {
+                continueReassign = true;
+                foreach (DBLocalMedia localMedia in CurrentMovie.LocalMedia) {
+                    // if the file is offline
+                    if (!localMedia.IsAvailable) {
+                        // do not continue
+                        continueReassign = false;
+
+                        // Prompt the user to insert the media containing the files
+                        string connect = string.Empty;
+                        if (localMedia.DriveLetter != null) {
+                            if (localMedia.ImportPath.GetDriveType() == DriveType.CDRom)
+                                connect = "Cannot rename a file on a CD/DVD.";
+                            else
+                                connect = "Please reconnect the media labeled '" + localMedia.MediaLabel + "' to " + localMedia.DriveLetter;
+                        }
+                        else {
+                            connect = "Please make sure the network share '" + localMedia.FullPath + "' is available.";
+                        }
+
+                        // Show dialog
+                        DialogResult resultInsert = MessageBox.Show(
+                        "The file or files you want to rename are currently not available to rename.\n\n" + connect,
+                        "File(s) not available.", MessageBoxButtons.RetryCancel);
+
+                        // if cancel is pressed stop the reassign process.
+                        if (resultInsert == DialogResult.Cancel)
+                            return;
+
+                        // break foreach loop (and recheck condition)
+                        break;
+                    }
+                }
+            }
+
+            // If we made it this far all files are available and we can notify the user
+            // about what the reassign process is going to do.
+            DialogResult result = MessageBox.Show(
+                    "You are about to rename this file or set of files.\n\n" +
+                    "Are you sure you want to continue?",
+                    "Rename Movie File", MessageBoxButtons.YesNo);
+
+            if (result == System.Windows.Forms.DialogResult.Yes) {
+                List<DBLocalMedia> localMedia = new List<DBLocalMedia>(CurrentMovie.LocalMedia);
+
+                MovieRenamer FileRename = new MovieRenamer();
+                FileRename.UndoRename(CurrentMovie);
+            }
+
+
+        }
     }
 
 

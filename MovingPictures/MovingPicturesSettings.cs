@@ -1469,6 +1469,42 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
+        #region Extras
+        #region File Renamer
+        
+        [CornerstoneSetting(
+            Name = "File Rename Pattern",
+            Description = "When using the file renamer functionality, movie files will be renamed based on this pattern. The multi-part pattern will replace ${moviepart} if the movie is made up of multipe files.",
+            Groups = "|Extras|File Renamer|",
+            Identifier = "file_rename_string",
+            Default = @"${movie.title} (${movie.year})")]
+        public string FileRenameString {
+            get { return _fileRenameString; }
+            set {
+                _fileRenameString = value;
+                OnSettingChanged("file_rename_string");
+            }
+        }
+        private string _fileRenameString;
+
+        [CornerstoneSetting(
+            Name = "Multi-Part Rename Pattern",
+            Description = "When using the file renamer functionality, this filename pattern will be appended to the regular pattern for movies made up of multiple files.",
+            Groups = "|Extras|File Renamer|",
+            Identifier = "file_multipart",
+            Default = @" Part #")]
+        public string FileMultipartString {
+            get { return _file_multipart; }
+            set {
+                _file_multipart = value;
+                OnSettingChanged("file_multipart");
+            }
+        }
+        private string _file_multipart;
+
+        #endregion
+        #endregion
+
         #region Internal Settings
 
         [CornerstoneSetting(
