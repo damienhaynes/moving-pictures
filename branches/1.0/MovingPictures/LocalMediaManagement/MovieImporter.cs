@@ -419,6 +419,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // build the new match and add it for processing
             MovieMatch newMatch = new MovieMatch();
             newMatch.LocalMedia = fileList;
+            newMatch.LocalMedia.Sort(new DBLocalMediaComparer());
             lock (priorityPendingMatches.SyncRoot) {
                 newMatch.HighPriority = true;
                 priorityPendingMatches.Insert(0, newMatch);
