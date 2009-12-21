@@ -24,8 +24,12 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         }
 
         public override void Work() {
+            logger.Info("Beginging artwork updater background process.");
+
             RemoveOrphanArtwork();
             LookForMissingArtwork();
+
+            logger.Info("Background artwork updater process complete.");
         }
 
         // Removes Artwork From a Movie
