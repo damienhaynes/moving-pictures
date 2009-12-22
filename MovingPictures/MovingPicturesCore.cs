@@ -147,6 +147,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 actionDescriptions.Add(newAction, "Performing Movie Information Upgrade Check...");
                 initActions.Add(newAction);
 
+                // artwork
+                newAction = new WorkerDelegate(DatabaseMaintenanceManager.PerformArtworkUpgradeCheck);
+                actionDescriptions.Add(newAction, "Reconfiguring Artwork...");
+                initActions.Add(newAction);
             }            
 
             newAction = new WorkerDelegate(checkVersionInfo);

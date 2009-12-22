@@ -8,6 +8,7 @@ using Cornerstone.Database.Tables;
 using Cornerstone.Database;
 using System.Reflection;
 using MediaPortal.Plugins.MovingPictures.MainUI;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public class DatabaseMaintenanceManager {
@@ -216,8 +217,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                             movie.DateAdded = movie.DateAdded.AddSeconds((double)movie.ID);
                         }
                     }
-
-                    
                 }
 
                 #endregion
@@ -246,9 +245,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (currFile.ID == null)
                     continue;
 
-                #region Upgrades required for 0.8.0
+                #region Upgrades required for 1.0.0
 
-                if (MovingPicturesCore.GetDBVersionNumber() < new Version("0.8.0")) {
+                if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.0.0")) {
                     
                     // Disk Information Upgrade
                     if (!currFile.ImportPath.IsOpticalDrive && currFile.ImportPath.IsAvailable) {
@@ -269,6 +268,38 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             if (MaintenanceProgress != null) MaintenanceProgress("", 100);
+        }
+
+        // All other one time upgrades
+        public static void PerformArtworkUpgradeCheck() {
+            Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+            logger.Info("Performing Artwork Upgrade Check...");
+
+            #region 1.0.2 Upgrade Tasks
+
+            if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.0.2")) {
+                // grab file list
+                List<FileInfo> files = new List<FileInfo>();
+                files.AddRange(Utility.GetFilesRecursive(new DirectoryInfo(MovingPicturesCore.Settings.BackdropFolder)));
+                files.AddRange(Utility.GetFilesRecursive(new DirectoryInfo(MovingPicturesCore.Settings.BackdropThumbsFolder)));
+                files.AddRange(Utility.GetFilesRecursive(new DirectoryInfo(MovingPicturesCore.Settings.CoverArtFolder)));
+                files.AddRange(Utility.GetFilesRecursive(new DirectoryInfo(MovingPicturesCore.Settings.CoverArtThumbsFolder)));
+
+                float count = 0;
+                float total = files.Count;
+
+                // rename PNGs to JPGs
+                foreach (FileInfo currFile in files) {
+                    count++;
+                    if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count * 100 / total));
+
+                    if (currFile.Extension.ToLower() == ".png")
+                        currFile.MoveTo(currFile.Directory.FullName + "\\" + currFile.Name.Replace(".png", ".jpg"));
+                }
+
+            }
+
+            #endregion
         }
 
         public static void VerifyFilterMenu() {

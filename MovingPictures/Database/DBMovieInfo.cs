@@ -909,9 +909,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
             catch (OutOfMemoryException e) {
                 logger.DebugException("Invalid image or image format not supported.", e);
+                return;
             }
             catch (FileNotFoundException e) {
                 logger.DebugException("File not found.", e);
+                return;
             }
 
             if (cover == null) {
