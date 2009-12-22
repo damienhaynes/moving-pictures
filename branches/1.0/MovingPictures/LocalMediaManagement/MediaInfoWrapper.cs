@@ -80,12 +80,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
         return;
       }
 
-      //currently mediainfo is only used for video related material
-      if (!isDVD && !isVideo)
-      {
-        return;
-      }
-
       try
       {
         _mI = new MediaInfo();
