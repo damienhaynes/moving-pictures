@@ -859,8 +859,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         private bool saveImage(string filename, Image image) {
             try {
-                // try to save as a JPG like normal
-                image.Save(filename, ImageFormat.Jpeg);
+                // try to save as a PNG
+                image.Save(filename, ImageFormat.Png);
                 return true;
             }
             catch (ArgumentNullException) {
@@ -868,12 +868,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
             catch (ExternalException) {
                 try {
-                    // if JPG saving failed for some reason, delete and try to resave as a PNG
+                    // if PNG saving failed for some reason, delete and try to resave as a JPG
                     if (File.Exists(filename))
                         File.Delete(filename);
 
-                    logger.Warn("Failed to save file as JPG, trying PNG: " + filename);
-                    image.Save(filename, ImageFormat.Png);
+                    logger.Warn("Failed to save file as PNG, trying JPG: " + filename);
+                    image.Save(filename, ImageFormat.Jpeg);
                     return true;
                 }
                 catch (Exception ex) {
