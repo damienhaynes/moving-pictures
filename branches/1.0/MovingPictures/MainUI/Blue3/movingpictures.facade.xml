@@ -160,7 +160,7 @@ This file should contain the facade view
 		  <font>font13</font>
 		  <textcolor>ffFFFFFF</textcolor>
 		  <align>right</align>
-		  <label>#MovingPictures.general.filteredmoviecount #MovingPictures.Translation.Movies.Label</label>
+		  <label>#MovingPictures.general.itemcount</label>
 		  <visible>facadeview.list+Control.IsVisible(50)</visible>
 		</control>
 		<control>
@@ -172,7 +172,7 @@ This file should contain the facade view
 		  <font>font13</font>
 		  <textcolor>ffFFFFFF</textcolor>
 		  <align>left</align>
-		  <label>#MovingPictures.general.filteredmoviecount #MovingPictures.Translation.Movies.Label</label>
+		  <label>#MovingPictures.general.itemcount</label>
 		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
 		</control>
 		<control>
@@ -184,7 +184,7 @@ This file should contain the facade view
 		  <font>font13</font>
 		  <textcolor>ffFFFFFF</textcolor>
 		  <align>left</align>
-		  <label>#MovingPictures.general.filteredmoviecount #MovingPictures.Translation.Movies.Label</label>
+		  <label>#MovingPictures.general.itemcount</label>
 		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
 		</control>
 		

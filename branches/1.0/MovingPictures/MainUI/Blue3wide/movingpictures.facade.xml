@@ -46,7 +46,7 @@ This file should contain the facade view
 					<onright>2</onright>
 					<width>475</width>
 					<posX>786</posX>
-					<posY>290</posY>        
+					<posY>290</posY>
 					<height>420</height>
 					<textXOff>-30</textXOff>
 					<textXOff3>10</textXOff3>
@@ -163,7 +163,7 @@ This file should contain the facade view
 		  <font>font11</font>
 		  <textcolor>ffFFFFFF</textcolor>
 		  <align>left</align>
-		  <label>#MovingPictures.general.filteredmoviecount #MovingPictures.Translation.Movies.Label</label>
+		  <label>#MovingPictures.general.itemcount</label>
 		  <visible>facadeview.list+Control.IsVisible(50)</visible>
 		</control>
 		<control>
@@ -175,7 +175,7 @@ This file should contain the facade view
 		  <font>font11</font>
 		  <textcolor>ffFFFFFF</textcolor>
 		  <align>left</align>
-		  <label>#MovingPictures.general.filteredmoviecount #MovingPictures.Translation.Movies.Label</label>
+		  <label>#MovingPictures.general.itemcount</label>
 		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
 		</control>
 		

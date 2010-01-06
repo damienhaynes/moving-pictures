@@ -1900,6 +1900,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             propertyStr = "#MovingPictures.general.filteredmoviecount";
             valueStr = browser.FilteredMovies.Count.ToString();
             SetProperty(propertyStr, valueStr);
+
+            // combined filtered movie count with Movie(s) translation
+            propertyStr = "#MovingPictures.general.itemcount";
+            valueStr = string.Format(valueStr + " {0}", browser.FilteredMovies.Count == 1 ? Translation.Movie : Translation.Movies);
+            SetProperty(propertyStr, valueStr);
         }
 
         /// <summary>
