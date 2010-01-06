@@ -1298,7 +1298,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return;
 
             // notify any listeners of the status change
-            logger.Info("Added \"{0}\".", currMatch.Selected.Movie.Title);
+            logger.Info("Added \"{0}\" ({1}).", currMatch.Selected.Movie.Title, currMatch.Selected.Movie.Year);
             if (MovieStatusChanged != null)
                 MovieStatusChanged(currMatch, MovieImporterAction.COMMITED);
         }
@@ -1363,7 +1363,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 else approvedMatches.Add(mediaMatch);
 
                 // notify any listeners
-                logger.Info("Auto-approved {0} as {1}", mediaMatch.LocalMediaString, mediaMatch.Selected.Movie.Title);
+                logger.Info("Auto-approved {0} as \"{1}\" ({2})", mediaMatch.LocalMediaString, mediaMatch.Selected.Movie.Title, mediaMatch.Selected.Movie.Year);
                 if (MovieStatusChanged != null)
                     MovieStatusChanged(mediaMatch, MovieImporterAction.APPROVED);
             }
