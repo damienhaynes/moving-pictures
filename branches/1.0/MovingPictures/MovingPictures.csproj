@@ -269,6 +269,9 @@
     <Compile Include="Database\DBUser.cs" />
     <Compile Include="Database\DBUserMovieSettings.cs" />
     <Compile Include="Database\DBWatchedHistory.cs" />
+    <Compile Include="LocalMediaManagement\MovieResources\Backdrop.cs" />
+    <Compile Include="LocalMediaManagement\MovieResources\Cover.cs" />
+    <Compile Include="LocalMediaManagement\MovieResources\FileBasedResource.cs" />
     <Compile Include="Database\FilterHelperDBMovieInfo.cs" />
     <Compile Include="LocalMediaManagement\MediaInfoWrapper.cs">
       <SubType>Code</SubType>
@@ -285,6 +288,7 @@
     <Compile Include="DataProviders\MyVideosProvider.cs" />
     <Compile Include="DataProviders\ScriptableProvider.cs" />
     <Compile Include="LocalMediaManagement\DeviceManager.cs" />
+    <Compile Include="LocalMediaManagement\MovieResources\ImageResource.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\BlurayMetaBuilder.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\HashBuilder.cs">
       <SubType>Code</SubType>
