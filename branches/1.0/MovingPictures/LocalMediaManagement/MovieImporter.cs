@@ -976,7 +976,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     if (Utility.isFolderMultipart(currDir.Name)) {
                         List<DBLocalMedia>  possiblePartners = DBLocalMedia.GetAll(currDir.Parent.FullName + "%");
                         foreach (DBLocalMedia partner in possiblePartners) {
-                            if (!partner.Ignored && Utility.isFolderMultipart(partner.File.Directory.Name)) {
+                            if (!partner.Ignored && Utility.isFolderMultipart(partner.File.Directory.Name) && currDir.FullName != partner.File.Directory.FullName)
+                            {
                                 partnerMedia = partner;
                                 break;
                             }
