@@ -157,6 +157,7 @@ This file should contain the list view
 		  <textcolor>ffFFFFFF</textcolor>
 		  <seperator>-----------------------------------------------------------------------------------</seperator>
 		  <font>font11</font>
+		  <scrollStartDelaySec>#textboxscrolldelay.thumbs</scrollStartDelaySec>
 		  <label>#MovingPictures.SelectedMovie.summary</label>
 		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
 		</control>
