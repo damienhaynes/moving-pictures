@@ -19,6 +19,7 @@ using Cornerstone.GUI.Dialogs;
 using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 using System.Threading;
+using MovingPicturesSocialAPI;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesCore {
@@ -38,6 +39,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private static object dbLock = new Object();
         private static object settingsLock = new Object();
         private static object processLock = new Object();
+        private static object socialAPILock = new Object();
 
         #region Properties & Events
 
@@ -103,6 +105,20 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return mpSettings;
             }
         }
+
+        // The MpsAPI object that should be used by all components of the plugin.
+        public static MovingPicturesSocialAPI.MpsAPI SocialAPI {
+            get {
+                lock (socialAPILock) {
+                    if (_socialAPI == null) {
+                        _socialAPI = new MpsAPI(Settings.SocialUsername
+                            , Settings.SocialPassword
+                            , Settings.SocialURLBase + "api/1.0/");
+                    }
+                    return _socialAPI;
+                }
+            }
+        } private static MovingPicturesSocialAPI.MpsAPI _socialAPI = null;
 
         #endregion
 

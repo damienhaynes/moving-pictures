@@ -693,6 +693,10 @@
       <Project>{14201B8D-31C3-4FB5-9356-9485676C147B}</Project>
       <Name>Cornerstone</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MovingPicturesSocialAPI\MovingPicturesSocialAPI.csproj">
+      <Project>{75EBA361-8137-4107-A5B5-753CE959983B}</Project>
+      <Name>MovingPicturesSocialAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
