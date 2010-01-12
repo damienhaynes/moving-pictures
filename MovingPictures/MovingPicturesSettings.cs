@@ -1591,5 +1591,56 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _deviceManagerEnabled;
 
         #endregion
+
+        #region Social
+        [CornerstoneSetting(
+            Name = "SocialURLBase",
+            Description = "Base URL for Moving Pictures Social.",
+            Groups = "|Social|",
+            Identifier = "socialurlbase",
+            Default = "http://social.moving-pictures.tv/",
+            Hidden = true)]
+        public string SocialURLBase {
+            get { return _socialURLBase; }
+            set {
+                _socialURLBase = value;
+                OnSettingChanged("socialurlbase");
+            }
+        }
+        private string _socialURLBase;
+
+        [CornerstoneSetting(
+            Name = "SocialUsername",
+            Description = "Username for Moving Pictures Social.",
+            Groups = "|Social|",
+            Identifier = "socialusername",
+            Default = "",
+            Hidden = true)]
+        public string SocialUsername {
+            get { return _socialUsername; }
+            set {
+                _socialUsername = value;
+                OnSettingChanged("socialusername");
+            }
+        }
+        private string _socialUsername;
+
+        [CornerstoneSetting(
+            Name = "SocialPassword",
+            Description = "Password for Moving Pictures Social.",
+            Groups = "|Social|",
+            Identifier = "socialpassword",
+            Default = "",
+            Hidden = true)]
+        public string SocialPassword {
+            get { return _socialPassword; }
+            set {
+                _socialPassword = value;
+                OnSettingChanged("socialpassword");
+            }
+        }
+        private string _socialPassword;
+        #endregion
+
     }
 }
