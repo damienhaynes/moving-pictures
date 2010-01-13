@@ -1146,7 +1146,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIGeneralRating ratingDlg = (GUIGeneralRating)GUIWindowManager.GetWindow(GUIGeneralRating.ID);
             ratingDlg.Reset();
 			ratingDlg.SetHeading(Translation.RateHeading);
-            ratingDlg.SetLine(1, String.Format(Translation.SelectYourRating, browser.SelectedMovie.Title));
+            ratingDlg.SetLine(1, String.Format(Translation.SelectYourRating, movie.Title));
             DBUserMovieSettings userMovieSettings = movie.ActiveUserSettings;			
             ratingDlg.Rating = userMovieSettings.UserRating.GetValueOrDefault(3);
 			ratingDlg.DisplayStars = GUIGeneralRating.StarDisplay.FIVE_STARS;
