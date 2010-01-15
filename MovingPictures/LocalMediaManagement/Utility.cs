@@ -250,7 +250,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // Regular expression patterns used by the multipart detection and cleaning methods
         // Matches the substrings "cd/dvd/disc/disk/part #" or "(# of #)"
-        private const string rxStackPattern = @"(\W*\b(cd|dvd|dis[ck]|part)\W*([a-f]|\d+|i+)\W*)|\W\d+\W*(of|-)\W*\d+\W$";
+        // todo: convert constants to advanced settings
+        private const string rxFileStackPattern = @"(\W*\b(cd|dvd|dis[ck]|part)\W*([a-z]|\d+|i+)\W*)|\W\d+\W*(of|-)\W*\d+\W$";
+        private const string rxFolderStackPattern = @"^(cd|dvd|dis[ck]|part)\W*([a-z]|\d+|i+)$";
 
         /// <summary>
         /// Checks if a filename has stack markers (and is multi-part)
@@ -259,7 +261,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <returns>true if multipart, false if not</returns>
         public static bool isFileMultiPart(string fileName) {
             fileName = Path.GetFileNameWithoutExtension(fileName);
-            Regex expr = new Regex(rxStackPattern, RegexOptions.IgnoreCase);
+            Regex expr = new Regex(rxFileStackPattern, RegexOptions.IgnoreCase);
             return expr.Match(fileName).Success;
         }
 
@@ -273,7 +275,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="name"></param>
         /// <returns></returns>
         public static bool isFolderMultipart(string name) {
-            Regex expr = new Regex(rxStackPattern, RegexOptions.IgnoreCase);
+            Regex expr = new Regex(rxFolderStackPattern, RegexOptions.IgnoreCase);
             return expr.Match(name).Success;
         }
 
@@ -289,7 +291,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             
             // If file is classified as multipart clean the stack markers.
             if (isFileMultiPart(fileName)) {                
-                Regex expr = new Regex(rxStackPattern, RegexOptions.IgnoreCase);
+                Regex expr = new Regex(rxFileStackPattern, RegexOptions.IgnoreCase);
                 cleanFileName = expr.Replace(cleanFileName, "");
             }
 
