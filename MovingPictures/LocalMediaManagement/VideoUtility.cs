@@ -272,13 +272,20 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         /// <summary>
-        /// Gets a value indicating wether the supplied path validates as a video file
+        /// Gets a value indicating whether the supplied path validates as a video file
         /// </summary>
         /// <param name="path">filepath to validate</param>
         /// <returns>True if the file validates as a video file</returns>
         public static bool IsVideoFile(string path) {
             VideoFormat format = GetVideoFormat(path);
-            return (GetVideoFormat(path) != VideoFormat.NotSupported);
+            if (format == VideoFormat.NotSupported)
+                return false;
+
+            // image files are only valid if DaemonTools is enabled
+            if (format == VideoFormat.Unknown && !MediaPortal.Util.DaemonTools.IsEnabled)
+                return false;
+
+            return true;
         }
 
         public static bool IsVideoFile(FileInfo fileInfo) {
