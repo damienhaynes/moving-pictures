@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
-using System.Runtime.InteropServices;
 using SQLite.NET;
 using System.Windows.Forms;
 using System.Reflection;
@@ -13,9 +12,9 @@ using System.Globalization;
 
 namespace Cornerstone.Database {
     public class DatabaseManager {
-
         #region Private
 
+        private SQLiteClient dbClient;
         private string dbFilename;
         private DatabaseCache cache;
         private Dictionary<Type, bool> isVerified;
@@ -26,10 +25,8 @@ namespace Cornerstone.Database {
         private HashSet<Type> preloading;
 
         private bool transactionInProgress = false;
-        
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        
-        private readonly object lockObject = new object();
 
         #endregion
 
@@ -43,56 +40,10 @@ namespace Cornerstone.Database {
         #endregion
 
         #region Public Methods
-
-        private bool _connected = false;
-
-        public bool IsClosed()
-        {         
-          return _connected == false;
-        }
-
-        private SQLiteClient dbClient {
-            get {
-                lock (lockObject) {
-                    if (!_connected) {
-                        try {
-                            sqliteClient = new SQLiteClient(dbFilename);
-                            sqliteClient.Execute("PRAGMA synchronous=OFF");
-                            logger.Info("Successfully Opened Database: " + dbFilename);
-                            _connected = true;
-                        }
-                        catch (Exception e) {
-                            logger.FatalException("Could Not Open Database: " + dbFilename, e);
-                            sqliteClient = null;
-                        }
-                    }
-                }
-
-                return sqliteClient;
-            }
-        } private SQLiteClient sqliteClient;
-
-        public void Close() {
-            lock (lockObject) {
-                if (!_connected)
-                    return;
-
-                logger.Info("Closing database connection...");
-                try {
-                    sqliteClient.Close();
-                    sqliteClient.Dispose();
-                    logger.Info("Successfully closed Database: {0}", dbFilename);
-                    _connected = false;
-                }
-                catch (Exception e) {
-                    logger.ErrorException("Failed closing Database: " + dbFilename, e);
-                }
-            }
-        }
-
         // Creates a new DatabaseManager based on the given filename.
         public DatabaseManager(string dbFilename) {
             this.dbFilename = dbFilename;
+            initDB();
 
             isVerified = new Dictionary<Type, bool>();
             doneFullRetrieve = new Dictionary<Type, bool>();
@@ -141,7 +92,7 @@ namespace Cornerstone.Database {
                 doneFullRetrieve[tableType] = true;
             }
 
-            lock (lockObject) {
+            lock (dbClient) {
                 List<DatabaseTable> rtn = new List<DatabaseTable>();
 
                 try {
@@ -192,7 +143,7 @@ namespace Cornerstone.Database {
 
             verifyTable(tableType);
 
-            lock (lockObject) {
+            lock (this) {
                 try {
                     // build and execute the query
                     string query = getSelectQuery(tableType);
@@ -230,7 +181,7 @@ namespace Cornerstone.Database {
             if (!transactionInProgress) {
                 transactionInProgress = true;
                 try {
-                    lock(lockObject) dbClient.Execute("BEGIN");
+                    lock (dbClient) dbClient.Execute("BEGIN");
                 }
                 catch (SQLiteException) {
                     logger.Error("Failed to BEGIN a SQLite Transaction.");
@@ -242,7 +193,7 @@ namespace Cornerstone.Database {
             if (transactionInProgress) {
                 transactionInProgress = false;
                 try {
-                    lock(lockObject) dbClient.Execute("COMMIT");
+                    lock (dbClient) dbClient.Execute("COMMIT");
                 }
                 catch (SQLiteException) {
                     logger.Error("Failed to COMMIT a SQLite Transaction.");
@@ -318,7 +269,7 @@ namespace Cornerstone.Database {
                 logger.Debug(query);
 
                 deleteAllRelationData(dbObject);
-                lock(lockObject) dbClient.Execute(query);
+                lock (dbClient) dbClient.Execute(query);
 
                 cache.Remove(dbObject);
                 dbObject.ID = null;
@@ -441,11 +392,24 @@ namespace Cornerstone.Database {
 
         #region Private Methods
 
+        // Attempts to initialize the connection to the database file
+        private void initDB() {
+            try {
+                dbClient = new SQLiteClient(dbFilename);
+                dbClient.Execute("PRAGMA synchronous=OFF");
+                logger.Info("Successfully Opened Database: " + dbFilename);
+            }
+            catch (Exception e) {
+                logger.FatalException("Could Not Open Database: " + dbFilename, e);
+                dbClient = null;
+            }
+        }
+
         // Checks that the table coorisponding to this type exists, and if it is missing, it creates it.
         // Also verifies all columns represented in the class are also present in the table, creating 
         // any missing. Needs to be enhanced to allow for changed defaults.
         private void verifyTable(Type tableType) {
-            lock (lockObject) {
+            lock (dbClient) {
                 // check that we haven't already verified this table
                 if (isVerified.ContainsKey(tableType))
                     return;
@@ -658,7 +622,7 @@ namespace Cornerstone.Database {
 
                 logger.Debug("INSERTING: " + dbObject.ToString());
                 
-                lock(lockObject) {
+                lock (dbClient) {
                     dbClient.Execute(query);
                     dbObject.ID = dbClient.LastInsertID();
                 }
@@ -709,7 +673,7 @@ namespace Cornerstone.Database {
                 // execute the query
                 logger.Debug("UPDATING: " + dbObject.ToString());
                 
-                lock(lockObject) dbClient.Execute(query);
+                lock (dbClient) dbClient.Execute(query);
                 dbObject.DBManager = this;
 
                 updateRelationTables(dbObject);
@@ -751,7 +715,7 @@ namespace Cornerstone.Database {
                     currRelation.SecondaryColumnName + ") values (" +
                     dbObject.ID + ", " + currDBObj.ID + ")";
 
-                lock(lockObject) dbClient.Execute(insertQuery);
+                lock (dbClient) dbClient.Execute(insertQuery);
             }
 
             currRelation.GetRelationList(dbObject).CommitNeeded = false;
@@ -768,8 +732,8 @@ namespace Cornerstone.Database {
                 return;
 
             string deleteQuery = "delete from " + relation.TableName + " where " + relation.PrimaryColumnName + "=" + dbObject.ID;
-
-            lock (lockObject) dbClient.Execute(deleteQuery);
+            
+            lock (dbClient) dbClient.Execute(deleteQuery);
         }
 
         private void getAllRelationData(DatabaseTable dbObject) {
@@ -798,7 +762,7 @@ namespace Cornerstone.Database {
             // and retireve relations
             //logger.Debug("Getting Relation Data for " + dbObject.GetType().Name + "[" + dbObject.ID + "]" + relation.SecondaryType.Name + "::: " + selectQuery);
             SQLiteResultSet resultSet;
-            lock (lockObject) resultSet = dbClient.Execute(selectQuery);
+            lock (dbClient) resultSet = dbClient.Execute(selectQuery);
 
             // parse results and add them to the list
             list.Clear();
@@ -814,7 +778,6 @@ namespace Cornerstone.Database {
         }
 
         #endregion
-
     }
 
     #region Criteria Classes
