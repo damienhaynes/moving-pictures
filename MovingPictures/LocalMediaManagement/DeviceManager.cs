@@ -18,7 +18,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         // Log object
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private static readonly object lockObject = new object();
+        private static readonly object syncRoot = new object();
         private static Dictionary<string, DriveInfo> driveInfoPool;
 
         #endregion
@@ -42,9 +42,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// </summary>
         public static bool MonitorStarted {
             get {
-                return monitorStarted;
+                lock (syncRoot) {
+                    return (watcherThread != null && watcherThread.IsAlive);
+                }
             }
-        } private static bool monitorStarted = false;
+        }
 
         #endregion
 
@@ -55,13 +57,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         static DeviceManager() {
-            lock (lockObject) {
-                watchedDrives = new List<string>();
-
-                watcherThread = new Thread(new ThreadStart(WatchDisks));
-                watcherThread.Name = "DeviceManager.WatchDisks";
-
-                driveStates = new Dictionary<string, bool>();
+            lock (syncRoot) {
                 driveInfoPool = new Dictionary<string, DriveInfo>();
             }
         }
@@ -75,8 +71,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Monitoring Logic
 
         public static void StartMonitor() {
-            
-            // Setup listener for added ImportPaths
+            if (MonitorStarted)
+                return;
+
+            // register listener to start receiving notifications about new import paths
             MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onPathAdded);
             
             foreach (DBImportPath currPath in DBImportPath.GetAll()) {
@@ -90,12 +88,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     logger.FatalException("Failed adding " + currPath + " to the Disk Watcher!", e);
                 }
             }
-
-            StartDiskWatcher();
         }
 
         public static void StopMonitor() {
-            StopDiskWatcher();
+            if (!MonitorStarted)
+                return;
+
+            // unregister listener to stop receiving notifications about new import paths
+            MovingPicturesCore.DatabaseManager.ObjectInserted -= new DatabaseManager.ObjectAffectedDelegate(onPathAdded);
+            
             ClearWatchDrives();
         }
 
@@ -111,11 +112,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     return;
 
                 // add the drive to the drive watcher
-                lock (watchedDrives) {
+                lock (syncRoot) {
+                    if (watchedDrives == null)
+                        watchedDrives = new List<string>();
+
                     if (!watchedDrives.Contains(driveLetter)) {
                         watchedDrives.Add(driveLetter);
                         StartDiskWatcher();
-                        logger.Info("Added " + driveLetter + " to DiskWatcher");
+                        logger.Info("Added " + driveLetter + " to Disk Watcher");
                     }
                 }
             }
@@ -132,10 +136,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (driveLetter == null)
                 return;
 
-            lock (watchedDrives) {
-                if (watchedDrives.Contains(driveLetter)) {
+            lock (syncRoot) {
+                if (watchedDrives != null && watchedDrives.Contains(driveLetter)) {
                     watchedDrives.Remove(driveLetter);
-                    logger.Info("Removed " + driveLetter + " from DiskWatcher");
+                    logger.Info("Removed " + driveLetter + " from Disk Watcher");
                     if (watchedDrives.Count == 0)
                         StopDiskWatcher();
                 }
@@ -144,36 +148,43 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         public static void ClearWatchDrives() {
-            lock (watchedDrives) {
-                logger.Info("Clearing all drives from Disk Watcher");
-                watchedDrives.Clear();
+            lock (syncRoot) {
+                if (watchedDrives != null && watchedDrives.Count > 0) {
+                    logger.Info("Removing all drives from Disk Watcher");
+                    watchedDrives.Clear();
+                }
                 StopDiskWatcher();
             }
         }
 
         public static void StartDiskWatcher() {
-            lock (watcherThread) {
-                if (MovingPicturesCore.Settings.DeviceManagerEnabled && !watcherThread.IsAlive) {
-                    logger.Info("Starting Disk Watcher");
+            lock (syncRoot) {
+                if (MovingPicturesCore.Settings.DeviceManagerEnabled && !MonitorStarted) {
+                    logger.Info("Starting Disk Watcher...");
                     watcherThread = new Thread(new ThreadStart(WatchDisks));
                     watcherThread.Name = "DeviceManager.WatchDisks";
                     watcherThread.Start();
+                    logger.Info("Successfully started Disk Watcher.");
                 }
             }
         }
 
         public static void StopDiskWatcher() {
-            lock (watcherThread) {
-                if (watcherThread.IsAlive) {
-                    logger.Info("Stopping Disk Watcher");
+            lock (syncRoot) {
+                if (MonitorStarted) {
+                    logger.Info("Stopping Disk Watcher...");
                     watcherThread.Abort();
+                    logger.Info("Successfully stopped Disk Watcher.");
                 }
             }
         }
 
         private static void WatchDisks() {
              while (true) {
-                lock (watchedDrives) {
+                 lock (syncRoot) {
+                    if (driveStates == null)
+                        driveStates = new Dictionary<string, bool>();
+
                     foreach (string currDrive in watchedDrives) {
                         try {
                             // check if the drive is available
@@ -293,7 +304,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (!PathIsUnc(path)) {
                 string driveletter = GetDriveLetter(path);
                 if (!driveInfoPool.ContainsKey(driveletter)) {
-                    lock (lockObject) {
+                    lock (syncRoot) {
                         if (!driveInfoPool.ContainsKey(driveletter)) {
                             try {
                                 driveInfoPool.Add(driveletter, new DriveInfo(driveletter));
