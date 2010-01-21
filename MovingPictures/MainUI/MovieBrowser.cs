@@ -33,6 +33,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         DateTime refreshToday = DateTime.Today;
         Timer refreshFacadeTimer;
         private readonly object syncRefresh = new object();
+        private readonly object syncDb = new object();
 
         #region Properties
 
@@ -395,14 +396,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Public Methods
 
         public MovieBrowser(MovingPicturesSkinSettings skinSettings) {
+            MovingPicturesCore.OnPowerEvent += new MovingPicturesCore.PowerEventDelegate(PowerEventHandler);
+            
             this.skinSettings = skinSettings;
-
             AutoRefresh = false;
-
-            // setup listeners for new or removed movies
-            MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(onMovieDeleted);
-            MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
-            MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(onMovieUpdated);
+            
+            init();            
 
             listItems = new Dictionary<DatabaseTable, GUIListItem>();
             availableMovies = new Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
@@ -410,10 +409,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             filterUpdatedDelegate = new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
 
-            // load all movies once
-            allMovies = DBMovieInfo.GetAll();
             initSortingDefaults();
         }
+
+        ~MovieBrowser() {
+            deinit();
+            MovingPicturesCore.OnPowerEvent -= new MovingPicturesCore.PowerEventDelegate(PowerEventHandler);
+        }       
 
         /// <summary>
         /// Rotates the current view.
@@ -517,6 +519,26 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region Core MovieBrowser Methods
 
+        // register movie object listeners and (re-)load all movies
+        private void init() {
+            lock (syncDb) {
+                MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(onMovieDeleted);
+                MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
+                MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(onMovieUpdated);
+
+                allMovies = DBMovieInfo.GetAll();
+            }
+        }
+
+        // unregister movie object listeners
+        private void deinit() {
+            lock (syncDb) {
+                MovingPicturesCore.DatabaseManager.ObjectDeleted -= new DatabaseManager.ObjectAffectedDelegate(onMovieDeleted);
+                MovingPicturesCore.DatabaseManager.ObjectInserted -= new DatabaseManager.ObjectAffectedDelegate(onMovieAdded);
+                MovingPicturesCore.DatabaseManager.ObjectUpdated -= new DatabaseManager.ObjectAffectedDelegate(onMovieUpdated);
+            }
+        }
+
         // Sets the initial settings for how movies should be sorted on launch.
         private void initSortingDefaults() {
             // set default sort method
@@ -534,23 +556,33 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             CurrentSortDirection = Sort.GetLastSortDirection(CurrentSortField);
         }
 
+        // Take the proper actions when a power event occurs
+        private void PowerEventHandler(MovingPicturesCore.PowerEvent powerEvent) {
+            if (powerEvent == MovingPicturesCore.PowerEvent.Suspend)
+                deinit();
+            else if (powerEvent == MovingPicturesCore.PowerEvent.Resume)
+                init();
+        }
+
         // Listens for newly added movies from the database manager.
         private void onMovieAdded(DatabaseTable obj) {
             // if this is not a movie object, break
             if (obj.GetType() != typeof(DBMovieInfo))
                 return;
 
-            // if this item is already in the list exit. This should never really happen though...  
-            if (allMovies.Contains((DBMovieInfo)obj)) {
-                logger.Warn("Received multiple \"added\" messages for " + (DBMovieInfo)obj);
-                return;
-            }
+            lock (syncDb) {
+                // if this item is already in the list exit. This should never really happen though...  
+                if (allMovies.Contains((DBMovieInfo)obj)) {
+                    logger.Warn("Received multiple \"added\" messages for " + (DBMovieInfo)obj);
+                    return;
+                }
 
-            // add movie to the list, update the facade and log the action
-            // a full update of the facade is necessary because of the possibility
-            // that the new item should be filtered out by the ActiveFilters
-            logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie browser.");
-            allMovies.Add((DBMovieInfo)obj);
+                // add movie to the list, update the facade and log the action
+                // a full update of the facade is necessary because of the possibility
+                // that the new item should be filtered out by the ActiveFilters
+                logger.Info("Adding " + ((DBMovieInfo)obj).Title + " to movie browser.");
+                allMovies.Add((DBMovieInfo)obj);
+            }
 
             onMovieContentsChange();
         }
@@ -573,16 +605,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (obj.GetType() != typeof(DBMovieInfo))
                 return;
 
-            // if this item is not in the list exit. This should never really happen though...  
-            if (!allMovies.Contains((DBMovieInfo)obj)) {
-                logger.Warn("Received multiple \"removed\" messages for " + (DBMovieInfo)obj);
-                return;
-            }
+            lock (syncDb) {
+                // if this item is not in the list exit. This should never really happen though...  
+                if (!allMovies.Contains((DBMovieInfo)obj)) {
+                    logger.Warn("Received multiple \"removed\" messages for " + (DBMovieInfo)obj);
+                    return;
+                }
 
-            // remove movie from master list and filtered list
-            logger.Info("Removing " + ((DBMovieInfo)obj).Title + " from list.");
-            DBMovieInfo movie = (DBMovieInfo)obj;
-            allMovies.Remove(movie);
+                // remove movie from master list and filtered list
+                logger.Info("Removing " + ((DBMovieInfo)obj).Title + " from list.");
+                DBMovieInfo movie = (DBMovieInfo)obj;
+                allMovies.Remove(movie);
+            }
 
             onMovieContentsChange();
         }
@@ -740,7 +774,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             // reapply the current selection
-            SelectedMovie = facade.SyncToFacade<DBMovieInfo>(selectedMovie, out selectedIndex);        
+            SelectedMovie = facade.SyncToFacade<DBMovieInfo>(selectedMovie, out selectedIndex);
         }
 
         /// <summary>
