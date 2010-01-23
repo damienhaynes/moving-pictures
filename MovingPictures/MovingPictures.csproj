@@ -650,6 +650,7 @@
     <Content Include="Resources\Images\world_add.png" />
     <None Include="Resources\Images\wrench.png" />
     <Content Include="Resources\Images\zoom.png" />
+    <Content Include="Resources\language\cs.xml" />
     <Content Include="Resources\language\da.xml" />
     <Content Include="Resources\language\de.xml" />
     <Content Include="Resources\language\en-US.xml" />

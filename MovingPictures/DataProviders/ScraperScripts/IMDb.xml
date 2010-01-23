@@ -4,7 +4,7 @@
     <name>imdb.com</name>
     <author>John Conrad (fforde), Armand Pondman (armandp)</author>
     <description>This script pulls data from IMDb.</description>
-    
+
     <!-- 
     These fields uniquely identify the script. The ID should never 
     change and should be unique (no other script should use this ID). With
@@ -14,9 +14,9 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="3" point="3"/>
-    <published month="12" day="02" year="2009"/>
-    
+    <version major="1" minor="4" point="6" />
+    <published month="01" day="19" year="2010" />
+
     <!--
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
@@ -24,13 +24,13 @@
     <type>MovieDetailsFetcher|MovieCoverFetcher</type>
     <language>en</language>
 
-   </details>
-  
-  
+  </details>
+
+
   <action name="search">
-    
+
     <set name="offset" value="0" />
-    
+
     <!-- Regular Expressions -->
     <set name="rx_details_page_block">
       <![CDATA[
@@ -79,9 +79,9 @@
     </if>
 
     <!-- Retrieve other results using Title -->
-    
+
     <retrieve name="search_page" url="http://akas.imdb.com/find?s=tt;q=${search.title:safe(ISO-8859-1)}" />
- 
+
     <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
     <parse name="details_page_block" input="${search_page}" regex="${rx_details_page_block}"/>
     <loop name="details_page_verified" on="details_page_block">
@@ -103,11 +103,11 @@
 
       <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
     </loop>
-    
+
+
     <!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop. -->
     <parse name="search_results_block" input="${search_page}" regex='&lt;meta name="title" content="IMDb Title Search"&gt;.+&lt;/body&gt;'/>
     <loop name="search_results_verified" on="search_results_block">
-
       <parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
       <loop name='curr_details' on='movie_details'>
         <add name="counter" value1="${count}" value2="${offset}" />
@@ -124,7 +124,6 @@
         <set name="movie[${counter}].year" value="${curr_details[2]:htmldecode}"/>
         <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
       </loop>
-
     </loop>
   </action>
 
@@ -151,12 +150,12 @@
        ]]>
       </set>
 
-	  <set name="rx_tagline">
+      <set name="rx_tagline">
         <![CDATA[
-      <h5>Tagline.</h5>[^>]+>[^\p{L}]+(?<movieTagline>[^<]+)
+      <h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)
        ]]>
       </set>
-	  
+
       <set name="rx_language">
         <![CDATA[
       <a\shref=./Sections/Languages/[^/]+/">\s+([^<]+)</a>
@@ -175,6 +174,12 @@
       ]]>
       </set>
 
+      <set name="rx_writers_block">
+        <![CDATA[
+	<h5>Writer[s]?.*?<div class="info-content">.*?(.*?)</div>
+	]]>
+      </set>
+
       <set name="movie.imdb_id" value="${movie.site_id}"/>
 
       <!-- Title and Year -->
@@ -191,7 +196,7 @@
       </loop>
 
       <!-- Writers -->
-      <parse name="writers_block" input="${details_page}" regex='&lt;div class="info"&gt;\s+&lt;h5&gt;Writer[s]?(?: &lt;a href="[^"]+"&gt;\([^)]+\)&lt;/a&gt;)?:&lt;/h5&gt;.+?&lt;/div&gt;'/>
+      <parse name="writers_block" input="${details_page}" regex="${rx_writers_block}" />
       <parse name='writers' input="${writers_block}" regex='&lt;a href="/name/nm\d+/"[^&gt;]*&gt;([^&lt;]+)&lt;/a&gt;'/>
       <set name='movie.writers' value=''/>
       <loop name='currWriter' on='writers'>
@@ -227,7 +232,7 @@
       <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
 
       <!-- Score -->
-      <parse name="score" input="${details_page}" regex='&lt;div class="meta"&gt;\s+&lt;b&gt;(\d+.\d+)/10&lt;/b&gt; '/>
+      <parse name="score" input="${details_page}" regex='&lt;b&gt;(\d+.\d+)/10&lt;/b&gt; '/>
       <set name='movie.score' value='${score[0][0]:htmldecode}'/>
 
       <!-- Popularity -->
@@ -258,25 +263,25 @@
       <loop name="currAka" on="akas" limit="50">
         <set name="movie.alternate_titles" value="${movie.alternate_titles}|${currAka[0]:htmldecode}"/>
       </loop>
-      
+
       <!-- Details URL -->
       <set name="movie.details_url" value="${site}"/>
 
     </if>
-    
+
   </action>
 
   <!-- Covers -->
-  
+
   <action name="get_cover_art">
-    
+
     <!-- if the site id is not set try to set it using the imdb id -->
     <if test="${movie.site_id}=">
       <if test="${movie.imdb_id}!=">
         <set name="movie.site_id" value="${movie.imdb_id}"/>
       </if>
     </if>
-    
+
     <!-- if we have a site id (imdb id) we can continue -->
     <if test="${movie.site_id}!=">
 
@@ -309,11 +314,11 @@
 
         <!-- set cover -->
         <set name="cover_art[0].url" value="${cover_src[0][0]}" />
-        
+
       </if>
-      
+
     </if>
-   
+
   </action>
-  
+
 </ScriptableScraper>
