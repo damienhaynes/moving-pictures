@@ -148,8 +148,8 @@
   <string Field="VirtualDriveHeader">Virtuelles Laufwerk ist nicht verfügbar</string>
   <string Field="VirtualDriveMessage">Das virtuelle Laufwerk stand nicht rechtzeitig zur Verfügung.\nBitte erneut versuchen oder die Wiedergabe abbrechen.</string>
   <string Field="Wednesday">Mittwoch</string>
-  <string Field="Writer">Author</string>
-  <string Field="Writers">Authoren</string>
+  <string Field="Writer">Autor</string>
+  <string Field="Writers">Autoren</string>
   <string Field="Year">Jahr</string>
   <string Field="Yesterday">Gestern</string>
 </strings>
