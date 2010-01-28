@@ -1678,6 +1678,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
              }
 
             PublishArtwork(movie);
+            SetProperty("#MovingPictures.Settings.BackdropMovieTitle", movie.Title);
         }
 
         /// <summary>
@@ -1997,9 +1998,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             switch (settings.BackdropType) {
                 case MenuBackdropType.FILE:
                     backdrop.Filename = settings.BackdropFilePath;
+                    SetProperty("#MovingPictures.Settings.BackdropMovieTitle", "");
                     break;
                 case MenuBackdropType.MOVIE:
                     backdrop.Filename = settings.BackdropMovie.BackdropFullPath;
+                    SetProperty("#MovingPictures.Settings.BackdropMovieTitle", settings.BackdropMovie.Title);
                     break;
                 case MenuBackdropType.RANDOM:
                     DBMovieInfo movie = null;
@@ -2017,6 +2020,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                     // change the backdrop or set to null 
                     backdrop.Filename = (movie != null) ? movie.BackdropFullPath : null;
+                    SetProperty("#MovingPictures.Settings.BackdropMovieTitle", movie.Title);
                     break;
             }
         }
