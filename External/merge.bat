@@ -1,7 +1,7 @@
 @echo off
 
 md tmp
-ilmerge /out:tmp\MovingPictures.dll MovingPictures.dll Cornerstone.dll Cornerstone.MP.dll NLog.dll CookComputing.XmlRpcV2.dll
+ilmerge /out:tmp\MovingPictures.dll MovingPictures.dll Cornerstone.dll Cornerstone.MP.dll NLog.dll CookComputing.XmlRpcV2.dll MovingPicturesSocialAPI.dll
 
 
 IF EXIST MovingPictures_UNMERGED.dll del MovingPictures_UNMERGED.dll
