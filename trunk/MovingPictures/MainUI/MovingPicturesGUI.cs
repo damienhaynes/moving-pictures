@@ -1661,6 +1661,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // publish details on selected movie
             PublishDetails(movie, "SelectedMovie");
             PublishDetails(movie.ActiveUserSettings, "UserMovieSettings");
+            if (movie.ActiveUserSettings.UserRating == null)
+                SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", null);
+            else
+                SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", (movie.ActiveUserSettings.UserRating.GetValueOrDefault() * 2).ToString());
             PublishDetails(movie.LocalMedia[0], "LocalMedia");
 
             // publish easily usable subtitles info
