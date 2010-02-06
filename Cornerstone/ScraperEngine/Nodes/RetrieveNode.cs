@@ -25,7 +25,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         public Encoding Encoding {
             get { return encoding; }
-        } protected Encoding encoding;
+        } protected Encoding encoding = null;
 
         public String UserAgent {
             get { return userAgent; }
@@ -185,7 +185,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 if (DebugMode) logger.Debug("Reading file: {0}", parsedFile);
 
                 try {
-                    StreamReader streamReader = new StreamReader(parsedFile);
+                    StreamReader streamReader;
+                    if (encoding != null) streamReader = new StreamReader(parsedFile, encoding);
+                    else streamReader = new StreamReader(parsedFile);
+
                     fileContents = streamReader.ReadToEnd();
                     streamReader.Close();
                 }
