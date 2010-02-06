@@ -75,7 +75,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                     fileStream.Write(buffer, 0, bytesRead);
                     totalBytesRead = fileStream.Length;
 
-                    logger.Debug("Download progress: {2:0.0}% ({0:###,###,###} / {1:###,###,###} bytes)", totalBytesRead, totalBytes, 100.0 * totalBytesRead / totalBytes);
+                    //logger.Debug("Download progress: {2:0.0}% ({0:###,###,###} / {1:###,###,###} bytes)", totalBytesRead, totalBytes, 100.0 * totalBytesRead / totalBytes);
 
                     // read the next stretch of data
                     bytesRead = webStream.Read(buffer, 0, buffer.Length);
