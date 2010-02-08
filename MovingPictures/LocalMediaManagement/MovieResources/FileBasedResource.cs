@@ -10,7 +10,7 @@ using System.Threading;
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources {
     public class FileBasedResource {
         public enum DownloadStatus {
-            SUCCESS, INCOMPLETE, FAILED
+            SUCCESS, INCOMPLETE, TIMED_OUT, FAILED
         }
 
         protected static Logger logger = LogManager.GetCurrentClassLogger();
@@ -22,26 +22,51 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
         private string _filename;
 
         protected bool Download(string url) {
+            int maxRetries = MovingPicturesCore.Settings.MaxTimeouts;
+            int timeoutBase = MovingPicturesCore.Settings.TimeoutLength;
+            int timeoutIncrement = MovingPicturesCore.Settings.TimeoutIncrement;
+
             DownloadStatus status = DownloadStatus.INCOMPLETE;
             long position = 0;
-            int attempts = 0;
+            int resumeAttempts = 0;
+            int retryAttempts = 0;
 
-            while (status == DownloadStatus.INCOMPLETE) {
-                status = Download(url, position);
-                position = new FileInfo(_filename).Length;
+            while (status != DownloadStatus.SUCCESS && status != DownloadStatus.FAILED) {
+                int timeout = timeoutBase + (timeoutIncrement * retryAttempts);
 
-                attempts++;
-                if (attempts > 1 && status == DownloadStatus.INCOMPLETE)
-                    logger.Warn("Connection lost while downloading resource. Attempting to resume...");
+                status = Download(url, position, timeout);
+
+                switch (status) {
+                    case DownloadStatus.INCOMPLETE:
+                        // if the download ended half way through, log a warning and update the 
+                        // position for a resume
+                        if (File.Exists(_filename)) position = new FileInfo(_filename).Length;
+                        resumeAttempts++;
+                        if (resumeAttempts > 1)
+                            logger.Warn("Connection lost while downloading resource. Attempting to resume...");
+                        break;
+                    case DownloadStatus.TIMED_OUT:
+                        // if we timed out past our try limit, fail
+                        retryAttempts++;
+                        if (retryAttempts == maxRetries) {
+                            logger.Error("Failed downloading resource from: " + url + ". Reached retry limit of " + maxRetries);
+                            status = DownloadStatus.FAILED;
+                        }                        
+                        break;
+                }
             }
-            
+
             if (status == DownloadStatus.SUCCESS)
                 return true;
-            else
+            else {
+                if (File.Exists(_filename))
+                    File.Delete(_filename);
+
                 return false;
+            }
         }
 
-        private DownloadStatus Download(string url, long startPosition) {
+        private DownloadStatus Download(string url, long startPosition, int timeout) {
             DownloadStatus rtn = DownloadStatus.SUCCESS;
 
             HttpWebRequest request = null;
@@ -56,12 +81,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                 else
                     fileStream = new FileStream(Filename, FileMode.Append, FileAccess.Write, FileShare.None);
 
-                // open our connection
+                // setup and open our connection
                 request = (HttpWebRequest)WebRequest.Create(url);
                 request.AddRange((int)startPosition);
+                request.Timeout = timeout;
+                request.ReadWriteTimeout = 20000;
+                request.UserAgent = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
                 response = request.GetResponse();
                 webStream = response.GetResponseStream();
-                
+
                 // setup our tracking variables for progress
                 int bytesRead = 0;
                 long totalBytesRead = 0;
@@ -81,28 +109,48 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                     bytesRead = webStream.Read(buffer, 0, buffer.Length);
                 }
 
-                // if we failed delete the file and quit
+                // if the downloaded ended prematurely, close the stream but save the file
+                // for resuming
                 if (fileStream.Length != totalBytes) {
                     fileStream.Close();
                     fileStream = null;
 
-                    //File.Delete(Filename);
                     rtn = DownloadStatus.INCOMPLETE;
                 }
 
             }
-            catch (Exception e) {
-                if (e is ThreadAbortException && fileStream != null) {
-                    fileStream.Close();
-                    fileStream = null;
-                    File.Delete(Filename);
-                }
-                else {
-                    logger.ErrorException("Unexpected error downloading file from: " + url, e);
-                }
-
+            catch (UriFormatException) {
+                // url was invalid
+                logger.Warn("Invalid URL: {0}", url);
                 rtn = DownloadStatus.FAILED;
-            }          
+            }
+            catch (WebException e) {
+                // file doesnt exist
+                if (e.Message.Contains("404")) {
+                    logger.Warn("File does not exist: {0}", url);
+                    rtn = DownloadStatus.FAILED;
+                }
+                
+                // timed out or other similar error
+                else 
+                    rtn = DownloadStatus.TIMED_OUT;
+
+            }
+            catch (ThreadAbortException) {
+                // user is shutting down the program
+                rtn = DownloadStatus.FAILED;
+            }
+            catch (Exception e) {
+                logger.ErrorException("Unexpected error downloading file from: " + url, e);
+                rtn = DownloadStatus.FAILED;
+            }
+
+            // if we failed delete the file
+            if (fileStream != null && rtn == DownloadStatus.FAILED) {
+                fileStream.Close();
+                fileStream = null;
+                if (File.Exists(Filename)) File.Delete(Filename);
+            }
 
             if (webStream != null) webStream.Close();
             if (fileStream != null) fileStream.Close();

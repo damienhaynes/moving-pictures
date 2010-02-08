@@ -9,7 +9,7 @@ xcopy ..\MovingPictures\MainUI\Blue3wide tmp\Blue3wide\ /E
 xcopy ..\MovingPictures\MainUI\Blue3 tmp\Blue3\ /E
 copy ..\MovingPictures\Resources\moving-pictures-release-notes.txt tmp
 copy ..\MovingPictures\bin\Release\movingpictures.dll tmp
-xcopy ..\MovingPictures\Resources\language tmp\language\ /E
+xcopy ..\MovingPictures\Resources\language tmp\language\MovingPictures\ /E
 
 :: xcopy "..\MovingPictures\MainUI\Generic Skin" "tmp\Generic Skin\" /E
 :: xcopy "tmp\Generic Skin\16x9\Media" "tmp\Generic Skin\4x3\Media\" /E

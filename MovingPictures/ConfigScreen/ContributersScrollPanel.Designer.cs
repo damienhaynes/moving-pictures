@@ -39,11 +39,8 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.label18 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.label22 = new System.Windows.Forms.Label();
@@ -54,21 +51,21 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.label8 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(409, 390);
+            this.label1.Location = new System.Drawing.Point(409, 343);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 78);
             this.label1.TabIndex = 52;
-            this.label1.Text = "Steffansp\r\n\r\n\r\n\r\nParanoid Delusion\r\nrolls1400";
+            this.label1.Text = "RoChess\r\nSteffansp\r\n\r\n\r\nParanoid Delusion\r\nrolls1400";
             // 
             // label20
             // 
@@ -85,7 +82,7 @@
             // 
             this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(231, 92);
+            this.label16.Location = new System.Drawing.Point(233, 58);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(69, 13);
             this.label16.TabIndex = 48;
@@ -107,7 +104,7 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Location = new System.Drawing.Point(3, 67);
+            this.groupBox2.Location = new System.Drawing.Point(2, 80);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(9);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(495, 3);
@@ -133,9 +130,9 @@
             this.label5.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(3, 45);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(98, 13);
+            this.label5.Size = new System.Drawing.Size(104, 13);
             this.label5.TabIndex = 40;
-            this.label5.Text = "Lead Developer:";
+            this.label5.Text = "Lead Developers:";
             // 
             // label3
             // 
@@ -175,7 +172,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(1, 79);
+            this.label13.Location = new System.Drawing.Point(0, 92);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(141, 13);
             this.label13.TabIndex = 37;
@@ -197,7 +194,7 @@
             // 
             this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(321, 390);
+            this.label10.Location = new System.Drawing.Point(321, 343);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(82, 78);
             this.label10.TabIndex = 33;
@@ -207,7 +204,7 @@
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(231, 390);
+            this.label9.Location = new System.Drawing.Point(231, 343);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(84, 78);
             this.label9.TabIndex = 32;
@@ -219,33 +216,11 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label6.Location = new System.Drawing.Point(231, 79);
+            this.label6.Location = new System.Drawing.Point(230, 92);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(137, 13);
             this.label6.TabIndex = 30;
             this.label6.Text = "Software Development";
-            // 
-            // label12
-            // 
-            this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(230, 237);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(69, 13);
-            this.label12.TabIndex = 54;
-            this.label12.Text = "Travis Collins";
-            this.toolTip.SetToolTip(this.label12, "ZealotSix, travistx");
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Location = new System.Drawing.Point(229, 259);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(9);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(265, 3);
-            this.groupBox1.TabIndex = 53;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
             // 
             // groupBox6
             // 
@@ -269,23 +244,11 @@
             this.label18.TabIndex = 51;
             this.label18.Text = "Retired Contributers:";
             // 
-            // label21
-            // 
-            this.label21.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label21.Location = new System.Drawing.Point(231, 224);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(101, 13);
-            this.label21.TabIndex = 50;
-            this.label21.Text = "Lead Developers";
-            // 
             // label7
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(230, 284);
+            this.label7.Location = new System.Drawing.Point(230, 237);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(43, 13);
             this.label7.TabIndex = 57;
@@ -294,7 +257,7 @@
             // groupBox7
             // 
             this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox7.Location = new System.Drawing.Point(229, 306);
+            this.groupBox7.Location = new System.Drawing.Point(229, 259);
             this.groupBox7.Margin = new System.Windows.Forms.Padding(9);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(265, 3);
@@ -308,7 +271,7 @@
             this.label22.AutoSize = true;
             this.label22.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label22.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label22.Location = new System.Drawing.Point(231, 271);
+            this.label22.Location = new System.Drawing.Point(231, 224);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(137, 13);
             this.label22.TabIndex = 55;
@@ -318,7 +281,7 @@
             // 
             this.label24.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(231, 357);
+            this.label24.Location = new System.Drawing.Point(231, 310);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(69, 13);
             this.label24.TabIndex = 61;
@@ -331,7 +294,7 @@
             this.label26.AutoSize = true;
             this.label26.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label26.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label26.Location = new System.Drawing.Point(231, 318);
+            this.label26.Location = new System.Drawing.Point(231, 271);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(72, 13);
             this.label26.TabIndex = 59;
@@ -341,7 +304,7 @@
             // 
             this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox8.Location = new System.Drawing.Point(3, 378);
+            this.groupBox8.Location = new System.Drawing.Point(3, 331);
             this.groupBox8.Margin = new System.Windows.Forms.Padding(9);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(495, 3);
@@ -353,7 +316,7 @@
             // 
             this.label27.AutoSize = true;
             this.label27.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label27.Location = new System.Drawing.Point(1, 390);
+            this.label27.Location = new System.Drawing.Point(1, 343);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(53, 13);
             this.label27.TabIndex = 62;
@@ -381,16 +344,6 @@
             this.label19.Text = "Grant Shipley";
             this.toolTip.SetToolTip(this.label19, "gshipley");
             // 
-            // label23
-            // 
-            this.label23.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(231, 118);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(71, 13);
-            this.label23.TabIndex = 66;
-            this.label23.Text = "Martin Guillon";
-            // 
             // label28
             // 
             this.label28.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -402,26 +355,36 @@
             this.label28.Text = "Lucas Falk";
             this.toolTip.SetToolTip(this.label28, "LRFalk01");
             // 
-            // label17
-            // 
-            this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(231, 331);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(37, 13);
-            this.label17.TabIndex = 68;
-            this.label17.Text = "Harley";
-            // 
             // label29
             // 
             this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(231, 344);
+            this.label29.Location = new System.Drawing.Point(231, 297);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(66, 13);
             this.label29.TabIndex = 69;
             this.label29.Text = "Tom Leeters";
             this.toolTip.SetToolTip(this.label29, "marvenius");
+            // 
+            // label23
+            // 
+            this.label23.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(231, 118);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(71, 13);
+            this.label23.TabIndex = 66;
+            this.label23.Text = "Martin Guillon";
+            // 
+            // label17
+            // 
+            this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(231, 284);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(37, 13);
+            this.label17.TabIndex = 68;
+            this.label17.Text = "Harley";
             // 
             // ContributersScrollPanel
             // 
@@ -444,12 +407,9 @@
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.label22);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.label16);
-            this.Controls.Add(this.label21);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
@@ -463,7 +423,7 @@
             this.Controls.Add(this.label6);
             this.MinimumSize = new System.Drawing.Size(500, 200);
             this.Name = "ContributersScrollPanel";
-            this.Size = new System.Drawing.Size(500, 506);
+            this.Size = new System.Drawing.Size(500, 457);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -486,11 +446,8 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Label label22;
