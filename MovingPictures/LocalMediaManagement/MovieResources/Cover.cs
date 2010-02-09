@@ -5,6 +5,7 @@ using System.Text;
 using MediaPortal.Plugins.MovingPictures.Database;
 using System.IO;
 using System.Threading;
+using System.Drawing;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources {
     public class Cover: ImageResource {
@@ -27,54 +28,47 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
             return artFolder + "\\{" + safeName + "} [" + source.GetHashCode() + "].jpg";
         }
 
-        public static Cover FromUrl(DBMovieInfo movie, string url, out ArtworkLoadStatus status) {
+        public static Cover FromUrl(DBMovieInfo movie, string url, out ImageLoadResults status) {
             return FromUrl(movie, url, false, out status);
         }
 
-        public static Cover FromUrl(DBMovieInfo movie, string url, bool ignoreRestrictions, out ArtworkLoadStatus status) {
-            int minWidth = MovingPicturesCore.Settings.MinimumCoverWidth;
-            int minHeight = MovingPicturesCore.Settings.MinimumCoverHeight;
-            bool redownloadCovers = MovingPicturesCore.Settings.RedownloadCoverArtwork;
+        public static Cover FromUrl(DBMovieInfo movie, string url, bool ignoreRestrictions, out ImageLoadResults status) {
+            ImageSize minSize = null;
+            ImageSize maxSize = new ImageSize();
+
+            if (!ignoreRestrictions) {
+                minSize = new ImageSize();
+                minSize.Width = MovingPicturesCore.Settings.MinimumCoverWidth;
+                minSize.Height = MovingPicturesCore.Settings.MinimumCoverHeight;
+            }
+
+            maxSize.Width = MovingPicturesCore.Settings.MaximumCoverWidth;
+            maxSize.Height = MovingPicturesCore.Settings.MaximumCoverHeight;
+
+            bool redownload = MovingPicturesCore.Settings.RedownloadCoverArtwork;
 
             Cover newCover = new Cover();
             newCover.Filename = GenerateFilename(movie, url);
+            status = newCover.FromUrl(url, ignoreRestrictions, minSize, maxSize, redownload);
 
-            // if we already have a file for this movie from this URL
-            if (File.Exists(newCover.Filename)) {
-                // if we are redownloading, just delete what we have
-                if (redownloadCovers) {
-                    try {
-                        File.Delete(newCover.Filename);
-                        File.Delete(newCover.ThumbFilename);
-                    }
-                    catch (Exception) {}
-                }
-                // otherwise return an "already loaded" failure
-                else {
-                    logger.Debug("Cover art for '" + movie.Title + "' [" + movie.ID + "] already exists from " + url + ".");
-                    status = ArtworkLoadStatus.ALREADY_LOADED;
+            switch (status) {
+                case ImageLoadResults.SUCCESS:
+                    logger.Info("Added cover art for \"{0}\" from: {1}", movie.Title, url);
+                    break;
+                case ImageLoadResults.SUCCESS_REDUCED_SIZE:
+                    logger.Info("Added resized cover art for \"{0}\" from: {1}", movie.Title, url);
+                    break;
+                case ImageLoadResults.FAILED_ALREADY_LOADED:
+                    logger.Debug("Cover art for \"{0}\" from the following URL is already loaded: {1}", movie.Title, url);
                     return null;
-                }
-            }
+                case ImageLoadResults.FAILED_TOO_SMALL:
+                    logger.Debug("Downloaded cover art for \"{0}\" failed minimum resolution requirements: {1}", movie.Title, url);
+                    return null;
+                case ImageLoadResults.FAILED:
+                    logger.Error("Failed downloading cover art for \"{0}\": {1}", movie.Title, url);
+                    return null;
+            }                       
 
-            // try to grab the image if failed, exit
-            bool success = newCover.Download(url);
-            if (!success) {
-                logger.Error("Failed retrieving cover artwork for '" + movie.Title + "' [" + movie.ID + "] from " + url + ".");
-                status = ArtworkLoadStatus.FAILED;
-                return null;
-            }
-
-            // check resolution
-            System.Drawing.Image currImage = System.Drawing.Image.FromFile(newCover.Filename);
-            if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
-                logger.Debug("Cover art for '" + movie.Title + "' [" + movie.ID + "] failed minimum resolution requirements: " + url);
-                currImage.Dispose();
-                status = ArtworkLoadStatus.FAILED_RES_REQUIREMENTS;
-                return null;
-            }
-
-            status = ArtworkLoadStatus.SUCCESS;
             return newCover;
         }
 

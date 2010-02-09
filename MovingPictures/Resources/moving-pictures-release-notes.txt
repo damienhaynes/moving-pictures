@@ -24,6 +24,12 @@ Issue #662:     Cover and backdrop downloading will now resume if a connection i
 Issue #701:     Covers and backdrops will no longer be saved as PNGs. All existing
                 PNG files used for covers and backdrops will be renamed with a JPG
                 extension to work around a MediaPortal bug.
+
+Issue #2:       Covers and backdrops will now be resized if the exceed the maximum
+                image size for that resource type. By default covers will be reduced 
+                in size if over 680x960 and backdrops if over 1920x1080. These 
+                values are adjustable in Advanced Settings and only apply to newly
+                downloaded artwork.
                 
 Issue #686:     Blu-Ray ISO playback now works as expected.
 

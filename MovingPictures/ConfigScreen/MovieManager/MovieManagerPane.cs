@@ -20,6 +20,7 @@ using System.Collections.ObjectModel;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using System.IO;
 using Cornerstone.GUI.Dialogs;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {
@@ -392,19 +393,20 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 // the retrieval process can take a little time, so spawn it off in another thread
                 ThreadStart actions = delegate {
                     startArtProgressBar();
-                    ArtworkLoadStatus result = movie.AddCoverFromURL(popup.GetURL(), true);
+                    ImageLoadResults result = movie.AddCoverFromURL(popup.GetURL(), true);
                     stopArtProgressBar();
 
                     switch (result) {
-                        case ArtworkLoadStatus.SUCCESS:
+                        case ImageLoadResults.SUCCESS:
+                        case ImageLoadResults.SUCCESS_REDUCED_SIZE:
                             // set new cover to current and update screen
                             movie.CoverFullPath = movie.AlternateCovers[movie.AlternateCovers.Count - 1];
                             updateMoviePanel();
                             break;
-                        case ArtworkLoadStatus.ALREADY_LOADED:
+                        case ImageLoadResults.FAILED_ALREADY_LOADED:
                             MessageBox.Show("Cover art from the specified URL has already been loaded.");
                             break;
-                        case ArtworkLoadStatus.FAILED:
+                        case ImageLoadResults.FAILED:
                             MessageBox.Show("Failed loading cover art from specified URL.");
                             break;
                     }

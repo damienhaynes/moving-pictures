@@ -87,6 +87,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                 request.Timeout = timeout;
                 request.ReadWriteTimeout = 20000;
                 request.UserAgent = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
+                request.Proxy = WebRequest.DefaultWebProxy;
+                request.Proxy.Credentials = CredentialCache.DefaultCredentials; 
                 response = request.GetResponse();
                 webStream = response.GetResponseStream();
 
@@ -138,6 +140,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
             }
             catch (ThreadAbortException) {
                 // user is shutting down the program
+                fileStream.Close();
+                fileStream = null;
+                if (File.Exists(Filename)) File.Delete(Filename);
                 rtn = DownloadStatus.FAILED;
             }
             catch (Exception e) {
