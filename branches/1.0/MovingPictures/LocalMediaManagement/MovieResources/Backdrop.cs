@@ -25,54 +25,47 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
             return artFolder + "\\{" + safeName + "} [" + source.GetHashCode() + "].jpg";
         }
 
-        public static Backdrop FromUrl(DBMovieInfo movie, string url, out ArtworkLoadStatus status) {
+        public static Backdrop FromUrl(DBMovieInfo movie, string url, out ImageLoadResults status) {
             return FromUrl(movie, url, false, out status);
         }
 
-        public static Backdrop FromUrl(DBMovieInfo movie, string url, bool ignoreRestrictions, out ArtworkLoadStatus status) {
-            int minWidth = MovingPicturesCore.Settings.MinimumBackdropWidth;
-            int minHeight = MovingPicturesCore.Settings.MinimumBackdropHeight;
-            bool redownloadBackdrops = MovingPicturesCore.Settings.RedownloadBackdrops; 
-            
+        public static Backdrop FromUrl(DBMovieInfo movie, string url, bool ignoreRestrictions, out ImageLoadResults status) {
+            ImageSize minSize = null;
+            ImageSize maxSize = new ImageSize();
+
+            if (!ignoreRestrictions) {
+                minSize = new ImageSize();
+                minSize.Width = MovingPicturesCore.Settings.MinimumBackdropWidth;
+                minSize.Height = MovingPicturesCore.Settings.MinimumBackdropHeight;
+            }
+
+            maxSize.Width = MovingPicturesCore.Settings.MaximumBackdropWidth;
+            maxSize.Height = MovingPicturesCore.Settings.MaximumBackdropHeight;
+
+            bool redownload = MovingPicturesCore.Settings.RedownloadBackdrops;
+
             Backdrop newBackdrop = new Backdrop();
             newBackdrop.Filename = GenerateFilename(movie, url);
+            status = newBackdrop.FromUrl(url, ignoreRestrictions, minSize, maxSize, redownload);
 
-            // if we already have a file for this movie from this URL
-            if (File.Exists(newBackdrop.Filename)) {
-                // if we are redownloading, just delete what we have
-                if (redownloadBackdrops) {
-                    try {
-                        File.Delete(newBackdrop.Filename);
-                        File.Delete(newBackdrop.ThumbFilename);
-                    }
-                    catch (Exception) { }
-                }
-                // otherwise return an "already loaded" failure
-                else {
-                    logger.Debug("Backdrop art for '" + movie.Title + "' [" + movie.ID + "] already exists from " + url + ".");
-                    status = ArtworkLoadStatus.ALREADY_LOADED;
+            switch (status) {
+                case ImageLoadResults.SUCCESS:
+                    logger.Info("Added backdrop for \"{0}\" from: {1}", movie.Title, url);
+                    break;
+                case ImageLoadResults.SUCCESS_REDUCED_SIZE:
+                    logger.Debug("Added resized backdrop for \"{0}\" from: {1}", movie.Title, url);
+                    break;
+                case ImageLoadResults.FAILED_ALREADY_LOADED:
+                    logger.Debug("Backdrop for \"{0}\" from the following URL is already loaded: {1}", movie.Title, url);
                     return null;
-                }
+                case ImageLoadResults.FAILED_TOO_SMALL:
+                    logger.Error("Downloaded backdrop for \"{0}\" failed minimum resolution requirements: {1}", movie.Title, url);
+                    return null;
+                case ImageLoadResults.FAILED:
+                    logger.Error("Failed downloading backdrop for \"{0}\": {1}", movie.Title, url);
+                    return null;
             }
 
-            // try to grab the image if failed, exit
-            bool success = newBackdrop.Download(url);
-            if (!success) {
-                logger.Error("Failed retrieving backdrop for '" + movie.Title + "' [" + movie.ID + "] from " + url + ".");
-                status = ArtworkLoadStatus.FAILED;
-                return null;
-            }
-
-            // check resolution
-            System.Drawing.Image currImage = System.Drawing.Image.FromFile(newBackdrop.Filename);
-            if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
-                logger.Debug("Backdrop for '" + movie.Title + "' [" + movie.ID + "] failed minimum resolution requirements: " + url);
-                currImage.Dispose();
-                status = ArtworkLoadStatus.FAILED_RES_REQUIREMENTS;
-                return null;
-            }
-
-            status = ArtworkLoadStatus.SUCCESS;
             return newBackdrop;
         }
 

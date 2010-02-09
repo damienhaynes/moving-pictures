@@ -20,13 +20,6 @@ using System.Runtime.InteropServices;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
-    public enum ArtworkLoadStatus {
-        SUCCESS,
-        ALREADY_LOADED,
-        FAILED,
-        FAILED_RES_REQUIREMENTS
-    }
-
     [DBTableAttribute("movie_info")]
     public class DBMovieInfo: MovingPicturesDBTable, IComparable, IAttributeOwner {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -607,41 +600,39 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         // Attempts to load cover art for this movie from a given URL. Optionally
         // ignores minimum resolution restrictions
-        public ArtworkLoadStatus AddCoverFromURL(string url, bool ignoreRestrictions) {
-            ArtworkLoadStatus status;
+        public ImageLoadResults AddCoverFromURL(string url, bool ignoreRestrictions) {
+            ImageLoadResults status;
             Cover newCover = Cover.FromUrl(this, url, ignoreRestrictions, out status);
-            
-            if (status != ArtworkLoadStatus.SUCCESS)
+
+            if (status != ImageLoadResults.SUCCESS && status != ImageLoadResults.SUCCESS_REDUCED_SIZE)
                 return status;
 
             AlternateCovers.Add(newCover.Filename);
             GenerateThumbnail();
             commitNeeded = true;
-            logger.Info("Added cover art for '" + Title + "' from: " + url + "");
-            return ArtworkLoadStatus.SUCCESS;
+            return ImageLoadResults.SUCCESS;
         }
 
         // Attempts to load cover art for this movie from a given URL. Honors 
         // minimum resolution restrictions
-        public ArtworkLoadStatus AddCoverFromURL(string url) {
+        public ImageLoadResults AddCoverFromURL(string url) {
             return AddCoverFromURL(url, false);
         }
 
-        public ArtworkLoadStatus AddBackdropFromURL(string url, bool ignoreRestrictions) {
-            ArtworkLoadStatus status;
+        public ImageLoadResults AddBackdropFromURL(string url, bool ignoreRestrictions) {
+            ImageLoadResults status;
             Backdrop newBackdrop = Backdrop.FromUrl(this, url, ignoreRestrictions, out status);
 
-            if (status != ArtworkLoadStatus.SUCCESS)
+            if (status != ImageLoadResults.SUCCESS && status != ImageLoadResults.SUCCESS_REDUCED_SIZE)
                 return status;
 
             // save the backdrop
             _backdropFullPath = newBackdrop.Filename;
             commitNeeded = true;
-            logger.Info("Added Backdrop for '" + Title + "' from: " + url);
-            return ArtworkLoadStatus.SUCCESS;
+            return ImageLoadResults.SUCCESS;
         }
 
-        public ArtworkLoadStatus AddBackdropFromURL(string url) {
+        public ImageLoadResults AddBackdropFromURL(string url) {
             return AddBackdropFromURL(url, false);
         }
 
