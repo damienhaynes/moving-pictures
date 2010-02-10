@@ -63,6 +63,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _enableImporterWhileInGUI;
 
+        [CornerstoneSetting(
+            Name = "JPG Compression Quality",
+            Description = "Determines the quality that will be used for JPG compression of covers and backdrops. Value should be between 1 and 100.",
+            Groups = "|Movie Importer|Tweaks|",
+            Identifier = "jpg_compress_quality",
+            Default = 90)]
+        public int JpgCompressionQuality {
+            get { return _jpgCompressionQuality; }
+            set {
+                _jpgCompressionQuality = value;
+                OnSettingChanged("jpg_compress_quality");
+            }
+        }
+        private int _jpgCompressionQuality;
+
         #endregion
 
         #region Matching and Importing

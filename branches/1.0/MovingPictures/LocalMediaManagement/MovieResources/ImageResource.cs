@@ -96,10 +96,15 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                 img.Dispose();
                 img = null;
 
+                // determine compression quality
+                int quality = MovingPicturesCore.Settings.JpgCompressionQuality;
+                if (quality > 100) quality = 100;
+                if (quality < 0) quality = 0;
+                
                 // save image as a jpg
                 ImageCodecInfo jgpEncoder = GetEncoder(ImageFormat.Jpeg);
                 System.Drawing.Imaging.Encoder qualityParamID = System.Drawing.Imaging.Encoder.Quality;
-                EncoderParameter qualityParam = new EncoderParameter(qualityParamID, 90L);
+                EncoderParameter qualityParam = new EncoderParameter(qualityParamID, quality);
                 EncoderParameters encoderParams = new EncoderParameters(1);
                 encoderParams.Param[0] = qualityParam;
                 newImage.Save(Filename, jgpEncoder, encoderParams);
