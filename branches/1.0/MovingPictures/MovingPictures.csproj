@@ -92,12 +92,6 @@
     <Compile Include="ConfigScreen\ContributersScrollPanel.Designer.cs">
       <DependentUpon>ContributersScrollPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\DataProviderSetupPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\DataProviderSetupPanel.Designer.cs">
-      <DependentUpon>DataProviderSetupPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="ConfigScreen\DataSourcePane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -338,10 +332,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\AutoDataSourcesPanel.resx">
       <DependentUpon>AutoDataSourcesPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\DataProviderSetupPanel.resx">
-      <DependentUpon>DataProviderSetupPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\DataSourcePane.resx">
