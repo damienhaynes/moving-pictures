@@ -38,9 +38,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     }
 
     public class MovieImporter {
+
         #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly object syncRoot = new object();
 
         // threads that do actual processing
         private List<Thread> mediaScannerThreads;
@@ -107,6 +109,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         List<DBImportPath> rescanQueue;        
         Dictionary<FileSystemWatcher, DBImportPath> pathLookup;
         int watcherInterval;
+        
+        bool importerStarted = false;
+        bool importerSuspended = false;
 
         #endregion
 
@@ -124,8 +129,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Creates a MovieImporter object which will scan ImportPaths and import new media.
         public MovieImporter() {
             initialize();
-            MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectDeleted);
-            DeviceManager.OnVolumeInserted += new DeviceManager.DeviceManagerEvent(OnVolumeInserted);
             percentDone = 0;
         }
 
@@ -163,33 +166,45 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         #region Public Methods
 
         public void Start() {
-            int maxThreadCount = MovingPicturesCore.Settings.ThreadCount;
 
-            if (mediaScannerThreads.Count == 0) {
-                for (int i = 0; i < maxThreadCount; i++) {
-                    Thread newThread = new Thread(new ThreadStart(ScanMedia));
-                    newThread.Start();
-                    newThread.Name = "MediaScanner";
+            lock (syncRoot) {
 
-                    mediaScannerThreads.Add(newThread);
+                MovingPicturesCore.OnPowerEvent += new MovingPicturesCore.PowerEventDelegate(PowerEventHandler);
+                MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectDeleted);
+                DeviceManager.OnVolumeInserted += OnVolumeInserted;
+
+                int maxThreadCount = MovingPicturesCore.Settings.ThreadCount;
+
+                if (mediaScannerThreads.Count == 0) {
+                    for (int i = 0; i < maxThreadCount; i++) {
+                        Thread newThread = new Thread(new ThreadStart(ScanMedia));
+                        newThread.Start();
+                        newThread.Name = "MediaScanner";
+
+                        mediaScannerThreads.Add(newThread);
+                    }
+
+                    logger.Info("Started MovieImporter");
                 }
 
-                logger.Info("Started MovieImporter");
-            }
+                if (pathScannerThread == null) {
+                    pathScannerThread = new Thread(new ThreadStart(ScanAndMonitorPaths));
+                    pathScannerThread.Start();
+                    pathScannerThread.Name = "PathScanner";
+                }
 
-            if (pathScannerThread == null) {
-                pathScannerThread = new Thread(new ThreadStart(ScanAndMonitorPaths));
-                pathScannerThread.Start();
-                pathScannerThread.Name = "PathScanner";
-            }
+                if (MovieStatusChanged != null)
+                    MovieStatusChanged(null, MovieImporterAction.STARTED);
 
-            if (MovieStatusChanged != null)
-                MovieStatusChanged(null, MovieImporterAction.STARTED);
+                importerStarted = true;
+            }
         }
 
         public void Stop() {
-            lock (mediaScannerThreads) {
-                bool stoppedSomething = false;
+            lock (syncRoot) {
+
+                if (!importerStarted)
+                    return;        
 
                 if (mediaScannerThreads.Count > 0) {
                     logger.Info("Shutting Down Media Scanner Threads...");
@@ -206,7 +221,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     }
 
                     mediaScannerThreads.Clear();
-                    stoppedSomething = true;
                 }
 
                 if (fileSystemWatchers != null && fileSystemWatchers.Count > 0) {
@@ -232,18 +246,19 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         Thread.Sleep(100);
 
                     pathScannerThread = null;
-                    stoppedSomething = true;
                 }
 
-                if (stoppedSomething) {
-                    if (Progress != null)
-                        Progress(100, 0, 0, "Stopped");
+                MovingPicturesCore.DatabaseManager.ObjectDeleted -= DatabaseManager_ObjectDeleted;
+                DeviceManager.OnVolumeInserted -= OnVolumeInserted;
 
-                    if (MovieStatusChanged != null)
-                        MovieStatusChanged(null, MovieImporterAction.STOPPED);
+                if (Progress != null)
+                    Progress(100, 0, 0, "Stopped");
 
-                    logger.Info("Stopped MovieImporter");
-                }
+                if (MovieStatusChanged != null)
+                    MovieStatusChanged(null, MovieImporterAction.STOPPED);
+
+                logger.Info("Stopped MovieImporter");
+                importerStarted = false;                
             }
         }
 
@@ -419,7 +434,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // build the new match and add it for processing
             MovieMatch newMatch = new MovieMatch();
             newMatch.LocalMedia = fileList;
-            newMatch.LocalMedia.Sort(new DBLocalMediaComparer());
             lock (priorityPendingMatches.SyncRoot) {
                 newMatch.HighPriority = true;
                 priorityPendingMatches.Insert(0, newMatch);
@@ -976,8 +990,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     if (Utility.isFolderMultipart(currDir.Name)) {
                         List<DBLocalMedia>  possiblePartners = DBLocalMedia.GetAll(currDir.Parent.FullName + "%");
                         foreach (DBLocalMedia partner in possiblePartners) {
-                            if (!partner.Ignored && Utility.isFolderMultipart(partner.File.Directory.Name) && currDir.FullName != partner.File.Directory.FullName)
-                            {
+                            if (!partner.Ignored && Utility.isFolderMultipart(partner.File.Directory.Name)) {
                                 partnerMedia = partner;
                                 break;
                             }
@@ -1137,6 +1150,24 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (obj is DBLocalMedia)
                 if (matchLookup.ContainsKey((DBLocalMedia)obj))
                     RemoveFromMatchLists(matchLookup[(DBLocalMedia)obj]);
+        }
+
+        // Take the proper actions when a power event occurs
+        private void PowerEventHandler(MovingPicturesCore.PowerEvent powerEvent) {
+            // ignore the event if we are NOT started AND NOT suspended
+            if (!importerStarted && !importerSuspended)
+                return;
+
+            if (powerEvent == MovingPicturesCore.PowerEvent.Suspend) {
+                // Stop the importer when suspending and flag that we are suspended
+                Stop();
+                importerSuspended = true;
+            }
+            else if (powerEvent == MovingPicturesCore.PowerEvent.Resume) {
+                // Start the importer when resuming and reset the suspended flag
+                Start();
+                importerSuspended = false;
+            }
         }
 
         #endregion
@@ -1299,7 +1330,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return;
 
             // notify any listeners of the status change
-            logger.Info("Added \"{0}\" ({1}).", currMatch.Selected.Movie.Title, currMatch.Selected.Movie.Year);
+            logger.Info("Added \"{0}\".", currMatch.Selected.Movie.Title);
             if (MovieStatusChanged != null)
                 MovieStatusChanged(currMatch, MovieImporterAction.COMMITED);
         }
@@ -1364,7 +1395,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 else approvedMatches.Add(mediaMatch);
 
                 // notify any listeners
-                logger.Info("Auto-approved {0} as \"{1}\" ({2})", mediaMatch.LocalMediaString, mediaMatch.Selected.Movie.Title, mediaMatch.Selected.Movie.Year);
+                logger.Info("Auto-approved {0} as {1}", mediaMatch.LocalMediaString, mediaMatch.Selected.Movie.Title);
                 if (MovieStatusChanged != null)
                     MovieStatusChanged(mediaMatch, MovieImporterAction.APPROVED);
             }
