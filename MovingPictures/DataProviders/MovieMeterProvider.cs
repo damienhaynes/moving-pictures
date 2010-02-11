@@ -7,6 +7,7 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using System.Reflection;
 using NLog;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     class MovieMeterProvider : InternalProvider, IMovieProvider {
@@ -119,7 +120,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 if (film != null) {
                     if (film.thumbnail != null) {
                         string coverPath = film.thumbnail.Replace(@"/thumbs/", @"/");
-                        if (movie.AddCoverFromURL(coverPath) == ArtworkLoadStatus.SUCCESS)
+                        if (movie.AddCoverFromURL(coverPath) == ImageLoadResults.SUCCESS)
                             return true;
                     }
                 }

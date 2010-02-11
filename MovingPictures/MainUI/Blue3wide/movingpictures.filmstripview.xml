@@ -109,6 +109,7 @@ This file should contain the list view
 		  <textcolor>ffFFFFFF</textcolor>
 		  <seperator>-----------------------------------------------------------------------------------</seperator>
 		  <font>font11</font>
+		  <scrollStartDelaySec>#textboxscrolldelay.filmstrip</scrollStartDelaySec>
 		  <label>#MovingPictures.SelectedMovie.summary</label>
 		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
 		</control>

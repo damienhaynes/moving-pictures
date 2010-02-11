@@ -12,6 +12,7 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Reflection;
 using System.Globalization;
 using NLog;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class ScriptableProvider : IScriptableMovieProvider {
@@ -288,7 +289,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 if (results.ContainsKey("cover_art[" + count + "].url")) {
                     string coverPath = results["cover_art[" + count + "].url"];
                     if (coverPath.Trim() != string.Empty)
-                        if (movie.AddCoverFromURL(coverPath) == ArtworkLoadStatus.SUCCESS)
+                        if (movie.AddCoverFromURL(coverPath) == ImageLoadResults.SUCCESS)
                             coversAdded++;
                 }
 
@@ -346,7 +347,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 if (results.ContainsKey("backdrop[" + count + "].url")) {
                     string backdropURL = results["backdrop[" + count + "].url"];
                     if (backdropURL.Trim().Length > 0)
-                        if (movie.AddBackdropFromURL(backdropURL) == ArtworkLoadStatus.SUCCESS)
+                        if (movie.AddBackdropFromURL(backdropURL) == ImageLoadResults.SUCCESS)
                             return true;
                 }
 

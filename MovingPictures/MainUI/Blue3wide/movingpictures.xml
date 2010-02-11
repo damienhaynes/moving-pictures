@@ -28,6 +28,12 @@ multiple view modes.
     <define>#categories.backdrop.used:true</define>     <!-- true if backdrop (fanart) should be displayed in this view -->
     <define>#details.backdrop.used:true</define>   	    <!-- true if backdrop (fanart) should be displayed in this view -->
 
+	<!-- Change the values below to adjust the delay  in (seconds) that text scrolls in movie overviews -->
+	<define>#textboxscrolldelay.list:12</define>
+	<define>#textboxscrolldelay.thumbs:12</define>
+	<define>#textboxscrolldelay.filmstrip:16</define>
+	<define>#textboxscrolldelay.details:16</define>
+	
 	<controls>
 
 		<!--            :: DUMMY CONTROLS ::             -->
@@ -184,7 +190,7 @@ multiple view modes.
 		<!-- Top Bar Controls -->
 		<control>      
 		  <type>image</type>
-		  <id>1</id>
+		  <id>0</id>
 		  <posX>50</posX>
 		  <posY>-10</posY>
 		  <width>70</width>

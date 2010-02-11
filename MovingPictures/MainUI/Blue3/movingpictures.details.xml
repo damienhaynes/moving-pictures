@@ -197,6 +197,7 @@ This file should contain the details view
       <textcolor>ffFFFFFF</textcolor>
       <seperator>-----------------------------------------------------------------------------------</seperator>
       <font>font13</font>
+	  <scrollStartDelaySec>#textboxscrolldelay.details</scrollStartDelaySec>
       <label>#MovingPictures.SelectedMovie.summary</label>
       <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
     </control>

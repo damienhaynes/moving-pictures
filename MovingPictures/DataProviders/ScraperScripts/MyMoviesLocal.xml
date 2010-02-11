@@ -17,8 +17,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>891001</id>
-    <version major="0" minor="9" point="0"/>
-    <published month="10" day="20" year="2009"/>
+    <version major="0" minor="9" point="1"/>
+    <published month="12" day="29" year="2009"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -31,39 +31,44 @@
 
   <!-- Search -->
   <action name="search">
-    
+
     <!-- try to read the mymovies.xml from the movie folder -->
     <set name="filename" value="${search.basepath}\mymovies.xml" />
     <retrieve name="file" file="${filename}" encoding="UTF-8"/>
 
-    <parse name="results" input="${file}" xpath="//Title" />
+    <!-- Prevent a non-existing file from causing parsing errors -->
+    <if test="${file}!=">
 
-    <loop name="result" on="results">
-      <set name="movie[${count}].title" value="${results[${count}].LocalTitle}" />
-      
-      <!-- by setting the alternative title to the search title we garantee a match-->
-      <set name="movie[${count}].alternate_titles" value="|${search.title}|"/>
-      
-      <set name="movie[${count}].year" value="${results[${count}].ProductionYear}" />
-      <set name="movie[${count}].imdb_id" value="${results[${count}].IMDB}" />
-      <set name="movie[${count}].popularity" value="100"/>
-      
-      <!-- we set the filename as the site id -->
-      <set name="movie[${count}].site_id" value="${filename}"/>
-      
-    </loop>
-    
+      <parse name="results" input="${file}" xpath="//Title" />
+
+      <loop name="result" on="results">
+        <set name="movie[${count}].title" value="${results[${count}].LocalTitle}" />
+
+        <!-- by setting the alternative title to the search title we garantee a match-->
+        <set name="movie[${count}].alternate_titles" value="|${search.title}|"/>
+
+        <set name="movie[${count}].year" value="${results[${count}].ProductionYear}" />
+        <set name="movie[${count}].imdb_id" value="${results[${count}].IMDB}" />
+        <set name="movie[${count}].popularity" value="100"/>
+
+        <!-- we set the filename as the site id -->
+        <set name="movie[${count}].site_id" value="${filename}"/>
+
+      </loop>
+
+    </if>
+
   </action>
 
   <action name="get_details">
-    
+
     <if test="${movie.site_id}!=">
-      
+
       <retrieve name="file" file="${movie.site_id}" encoding="UTF-8"/>
       <parse name="result" input="${file}" xpath="//Title" />
 
       <if test="${result.count}>0">
-        
+
         <set name="movie.title" value="${result[0].LocalTitle}" />
         <set name="movie.alternate_titles" value="|${result[0].OriginalTitle}|"/>
         <set name="movie.sortby" value="${result[0].SortTitle}"/>
@@ -71,10 +76,10 @@
         <set name="movie.imdb_id" value="${result[0].IMDB}" />
         <set name="movie.summary" value="${result[0].Description}"/>
         <set name='movie.tagline' value='${result[0].TagLine}'/>
-        
+
         <set name="movie.score" value="${result[0].Rating}" />
         <set name="movie.runtime" value="${result[0].RunningTime}" />
-        
+
         <!-- Certification / Parental Rating -->
         <parse name="certification" input="${file}" xpath="//Title/ParentalRating"/>
         <set name="movie.certification" value="${result[0].Value}" />
@@ -98,10 +103,10 @@
         <set name="movie.actors" value="" />
         <loop name="actor" on="actors">
           <set name="movie.actors" value="${movie.actors}|${actor:htmldecode}"/>
-        </loop>        
+        </loop>
 
       </if>
-      
+
     </if>
 
   </action>

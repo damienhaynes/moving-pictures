@@ -26,7 +26,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
             if (!MovingPicturesCore.Settings.AutoRetrieveMediaInfo)
                 return;
 
-            logger.Info("Updating Media Info...");
+            logger.Info("Begining background media info update process.");
 
             List<DBLocalMedia> allLocalMedia = DBLocalMedia.GetAll();
             foreach (DBLocalMedia lm in allLocalMedia) {
@@ -35,6 +35,8 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                     lm.Commit();
                 }
             }
+
+            logger.Info("Background media info update process complete.");
         }
     }
 }

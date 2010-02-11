@@ -16,15 +16,10 @@ using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Text.RegularExpressions;
 using Cornerstone.Tools.Translate;
+using System.Runtime.InteropServices;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
-    public enum ArtworkLoadStatus {
-        SUCCESS,
-        ALREADY_LOADED,
-        FAILED,
-        FAILED_RES_REQUIREMENTS
-    }
-
     [DBTableAttribute("movie_info")]
     public class DBMovieInfo: MovingPicturesDBTable, IComparable, IAttributeOwner {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -574,32 +569,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // if the file isnt in the cover folder, generate a name and save it there
             if (!alreadyInFolder) {
                 string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
-                string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].png";
-                if (!File.Exists(newFileName)) {
-                    bool saved = false;
-                    try {
-                        newCover.Save(newFileName, ImageFormat.Png);
-                        AlternateCovers.Add(newFileName);
-                        saved = true;
-                    }
-                    catch (ArgumentNullException) {
-                        logger.Debug("Error while trying to save cover: filename is missing.");
-                    }
-                    catch (System.Runtime.InteropServices.ExternalException e) {
-                        logger.Error("Error while trying to save cover. ", e);
-                        try {
-                            if (File.Exists(newFileName))
-                                File.Delete(newFileName);
-                        }
-                        catch (Exception) { }
-                    }
-
-                    if (!saved) {
-                        newCover.Dispose();
-                        return false;
-                    }
+                string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
+                
+                if (!File.Exists(newFileName) && saveImage(newFileName, newCover)) {
+                    AlternateCovers.Add(newFileName);
+                    commitNeeded = true;
                 }
-                else return false;
+                else
+                    return false;
             }
 
             // if it's already in the folder, just store the filename in the db
@@ -613,188 +590,49 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
 
             // create a thumbnail for the cover
-            logger.Debug("Added cover art for '" + Title + "' [" + ID + "] from " + filename + ".");
             newCover.Dispose();
             commitNeeded = true;
             GenerateThumbnail();
+            logger.Info("Added cover art for '" + Title + "' from: " + filename);
             
             return true;
         }
 
         // Attempts to load cover art for this movie from a given URL. Optionally
         // ignores minimum resolution restrictions
-        public ArtworkLoadStatus AddCoverFromURL(string url, bool ignoreRestrictions) {
-            int minWidth = MovingPicturesCore.Settings.MinimumCoverWidth;
-            int minHeight = MovingPicturesCore.Settings.MinimumCoverHeight;
-            string artFolder = MovingPicturesCore.Settings.CoverArtFolder;
-            string thumbsFolder = MovingPicturesCore.Settings.CoverArtThumbsFolder;
-            bool redownloadCovers = MovingPicturesCore.Settings.RedownloadCoverArtwork;
+        public ImageLoadResults AddCoverFromURL(string url, bool ignoreRestrictions) {
+            ImageLoadResults status;
+            Cover newCover = Cover.FromUrl(this, url, ignoreRestrictions, out status);
 
-            // genrate a filename for a movie. should be unique based on the url hash
-            string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
-            string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].png";
-            
-            // if we already have a file for this movie from this URL, move on
-            if (File.Exists(filename)) {
-                if (redownloadCovers) {
-                    FileInfo file = new FileInfo(filename);
-                    string thumbFileName = thumbsFolder + "\\" + file.Name;
-                    FileInfo thumbFile = new FileInfo(thumbFileName);
-                    try {
-                        file.Delete();
-                        thumbFile.Delete();
-                    }
-                    catch (Exception e) {
-                        if (e.GetType() == typeof(ThreadAbortException))
-                            throw e;
-                    }
-                }
-                else {
-                    if (!AlternateCovers.Contains(filename)) {
-                        AlternateCovers.Add(filename);
-                        commitNeeded = true;
-                    }
+            if (status != ImageLoadResults.SUCCESS && status != ImageLoadResults.SUCCESS_REDUCED_SIZE)
+                return status;
 
-                    logger.Debug("Cover art for '" + Title + "' [" + ID + "] already exists from " + url + ".");
-                    GenerateThumbnail();
-                    return ArtworkLoadStatus.ALREADY_LOADED;
-                }
-            }
-
-            // try to grab the image if failed, exit
-            Image currImage = getImageFromUrl(url);
-            if (currImage == null) {
-                logger.Error("Failed retrieving cover artwork for '" + Title + "' [" + ID + "] from " + url + ".");
-                return ArtworkLoadStatus.FAILED;
-            }
-
-            // check resolution
-            if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
-                logger.Debug("Cover art for '" + Title + "' [" + ID + "] failed minimum resolution requirements: " + url);
-                currImage.Dispose();
-                return ArtworkLoadStatus.FAILED_RES_REQUIREMENTS;
-            }
-
-            // save the artwork
-            bool saved = false;
-            try {
-                currImage.Save(filename, ImageFormat.Png);
-                AlternateCovers.Add(filename);
-                GenerateThumbnail();
-                commitNeeded = true;
-                saved = true;
-                logger.Debug("Added cover art for '" + Title + "' [" + ID + "] from " + url + ".");
-            }
-            catch (ArgumentNullException) {
-                logger.Debug("Error while trying to save cover: filename is missing.");
-            }
-            catch (System.Runtime.InteropServices.ExternalException e) {
-                logger.Error("Error while trying to save cover. ", e);
-                try {
-                    if (File.Exists(filename))
-                        File.Delete(filename);
-                }
-                catch (Exception) { }
-            }
-            finally {
-                currImage.Dispose();
-            }
-
-            if (saved)
-                return ArtworkLoadStatus.SUCCESS;
-            else
-                return ArtworkLoadStatus.FAILED;
+            AlternateCovers.Add(newCover.Filename);
+            GenerateThumbnail();
+            commitNeeded = true;
+            return ImageLoadResults.SUCCESS;
         }
 
         // Attempts to load cover art for this movie from a given URL. Honors 
         // minimum resolution restrictions
-        public ArtworkLoadStatus AddCoverFromURL(string url) {
+        public ImageLoadResults AddCoverFromURL(string url) {
             return AddCoverFromURL(url, false);
         }
 
-        public ArtworkLoadStatus AddBackdropFromURL(string url, bool ignoreRestrictions) {
-            int minWidth = MovingPicturesCore.Settings.MinimumBackdropWidth;
-            int minHeight = MovingPicturesCore.Settings.MinimumBackdropHeight;
-            string artFolder = MovingPicturesCore.Settings.BackdropFolder;
-            string thumbsFolder = MovingPicturesCore.Settings.BackdropThumbsFolder;
-            bool redownloadBackdrops = MovingPicturesCore.Settings.RedownloadBackdrops;
-            
-            // generate a filename for a movie. should be unique based on the url hash
-            string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
-            string filename = artFolder + "\\{" + safeName + "} [" + url.GetHashCode() + "].png";
+        public ImageLoadResults AddBackdropFromURL(string url, bool ignoreRestrictions) {
+            ImageLoadResults status;
+            Backdrop newBackdrop = Backdrop.FromUrl(this, url, ignoreRestrictions, out status);
 
-            // if we already have a file for this movie from this URL, move on
-            if (File.Exists(filename)) {
-                if (redownloadBackdrops) {
-                    FileInfo file = new FileInfo(filename);
-                    string thumbFileName = thumbsFolder + "\\" + file.Name;
-                    FileInfo thumbFile = new FileInfo(thumbFileName);
-                    try {
-                        file.Delete();
-                        thumbFile.Delete();
-                    }
-                    catch (Exception e) {
-                        if (e.GetType() == typeof(ThreadAbortException))
-                            throw e;
-                    }
-                }
-                else {
-                    // TODO: Add filename to alrternate backdrops string list here
-                    if (_backdropFullPath.Trim().Length == 0) {
-                        BackdropFullPath = filename;
-                        commitNeeded = true;
-                    }
-                    logger.Debug("Backdrop for '" + Title + "' [" + ID + "] already exists from " + url + ".");
-                    return ArtworkLoadStatus.ALREADY_LOADED;
-                }
-            }
-
-            // try to grab the image if failed, exit
-            Image currImage = getImageFromUrl(url);
-            if (currImage == null) {
-                // needs to be uncommented when backdrop provider is fleshed out and doesnt ask
-                // for 404 urls to be loaded
-                //logger.Error("Failed retrieving backdrop for '" + Title + "' [" + ID + "] from " + url + ".");
-                return ArtworkLoadStatus.FAILED;
-            }
-
-            // check resolution
-            if (!ignoreRestrictions && (currImage.Width < minWidth || currImage.Height < minHeight)) {
-                logger.Debug("Backdrop for '" + Title + "' [" + ID + "] failed minimum resolution requirements: " + url);
-                currImage.Dispose();
-                return ArtworkLoadStatus.FAILED_RES_REQUIREMENTS;
-            }
+            if (status != ImageLoadResults.SUCCESS && status != ImageLoadResults.SUCCESS_REDUCED_SIZE)
+                return status;
 
             // save the backdrop
-            bool saved = false;
-            try {
-                currImage.Save(filename, ImageFormat.Png);
-                _backdropFullPath = filename;
-                commitNeeded = true;
-                saved = true;
-            }
-            catch (ArgumentNullException) {
-                logger.Debug("Error while trying to save backdrop: filename is missing.");
-            }
-            catch (System.Runtime.InteropServices.ExternalException e) {
-                logger.Error("Error while trying to save backdrop. ", e);
-                try {
-                    if (File.Exists(filename))
-                        File.Delete(filename);
-                }
-                catch (Exception) { }
-            }
-            finally {
-                currImage.Dispose();
-            }
-            if (saved)
-                return ArtworkLoadStatus.SUCCESS;
-            else
-                return ArtworkLoadStatus.FAILED;
-            
+            _backdropFullPath = newBackdrop.Filename;
+            commitNeeded = true;
+            return ImageLoadResults.SUCCESS;
         }
 
-        public ArtworkLoadStatus AddBackdropFromURL(string url) {
+        public ImageLoadResults AddBackdropFromURL(string url) {
             return AddBackdropFromURL(url, false);
         }
 
@@ -827,31 +665,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // if the file isnt in the backdrop folder, generate a name and save it there
             if (!alreadyInFolder) {
                 string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
-                string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].png";
+                string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 
                 // save the backdrop
-                bool saved = false;
-                try {
-                    newBackdrop.Save(newFileName, ImageFormat.Png);
-                    _backdropFullPath = filename;
+                bool saved = saveImage(newFileName, newBackdrop);
+                if (saved) {
+                    _backdropFullPath = newFileName;
                     commitNeeded = true;
-                    saved = true;
+                    logger.Info("Added backdrop for '" + Title + "' from: " + newFileName);
+                    return true;
                 }
-                catch (ArgumentNullException) {
-                    logger.Debug("Error while trying to save backdrop: filename is NULL.");
-                }
-                catch (System.Runtime.InteropServices.ExternalException e) {
-                    logger.Error("Error while trying to save backdrop. ", e);
-                    try {
-                        if (File.Exists(newFileName))
-                            File.Delete(newFileName);
-                    }
-                    catch (Exception) { }
-                }
-                finally {
-                    newBackdrop.Dispose();
-                }
-                return saved;
+                else 
+                    return false;
             }
 
             // if it's already in the folder, just store the filename in the db
@@ -859,66 +684,42 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 newBackdrop.Dispose();
                 _backdropFullPath = filename;
                 commitNeeded = true;
+                logger.Info("Added backdrop for '" + Title + "' from: " + filename);
                 return true;
-
             }
         }
 
-        // given a URL, returns an image stored at that URL. Returns null if not 
-        // an image or connection error.
-        private Image getImageFromUrl(string url) {
-            Image rtn = null;
-
-            // pull in timeout settings
-            int tryCount = 0;
-            int maxRetries = MovingPicturesCore.Settings.MaxTimeouts;
-            int timeout = MovingPicturesCore.Settings.TimeoutLength;
-            int timeoutIncrement = MovingPicturesCore.Settings.TimeoutIncrement;
-
-            while (rtn == null && tryCount < maxRetries) {
+        private bool saveImage(string filename, Image image) {
+            try {
+                // try to save as a JPG
+                image.Save(filename, ImageFormat.Jpeg);
+                return true;
+            }
+            catch (ArgumentNullException) {
+                logger.Debug("Error while trying to save backdrop: filename is NULL.");
+            }
+            catch (ExternalException) {
                 try {
-                    // try to grab the image
-                    tryCount++;
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                    request.Timeout = timeout + (timeoutIncrement * tryCount);
-                    request.ReadWriteTimeout = 20000;
-                    request.UserAgent = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    // if JPG saving failed for some reason, delete and try to resave as a PNG
+                    if (File.Exists(filename))
+                        File.Delete(filename);
 
-                    // parse the stream into an image file
-                    rtn = Image.FromStream(response.GetResponseStream());
+                    logger.Warn("Failed to save file as JPG, trying PNG: " + filename);
+                    image.Save(filename, ImageFormat.Png);
+                    return true;
                 }
-                catch (WebException e) {
-                    // file doesnt exist
-                    if (e.Message.Contains("404")) {
-                        // needs to be uncommented when backdrop provider is fleshed out and doesnt ask
-                        // for 404 urls to be loaded
-                        //logger.Warn("Failed retrieving artwork from " + url + ". File does not exist. (404)");
-                        return null;
-                    }
-                    
-                    // if we timed out past our try limit
-                    if (tryCount == maxRetries) {
-                        logger.ErrorException("Failed to retrieve artwork from " + url + ". Reached retry limit of " + maxRetries, e);
-                        return null;
-                    }
-                }
-                catch (UriFormatException) {
-                    logger.Error("Bad URL format, failed loading image: " + url);
-                    return null;
-                }
-                catch (ArgumentException) {
-                    logger.Error("URL does not point to an image: " + url);
-                    return null;
+                catch (Exception ex) {
+                    // we are getting no where...
+                    logger.Error("Error trying to save image file: " + filename, ex);
+                    if (File.Exists(filename))
+                        File.Delete(filename);
                 }
             }
-
-            if (rtn == null) {
-                logger.Error("Failed loading image from url: " + url);
-                return null;
+            finally {
+                image.Dispose();
             }
 
-            return rtn;
+            return false;
         }
 
         public void GenerateThumbnail() {
@@ -940,9 +741,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
             catch (OutOfMemoryException e) {
                 logger.DebugException("Invalid image or image format not supported.", e);
+                return;
             }
             catch (FileNotFoundException e) {
                 logger.DebugException("File not found.", e);
+                return;
             }
 
             if (cover == null) {
@@ -954,26 +757,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             int height = (int)(cover.Height * ((float)width / (float)cover.Width));
 
             Image coverThumb = cover.GetThumbnailImage(width, height, null, IntPtr.Zero);
-            try {
-                coverThumb.Save(fullname, ImageFormat.Png);
+            if (saveImage(fullname, coverThumb)) {
                 _coverThumbFullPath = fullname;
                 commitNeeded = true;
             }
-            catch (ArgumentNullException) {
-                logger.Debug("Error while trying to save thumbnail: filename is NULL.");
-            }
-            catch (System.Runtime.InteropServices.ExternalException e) {
-                logger.Error("Error while trying to save thumbnail. ", e);
-                try {
-                    if (File.Exists(fullname))
-                        File.Delete(fullname);
-                }
-                catch (Exception) { }
-            }
-            finally {
-                cover.Dispose();
-                coverThumb.Dispose();
-            }
+
+            cover.Dispose();
+            coverThumb.Dispose();
         }
 
         #endregion

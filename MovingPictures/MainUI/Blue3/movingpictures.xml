@@ -28,6 +28,9 @@ multiple view modes.
 	<define>#categories.backdrop.used:true</define>     <!-- true if backdrop (fanart) should be displayed in this view -->
     <define>#details.backdrop.used:true</define>        <!-- true if backdrop (fanart) should be displayed in this view -->
 
+	<!-- Change the values below to adjust the delay  in (seconds) that text scrolls in movie overviews -->
+	<define>#textboxscrolldelay.details:10</define>
+	
 	<controls>		
 		<!--            :: DUMMY CONTROLS ::             -->
 
@@ -76,11 +79,12 @@ multiple view modes.
 		  <width>0</width>
 		</control>
 
-		<!--            :: BACKGROUNDS :: MOVIE BACKDROP :: OVERLAYS ::            -->		
+		<!--            :: BACKGROUNDS :: MOVIE BACKDROP :: OVERLAYS ::            -->	
+		
 		<control>
 			<description>Background</description>
 			<type>image</type>
-			<id>1</id>
+			<id>0</id>
 			<posX>0</posX>
 			<posY>0</posY>
 			<width>720</width>
@@ -89,7 +93,7 @@ multiple view modes.
 			<texture>Background.png</texture>
 		</control>
 	
-		<!-- centre 1280x720 image in a 720x576 window -->
+		<!-- centre 1024x576 image in a 720x576 window -->
 		<control>
 		  <description>Movie Backdrop (Fan Art) - Plug-in sets to invisible, if no art.</description>
 		  <type>image</type>
@@ -120,6 +124,7 @@ multiple view modes.
 		  <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>	
 		</control>
 
+		<!-- Backdrop Overlay -->
 		<control>
 		  <id>0</id>
 		  <type>image</type>
@@ -146,7 +151,7 @@ multiple view modes.
 		<!-- Top Bar Controls -->
 		<control>      
 		  <type>image</type>
-		  <id>1</id>
+		  <id>0</id>
 		  <posX>50</posX>
 		  <posY>-10</posY>
 		  <width>70</width>

@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141521</id>
-    <version major="1" minor="2" point="8"/>
-    <published month="7" day="20" year="2009"/>
+    <version major="1" minor="2" point="9"/>
+    <published month="11" day="29" year="2009"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -53,7 +53,7 @@
 	
 	<set name="rx_aka">
       <![CDATA[
-      \#666">(?<alternateTitle>[^<]+)
+      #666[^>]+>(?<alternateTitle>[^<]+)
       ]]>
     </set>
 
@@ -65,7 +65,7 @@
 	
 	<set name="rx_site_id">
       <![CDATA[
-      /level/1/film/(?<site_id>[\d]+)/ord/date/#list
+      /level/1/film/(?<site_id>[\d]+)/ord/rating/status/good/#list
       ]]>
     </set>	
 	
@@ -169,7 +169,7 @@
 	
 	<set name="rx_certification">
       <![CDATA[
-	  src="/images/mpaa/(?<movieRating>[^\.]+).gif"
+	  src='/images/mpaa/(?<movieRating>[^\.]+).gif'
       ]]>
     </set>
 	
@@ -225,7 +225,13 @@
       <![CDATA[
       <link\srel="canonical"\shref="http://www.imdb.com/title/(tt\d{7})/"\s/>
       ]]>
-    </set>	
+    </set>
+
+	<set name="rx_tagline">
+      <![CDATA[
+		слоган[^#]+#555">(?<TagLine>[^<]+)
+      ]]>
+    </set>
 
 	<set name="rx_cut_aka">
       <![CDATA[
@@ -341,6 +347,10 @@
     <parse name="cert" input="${details_page}" regex="${rx_certification}"/>
 	<set name="movie.certification" value="${cert[0][0]}" />
 
+    <!-- TagLine -->
+    <parse name="tagline" input="${details_page}" regex="${rx_tagline}"/>
+	<set name="movie.tagline" value="${tagline[0][0]:htmldecode}" />
+	
     <!-- Runtime -->
     <parse name="runtime" input="${details_page}" regex="${rx_runtime}"/>
     <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
