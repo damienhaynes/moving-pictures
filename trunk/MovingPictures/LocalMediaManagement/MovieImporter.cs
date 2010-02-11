@@ -434,6 +434,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // build the new match and add it for processing
             MovieMatch newMatch = new MovieMatch();
             newMatch.LocalMedia = fileList;
+            newMatch.LocalMedia.Sort(new DBLocalMediaComparer());
             lock (priorityPendingMatches.SyncRoot) {
                 newMatch.HighPriority = true;
                 priorityPendingMatches.Insert(0, newMatch);
@@ -990,7 +991,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     if (Utility.isFolderMultipart(currDir.Name)) {
                         List<DBLocalMedia>  possiblePartners = DBLocalMedia.GetAll(currDir.Parent.FullName + "%");
                         foreach (DBLocalMedia partner in possiblePartners) {
-                            if (!partner.Ignored && Utility.isFolderMultipart(partner.File.Directory.Name)) {
+                            if (!partner.Ignored && Utility.isFolderMultipart(partner.File.Directory.Name) && currDir.FullName != partner.File.Directory.FullName)
+                            {
                                 partnerMedia = partner;
                                 break;
                             }
@@ -1330,7 +1332,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 return;
 
             // notify any listeners of the status change
-            logger.Info("Added \"{0}\".", currMatch.Selected.Movie.Title);
+            logger.Info("Added \"{0}\" ({1}).", currMatch.Selected.Movie.Title, currMatch.Selected.Movie.Year);
             if (MovieStatusChanged != null)
                 MovieStatusChanged(currMatch, MovieImporterAction.COMMITED);
         }
@@ -1395,7 +1397,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 else approvedMatches.Add(mediaMatch);
 
                 // notify any listeners
-                logger.Info("Auto-approved {0} as {1}", mediaMatch.LocalMediaString, mediaMatch.Selected.Movie.Title);
+                logger.Info("Auto-approved {0} as \"{1}\" ({2})", mediaMatch.LocalMediaString, mediaMatch.Selected.Movie.Title, mediaMatch.Selected.Movie.Year);
                 if (MovieStatusChanged != null)
                     MovieStatusChanged(mediaMatch, MovieImporterAction.APPROVED);
             }
