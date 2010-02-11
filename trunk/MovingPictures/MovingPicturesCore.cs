@@ -22,19 +22,10 @@ using System.Threading;
 using MovingPicturesSocialAPI;
 
 namespace MediaPortal.Plugins.MovingPictures {
-    
     public class MovingPicturesCore {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public static event ProgressDelegate InitializeProgress;
-
-        public enum PowerEvent {
-            Suspend,
-            Resume
-        }
-
-        public delegate void PowerEventDelegate(PowerEvent powerEvent);
-        public static event PowerEventDelegate OnPowerEvent;
 
         private const string dbFileName = "movingpictures.db3";
         private const string logFileName = "movingpictures.log";
@@ -142,9 +133,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             logger.Info("Moving Pictures (" + ver.Major + "." + ver.Minor + "." + ver.Build + ":" + ver.Revision + ")");
             logger.Info("Plugin Launched");
 
-            // Register Win32 PowerMode Event Handler
-            Microsoft.Win32.SystemEvents.PowerModeChanged += new Microsoft.Win32.PowerModeChangedEventHandler(onSystemPowerModeChanged);
-
             DatabaseMaintenanceManager.MaintenanceProgress += new ProgressDelegate(DatabaseMaintenanceManager_MaintenanceProgress);
 
             // setup the data structures sotring our list of startup actions
@@ -175,6 +163,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 actionDescriptions.Add(newAction, "Performing Movie Information Upgrade Check...");
                 initActions.Add(newAction);
 
+                // artwork
+                newAction = new WorkerDelegate(DatabaseMaintenanceManager.PerformArtworkUpgradeCheck);
+                actionDescriptions.Add(newAction, "Reconfiguring Artwork...");
+                initActions.Add(newAction);
             }            
 
             newAction = new WorkerDelegate(checkVersionInfo);
@@ -193,9 +185,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             actionDescriptions.Add(newAction, "Updating Filtering Menu...");
             initActions.Add(newAction);
 
-            newAction = new WorkerDelegate(DatabaseMaintenanceManager.VerifyCategoryMenu);
-            actionDescriptions.Add(newAction, "Updating Categories Menu...");
-            initActions.Add(newAction);            
+            // only perform this task when categories are enabled
+            if (Settings.CategoriesEnabled) {
+                newAction = new WorkerDelegate(DatabaseMaintenanceManager.VerifyCategoryMenu);
+                actionDescriptions.Add(newAction, "Updating Categories Menu...");
+                initActions.Add(newAction);
+            }
 
             newAction = new WorkerDelegate(DeviceManager.StartMonitor);
             actionDescriptions.Add(newAction, "Starting Device Monitor...");
@@ -228,7 +223,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             DatabaseMaintenanceManager.MaintenanceProgress -= new ProgressDelegate(DatabaseMaintenanceManager_MaintenanceProgress);
 
             // Launch background tasks
-            startBackgroundTasks();
+            launchBackgroundTasks();
 
         }
 
@@ -238,21 +233,19 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         public static void Shutdown() {
-
-            // Unregister Win32 PowerMode Event Handler
-            Microsoft.Win32.SystemEvents.PowerModeChanged -= new Microsoft.Win32.PowerModeChangedEventHandler(onSystemPowerModeChanged);
-            
             DeviceManager.StopMonitor();
             
             // Stop Importer
             if (_importer != null)
                 _importer.Stop();
 
-            stopBackgroundTasks();
+            // Cancel background processes
+            if (_processManager != null)
+                _processManager.CancelAllProcesses();
 
+            _processManager = null;
             _importer = null;
             _settings = null;
-            _databaseManager.Close();
             _databaseManager = null;
 
             logger.Info("Plugin Closed");
@@ -261,8 +254,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         #endregion
 
         #region Private Methods
-
-        
 
         // Initializes the database connection to the Movies Plugin database
         private static void initDB() {
@@ -283,13 +274,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             // add all filter helpers
             _databaseManager.AddFilterHelper<DBMovieInfo>(new FilterHelperDBMovieInfo());
         }
-
-        private static void closeDB() {
-            if (_databaseManager == null)
-                return;
-
-            _databaseManager.Close();
-        }        
 
         private static void initLogger() {
             LoggingConfiguration config = new LoggingConfiguration();
@@ -376,20 +360,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 Directory.CreateDirectory(Settings.BackdropThumbsFolder);
         }
 
-        private static void startBackgroundTasks() {
-            logger.Info("Starting Background Processes...");
+        private static void launchBackgroundTasks() {
+            logger.Info("Launching Background Processes...");
             ProcessManager.StartProcess(new MediaInfoUpdateProcess());
             ProcessManager.StartProcess(new UpdateArtworkProcess());
-        }
-
-        private static void stopBackgroundTasks() {
-            logger.Info("Stopping Background Processes...");
-            
-            // Cancel background processes
-            if (_processManager != null)
-                _processManager.CancelAllProcesses();
-
-            _processManager = null;
         }
 
         private static void checkVersionInfo() {
@@ -404,43 +378,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public static Version GetDBVersionNumber() {
             return new Version(Settings.Version);
-        }
-
-        // Centralized handler for PowerMode events, will in turn fire our own event where the other components hook into
-        private static void onSystemPowerModeChanged(object sender, Microsoft.Win32.PowerModeChangedEventArgs e) {
-            if (e.Mode == Microsoft.Win32.PowerModes.Resume) {
-                logger.Info("MovingPictures is resuming from standby");
-
-                // The database connection will be automatically reopened on first request
-                // so we don't have to explicitly open it again
-
-                // Start Device Manager
-                DeviceManager.StartMonitor();
-
-                // Start Background Tasks
-                startBackgroundTasks();
-
-                // Fire Event Resume
-                if (OnPowerEvent != null)
-                    OnPowerEvent(PowerEvent.Resume);
-
-            }
-            else if (e.Mode == Microsoft.Win32.PowerModes.Suspend) {
-                logger.Info("MovingPictures is suspending");
-
-                // Fire Event Suspend
-                if (OnPowerEvent != null)
-                    OnPowerEvent(PowerEvent.Suspend);
-                
-                // Stop Background Tasks
-                stopBackgroundTasks();
-                
-                // Stop Device Manager
-                DeviceManager.StopMonitor();
-
-                // Close DB Connection
-                closeDB();
-            }
         }
 
         #endregion

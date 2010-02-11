@@ -270,7 +270,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         return _discid;
                     
                     // Calculate the DiscID
-                    DiscId = this.VideoFormat.GetIdentifier(FullPath);
+                    DiscId = this.VideoFormat.GetIdentifier(GetVideoPath());
                 }
                 
                 // return the DiscID
@@ -287,8 +287,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             get {
                 if (fileHash == null && IsAvailable) {
                     // Only try to get file hashes when the format is File or when it's an image
-                    if (this.VideoFormat == VideoFormat.File || this.IsImageFile)
-                        FileHash = this.VideoFormat.GetIdentifier(FullPath);
+                    if (VideoFormat == VideoFormat.File || IsImageFile)
+                        FileHash = VideoFormat.File.GetIdentifier(FullPath);
                 }
                 return fileHash;
             }

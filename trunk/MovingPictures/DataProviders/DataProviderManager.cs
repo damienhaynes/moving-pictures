@@ -171,6 +171,18 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         }
                     }
 
+                    // special case for impawards script
+                    else if (currType == DataType.COVERS && currSource.IsScriptable() && ((ScriptableProvider)currSource.Provider).ScriptID == 874903) {
+                        if (languageCode != "en") {
+                            currSource.SetPriority(currType, 98);
+                            currSource.Commit();
+                        }
+                        else {
+                            currSource.SetPriority(currType, 1);
+                            currSource.Commit();
+                        }
+                    }
+
                     // special case for themoviedb provider. should always be used for covers and backdrops
                     else if ((currType == DataType.COVERS || currType == DataType.BACKDROPS) &&
                               currSource.Provider is TheMovieDbProvider) {
@@ -186,7 +198,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     }
 
                     // not a generic language script and not for the selected language, disable
-                    else if (currSource.Provider.LanguageCode != "" && 
+                    else if (currSource.Provider.LanguageCode != "" &&
                              currSource.Provider.LanguageCode != "various" &&
                              currSource.Provider.LanguageCode != languageCode) {
 

@@ -63,6 +63,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _enableImporterWhileInGUI;
 
+        [CornerstoneSetting(
+            Name = "JPG Compression Quality",
+            Description = "Determines the quality that will be used for JPG compression of covers and backdrops. Value should be between 1 and 100.",
+            Groups = "|Movie Importer|Tweaks|",
+            Identifier = "jpg_compress_quality",
+            Default = 90)]
+        public int JpgCompressionQuality {
+            get { return _jpgCompressionQuality; }
+            set {
+                _jpgCompressionQuality = value;
+                OnSettingChanged("jpg_compress_quality");
+            }
+        }
+        private int _jpgCompressionQuality;
+
         #endregion
 
         #region Matching and Importing
@@ -491,38 +506,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         [CornerstoneSetting(
-            Name = "Minimum Cover Width",
-            Description = "The minimum width in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.",
-            Groups = "|Movie Importer|Cover Art|",
-            Identifier = "min_cover_width",
-            Default = 175)]
-        public int MinimumCoverWidth {
-            get { return _minimumCoverWidth; }
-            set {
-                _minimumCoverWidth = value;
-                OnSettingChanged("min_cover_width");
-            }
-        }
-        private int _minimumCoverWidth;
-
-
-        [CornerstoneSetting(
-            Name = "Minimum Cover Height",
-            Description = "The minimum height in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.",
-            Groups = "|Movie Importer|Cover Art|",
-            Identifier = "min_cover_height",
-            Default = 260)]
-        public int MinimumCoverHeight {
-            get { return _minimumCoverHeight; }
-            set {
-                _minimumCoverHeight = value;
-                OnSettingChanged("min_cover_height");
-            }
-        }
-        private int _minimumCoverHeight;
-
-
-        [CornerstoneSetting(
             Name = "Cover Artwork Filename Pattern",
             Description = "The importer will look in your cover art folder and try to find a file that matches this pattern. If one is found, it will be used as a cover. If none is found, an online data provider will be used to auto download artwork.",
             Groups = "|Movie Importer|Cover Art|",
@@ -570,6 +553,76 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private string _movieFolderCoverArtworkFilenamePattern;
+
+        #region Minimum Size
+
+        [CornerstoneSetting(
+            Name = "Width",
+            Description = "The minimum width in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.",
+            Groups = "|Movie Importer|Cover Art|Minimum Size",
+            Identifier = "min_cover_width",
+            Default = 175)]
+        public int MinimumCoverWidth {
+            get { return _minimumCoverWidth; }
+            set {
+                _minimumCoverWidth = value;
+                OnSettingChanged("min_cover_width");
+            }
+        }
+        private int _minimumCoverWidth;
+
+
+        [CornerstoneSetting(
+            Name = "Height",
+            Description = "The minimum height in pixels for any given cover. If a cover from any data provider is smaller than this value it will not be downloaded and saved.",
+            Groups = "|Movie Importer|Cover Art|Minimum Size",
+            Identifier = "min_cover_height",
+            Default = 260)]
+        public int MinimumCoverHeight {
+            get { return _minimumCoverHeight; }
+            set {
+                _minimumCoverHeight = value;
+                OnSettingChanged("min_cover_height");
+            }
+        }
+        private int _minimumCoverHeight;
+
+        #endregion
+
+        #region Maximum Size
+
+        [CornerstoneSetting(
+            Name = "Width",
+            Description = "The maximum width in pixels for any given cover. If a cover from any data provider is larger than this value it will be resized.",
+            Groups = "|Movie Importer|Cover Art|Maximum Size",
+            Identifier = "max_cover_width",
+            Default = 680)]
+        public int MaximumCoverWidth {
+            get { return _maximumCoverWidth; }
+            set {
+                _maximumCoverWidth = value;
+                OnSettingChanged("max_cover_width");
+            }
+        }
+        private int _maximumCoverWidth;
+
+
+        [CornerstoneSetting(
+            Name = "Height",
+            Description = "The maximum height in pixels for any given cover. If a cover from any data provider is larger than this value it will be resized.",
+            Groups = "|Movie Importer|Cover Art|Maximum Size",
+            Identifier = "max_cover_height",
+            Default = 960)]
+        public int MaximumCoverHeight {
+            get { return _maximumCoverHeight; }
+            set {
+                _maximumCoverHeight = value;
+                OnSettingChanged("max_cover_height");
+            }
+        }
+        private int _maximumCoverHeight;
+
+        #endregion
 
         #endregion
 
@@ -624,38 +677,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         [CornerstoneSetting(
-            Name = "Minimum Backdrop Width",
-            Description = "The minimum width in pixels for any given movie backdrop. If a backdrop from any data provider is smaller than this value it will not automatically be downloaded and saved.",
-            Groups = "|Movie Importer|Backdrops|",
-            Identifier = "min_backdrop_width",
-            Default = 1280)]
-        public int MinimumBackdropWidth {
-            get { return _minimumBackdropWidth; }
-            set {
-                _minimumBackdropWidth = value;
-                OnSettingChanged("min_backdrop_width");
-            }
-        }
-        private int _minimumBackdropWidth;
-
-
-        [CornerstoneSetting(
-            Name = "Minimum Backdrop Height",
-            Description = "The minimum height in pixels for any given movie backdrop. If a cover from any data provider is smaller than this value it will not automatically be downloaded and saved.",
-            Groups = "|Movie Importer|Backdrops|",
-            Identifier = "min_backdrop_height",
-            Default = 720)]
-        public int MinimumBackdropHeight {
-            get { return _minimumBackdropHeight; }
-            set {
-                _minimumBackdropHeight = value;
-                OnSettingChanged("min_backdrop_height");
-            }
-        }
-        private int _minimumBackdropHeight;
-
-
-        [CornerstoneSetting(
             Name = "Backdrop Filename Pattern",
             Description = "The importer will look in your backdrop folder and try to find a file that matches this pattern. If one is found, it will be used as a backdrop. If none is found, an online data provider will be used to auto download artwork.",
             Groups = "|Movie Importer|Backdrops|",
@@ -704,6 +725,75 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _movieFolderBackdropFilenamePattern;
 
+        #region Minimum Size
+
+        [CornerstoneSetting(
+            Name = "Width",
+            Description = "The minimum width in pixels for any given movie backdrop. If a backdrop from any data provider is smaller than this value it will not automatically be downloaded and saved.",
+            Groups = "|Movie Importer|Backdrops|Minimum Size|",
+            Identifier = "min_backdrop_width",
+            Default = 1280)]
+        public int MinimumBackdropWidth {
+            get { return _minimumBackdropWidth; }
+            set {
+                _minimumBackdropWidth = value;
+                OnSettingChanged("min_backdrop_width");
+            }
+        }
+        private int _minimumBackdropWidth;
+
+
+        [CornerstoneSetting(
+            Name = "Height",
+            Description = "The minimum height in pixels for any given movie backdrop. If a cover from any data provider is smaller than this value it will not automatically be downloaded and saved.",
+            Groups = "|Movie Importer|Backdrops|Minimum Size|",
+            Identifier = "min_backdrop_height",
+            Default = 720)]
+        public int MinimumBackdropHeight {
+            get { return _minimumBackdropHeight; }
+            set {
+                _minimumBackdropHeight = value;
+                OnSettingChanged("min_backdrop_height");
+            }
+        }
+        private int _minimumBackdropHeight;
+
+        #endregion
+
+        #region Maximum Size
+
+        [CornerstoneSetting(
+            Name = "Width",
+            Description = "The maximum width in pixels for any given movie backdrop. If a backdrop from any data provider is larger than this value it will be resized.",
+            Groups = "|Movie Importer|Backdrops|Maximum Size|",
+            Identifier = "max_backdrop_width",
+            Default = 1920)]
+        public int MaximumBackdropWidth {
+            get { return _maximumBackdropWidth; }
+            set {
+                _maximumBackdropWidth = value;
+                OnSettingChanged("max_backdrop_width");
+            }
+        }
+        private int _maximumBackdropWidth;
+
+
+        [CornerstoneSetting(
+            Name = "Height",
+            Description = "The maximum height in pixels for any given movie backdrop. If a cover from any data provider is larger than this value it will be resized.",
+            Groups = "|Movie Importer|Backdrops|Maximum Size|",
+            Identifier = "max_backdrop_height",
+            Default = 1080)]
+        public int MaximumBackdropHeight {
+            get { return _maximumBackdropHeight; }
+            set {
+                _maximumBackdropHeight = value;
+                OnSettingChanged("max_backdrop_height");
+            }
+        }
+        private int _maximumBackdropHeight;
+
+        #endregion
 
         #endregion
 
@@ -712,7 +802,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         [CornerstoneSetting(
             Name = "Max Timeouts",
             Description = "The maximum number of timeouts received from the server before a thread returns an error condition.",
-            Groups = "|Movie Importer|themoviedb.org|",
+            Groups = "|Movie Importer|Network Timeout Settings|",
             Identifier = "tmdb_max_timeouts",
             Default = 10)]
         public int MaxTimeouts {
@@ -728,7 +818,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         [CornerstoneSetting(
             Name = "Timeout Length",
             Description = "The base length of time (in milliseconds) for a timeout when connecting to themoviedb.org data service.",
-            Groups = "|Movie Importer|themoviedb.org|",
+            Groups = "|Movie Importer|Network Timeout Settings|",
             Identifier = "tmdb_timeout_length",
             Default = 5000)]
         public int TimeoutLength {
@@ -744,7 +834,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         [CornerstoneSetting(
             Name = "Timeout Increment",
             Description = "The amount of time (in milliseconds) added to the timeout limit  after each timeout failure. A non-zero value will help when the server is experience a large amount of congestion.",
-            Groups = "|Movie Importer|themoviedb.org|",
+            Groups = "|Movie Importer|Network Timeout Settings|",
             Identifier = "tmdb_timeout_increment",
             Default = 1000)]
         public int TimeoutIncrement {

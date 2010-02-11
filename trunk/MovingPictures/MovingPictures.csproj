@@ -141,7 +141,6 @@
       <DependentUpon>MovieNodeSettingsPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\PinCodeTextBox.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="ConfigScreen\Popups\AddImportPathPopup.cs">
       <SubType>Form</SubType>
@@ -269,6 +268,9 @@
     <Compile Include="Database\DBUser.cs" />
     <Compile Include="Database\DBUserMovieSettings.cs" />
     <Compile Include="Database\DBWatchedHistory.cs" />
+    <Compile Include="LocalMediaManagement\MovieResources\Backdrop.cs" />
+    <Compile Include="LocalMediaManagement\MovieResources\Cover.cs" />
+    <Compile Include="LocalMediaManagement\MovieResources\FileBasedResource.cs" />
     <Compile Include="Database\FilterHelperDBMovieInfo.cs" />
     <Compile Include="LocalMediaManagement\MediaInfoWrapper.cs">
       <SubType>Code</SubType>
@@ -286,6 +288,7 @@
     <Compile Include="DataProviders\ScriptableProvider.cs" />
     <Compile Include="LocalMediaManagement\DeviceManager.cs" />
     <Compile Include="LocalMediaManagement\MovieRenamer.cs" />
+    <Compile Include="LocalMediaManagement\MovieResources\ImageResource.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\BlurayMetaBuilder.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\HashBuilder.cs">
       <SubType>Code</SubType>
@@ -647,6 +650,7 @@
     <Content Include="Resources\Images\world_add.png" />
     <None Include="Resources\Images\wrench.png" />
     <Content Include="Resources\Images\zoom.png" />
+    <Content Include="Resources\language\cs.xml" />
     <Content Include="Resources\language\da.xml" />
     <Content Include="Resources\language\de.xml" />
     <Content Include="Resources\language\en-US.xml" />

@@ -224,6 +224,7 @@ This file should contain the list view
 		  <textcolor>ffFFFFFF</textcolor>
 		  <seperator>-----------------------------------------------------------------------------------</seperator>
 		  <font>font11</font>
+		  <scrollStartDelaySec>#textboxscrolldelay.list</scrollStartDelaySec>
 		  <label>#MovingPictures.SelectedMovie.summary</label>
 		  <visible>facadeview.list+Control.IsVisible(50)</visible>
 		</control>

@@ -1173,7 +1173,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIGeneralRating ratingDlg = (GUIGeneralRating)GUIWindowManager.GetWindow(GUIGeneralRating.ID);
             ratingDlg.Reset();
 			ratingDlg.SetHeading(Translation.RateHeading);
-            ratingDlg.SetLine(1, String.Format(Translation.SelectYourRating, browser.SelectedMovie.Title));
+            ratingDlg.SetLine(1, String.Format(Translation.SelectYourRating, movie.Title));
             DBUserMovieSettings userMovieSettings = movie.ActiveUserSettings;			
             ratingDlg.Rating = userMovieSettings.UserRating.GetValueOrDefault(3);
 			ratingDlg.DisplayStars = GUIGeneralRating.StarDisplay.FIVE_STARS;
@@ -1291,7 +1291,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (browser.CurrentView != BrowserViewMode.DETAILS) {
                 browser.ReloadMovieFacade();
             }
-            PublishMovieDetails(movie);
+
+            // (re-)public movie details if the movie is still the same
+            if (browser.SelectedMovie == movie)
+                PublishMovieDetails(movie);
         }
 
         /// <summary>
@@ -1625,6 +1628,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         /// <summary>
+        /// Resets the property values for every key that starts with the given string
+        /// </summary>
+        /// <param name="startsWith">the prefix to reset</param>
+        public void ResetProperties(string startsWith) {
+            logger.Debug("Resetting properties: {0}", startsWith);
+            foreach (string key in loggedProperties.Keys) {
+                if (key.StartsWith(startsWith))
+                    SetProperty(key, "");
+            }
+        }
+
+        /// <summary>
         /// Publishes movie details to the skin. If multiple requests are done within a short period of time the publishing is delayed 
         /// and only the last request is then published to the skin. This will speed up browsing on "heavy" skins that show a lot of
         /// detail on the current selection.
@@ -1655,9 +1670,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <param name="movie"></param>
         private void PublishMovieDetails(DBMovieInfo movie) {
-            if (movie == null)
-                return;
+            if (movie == null) {
+                // Clear the movie related skin properties
+                ResetProperties("#MovingPictures.SelectedMovie");
+                ResetProperties("#MovingPictures.UserMovieSettings");
+                ResetProperties("#MovingPictures.LocalMedia");
+            }
+            else {
+                // publish details on selected movie
+                PublishDetails(movie, "SelectedMovie");
+                PublishDetails(movie.ActiveUserSettings, "UserMovieSettings");
+                PublishDetails(movie.LocalMedia[0], "LocalMedia");
 
+                // publish easily usable subtitles info
+                SetProperty("#MovingPictures.LocalMedia.Subtitles", movie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles");
             // publish details on selected movie
             PublishDetails(movie, "SelectedMovie");
             PublishDetails(movie.ActiveUserSettings, "UserMovieSettings");
@@ -1667,19 +1693,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", (movie.ActiveUserSettings.UserRating.GetValueOrDefault() * 2).ToString());
             PublishDetails(movie.LocalMedia[0], "LocalMedia");
 
-            // publish easily usable subtitles info
-            SetProperty("#MovingPictures.LocalMedia.Subtitles", movie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles");
-
-            // publish the selected index in the facade
-            int selectedIndex = browser.SelectedIndex + 1;
-            SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
+                // publish the selected index in the facade
+                int selectedIndex = browser.SelectedIndex + 1;
+                SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
+            }
 
             if (selectedMovieWatchedIndicator != null) {
                 selectedMovieWatchedIndicator.Visible = false;
-                if (movie.ActiveUserSettings != null)
+                if (movie != null && movie.ActiveUserSettings != null)
                     if (movie.ActiveUserSettings.WatchedCount > 0)
                         selectedMovieWatchedIndicator.Visible = true;             
-             }
+            }
 
             PublishArtwork(movie);
             SetProperty("#MovingPictures.Settings.BackdropMovieTitle", movie.Title);
@@ -1690,16 +1714,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <param name="node"></param>
         private void PublishCategoryDetails(DBNode<DBMovieInfo> node) {
-            if (node == null)
-                return;
+            if (node == null) {
+                // Clear the category related skin properties
+                ResetProperties("#MovingPictures.SelectedNode");
+            }
+            else {
+                // Publish category details
+                PublishDetails(node, "SelectedNode");
+                PublishDetails(node.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
 
-            PublishDetails(node, "SelectedNode");
-            PublishDetails(node.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
+                // publish category node name in a format that can always be used as a filename.
+                SetProperty("#MovingPictures.SelectedNode.FileFriendlyName", Utility.CreateFilename(Translation.ParseString(node.Name)));
+            }
+
+            // Publish Category Artwork
             PublishArtwork(node);
-
-            // publish category node name in a format that can always be used as a filename.
-            SetProperty("#MovingPictures.SelectedNode.FileFriendlyName", Utility.CreateFilename(Translation.ParseString(node.Name)));
-
         }
 
         /// <summary>
@@ -1937,6 +1966,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             propertyStr = "#MovingPictures.general.filteredmoviecount";
             valueStr = browser.FilteredMovies.Count.ToString();
             SetProperty(propertyStr, valueStr);
+
+            // combined filtered movie count with Movie(s) translation
+            propertyStr = "#MovingPictures.general.itemcount";
+            valueStr = string.Format(valueStr + " {0}", browser.FilteredMovies.Count == 1 ? Translation.Movie : Translation.Movies);
+            SetProperty(propertyStr, valueStr);
         }
 
         /// <summary>
@@ -1970,8 +2004,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <param name="movie"></param>
         private void PublishArtwork(DBMovieInfo movie) {
-            if (movie == null)
+            if (movie == null) {
+                logger.Debug("Clearing Movie Artwork");
+                cover.Filename = string.Empty;
+                backdrop.Filename = string.Empty;
                 return;
+            }
 
             logger.Debug("Publishing Movie Artwork");
 
@@ -1984,8 +2022,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <param name="node"></param>
         private void PublishArtwork(DBNode<DBMovieInfo> node) {
-            if (node == null)
+            if (node == null) {
+                logger.Debug("Clearing Category Artwork");
+                cover.Filename = string.Empty;
+                backdrop.Filename = string.Empty;
                 return;
+            }
 
             logger.Debug("Publishing Category Artwork");
 

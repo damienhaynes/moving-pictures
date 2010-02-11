@@ -17,8 +17,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874940</id>
-    <version major="0" minor="1" point="1"/>
-    <published month="7" day="2" year="2009"/>
+    <version major="0" minor="1" point="2"/>
+    <published month="2" day="5" year="2010"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -182,13 +182,31 @@
 
       <set name="rx_plot">
         <![CDATA[
-        <br>Obsah:<BR>.+?float:left.+?>(.+?)&nbsp;&nbsp;&nbsp;<b><i>\(.*?\)</i></b></div></span></span></td>
+        <br>Obsah:.+?float:left.+?>(.+?)&nbsp;&nbsp;&nbsp;<b><i>\(.*?\)</i></b></div></span></span></td>
         ]]>
       </set>
 
       <set name="rx_plot2">
         <![CDATA[
-        <br>Obsah:<BR>.+?float:left.+?>.+?&nbsp;\(<a href="(.+?)"\s.+?">zobrazit&nbsp;celý&nbsp;text</a>\)</div>\s</span></span></td>
+        <br>Obsah:.+?float:left.+?>.+?&nbsp;\(<a href="(.+?)"\s.+?">zobrazit&nbsp;celý&nbsp;text</a>\)</div>\s</span></span></td>
+        ]]>
+      </set>
+
+      <set name="rx_writers_block">
+	      <![CDATA[
+	      <h5>Writer[s]?.*?<div class="info-content">.*?(.*?)</div>
+	      ]]>
+      </set>
+
+	    <set name="rx_tagline">
+        <![CDATA[
+        <h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)
+        ]]>
+      </set>
+	  
+      <set name="rx_language">
+        <![CDATA[
+        <a\shref=./Sections/Languages/[^/]+/">\s+([^<]+)</a>
         ]]>
       </set>
 
@@ -268,14 +286,14 @@
 
       <!-- Retrieve other details from IMDb -->
       <if test="${movie.imdb_id}!=">
-        <retrieve name="imdb_details_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
+        <retrieve name="imdb_details_page" url="http://www.imdb.com/title/${movie.imdb_id}" />
 
         <!-- IMDb ID -->
         <parse name="imdb" input="${imdb_details_page}" regex='&lt;link rel="canonical" href="http://www.imdb.com/title/(tt[\d]{7})/" /&gt;' />
         <set name="movie.imdb_id" value="${imdb[0][0]}" />
 
         <!-- Writers -->
-        <parse name="writers_block" input="${imdb_details_page}" regex='&lt;div class="info"&gt;\s+&lt;h5&gt;Writer[s]?(?: &lt;a href="[^"]+"&gt;\([^)]+\)&lt;/a&gt;)?:&lt;/h5&gt;.+?&lt;/div&gt;'/>
+        <parse name="writers_block" input="${imdb_details_page}" regex="${rx_writers_block}" />
         <parse name='writers' input="${writers_block}" regex='&lt;a href="/name/nm\d+/"[^&gt;]*&gt;([^&lt;]+)&lt;/a&gt;'/>
         <set name='movie.writers' value=''/>
         <loop name='currWriter' on='writers'>
@@ -291,27 +309,29 @@
         <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
 
         <!-- Tagline -->
-        <parse name="tagline" input="${imdb_details_page}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
+        <parse name="tagline" input="${imdb_details_page}" regex="${rx_tagline}" />
         <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
 
-      <!-- Language (all matches)
-      <parse name="language_block" input="${imdb_details_page}" regex='&lt;h5&gt;Language:&lt;/h5&gt;(.+?)\s&lt;/div&gt;'/>
-      <parse name='language' input='"${language_block}' regex='&lt;a href="/Sections/Languages/[^/]+/"&gt;\s+([^&lt;]+)&lt;/a&gt;'/>
-      <set name='movie.language' value=''/>
-      <loop name='currLanguage' on='language'>
-        <set name='movie.language' value='${movie.language}|${currLanguage[0]:htmldecode}'/>
-      </loop>
-      <set name='movie.language' value='${movie.language}|' />
-      -->
-      <!-- Language (only first match) -->
-      <parse name="language" input="${imdb_details_page}" regex='&lt;h5&gt;Language:&lt;/h5&gt;\s+&lt;a href="/Sections/Languages/[^/]+/"&gt;\s+([^&lt;]+)&lt;/a&gt;'/>
-      <set name='movie.language' value='${language[0][0]:htmldecode}'/>
+        <!-- Language (all matches)
+        <parse name="language_block" input="${imdb_details_page}" regex='&lt;h5&gt;Language:&lt;/h5&gt;(.+?)\s&lt;/div&gt;'/>
+        <parse name='language' input='"${language_block}' regex='&lt;a href="/Sections/Languages/[^/]+/"&gt;\s+([^&lt;]+)&lt;/a&gt;'/>
+        <set name='movie.language' value=''/>
+        <loop name='currLanguage' on='language'>
+          <set name='movie.language' value='${movie.language}|${currLanguage[0]:htmldecode}'/>
+        </loop>
+        <set name='movie.language' value='${movie.language}|' />
+        -->
+
+        <!-- Language (only first match) -->
+        <parse name="language" input="${imdb_details_page}" regex="${rx_language}" />
+        <set name='movie.language' value='${language[0][0]:htmldecode}'/>
 
         <replace name="movie.language" input="${movie.language}" pattern="(Cantonese)" with="Kantonsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Czech)" with="Česky" />
         <replace name="movie.language" input="${movie.language}" pattern="(English)" with="Anglicky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Filipino)" with="Filipínsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(French)" with="Francouzsky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(German)" with="Německy" />
         <replace name="movie.language" input="${movie.language}" pattern="(Hindi)" with="Hindsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Japanese)" with="Japonsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Korean)" with="Korejsky" />

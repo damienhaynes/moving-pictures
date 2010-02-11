@@ -1,4 +1,4 @@
-Moving Pictures 1.0.1
+Moving Pictures 1.0.2
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -7,11 +7,89 @@ If you have any problems or questions about the plug-in you can visit the
 forums to interact with the community and developers, or you can visit the 
 Moving Pictures Wiki for access to the user's guide and frequently asked questions.
 
-Moving Pictures Forum:          http://forum.team-mediaportal.com/moving-pictures-284/
-Moving Pictures Wiki:           http://moving-pictures.tv
+Moving Pictures Forum:       http://forum.team-mediaportal.com/moving-pictures-284/
+Moving Pictures Wiki:        http://moving-pictures.tv
 Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 Change Log
+================================================================================
+1.0.2
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #662:     Cover and backdrop downloading will now resume if a connection is
+                dropped. This should resolve the "corrupted" or "partially downloaded"
+                image problem.
+                
+Issue #701:     Covers and backdrops will no longer be saved as PNGs. All existing
+                PNG files used for covers and backdrops will be renamed with a JPG
+                extension to work around a MediaPortal bug.
+
+Issue #2:       Covers and backdrops will now be resized if the exceed the maximum
+                image size for that resource type. By default covers will be reduced 
+                in size if over 680x960 and backdrops if over 1920x1080. These 
+                values are adjustable in Advanced Settings and only apply to newly
+                downloaded artwork.
+                
+Issue #686:     Blu-Ray ISO playback now works as expected.
+
+Issue #683:     Mediainfo will now be properly pulled for Bluray disks.
+
+Issue #706:     Importer will no longer fail when only partial Bluray metadata is
+                available.
+
+Issue #490:     When importing two DVDs as a two part film, they will now be loaded
+                and played in the correct sequence.
+                
+Issue #710:     Movies files will no longer be auto joined to the incorrect movie.
+
+Issue #692:     The preprocessing NFO Scanner will no longer fail when an filename
+                resembles a part of a two part movie.
+
+Issue #575:     Custom intro playback will no longer fail when the filename is padded
+                with blank space.
+                
+Issue #717:     Minimizing a playing movie while browsing the MediaPortal interface 
+                will no longer cause the incorrect movie to be listed in the rating 
+                dialog.
+
+Issue #709:     When a movie has been marked as watched and removed from the movie 
+                list, the movie details will no longer persist on the screen after
+                the movie has been deselected.
+
+Issue #632:     A new skin property has been added to list the number of movies in the
+                current list while taking into the plurality. For example "1 Movie" or
+                "13 Movies".  New property is called: #MovingPictures.general.itemcount
+                
+Issue #694:     Fixed minor layout issues with Blue3 and Blue3Wide skins.
+
+Issue #724:     Made minor adjustments to the scrolling delay in Blue3 and Blue3Wide 
+                skins.
+
+Issue #720:     The scrapper engine Retrieve node will now honor the specified encoding
+                when reading from a local file.
+                
+Issue #611:     The categories menu is no longer updated on launch when categories are
+                disabled.
+
+
+--------------------------------------------------------------------------------
+Translation and Scraper Script Changes
+--------------------------------------------------------------------------------                
+Issue #730:     Updated IMDb Scraper.
+Issue #698:     Updated Kinoposk.RU Scraper.
+Issue #711:     Updated MyMovies XML Scraper.
+Issue #738:     Updated Scope Scraper.
+Issue #704:     Updated Filmtipset.se Scraper.
+Issue #740:     Updated mymovies.it Scraper.
+Issue #753:     Updated CSFD.cz Scraper.
+                
+Issue #736:     Updated German Language File.
+Issue #743:     Added Slovenian language file
+Issue #721:     Added Brazilian Portuguese language file.
+Issue #729:     Updated Czech language file.
+Issue #725:     Updated Dutch language file.
+
 ================================================================================
 1.0.1
 --------------------------------------------------------------------------------
@@ -335,14 +413,14 @@ Issue #377:     Updated OFDb scrapper with changes to now pull certification and
 --------------------------------------------------------------------------------
 Enhancements
 --------------------------------------------------------------------------------
-Issue #333:    	Sorting by date in the GUI will now sort by the date a movie was added
+Issue #333:     Sorting by date in the GUI will now sort by the date a movie was added
                 to your system (file creation date) rather than the date it was added
                 to Moving Pictures.
 
-Issue #327:    	The user can now optionally configure an external player for Bluray
+Issue #327:     The user can now optionally configure an external player for Bluray
                 and HD-DVD content.
                 
-Issue #340:    	Harley's Blue3wide skin is now distributed with Moving Pictures.
+Issue #340:     Harley's Blue3wide skin is now distributed with Moving Pictures.
 
 Issue #263:     Spanish and Russian scrapers have been added to Moving Pictures. Please
                 be aware these are still works in progress. See the forums for support.
@@ -350,43 +428,43 @@ Issue #263:     Spanish and Russian scrapers have been added to Moving Pictures.
 
 Importer / Configuration Screen Bug Fixes
 --------------------------------------------------------------------------------
-Issue #331:    	Movies on network drives will no longer (in rare cases) be 
+Issue #331:     Movies on network drives will no longer (in rare cases) be 
                 readded to the database creating duplicate entries.
 
-Issue #342:    	File/path names that are longer than the windows maximum path length
+Issue #342:     File/path names that are longer than the windows maximum path length
                 will no longer cause the entire import path to fail to import. An 
                 appropriate error message is now also logged to the log file.
                 
-Issue #347:    	The removable import path logic will now work correctly for external
+Issue #347:     The removable import path logic will now work correctly for external
                 drives mounted to a folder on a fixed drive.
 
-Issue #344:    	New data sources will now automatically be correctly loaded on upgrade.
+Issue #344:     New data sources will now automatically be correctly loaded on upgrade.
                 This includes the themoviedb.org data source which provides backdrops.
                 
-Issue #325:    	allocine.fr and moviemeter.nl scripts have been updated to return 
+Issue #325:     allocine.fr and moviemeter.nl scripts have been updated to return 
                 correct results after website changes.
 
-Issue #328:    	The Moving Pictures configuration screen will no longer cause a
+Issue #328:     The Moving Pictures configuration screen will no longer cause a
                 crash when quickly exiting and reentering the config.
 
 --------------------------------------------------------------------------------
 MediaPortal GUI Bug Fixes
 --------------------------------------------------------------------------------
-Issue #330:    	Moving Pictures is now more tolerant of skins that do not implement
+Issue #330:     Moving Pictures is now more tolerant of skins that do not implement
                 all "dummy" labels.
 
-Issue #326:    	Bluray and HD-DVD media will now correctly play using the currently 
+Issue #326:     Bluray and HD-DVD media will now correctly play using the currently 
                 selected player (although the menu will not be displayed).
                 
-Issue #257:    	Multi-part movies will now always be played in the correct order.
+Issue #257:     Multi-part movies will now always be played in the correct order.
 
-Issue #336:    	Moving Pictures will no longer crash because of bad artwork (such 
+Issue #336:     Moving Pictures will no longer crash because of bad artwork (such 
                 as the old Hancock backdrop).
 
-Issue #334:    	Moving Pictures will no longer cause "double playback" problems in
+Issue #334:     Moving Pictures will no longer cause "double playback" problems in
                 other plug-ins such as MPTV-Series.
 
-Issue #332:    	The "Change View" button will now correctly invoke the "Change View" 
+Issue #332:     The "Change View" button will now correctly invoke the "Change View" 
                 context menu.
 
 ================================================================================
@@ -650,10 +728,10 @@ http://code.google.com/p/moving-pictures/issues/list?can=1&q=milestone:0.6.0
 Enhancements
 ------------
 
-Watched Flags:              Moving Pictures will now track which movies you have watched 
+Watched Flags:           Moving Pictures will now track which movies you have watched 
                             and allow you to filter by unwatched movies.
 
-Resume Playback:            If a movie is stopped before completion, when you start playback 
+Resume Playback:         If a movie is stopped before completion, when you start playback 
                             again you have to resume playback where you left off.
 
 Additional Data Sources &   The plug-in will now optionally pull data from OFDb (German), 
@@ -673,7 +751,7 @@ Remote Control Filtering:   You can now type out a partial name of a movie on th
 Manual Movie Inserting:     If a match is not coming up for a file you can now manually add the 
                             file to the database and edit the movie details in the Movie Manager.
                             
-Unignore Files:             You can now unignore files that had been previously "permanently 
+Unignore Files:          You can now unignore files that had been previously "permanently 
                             ignored". This is currently a bulk feature. Additional granularity 
                             will be added in a future version.
 

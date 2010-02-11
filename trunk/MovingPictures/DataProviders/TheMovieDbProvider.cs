@@ -8,6 +8,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
@@ -87,7 +88,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 if (currNode.Attributes["size"].Value == "original") {
                     backdropURL = currNode.Attributes["url"].Value;
                     if (backdropURL.Trim().Length > 0) {
-                        if (movie.AddBackdropFromURL(backdropURL) == ArtworkLoadStatus.SUCCESS) {
+                        if (movie.AddBackdropFromURL(backdropURL) == ImageLoadResults.SUCCESS) {
                             movie.GetSourceMovieInfo(SourceInfo).Identifier = tmdbID;
                             return true;
                         }
@@ -309,7 +310,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     // get url for cover and load it via the movie object
                     string coverPath = posterNode.Attributes["url"].Value;
                     if (coverPath.Trim() != string.Empty)
-                        if (movie.AddCoverFromURL(coverPath) == ArtworkLoadStatus.SUCCESS)
+                        if (movie.AddCoverFromURL(coverPath) == ImageLoadResults.SUCCESS)
                             coversAdded++;
 
                     count++;
