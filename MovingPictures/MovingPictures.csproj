@@ -643,6 +643,7 @@
     <Content Include="Resources\language\cs.xml" />
     <Content Include="Resources\language\da.xml" />
     <Content Include="Resources\language\de.xml" />
+    <Content Include="Resources\language\el.xml" />
     <Content Include="Resources\language\en-US.xml" />
     <Content Include="Resources\language\es.xml" />
     <Content Include="Resources\language\fr.xml" />
@@ -650,6 +651,7 @@
     <Content Include="Resources\language\it.xml" />
     <Content Include="Resources\language\nl.xml" />
     <Content Include="Resources\language\ru.xml" />
+    <Content Include="Resources\language\sl.xml" />
     <Content Include="Resources\language\sv.xml" />
     <Content Include="Resources\Images\page_gear.png" />
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
