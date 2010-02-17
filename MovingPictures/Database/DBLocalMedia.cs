@@ -116,10 +116,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (fileInfo != null) {
                     bool available = DeviceManager.IsAvailable(fileInfo, volume_serial);
 
-                    // If this media is a DVD/Bluray in an optical drive
+                    // If this media is a DVD in an optical drive
                     // double check the DiscID to make sure we are looking
                     // at the same disc. 
-                    if (available && ( IsDVD || IsBluray ) && (ImportPath.GetDriveType() == DriveType.CDRom)) {
+                    // todo: add bluray check in the future
+                    if (available && ( IsDVD ) && (ImportPath.GetDriveType() == DriveType.CDRom)) {
                         // Grab the current DiscID and compare it to the stored DiscID
                         string currentDiscID = this.VideoFormat.GetIdentifier(FullPath);
                         // If the id's don't match the media is not available
