@@ -1,4 +1,4 @@
-Moving Pictures 1.0.2
+Moving Pictures 1.0.3
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -12,6 +12,26 @@ Moving Pictures Wiki:        http://moving-pictures.tv
 Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 Change Log
+================================================================================
+1.0.3
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #699:     Playback of certain Bluray disks will no longer result in a 
+                "Media Not Available" message, even though the disk is actually
+				available.
+				
+Issue #735:     Scraper script configuration will now default to an English setup
+                with new installs if the user chooses manual data source management.
+				
+Issue #758:     Fixed minor layout issues in small thumbnail view for Blue3 skin.
+
+Issue #760:     Updated Filmtipset.se scraper script.
+
+Issue #755:     Updated OFDB script to take advantage of new server mirroring.
+
+Issue #757:     Added Greek language file.
+
 ================================================================================
 1.0.2
 --------------------------------------------------------------------------------

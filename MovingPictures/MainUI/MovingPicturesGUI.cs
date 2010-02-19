@@ -1090,7 +1090,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currID++;
             }
 
-            rateItem = new GUIListItem(Translation.Rate);
+            rateItem = new GUIListItem(Translation.RateHeading);
             rateItem.ItemId = currID;
             dialog.Add(rateItem);
             currID++;
