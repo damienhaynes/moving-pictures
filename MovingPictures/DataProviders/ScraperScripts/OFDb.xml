@@ -5,7 +5,7 @@
     <name>ofdb.de</name>
     <author>Armand Pondman (armandp) and Schenk2302</author>
     <description>
-      This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)
+      This script pulls data from the OFDb XML gateway at  http://ofdbgw.org. (ofdb.de)
       Missing information is pulled from imdb.com
     </description>
 
@@ -18,8 +18,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="2" minor="3" point="0"/>
-    <published month="4" day="24" year="2009"/>
+    <version major="2" minor="3" point="1"/>
+    <published month="2" day="19" year="2010"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -35,7 +35,7 @@
   <action name="search">
 
     <!-- Variables -->
-    <set name="site" value="http://xml.n4rf.net/ofdbgw/" />
+    <set name="site" value=" http://ofdbgw.org/" />
 
     <!-- Regular Expressions -->
     <set name="rx_title_clean" value="\[(TV-Mini-Serie|Kurzfilm)\]" />
@@ -103,8 +103,8 @@
   <!-- Details -->
   <action name="get_details">
 
-    <set name="site" value="http://xml.n4rf.net/ofdbgw/movie/" />
-    <set name="imdb2ofdb" value="http://xml.n4rf.net/ofdbgw/imdb2ofdb/" />
+    <set name="site" value=" http://ofdbgw.org/movie/" />
+    <set name="imdb2ofdb" value=" http://ofdbgw.org/imdb2ofdb/" />
 
     <!-- If OFDB id is missing -->
     <if test="${movie.site_id}=">
@@ -211,7 +211,7 @@
   <!-- Covert Art Scraper Only Works with IMDB or OFDB id -->
   <action name="get_cover_art">
 
-    <set name="imdb2ofdb" value="http://xml.n4rf.net/ofdbgw/imdb2ofdb/" />
+    <set name="imdb2ofdb" value=" http://ofdbgw.org/imdb2ofdb/" />
 
     <if test="${movie.site_id}=">
       <!-- If OFDB id is missing -->
