@@ -24,6 +24,9 @@ Issue #699:     Playback of certain Bluray disks will no longer result in a
 Issue #735:     Scraper script configuration will now default to an English setup
                 with new installs if the user chooses manual data source management.
 				
+Issue #773:     Dolby TrueHD and DTS-HD Logos codecs will now be properly detected
+                by mediainfo.				
+				
 Issue #758:     Fixed minor layout issues in small thumbnail view for Blue3 skin.
 
 Issue #760:     Updated Filmtipset.se scraper script.
