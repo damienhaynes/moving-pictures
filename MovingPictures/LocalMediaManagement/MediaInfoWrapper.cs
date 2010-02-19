@@ -184,7 +184,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
         _isWMA = (_audioCodec.IndexOf("wma") > -1); // e.g. wma3
         _isPCM = (_audioCodec.IndexOf("pcm") > -1);
         _isTrueHD = (_audioCodec.Contains("truehd") || _audioFormatProfile.Contains("truehd"));
-        _isDTSHD = (_audioCodec.Contains("dts") && (_audioFormatProfile.Contains("hra") || _audioFormatProfile.Contains("MA")));
+        _isDTSHD = (_audioCodec.Contains("dts") && (_audioFormatProfile.Contains("hra") || _audioFormatProfile.Contains("ma")));
 
         if (checkHasExternalSubtitles(strFile))
         {
