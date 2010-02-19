@@ -464,6 +464,7 @@
     <Content Include="DataProviders\ScraperScripts\Sratim.xml" />
     <Content Include="DataProviders\ScraperScripts\xbmc.xml" />
     <Content Include="MainUI\Blue3wide\dialogGeneralRating.xml" />
+    <Content Include="MainUI\Blue3wide\Media\Backgroundtop2.png" />
     <Content Include="MainUI\Blue3wide\Media\Background_moving.png" />
     <Content Include="MainUI\Blue3wide\Media\blue.png" />
     <Content Include="MainUI\Blue3wide\Media\Categories\Movies.png" />
@@ -476,8 +477,13 @@
     <Content Include="MainUI\Blue3wide\Media\glasstitlebar.png" />
     <Content Include="MainUI\Blue3wide\Media\hover_moving pictures.png" />
     <Content Include="MainUI\Blue3wide\Media\Lock.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\BLURAY.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\DVD.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\fullscreen.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\hd.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\HDDVD.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\SVCD.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\TrueHD.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\vc-1.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\widescreen.png" />
     <Content Include="MainUI\Blue3wide\Media\mainoverlay.png" />
@@ -517,8 +523,13 @@
     <Content Include="MainUI\Blue3\Media\glassoverlay2.png" />
     <Content Include="MainUI\Blue3\Media\hover_moving pictures.png" />
     <Content Include="MainUI\Blue3\Media\Lock.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\BLURAY.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\DVD.png" />
     <Content Include="MainUI\Blue3\Media\Logos\fullscreen.png" />
     <Content Include="MainUI\Blue3\Media\Logos\hd.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\HDDVD.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\SVCD.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\TrueHD.png" />
     <Content Include="MainUI\Blue3\Media\Logos\vc-1.png" />
     <Content Include="MainUI\Blue3\Media\Logos\widescreen.png" />
     <Content Include="MainUI\Blue3\Media\movingpictures_detailsoverlay.png" />
