@@ -393,6 +393,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             if (browser == null) {
                 browser = new MovieBrowser(skinSettings);
+                MovingPicturesCore.Browser = browser;
 
                 // add available filters to browser
                 remoteFilter = new RemoteNumpadFilter();

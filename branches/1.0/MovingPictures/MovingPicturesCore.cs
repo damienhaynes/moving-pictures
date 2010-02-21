@@ -19,6 +19,7 @@ using Cornerstone.GUI.Dialogs;
 using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 using System.Threading;
+using MediaPortal.Plugins.MovingPictures.MainUI;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesCore {
@@ -93,6 +94,16 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
             }
         } private static BackgroundProcessManager _processManager = null;
+
+        public static MovieBrowser Browser {
+            get {
+                return _browser;
+            }
+
+            internal set {
+                _browser = value;
+            }
+        } private static MovieBrowser _browser = null;
 
         // Settings from Media Portal
         // Instead of calling this line whenever we need some MP setting we only define it once
