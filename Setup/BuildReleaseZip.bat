@@ -9,6 +9,8 @@ xcopy ..\MovingPictures\MainUI\Blue3wide tmp\Blue3wide\ /E
 xcopy ..\MovingPictures\MainUI\Blue3 tmp\Blue3\ /E
 copy ..\MovingPictures\Resources\moving-pictures-release-notes.txt tmp
 copy ..\MovingPictures\bin\Release\movingpictures.dll tmp
+copy ..\MovingPictures\bin\Release\Cornerstone.dll tmp
+copy ..\MovingPictures\bin\Release\Cornerstone.MP.dll tmp
 xcopy ..\MovingPictures\Resources\language tmp\language\MovingPictures\ /E
 
 :: xcopy "..\MovingPictures\MainUI\Generic Skin" "tmp\Generic Skin\" /E
