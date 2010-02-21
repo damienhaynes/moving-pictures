@@ -11,6 +11,7 @@ copy ..\MovingPictures\Resources\moving-pictures-release-notes.txt tmp
 copy ..\MovingPictures\bin\Release\movingpictures.dll tmp
 copy ..\MovingPictures\bin\Release\Cornerstone.dll tmp
 copy ..\MovingPictures\bin\Release\Cornerstone.MP.dll tmp
+copy ..\MovingPictures\bin\Release\NLog.dll tmp
 xcopy ..\MovingPictures\Resources\language tmp\language\MovingPictures\ /E
 
 :: xcopy "..\MovingPictures\MainUI\Generic Skin" "tmp\Generic Skin\" /E
