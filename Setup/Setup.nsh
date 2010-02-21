@@ -94,6 +94,7 @@ Section "Moving Pictures Plugin" SEC0000
         File ..\MovingPictures\bin\Release\MovingPictures.dll
 		File ..\MovingPictures\bin\Release\Cornerstone.dll
 		File ..\MovingPictures\bin\Release\Cornerstone.MP.dll
+		File ..\MovingPictures\bin\Release\NLog.dll
  		
         # if the files failed to copy, MediaPortal is probably running
         # prompt to close MediaPortal and retry.
