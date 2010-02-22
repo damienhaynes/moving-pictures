@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Cornerstone.Extensions.IO;
+using Cornerstone.Tools;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Database;
@@ -10,7 +12,7 @@ using NLog;
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     
     /// <summary>
-    /// Device Manager - needs proper description
+    /// Device Manager monitors drive states
     /// </summary>
     public class DeviceManager {
 
@@ -19,7 +21,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Log object
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private static readonly object syncRoot = new object();
-        private static Dictionary<string, DriveInfo> driveInfoPool;
 
         #endregion
 
@@ -54,12 +55,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         private DeviceManager() {
 
-        }
-
-        static DeviceManager() {
-            lock (syncRoot) {
-                driveInfoPool = new Dictionary<string, DriveInfo>();
-            }
         }
 
         ~DeviceManager() {
@@ -102,12 +97,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         public static void AddWatchDrive(string path) {
             try {
-                // if the path does not point to logical volume do not add it to the drive watcher
-                if (PathIsUnc(path))
-                    return;
-
                 // get the driveletter
-                string driveLetter = GetDriveLetter(path);
+                string driveLetter = path.PathToDriveletter();
                 if (driveLetter == null)
                     return;
 
@@ -132,7 +123,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         public static void RemoveWatchDrive(string path) {
-            string driveLetter = GetDriveLetter(path);
+            string driveLetter = path.PathToDriveletter();
             if (driveLetter == null)
                 return;
 
@@ -189,7 +180,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         try {
                             // check if the drive is available
                             bool isAvailable;
-                            DriveInfo driveInfo = GetDriveInfo(currDrive);
+                            DriveInfo driveInfo = DriveInfoHelper.GetDriveInfo(currDrive);
                             if (driveInfo == null) isAvailable = false;
                             else isAvailable = driveInfo.IsReady;
 
@@ -248,209 +239,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // Add the new import path to the watched drives
             AddWatchDrive(((DBImportPath)obj).FullPath);
-        }
-
-        #endregion
-
-        #region Public Static Methods
-
-        // Grab the drive letter from a FileSystemInfo object.
-        public static string GetDriveLetter(FileSystemInfo fsInfo) {
-            if (fsInfo != null)
-                return GetDriveLetter(fsInfo.FullName);
-            else
-                return null;
-        }
-
-        // Grab drive letter from string
-        public static string GetDriveLetter(string path) {
-            // if the path is UNC return null
-            if (path != null && PathIsUnc(path))
-                return null;
-
-            // return the first 2 characters
-            if (path.Length > 1)
-                return path.Substring(0, 2).ToUpper();
-            else // or if only a letter was given add colon
-                return path.ToUpper() + ":";
-        }
-        
-        /// <summary>
-        /// Gets a value indicating wether the path is in UNC format.
-        /// </summary>
-        /// <param name="path">path to check</param>
-        /// <returns>True, if it's a UNC path</returns>
-        public static bool PathIsUnc(string path) {
-            return (path != null && path.StartsWith(@"\\"));
-   
-        }
-
-        /// <summary>
-        /// Get the VolumeInfo object where this FileSystemInfo object is located.
-        /// </summary>
-        /// <param name="fsInfo"></param>
-        /// <returns></returns>
-        public static DriveInfo GetDriveInfo(FileSystemInfo fsInfo) {
-            return GetDriveInfo(fsInfo.FullName);
-        }
-
-        /// <summary>
-        /// Gets the DriveInfo object for the given path 
-        /// When the object was created before it will be returned from cache.
-        /// </summary>
-        /// <param name="driveletter">ex. E:\ </param>
-        /// <returns></returns>
-        public static DriveInfo GetDriveInfo(string path) {
-            if (!PathIsUnc(path)) {
-                string driveletter = GetDriveLetter(path);
-                if (!driveInfoPool.ContainsKey(driveletter)) {
-                    lock (syncRoot) {
-                        if (!driveInfoPool.ContainsKey(driveletter)) {
-                            try {
-                                driveInfoPool.Add(driveletter, new DriveInfo(driveletter));
-                            }
-                            catch (Exception e) {
-                                logger.Error("Error adding drive object for '{0}' to cache. {1}", driveletter, e.Message);
-                                return null;
-                            }
-                        }
-                    }
-                }
-                return driveInfoPool[driveletter];
-            }
-            else {
-                // not a logical volume (no driveinfo)
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating if the FileSystemInfo object is currently available
-        /// </summary>
-        /// <param name="fsInfo"></param>
-        /// <returns></returns>
-        public static bool IsAvailable(FileSystemInfo fsInfo) {
-            return IsAvailable(fsInfo, null);
-        }
-
-        /// <summary>
-        /// Gets a value indicating if the FileSystemInfo object is currently available
-        /// </summary>
-        /// <param name="fsInfo"></param>
-        /// <param name="serial">if a serial is specified the return value is more reliable.</param>
-        /// <returns></returns>
-        public static bool IsAvailable(FileSystemInfo fsInfo, string recordedSerial) {
-            // Get Drive Information
-            DriveInfo driveInfo = GetDriveInfo(fsInfo);
-            
-            // Refresh the object information (important)
-            fsInfo.Refresh();
-
-            // Check if the file exists
-            bool fileExists = fsInfo.Exists;
-
-            // Do we have a logical volume?
-            if (driveInfo != null && fileExists) {
-                string currentSerial = driveInfo.GetVolumeSerial();
-                // if we have both the recorded and the current serial we can do this very exact
-                // by checking if the serials match
-                if (!String.IsNullOrEmpty(recordedSerial) && !String.IsNullOrEmpty(currentSerial))
-                    // return the exact check result
-                    return (currentSerial == recordedSerial);
-            }
-            
-           // return the simple check result
-           return fileExists;   
-        }
-
-        /// <summary>
-        /// Gets a value indicating wether this FileSystemInfo object is located on a removable drive type.
-        /// </summary>
-        /// <param name="fsInfo"></param>
-        /// <returns></returns>
-        public static bool IsRemovable(FileSystemInfo fsInfo) {
-            // UNC is always removable
-            if (PathIsUnc(fsInfo.FullName))
-                return true;
-
-            if (fsInfo.Exists) {
-                try {
-                    if ((fsInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
-                        return true;
-                }
-                catch (Exception) {
-                    logger.Warn("Failed check if " + fsInfo.FullName + " is a reparse point");
-                }
-            }
-
-            return IsRemovable(fsInfo.FullName);
-        }
-
-        /// <summary>
-        /// Gets a value indicating wether this path is located on a removable drive type.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static bool IsRemovable(string path) {
-            
-            // UNC is always removable
-            if (PathIsUnc(path))
-                return true;
-
-            DriveInfo driveInfo = GetDriveInfo(path);
-            if (driveInfo != null)
-                return driveInfo.IsRemovable();
-            else
-                return true;
-        }
-
-        public static bool IsOpticalDrive(string path) {
-            DriveInfo driveInfo = DeviceManager.GetDriveInfo(path);
-            return (driveInfo != null && driveInfo.IsOptical());
-        }
-
-        /// <summary>
-        /// Gets the disk serial of the drive were the given FileSystemInfo object is located.
-        /// </summary>
-        /// <param name="fsInfo"></param>
-        /// <returns></returns>
-        public static string GetVolumeSerial(FileSystemInfo fsInfo) {
-            return GetVolumeSerial(fsInfo.FullName);   
-        }
-
-        /// <summary>
-        /// Gets the disk serial of the drive were the path is located.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string GetVolumeSerial(string path) {
-            DriveInfo driveInfo = GetDriveInfo(path);
-            if (driveInfo != null && driveInfo.IsReady)
-                return driveInfo.GetVolumeSerial();
-            else
-                return string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the volume label of the drive were the given FileSystemInfo object is located.
-        /// </summary>
-        /// <param name="fsInfo"></param>
-        /// <returns></returns>
-        public static string GetVolumeLabel(FileSystemInfo fsInfo) {
-            return GetVolumeLabel(fsInfo.FullName);
-        }
-
-        /// <summary>
-        /// Gets the volume label of the drive were the path is located.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string GetVolumeLabel(string path) {
-            DriveInfo driveInfo = GetDriveInfo(path);
-            if (driveInfo != null && driveInfo.IsReady)
-                return driveInfo.VolumeLabel;
-            else
-                return string.Empty;
         }
 
         #endregion

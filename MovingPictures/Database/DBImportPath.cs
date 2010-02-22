@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Cornerstone.Extensions;
+using Cornerstone.Extensions.IO;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
@@ -21,52 +23,29 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public bool IsUnc {
-            get { 
-                if (dirInfo == null) 
-                    return true;
-
-                return DeviceManager.PathIsUnc(dirInfo.FullName);
-                }
+            get {
+                if (dirInfo == null)
+                    return false;
+                
+                return dirInfo.IsUncPath();
+            }
         }
 
         public bool IsAvailable {
             get {
-                if (dirInfo == null) 
+                if (dirInfo == null)
                     return false;
 
-                // basic check to see if the path is online
-                if (!DeviceManager.IsAvailable(dirInfo))
-                    return false;
-
-                // the path is available and if it's UNC then we can skip the reparse check
-                if (this.IsUnc)
-                    return true;
-
-                // we can get to the root folder, if this is a reparse point make sure the 
-                // contents are currently accessible 
-                try {
-                    if ((dirInfo.Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint)
-                        dirInfo.GetDirectories();
-
-                    // directory access successful, disk is online
-                    return true;
-                }
-                catch (Exception e) {
-                    if (e is ThreadAbortException)
-                        throw e;
-
-                    // failed to look in the director, so it's not available
-                    return false;
-                }
+                return dirInfo.IsAccessible();
             }
         }
 
         public bool IsRemovable {
             get {
-                if (dirInfo != null)
-                    return DeviceManager.IsRemovable(dirInfo);
-                else
+                if (dirInfo == null)
                     return false;
+                
+                return dirInfo.IsRemovablePath();
             }
         }
 
@@ -75,8 +54,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         /// </summary>
         public bool IsOpticalDrive {
             get {
-                if (_isOpticalDrive == null)
-                    _isOpticalDrive = DeviceManager.IsOpticalDrive(this.FullPath);
+                if (_isOpticalDrive == null && dirInfo != null)
+                    _isOpticalDrive = dirInfo.IsOpticalPath();
 
                 return (bool) _isOpticalDrive;
             }
@@ -161,7 +140,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     while (serial == string.Empty) {
                         
                         // Grab information for this logical volume
-                        DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
+                        DriveInfo driveInfo = Directory.GetDriveInfo();
                         if (driveInfo != null && driveInfo.IsReady) {
                             // get the volume properties
                             volume = driveInfo.GetDriveLetter();
@@ -309,10 +288,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public DriveType GetDriveType() {
             // this property won't be stored as it can differ in time
             if (Directory != null) {
-                if (DeviceManager.PathIsUnc(Directory.FullName))
+                if (Directory.IsUncPath())
                     return DriveType.Network;
                 else {
-                    DriveInfo driveInfo = DeviceManager.GetDriveInfo(Directory);
+                    DriveInfo driveInfo = Directory.GetDriveInfo();
                     if (driveInfo != null)
                         return driveInfo.DriveType;
                 }
@@ -322,8 +301,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public string GetVolumeLabel() {
             // this property won't be stored as it can differ in time
-            if (Directory != null)
-                return DeviceManager.GetVolumeLabel(Directory);
+            if (Directory != null && Directory.GetDriveInfo() != null)
+                return Directory.GetDriveInfo().VolumeLabel;
             else
                 return string.Empty;
         }
@@ -331,7 +310,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public string GetVolumeSerial() {
             // this property won't be stored as it can differ in time
             if (Directory != null)
-                return DeviceManager.GetVolumeSerial(Directory);
+                return Directory.GetDriveVolumeSerial();
             else
                 return string.Empty;
         }

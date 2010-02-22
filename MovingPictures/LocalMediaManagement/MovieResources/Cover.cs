@@ -6,6 +6,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using System.IO;
 using System.Threading;
 using System.Drawing;
+using Cornerstone.Extensions;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources {
     public class Cover: ImageResource {
@@ -24,7 +25,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
         // genrate a filename for a cover. should be unique based on the source hash
         private static string GenerateFilename(DBMovieInfo movie, string source) {
             string artFolder = MovingPicturesCore.Settings.CoverArtFolder;
-            string safeName = Utility.CreateFilename(movie.Title.Replace(' ', '.'));
+            string safeName = movie.Title.Replace(' ', '.').ToValidFilename();
             return artFolder + "\\{" + safeName + "} [" + source.GetHashCode() + "].jpg";
         }
 

@@ -2,6 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Cornerstone.Extensions;
+using MediaPortal.Plugins.MovingPictures.Extensions;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Cornerstone.Extensions;
+using Cornerstone.Extensions.IO;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
@@ -114,7 +116,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool IsAvailable {
             get {
                 if (fileInfo != null) {
-                    bool available = DeviceManager.IsAvailable(fileInfo, volume_serial);
+                    bool available = fileInfo.Exists(volume_serial);
 
                     // If this media is a DVD in an optical drive
                     // double check the DiscID to make sure we are looking
@@ -138,7 +140,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public string DriveLetter {
             get {
-                return DeviceManager.GetDriveLetter(fileInfo);
+                if (fileInfo != null)
+                    return fileInfo.GetDriveLetter();
+
+                return null;
             }
         }
 
@@ -162,7 +167,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // if this not an UNC path we should check the volume serial
                 // to check wether this is the correct media
                 if (!importPath.IsUnc && VolumeSerial.Trim().Length > 0) {
-                    correctMedia = (DeviceManager.GetVolumeSerial(fileInfo.DirectoryName) == VolumeSerial);
+                    correctMedia = (fileInfo.GetDriveVolumeSerial() == VolumeSerial);
                 }
 
                 // if the import path is online, we have the right media inserted and the file 

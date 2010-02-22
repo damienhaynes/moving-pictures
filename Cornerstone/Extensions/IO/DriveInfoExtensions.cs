@@ -2,13 +2,22 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using NLog;
+using System.Collections.Generic;
 
-namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
+namespace Cornerstone.Extensions.IO {
 
     /// <summary>
-    /// Extensions to the DriveInfo class
+    /// DriveInfo Manager Class that also provides DriveInfo extensions
     /// </summary>
     public static class DriveInfoExtensions {
+
+        #region Imports
+
+        [DllImport("kernel32.dll")]
+        private static extern long GetVolumeInformation(string PathName, StringBuilder VolumeNameBuffer, UInt32 VolumeNameSize, ref UInt32 VolumeSerialNumber, ref UInt32 MaximumComponentLength, ref UInt32 FileSystemFlags, StringBuilder FileSystemNameBuffer, UInt32 FileSystemNameSize);
+
+        #endregion
 
         /// <summary>
         /// Gets the driveletter in a two character format. 
@@ -20,7 +29,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         /// <summary>
-        /// Gets a value indicating wether this drive is removable
+        /// Gets a value indicating whether this drive is removable
         /// </summary>
         /// <param name="self"></param>
         /// <returns>True if removable</returns>
@@ -30,7 +39,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         /// <summary>
-        /// Gets a value indicating wether this is an optical drive
+        /// Gets a value indicating whether this is an optical drive
         /// </summary>
         /// <returns>True if this is an optical drive</returns>
         public static bool IsOptical(this DriveInfo self) {
@@ -38,7 +47,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         /// <summary>
-        /// Gets a value indicating wether the drive exists
+        /// Gets a value indicating whether the drive exists
         /// </summary>
         /// <param name="self"></param>
         /// <returns></returns>
@@ -62,9 +71,5 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return ( (serNum != 0) ? Convert.ToString(serNum, 16).ToUpper() : string.Empty );
         }
 
-        [DllImport("kernel32.dll")]
-        private static extern long GetVolumeInformation(string PathName, StringBuilder VolumeNameBuffer, UInt32 VolumeNameSize, ref UInt32 VolumeSerialNumber, ref UInt32 MaximumComponentLength, ref UInt32 FileSystemFlags, StringBuilder FileSystemNameBuffer, UInt32 FileSystemNameSize);
-
     }
-
 }

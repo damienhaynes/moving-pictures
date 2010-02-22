@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using NLog;
+using Cornerstone.Extensions.IO;
 using Cornerstone.GUI.Dialogs;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database;
@@ -280,10 +281,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.0.2")) {
                 // grab file list
                 List<FileInfo> files = new List<FileInfo>();
-                files.AddRange(Utility.GetFilesRecursive(new DirectoryInfo(MovingPicturesCore.Settings.BackdropFolder)));
-                files.AddRange(Utility.GetFilesRecursive(new DirectoryInfo(MovingPicturesCore.Settings.BackdropThumbsFolder)));
-                files.AddRange(Utility.GetFilesRecursive(new DirectoryInfo(MovingPicturesCore.Settings.CoverArtFolder)));
-                files.AddRange(Utility.GetFilesRecursive(new DirectoryInfo(MovingPicturesCore.Settings.CoverArtThumbsFolder)));
+                files.AddRange(new DirectoryInfo(MovingPicturesCore.Settings.BackdropFolder).GetFilesRecursive());
+                files.AddRange(new DirectoryInfo(MovingPicturesCore.Settings.BackdropThumbsFolder).GetFilesRecursive());
+                files.AddRange(new DirectoryInfo(MovingPicturesCore.Settings.CoverArtFolder).GetFilesRecursive());
+                files.AddRange(new DirectoryInfo(MovingPicturesCore.Settings.CoverArtThumbsFolder).GetFilesRecursive());
 
                 float count = 0;
                 float total = files.Count;
