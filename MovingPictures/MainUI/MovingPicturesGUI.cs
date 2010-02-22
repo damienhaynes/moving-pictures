@@ -394,6 +394,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             if (browser == null) {
                 browser = new MovieBrowser(skinSettings);
+                MovingPicturesCore.Browser = browser;
 
                 // add available filters to browser
                 remoteFilter = new RemoteNumpadFilter();
@@ -1117,7 +1118,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currID++;
             }
 
-            rateItem = new GUIListItem(Translation.Rate);
+            rateItem = new GUIListItem(Translation.RateHeading);
             rateItem.ItemId = currID;
             dialog.Add(rateItem);
             currID++;

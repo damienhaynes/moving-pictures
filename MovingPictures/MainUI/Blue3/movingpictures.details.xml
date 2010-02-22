@@ -22,13 +22,28 @@ This file should contain the details view
       <type>button</type>
       <id>6</id>
       <label>-</label>
-      <onup>6</onup>
-      <ondown>6</ondown>
-      <onleft>6</onleft>
-      <onright>6</onright>
+      <onup>999</onup>
+      <ondown>999</ondown>
+      <onleft>999</onleft>
+      <onright>999</onright>
       <textureFocus>-</textureFocus>
       <textureNoFocus>-</textureNoFocus>
       <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+    </control>
+	
+	<control>
+	  <description>SubCentral</description>
+	  <id>999</id>
+	  <type>button</type>
+	  <label>Check for Subtitles</label>
+	  <hyperlink>84623</hyperlink>
+	  <visible>plugin.isenabled(SubCentral)+!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+	  <posX>363</posX>
+	  <posY>309</posY>
+	  <onup>6</onup>
+      <ondown>6</ondown>
+      <onleft>6</onleft>
+      <onright>6</onright>
     </control>
 
     <!--            :: MAIN DETAILS ::            -->

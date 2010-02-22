@@ -110,7 +110,7 @@ This file should contain the facade view
 					<textYOff>1500</textYOff>
 					<posX>60</posX>
 					<posY>105</posY>
-					<width>700</width>
+					<width>650</width>
 					<height>480</height>
 					<!-- Small Icons 0.66 aspect ratio -->
 					<itemWidth>100</itemWidth>

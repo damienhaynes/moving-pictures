@@ -92,12 +92,6 @@
     <Compile Include="ConfigScreen\ContributersScrollPanel.Designer.cs">
       <DependentUpon>ContributersScrollPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\DataProviderSetupPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\DataProviderSetupPanel.Designer.cs">
-      <DependentUpon>DataProviderSetupPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="ConfigScreen\DataSourcePane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -141,6 +135,7 @@
       <DependentUpon>MovieNodeSettingsPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\PinCodeTextBox.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="ConfigScreen\Popups\AddImportPathPopup.cs">
       <SubType>Form</SubType>
@@ -340,10 +335,6 @@
       <DependentUpon>AutoDataSourcesPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\DataProviderSetupPanel.resx">
-      <DependentUpon>DataProviderSetupPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\DataSourcePane.resx">
       <DependentUpon>DataSourcePane.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -474,6 +465,7 @@
     <Content Include="DataProviders\ScraperScripts\Sratim.xml" />
     <Content Include="DataProviders\ScraperScripts\xbmc.xml" />
     <Content Include="MainUI\Blue3wide\dialogGeneralRating.xml" />
+    <Content Include="MainUI\Blue3wide\Media\Backgroundtop2.png" />
     <Content Include="MainUI\Blue3wide\Media\Background_moving.png" />
     <Content Include="MainUI\Blue3wide\Media\blue.png" />
     <Content Include="MainUI\Blue3wide\Media\Categories\Movies.png" />
@@ -486,8 +478,13 @@
     <Content Include="MainUI\Blue3wide\Media\glasstitlebar.png" />
     <Content Include="MainUI\Blue3wide\Media\hover_moving pictures.png" />
     <Content Include="MainUI\Blue3wide\Media\Lock.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\BLURAY.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\DVD.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\fullscreen.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\hd.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\HDDVD.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\SVCD.png" />
+    <Content Include="MainUI\Blue3wide\Media\Logos\TrueHD.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\vc-1.png" />
     <Content Include="MainUI\Blue3wide\Media\Logos\widescreen.png" />
     <Content Include="MainUI\Blue3wide\Media\mainoverlay.png" />
@@ -527,8 +524,13 @@
     <Content Include="MainUI\Blue3\Media\glassoverlay2.png" />
     <Content Include="MainUI\Blue3\Media\hover_moving pictures.png" />
     <Content Include="MainUI\Blue3\Media\Lock.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\BLURAY.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\DVD.png" />
     <Content Include="MainUI\Blue3\Media\Logos\fullscreen.png" />
     <Content Include="MainUI\Blue3\Media\Logos\hd.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\HDDVD.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\SVCD.png" />
+    <Content Include="MainUI\Blue3\Media\Logos\TrueHD.png" />
     <Content Include="MainUI\Blue3\Media\Logos\vc-1.png" />
     <Content Include="MainUI\Blue3\Media\Logos\widescreen.png" />
     <Content Include="MainUI\Blue3\Media\movingpictures_detailsoverlay.png" />
@@ -653,6 +655,7 @@
     <Content Include="Resources\language\cs.xml" />
     <Content Include="Resources\language\da.xml" />
     <Content Include="Resources\language\de.xml" />
+    <Content Include="Resources\language\el.xml" />
     <Content Include="Resources\language\en-US.xml" />
     <Content Include="Resources\language\es.xml" />
     <Content Include="Resources\language\fr.xml" />
@@ -660,6 +663,7 @@
     <Content Include="Resources\language\it.xml" />
     <Content Include="Resources\language\nl.xml" />
     <Content Include="Resources\language\ru.xml" />
+    <Content Include="Resources\language\sl.xml" />
     <Content Include="Resources\language\sv.xml" />
     <Content Include="Resources\Images\page_gear.png" />
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
