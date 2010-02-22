@@ -245,9 +245,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     // The file is in the database
                     if (newFile.ID != null) {
 
-                        // for optical paths + DVD/Bluray we have to check the actual DiscId
+                        // for optical paths + DVD we have to check the actual DiscId
+                        // todo: add bluray disc id support
                         if (IsOpticalDrive) {
-                            if ( (newFile.IsDVD || newFile.IsBluray) && !newFile.IsAvailable) {
+                            if ( (newFile.IsDVD) && !newFile.IsAvailable) {
                                 string discId = newFile.VideoFormat.GetIdentifier(newFile.FullPath);
                                 // Create/get a DBLocalMedia object using the the DiscID
                                 newFile = DBLocalMedia.GetDisc(videoFile.FullName, discId);

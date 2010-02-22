@@ -3,7 +3,7 @@
 	<!-- These details are for display purposes only. -->
 	<name>filmtipset.se</name>
 	<author>vuego</author>
-	<description>This script pulls data from filmtipset.se and score + certification + language from imdb.com.</description>
+	<description>This script pulls data from filmtipset.se and score + certification + language + tagline from imdb.com.</description>
 
 	<!-- 
 	These fields uniquely identify the script. The ID should never 
@@ -14,8 +14,8 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="4" point="3"/>
-	<published month="12" day="20" year="2009"/>
+	<version major="1" minor="5" point="0"/>
+	<published month="1" day="28" year="2010"/>
 
 	<!--
 	These fields are used for categorization purposes. Seperate multiple 
@@ -87,15 +87,20 @@
 		</if>
 		<set name="search.title" value="${title[0][1]}${title[0][0]}"/>
 
-		<!-- Perform search using Title -->
-		<retrieve name="search_page" url="http://www.filmtipset.se/search.cgi?search_value=${search.title:safe(ISO-8859-1)}&amp;field=name&amp;field=orgname" />
+		<!-- Perform search using IMDb or Title -->
+		<if test='${search.imdb_id}!='>
+			<retrieve name="search_page" url="http://www.filmtipset.se/imdb/${search.imdb_id}" />
+		</if>
+		<if test='${search.imdb_id}='>
+			<retrieve name="search_page" url="http://www.filmtipset.se/search.cgi?search_value=${search.title:safe(ISO-8859-1)}&amp;field=name&amp;field=orgname" />
+		</if>
 
 		<!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
 		<parse name="details_page_verified" input="${search_page}" regex="${rx_title}"/>
 		<loop name="title" on="details_page_verified">
 			<parse name="year_alt" input="${search_page}" regex="${rx_year_alt}"/>
 			<parse name="site_id" input="${search_page}" regex="${rx_site_id}"/>
-			<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
+			<parse name="imdb" input="${search_page}" regex='${rx_imdb}'/>
 
 			<set name="movie[0].title" value="${title[0]:htmldecode}"/>
 			<if test="${movie[0].title}!=${year_alt[0][0]}">
@@ -144,6 +149,7 @@
 
 	<action name="get_details">
 		<!-- if we have a site id we can continue -->
+		<!-- use IMDbScore value to enable IMDb score instead of filmtipset -->
 			<set name="IMDbScore" value="true" />
 
 			<retrieve name="details_page" url="${movie.details_url}"/>
@@ -203,6 +209,16 @@
 				http://www.imdb.com/title/(tt\d{7})/
 				]]>
 			</set>
+			<set name="rx_tagline">
+				<![CDATA[
+				<h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)
+				]]>
+			</set>
+			<set name="rx_language">
+				<![CDATA[
+				<a\shref=./Sections/Languages/[^/]+/">\s+([^<]+)</a>
+				]]>
+			</set>
 			
 			<!-- Directors -->
 			<parse name="directors_block" input="${details_page}" regex='${rx_directors_block}'/>
@@ -260,12 +276,16 @@
 			<set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
 
 			<!-- Language -->
-			<parse name="language" input="${imdb_page}" regex='&lt;h5&gt;Language:&lt;/h5&gt;\s+&lt;a href="/Sections/Languages/[^/]+/"&gt;\s+([^&lt;]+)&lt;/a&gt;'/>
+			<parse name="language" input="${imdb_page}" regex='${rx_language}'/>
 			<set name='movie.language' value='${language[0][0]:htmldecode}'/>
+
+			<!-- Tagline -->
+			<parse name="tagline" input="${imdb_page}" regex='${rx_tagline}'/>
+			<set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
 
 			<!-- Score IMDb -->
 			<if test="${IMDbScore}=true">
-				<parse name="score" input="${imdb_page}" regex='&lt;div class="meta"&gt;\s+&lt;b&gt;(\d+.\d+)/10&lt;/b&gt; '/>
+				<parse name="score" input="${imdb_page}" regex='&lt;b&gt;(\d+.\d+)/10&lt;/b&gt; '/>
 				<set name='movie.score' value='${score[0][0]:htmldecode}'/>
 			</if>
 

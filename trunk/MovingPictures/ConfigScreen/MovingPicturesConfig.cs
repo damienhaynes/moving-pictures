@@ -44,6 +44,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void MovingPicturesConfig_Shown(object sender, EventArgs e) {
             if (MovingPicturesCore.Settings.DataProviderManagementMethod == "undefined") {
+                MovingPicturesCore.DataProviderManager.ArrangeDataProviders("en");
                 DataProviderSetupPopup popup = new DataProviderSetupPopup();
                 popup.Owner = this;
                 popup.ShowDialog();
