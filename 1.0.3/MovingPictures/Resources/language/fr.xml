@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- French (FR) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<!-- Contributed by hcheuton in Issue#20 -->
+
+<strings>
+  <!-- A -->
+  <string Field="Actor">Acteur</string>
+  <string Field="Actors">Acteurs</string>
+  <string Field="AllMovies">Tous les films</string>
+  <!-- C -->
+  <string Field="Cancel">Annuler</string>
+  <string Field="CannotDeleteOffline">Impossible de supprimer {0}\n parce que le fichier est hors ligne</string>
+  <string Field="CannotDeleteReadOnly">Impossible de supprimer un film en lecture seule.\n Voulez vous que Moving Pictures ignore ce film ?</string>
+  <string Field="CategoryEmptyDescription">Il n'y a actuellement aucun film\n dans cette catégorie.</string>
+  <string Field="CategoryEmptyHeader">Catégorie vide</string>
+  <string Field="Certification">Certification</string>
+  <string Field="ChangeView">Changer la vue</string>
+  <string Field="CheckForMissingArtwork">Vérifier les artwork manquants en ligne</string>
+  <string Field="ContinueToNextPartBody">Voulez vous continuer avec la partie {0} ?</string>
+  <string Field="ContinueToNextPartHeader">Continuer à la partie suivante ?</string>
+  <string Field="CycleCoverArt">Changer de Cover-Art</string>
+  <string Field="CycleView">Changer de vue</string>
+  <!-- D -->
+  <string Field="DateAdded">Ajouté le</string>
+  <string Field="DateDay">jour</string>
+  <string Field="DateDays">jours</string>
+  <string Field="DateMonth">mois</string>
+  <string Field="DateMonths">mois</string>
+  <string Field="DatePartAgo">Il y a {0} {1}</string>
+  <string Field="DatePartWithinDays">{0} derniers jours</string>
+  <string Field="DatePartWithinMonths">{0} derniers mois</string>
+  <string Field="DatePartWithinWeeks">{0} dernières semaines</string>
+  <string Field="DatePartWithinYears">{0} dernières années</string>
+  <string Field="DateWeek">semaine</string>
+  <string Field="DateWeeks">semaines</string>
+  <string Field="DateYear">année</string>
+  <string Field="DateYears">années</string>
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="DeleteFailed">La suppression a échouée</string>
+  <string Field="DeleteMovie">Supprimer le film</string>
+  <string Field="Director">Réalisateur</string>
+  <string Field="Directors">Réalisateurs</string>
+  <string Field="DownAbbreviation">(bs)</string>
+  <string Field="DoYouWantToDelete">Voulez vous supprimer \n{0}\nde votre disque dur ?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Plus tôt cette année</string>
+  <string Field="Error">Erreur</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">Désolé, impossible de monter l'image du DVD</string>
+  <string Field="FilePath">Chemin du fichier</string>
+  <string Field="FilmstripView">Pellicule</string>
+  <string Field="FilterBy">Filtrer par</string>
+  <string Field="Friday">Vendredi</string>
+  <string Field="Future">Future</string>
+  <!-- G -->
+  <string Field="Genre">Genre</string>
+  <string Field="Genres">Genres</string>
+  <!-- I -->
+  <string Field="InvalidPin">Mot de passe invalide !</string>
+  <string Field="InvalidVideoDiscFormat">Soit le fichier image ne contient\npas un format de disque vidéo valide, soit votre configuration\nde Daemon Tools dans MediaPortal est incorrecte.</string>
+  <!-- L -->
+  <string Field="Language">Langue</string>
+  <string Field="LargeThumbnailView">Miniature large</string>
+  <string Field="LastMonth">Le mois dernier</string>
+  <string Field="LastWeek">La semaine dernière</string>
+  <string Field="LastYear">L'année dernière</string>
+  <string Field="ListView">Liste</string>
+  <string Field="LockRestrictedMovies">Vérouiller les films réservés</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Marquer comme non vu</string>
+  <string Field="MarkAsWatched">Marquer comme vu</string>
+  <string Field="MediaIsMissing">Le média pour le film que vous avez sélectionné est introuvable !\nDésolé mais quelque chose a mal tourné...</string>
+  <string Field="MediaNotAvailableBody">Le média pour le film sélectionné n'est pas\nactuellement disponible. Merci d'insérer ou connecter le media\n : {0}</string>
+  <string Field="MediaNotAvailableHeader">Média indisponible</string>
+  <string Field="MissingExternalPlayerExe">L'exécutable du lecteur externe est introuvable.\nMerci de corriger le chemin vers l'exécutable.</string>
+  <string Field="Monday">Lundi</string>
+  <string Field="Movie">Film</string>
+  <string Field="MovieDetails">Détails du film</string>
+  <string Field="MovieOptions">Options du film</string>
+  <string Field="Movies">Films</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">Vous n'avez pas configuré\nde chemins d'import. Vous\ndevez fermer MediaPortal et\nlancer l'écran de configuration\nde MediaPortal pour\nconfigurer Moving Pictures.</string>
+  <string Field="NoImportPathsHeading">Aucun chemin d'import !</string>
+  <!-- O -->
+  <string Field="Older">Ancien</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Le contrôle parental est désactivé.</string>
+  <string Field="PinCodeHeader">Dévérouiller le contenu réservé</string>
+  <string Field="PinCodePrompt">Entrez le mot de passe pour continuer:</string>
+  <string Field="PlaybackFailed">La lecture est impossible parce que l'extension '{0}'\nn'est pas listée dans votre configuration MediaPortal.\nAjoutez cette extension ou exécuter un lecteur externe\net essayez à nouveau.</string>
+  <string Field="PlaybackFailedHeader">Erreur lors de la lecture</string>
+  <string Field="ProblemLoadingSkinFile">Désolé, il y a eu un problème lors du chargement du skin...</string>
+  <!-- R -->
+  <string Field="Rate">Note</string>
+  <string Field="Rated">Noter</string>
+  <string Field="RateFiveStarFive">Parfait</string>
+  <string Field="RateFiveStarFour">Superbe</string>
+  <string Field="RateFiveStarOne">Terrible</string>
+  <string Field="RateFiveStarThree">Bon</string>
+  <string Field="RateFiveStarTwo">Mediocre</string>
+  <string Field="RateHeading">Note du film</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">Reprendre depuis :</string>
+  <string Field="ResumeFromLast">Reprendre le film depuis la dernière lecture ?</string>
+  <string Field="Retry">Réessayer</string>
+  <string Field="Runtime">Durée</string>
+  <string Field="RuntimeHour">{0} heure</string>
+  <string Field="RuntimeHours">{0} heures</string>
+  <string Field="RuntimeLong">{0} et {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} et {2}</string>
+  <string Field="RuntimeMinute">{0} minute</string>
+  <string Field="RuntimeMinutes">{0} minutes</string>
+  <string Field="RuntimeSecond">{0} seconde</string>
+  <string Field="RuntimeSeconds">{0} secondes</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">Samedi</string>
+  <string Field="Score">Score</string>
+  <string Field="SelectYourRating">Sélectionnez votre note pour {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">Afficher seulement les films non vus</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Afficher les films vus et non vus</string>
+  <string Field="SkinDoesNotSupportPinDialog">Ce skin ne prend pas en charge la fenêtre de saisie du mot de passe.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Ce skin ne prend pas en charge la fenêtre de notation.</string>
+  <string Field="SortBy">Trier par</string>
+  <string Field="SortDirection">Sens du tri</string>
+  <string Field="StarRating">Etoile de notation</string>
+  <string Field="Sunday">Dimanche</string>
+  <!-- T -->
+  <string Field="ThisMonth">Ce mois</string>
+  <string Field="ThisWeek">Cette semaine</string>
+  <string Field="ThisYear">Cette année</string>
+  <string Field="ThreeMonthsAgo">Il y a trois mois</string>
+  <string Field="ThreeWeeksAgo">Il y a trois semaine</string>
+  <string Field="ThumbnailView">Miniature</string>
+  <string Field="Thursday">Jeudi</string>
+  <string Field="Title">Titre</string>
+  <string Field="Today">Aujourd'hui</string>
+  <string Field="ToggleParentalLock">Dévérouiller le contrôle parental</string>
+  <string Field="Tuesday">Mardi</string>
+  <string Field="TwoMonthsAgo">Il y a deux mois</string>
+  <string Field="TwoWeeksAgo">Il y a deux semaines</string>
+  <!-- U -->
+  <string Field="Unknown">Inconnu</string>
+  <string Field="UnlockRestrictedMovies">dévérouiller les films réservés</string>
+  <string Field="UpAbbreviation">(ht)</string>
+  <string Field="UpdateDetailsFromOnline">Mettre à jour les détails en ligne</string>
+  <string Field="UpdateMovieDetailsBody">Vous allez mettre à jour toutes les données du film, écrasant\ntoutes les modifications. Voulez vous\ncontinuer ?</string>
+  <string Field="UpdateMovieDetailsHeader">Mettre à jour les détails du film</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Le lecteur virtuel n'est pas prêt</string>
+  <string Field="VirtualDriveMessage">Le lecteur virtuel n'a pas été prêt à temps.\n Merci de réessayer ou d'arrêter la lecture.</string>
+  <!-- W -->
+  <string Field="Wednesday">Mercredi</string>
+  <string Field="Writer">Auteur</string>
+  <string Field="Writers">Auteurs</string>
+  <!-- Y -->
+  <string Field="Year">Année</string>
+  <string Field="Yesterday">Hier</string>
+</strings>
