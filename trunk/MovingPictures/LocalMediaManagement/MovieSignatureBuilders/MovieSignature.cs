@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.Database;
+using MediaPortal.Plugins.MovingPictures.Extensions;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 using System.Collections.ObjectModel;

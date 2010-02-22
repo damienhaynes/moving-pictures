@@ -18,6 +18,7 @@ using System.Text.RegularExpressions;
 using Cornerstone.Tools.Translate;
 using System.Runtime.InteropServices;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
+using Cornerstone.Extensions;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("movie_info")]
@@ -568,7 +569,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // if the file isnt in the cover folder, generate a name and save it there
             if (!alreadyInFolder) {
-                string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
+                string safeName = Title.Replace(' ', '.').ToValidFilename();
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 
                 if (!File.Exists(newFileName) && saveImage(newFileName, newCover)) {
@@ -664,7 +665,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // if the file isnt in the backdrop folder, generate a name and save it there
             if (!alreadyInFolder) {
-                string safeName = Utility.CreateFilename(Title.Replace(' ', '.'));
+                string safeName = Title.Replace(' ', '.').ToValidFilename();
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 
                 // save the backdrop

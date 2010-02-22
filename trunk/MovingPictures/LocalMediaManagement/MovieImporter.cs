@@ -10,6 +10,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using Cornerstone.Tools;
 using Cornerstone.Extensions;
+using Cornerstone.Extensions.IO;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
@@ -720,7 +721,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // Process all files that were created
                 foreach (FileInfo videoFile in filesCreated) {
                     // Check if the file already exists in our system
-                    DBLocalMedia newFile = DBLocalMedia.Get(videoFile.FullName, DeviceManager.GetVolumeSerial(videoFile.FullName));
+                    DBLocalMedia newFile = DBLocalMedia.Get(videoFile.FullName, videoFile.GetDriveVolumeSerial());
                     if (newFile.ID != null) {
                         // if this file is already in the system, ignore and log a message.
                         if (importPath.IsRemovable)
@@ -741,11 +742,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // When a FileSystemWatcher detects a file has been removed, delete it.
         private void OnFileDeleted(Object source, FileSystemEventArgs e) {
             List<DBLocalMedia> localMediaRemoved = new List<DBLocalMedia>();
-
+           
             // we are going to get all localmedia that IS this file or
             // this directory we can do this by adding a % character to the end of 
             // the path as the sqlite query behind it uses LIKE as operator.
-            localMediaRemoved = DBLocalMedia.GetAll(e.FullPath + '%', DeviceManager.GetVolumeSerial(e.FullPath));
+            localMediaRemoved = DBLocalMedia.GetAll(e.FullPath + '%', e.FullPath.PathToFileInfo().GetDriveVolumeSerial());
 
             // Loop through the remove files list and process
             foreach (DBLocalMedia removedFile in localMediaRemoved) {          
@@ -780,7 +781,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (File.Exists(e.OldFullPath))
                     return;
 
-                DBLocalMedia localMedia = DBLocalMedia.Get(e.OldFullPath, DeviceManager.GetVolumeSerial(e.FullPath));
+                DBLocalMedia localMedia = DBLocalMedia.Get(e.OldFullPath, e.FullPath.PathToFileInfo().GetDriveVolumeSerial());
                 // if this file is not in our database, return
                 if (localMedia.ID == null)
                     return;
@@ -798,7 +799,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // This is a directory so we are going to get all localmedia that uses 
                 // this directory we can do this by adding a % character to the end of 
                 // the path as the sqlite query behind it uses LIKE as operator.
-                localMediaRenamed = DBLocalMedia.GetAll(e.OldFullPath + '%', DeviceManager.GetVolumeSerial(e.FullPath));
+                localMediaRenamed = DBLocalMedia.GetAll(e.OldFullPath + '%', e.FullPath.PathToFileInfo().GetDriveVolumeSerial());
 
                 // if this folder isn't related to any file in our database, return
                 if (localMediaRenamed.Count == 0)

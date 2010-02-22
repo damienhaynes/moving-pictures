@@ -90,9 +90,15 @@
     <Compile Include="Database\Tables\IFilter.cs" />
     <Compile Include="Database\Tables\GenericDatabaseTable.cs" />
     <Compile Include="Database\Tables\NodeListExtensions.cs" />
+    <Compile Include="Extensions\ByteExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Extensions\FileInfoExtensions.cs" />
-    <Compile Include="Extensions\IListExtensions.cs" />
+    <Compile Include="Extensions\IO\DirectoryInfoExtensions.cs" />
+    <Compile Include="Extensions\IO\DriveInfoExtensions.cs" />
+    <Compile Include="Extensions\IO\FileInfoExtensions.cs" />
+    <Compile Include="Extensions\IO\FileSystemInfoExtensions.cs" />
+    <Compile Include="Extensions\Collections\IListExtensions.cs" />
+    <Compile Include="Extensions\IO\PathStringExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="GUI\AdvancedSettingsPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -241,6 +247,7 @@
     <Compile Include="Tools\AbstractBackgroundProcess.cs" />
     <Compile Include="Tools\AdvancedStringComparer.cs" />
     <Compile Include="Tools\BackgroundProcessManager.cs" />
+    <Compile Include="Tools\DriveInfoHelper.cs" />
     <Compile Include="Tools\Translator\LanguageUtility.cs" />
     <Compile Include="Tools\Translator\Translator.cs" />
     <Compile Include="Tools\WebGrabber.cs" />
@@ -331,7 +338,7 @@
     <Content Include="Images\list-remove.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
+    <ProjectReference Include="..\..\..\..\MediaPortal\Source\Stable\Databases\Databases.csproj">
       <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
       <Name>Databases</Name>
     </ProjectReference>

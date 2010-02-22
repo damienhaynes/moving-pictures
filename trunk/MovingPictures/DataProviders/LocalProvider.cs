@@ -13,6 +13,7 @@ using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using System.Reflection;
 using System.Threading;
 using System.Globalization;
+using Cornerstone.Extensions;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class LocalProvider : IMovieProvider {
@@ -134,7 +135,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             string backdropFolderPath = MovingPicturesCore.Settings.BackdropFolder;
             DirectoryInfo backdropFolder = new DirectoryInfo(backdropFolderPath);
 
-            string safeName = Utility.CreateFilename(movie.Title.Replace(' ', '.'));
+            string safeName = movie.Title.Replace(' ', '.').ToValidFilename();
             Regex oldBackdropRegex = new Regex("^{?" + Regex.Escape(safeName) + "}? \\[-?\\d+\\]\\.(jpg|png)");
 
             foreach (FileInfo currFile in backdropFolder.GetFiles()) {
@@ -207,7 +208,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             string coverartFolderPath = MovingPicturesCore.Settings.CoverArtFolder;
             DirectoryInfo coverFolder = new DirectoryInfo(coverartFolderPath);
             
-            string safeName = Utility.CreateFilename(movie.Title.Replace(' ', '.'));
+            string safeName = movie.Title.Replace(' ', '.').ToValidFilename();
             Regex oldCoverRegex = new Regex("^{?" + Regex.Escape(safeName) + "}? \\[-?\\d+\\]\\.(jpg|png)");
             
             foreach (FileInfo currFile in coverFolder.GetFiles()) {

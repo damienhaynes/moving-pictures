@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using MediaPortal.Plugins.MovingPictures.Database;
+using Cornerstone.Extensions;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources {
     public class Backdrop: ImageResource {
@@ -21,7 +22,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
         // genrate a filename for a backdrop. should be unique based on the source hash
         private static string GenerateFilename(DBMovieInfo movie, string source) {
             string artFolder = MovingPicturesCore.Settings.BackdropFolder;
-            string safeName = Utility.CreateFilename(movie.Title.Replace(' ', '.'));
+            string safeName = movie.Title.Replace(' ', '.').ToValidFilename();
             return artFolder + "\\{" + safeName + "} [" + source.GetHashCode() + "].jpg";
         }
 

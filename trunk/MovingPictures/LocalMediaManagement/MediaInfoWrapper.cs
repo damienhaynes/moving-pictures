@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
+using Cornerstone.Extensions.IO;
 using MediaPortal.GUI.Library;
 using MediaPortal.Player;
 using System.IO;
@@ -89,6 +90,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
         _mI = new MediaInfo();
         _mI.Open(strFile);
 
+        FileInfo fileInfo = strFile.PathToFileInfo();
+        DriveInfo driveInfo = fileInfo.GetDriveInfo();
+
         NumberFormatInfo providerNumber = new NumberFormatInfo();
         providerNumber.NumberDecimalSeparator = ".";
 
@@ -120,8 +124,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
             _aspectRatio = "fullscreen";
         else
             _aspectRatio = "widescreen";
-
-        if (strFile.ToLower().EndsWith(".ifo") && !DeviceManager.IsOpticalDrive(strFile)) {
+        
+        if (strFile.ToLower().EndsWith(".ifo") && driveInfo != null && driveInfo.IsOptical()) {
             // mediainfo is not able to obtain duration of IFO files
             // so we use this to loop through all corresponding VOBs and add up the duration
             // we do not do this for optical drives because there are issues with some discs

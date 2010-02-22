@@ -10,6 +10,7 @@ using Cornerstone.Database.Tables;
 using Cornerstone.MP;
 using Cornerstone.Collections;
 using Cornerstone.Extensions;
+using Cornerstone.Extensions.Collections;
 using Cornerstone.MP.Extensions;
 using Cornerstone.GUI.Dialogs;
 using MediaPortal.Dialogs;
@@ -1725,7 +1726,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 PublishDetails(node.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
 
                 // publish category node name in a format that can always be used as a filename.
-                SetProperty("#MovingPictures.SelectedNode.FileFriendlyName", Utility.CreateFilename(Translation.ParseString(node.Name)));
+                SetProperty("#MovingPictures.SelectedNode.FileFriendlyName", Translation.ParseString(node.Name).ToValidFilename());
             }
 
             // Publish Category Artwork

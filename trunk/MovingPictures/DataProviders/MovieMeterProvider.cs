@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter;
+using MediaPortal.Plugins.MovingPictures.Extensions;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using System.Reflection;

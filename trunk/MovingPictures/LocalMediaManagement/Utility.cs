@@ -4,11 +4,12 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Cornerstone.Tools;
+using Cornerstone.Extensions;
+using Cornerstone.Extensions.IO;
 using MediaPortal.Util;
 using NLog;
 
@@ -20,131 +21,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         Success
     }
 
-    #region String Extensions
-
-    static class StringExtensions {
-
-        // Regular expression pattern that matches a selection of non-word characters
-        private const string rxMatchNonWordCharacters = @"[^\w]";
-
-        /// <summary>
-        /// Returns the string converted to a sortable string (The String -> String, The)
-        /// </summary>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        public static string ToSortable(this String self) {
-            Regex expr = new Regex(@"^(" + MovingPicturesCore.Settings.ArticlesForRemoval + @")\s(.+)", RegexOptions.IgnoreCase);
-            return expr.Replace(self, "$2, $1").Trim();
-        }
-
-        /// <summary>
-        /// Returns the string as converted from a sortable string (String, The -> The String)
-        /// </summary>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        public static string FromSortable(this String self) {
-            Regex expr = new Regex(@"(.+?)(?:, (" + MovingPicturesCore.Settings.ArticlesForRemoval + @"))?\s*$", RegexOptions.IgnoreCase);
-            return expr.Replace(self, "$2 $1").Trim();
-        }
-
-        /// <summary>
-        /// Filters non descriptive words/characters from a title so that only keywords remain.
-        /// </summary>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        public static string ToKeywords(this String self) {
-
-            // Remove articles and non-descriptive words
-            string newTitle = Regex.Replace(self, @"\b(" + MovingPicturesCore.Settings.ArticlesForRemoval + @")\b", "", RegexOptions.IgnoreCase);
-            newTitle = Regex.Replace(newTitle, @"\b(and|or|of|und|en|et|y)\b", "", RegexOptions.IgnoreCase);
-
-            // Replace non-word characters with spaces
-            newTitle = Regex.Replace(newTitle, rxMatchNonWordCharacters, " ");
-
-            // Remove double spaces and return the keywords
-            return newTitle.TrimWhiteSpace();
-        }
-
-        /// <summary>
-        /// Replaces multiple white-spaces with one space
-        /// </summary>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        public static string TrimWhiteSpace(this String self) {
-            return Regex.Replace(self, @"\s{2,}", " ").Trim();
-        }
-
-        /// <summary>
-        /// Returns and converts the string into a common format.
-        /// </summary>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        public static string Equalize(this String self) {
-            if (self == null) return string.Empty;
-
-            // Convert title to lowercase culture invariant
-            string newTitle = self.ToLowerInvariant();
-
-            // Swap article
-            newTitle = newTitle.FromSortable();
-
-            // Replace non-descriptive characters with spaces
-            newTitle = Regex.Replace(newTitle, rxMatchNonWordCharacters, " ");
-
-            // Equalize: Convert to base character string
-            newTitle = newTitle.RemoveDiacritics();
-
-            // Equalize: Common characters with words of the same meaning
-            newTitle = Regex.Replace(newTitle, @"\b(and|und|en|et|y)\b", " & ");
-
-            // Equalize: Roman Numbers To Numeric
-            newTitle = Regex.Replace(newTitle, @"\si(\b)", @" 1$1");
-            newTitle = Regex.Replace(newTitle, @"\sii(\b)", @" 2$1");
-            newTitle = Regex.Replace(newTitle, @"\siii(\b)", @" 3$1");
-            newTitle = Regex.Replace(newTitle, @"\siv(\b)", @" 4$1");
-            newTitle = Regex.Replace(newTitle, @"\sv(\b)", @" 5$1");
-            newTitle = Regex.Replace(newTitle, @"\svi(\b)", @" 6$1");
-            newTitle = Regex.Replace(newTitle, @"\svii(\b)", @" 7$1");
-            newTitle = Regex.Replace(newTitle, @"\sviii(\b)", @" 8$1");
-            newTitle = Regex.Replace(newTitle, @"\six(\b)", @" 9$1");
-
-            // Remove the number 1 from the end of a title string
-            newTitle = Regex.Replace(newTitle, @"\s(1)$", "");
-
-
-            // Remove double spaces and return the cleaned title
-            return newTitle.TrimWhiteSpace();
-        }
-
-        /// <summary>
-        /// Translates characters to their base form. ( ë/é/è -> e)
-        /// </summary>
-        /// <example>
-        /// characters: ë, é, è
-        /// result: e
-        /// </example>
-        /// <remarks>
-        /// source: http://blogs.msdn.com/michkap/archive/2007/05/14/2629747.aspx
-        /// </remarks>
-        /// <param name="self"></param>
-        /// <returns></returns>
-        public static string RemoveDiacritics(this String self) {
-            string stFormD = self.Normalize(NormalizationForm.FormD);
-            StringBuilder sb = new StringBuilder();
-            for (int ich = 0; ich < stFormD.Length; ich++) {
-                UnicodeCategory uc = CharUnicodeInfo.GetUnicodeCategory(stFormD[ich]);
-                if (uc != UnicodeCategory.NonSpacingMark) {
-                    sb.Append(stFormD[ich]);
-                }
-            }
-
-            return (sb.ToString().Normalize(NormalizationForm.FormC));
-        }
-
-    }
-
-    #endregion
-
+   
     class Utility {
 
         #region Ctor / Private variables
@@ -157,59 +34,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         #endregion        
 
-        #region Enum Helper Methods
-
-        public static string GetEnumValueDescription(object value) {
-            Type objType = value.GetType();
-            FieldInfo fieldInfo = objType.GetField(Enum.GetName(objType, value));
-            DescriptionAttribute attribute = (DescriptionAttribute)
-            (fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false)[0]);
-
-            // Return the description.
-            return attribute.Description;
-        }
-
-        #endregion
-
-        #region FileSystem Methods
-
-        /// <summary>
-        /// Get all files from directory and it's subdirectories.
-        /// </summary>
-        /// <param name="inputDir"></param>
-        /// <returns></returns>
-        public static List<FileInfo> GetFilesRecursive(DirectoryInfo directory) {
-            List<FileInfo> fileList = new List<FileInfo>();
-            DirectoryInfo[] subdirectories = new DirectoryInfo[] { };
-
-            try {
-                fileList.AddRange(directory.GetFiles("*"));
-                subdirectories = directory.GetDirectories();
-            }
-            catch (Exception e) {
-                if (e.GetType() == typeof(ThreadAbortException))
-                    throw e;
-
-                logger.Debug("Error while retrieving files/directories for: {0} {1}", directory.FullName, e);
-            }
-
-            foreach (DirectoryInfo subdirectory in subdirectories) {
-                try {
-                    if ((subdirectory.Attributes & FileAttributes.System) == 0)
-                        fileList.AddRange(GetFilesRecursive(subdirectory));
-                    else
-                        logger.Debug("Rejecting directory {0} because it is flagged as a System folder.", subdirectory.FullName);
-                }
-                catch (Exception e) {
-                    if (e.GetType() == typeof(ThreadAbortException))
-                        throw e;
-
-                    logger.Debug("Error during attribute check for: {0} {1}", subdirectory.FullName, e);
-                }
-            }
-
-            return fileList;
-        } 
+        #region FileSystem Methods     
 
         /// <summary>
         /// This method will dump the complete file/directory structure to the log
@@ -217,7 +42,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path"></param>
         public static void LogDirectoryStructure(string path) {
             DirectoryInfo dir = new DirectoryInfo(path);
-            List<FileInfo> fileList = GetFilesRecursive(dir);
+            List<FileInfo> fileList = dir.GetFilesRecursive();
             StringBuilder structure = new StringBuilder();
             structure.AppendLine("Listing files for: " + path);
             structure.AppendLine(""); // append a blank line
@@ -226,24 +51,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             
             // Dump the file structure to the log
             logger.Debug(structure.ToString());
-        }
-        
-        /// <summary>
-        /// This method will create a string that can be safely used as a filename.
-        /// </summary>
-        /// <param name="subject">the string to process</param>
-        /// <returns>the processed string</returns>
-        public static string CreateFilename(string subject) {
-            if (String.IsNullOrEmpty(subject))
-                return string.Empty;
-
-            string rtFilename = subject;
-
-            char[] invalidFileChars = System.IO.Path.GetInvalidFileNameChars();
-            foreach (char invalidFileChar in invalidFileChars)
-                rtFilename = rtFilename.Replace(invalidFileChar, '_');
-
-            return rtFilename;
         }
 
         #region Multi-part / Stacking
@@ -304,34 +111,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         }
 
         #endregion
-
-        /// <summary>
-        /// Get the largest file from a directory matching the specified file mask
-        /// </summary>
-        /// <param name="targetDir">the directory to scan</param>
-        /// <param name="fileMask">the filemask to match</param>
-        /// <returns>path to the largest file or null if no file was found or an error occured</returns>
-        public static string GetLargestFileInDirectory(DirectoryInfo targetDir, string fileMask) {
-            string largestFile = null;
-            long largestSize = 0;
-            try {
-                FileInfo[] files = targetDir.GetFiles(fileMask);
-                foreach (FileInfo file in files) {
-                    long fileSize = file.Length;
-                    if (fileSize > largestSize) {
-                        largestSize = fileSize;
-                        largestFile = file.FullName;
-                    }
-                }
-            }
-            catch (Exception e) {
-                if (e is ThreadAbortException)
-                    throw e;
-
-                logger.ErrorException("Error while retrieving files for: " + targetDir.FullName, e);
-            }
-            return largestFile;
-        }
 
         #endregion
 
@@ -540,98 +319,17 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             return IsMediaPortalVideoFile(fileInfo);
         }
 
-        #endregion
+        #endregion        
         
-        /// <summary>
-        /// Generates a SHA1-Hash from a given filepath
-        /// </summary>
-        /// <param name="filePath">path to the file</param>
-        /// <returns>hash as an hexadecimal string </returns>
-        public static string ComputeSHA1Hash(string filePath) {
-            string hashHex = null;
-            if (File.Exists(filePath)) {
-                Stream file = null;
-                try {
-                    file = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                    HashAlgorithm hashObj = new SHA1Managed();
-                    byte[] hash = hashObj.ComputeHash(file);
-                    hashHex = BitConverter.ToString(hash);
-                    logger.Debug("SHA1: Success, File='{0}', Hash='{1}'", filePath, hashHex);
-                }
-                catch (Exception e) {
-                    if (e.GetType() == typeof(ThreadAbortException))
-                        throw e;
-
-                    logger.DebugException("SHA1: Failed, File='" + hashHex + "' ", e);
-                }
-                finally {
-                    if (file != null)
-                        file.Close();
-                }
-            }
-            else {
-                // File does not exist
-                logger.Debug("SHA1: Failed, File='{0}', Reason='File is not available'", filePath);
-            }
-
-            // Return
-            return hashHex;
-        }
-
         #region MovieHash
         
         public static string GetMovieHashString(string filename) {
-            string hash;
-            try {
-                byte[] moviehash = ComputeMovieHash(filename);
-                hash = ToHexadecimal(moviehash);
-            }
-            catch (Exception e) {
-                logger.Error("Error while generating FileHash for: " + filename, e);
-                hash = null;
-            }
+            FileInfo file = new FileInfo(filename);
+            string hash = file.ComputeSmartHash();
+            if (hash==null)
+                logger.Error("Error while computing hash for '{0}'.", filename);
+
             return hash;
-        }
-        
-        private static byte[] ComputeMovieHash(string filename) {
-            byte[] result;
-            using (Stream input = File.OpenRead(filename)) {
-                result = ComputeMovieHash(input);
-            }
-            return result;
-        }
-
-        private static byte[] ComputeMovieHash(Stream input) {
-            ulong lhash;
-            long streamsize;
-            streamsize = input.Length;
-            lhash = (ulong)streamsize;
-
-            long i = 0;
-            byte[] buffer = new byte[sizeof(long)];
-            input.Position = 0;
-            while (i < 65536 / sizeof(long) && (input.Read(buffer, 0, sizeof(long)) > 0)) {
-                i++;
-                unchecked { lhash += BitConverter.ToUInt64(buffer, 0); }
-            }
-
-            input.Position = Math.Max(0, streamsize - 65536);
-            i = 0;
-            while (i < 65536 / sizeof(long) && (input.Read(buffer, 0, sizeof(long)) > 0)) {
-                i++;
-                unchecked { lhash += BitConverter.ToUInt64(buffer, 0); }
-            }
-            byte[] result = BitConverter.GetBytes(lhash);
-            Array.Reverse(result);
-            return result;
-        }
-
-        private static string ToHexadecimal(byte[] bytes) {
-            StringBuilder hexBuilder = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++) {
-                hexBuilder.Append(bytes[i].ToString("x2"));
-            }
-            return hexBuilder.ToString();
         }
 
         #endregion

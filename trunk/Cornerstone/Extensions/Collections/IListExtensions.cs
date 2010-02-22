@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Cornerstone.Extensions {
+namespace Cornerstone.Extensions.Collections {
 
     public static class IListExtensions {
 

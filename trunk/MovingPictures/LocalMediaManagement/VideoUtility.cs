@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using DirectShowLib;
 using DirectShowLib.Dvd;
+using Cornerstone.Extensions;
+using Cornerstone.Extensions.IO;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
@@ -131,7 +133,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="driveletter">the drive to use in the generated path</param>
         /// <returns>Full path to the entry file</returns>
         public static string GenerateVideoPathOnDrive(this VideoFormat self, string driveletter) {
-            return DeviceManager.GetDriveLetter(driveletter) + self.PathEndsWith();       
+            return driveletter.PathToDriveletter() + self.PathEndsWith();       
         }
 
         /// <summary>
@@ -145,10 +147,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             switch (self) {
                 case VideoFormat.Bluray:
                     dir = path.ToLower().Replace("index.bdmv", @"STREAM\");
-                    return Utility.GetLargestFileInDirectory(new DirectoryInfo(dir), "*.m2ts");
+                    return new DirectoryInfo(dir).GetLargestFile("*.m2ts");
                 case VideoFormat.HDDVD:
                     dir = path.ToLower().Replace(@"adv_obj\discid.dat", @"HVDVD_TS\");
-                    return Utility.GetLargestFileInDirectory(new DirectoryInfo(dir), "*.evo");
+                    return new DirectoryInfo(dir).GetLargestFile("*.evo");
                 case VideoFormat.DVD:
                     return path.ToLower().Replace(@"\video_ts.ifo", @"\vts_01_0.ifo");
                 default:
@@ -214,16 +216,18 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // Standard for the Bluray Disc ID is to compute a SHA1 hash from the key file (will only work for retail disks)
                 string path = videoPath.ToLower();
                 if (path.EndsWith(@"bdmv\index.bdmv")) {
-                    string keyFile = path.Replace(@"bdmv\index.bdmv", @"AACS\Unit_Key_RO.inf");
-                    if (File.Exists(keyFile))
-                        hashID = Utility.ComputeSHA1Hash(keyFile);
+                    string keyFilePath = path.Replace(@"bdmv\index.bdmv", @"AACS\Unit_Key_RO.inf");
+                    if (File.Exists(keyFilePath)) {
+                        FileInfo keyFile = new FileInfo(keyFilePath);
+                        hashID = keyFile.ComputeSHA1Hash();
+                    }
                     else if (File.Exists(videoPath))
                         hashID = string.Empty;
                 }
             }
             else if (self == VideoFormat.File) {
-                // Compute a Movie Hash with the OpenSubtitles method (might change this to a new standard in the future)
-                hashID = Utility.GetMovieHashString(videoPath);
+                FileInfo file = new FileInfo(videoPath);
+                hashID = file.ComputeSmartHash();
             }
 
             // Log the result
@@ -270,8 +274,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (format.PathExistsOnDrive(driveletter))
                     return format.GenerateVideoPathOnDrive(driveletter);
             }
-
-            return DeviceManager.GetDriveLetter(driveletter);
+            
+            return driveletter.PathToDriveletter();
         }
 
         /// <summary>
@@ -362,7 +366,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="directory"></param>
         /// <returns></returns>
         public static List<FileInfo> GetVideoFilesRecursive(DirectoryInfo directory) {
-            List<FileInfo> fileList = Utility.GetFilesRecursive(directory);
+            List<FileInfo> fileList = directory.GetFilesRecursive();
             List<FileInfo> videoFileList = new List<FileInfo>();
             foreach (FileInfo file in fileList) {
                 if (IsVideoFile(file))
