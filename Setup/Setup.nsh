@@ -92,6 +92,8 @@ Section "Moving Pictures Plugin" SEC0000
         SetOverwrite try
         File ..\MovingPictures\Resources\moving-pictures-release-notes.txt
         File ..\MovingPictures\bin\Release\MovingPictures.dll
+		
+		SetOutPath $MEDIAPORTAL_DIR
 		File ..\MovingPictures\bin\Release\Cornerstone.dll
 		File ..\MovingPictures\bin\Release\Cornerstone.MP.dll
 		File ..\MovingPictures\bin\Release\NLog.dll
