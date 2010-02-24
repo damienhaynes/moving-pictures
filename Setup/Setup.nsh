@@ -92,12 +92,15 @@ Section "Moving Pictures Plugin" SEC0000
         SetOverwrite try
         File ..\MovingPictures\Resources\moving-pictures-release-notes.txt
         File ..\MovingPictures\bin\Release\MovingPictures.dll
-		
-		SetOutPath $MEDIAPORTAL_DIR
 		File ..\MovingPictures\bin\Release\Cornerstone.dll
 		File ..\MovingPictures\bin\Release\Cornerstone.MP.dll
+		
+		SetOutPath $MEDIAPORTAL_DIR
 		File ..\MovingPictures\bin\Release\NLog.dll
  		
+		Delete $MEDIAPORTAL_DIR\Cornerstone.dll
+		Delete $MEDIAPORTAL_DIR\Cornerstone.MP.dll
+		
         # if the files failed to copy, MediaPortal is probably running
         # prompt to close MediaPortal and retry.
         IfErrors mediaportal_running everything_is_fine
