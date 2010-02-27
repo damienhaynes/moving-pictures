@@ -1,0 +1,341 @@
+<ScriptableScraper>
+  <details>
+    <!-- These details are for display purposes only. -->
+    <name>FilmWeb.pl</name>
+    <author>LRFalk01</author>
+    <description>This script pulls data from FilmWeb.pl.</description>
+    
+    <!-- 
+    These fields uniquely identify the script. The ID should never 
+    change and should be unique (no other script should use this ID). With
+    new versions of the script the version numbers should change. EVEN FOR 
+    MINOR CHANGES, you should change the version number if you are going to
+    disribute it to anyone but internal testers. The point number 
+    is for minor bug fix releases. Use it.
+    -->
+    <id>141516</id>
+    <version major="1" minor="0" point="0"/>
+    <published month="2" day="25" year="2009"/>
+    
+    <!--
+    These fields are used for categorization purposes. Seperate multiple 
+    types with a pipe | character.
+    -->
+    <type>MovieDetailsFetcher|MovieCoverFetcher</type>
+    <language>pl</language>
+
+   </details>
+  
+  
+  <action name="search">
+    
+    <set name="offset" value="0" />
+    
+    <!-- Regular Expressions -->
+
+    <set name="rx_search_results">
+      <![CDATA[
+      src="http://gfx.filmweb.pl/po/[^/]+/[^/]+/(?<FilmWebID>[0-9]+)/.[^\n]+[^"]+[^>]+>\s*(?<Title>[^\n]+)\s+</a[^(]+\((?<Year>[0-9]+)[^\n]+\n[^<]+(?<akaTitles>[^\n]+)
+      ]]>
+    </set>
+
+    <set name="rx_search_titles">
+      <![CDATA[
+      (?<MovieTitle>[^/]+)
+      ]]>
+    </set>
+	
+	<set name="rx_title">
+      <![CDATA[
+      film\-title[^a]+[^>]+>\n\s+([^\n]+)</a>
+      ]]>
+    </set>
+	
+	<set name="rx_remove_aka">
+      <![CDATA[
+      aka: ([^\n]+)
+      ]]>
+    </set>
+	
+	<set name="rx_details_aka_list">
+      <![CDATA[
+      \(aka(?<alternates>[^\)]+)
+      ]]>
+    </set>
+	
+	<set name="rx_details_aka">
+      <![CDATA[
+      class="aka">\s{16}(?<GroupName>[^\t]+)
+      ]]>
+    </set>
+	
+	<set name="rx_year">
+      <![CDATA[
+      startYear=[^>]+>(\d{4})
+      ]]>
+    </set>
+	
+	<set name="rx_verify_ID">
+      <![CDATA[
+      ^\d+$
+      ]]>
+    </set>
+
+    <!-- Retrieve results using Title -->
+    <retrieve name="search_page" url="http://www.filmweb.pl/szukaj?source=opensearch&amp;alias=film&amp;q=${search.title:safe}" allow_unsafe_header="true" />
+ 
+    <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
+    <parse name="details_page_block" input="${search_page}" regex="${rx_search_results}"/>
+	<if test="details_page_block[0][0]!=">
+	    <loop name="item_return" on="details_page_block">
+	      <add name="counter" value1="${count}" value2="${offset}" />
+		  <parse name="titles" input="${item_return[1]:striptags}" regex="${rx_search_titles}" />
+		  <set name="movie[${counter}].title" value="${titles[0][0]}"/>
+		  <set name="movie[${counter}].alternate_titles" value="${titles[1][0]}" />
+		  <parse name="akaTitles" input="${item_return[3]:striptags}" regex="${rx_remove_aka}" />
+		  <parse name="akaTitles" input="${akaTitles[0][0]}" regex="${rx_search_titles}" />
+		  <!-- If there are no aka titles, this will not run. -->
+		  <if test="akaTitles[0][0]!=">
+		  	<loop name="akaTitle" on="akaTitles">
+		  		<set name='alternate_titles' value='${movie[${counter}].alternate_titles}'/>
+		  		<set name="movie[${counter}].alternate_titles" value="${alternate_titles}|${akaTitle[0]}" />
+			</loop>
+		  </if>
+		  <!-- tests the existance of a year before trying to put on in the movie info -->
+		  <if test="${item_return[2]}!=">
+		      <set name="movie[${counter}].year" value="${item_return[2]:htmldecode}"/>
+		  </if>
+	      <set name="movie[${counter}].site_id" value="${item_return[0]}"/>
+	      <set name="movie[${counter}].details_url" value="http://www.filmweb.pl/Film?id=${item_return[0]}"/>
+		  <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
+	    </loop>
+	</if>
+	
+	<!-- This is ran if no movies were found the first go around.
+		 The intention here is to let the user use the FilmWeb.pl ID to find a movie. -->
+	<if test="${movie[0].title}=">
+		<retrieve name="search_page" url="http://www.filmweb.pl/Film?id=${search.title:safe}" allow_unsafe_header="true" />
+		<parse name="title" input="${search_page}" regex="${rx_title}"/>
+		<!-- makes sure a title was found on this page. If not there is no reason to ad anything else. -->
+		<if test="${title[0][0]:htmldecode}!=">
+			<set name="movie[0].title" value="${title[0][0]:htmldecode}" />
+			<set name="movie[0].site_id" value="${search.title:safe}"/>
+			<set name="movie[0].details_url" value="http://www.filmweb.pl/Film?id=${search.title:safe}"/>
+			<parse name="year" input="${search_page}" regex="${rx_year}"/>
+			<!-- tests the existance of a year before trying to put on in the movie info -->
+			<if test="${year[0][0]}!=">
+				<set name="movie[0].year" value="${year[0][0]}" />
+			</if>
+			<parse name="aka" input="${search_page}" regex="${rx_details_aka}" />
+			<!-- If there is no aka title, this will not run. -->
+			<if test="aka[0][0]!=">
+				<set name="movie[0].alternate_titles" value="${aka[0][0]:htmldecode}" />
+			</if>
+			<!-- Finds the existance of an aka list -->
+			<parse name="akaList" input="${search_page}" regex="${rx_details_aka}"/>
+			<if test="akaList[0][0]!=">
+				<parse name="akaListFinal" input="${akaList[0][0]}" regex="${rx_search_titles}"/>
+				<loop name="titleAka" on="akaListFinal">
+					<set name='alternate_titles' value='${movie[0].alternate_titles}'/>
+					<set name="movie[0].alternate_titles" value="${alternate_titles}|${titleAka[0]:htmldecode}" />
+				</loop>
+			</if>
+		</if>
+	</if>
+  </action>
+
+
+  <action name="get_details">
+    
+    <set name="rx_director">
+      <![CDATA[
+      reżyseria[^>]+>([^<]+)
+       ]]>
+    </set>
+    
+    <set name="production">
+      <![CDATA[
+      produkcja[^=]+[^>]+>([^<]+)<
+      ]]>
+    </set>
+	
+	<set name="rx_distribution">
+      <![CDATA[
+      Dystrybucja">[^>]+>\n\s+([^\n\t]+)
+      ]]>
+    </set>
+	
+	<set name="rx_genres">
+      <![CDATA[
+      gatunek[^=]+[^>]+>\s([^<]+)<
+      ]]>
+    </set>
+	
+	<set name="rx_genre">
+      <![CDATA[
+      (?<genre>[^,]+),
+      ]]>
+    </set>
+	
+	<set name="rx_votes">
+      <![CDATA[
+      głosów[^>]+>([\d]+)
+      ]]>
+    </set>
+	
+	<set name="rx_score">
+      <![CDATA[
+      <strong\sclass="value">([\d]).*?</strong>/
+      ]]>
+    </set>
+	
+	<set name="rx_actor_roll">
+      <![CDATA[
+      src="[^>]+>\n\s+([^\n<>]+)\n\s+[^\n]+\s+[^\n]+\n\s+.td.class="film\-protagonist">[^\n]+\n+\s+([^\n]+)
+      ]]>
+    </set>
+	
+	<set name="rx_title">
+      <![CDATA[
+      film\-title[^a]+[^>]+>\n\s+([^\n]+)</a>
+      ]]>
+    </set>
+	
+	<set name="rx_year">
+      <![CDATA[
+      startYear=[^>]+>(\d{4})
+      ]]>
+    </set>
+	
+	<set name="rx_description">
+      <![CDATA[
+      o\-filmie\-header[^\n]+[^>]+[^a-zA-Z]+([^\t]+)
+      ]]>
+    </set>
+	
+	<set name="rx_runtime">
+      <![CDATA[
+      trwania[\D]+(\d+)
+      ]]>
+    </set>
+	
+	<set name="rx_wiki_search">
+      <![CDATA[
+      linkuje[^"]+.(?<wikiURL>[^"]+)
+      ]]>
+    </set>
+	
+	<set name="rx_imdb">
+      <![CDATA[
+      tt(?<imdbID>\d{7})
+      ]]>
+    </set>
+	
+    <retrieve name="details_page" url="http://www.filmweb.pl/Film?id=${movie.site_id}" allow_unsafe_header="true" />
+
+    <!-- Title and Year -->
+    <parse name="title" input="${details_page}" regex="${rx_title}"/>
+    <set name="movie.title" value="${title[0][0]:htmldecode}"/>
+	<parse name="year" input="${details_page}" regex="${rx_year}"/>
+    <set name="movie.year" value="${year[0][0]:htmldecode}"/>
+	
+
+    <!-- Directors -->
+    <parse name="directors" input="${details_page}" regex="${rx_director}"/>
+    <set name='movie.directors' value="${directors[0][0]:htmldecode}"/>
+    
+
+    <!-- Writers -->
+    
+    
+    <!-- Actors -->
+    <parse name='actors' input='"${details_page}' regex="${rx_actor_roll}"/>
+    <set name='movie.actors' value=''/>
+    <loop name='currActor' on='actors'>
+      <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'/>
+    </loop>
+
+    <!-- Genres -->
+    <parse name="genres" input="${details_page}" regex="${rx_genres}"/>
+	<set name="genresList" value="${genres[0][0]}," />
+	<parse name="genre" input="${genresList}" regex="${rx_genre}"/>
+    <set name='movie.genres' value=''/>
+    <loop name='currGenre' on='genre'>
+      <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
+    </loop>
+
+    <!-- Certification -->
+    
+
+    <!-- Runtime -->
+    <parse name="runtime" input="${details_page}" regex="${rx_runtime}"/>
+    <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
+
+    <!-- Tagline -->
+    
+    
+    <!-- Score -->
+    <parse name="score" input="${details_page}" regex="${rx_score}"/>
+    <set name='movie.score' value='${score[0][0]:htmldecode}'/>
+    
+    <!-- Popularity -->
+    <parse name="votes" input="${details_page}" regex="${rx_votes}"/>
+    <set name='movie.popularity' value='${votes[0][0]:htmldecode}'/>
+
+    <!-- Language -->
+    
+    
+    <!-- Plot Summary -->
+    <parse name="summary" input="${details_page}" regex="${rx_description}"/>
+	<if test="${summary[0][0]!=">
+	    <set name="summary_clean" value="${summary[0][0]:striptags}" />
+	    <set name="movie.summary" value="${summary_clean:htmldecode}..." />
+	</if>
+	
+	<!-- Attempt to get IMDB -->
+	<retrieve name="wiki_page" url="http://pl.wikipedia.org/w/index.php?title=Specjalna:Wyszukiwarka_link%F3w&amp;target=http%3A%2F%2Fwww.filmweb.pl%2FFilm%3Fid%3D${movie.site_id}" />
+    <parse name="wikiLink" input="${wiki_page}" regex="${rx_wiki_search}"/>
+	<!-- Checks to see if a match was found on wiki -->
+	<if test="${wikiLink[0][0]}!=">
+		<!-- Go to Wiki's movie page and try to find IMDB -->
+		<retrieve name="wiki_page_details" url="http://pl.wikipedia.org${wikiLink[0][0]}" />
+		<parse name="imdbID" input="${wiki_page_details}" regex="${rx_imdb}"/>
+		<if test="${imdbID[0]}!=">
+			<set name="movie.imdb_id" value="${imdbID[0]}" />
+		</if>
+	</if>
+  </action>
+  
+<action name="get_cover_art">
+		
+<set name="rx_poster_link">
+  <![CDATA[
+  plakaty.+href=.(?<coverLink>[^"]+)">plakaty</a>
+  ]]>
+</set>
+
+<set name="rx_covers">
+  <![CDATA[
+  <a\shref="http://gfx.filmweb.pl/po/(?<coverImage>[^\?]+)
+  ]]>
+</set>
+		
+		<!-- We need to find the link to the posters page from the details page -->
+	<if test="${movie.site_id}!=">	
+		<retrieve name="details_page_cover" url="http://www.filmweb.pl/Film?id=${movie.site_id}" allow_unsafe_header="true" />
+		<parse name="posterLink" input="${details_page_cover}" regex="${rx_poster_link}"/>
+		<!-- If link found, continue -->
+		<if test="${posterLink[0][0]}!=">
+			<set name="posterPage" value="${posterLink[0][0]}" />
+			<retrieve name="cover_page" url="${posterPage}" allow_unsafe_header="true" />
+			<parse name="posterLinks" input="${cover_page}" regex="${rx_covers}"/>
+			<loop name='cover_url' on='posterLinks'>
+				<set name='cover_art[${count}].url' value='http://gfx.filmweb.pl/po/${cover_url[0]}'/>
+			  </loop>
+		</if>
+	</if>
+
+
+</action>
+  
+</ScriptableScraper>
