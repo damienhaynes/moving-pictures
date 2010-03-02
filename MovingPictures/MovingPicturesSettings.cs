@@ -965,10 +965,10 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Default View",
-            Description = "The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are \"list\", \"thumbs\", \"largethumbs\", and \"filmstrip\".",
+            Description = "The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are \"lastused\", \"list\", \"thumbs\", \"largethumbs\", and \"filmstrip\".",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "default_view",
-            Default = "list",
+            Default = "lastused",
             Hidden = true)]
         public string DefaultView {
             get { return _defaultView; }

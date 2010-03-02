@@ -102,6 +102,7 @@
             this.defaultViewComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.defaultViewComboBox.FormattingEnabled = true;
             this.defaultViewComboBox.Items.AddRange(new object[] {
+            "Last Used View",
             "List View",
             "Poster View",
             "Large Poster View",

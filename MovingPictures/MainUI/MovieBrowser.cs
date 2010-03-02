@@ -15,8 +15,6 @@ using Cornerstone.Collections;
 using MediaPortal.Plugins.MovingPictures.MainUI.Filters;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
-    public enum BrowserViewMode { INIT, LIST, SMALLICON, LARGEICON, FILMSTRIP, DETAILS, CATEGORIES }
-    
     public class MovieBrowser {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -121,7 +119,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // Set view and reload it
                 currentView = value;
                 ReloadView();
-               
+                if (CurrentNode != null) {
+                    DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)CurrentNode.AdditionalSettings;
+                    if (nodeSettings.LastMovieView != value) {
+                        nodeSettings.LastMovieView = value;
+                        CurrentNode.Commit();
+                    }
+                }
             }
         } private BrowserViewMode currentView; 
 
@@ -147,6 +151,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return BrowserViewMode.LARGEICON;
                 else if (defaultView.Equals("filmstrip"))
                     return BrowserViewMode.FILMSTRIP;
+                else if (defaultView.Equals("lastused"))
+                    return BrowserViewMode.LASTUSED;
                 else {
                     logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
                     return BrowserViewMode.LIST;
@@ -188,6 +194,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public DBMenu<DBMovieInfo> CategoriesMenu {
             get { return MovingPicturesCore.Settings.CategoriesMenu; }
+        }
+
+        private BrowserViewMode GetViewFromNode(DBNode<DBMovieInfo> node) {
+            DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)node.AdditionalSettings;
+            if (nodeSettings.MovieView == BrowserViewMode.PARENT) {
+                if (node.Parent != null)
+                    return GetViewFromNode(node.Parent);
+                else
+                    return DefaultView;
+            }
+            else
+                return nodeSettings.MovieView;
         }
 
         /// <summary>
@@ -251,9 +269,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // evaluate where we are
                 if ( SubNodes == null || SubNodes.Count == 0) {
                     // we don't have any sub categories to show so we switch to 
-                    // the default view if we are not in that view
-                    if (CurrentView != DefaultView)
-                        CurrentView = DefaultView;
+                    // the view defined for the category if we are not in that view
+                    BrowserViewMode movieView = GetViewFromNode(_currentNode);
+                    if (movieView == BrowserViewMode.LASTUSED) {
+                        DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)_currentNode.AdditionalSettings;
+                        movieView = nodeSettings.LastMovieView.GetValueOrDefault(BrowserViewMode.LIST);
+                    }
+
+                    if (CurrentView != movieView)
+                        CurrentView = movieView;
                 }
                 else if (CurrentView != BrowserViewMode.CATEGORIES) {
                     // we have sub categories to show so switch to 

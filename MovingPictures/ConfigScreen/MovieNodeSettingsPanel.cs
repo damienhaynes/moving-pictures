@@ -20,14 +20,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             get { return _node; }
             set {
                 _node = value;
-                if (_node != null && _node.AdditionalSettings == null) 
+                if (_node != null && _node.AdditionalSettings == null)
                     _node.AdditionalSettings = new DBMovieNodeSettings();
-                
+
                 settings = _node == null ? null : (DBMovieNodeSettings)_node.AdditionalSettings;
 
                 updateControls();
             }
-        } 
+        }
         private DBNode<DBMovieInfo> _node;
 
         public MovieNodeSettingsPanel() {
@@ -106,6 +106,28 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             backdropFileTextBox.Text = settings.BackdropFilePath;
 
+            switch (settings.MovieView) {
+                case BrowserViewMode.LASTUSED:
+                    viewComboBox.SelectedIndex = 1;
+                    break;
+                case BrowserViewMode.LIST:
+                    viewComboBox.SelectedIndex = 2;
+                    break;
+                case BrowserViewMode.SMALLICON:
+                    viewComboBox.SelectedIndex = 3;
+                    break;
+                case BrowserViewMode.LARGEICON:
+                    viewComboBox.SelectedIndex = 4;
+                    break;
+                case BrowserViewMode.FILMSTRIP:
+                    viewComboBox.SelectedIndex = 5;
+                    break;
+                case BrowserViewMode.PARENT:
+                default:
+                    viewComboBox.SelectedIndex = 0;
+                    break;
+            }
+
             updating = false;
         }
 
@@ -128,7 +150,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void specificBackdropRadioButton_CheckedChanged(object sender, EventArgs e) {
             if (settings == null || updating) return;
-            
+
             if (specificBackdropRadioButton.Checked)
                 settings.BackdropType = MenuBackdropType.MOVIE;
 
@@ -212,13 +234,36 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 _node.DBManager = MovingPicturesCore.DatabaseManager;
 
             object selected = backdropMovieCombo.SelectedItem;
-            
+
             backdropMovieCombo.Items.Clear();
             HashSet<DBMovieInfo> unsortedMovies = _node.GetPossibleFilteredItems();
             IOrderedEnumerable<DBMovieInfo> sortedMovies = unsortedMovies.OrderBy((movie) => movie.SortBy);
             backdropMovieCombo.Items.AddRange(sortedMovies.ToArray());
 
             backdropMovieCombo.SelectedItem = selected;
+        }
+
+        private void viewComboBox_SelectedIndexChanged(object sender, EventArgs e) {
+            switch (viewComboBox.SelectedIndex) {
+                case 0:
+                    settings.MovieView = BrowserViewMode.PARENT;
+                    break;
+                case 1:
+                    settings.MovieView = BrowserViewMode.LASTUSED;
+                    break;
+                case 2:
+                    settings.MovieView = BrowserViewMode.LIST;
+                    break;
+                case 3:
+                    settings.MovieView = BrowserViewMode.SMALLICON;
+                    break;
+                case 4:
+                    settings.MovieView = BrowserViewMode.LARGEICON;
+                    break;
+                case 5:
+                    settings.MovieView = BrowserViewMode.FILMSTRIP;
+                    break;
+            }
         }
     }
 }

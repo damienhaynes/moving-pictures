@@ -87,7 +87,41 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private SortingDirections _sortDirection = SortingDirections.Ascending;
-        
 
+        // movie view assigned to the category
+        // possible options include PARENT, LIST, SMALLICON, LARGEICON, FILMSTRIP, LASTUSED
+        [DBField]
+        public BrowserViewMode MovieView {
+            get { return _movieView; }
+            set {
+                if (value == BrowserViewMode.PARENT
+                    || value == BrowserViewMode.LIST
+                    || value == BrowserViewMode.SMALLICON
+                    || value == BrowserViewMode.LARGEICON
+                    || value == BrowserViewMode.FILMSTRIP
+                    || value == BrowserViewMode.LASTUSED
+                    ) {
+                    _movieView = value;
+                    commitNeeded = true;
+                }
+            }
+        } private BrowserViewMode _movieView = BrowserViewMode.PARENT;
+
+        // view that is used when the movie view is set to "lastused"
+        // possible options include LIST, SMALLICON, LARGEICON, FILMSTRIP
+        [DBField]
+        public Nullable<BrowserViewMode> LastMovieView {
+            get { return _lastMovieView; }
+            set {
+                if (value == BrowserViewMode.LIST
+                    || value == BrowserViewMode.SMALLICON
+                    || value == BrowserViewMode.LARGEICON
+                    || value == BrowserViewMode.FILMSTRIP
+                    ) {
+                    _lastMovieView = value;
+                    commitNeeded = true;
+                }
+            }
+        } private Nullable<BrowserViewMode> _lastMovieView = null;
     }
 }

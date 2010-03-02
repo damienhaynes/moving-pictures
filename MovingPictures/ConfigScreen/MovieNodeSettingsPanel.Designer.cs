@@ -41,6 +41,9 @@
             this.customSortRadioButton = new System.Windows.Forms.RadioButton();
             this.defaultSortRadioButton = new System.Windows.Forms.RadioButton();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.viewComboBox = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -250,10 +253,50 @@
             this.openFileDialog.FileName = "openFileDialog";
             this.openFileDialog.Filter = "Images|*.jpg; *.png|All Files|*.*";
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Location = new System.Drawing.Point(129, 183);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(315, 3);
+            this.groupBox3.TabIndex = 10;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "groupBox3";
+            // 
+            // viewComboBox
+            // 
+            this.viewComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.viewComboBox.FormattingEnabled = true;
+            this.viewComboBox.Items.AddRange(new object[] {
+            "Parent View",
+            "Last Used View",
+            "List View",
+            "Poster View",
+            "Large Poster View",
+            "Filmstrip View"});
+            this.viewComboBox.Location = new System.Drawing.Point(211, 193);
+            this.viewComboBox.Name = "viewComboBox";
+            this.viewComboBox.Size = new System.Drawing.Size(128, 21);
+            this.viewComboBox.TabIndex = 12;
+            this.viewComboBox.SelectedIndexChanged += new System.EventHandler(this.viewComboBox_SelectedIndexChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(128, 196);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(80, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Show movies in";
+            // 
             // MovieNodeSettingsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.viewComboBox);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.groupBox2);
@@ -262,7 +305,7 @@
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MovieNodeSettingsPanel";
-            this.Size = new System.Drawing.Size(444, 190);
+            this.Size = new System.Drawing.Size(444, 229);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -292,5 +335,8 @@
         private System.Windows.Forms.RadioButton defaultSortRadioButton;
         private System.Windows.Forms.RadioButton customSortRadioButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ComboBox viewComboBox;
+        private System.Windows.Forms.Label label5;
     }
 }
