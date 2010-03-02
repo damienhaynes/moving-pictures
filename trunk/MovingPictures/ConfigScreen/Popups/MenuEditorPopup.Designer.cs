@@ -109,7 +109,7 @@
             this.movieNodeSettingsPanel.Location = new System.Drawing.Point(285, 79);
             this.movieNodeSettingsPanel.Name = "movieNodeSettingsPanel";
             this.movieNodeSettingsPanel.Node = null;
-            this.movieNodeSettingsPanel.Size = new System.Drawing.Size(438, 187);
+            this.movieNodeSettingsPanel.Size = new System.Drawing.Size(438, 229);
             this.movieNodeSettingsPanel.TabIndex = 5;
             // 
             // nodeSettingsPanel

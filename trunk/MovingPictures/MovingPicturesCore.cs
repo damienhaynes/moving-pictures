@@ -23,6 +23,7 @@ using MovingPicturesSocialAPI;
 using MediaPortal.Plugins.MovingPictures.MainUI;
 
 namespace MediaPortal.Plugins.MovingPictures {
+    public enum BrowserViewMode { PARENT, LIST, SMALLICON, LARGEICON, FILMSTRIP, DETAILS, CATEGORIES, LASTUSED }
     
     public class MovingPicturesCore {
         private static Logger logger = LogManager.GetCurrentClassLogger();

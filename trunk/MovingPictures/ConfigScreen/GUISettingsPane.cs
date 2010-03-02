@@ -64,14 +64,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
 
             // default view init
-            if (defaultView.StringValue.Equals("list"))
+            if (defaultView.StringValue.Equals("lastused"))
                 defaultViewComboBox.SelectedIndex = 0;
-            else if (defaultView.StringValue.Equals("thumbs"))
+            else if (defaultView.StringValue.Equals("list"))
                 defaultViewComboBox.SelectedIndex = 1;
-            else if (defaultView.StringValue.Equals("largethumbs"))
+            else if (defaultView.StringValue.Equals("thumbs"))
                 defaultViewComboBox.SelectedIndex = 2;
-            else if (defaultView.StringValue.Equals("filmstrip"))
+            else if (defaultView.StringValue.Equals("largethumbs"))
                 defaultViewComboBox.SelectedIndex = 3;
+            else if (defaultView.StringValue.Equals("filmstrip"))
+                defaultViewComboBox.SelectedIndex = 4;
 
             // movie clicked action init
             if ((bool)clickGoesToDetails.Value)
@@ -133,12 +135,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void defaultViewComboBox_SelectedIndexChanged(object sender, EventArgs e) {
             if (defaultViewComboBox.SelectedIndex == 0)
-                defaultView.Value = "list";
+                defaultView.Value = "lastused";
             if (defaultViewComboBox.SelectedIndex == 1)
-                defaultView.Value = "thumbs";
+                defaultView.Value = "list";
             if (defaultViewComboBox.SelectedIndex == 2)
-                defaultView.Value = "largethumbs";
+                defaultView.Value = "thumbs";
             if (defaultViewComboBox.SelectedIndex == 3)
+                defaultView.Value = "largethumbs";
+            if (defaultViewComboBox.SelectedIndex == 4)
                 defaultView.Value = "filmstrip";
         }
 
