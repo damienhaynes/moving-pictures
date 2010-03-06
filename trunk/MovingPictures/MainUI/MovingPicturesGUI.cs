@@ -657,7 +657,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void ResetParentalFilterTimer() {
-            if (MovingPicturesCore.Settings.ParentalControlsEnabled && parentalControlsFilter.Active == false && MovingPicturesCore.Settings.ParentalControlsTimeout > 0) {
+            if (MovingPicturesCore.Settings.ParentalControlsEnabled 
+                && parentalControlsFilter.Active == false 
+                && MovingPicturesCore.Settings.ParentalControlsTimeout > 0
+                && !moviePlayer.IsPlaying
+                ) {
                 if (parentalFilterTimer == null) {
                     parentalFilterTimer = new Timer(delegate {
                             logger.Info("Reactivating parental filter after {0} minutes idle", MovingPicturesCore.Settings.ParentalControlsTimeout);
