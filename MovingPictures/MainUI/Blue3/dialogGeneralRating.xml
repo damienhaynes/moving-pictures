@@ -15,6 +15,7 @@
 		<posY>300</posY>
 		<width>24</width>
 		<height>24</height>
+		<onup>101</onup>
 		<textureFocus>UserRatingStarOn.png</textureFocus>
 		<textureNoFocus>UserRatingStarOn.png</textureNoFocus>
 		<AltTextureFocus>UserRatingStarOff.png</AltTextureFocus>
@@ -29,6 +30,7 @@
 		<posY>300</posY>
 		<width>24</width>
 		<height>24</height>
+		<onup>102</onup>
 		<textureFocus>UserRatingStarOn.png</textureFocus>
 		<textureNoFocus>UserRatingStarOn.png</textureNoFocus>
 		<AltTextureFocus>UserRatingStarOff.png</AltTextureFocus>
@@ -43,6 +45,7 @@
 		<posY>300</posY>
 		<width>24</width>
 		<height>24</height>
+		<onup>103</onup>
 		<textureFocus>UserRatingStarOn.png</textureFocus>
 		<textureNoFocus>UserRatingStarOn.png</textureNoFocus>
 		<AltTextureFocus>UserRatingStarOff.png</AltTextureFocus>
@@ -57,6 +60,7 @@
 		<posY>300</posY>
 		<width>24</width>
 		<height>24</height>
+		<onup>104</onup>
 		<textureFocus>UserRatingStarOn.png</textureFocus>
 		<textureNoFocus>UserRatingStarOn.png</textureNoFocus>
 		<AltTextureFocus>UserRatingStarOff.png</AltTextureFocus>
