@@ -2072,7 +2072,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                     // change the backdrop or set to null 
                     backdrop.Filename = (movie != null) ? movie.BackdropFullPath : null;
-                    SetProperty("#MovingPictures.Settings.BackdropMovieTitle", movie.Title);
+                    SetProperty("#MovingPictures.Settings.BackdropMovieTitle"
+                        , (movie != null) ? movie.Title : null);
                     break;
             }
         }
