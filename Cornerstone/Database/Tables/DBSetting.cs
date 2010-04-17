@@ -111,6 +111,7 @@ namespace Cornerstone.Database.Tables {
         #endregion
 
         public bool Hidden { get; set; }
+        public bool Sensitive { get; set; }
 
         public object Value {
             get {
@@ -188,7 +189,10 @@ namespace Cornerstone.Database.Tables {
         }
 
         public override string ToString() {
-            return "DBSetting: " + Name + " = \"" + Value.ToString() + "\""; 
+            if (this.Sensitive)
+                return "DBSetting: " + Name + " = \"*****\""; 
+            else
+                return "DBSetting: " + Name + " = \"" + Value.ToString() + "\""; 
         }
     }
 }

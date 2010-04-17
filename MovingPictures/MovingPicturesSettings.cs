@@ -1403,7 +1403,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Groups = "|MediaPortal GUI|Parental Controls|",
             Identifier = "parental_controls_password",
             Default = "1111",
-            Hidden = true)]
+            Hidden = true,
+            Sensitive = true)]
         public string ParentalContolsPassword {
             get { return _parentalContolsPassword; }
             set {
@@ -1721,7 +1722,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Groups = "|Social|",
             Identifier = "socialpassword",
             Default = "",
-            Hidden = true)]
+            Hidden = true,
+            Sensitive = true)]
         public string SocialPassword {
             get { return _socialPassword; }
             set {

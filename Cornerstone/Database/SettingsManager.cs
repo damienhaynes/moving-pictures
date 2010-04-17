@@ -229,6 +229,7 @@ namespace Cornerstone.Database {
                 newSetting.Type = DBSetting.TypeLookup(property.PropertyType);
                 newSetting.Description = attribute.Description;
                 newSetting.Hidden = attribute.Hidden;
+                newSetting.Sensitive = attribute.Sensitive;
                 newSetting.Grouping.AddRange(groups);
                 newSetting.DBManager = this.dbManager;
                 newSetting.SettingsManager = this;
@@ -247,6 +248,7 @@ namespace Cornerstone.Database {
                     existingSetting.Description = attribute.Description;
 
                 existingSetting.Hidden = attribute.Hidden;
+                existingSetting.Sensitive = attribute.Sensitive;
 
                 // update groups if necessary
                 bool reloadGrouping = false;
@@ -280,5 +282,10 @@ namespace Cornerstone.Database {
         public string Description { get; set; }
         public object Default { get; set; }
         public bool Hidden { get; set; }
+
+        /// <summary>
+        /// Mark settings as Sensitive to prevent their values from being displayed in log files
+        /// </summary>
+        public bool Sensitive { get; set; }
     }
 }
