@@ -26,9 +26,10 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                         XPathDocument metaXML = new XPathDocument(metaFilePath);
                         XPathNavigator navigator = metaXML.CreateNavigator();
                         XmlNamespaceManager ns = new XmlNamespaceManager(navigator.NameTable);
-                        ns.AddNamespace("di", "urn:BDA:bdmv;disclib");
-                        XPathNodeIterator nodes = navigator.Select("/disclib/di:discinfo/di:title/di:name", ns);
-                        XPathNavigator node = nodes.Current;
+                        ns.AddNamespace("", "urn:BDA:bdmv;disclib");
+                        ns.AddNamespace("di", "urn:BDA:bdmv;discinfo");                        
+                        navigator.MoveToFirst();
+                        XPathNavigator node = navigator.SelectSingleNode("//di:discinfo/di:title/di:name", ns);
                         string title = node.ToString().Trim();
                         if (title != string.Empty) {
                             signature.Title = title;
