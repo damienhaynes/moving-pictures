@@ -239,6 +239,12 @@
     <Compile Include="ConfigScreen\Popups\TranslationPopup.Designer.cs">
       <DependentUpon>TranslationPopup.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\SocialPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\SocialPane.Designer.cs">
+      <DependentUpon>SocialPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\SplashPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -626,6 +632,9 @@
     <Content Include="Resources\Images\help.png" />
     <EmbeddedResource Include="ConfigScreen\ContributersScrollPanel.resx">
       <DependentUpon>ContributersScrollPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\SocialPane.resx">
+      <DependentUpon>SocialPane.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Images\icon_faded.png" />
     <EmbeddedResource Include="Resources\Images\icon_normal.png" />

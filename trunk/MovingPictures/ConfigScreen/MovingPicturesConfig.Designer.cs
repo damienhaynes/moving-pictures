@@ -34,6 +34,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.guiSettingsPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.GUISettingsPane();
             this.importerSettingsTab = new System.Windows.Forms.TabPage();
             this.importerSettingsPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImporterSettingsPane();
+            this.socialTab = new System.Windows.Forms.TabPage();
+            this.socialPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.SocialPane();
             this.aboutTabPage = new System.Windows.Forms.TabPage();
             this.aboutPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AboutPane();
             this.mainTabControl.SuspendLayout();
@@ -41,6 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importSettingsTab.SuspendLayout();
             this.guiTab.SuspendLayout();
             this.importerSettingsTab.SuspendLayout();
+            this.socialTab.SuspendLayout();
             this.aboutTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,6 +56,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.mainTabControl.Controls.Add(this.importSettingsTab);
             this.mainTabControl.Controls.Add(this.guiTab);
             this.mainTabControl.Controls.Add(this.importerSettingsTab);
+            this.mainTabControl.Controls.Add(this.socialTab);
             this.mainTabControl.Controls.Add(this.aboutTabPage);
             this.mainTabControl.Location = new System.Drawing.Point(12, 12);
             this.mainTabControl.Name = "mainTabControl";
@@ -154,6 +158,26 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importerSettingsPane1.Size = new System.Drawing.Size(582, 597);
             this.importerSettingsPane1.TabIndex = 1;
             // 
+            // socialTab
+            // 
+            this.socialTab.Controls.Add(this.socialPane1);
+            this.socialTab.Location = new System.Drawing.Point(4, 22);
+            this.socialTab.Name = "socialTab";
+            this.socialTab.Padding = new System.Windows.Forms.Padding(3);
+            this.socialTab.Size = new System.Drawing.Size(588, 603);
+            this.socialTab.TabIndex = 7;
+            this.socialTab.Text = "Social";
+            this.socialTab.UseVisualStyleBackColor = true;
+            // 
+            // socialPane1
+            // 
+            this.socialPane1.BackColor = System.Drawing.Color.Red;
+            this.socialPane1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.socialPane1.Location = new System.Drawing.Point(3, 3);
+            this.socialPane1.Name = "socialPane1";
+            this.socialPane1.Size = new System.Drawing.Size(582, 597);
+            this.socialPane1.TabIndex = 0;
+            // 
             // aboutTabPage
             // 
             this.aboutTabPage.Controls.Add(this.aboutPane1);
@@ -197,6 +221,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importSettingsTab.ResumeLayout(false);
             this.guiTab.ResumeLayout(false);
             this.importerSettingsTab.ResumeLayout(false);
+            this.socialTab.ResumeLayout(false);
             this.aboutTabPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -216,5 +241,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.TabPage aboutTabPage;
         private GUISettingsPane guiSettingsPane1;
         private AboutPane aboutPane1;
+        private System.Windows.Forms.TabPage socialTab;
+        private SocialPane socialPane1;
     }
 }

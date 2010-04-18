@@ -5,6 +5,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Tools.Translate;
+using System.Security.Cryptography;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesSettings: SettingsManager {
@@ -1727,11 +1728,39 @@ namespace MediaPortal.Plugins.MovingPictures {
         public string SocialPassword {
             get { return _socialPassword; }
             set {
+                if (value.Trim().Length > 0) {
+                    // salt + hash
+                    string salt = "52c3a0d0-f793-46fb-a4c0-35a0ff6844c8";
+                    string saltedPassword = value + salt;
+                    SHA1CryptoServiceProvider sha1Obj = new SHA1CryptoServiceProvider();
+                    byte[] bHash = sha1Obj.ComputeHash(Encoding.ASCII.GetBytes(saltedPassword));
+                    string sHash = "";
+                    foreach (byte b in bHash) {
+                        sHash += b.ToString("x2");
+                    }
+                    value = sHash;
+                }
                 _socialPassword = value;
                 OnSettingChanged("socialpassword");
             }
         }
         private string _socialPassword;
+
+        [CornerstoneSetting(
+            Name = "SocialSyncRequired",
+            Description = "Sync is required for Moving Pictures Social.",
+            Groups = "|Social|",
+            Identifier = "socialsyncrequired",
+            Default = false,
+            Hidden = true)]
+        public bool SocialSyncRequired {
+            get { return _socialSyncRequired; }
+            set {
+                _socialSyncRequired = value;
+                OnSettingChanged("socialsyncrequired");
+            }
+        }
+        private bool _socialSyncRequired;
         #endregion
 
     }

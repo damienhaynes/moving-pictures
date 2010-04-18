@@ -4,6 +4,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 using System.Xml;
+using System.Web;
 
 namespace MovingPicturesSocialAPI {
     public class MpsAPI {
@@ -196,6 +197,42 @@ namespace MovingPicturesSocialAPI {
         }
 
         /// <summary>
+        /// Adds a collection of new movies with data to MPS, and adds it to the user's collection.
+        /// </summary>
+        public bool MovieAddToCollectionWithData(ICollection<MovieDTO> movies) {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add("movieCount", movies.Count.ToString());
+            int i = 0;
+            foreach (MovieDTO movie in movies) {
+                data.Add(i + "_sourceName", movie.SourceName);
+                data.Add(i + "_sourceId", movie.SourceId);
+                data.Add(i + "_title", movie.Title);
+                data.Add(i + "_year", movie.Year);
+                data.Add(i + "_certification", movie.Certification);
+                data.Add(i + "_language", movie.Language);
+                data.Add(i + "_tagline", movie.Tagline);
+                data.Add(i + "_summary", movie.Summary);
+                data.Add(i + "_score", movie.Score);
+                data.Add(i + "_popularity", movie.Popularity);
+                data.Add(i + "_runtime", movie.Runtime);
+                data.Add(i + "_genres", movie.Genres);
+                data.Add(i + "_directors", movie.Directors);
+                data.Add(i + "_cast", movie.Cast);
+                data.Add(i + "_translatedTitle", movie.TranslatedTitle);
+                data.Add(i + "_locale", movie.Locale);
+                i++;
+            }
+
+            var resp = PostData("movies/BulkAddToCollectionWithData", data);
+
+            // Check for success
+            if (resp.StatusCode == HttpStatusCode.OK && CheckForSuccess(resp))
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
         /// Remove a movie from an user's collection
         /// </summary>
         /// <param name="mpsId"></param>
@@ -204,6 +241,17 @@ namespace MovingPicturesSocialAPI {
             Dictionary<string, string> data = new Dictionary<string, string>();
             data.Add("mpsId", mpsId.ToString());
             var resp = PostData("movies/RemoveFromCollection", data);
+            if (resp.StatusCode == HttpStatusCode.OK && CheckForSuccess(resp))
+                return true;
+            else
+                return false;
+        }
+
+        public bool MovieRemoveFromCollection(string sourceName, string sourceId) {
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add("sourceName", sourceName);
+            data.Add("sourceId", sourceId);
+            var resp = PostData("movies/RemoveFromCollectionBySource", data);
             if (resp.StatusCode == HttpStatusCode.OK && CheckForSuccess(resp))
                 return true;
             else
@@ -263,10 +311,17 @@ namespace MovingPicturesSocialAPI {
         private static APIHttpResponse PostData(string APIURLBase, string Username, string Password, string urlFragment, Dictionary<string, string> postData) {
             string postDataStr = "";
             foreach (var item in postData) {
-                postDataStr += String.Format("&{0}={1}", item.Key, item.Value);
+                string key = HttpUtility.UrlEncode(item.Key);
+                string value = HttpUtility.UrlEncode(item.Value);
+                postDataStr += String.Format("&{0}={1}", key, value);
             }
             if (postDataStr.Length > 0)
                 postDataStr = postDataStr.Substring(1);
+
+            return PostData(APIURLBase, Username, Password, urlFragment, postDataStr);
+        }
+
+        private static APIHttpResponse PostData(string APIURLBase, string Username, string Password, string urlFragment, string postDataStr) {
             byte[] data = Encoding.UTF8.GetBytes(postDataStr);
 
             // Prepare web request...
@@ -294,7 +349,12 @@ namespace MovingPicturesSocialAPI {
 
         private static bool CheckForSuccess(APIHttpResponse resp) {
             XmlDocument xml = new XmlDocument();
-            xml.LoadXml(resp.ResponseString);
+            try {
+                xml.LoadXml(resp.ResponseString);
+            }
+            catch {
+                return false;
+            }
 
             var successNode = xml.SelectSingleNode("/success");
             return (successNode != null);
