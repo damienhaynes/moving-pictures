@@ -320,6 +320,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // V
         public static string VirtualDriveHeader = "Virtual drive not ready";
         public static string VirtualDriveMessage = "The virtual drive wasn't ready in time.\nPlease try again or cancel playback.";
+        public static string Votes = "votes";
 
         // W
         public static string Wednesday = "Wednesday";
