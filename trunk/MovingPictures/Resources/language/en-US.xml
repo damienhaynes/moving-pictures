@@ -164,6 +164,7 @@
   <!-- V -->
   <string Field="VirtualDriveHeader">Virtual drive not ready</string>
   <string Field="VirtualDriveMessage">The virtual drive wasn't ready in time.\nPlease try again or cancel playback.</string>
+  <string Field="Votes">votes</string>
   <!-- W -->
   <string Field="Wednesday">Wednesday</string>
   <string Field="Writer">Writer</string>

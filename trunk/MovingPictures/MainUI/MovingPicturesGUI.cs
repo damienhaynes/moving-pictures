@@ -1851,6 +1851,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     PublishRuntime(seconds, actualRuntime, "#MovingPictures." + prefix + ".runtime.", forceLogging);         
                     
                 }
+                // for the popularity we add a localized property to make it easier to read in skins
+                else if (currField.FieldName == "popularity" && tableType == typeof(DBMovieInfo)){
+                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
+
+                    int popularity = (int)currField.GetValue(obj);
+                    
+                    NumberFormatInfo localizedScoreFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
+                    localizedScoreFormat.NumberDecimalDigits = 0;
+
+                    // Publish Popularity
+                    SetProperty(propertyStr + ".raw", popularity.ToString(), forceLogging);
+                    SetProperty(propertyStr + ".localized", popularity.ToString("N", localizedScoreFormat), forceLogging);
+
+                }
                 // for floats we need to make sure we use english style printing or imagelist controls
                 // will break. 
                 else if (value.GetType() == typeof(float)) {
