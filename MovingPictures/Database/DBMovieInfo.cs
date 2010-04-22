@@ -197,7 +197,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private float _score;
 
-        [DBField(Filterable=false)]
+        [DBField(AllowDynamicFiltering = false)]
         public int Popularity {
             get { return _popularity; }
 
