@@ -58,7 +58,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Regular expression patterns used by the multipart detection and cleaning methods
         // Matches the substrings "cd/dvd/disc/disk/part #" or "(# of #)"
         // todo: convert constants to advanced settings
-        private const string rxFileStackPattern = @"(\W*\b(cd|dvd|dis[ck]|part)\W*([a-z]|\d+|i+)\W*)|\W\d+\W*(of|-)\W*\d+\W$";
+        private const string rxFileStackPattern = @"(\W*\b(cd|dvd|dis[ck]|part)\W*([a-z]|\d+|i+)(\W|$))|\W\d+\W*(of|-)\W*\d+\W$";
         private const string rxFolderStackPattern = @"^(cd|dvd|dis[ck]|part)\W*([a-z]|\d+|i+)$";
 
         /// <summary>

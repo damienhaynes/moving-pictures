@@ -17,6 +17,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private static Dictionary<string, string> translations;
+        private static Regex translateExpr = new Regex(@"\$\{([^\}]+)\}");
         private static string path = string.Empty;
 
         #endregion
@@ -127,8 +128,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// <param name="input">a string containing ${named} variables that represent the translation keys</param>
         /// <returns>translated input string</returns>
         public static string ParseString(string input) {
-            Regex replacements = new Regex(@"\$\{([^\}]+)\}");
-            MatchCollection matches = replacements.Matches(input);
+            MatchCollection matches = translateExpr.Matches(input);
             foreach(Match match in matches) {
                 input = input.Replace(match.Value, GetByName(match.Groups[1].Value));
             }
