@@ -291,9 +291,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(Default = null, Filterable = false)]
         public string FileHash {
             get {
-                if (fileHash == null && IsAvailable) {
-                    // Only try to get file hashes when the format is File or when it's an image
-                    if (VideoFormat == VideoFormat.File || IsImageFile)
+                // Only try to get file hashes when the format is File or when it's an image
+                if (fileHash == null && (VideoFormat == VideoFormat.File || IsImageFile)) {
+                    if (IsAvailable)
                         FileHash = VideoFormat.File.GetIdentifier(FullPath);
                 }
                 return fileHash;
