@@ -672,6 +672,8 @@
     <Content Include="Resources\language\it.xml" />
     <Content Include="Resources\language\ko.xml" />
     <Content Include="Resources\language\nl.xml" />
+    <Content Include="Resources\language\no.xml" />
+    <Content Include="Resources\language\pt_BR.xml" />
     <Content Include="Resources\language\ru.xml" />
     <Content Include="Resources\language\sl.xml" />
     <Content Include="Resources\language\sv.xml" />
