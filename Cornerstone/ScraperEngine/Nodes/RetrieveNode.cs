@@ -50,7 +50,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             : base(xmlNode, debugMode) {
 
             // Set default attribute valuess
-            userAgent = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
+            userAgent = "Mozilla/5.0 (X11; U; Linux i686; pl-PL; rv:1.9.0.2) Gecko/20121223 Ubuntu/9.25 (jaunty) Firefox/3.8";
             allowUnsafeHeader = false;
             maxRetries = 5;
             timeout = 5000;
