@@ -2,7 +2,6 @@
 <!-- Moving Pictures translation file -->
 <!-- Spanish (ES) -->
 <!-- Note: English is the fallback for any strings not found in other languages -->
-<!-- Contributed by joarreba -->
 <strings>
   <string Field="Actor">Actor</string>
   <string Field="Actors">Actores</string>
@@ -115,6 +114,7 @@
   <string Field="SelectYourRating">Seleccione su puntuación para {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Mostrar sólo películas no vistas</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Mostrar películas vistas y no vistas</string>
+  <string Field="SkinDoesNotSupportCategories">Este skin no soporta las Categorías.</string>
   <string Field="SkinDoesNotSupportPinDialog">Este skin no soporta el diálogo de código PIN</string>
   <string Field="SkinDoesNotSupportRatingDialog">Este skin no soporta el diálogo de puntuaciones</string>
   <string Field="SortBy">Ordenar por</string>
