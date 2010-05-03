@@ -233,6 +233,16 @@ namespace MovingPicturesSocialAPI {
         }
 
         /// <summary>
+        /// Adds a new movie with data to MPS, and adds it to the user's collection.
+        /// </summary>
+        public void MovieAddToCollectionWithData(MovieDTO mpsMovie) {
+            List<MovieDTO> movies = new List<MovieDTO>();
+            movies.Add(mpsMovie);
+            MovieAddToCollectionWithData(movies);
+        }
+
+
+        /// <summary>
         /// Remove a movie from an user's collection
         /// </summary>
         /// <param name="mpsId"></param>

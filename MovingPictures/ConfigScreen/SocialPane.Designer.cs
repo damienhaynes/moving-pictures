@@ -402,6 +402,7 @@
             this.btnLinkedSyncNow.TabIndex = 28;
             this.btnLinkedSyncNow.Text = "Sync Movie Collection Now";
             this.btnLinkedSyncNow.UseVisualStyleBackColor = true;
+            this.btnLinkedSyncNow.Click += new System.EventHandler(this.btnLinkedSyncNow_Click);
             // 
             // linkLinkedUsername
             // 

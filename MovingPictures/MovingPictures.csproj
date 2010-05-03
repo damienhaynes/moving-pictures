@@ -323,6 +323,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Social.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.Database.MoviesPluginTables.DBUser.datasource" />
