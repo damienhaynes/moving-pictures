@@ -171,7 +171,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // socialPane1
             // 
-            this.socialPane1.BackColor = System.Drawing.Color.Red;
             this.socialPane1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.socialPane1.Location = new System.Drawing.Point(3, 3);
             this.socialPane1.Name = "socialPane1";

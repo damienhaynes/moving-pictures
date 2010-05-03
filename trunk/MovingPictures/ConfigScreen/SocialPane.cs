@@ -10,6 +10,8 @@ using MovingPicturesSocialAPI;
 using System.Diagnostics;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
+using System.Security.Cryptography;
+using Cornerstone.GUI.Dialogs;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class SocialPane : UserControl {
@@ -29,11 +31,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void SocialPane_Load(object sender, EventArgs e) {
             if (!DesignMode) {
-                if (MovingPicturesCore.Settings.SocialUsername.Trim() == "") {
-                    SwitchToTab(this.tabStartWizard);
+                if (MovingPicturesCore.Social.HasSocial) {
+                    SwitchToTab(this.tabAlreadyLinked);
                 }
                 else {
-                    SwitchToTab(this.tabAlreadyLinked); 
+                    SwitchToTab(this.tabStartWizard);
                 }
             }
         }
@@ -91,7 +93,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 if (bSuccess) {
                     logger.Debug("MPS Registration successful for user {0}.  Linking with MPS.", txtRegisterUsername.Text);
                     MovingPicturesCore.Settings.SocialUsername = txtRegisterUsername.Text;
-                    MovingPicturesCore.Settings.SocialPassword = txtRegisterPassword.Text;
+                    MovingPicturesCore.Settings.SocialPassword = HashMPSPassword(txtRegisterPassword.Text);
                     MovingPicturesCore.Settings.SocialSyncRequired = true;
 
                     SwitchToTab(this.tabAlreadyLinked);
@@ -115,6 +117,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
             catch (Exception ex) {
                 logger.ErrorException("", ex);
+                MessageBox.Show(String.Format("An unexpected error occurred while registering with Moving Pictures Social.\n{0}", ex.Message)
+                    , "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -131,7 +135,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 if (api.UserCheckAuthentication()) {
                     logger.Debug("Login succeeded for user {0}.  Linking with MPS", txtLinkUsername.Text);
                     MovingPicturesCore.Settings.SocialUsername = txtLinkUsername.Text;
-                    MovingPicturesCore.Settings.SocialPassword = txtLinkPassword.Text;
+                    MovingPicturesCore.Settings.SocialPassword = HashMPSPassword(txtLinkPassword.Text);
                     MovingPicturesCore.Settings.SocialSyncRequired = true;
 
                     SwitchToTab(this.tabAlreadyLinked);
@@ -144,6 +148,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
             catch (Exception ex) {
                 logger.ErrorException("", ex);
+                MessageBox.Show(String.Format("An unexpected error occurred while linking with Moving Pictures Social.\n{0}", ex.Message)
+                    , "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -160,15 +166,19 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void btnLinkedSyncNow_Click(object sender, EventArgs e) {
-            SyncAllMovies();
+            ProgressPopup popup = new Cornerstone.GUI.Dialogs.ProgressPopup(new TrackableWorkerDelegate(SyncAllMovies));
+            popup.Owner = this.ParentForm;
+            popup.ShowDialog();
         }
 
-        private void SyncAllMovies() {
-            // todo: this should be moved somewhere else
+        private void SyncAllMovies(ProgressDelegate progress) {
             try {
                 List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
                 List<MovingPicturesSocialAPI.MovieDTO> mpsMovies = new List<MovingPicturesSocialAPI.MovieDTO>();
+
+                int count = 0;
                 foreach (var movie in allMovies) {
+                    count++;
                     MovingPicturesSocialAPI.MovieDTO mpsMovie = new MovingPicturesSocialAPI.MovieDTO();
                     string directors = "";
                     string actors = "";
@@ -205,12 +215,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     mpsMovie.Locale = movie.PrimarySource.Provider.LanguageCode;
                     mpsMovies.Add(mpsMovie);
 
+                    if (progress != null)
+                        progress("Syncing All Movies to MPS", (int)(count * 100 / allMovies.Count));
                     if (mpsMovies.Count >= 100) {
-                        MovingPicturesCore.SocialAPI.MovieAddToCollectionWithData(mpsMovies);
+                        MovingPicturesCore.Social.SocialAPI.MovieAddToCollectionWithData(mpsMovies);
                         mpsMovies.Clear();
                     }
                 }
-                MovingPicturesCore.SocialAPI.MovieAddToCollectionWithData(mpsMovies);
+                MovingPicturesCore.Social.SocialAPI.MovieAddToCollectionWithData(mpsMovies);
             }
             catch (Exception ex) {
                 logger.ErrorException("", ex);
@@ -226,5 +238,19 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 SwitchToTab(this.tabStartWizard);
             }
         }
+
+        private string HashMPSPassword(string password) {
+            // salt + hash
+            string salt = "52c3a0d0-f793-46fb-a4c0-35a0ff6844c8";
+            string saltedPassword = password + salt;
+            SHA1CryptoServiceProvider sha1Obj = new SHA1CryptoServiceProvider();
+            byte[] bHash = sha1Obj.ComputeHash(Encoding.ASCII.GetBytes(saltedPassword));
+            string sHash = "";
+            foreach (byte b in bHash) {
+                sHash += b.ToString("x2");
+            }
+            return sHash;
+        }
+
     }
 }

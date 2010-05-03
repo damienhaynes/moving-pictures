@@ -50,7 +50,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private static object dbLock = new Object();
         private static object settingsLock = new Object();
         private static object processLock = new Object();
-        private static object socialAPILock = new Object();
+        private static object socialLock = new Object();
 
         #region Properties & Events
 
@@ -127,19 +127,18 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
 
-        // The MpsAPI object that should be used by all components of the plugin.
-        public static MovingPicturesSocialAPI.MpsAPI SocialAPI {
+        // The Social object that should be used by all components of the plugin.
+        public static Social Social {
             get {
-                lock (socialAPILock) {
-                    if (_socialAPI == null) {
-                        _socialAPI = new MpsAPI(Settings.SocialUsername
-                            , Settings.SocialPassword
-                            , Settings.SocialURLBase + "api/1.0/");
+                lock (socialLock) {
+                    if (_social == null) {
+                        _social = new Social();
                     }
-                    return _socialAPI;
+                    return _social;
                 }
+
             }
-        } private static MovingPicturesSocialAPI.MpsAPI _socialAPI = null;
+        } private static Social _social = null;
 
         #endregion
 
@@ -158,6 +157,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             Microsoft.Win32.SystemEvents.PowerModeChanged += new Microsoft.Win32.PowerModeChangedEventHandler(onSystemPowerModeChanged);
 
             DatabaseMaintenanceManager.MaintenanceProgress += new ProgressDelegate(DatabaseMaintenanceManager_MaintenanceProgress);
+
+            _social = new MovingPictures.Social();
 
             // setup the data structures sotring our list of startup actions
             // we use this setup so we can easily add new tasks without having to 

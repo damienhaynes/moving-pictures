@@ -5,7 +5,6 @@ using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Tools.Translate;
-using System.Security.Cryptography;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesSettings: SettingsManager {
@@ -1691,7 +1690,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Groups = "|Social|",
             Identifier = "socialurlbase",
             Default = "http://social.moving-pictures.tv/",
-            Hidden = true)]
+            Hidden = false)]
         public string SocialURLBase {
             get { return _socialURLBase; }
             set {
@@ -1728,18 +1727,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         public string SocialPassword {
             get { return _socialPassword; }
             set {
-                if (value.Trim().Length > 0) {
-                    // salt + hash
-                    string salt = "52c3a0d0-f793-46fb-a4c0-35a0ff6844c8";
-                    string saltedPassword = value + salt;
-                    SHA1CryptoServiceProvider sha1Obj = new SHA1CryptoServiceProvider();
-                    byte[] bHash = sha1Obj.ComputeHash(Encoding.ASCII.GetBytes(saltedPassword));
-                    string sHash = "";
-                    foreach (byte b in bHash) {
-                        sHash += b.ToString("x2");
-                    }
-                    value = sHash;
-                }
                 _socialPassword = value;
                 OnSettingChanged("socialpassword");
             }
