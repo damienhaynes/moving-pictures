@@ -95,6 +95,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             if (ext == ".m2ts" && dirName.Equals("stream", StringComparison.OrdinalIgnoreCase))
                                 return false;
 
+                            // Bluray: mpls files sitting in a playlist folder are part of a bluray disc
+                            if (ext == ".mpls" && dirName.Equals("playlist", StringComparison.OrdinalIgnoreCase))
+                                return false;
+
                             // HD-DVD: evo files sitting in a hvdvd_ts folder are part of a hddvd disc
                             if (ext == ".evo" && dirName.Equals("hvdvd_ts", StringComparison.OrdinalIgnoreCase))
                                 return false;
