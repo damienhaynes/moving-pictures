@@ -1734,20 +1734,20 @@ namespace MediaPortal.Plugins.MovingPictures {
         private string _socialPassword;
 
         [CornerstoneSetting(
-            Name = "SocialSyncRequired",
-            Description = "Sync is required for Moving Pictures Social.",
+            Name = "SocialTaskListTimer",
+            Description = "Minutes for checking Moving Pictures Social Task List.  0 to disable.",
             Groups = "|Social|",
-            Identifier = "socialsyncrequired",
-            Default = false,
-            Hidden = true)]
-        public bool SocialSyncRequired {
-            get { return _socialSyncRequired; }
+            Identifier = "socialtasklisttimer",
+            Default = 60,
+            Hidden = false)]
+        public int SocialTaskListTimer {
+            get { return _socialTaskListTimer; }
             set {
-                _socialSyncRequired = value;
-                OnSettingChanged("socialsyncrequired");
+                _socialTaskListTimer = value;
+                OnSettingChanged("socialtasklisttimer");
             }
         }
-        private bool _socialSyncRequired;
+        private int _socialTaskListTimer;
         #endregion
 
     }
