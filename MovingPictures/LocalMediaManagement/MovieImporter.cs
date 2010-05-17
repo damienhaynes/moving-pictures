@@ -1334,8 +1334,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // notify any listeners of the status change
             logger.Info("Added \"{0}\" ({1}).", currMatch.Selected.Movie.Title, currMatch.Selected.Movie.Year);
-            if (MovieStatusChanged != null)
-                MovieStatusChanged(currMatch, MovieImporterAction.COMMITED);
+            if (MovieStatusChanged != null) {
+                foreach (MovieStatusChangedHandler handler in MovieStatusChanged.GetInvocationList()) {
+                    try {
+                        handler(currMatch, MovieImporterAction.COMMITED);
+                    }
+                    catch (Exception ex) {
+                        logger.ErrorException("Error in event handler: " + handler.Method.Name, ex);
+                    }
+                }
+            }
         }
 
         // retrieves possible matches for the next item (or group of items) in the mediaQueue
