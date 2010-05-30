@@ -1774,8 +1774,20 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (this.Result.YearScore > otherResult.YearScore)
                 return 1;
             
-            // If we are still equal judge by popularity
-            return ((PossibleMatch)o).movie.Popularity.CompareTo(this.movie.Popularity);
+            DBSourceInfo thisSource = this.Movie.PrimarySource;
+            DBSourceInfo otherSource = ((PossibleMatch)o).Movie.PrimarySource;
+
+            // If we are still equal and from the same data source, judge by popularity
+            if (thisSource == otherSource)
+                return ((PossibleMatch)o).movie.Popularity.CompareTo(this.movie.Popularity);
+
+            // if we are still equal and from different data sources, use the one from the higher ranked source
+            if (thisSource.DetailsPriority < otherSource.DetailsPriority)
+                return -1;
+            else if (thisSource.DetailsPriority > otherSource.DetailsPriority)
+                return 1;
+
+            return 0;
         }
 
         public override string ToString() {
