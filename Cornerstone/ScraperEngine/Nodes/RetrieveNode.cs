@@ -44,7 +44,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         } protected bool allowUnsafeHeader;
 
         public string Cookies {
-            get { return Cookies; }
+            get { return cookies; }
         } protected string cookies = null;
 
         #endregion
