@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{14201B8D-31C3-4FB5-9356-9485676C147B}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -331,7 +331,7 @@
     <Content Include="Images\list-remove.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaPortal\Databases\Databases.csproj">
+    <ProjectReference Include="..\MediaPortal\Databases\Databases.csproj">
       <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
       <Name>Databases</Name>
     </ProjectReference>

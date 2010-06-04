@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>439321</id>
-    <version major="1" minor="0" point="4"/>
-    <published month="4" day="18" year="2009"/>
+    <version major="1" minor="0" point="5"/>
+    <published month="2" day="23" year="2010"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -182,7 +182,7 @@
     <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
     
     <!-- Score -->
-    <parse name="score" input="${imdb_details_page}" regex='&lt;div class="meta"&gt;\s+&lt;b&gt;(\d+.\d+)/10&lt;/b&gt; '/>
+    <parse name="score" input="${imdb_details_page}" regex='&lt;b&gt;(\d+.\d+)/10&lt;/b&gt; '/>
     <set name='movie.score' value='${score[0][0]:htmldecode}'/>
     
     <!-- Language -->
