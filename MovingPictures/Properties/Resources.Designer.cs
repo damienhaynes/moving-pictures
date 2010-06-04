@@ -493,6 +493,27 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;Daum&lt;/name&gt;
+        ///    &lt;author&gt;edge&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from movie.daum.net&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHAN [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_Daum {
+            get {
+                return ResourceManager.GetString("Script_Daum", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap script_delete {
             get {
                 object obj = ResourceManager.GetObject("script_delete", resourceCulture);
@@ -677,6 +698,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         internal static string Script_Kinopoisk {
             get {
                 return ResourceManager.GetString("Script_Kinopoisk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;kvikmyndir.is&lt;/name&gt;
+        ///    &lt;author&gt;Kjartan Þór Guðmundsson (kjarrig)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from kvikmyndir.is.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers sho [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_kvikmyndir {
+            get {
+                return ResourceManager.GetString("Script_kvikmyndir", resourceCulture);
             }
         }
         
