@@ -42,6 +42,11 @@ namespace Cornerstone.ScraperEngine.Nodes {
         public bool AllowUnsafeHeader {
             get { return allowUnsafeHeader; }
         } protected bool allowUnsafeHeader;
+
+        public string Cookies {
+            get { return Cookies; }
+        } protected string cookies = null;
+
         #endregion
 
         #region Methods
@@ -105,6 +110,9 @@ namespace Cornerstone.ScraperEngine.Nodes {
                                 throw e;                            
                         }
                         break;
+                    case "cookies":
+                        cookies = attr.Value;
+                        break;
                 }
             }
 
@@ -151,12 +159,19 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 grabber.TimeoutIncrement = timeoutIncrement;
                 grabber.MaxRetries = maxRetries;
                 grabber.AllowUnsafeHeader = allowUnsafeHeader;
+                grabber.CookieHeader = cookies;
                 grabber.Debug = DebugMode;
+
 
                 // Keep session / chaining
                 string sessionKey = "urn://scraper/header/" + grabber.Request.RequestUri.Host;
-                if (variables.ContainsKey(sessionKey))
-                    grabber.CookieHeader = variables[sessionKey];
+                if (variables.ContainsKey(sessionKey)) {
+                    if (grabber.CookieHeader == null)
+                        grabber.CookieHeader = variables[sessionKey];
+                    else
+                        grabber.CookieHeader = grabber.CookieHeader + "," + variables[sessionKey];
+                }
+
 
                 // Retrieve the document
                 if (grabber.GetResponse()) {
