@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!-- Moving Pictures translation file -->
-<!-- English (US) -->
+<!-- Danish (DA) -->
 <!-- Note: English is the fallback for any strings not found in other languages -->
-<!-- Contributed by Steffansp -->
+<!-- Contributed by Steffansp 12/05/10 -->
 <strings>
   <!-- A -->
   <string Field="Actor">Skuespiller</string>
@@ -101,10 +101,8 @@
   <string Field="RateFiveStarTwo">Middelmådig</string>
   <string Field="RateHeading">Vurder film</string>
   <string Field="RecentlyAddedMovies">Nylig tilføjet</string>
-  <string Field="RemoteNumericAlphabet0">
-  </string>
-  <string Field="RemoteNumericAlphabet1">
-  </string>
+  <string Field="RemoteNumericAlphabet0"></string>
+  <string Field="RemoteNumericAlphabet1"></string>
   <string Field="RemoteNumericAlphabet2">abcæåä</string>
   <string Field="RemoteNumericAlphabet3">def</string>
   <string Field="RemoteNumericAlphabet4">ghi</string>
@@ -133,6 +131,7 @@
   <string Field="SelectYourRating">Vælg din vurdering for {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Vis kun usete film</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Vis sete og usete film</string>
+  <string Field="SkinDoesNotSupportCategories">Dette skin understøtter ikke kategorier</string>
   <string Field="SkinDoesNotSupportPinDialog">Dette skin understøtter ikke adgangskodedialogen.</string>
   <string Field="SkinDoesNotSupportRatingDialog">Dette skin understøtter ikke klassificerings dialogen</string>
   <string Field="SortBy">Sorter efter</string>
@@ -149,7 +148,7 @@
   <string Field="Thursday">Torsdag</string>
   <string Field="Title">Title</string>
   <string Field="Today">I dag</string>
-  <string Field="ToggleParentalLock">Toggle Parental Lock</string>
+  <string Field="ToggleParentalLock">Slå forælder lås fra</string>
   <string Field="Tuesday">Tirsdag</string>
   <string Field="TwoMonthsAgo">For 2 måneder siden</string>
   <string Field="TwoWeeksAgo">For 2 uger siden</string>
@@ -164,6 +163,7 @@
   <!-- V -->
   <string Field="VirtualDriveHeader">Det virtuelle drev er ikke klar</string>
   <string Field="VirtualDriveMessage">Det virtuelle drev blev ikke klar i tide. \nPrøv igen eller annuller afspilningen.</string>
+  <string Field="Votes">Vurdering</string>
   <!-- W -->
   <string Field="Wednesday">Onsdag</string>
   <string Field="Writer">Manuskript</string>

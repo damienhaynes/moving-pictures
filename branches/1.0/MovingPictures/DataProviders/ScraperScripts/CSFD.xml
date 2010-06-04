@@ -17,8 +17,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874940</id>
-    <version major="0" minor="1" point="2"/>
-    <published month="2" day="5" year="2010"/>
+    <version major="0" minor="1" point="3"/>
+    <published month="3" day="3" year="2010"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -68,7 +68,7 @@
     </set>
 
     <!-- Retrieve results using Title -->
-    <replace name="search.title" input="${search.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)" with=""/>
+    <replace name="search.title" input="${search.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)|(^El\s+)" with=""/>
     <retrieve name="search_page" url="${site}hledani-filmu-hercu-reziseru-ve-filmove-databazi/?search=${search.title:safe}" encoding="utf-8" />
 
     <!-- If we got a details page, this is used. If not, regex does not match so we dont process the loop -->
@@ -85,7 +85,7 @@
       <parse name="movie_details" input="${search_results_verified}" regex="${rx_verify}" />
       <loop name="curr_details" on="movie_details" limit="20">
         <add name="counter" value1="${count}" value2="${offset}" />
-        <parse name="title" input="${curr_details[1]:htmldecode}" regex="(.+?)(?:, (The|A|Ein|Das|Die|Der|Les|Une))?$" />
+        <parse name="title" input="${curr_details[1]:htmldecode}" regex="(.+?)(?:, (The|A|An|Ein|El|Das|Die|Der|Les|Une))?$" />
         <set name="movie[${counter}].title" value="${title[0][1]} ${title[0][0]}" />
         <set name="movie[${counter}].year" value="${curr_details[2]:htmldecode}" />
         <set name="movie[${counter}].site_id" value="${curr_details[0]}" />
@@ -122,13 +122,13 @@
       <!-- Regular Expressions -->
       <set name="rx_title">
         <![CDATA[
-        <title>CSFD.cz\s\-\s(.+?)(?:, (The|A|Ein|Das|Die|Der|Les|Une))?(?:\s/\s(.+?)(?:, (The|A|Ein|Das|Die|Der|Les|Une))?)?\s\((\d{4})\).*</title>
+        <title>CSFD.cz\s\-\s(.+?)(?:, (The|A|An|Ein|El|Das|Der|Die|Les|Une))?(?:\s/\s(.+?)(?:, (The|A|Ein|El|Das|Die|Der|Les|Une))?)?\s\((\d{4})\).*</title>
         ]]>
       </set>
 
       <set name="rx_akas">
         <![CDATA[
-        vspace='2'\s></td><td>(.+?)(?:, (The|A|Ein|Das|Die|Der|Les|Une))?</td></tr></table>
+        vspace='2'\s></td><td>(.+?)(?:, (The|A|An|Ein|El|Das|Der|Die|Les|Une))?</td></tr></table>
         ]]>
       </set>
 
@@ -162,12 +162,6 @@
         ]]>
       </set>
 
-      <set name="rx_score_block">
-        <![CDATA[
-        font-size:36px.+?<b>Hodnocení uživatelů:</b>
-        ]]>
-      </set>
-
       <set name="rx_score">
         <![CDATA[
         font-size:36px.+?>.*?(\d+)%.*?</td>
@@ -198,15 +192,15 @@
 	      ]]>
       </set>
 
-	    <set name="rx_tagline">
-        <![CDATA[
-        <h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)
-        ]]>
-      </set>
-	  
       <set name="rx_language">
         <![CDATA[
         <a\shref=./Sections/Languages/[^/]+/">\s+([^<]+)</a>
+        ]]>
+      </set>
+
+	    <set name="rx_tagline">
+        <![CDATA[
+        <h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)
         ]]>
       </set>
 
@@ -234,6 +228,7 @@
       <loop name='currDirector' on='directors'>
         <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}" />
       </loop>
+      <replace name="movie.directors" input="${movie.directors}" pattern="( )" with=" " />
       <replace name="movie.directors" input="${movie.directors}" pattern="(  )" with=" " />
 
       <!-- Actors -->
@@ -243,6 +238,7 @@
       <loop name="currActor" on="actors" limit="50">
         <set name="movie.actors" value="${movie.actors}|${currActor[0]:htmldecode}" />
       </loop>
+      <replace name="movie.actors" input="${movie.actors}" pattern="( )" with=" " />
       <replace name="movie.actors" input="${movie.actors}" pattern="(  )" with=" " />
 
       <!-- Genres -->
@@ -254,8 +250,7 @@
       </loop>
 
       <!-- Score -->
-      <parse name="score_block" input="${details_page}" regex="${rx_score_block}" />
-      <parse name="score" input="${score_block}" regex="${rx_score}" />
+      <parse name="score" input="${details_page}" regex="${rx_score}" />
       <set name="movie.score" value="${score[0][0]:htmldecode}" />
 
       <!-- Popularity -->
@@ -301,9 +296,21 @@
         </loop>
 
         <!-- Certification -->
-        <parse name="certification" input="${imdb_details_page}" regex='&gt;\s+USA:((?:G)|(?:PG)|(?:PG-13)|(?:R)|(?:X)|(?:NC-17))&lt;/a&gt;'/>
+        <parse name="certification" input="${imdb_details_page}" regex='&gt;\s+UK:((?:U)|(?:PG)|(?:12)|(?:12A)|(?:15)|(?:18)|(?:R18))&lt;/a&gt;'/>
         <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
 
+        <replace name="movie.certification" input="${movie.certification}" pattern="(U)" with="Pro všechny věkové skupiny" />
+        <replace name="movie.certification" input="${movie.certification}" pattern="(PG)" with="Doprovod rodiče" />
+        <replace name="movie.certification" input="${movie.certification}" pattern="(12)" with="Přístupné od 12 let" />
+        <replace name="movie.certification" input="${movie.certification}" pattern="(Přístupné od 12 letA)" with="Vhodné od 12 let" />
+        <replace name="movie.certification" input="${movie.certification}" pattern="(15)" with="Přístupné od 15 let" />
+        <replace name="movie.certification" input="${movie.certification}" pattern="(18)" with="Přístupné od 18 let" />
+        <replace name="movie.certification" input="${movie.certification}" pattern="(RPřístupné od 18 let)" with="Zakázaný film" />
+
+        <if test="${movie.certification}=">
+          <set name='movie.certification' value='Neuvedeno'/>
+        </if>
+        
         <!-- Runtime -->
         <parse name="runtime" input="${imdb_details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+'/>
         <set name='movie.runtime' value='${runtime[0][0]:htmldecode}'/>
@@ -328,17 +335,27 @@
 
         <replace name="movie.language" input="${movie.language}" pattern="(Cantonese)" with="Kantonsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Czech)" with="Česky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(Danish)" with="Dánsky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(Dutch)" with="Nizozemsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(English)" with="Anglicky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(Estonian)" with="Estonsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Filipino)" with="Filipínsky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(Finish)" with="Finsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(French)" with="Francouzsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(German)" with="Německy" />
         <replace name="movie.language" input="${movie.language}" pattern="(Hindi)" with="Hindsky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(Icelandic)" with="Islandsky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(Italian)" with="Italsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Japanese)" with="Japonsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Korean)" with="Korejsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Mandarin)" with="Mandarínsky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(Mongolian)" with="Mongolsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Norwegian)" with="Norsky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(Portuguese)" with="Portugalsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Russian)" with="Rusky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(Saami)" with="Laponsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Spanish)" with="Španělsky" />
+        <replace name="movie.language" input="${movie.language}" pattern="(Swedish)" with="Švédsky" />
         <replace name="movie.language" input="${movie.language}" pattern="(Tamil)" with="Tamilsky" />
 
       </if>

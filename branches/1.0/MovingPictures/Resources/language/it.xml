@@ -143,6 +143,7 @@
   <string Field="UpdateMovieDetailsHeader">Aggiorna dettagli film</string>
   <string Field="VirtualDriveHeader">Disco virtuale non pronto</string>
   <string Field="VirtualDriveMessage">Il disco virtuale non era pronto in tempo.\nRiprovare o cancellare la riproduzione.</string>
+  <string Field="Votes">voti</string>
   <string Field="Wednesday">Mercoledì</string>
   <string Field="Writer">Scrittore</string>
   <string Field="Writers">Scrittori</string>
