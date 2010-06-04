@@ -47,6 +47,20 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _noiseFilter;
 
+        [CornerstoneSetting(
+            Name = "Default User Agent",
+            Description = "Default user agent Moving-Pictures uses for its web requests.",
+            Groups = "|Movie Importer|Tweaks|",
+            Identifier = "useragent",
+            Default = @"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2)")]
+        public string UserAgent {
+            get { return _useragent; }
+            set {
+                _useragent = value;
+                OnSettingChanged("useragent");
+            }
+        }
+        private string _useragent;
 
         [CornerstoneSetting(
             Name = "Enable Importer While In GUI",

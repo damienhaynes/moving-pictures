@@ -86,7 +86,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                 request.AddRange((int)startPosition);
                 request.Timeout = timeout;
                 request.ReadWriteTimeout = 20000;
-                request.UserAgent = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
+                request.UserAgent = MovingPicturesCore.Settings.UserAgent;
                 request.Proxy = WebRequest.DefaultWebProxy;
                 request.Proxy.Credentials = CredentialCache.DefaultCredentials; 
                 response = request.GetResponse();
