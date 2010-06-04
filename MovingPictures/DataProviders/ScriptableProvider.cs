@@ -138,6 +138,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movieSignature.Folder != null) paramList["search.foldername"] = movieSignature.Folder;
             if (movieSignature.File != null) paramList["search.filename"] = movieSignature.File;
             
+            //set default useragent for scrapers to use
+            paramList["settings.defaultuseragent"] = MovingPicturesCore.Settings.UserAgent;
+
             // this variable is the filename without extension (and a second one without stackmarkers)
             if (!String.IsNullOrEmpty(movieSignature.File)) {
                 paramList["search.filename_noext"] = Path.GetFileNameWithoutExtension(movieSignature.File);
@@ -212,6 +215,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
             }
 
+            //add useragent to paramlist
+            paramList["settings.defaultuseragent"] = MovingPicturesCore.Settings.UserAgent;
+
             // try to retrieve results
             results = scraper.Execute("get_details", paramList);
             if (results == null) {
@@ -270,6 +276,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo)))
                 if (currField.GetValue(movie) != null)
                     paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
+
+            //add useragent to paramlist
+            paramList["settings.defaultuseragent"] = MovingPicturesCore.Settings.UserAgent;
 
             // run the scraper
             results = scraper.Execute("get_cover_art", paramList);
@@ -330,6 +339,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             foreach (DBField currField in DBField.GetFieldList(typeof(DBMovieInfo)))
                 if (currField.GetValue(movie) != null)
                     paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
+
+            //add useragent to paramlist
+            paramList["settings.defaultuseragent"] = MovingPicturesCore.Settings.UserAgent;
 
             // run the scraper
             results = scraper.Execute("get_backdrop", paramList);

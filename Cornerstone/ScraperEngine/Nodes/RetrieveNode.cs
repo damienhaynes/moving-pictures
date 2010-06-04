@@ -29,7 +29,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         public String UserAgent {
             get { return userAgent; }
-        } protected String userAgent;
+        } protected String userAgent = null;
 
         public int Timeout {
             get { return timeout; }
@@ -55,7 +55,6 @@ namespace Cornerstone.ScraperEngine.Nodes {
             : base(xmlNode, debugMode) {
 
             // Set default attribute valuess
-            userAgent = "Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)";
             allowUnsafeHeader = false;
             maxRetries = 5;
             timeout = 5000;
@@ -127,6 +126,14 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         public override void Execute(Dictionary<string, string> variables) {
             if (DebugMode) logger.Debug("executing retrieve: " + xmlNode.OuterXml);
+
+            // Check for calling class provided useragent
+            if (userAgent == null && variables.ContainsKey("settings.defaultuseragent")) {
+                userAgent = variables["settings.defaultuseragent"];
+            }
+
+            if (userAgent == null) 
+                userAgent = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2)";
 
             string parsedName = parseString(variables, name);
             string stringData = string.Empty;
