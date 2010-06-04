@@ -448,6 +448,7 @@
     <Content Include="DataProviders\ScraperScripts\Allocine.xml" />
     <Content Include="DataProviders\ScraperScripts\Alpacine.xml" />
     <Content Include="DataProviders\ScraperScripts\CSFD.xml" />
+    <Content Include="DataProviders\ScraperScripts\Daum.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmAffinity.xml" />
     <None Include="DataProviders\ScraperScripts\filmtipset.se.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmWeb.xml" />
@@ -456,6 +457,7 @@
     <Content Include="DataProviders\ScraperScripts\IMDb.it.xml" />
     <Content Include="DataProviders\ScraperScripts\IMPAwards.xml" />
     <Content Include="DataProviders\ScraperScripts\Kinopoisk.xml" />
+    <Content Include="DataProviders\ScraperScripts\kvikmyndir.xml" />
     <Content Include="DataProviders\ScraperScripts\MoTechPosters.xml" />
     <None Include="DataProviders\ScraperScripts\MovieMaze.xml" />
     <Content Include="DataProviders\ScraperScripts\MovieMeter.xml" />
