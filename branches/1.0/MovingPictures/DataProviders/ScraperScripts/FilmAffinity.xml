@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141416</id>
-    <version major="1" minor="0" point="7"/>
-    <published month="11" day="7" year="2009"/>
+    <version major="1" minor="0" point="10"/>
+    <published month="06" day="04" year="2010"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -193,21 +193,21 @@
       ]]>
     </set>
 	
-	<set name="rx_description_genres">
-      <![CDATA[
-      GÉNERO\sY\sCRÍTICA(?:[^>]+>){14}(?<MovieGenres>[^/]+)\s/\ssinopsis..(?<MovieSummary>[^\n]+)
-      ]]>
-    </set>
-	
 	<set name="rx_description">
       <![CDATA[
-      GÉNERO\sY\sCRÍTICA(?:[^>]+>){14}(?<MovieSummary>[^\n]+)
+      SINOPSIS.+?<td>(.+?)</td>
       ]]>
     </set>
 	
-	<set name="rx_description_genre_test">
+	<set name="rx_genre_block">
       <![CDATA[
-      /\s(?<MovieGenres>[^/]+)/\ssinopsis.\s(?<MovieSummary>[^\n]+)
+      GÉNERO.+?<td[^>]+>(.+?)</td>
+      ]]>
+    </set>
+	
+	<set name="rx_genre">
+      <![CDATA[
+      ([^\.]+)(?:\.)
       ]]>
     </set>
 	
@@ -284,13 +284,13 @@
 	</if>
 	
     <!-- Genres -->
-    <parse name="genres" input="${details_page}" regex="${rx_description_genres}"/>
+    <parse name="genres" input="${details_page}" regex="${rx_genre_block}"/>
 	<if test='${genres[0][0]}!='>
-		<set name="genresList" value="${genres[0][0]}" />
-		<parse name="genre" input="${genresList}" regex="${rx_breakPeriodList}"/>
+		<set name="genresList" value="${genres[0][0]:striptags}" />
+		<parse name="genre" input="${genresList}." regex="${rx_genre}"/>
 		<set name='movie.genres' value=''/>
 		<loop name='currGenre' on='genre'>
-		  <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
+			<set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
 		</loop>
 	</if>
     <!-- Certification -->
@@ -322,43 +322,13 @@
     
     
     <!-- Plot Summary -->
-    <parse name="summary" input="${details_page}" regex="${rx_description_genres}"/>
-	<set name='summary' value='${summary[0][1]:striptags}' />
+	<parse name="summary" input="${details_page}" regex="${rx_description}"/>
+	<if test='${summary[0][0]}!='>
+	<set name='summary' value='${summary[0][0]:striptags}' />
 	<if test="${summary}!=">
-	    <set name="summary_clean" value="${summary:striptags}" />
-	    <set name="movie.summary" value="${summary_clean:htmldecode}" />
+		<set name="summary_clean" value="${summary:striptags}" />
+		<set name="movie.summary" value="${summary_clean:htmldecode}" />
 	</if>
-	<if test="${summary}=">
-	    <parse name="summary" input="${details_page}" regex="${rx_description}"/>
-		<if test='${summary[0][0]:striptags}!='>
-			<!-- Do test an additional test to see if we can find the genres in the summary -->
-			<parse name="genre_summary" input="${summary[0][0]}" regex="${rx_description_genre_test}"/>
-			<if test='${genre_summary[0][0]:striptags}!='>
-				<if test='${genre_summary[0][1]:striptags}!='>
-					<!-- Add summary to movie -->
-					<set name="summary_clean" value="${genre_summary[0][1]:striptags}" />
-					<set name="movie.summary" value="${summary_clean:htmldecode}" />
-					<!-- If the above two tests pass, we should have the genres in group 0 and the summary in group 1 -->
-					<set name="genresList" value="${genre_summary[0][0]}" />
-					<parse name="genre" input="${genresList}" regex="${rx_breakPeriodList}"/>
-					<if test='${genre[0][0]}!='>
-						<!-- genres found. Add them to movie. -->
-						<set name='movie.genres' value=''/>
-						<loop name='currGenre' on='genre'>
-							<set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
-						</loop>
-					</if>				
-				</if>
-			</if>
-			<!-- Find out if movie summary has been found with genres. If not, add it. -->
-			<if test='${movie.summary}='>
-				<set name='summary' value='${summary[0][0]:striptags}' />
-				<if test="${summary}!=">
-					<set name="summary_clean" value="${summary:striptags}" />
-					<set name="movie.summary" value="${summary_clean:htmldecode}" />
-				</if>
-			</if>
-		</if>
 	</if>
 	
 	
@@ -368,7 +338,7 @@
 		
 	<set name="rx_poster_link">
 	  <![CDATA[
-	  http.//www.filmaffinity.com/imgs/posters/large/(?<MoviePoster>[^"]+)
+	  lightbox"\shref="([^"]+)
 	  ]]>
 	</set>
 
@@ -379,7 +349,7 @@
 		<parse name="posterLink" input="${details_page_cover}" regex="${rx_poster_link}"/>
 		<!-- If link found, continue -->
 		<if test="${posterLink[0][0]}!=">
-			<set name='cover_art[0].url' value='http://www.filmaffinity.com/imgs/posters/large/${posterLink[0][0]}'/>
+			<set name='cover_art[0].url' value='${posterLink[0][0]}'/>
 		</if>
 	</if>
 
