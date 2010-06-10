@@ -452,6 +452,7 @@
     <Content Include="DataProviders\ScraperScripts\FilmAffinity.xml" />
     <None Include="DataProviders\ScraperScripts\filmtipset.se.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmWeb.xml" />
+    <Content Include="DataProviders\ScraperScripts\IMDb.de.xml" />
     <Content Include="DataProviders\ScraperScripts\IMDb.es.xml" />
     <Content Include="DataProviders\ScraperScripts\IMDb.fr.xml" />
     <Content Include="DataProviders\ScraperScripts\IMDb.it.xml" />
