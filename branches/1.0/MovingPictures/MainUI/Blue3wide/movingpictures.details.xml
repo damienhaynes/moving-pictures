@@ -14,7 +14,7 @@ This file should contain the details view
       <width>1280</width>
       <height>720</height>
       <texture>filmstrip_overlay.png</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -28,7 +28,7 @@ This file should contain the details view
       <onright>999</onright>
       <textureFocus>-</textureFocus>
       <textureNoFocus>-</textureNoFocus>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 	
 	<control>
@@ -37,7 +37,7 @@ This file should contain the details view
 	  <type>button</type>
 	  <label>Check for Subtitles</label>
 	  <hyperlink>84623</hyperlink>
-	  <visible>plugin.isenabled(SubCentral)+!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+	  <visible>plugin.isenabled(SubCentral)+!control.isvisible(50)+!control.isvisible(51)</visible>
 	  <posX>363</posX>
 	  <posY>309</posY>
 	  <onup>6</onup>
@@ -52,12 +52,12 @@ This file should contain the details view
       <description>Default Cover Art</description>
       <type>image</type>
       <id>0</id>
-      <posX>42</posX>
-      <posY>305</posY>
-      <width>267</width>
-      <height>390</height>
+      <posX>44</posX>
+      <posY>307</posY>
+      <width>264</width>
+      <height>388</height>
       <texture>defaultdvdcover.png</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>Cover Art</description>
@@ -68,7 +68,7 @@ This file should contain the details view
       <width>257</width>
       <height>380</height>
       <texture flipY="true" diffuse="diffusemirrorwide.png">#MovingPictures.Coverart</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>Cover Art Glass Overlay</description>
@@ -79,7 +79,7 @@ This file should contain the details view
       <width>228</width>
       <height>177</height>
       <texture>glassoverlay2.png</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+Control.HasThumb(60)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)+Control.HasThumb(60)</visible>
     </control>
 
     <control>
@@ -91,7 +91,7 @@ This file should contain the details view
       <width>32</width>
       <height>39</height>
       <texture>overlaywubg.png</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>Watched Icon</description>
@@ -102,7 +102,7 @@ This file should contain the details view
       <width>23</width>
       <height>23</height>
       <texture>overlaywatched.png</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+Control.IsVisible(9)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)+control.isvisible(9)</visible>
     </control>
     <control>
       <description>Un-Watched Icon</description>
@@ -113,7 +113,7 @@ This file should contain the details view
       <width>23</width>
       <height>23</height>
       <texture>overlayunwatched.png</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+!Control.IsVisible(9)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)+!control.isvisible(9)</visible>
     </control>
 
     <!-- Details Box -->
@@ -127,7 +127,7 @@ This file should contain the details view
       <width>896</width>
       <height>337</height>
       <texture>detailsbg.png</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
 	<control>
@@ -140,7 +140,7 @@ This file should contain the details view
       <font>font16</font>
       <label>#MovingPictures.SelectedMovie.title</label>
       <textcolor>ff222222</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>Movie Title</description>
@@ -152,7 +152,7 @@ This file should contain the details view
       <font>font16</font>
       <label>#MovingPictures.SelectedMovie.title</label>
       <textcolor>ffFFFFFF</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
 	 <control>
@@ -165,7 +165,7 @@ This file should contain the details view
       <width>840</width>
       <font>font12</font>
       <textcolor>ff222222</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>Genres</description>
@@ -177,7 +177,7 @@ This file should contain the details view
       <width>840</width>
       <font>font12</font>
       <textcolor>ffa9d0f7</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
 	<control>
@@ -190,7 +190,7 @@ This file should contain the details view
 	  <posY>445</posY>	  
 	  <align>left</align>		  
 	  <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>		  
-	  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+	  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
 	</control>	
 	<control>
 	  <description>Star Rating Value</description>
@@ -202,7 +202,7 @@ This file should contain the details view
 	  <width>200</width>
 	  <align>left</align>
 	  <font>font10</font>	  
-	  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+	  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
 	</control>
 	<control>
 	  <description>Dummy User Star Rating Value</description>
@@ -211,7 +211,7 @@ This file should contain the details view
 	  <label>#MovingPictures.UserMovieSettings.user_rating</label>
 	  <posX>-50</posX>
 	  <posY>-50</posY>	
-	  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+	  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
 	</control>
 	<control>
 	  <description>User Star Rating Value</description>
@@ -223,7 +223,7 @@ This file should contain the details view
 	  <width>200</width>
 	  <align>left</align>
 	  <font>font10</font>	  
-	  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+Control.HasText(199)</visible>
+	  <visible>!control.isvisible(50)+!control.isvisible(51)+Control.HasText(199)</visible>
 	</control>
 	
     <control>
@@ -239,7 +239,7 @@ This file should contain the details view
       <font>font11</font>
 	  <scrollStartDelaySec>#textboxscrolldelay.details</scrollStartDelaySec>
       <label>#MovingPictures.SelectedMovie.summary</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -252,7 +252,7 @@ This file should contain the details view
       <width>115</width>
       <font>font11</font>
       <textcolor>ffa9d0f7</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>Directors</description>
@@ -264,7 +264,7 @@ This file should contain the details view
       <width>388</width>
       <font>font11</font>
       <textcolor>ffFFFFFF</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -277,7 +277,7 @@ This file should contain the details view
       <width>115</width>
       <font>font11</font>
       <textcolor>ffa9d0f7</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>Writer</description>
@@ -289,7 +289,7 @@ This file should contain the details view
       <width>388</width>
       <font>font11</font>
       <textcolor>ffFFFFFF</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -302,7 +302,7 @@ This file should contain the details view
       <width>115</width>
       <font>font11</font>
       <textcolor>ffa9d0f7</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>actors</description>
@@ -314,7 +314,7 @@ This file should contain the details view
       <width>728</width>
       <font>font11</font>
       <textcolor>ffFFFFFF</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -327,7 +327,7 @@ This file should contain the details view
       <width>840</width>
       <font>font11</font>
       <textcolor>ffa9d0f7</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>year</description>
@@ -339,7 +339,7 @@ This file should contain the details view
       <width>840</width>
       <font>font11</font>
       <textcolor>ffFFFFFF</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -352,7 +352,7 @@ This file should contain the details view
       <width>840</width>
       <font>font11</font>
       <textcolor>ffa9d0f7</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>runtime</description>
@@ -364,7 +364,7 @@ This file should contain the details view
       <width>840</width>
       <font>font11</font>
       <textcolor>ffFFFFFF</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
   </controls>

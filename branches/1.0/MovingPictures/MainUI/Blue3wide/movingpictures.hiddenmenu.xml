@@ -23,7 +23,7 @@
 			<height>591</height>
 			<texture>Backslide.png</texture>
 			<colorDiffuse>fffffffff</colorDiffuse>
-			<visible>!Control.HasFocus(50)+Control.IsVisible(50)</visible>
+			<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>
 			<animation effect="slide" time="250" start="-300,0" reversible="false">visible</animation>
 			<animation effect="slide" time="250" end="-300,0" reversible="false">hidden</animation>
 		  </control>
@@ -32,7 +32,7 @@
 			<type>group</type>
 			<animation effect="slide" time="250" start="-300,0" reversible="false">visible</animation>
 			<animation effect="slide" time="250" end="-300,0" reversible="false">hidden</animation>
-			<visible>!Control.HasFocus(50)+Control.IsVisible(50)</visible>     			
+			<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>     			
 			<control>
 			  <description>button group</description>
 			  <type>group</type>
@@ -110,7 +110,7 @@
 				<posX>300</posX>
 				<posY>270</posY>
 				<texture>movingpictures_Sort#MovingPictures.Sort.Direction.png</texture>
-				<visible>!Control.HasFocus(50)+Control.IsVisible(50)</visible>
+				<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>
 				<animation effect="slide" time="250" start="-300,0" reversible="false">visible</animation>
 				<animation effect="slide" time="250" end="-300,0" reversible="false">hidden</animation>
 			</control>
