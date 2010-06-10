@@ -799,7 +799,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // This is a directory so we are going to get all localmedia that uses 
                 // this directory we can do this by adding a % character to the end of 
                 // the path as the sqlite query behind it uses LIKE as operator.
-                localMediaRenamed = DBLocalMedia.GetAll(e.OldFullPath + '%', e.FullPath.PathToFileInfo().GetDriveVolumeSerial());
+                localMediaRenamed = DBLocalMedia.GetAll(e.OldFullPath + Path.DirectorySeparatorChar + '%', e.FullPath.PathToFileInfo().GetDriveVolumeSerial());
 
                 // if this folder isn't related to any file in our database, return
                 if (localMediaRenamed.Count == 0)
