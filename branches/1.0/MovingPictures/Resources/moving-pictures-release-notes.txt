@@ -1,4 +1,4 @@
-Moving Pictures 1.0.3
+Moving Pictures 1.0.5
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -7,9 +7,10 @@ If you have any problems or questions about the plug-in you can visit the
 forums to interact with the community and developers, or you can visit the 
 Moving Pictures Wiki for access to the user's guide and frequently asked questions.
 
-Moving Pictures Forum:       http://forum.team-mediaportal.com/moving-pictures-284/
-Moving Pictures Wiki:        http://moving-pictures.tv
+Moving Pictures Wiki:           http://moving-pictures.tv
+Moving Pictures Forum:          http://forum.team-mediaportal.com/moving-pictures-284/
 Moving Pictures Project Page:   http://moving-pictures.googlecode.com
+
 
 Change Log
 ================================================================================
