@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="1" minor="5" point="4" />
-    <published month="05" day="28" year="2010" />
+    <version major="1" minor="5" point="5" />
+    <published month="06" day="12" year="2010" />
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -183,7 +183,7 @@
 	  
       <set name="rx_language">
         <![CDATA[
-      <a\shref=./Sections/Languages/[^/]+/">\s+([^<]+)</a>
+      <a\shref=./Sections/Languages/[^/]+/">\s*([^<]+)</a>
       ]]>
       </set>
 
@@ -245,7 +245,7 @@
       </loop>
 
       <!-- Certification -->
-      <parse name="certification" input="${details_page}" regex='&gt;\s+USA:((?:G)|(?:PG)|(?:PG-13)|(?:R)|(?:X)|(?:NC-17))&lt;/a&gt;'/>
+      <parse name="certification" input="${details_page}" regex='&gt;\s*USA:((?:G)|(?:PG)|(?:PG-13)|(?:R)|(?:X)|(?:NC-17))&lt;/a&gt;'/>
       <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
 
       <!-- Runtime -->
