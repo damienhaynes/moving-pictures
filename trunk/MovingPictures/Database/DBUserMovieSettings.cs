@@ -8,6 +8,8 @@ using Cornerstone.Database.Tables;
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("user_movie_settings")]
     public class DBUserMovieSettings: MovingPicturesDBTable {
+        public bool RatingChanged = false;
+        public bool WatchCountChanged = false;
 
         public override void AfterDelete() {
         }
@@ -37,13 +39,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public int? UserRating {
             get { return _userRating; }
             set {
-                if (value > 5)
-                    _userRating = 5;
-                else if (value < 1)
-                    _userRating = 1;
-                else
+                if (value > 5) value = 5;
+                if (value < 1) value = 1;
+
+                if (_userRating != value) {
                     _userRating = value;
-                commitNeeded = true;
+                    commitNeeded = true;
+                    RatingChanged = true;
+                }
             }
         } private int? _userRating;
 
@@ -54,6 +57,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (_watched != value) {
                     _watched = value;
                     commitNeeded = true;
+                    WatchCountChanged = true;
                 }
             }
         } private int _watched;
