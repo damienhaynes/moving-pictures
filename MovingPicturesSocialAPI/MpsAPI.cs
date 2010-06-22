@@ -104,11 +104,6 @@ namespace MovingPicturesSocialAPI {
             return true;
         }
 
-        public bool WatchMovie(string sourceName, string sourceId, DateTime watchDate) {
-            // todo: implement
-            return true;
-        }
-
         public bool UploadCover(string sourceName, string sourceId, string file) {
             FileStream fileStream = new FileStream(file, FileMode.Open, FileAccess.Read);
 
@@ -148,6 +143,16 @@ namespace MovingPicturesSocialAPI {
             }
 
             return result;
+        }
+
+        public void SetMovieRating(string sourceName, string sourceId, int rating) {
+            var proxy = CreateProxy();
+            proxy.SetMovieRating(sourceName, sourceId, rating.ToString());
+        }
+
+        public void SetWatchCount(string sourceName, string sourceId, int watchCount) {
+            var proxy = CreateProxy();
+            proxy.SetWatchCount(sourceName, sourceId, watchCount);
         }
 
         #region Static Methods
@@ -272,10 +277,14 @@ namespace MovingPicturesSocialAPI {
         [XmlRpcMethod("GetUserTaskList")]
         object[] GetUserTaskList();
 
-
         [XmlRpcMethod("UploadCover", StructParams = true)]
         object UploadCover(string SourceName, string SourceId, string Base64File);
 
+        [XmlRpcMethod("SetMovieRating", StructParams = true)]
+        object SetMovieRating(string SourceName, string SourceId, string Rating);
+
+        [XmlRpcMethod("SetWatchCount", StructParams = true)]
+        object SetWatchCount(string SourceName, string SourceId, int WatchCount);
     }
 
     public struct MovieData {

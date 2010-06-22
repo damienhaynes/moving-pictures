@@ -7,12 +7,25 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MovingPicturesSocialAPI;
 using NLog;
+using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class Social {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private static object socialAPILock = new Object();
         private Timer taskListTimer;
+
+        public string SocialAPIURL {
+            get {
+                return MovingPicturesCore.Settings.SocialURLBase + "api/1.0/";
+            }
+        }
+
+        public bool HasSocial {
+            get {
+                return MovingPicturesCore.Settings.SocialUsername.Trim().Length > 0;
+            }
+        }
 
         // The MpsAPI object that should be used by all components of the plugin.
         public MovingPicturesSocialAPI.MpsAPI SocialAPI {
@@ -28,40 +41,14 @@ namespace MediaPortal.Plugins.MovingPictures {
                     return _socialAPI;
                 }
             }
-        }
-
-        void _socialAPI_RequestEvent(string RequestText) {
-            string logtext = ScrubLogText(RequestText);
-            logger.Debug("Request sent to MPS: " + logtext);
-        }
-
-        void _socialAPI_ResponseEvent(string ResponseText) {
-            string logtext = ScrubLogText(ResponseText);
-            logger.Debug("Response received from MPS: " + logtext);
-        }
-
-        private string ScrubLogText(string RequestText) {
-            // remove new lines and truncate
-            string logtext = RequestText;
-            logtext = System.Text.RegularExpressions.Regex.Replace(logtext, @"\s+", " ");
-            if (logtext.Length > 1000)
-                logtext = logtext.Substring(0, 1000) + "(truncated)";
-            return logtext;
-        }
-
-        private static MovingPicturesSocialAPI.MpsAPI _socialAPI = null;
-
-        public bool HasSocial {
-            get {
-                return MovingPicturesCore.Settings.SocialUsername.Trim().Length > 0;
-            }
-        }
+        } private static MovingPicturesSocialAPI.MpsAPI _socialAPI = null;
 
         public Social() {
             MovingPicturesCore.Settings.SettingChanged += new SettingChangedDelegate(Settings_SettingChanged);
             if (HasSocial) {
                 MovingPicturesCore.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
                 MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
+                MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);
 
                 if (MovingPicturesCore.Settings.SocialTaskListTimer > 0) {
                     taskListTimer = new Timer(taskListTimerCallback, null, 0, MovingPicturesCore.Settings.SocialTaskListTimer * 60000);
@@ -69,7 +56,43 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
 
-        void Settings_SettingChanged(DBSetting setting, object oldValue) {
+        private void DatabaseManager_ObjectUpdated(DatabaseTable obj) {
+            try {
+                // we're looking for user rating changes and watch count changes
+                if (obj.GetType() != typeof(DBUserMovieSettings))
+                    return;
+
+                DBUserMovieSettings settings = (DBUserMovieSettings)obj;
+                if (settings.RatingChanged) {
+                    DBMovieInfo movie = settings.AttachedMovies[0];
+
+                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                    bgProc.Action = MPSActions.UpdateUserRating;
+                    bgProc.Movies.Add(movie);
+                    MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+
+                    // reset the flag
+                    settings.RatingChanged = false;
+                }
+
+                if (settings.WatchCountChanged) {
+                    DBMovieInfo movie = settings.AttachedMovies[0];
+
+                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                    bgProc.Action = MPSActions.SetWatchCount;
+                    bgProc.Movies.Add(movie);
+                    MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+
+                    // reset the flag
+                    settings.WatchCountChanged = false;
+                }
+            }
+            catch (Exception ex) {
+                logger.ErrorException("", ex);
+            }
+        }
+
+        private void Settings_SettingChanged(DBSetting setting, object oldValue) {
             try {
                 // Reinitializes the SocialAPI object when Username, Password, or URLBase changes.
                 if (setting.Key == "socialurlbase"
@@ -96,10 +119,10 @@ namespace MediaPortal.Plugins.MovingPictures {
             try {
                 if (action == MovieImporterAction.COMMITED) {
                     DBMovieInfo movie = obj.Selected.Movie;
-                    logger.Info("Adding {0} to Moving Pictures Social Collection", movie.Title);
-
-                    MovingPicturesSocialAPI.MovieDTO mpsMovie = MovingPicturesCore.Social.MovieToMPSMovie(movie);
-                    MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(mpsMovie);
+                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                    bgProc.Action = MPSActions.AddMoviesToCollection;
+                    bgProc.Movies.Add(movie);
+                    MovingPicturesCore.ProcessManager.StartProcess(bgProc);
                 }
             }
             catch (Exception ex) {
@@ -115,10 +138,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                     return;
 
                 DBMovieInfo movie = (DBMovieInfo)obj;
-                logger.Info("Removing {0} from MPS collection", movie.Title);
-                string sourceName = movie.PrimarySource.Provider.Name;
-                string sourceId = movie.GetSourceMovieInfo(movie.PrimarySource).Identifier;
-                MovingPicturesCore.Social.SocialAPI.RemoveMovieFromCollection(sourceName, sourceId);
+                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                bgProc.Action = MPSActions.RemoveMovieFromCollection;
+                bgProc.Movies.Add(movie);
+                MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+
             }
             catch (Exception ex) {
                 logger.ErrorException("", ex);
@@ -128,28 +152,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void taskListTimerCallback(object state) {
             try {
-                logger.Debug("Getting task list from MPS");
-                List<TaskListItem> taskList = this.SocialAPI.GetUserTaskList();
-
-                if (taskList.Count > 0) {
-                    logger.Debug("MPS Task list contains {0} items", taskList.Count);
-                    List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
-
-                    foreach (TaskListItem taskItem in taskList) {
-                        logger.Debug("Checking for cover for movie {0} {1}", taskItem.SourceName, taskItem.SourceId);
-                        DBMovieInfo foundMovie = allMovies.Find(delegate(DBMovieInfo m) {
-                            return
-                            m.PrimarySource.Provider.Name == taskItem.SourceName
-                            && m.GetSourceMovieInfo(m.PrimarySource).Identifier == taskItem.SourceId;
-                        });
-
-                        if (foundMovie != null && foundMovie.CoverFullPath.Trim().Length > 0) {
-                            logger.Debug("Cover found.  Uploading for movie {0} {1}", taskItem.SourceName, taskItem.SourceId);
-                            this.SocialAPI.UploadCover(taskItem.SourceName, taskItem.SourceId
-                                , foundMovie.CoverFullPath);
-                        }
-                    }
-                }
+                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                bgProc.Action = MPSActions.ProcessTaskList;
+                MovingPicturesCore.ProcessManager.StartProcess(bgProc);
             }
             catch (Exception ex) {
                 logger.ErrorException("", ex);
@@ -197,10 +202,23 @@ namespace MediaPortal.Plugins.MovingPictures {
             return mpsMovie;
         }
 
-        public string SocialAPIURL {
-            get {
-                return MovingPicturesCore.Settings.SocialURLBase + "api/1.0/";
-            }
+        void _socialAPI_RequestEvent(string RequestText) {
+            string logtext = ScrubLogText(RequestText);
+            logger.Debug("Request sent to MPS: " + logtext);
+        }
+
+        void _socialAPI_ResponseEvent(string ResponseText) {
+            string logtext = ScrubLogText(ResponseText);
+            logger.Debug("Response received from MPS: " + logtext);
+        }
+
+        private string ScrubLogText(string RequestText) {
+            // remove new lines and truncate
+            string logtext = RequestText;
+            logtext = System.Text.RegularExpressions.Regex.Replace(logtext, @"\s+", " ");
+            if (logtext.Length > 1000)
+                logtext = logtext.Substring(0, 1000) + "(truncated)";
+            return logtext;
         }
     }
 }
