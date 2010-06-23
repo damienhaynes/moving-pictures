@@ -96,14 +96,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // Remove the file extension from the filename
             string cleanFileName = Path.GetFileNameWithoutExtension(fileName);
             
-            // If file is classified as multipart clean the stack markers.
+            // If file is classified as multipart replace the stack markers with a space.
             if (isFileMultiPart(fileName)) {                
                 Regex expr = new Regex(rxFileStackPattern, RegexOptions.IgnoreCase);
-                cleanFileName = expr.Replace(cleanFileName, "");
+                cleanFileName = expr.Replace(cleanFileName, " ");
             }
 
-            // Return cleanFileName cleaned filename
-            return cleanFileName;
+            // Trim the double spaces and return the cleaned filename
+            return cleanFileName.TrimWhiteSpace();
         }
 
         public static string GetFileNameWithoutExtensionAndStackMarkers(FileInfo fileInfo) {
