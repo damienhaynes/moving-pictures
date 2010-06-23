@@ -1689,15 +1689,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 PublishDetails(movie.LocalMedia[0], "LocalMedia");
 
                 // publish easily usable subtitles info
-                SetProperty("#MovingPictures.LocalMedia.Subtitles", movie.LocalMedia[0].HasSubtitles ? "subtitles" : "nosubtitles");
-            // publish details on selected movie
-            PublishDetails(movie, "SelectedMovie");
-            PublishDetails(movie.ActiveUserSettings, "UserMovieSettings");
-            if (movie.ActiveUserSettings.UserRating == null)
-                SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", null);
-            else
-                SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", (movie.ActiveUserSettings.UserRating.GetValueOrDefault() * 2).ToString());
-            PublishDetails(movie.LocalMedia[0], "LocalMedia");
+                SetProperty("#MovingPictures.LocalMedia.Subtitles", movie.LocalMedia.HasSubtitles() ? "subtitles" : "nosubtitles");
+
+                // publish details on selected movie
+                PublishDetails(movie, "SelectedMovie");
+                PublishDetails(movie.ActiveUserSettings, "UserMovieSettings");
+                if (movie.ActiveUserSettings.UserRating == null)
+                    SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", null);
+                else
+                    SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", (movie.ActiveUserSettings.UserRating.GetValueOrDefault() * 2).ToString());
+
+                PublishDetails(movie.LocalMedia[0], "LocalMedia");
 
                 // publish the selected index in the facade
                 int selectedIndex = browser.SelectedIndex + 1;
