@@ -9,11 +9,10 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         /// Returns true if any of the objects in the list have subtitles.
         /// </summary>
         public static bool HasSubtitles(this IList<DBLocalMedia> mediaList) {
-            bool rtn = false;
-            foreach(DBLocalMedia currMedia in mediaList)  
-                if (currMedia.HasSubtitles) rtn = true;
+            foreach (DBLocalMedia currMedia in mediaList)
+                if (currMedia.HasSubtitles) return true;
 
-            return true;
+            return false;
         }
     }
 }
