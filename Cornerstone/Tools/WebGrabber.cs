@@ -119,7 +119,7 @@ namespace Cornerstone.Tools {
 
                 request.Timeout = timeout + (timeoutIncrement * tryCount);
                 if (cookieHeader != null)
-                    request.CookieContainer.SetCookies(request.RequestUri, cookieHeader);
+                    request.CookieContainer.SetCookies(request.RequestUri, cookieHeader.Replace(';', ','));
 
                 try {
                     response = (HttpWebResponse)request.GetResponse();

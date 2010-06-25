@@ -14,7 +14,7 @@ This file should contain the list view
 		  <width>257</width>
 		  <height>380</height>
 		  <texture>#MovingPictures.Coverart</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Cover Art Glass Overlay</description>
@@ -25,7 +25,7 @@ This file should contain the list view
 		  <width>228</width>
 		  <height>177</height>
 		  <texture>glassoverlay2.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)+Control.HasThumb(60)</visible>
+		  <visible>facadeview.list+control.isvisible(50)+Control.HasThumb(60)</visible>
 		</control>
 
 		<control>
@@ -37,7 +37,7 @@ This file should contain the list view
 		  <width>32</width>
 		  <height>39</height>
 		  <texture>overlaywubg.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)+Control.HasThumb(60)</visible>
+		  <visible>facadeview.list+control.isvisible(50)+Control.HasThumb(60)</visible>
 		</control>
 		<control>
 		  <description>Watched Icon</description>
@@ -48,7 +48,7 @@ This file should contain the list view
 		  <width>23</width>
 		  <height>23</height>
 		  <texture>overlaywatched.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)+Control.IsVisible(9)+Control.HasThumb(60)</visible>
+		  <visible>facadeview.list+control.isvisible(50)+control.isvisible(9)+Control.HasThumb(60)</visible>
 		</control>
 		<control>
 		  <description>Un-Watched Icon</description>
@@ -59,7 +59,7 @@ This file should contain the list view
 		  <width>23</width>
 		  <height>23</height>
 		  <texture>overlayunwatched.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)+!Control.IsVisible(9)+Control.HasThumb(60)</visible>
+		  <visible>facadeview.list+control.isvisible(50)+!control.isvisible(9)+Control.HasThumb(60)</visible>
 		</control>
 
 		<control>
@@ -72,7 +72,7 @@ This file should contain the list view
 		  <font>font18</font>
 		  <label>#MovingPictures.SelectedMovie.title</label>
 		  <textcolor>ff000000</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Movie Title</description>
@@ -84,7 +84,7 @@ This file should contain the list view
 		  <font>font18</font>
 		  <label>#MovingPictures.SelectedMovie.title</label>
 		  <textcolor>ffFFFFFF</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -96,7 +96,7 @@ This file should contain the list view
 		  <height>22</height>		  
 		  <align>left</align>		  
 		  <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>		
 		
 	</controls>

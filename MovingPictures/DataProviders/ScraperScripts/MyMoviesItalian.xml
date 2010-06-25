@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="1" minor="0" point="6"/>
-    <published month="01" day="18" year="2010"/>
+    <version major="1" minor="0" point="7"/>
+    <published month="05" day="26" year="2010"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -212,12 +212,47 @@
       <parse name='summaryit' input ='${details_page}' regex='${it_summary}'/>
       <set name="movie.summary" value="${summaryit[0]:striptags}" />
       <set name="movie.summary" value="${movie.summary:htmldecode}" />
+     
+	 			<!-- Get IMDb ID via imdb.it to assist in obtaining fanarts -->
+		<set name="rx_details_page">
+			<![CDATA[
+			<title>.+?\((\d{4})\).*?</title>(.+?)</body>
+			]]>
+		</set>
 
-      <!-- IMDB id -->
-      <retrieve name="imdb_find" url="http://www.google.it/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.title:safe}+(${movie.year:safe})" />
-      <parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
-      <set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
-    </if>
+		<set name="rx_locate_title">
+			<![CDATA[
+			=/title/(tt\d{7})/.*?\((\d{4})\)
+			]]>
+		</set>
+
+		<!-- We can not rely on user interaction to select the right movie -->
+		<!-- So this will rely solely on imdb.es for a correct match -->
+
+		<retrieve name="imdb_search" url="http://www.imdb.it/find?s=tt;q=${movie.title:safe(ISO-8859-1)}" />
+
+		<!-- Verify first to see if the search results is an instant match -->
+		<parse name="details_page" input="${imdb_search}" regex="${rx_details_page}" />
+		<!-- Verify Release Year -->
+		<if test="${details_page[0][0]:htmldecode}=${movie.year}">
+			<parse name="imdb_id" input="${details_page[0][1]}" regex="(tt\d{7})/fullcredits" />
+			<set name="movie.imdb_id" value="${imdb_id[0][0]:htmldecode}" />
+		</if>
+
+		<!-- Use the Search page results otherwise -->
+		<if test="${movie.imdb_id}=">
+			<parse name="search_results" input="${imdb_search}" regex='&lt;meta name="title" content="IMDb Ricerca Titolo"&gt;.+&lt;/body&gt;' />
+			<if test="${search_results}!=">
+				<parse name="imdb_id" input="${search_results}" regex="${rx_locate_title}" />
+				<!-- Verify Release Year -->
+				<if test="${imdb_id[0][1]:htmldecode}=${movie.year}">
+					<set name="movie.imdb_id" value="${imdb_id[0][0]:htmldecode}" />
+				</if>
+			</if>
+		</if>
+	 
+	</if>
+
   </action>
 
   <!-- Covert Art currently only works with the native site id -->

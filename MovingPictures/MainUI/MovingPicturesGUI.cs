@@ -1645,6 +1645,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
+        delegate void MoviePublishWorker(DBMovieInfo movie);
+
         /// <summary>
         /// Publishes movie details to the skin. If multiple requests are done within a short period of time the publishing is delayed 
         /// and only the last request is then published to the skin. This will speed up browsing on "heavy" skins that show a lot of
@@ -1652,16 +1654,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <param name="movie">the movie that needs to be published</param>
         private void MovieDetailsPublisher(DBMovieInfo movie) {
-            
-            if (MovingPicturesCore.Settings.DetailsLoadingDelay < (int)(AnimationTimer.TickCount - lastPublished)) {
-                lastPublished = AnimationTimer.TickCount;
-                PublishMovieDetails(movie);
-                return;              
+            double tickCount = AnimationTimer.TickCount;
+
+            // Publish instantly when previous request has passed the required delay
+            if (MovingPicturesCore.Settings.DetailsLoadingDelay < (int)(tickCount - lastPublished)) {
+                lastPublished = tickCount;
+                
+                // publish using the threadpool (experimental tweak!)
+                MoviePublishWorker publisher = new MoviePublishWorker(PublishMovieDetails);
+                publisher.BeginInvoke(movie, null, null);
+                return;          
             }
 
-            lastPublished = AnimationTimer.TickCount;
+            // Publish on timer using the delay specified in settings
+            lastPublished = tickCount;
 
-            // Delay publishing the details by the ms specified in settings
             if (publishTimer == null) {
                 publishTimer = new Timer(delegate { PublishMovieDetails(browser.SelectedMovie); }, null, MovingPicturesCore.Settings.DetailsLoadingDelay, Timeout.Infinite);
             }

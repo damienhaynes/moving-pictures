@@ -16,7 +16,7 @@ This file should contain the list view
 		  <font>font18</font>
 		  <label>#MovingPictures.SelectedMovie.title</label>
 		  <textcolor>ff000000</textcolor>
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Movie Title</description>
@@ -28,7 +28,7 @@ This file should contain the list view
 		  <font>font18</font>
 		  <label>#MovingPictures.SelectedMovie.title</label>
 		  <textcolor>ffFFFFFF</textcolor>
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>				
 		
 		<!-- Star Rating -->		
@@ -41,7 +41,7 @@ This file should contain the list view
 		  <height>22</height>		 
 		  <align>right</align>		  
 		  <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>		
 		
 	</controls>

@@ -14,7 +14,7 @@ This file should contain the list view
 		  <width>266</width>
 		  <height>388</height>
 		  <texture>defaultdvdcover.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -26,7 +26,7 @@ This file should contain the list view
 		  <width>257</width>
 		  <height>380</height>
 		  <texture>#MovingPictures.Coverart</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -38,7 +38,7 @@ This file should contain the list view
 		  <width>228</width>
 		  <height>177</height>
 		  <texture>glassoverlay2.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -50,7 +50,7 @@ This file should contain the list view
 		  <width>32</width>
 		  <height>39</height>
 		  <texture>overlaywubg.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -62,7 +62,7 @@ This file should contain the list view
 		  <width>23</width>
 		  <height>23</height>
 		  <texture>overlaywatched.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)+Control.IsVisible(9)</visible>
+		  <visible>facadeview.list+control.isvisible(50)+control.isvisible(9)</visible>
 		</control>
 
 		<control>
@@ -74,7 +74,7 @@ This file should contain the list view
 		  <width>23</width>
 		  <height>23</height>
 		  <texture>overlayunwatched.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)+!Control.IsVisible(9)</visible>
+		  <visible>facadeview.list+control.isvisible(50)+!control.isvisible(9)</visible>
 		</control>
 
 		<control>
@@ -87,7 +87,7 @@ This file should contain the list view
 		  <font>font16</font>
 		  <label>#MovingPictures.SelectedMovie.title</label>
 		  <textcolor>ff000000</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Movie Title</description>
@@ -99,7 +99,7 @@ This file should contain the list view
 		  <font>font16</font>
 		  <label>#MovingPictures.SelectedMovie.title</label>
 		  <textcolor>ffFFFFFF</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -112,7 +112,7 @@ This file should contain the list view
 		  <width>470</width>
 		  <font>font12</font>
 		  <textcolor>ff000000</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Genres</description>
@@ -124,7 +124,7 @@ This file should contain the list view
 		  <width>470</width>
 		  <font>font12</font>
 		  <textcolor>ffa9d0f7</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -135,7 +135,7 @@ This file should contain the list view
 		  <posY>321</posY>
 		  <font>font11</font>
 		  <textcolor>ff222222</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Directors Label</description>
@@ -145,7 +145,7 @@ This file should contain the list view
 		  <posY>320</posY>
 		  <font>font11</font>
 		  <textcolor>ffFFFFFF</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Directors Shadow</description>
@@ -156,7 +156,7 @@ This file should contain the list view
 		  <width>195</width>
 		  <font>font10</font>
 		  <textcolor>ff222222</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Directors</description>
@@ -167,7 +167,7 @@ This file should contain the list view
 		  <width>195</width>
 		  <font>font10</font>
 		  <textcolor>ffa9d0f7</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -178,7 +178,7 @@ This file should contain the list view
 		  <posY>321</posY>
 		  <font>font11</font>
 		  <textcolor>ff222222</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Writers Label</description>
@@ -188,7 +188,7 @@ This file should contain the list view
 		  <posY>320</posY>
 		  <font>font11</font>
 		  <textcolor>ffFFFFFF</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Writers Shadow</description>
@@ -199,7 +199,7 @@ This file should contain the list view
 		  <width>240</width>
 		  <font>font10</font>
 		  <textcolor>ff222222</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Writers</description>
@@ -210,7 +210,7 @@ This file should contain the list view
 		  <width>240</width>
 		  <font>font10</font>
 		  <textcolor>ffa9d0f7</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -226,7 +226,7 @@ This file should contain the list view
 		  <font>font11</font>
 		  <scrollStartDelaySec>#textboxscrolldelay.list</scrollStartDelaySec>
 		  <label>#MovingPictures.SelectedMovie.summary</label>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -238,7 +238,7 @@ This file should contain the list view
 		  <height>22</height>		  
 		  <align>left</align>		  
 		  <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <id>0</id>
@@ -249,7 +249,7 @@ This file should contain the list view
 		  <width>260</width>
 		  <font>font11</font>
 		  <textcolor>ffa9d0f7</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>		
 		<control>
 		  <id>0</id>
@@ -260,7 +260,7 @@ This file should contain the list view
 		  <width>260</width>
 		  <font>font11</font>
 		  <textcolor>ffFFFFFF</textcolor>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		
 	</controls>
