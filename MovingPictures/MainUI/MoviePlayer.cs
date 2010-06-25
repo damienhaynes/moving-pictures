@@ -357,10 +357,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 logger.Info("HD Playback: Internal, Media={0}", media);
             }
-
-            // Todo: do these two lines still make sense?
-            GUIGraphicsContext.IsFullScreenVideo = true;
-            GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
             
             // We start listening to external player events
             listenToExternalPlayerEvents = true;
@@ -371,8 +367,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // We stop listening to external player events
             listenToExternalPlayerEvents = false;
 
-            // if the playback did not happen, reset the player
-            if (!success) {
+            // if the playback started and we are still playing go full screen (internal player)
+            if (success && g_Player.Playing)
+                g_Player.ShowFullScreenWindow();
+            else if (!success) {
+                // if the playback did not happen, reset the player
                 logger.Info("Playback failed: Media={0}", media);
                 resetPlayer();
             }
