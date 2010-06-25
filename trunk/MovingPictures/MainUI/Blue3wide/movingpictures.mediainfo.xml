@@ -12,7 +12,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
-		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
 		</control>
 
 		<control>
@@ -24,7 +24,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
-		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
 		</control>
 
 		<control>
@@ -36,7 +36,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
-		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
 		</control>
 
 		<control>
@@ -48,7 +48,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
-		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
 		</control>
 
 		<control>
@@ -60,7 +60,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
-		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
 		</control>
 
 		<control>
@@ -72,7 +72,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
-		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
 		</control>
 		
 		<control>
@@ -84,7 +84,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoformat.png</texture>
-		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+!Control.HasThumb(87)</visible>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)+!Control.HasThumb(87)</visible>
 		</control>
 		<control>
 		  <description>Video Format</description>
@@ -95,7 +95,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoformat.png</texture>
-		  <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+Control.HasThumb(87)</visible>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)+Control.HasThumb(87)</visible>
 		</control>
 		
 		<!-- Media logos [List View] -->
@@ -108,7 +108,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.list</visible>
+		  <visible>control.isvisible(50)+facadeview.list</visible>
 		</control>
 
 		<control>
@@ -120,7 +120,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.list</visible>
+		  <visible>control.isvisible(50)+facadeview.list</visible>
 		</control>
 
 		<control>
@@ -132,7 +132,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.list</visible>
+		  <visible>control.isvisible(50)+facadeview.list</visible>
 		</control>
 
 		<control>
@@ -144,7 +144,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.list</visible>
+		  <visible>control.isvisible(50)+facadeview.list</visible>
 		</control>
 
 		<control>
@@ -156,7 +156,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.list</visible>
+		  <visible>control.isvisible(50)+facadeview.list</visible>
 		</control>
 
 		<control>
@@ -168,7 +168,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.list</visible>
+		  <visible>control.isvisible(50)+facadeview.list</visible>
 		</control>			
 		
 		<!-- Media logos [Thumbnails View] -->
@@ -181,7 +181,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
-		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
+		  <visible>control.isvisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
 
 		<control>
@@ -193,7 +193,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
-		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
+		  <visible>control.isvisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
 
 		<control>
@@ -205,7 +205,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
-		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
+		  <visible>control.isvisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
 
 		<control>
@@ -217,7 +217,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
-		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
+		  <visible>control.isvisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
 
 		<control>
@@ -229,7 +229,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
-		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
+		  <visible>control.isvisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
 
 		<control>
@@ -241,7 +241,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
-		  <visible>Control.IsVisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
+		  <visible>control.isvisible(50)+[facadeview.smallicons|facadeview.largeicons]</visible>
 		</control>
 		
 		<!-- Media logos [Filmstrip View] -->
@@ -255,7 +255,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		  <visible>control.isvisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
 		</control>
 
 		<control>
@@ -267,7 +267,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		  <visible>control.isvisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
 		</control>
 
 		<control>
@@ -279,7 +279,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		  <visible>control.isvisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
 		</control>
 
 		<control>
@@ -291,7 +291,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		  <visible>control.isvisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
 		</control>
 
 		<control>
@@ -303,7 +303,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		  <visible>control.isvisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
 		</control>
 
 		<control>
@@ -315,7 +315,7 @@
 		  <width>89</width>
 		  <height>50</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
-		  <visible>Control.IsVisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
+		  <visible>control.isvisible(50)+facadeview.filmstrip+Control.HasFocus(50)</visible>
 		</control>
 		-->
 	</controls>

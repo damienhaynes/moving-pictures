@@ -38,7 +38,7 @@ This file should contain the facade view
 				<type>facadeview</type>
 				<id>50</id>
 				<control>
-					<visible>Control.IsVisible(50)</visible>
+					<visible>control.isvisible(50)</visible>
 					<description>Movie List</description>
 					<type>listcontrol</type>
 					<id>50</id>
@@ -60,7 +60,7 @@ This file should contain the facade view
 					<textcolor3>ff3E99D7</textcolor3>
 				</control>
 				<control>
-					<visible>Control.IsVisible(50)</visible>
+					<visible>control.isvisible(50)</visible>
 					<description>Filmstrip view</description>
 					<type>filmstrip</type>
 					<id>50</id>
@@ -161,7 +161,7 @@ This file should contain the facade view
 		  <textcolor>ffFFFFFF</textcolor>
 		  <align>right</align>
 		  <label>#MovingPictures.general.itemcount</label>
-		  <visible>facadeview.list+Control.IsVisible(50)</visible>
+		  <visible>facadeview.list+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <type>label</type>
@@ -173,7 +173,7 @@ This file should contain the facade view
 		  <textcolor>ffFFFFFF</textcolor>
 		  <align>left</align>
 		  <label>#MovingPictures.general.itemcount</label>
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <type>label</type>
@@ -185,7 +185,7 @@ This file should contain the facade view
 		  <textcolor>ffFFFFFF</textcolor>
 		  <align>left</align>
 		  <label>#MovingPictures.general.itemcount</label>
-		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+		  <visible>facadeview.filmstrip+control.isvisible(50)</visible>
 		</control>
 		
 		<!-- Selected Category Facade Item -->	
@@ -201,7 +201,7 @@ This file should contain the facade view
 			<keepaspectratio>yes</keepaspectratio>
 			<animation effect="fade" time="250">WindowOpen</animation>
 			<animation effect="fade" time="250">WindowClose</animation>			
-			<visible>Control.IsVisible(51)+facadeview.list+!Control.HasThumb(100)</visible>
+			<visible>control.isvisible(51)+facadeview.list+!Control.HasThumb(100)</visible>
 		</control>
 		<control>
 			<description>Default Image</description>
@@ -215,7 +215,7 @@ This file should contain the facade view
 			<keepaspectratio>yes</keepaspectratio>
 			<animation effect="fade" time="250">WindowOpen</animation>
 			<animation effect="fade" time="250">WindowClose</animation>			
-			<visible>Control.IsVisible(51)+facadeview.list</visible>
+			<visible>control.isvisible(51)+facadeview.list</visible>
 		</control>
 	
 	</controls>

@@ -493,6 +493,27 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;Daum&lt;/name&gt;
+        ///    &lt;author&gt;edge&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from movie.daum.net&lt;/description&gt;
+        ///
+        ///    &lt;!-- 
+        ///    These two fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINOR CHAN [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_Daum {
+            get {
+                return ResourceManager.GetString("Script_Daum", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap script_delete {
             get {
                 object obj = ResourceManager.GetObject("script_delete", resourceCulture);
@@ -526,13 +547,13 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///	&lt;!-- These details are for display purposes only. --&gt;
         ///	&lt;name&gt;filmtipset.se&lt;/name&gt;
         ///	&lt;author&gt;vuego&lt;/author&gt;
-        ///	&lt;description&gt;This script pulls data from filmtipset.se and score + certification + language from imdb.com.&lt;/description&gt;
+        ///	&lt;description&gt;This script pulls data from filmtipset.se and score + certification + language + tagline from imdb.com.&lt;/description&gt;
         ///
         ///	&lt;!-- 
         ///	These fields uniquely identify the script. The ID should never 
         ///	change and should be unique (no other script should use this ID). With
         ///	new versions of the script the version numbers should change. EVEN FOR 
-        ///	MINOR CHANGES, you sho [rest of string was truncated]&quot;;.
+        ///	MINOR CHANGE [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Script_Filmtipset {
             get {
@@ -584,6 +605,86 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;IMDb.de&lt;/name&gt;
+        ///    &lt;author&gt;John Conrad (fforde), Armand Pondman (armandp), Ron (RoChess)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from IMDb.de&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_IMDb_de {
+            get {
+                return ResourceManager.GetString("Script_IMDb_de", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;IMDb.es&lt;/name&gt;
+        ///    &lt;author&gt;John Conrad (fforde), Armand Pondman (armandp), Ron (RoChess)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from IMDb.es&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_IMDb_es {
+            get {
+                return ResourceManager.GetString("Script_IMDb_es", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;IMDb.fr&lt;/name&gt;
+        ///    &lt;author&gt;John Conrad (fforde), Armand Pondman (armandp), Ron (RoChess)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from IMDb.fr&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_IMDb_fr {
+            get {
+                return ResourceManager.GetString("Script_IMDb_fr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;IMDb.it&lt;/name&gt;
+        ///    &lt;author&gt;John Conrad (fforde), Armand Pondman (armandp), Ron (RoChess)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from IMDb.it&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_IMDb_it {
+            get {
+                return ResourceManager.GetString("Script_IMDb_it", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;impawards.com&lt;/name&gt;
         ///    &lt;author&gt;John Conrad (fforde)&lt;/author&gt;
         ///    &lt;description&gt;This script grabs cover-art from impawards.com.&lt;/description&gt;
@@ -617,6 +718,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         internal static string Script_Kinopoisk {
             get {
                 return ResourceManager.GetString("Script_Kinopoisk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;kvikmyndir.is&lt;/name&gt;
+        ///    &lt;author&gt;Kjartan Þór Guðmundsson (kjarrig)&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from kvikmyndir.is.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers sho [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_kvikmyndir {
+            get {
+                return ResourceManager.GetString("Script_kvikmyndir", resourceCulture);
             }
         }
         
@@ -732,13 +853,13 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    &lt;name&gt;ofdb.de&lt;/name&gt;
         ///    &lt;author&gt;Armand Pondman (armandp) and Schenk2302&lt;/author&gt;
         ///    &lt;description&gt;
-        ///      This script pulls data from the OFDb XML gateway at http://blog.n4rf.net/solutions/ofdbgw. (ofdb.de)
+        ///      This script pulls data from the OFDb XML gateway at  http://ofdbgw.org. (ofdb.de)
         ///      Missing information is pulled from imdb.com
         ///    &lt;/description&gt;
         ///
         ///    &lt;!-- 
         ///    These two fields uniquely identify the script. The ID should never 
-        ///    ch [rest of string was truncated]&quot;;.
+        ///    change and should be  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Script_OFDb {
             get {
@@ -773,12 +894,12 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///    &lt;name&gt;Scope.dk&lt;/name&gt;
         ///    &lt;author&gt;LRFalk01&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from Scope.dk.&lt;/description&gt;
-        ///    
+        ///
         ///    &lt;!-- 
         ///    These fields uniquely identify the script. The ID should never 
         ///    change and should be unique (no other script should use this ID). With
         ///    new versions of the script the version numbers should change. EVEN FOR 
-        ///    MINOR CHANGES, you should change the version num [rest of string was truncated]&quot;;.
+        ///    MINOR CHANGES, you should change the version number  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Script_Scope {
             get {
@@ -809,16 +930,16 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
-        ///    &lt;!-- These details are for display purposes only. --&gt;
-        ///    &lt;name&gt;XBMC&lt;/name&gt;
-        ///    &lt;author&gt;LRFalk01&lt;/author&gt;
-        ///    &lt;description&gt;This script pulls data from an XBMC Nfo export.&lt;/description&gt;
-        ///    
-        ///    &lt;!-- 
-        ///    These fields uniquely identify the script. The ID should never 
-        ///    change and should be unique (no other script should use this ID). With
-        ///    new versions of the script the version numbers should change. EVEN FOR 
-        ///    MINOR CHANGES, you should change the versi [rest of string was truncated]&quot;;.
+        ///	&lt;!-- These details are for display purposes only. --&gt;
+        ///	&lt;name&gt;XBMC (Local)&lt;/name&gt;
+        ///	&lt;author&gt;LRFalk01&lt;/author&gt;
+        ///	&lt;description&gt;This script pulls data from an XBMC NFO export.&lt;/description&gt;
+        ///
+        ///	&lt;!-- 
+        ///	These fields uniquely identify the script. The ID should never 
+        ///	change and should be unique (no other script should use this ID). With
+        ///	new versions of the script the version numbers should change. EVEN FOR 
+        ///	MINOR CHANGES, you should change the version number if you are go [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Script_XBMC {
             get {

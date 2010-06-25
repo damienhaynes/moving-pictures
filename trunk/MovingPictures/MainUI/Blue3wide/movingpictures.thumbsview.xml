@@ -16,7 +16,7 @@ This file should contain the list view
 		  <font>font16</font>
 		  <label>#MovingPictures.SelectedMovie.title</label>
 		  <textcolor>ff222222</textcolor>		  
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Movie Title</description>
@@ -28,7 +28,7 @@ This file should contain the list view
 		  <font>font16</font>
 		  <label>#MovingPictures.SelectedMovie.title</label>
 		  <textcolor>ffFFFFFF</textcolor>		  
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 		
 		<control>
@@ -41,7 +41,7 @@ This file should contain the list view
 		  <width>500</width>
 		  <font>font12</font>
 		  <textcolor>ff222222</textcolor>
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Genres</description>
@@ -53,7 +53,7 @@ This file should contain the list view
 		  <width>500</width>
 		  <font>font12</font>
 		  <textcolor>ffa9d0f7</textcolor>
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 		
 		<control>
@@ -64,7 +64,7 @@ This file should contain the list view
 		  <posY>301</posY>
 		  <font>font11</font>
 		  <textcolor>ff222222</textcolor>		 
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Directors Label</description>
@@ -74,7 +74,7 @@ This file should contain the list view
 		  <posY>300</posY>
 		  <font>font11</font>
 		  <textcolor>ffFFFFFF</textcolor>		 
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Director Shadow</description>
@@ -86,7 +86,7 @@ This file should contain the list view
 		  <width>200</width>
 		  <font>font10</font>
 		  <textcolor>ff222222</textcolor>		  
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Director</description>
@@ -98,7 +98,7 @@ This file should contain the list view
 		  <width>200</width>
 		  <font>font10</font>
 		  <textcolor>ffa9d0f7</textcolor>		  
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -109,7 +109,7 @@ This file should contain the list view
 		  <posY>301</posY>
 		  <font>font11</font>
 		  <textcolor>ff222222</textcolor>		 
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>		  
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>		  
 		</control>
 		<control>
 		  <description>Writer Label</description>
@@ -119,7 +119,7 @@ This file should contain the list view
 		  <posY>300</posY>
 		  <font>font11</font>
 		  <textcolor>ffFFFFFF</textcolor>		 
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>		  
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>		  
 		</control>
 		<control>
 		  <description>Writer Shadow</description>
@@ -131,7 +131,7 @@ This file should contain the list view
 		  <width>255</width>
 		  <font>font10</font>
 		  <textcolor>ff222222</textcolor>		  
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>		
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>		
 		</control>
 		<control>
 		  <description>Writer</description>
@@ -143,7 +143,7 @@ This file should contain the list view
 		  <width>255</width>
 		  <font>font10</font>
 		  <textcolor>ffa9d0f7</textcolor>		  
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>		
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>		
 		</control>
 		
 		<control>
@@ -159,7 +159,7 @@ This file should contain the list view
 		  <font>font11</font>
 		  <scrollStartDelaySec>#textboxscrolldelay.thumbs</scrollStartDelaySec>
 		  <label>#MovingPictures.SelectedMovie.summary</label>
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>
 		
 		<!-- Star Rating -->
@@ -170,7 +170,7 @@ This file should contain the list view
 		  <posY>640</posY>
 		  <width>360</width>
 		  <font>font11</font>
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>		
 		<control>
 		  <type>image</type>
@@ -181,7 +181,7 @@ This file should contain the list view
 		  <height>22</height>		 
 		  <align>left</align>		  
 		  <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>		
 		<control>
 		  <type>label</type>
@@ -190,7 +190,7 @@ This file should contain the list view
 		  <posY>663</posY>
 		  <width>360</width>
 		  <font>font11</font>		  
-		  <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
 		</control>	
 		
 	</controls>

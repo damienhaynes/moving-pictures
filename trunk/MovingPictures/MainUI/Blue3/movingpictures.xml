@@ -134,7 +134,7 @@ multiple view modes.
 		  <height>576</height>
 		  <dimColor>50ffffff</dimColor>
 		  <texture>Backgroundtop2.png</texture>
-		  <visible>Control.IsVisible(50)|Control.IsVisible(51)</visible>
+		  <visible>control.isvisible(50)|control.isvisible(51)</visible>
 		</control>
 	
 		<!-- VIEWS -->
@@ -210,7 +210,7 @@ multiple view modes.
 		  <textcolor>ffa9d0f7</textcolor>		  
 		  <animation effect="fade" time="250">WindowOpen</animation>
 		  <animation effect="fade" time="250">WindowClose</animation>
-		  <visible>[Control.IsVisible(50)|Control.IsVisible(51)]+!Control.IsVisible(17)</visible>
+		  <visible>[control.isvisible(50)|control.isvisible(51)]+!control.isvisible(17)</visible>
 		</control>
 		<control>
 		  <description>Current Category / Filter</description>
@@ -224,7 +224,7 @@ multiple view modes.
 		  <textcolor>ffa9d0f7</textcolor>		  
 		  <animation effect="fade" time="250">WindowOpen</animation>
 		  <animation effect="fade" time="250">WindowClose</animation>
-		  <visible>[Control.IsVisible(50)|Control.IsVisible(51)]+Control.IsVisible(17)</visible>
+		  <visible>[control.isvisible(50)|control.isvisible(51)]+control.isvisible(17)</visible>
 		</control>
 
 		<!-- Dim background when movie starts -->
@@ -238,7 +238,7 @@ multiple view modes.
 			 <width>720</width>
 			 <height>576</height>
 			 <texture>backgroundtop2.png</texture>	
-			 <visible>Control.IsVisible(18)+!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+			 <visible>control.isvisible(18)+!control.isvisible(50)+!control.isvisible(51)</visible>
 		</control>
 		
 		<control>

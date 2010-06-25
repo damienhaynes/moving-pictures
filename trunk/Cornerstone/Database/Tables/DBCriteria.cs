@@ -97,6 +97,15 @@ namespace Cornerstone.Database.Tables {
                             return true;
                     }
                     else {
+                        if (value == null && Value != null)
+                            return false;
+                        
+                        if (value == null && Value == null)
+                            return true;
+
+                        if (value != null && Value == null)
+                            return false;
+
                         if (value.Equals(Value))
                             return true;
                     }

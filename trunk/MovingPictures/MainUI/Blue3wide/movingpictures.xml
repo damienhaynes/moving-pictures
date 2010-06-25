@@ -136,7 +136,7 @@ multiple view modes.
 		  <width>1280</width>
 		  <height>720</height>
 		  <texture>mainoverlay.png</texture>
-		  <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+[Control.IsVisible(50)|Control.IsVisible(51)]</visible>
+		  <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+[control.isvisible(50)|control.isvisible(51)]</visible>
 		</control>
 
 		<control>
@@ -149,7 +149,7 @@ multiple view modes.
 		  <height>221</height>
 		  <colordiffuse>ffFFFFFF</colordiffuse>
 		  <texture>blue.png</texture>
-		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+		  <visible>facadeview.filmstrip+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -161,7 +161,7 @@ multiple view modes.
 		  <width>1282</width>
 		  <height>723</height>
 		  <texture>movieviewbg.png</texture>
-		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+		  <visible>facadeview.filmstrip+control.isvisible(50)</visible>
 		</control>
 
 		<control>
@@ -173,7 +173,7 @@ multiple view modes.
 		  <width>512</width>
 		  <height>43</height>
 		  <texture>glasstitlebar.png</texture>
-		  <visible>facadeview.filmstrip+Control.IsVisible(50)</visible>
+		  <visible>facadeview.filmstrip+control.isvisible(50)</visible>
 		</control>
 
 		<!-- VIEWS -->
@@ -249,7 +249,7 @@ multiple view modes.
 		  <textcolor>ffa9d0f7</textcolor>		  
 		  <animation effect="fade" time="250">WindowOpen</animation>
 		  <animation effect="fade" time="250">WindowClose</animation>
-		  <visible>[Control.IsVisible(50)|Control.IsVisible(51)]+!Control.IsVisible(17)</visible>
+		  <visible>[control.isvisible(50)|control.isvisible(51)]+!control.isvisible(17)</visible>
 		</control>
 		<control>
 		  <description>Current Category / Filter</description>
@@ -263,7 +263,7 @@ multiple view modes.
 		  <textcolor>ffa9d0f7</textcolor>		  
 		  <animation effect="fade" time="250">WindowOpen</animation>
 		  <animation effect="fade" time="250">WindowClose</animation>
-		  <visible>[Control.IsVisible(50)|Control.IsVisible(51)]+Control.IsVisible(17)</visible>
+		  <visible>[control.isvisible(50)|control.isvisible(51)]+control.isvisible(17)</visible>
 		</control>
 
 		<!-- Dim background when movie starts -->
@@ -277,7 +277,7 @@ multiple view modes.
 			 <width>1280</width>
 			 <height>720</height>
 			 <texture>backgroundtop2.png</texture>	
-			 <visible>Control.IsVisible(18)+!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+			 <visible>control.isvisible(18)+!control.isvisible(50)+!control.isvisible(51)</visible>
 		</control>		
 
 		<control>

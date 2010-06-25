@@ -29,7 +29,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         public String UserAgent {
             get { return userAgent; }
-        } protected String userAgent;
+        } protected String userAgent = null;
 
         public int Timeout {
             get { return timeout; }
@@ -42,6 +42,11 @@ namespace Cornerstone.ScraperEngine.Nodes {
         public bool AllowUnsafeHeader {
             get { return allowUnsafeHeader; }
         } protected bool allowUnsafeHeader;
+
+        public string Cookies {
+            get { return cookies; }
+        } protected string cookies = null;
+
         #endregion
 
         #region Methods
@@ -50,7 +55,6 @@ namespace Cornerstone.ScraperEngine.Nodes {
             : base(xmlNode, debugMode) {
 
             // Set default attribute valuess
-            userAgent = "Mozilla/5.0 (X11; U; Linux i686; pl-PL; rv:1.9.0.2) Gecko/20121223 Ubuntu/9.25 (jaunty) Firefox/3.8";
             allowUnsafeHeader = false;
             maxRetries = 5;
             timeout = 5000;
@@ -105,6 +109,9 @@ namespace Cornerstone.ScraperEngine.Nodes {
                                 throw e;                            
                         }
                         break;
+                    case "cookies":
+                        cookies = attr.Value;
+                        break;
                 }
             }
 
@@ -119,6 +126,14 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         public override void Execute(Dictionary<string, string> variables) {
             if (DebugMode) logger.Debug("executing retrieve: " + xmlNode.OuterXml);
+
+            // Check for calling class provided useragent
+            if (userAgent == null && variables.ContainsKey("settings.defaultuseragent")) {
+                userAgent = variables["settings.defaultuseragent"];
+            }
+
+            if (userAgent == null) 
+                userAgent = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2)";
 
             string parsedName = parseString(variables, name);
             string stringData = string.Empty;
@@ -151,12 +166,19 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 grabber.TimeoutIncrement = timeoutIncrement;
                 grabber.MaxRetries = maxRetries;
                 grabber.AllowUnsafeHeader = allowUnsafeHeader;
+                grabber.CookieHeader = cookies;
                 grabber.Debug = DebugMode;
+
 
                 // Keep session / chaining
                 string sessionKey = "urn://scraper/header/" + grabber.Request.RequestUri.Host;
-                if (variables.ContainsKey(sessionKey))
-                    grabber.CookieHeader = variables[sessionKey];
+                if (variables.ContainsKey(sessionKey)) {
+                    if (grabber.CookieHeader == null)
+                        grabber.CookieHeader = variables[sessionKey];
+                    else
+                        grabber.CookieHeader = grabber.CookieHeader + "," + variables[sessionKey];
+                }
+
 
                 // Retrieve the document
                 if (grabber.GetResponse()) {
