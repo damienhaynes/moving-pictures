@@ -1483,6 +1483,71 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         } private DBMenu<DBMovieInfo> _filterMenu = null;
 
+        [CornerstoneSetting(
+            Name = "Use Default Filter",
+            Description = "If enabled the default filter will be used on initial launch.",
+            Groups = "|MediaPortal GUI|Filtering|",
+            Identifier = "use_default_filter",
+            Default = false,
+            Hidden = true)]
+        public bool DefaultFilterEnabled {
+            get { return _useDefaultFilter; }
+            set {
+                _useDefaultFilter = value;
+                OnSettingChanged("use_default_filter");
+            }
+        }
+        private bool _useDefaultFilter;
+
+        [CornerstoneSetting(
+            Name = "Default Filter ID",
+            Description = "The database ID for the default filter on startup.",
+            Groups = "|MediaPortal GUI|Filtering|",
+            Identifier = "default_filter_id",
+            Default = "null",
+            Hidden = true)]
+        public string DefaultFilterID {
+            get { return _defaultFilterID; }
+            set {
+                _defaultFilterID = value;
+                OnSettingChanged("default_filter_id");
+            }
+        }
+        private string _defaultFilterID;
+
+        public DBNode<DBMovieInfo> DefaultFilter {
+            get {
+                if (_defaultFilter == null) {
+                    // grab the default filter or assign the default
+                    string filterID = DefaultFilterID;
+                    if (filterID == "null") {
+                        _defaultFilter = null;
+
+                        List<DBNode<DBMovieInfo>> resultSet = FilterMenu.FindNode("${UnwatchedMovies}");                        
+                        if (resultSet.Count > 0) {
+                            _defaultFilter = resultSet[0];
+                            DefaultFilterID = _defaultFilter.ID.ToString();
+                        }
+                    }
+                    else {                        
+                        try { _defaultFilter = MovingPicturesCore.DatabaseManager.Get<DBNode<DBMovieInfo>>(int.Parse(filterID)); }
+                        catch (FormatException) {
+                            _defaultFilter = null;
+                            DefaultFilterID = "null";
+                        }
+                    }
+                }
+
+                return _defaultFilter;
+            }
+
+            set {
+                if (value == null) DefaultFilterID = "null";
+                else DefaultFilterID = value.ID.ToString();
+
+                _defaultFilter = null;
+            }
+        } private DBNode<DBMovieInfo> _defaultFilter = null;
 
         [CornerstoneSetting(
             Name = "Category Menu ID",

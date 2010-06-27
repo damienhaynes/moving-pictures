@@ -6,6 +6,7 @@ using Cornerstone.Database.CustomTypes;
 using System.Windows.Forms;
 using System.Threading;
 using NLog;
+using System.Collections;
 
 namespace Cornerstone.Database.Tables {
     public delegate void DBNodeEventHandler(IDBNode node, Type type);
@@ -116,6 +117,10 @@ namespace Cornerstone.Database.Tables {
             }
         } private DBFilter<T> _filter = null;
 
+        public bool HasFilter {
+            get { return Filter != null; }
+        }
+
         [DBRelation(AutoRetrieve = true, OneWay=true)]
         public RelationList<DBNode<T>, DBNode<T>> Children {
             get {
@@ -126,6 +131,12 @@ namespace Cornerstone.Database.Tables {
             }
         } 
         RelationList<DBNode<T>, DBNode<T>> _children;
+
+        public bool HasChildren {
+            get {
+                return Children.Count != 0;
+            }
+        }
 
         [DBField]
         public DatabaseTable AdditionalSettings {
@@ -326,5 +337,17 @@ namespace Cornerstone.Database.Tables {
 
     }
 
-    public interface IDBNode { }
+    public interface IDBNode {
+        string Name {
+            get;
+        }
+
+        bool HasChildren {
+            get;
+        }
+
+        bool HasFilter {
+            get;
+        }
+    }
 }

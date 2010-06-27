@@ -29,12 +29,12 @@
         private void InitializeComponent() {
             this.treeView = new System.Windows.Forms.TreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.addNodeButton = new System.Windows.Forms.ToolStripButton();
             this.removeNodeButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.moveUpButton = new System.Windows.Forms.ToolStripButton();
             this.moveDownButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.advancedButton = new System.Windows.Forms.ToolStripSplitButton();
             this.convertToRegularMenuItemButton = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
@@ -43,15 +43,13 @@
             // treeView
             // 
             this.treeView.AllowDrop = true;
-            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.treeView.HideSelection = false;
             this.treeView.LabelEdit = true;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(186, 340);
+            this.treeView.Size = new System.Drawing.Size(190, 340);
             this.treeView.TabIndex = 0;
             this.treeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeView_AfterLabelEdit);
             this.treeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeExpand);
@@ -66,8 +64,7 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Right;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNodeButton,
@@ -78,21 +75,11 @@
             this.toolStripSeparator1,
             this.advancedButton});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.toolStrip1.Location = new System.Drawing.Point(189, 0);
+            this.toolStrip1.Location = new System.Drawing.Point(190, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(33, 148);
+            this.toolStrip1.Size = new System.Drawing.Size(33, 340);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(31, 6);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(31, 6);
             // 
             // addNodeButton
             // 
@@ -117,6 +104,11 @@
             this.removeNodeButton.ToolTipText = "Remove Menu Item";
             this.removeNodeButton.Click += new System.EventHandler(this.removeNodeButton_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(31, 6);
+            // 
             // moveUpButton
             // 
             this.moveUpButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -139,6 +131,11 @@
             this.moveDownButton.Text = "Move Category Down";
             this.moveDownButton.ToolTipText = "Move Category Down";
             this.moveDownButton.Click += new System.EventHandler(this.moveDownButton_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(31, 6);
             // 
             // advancedButton
             // 
@@ -164,8 +161,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.treeView);
+            this.Controls.Add(this.toolStrip1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "GenericMenuTreePanel";
             this.Size = new System.Drawing.Size(223, 340);

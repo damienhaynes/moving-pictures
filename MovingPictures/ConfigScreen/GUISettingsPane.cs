@@ -14,6 +14,7 @@ using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.GUI.Dialogs;
 using Cornerstone.GUI;
+using Cornerstone.GUI.Filtering;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class GUISettingsPane : UserControl {
@@ -41,10 +42,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             parentalControlsCheckBox.Setting = MovingPicturesCore.Settings["enable_parental_controls"];
             passwordTextBox.Setting = MovingPicturesCore.Settings["parental_controls_password"];
             categoriesCheckBox.Setting = MovingPicturesCore.Settings["enable_categories"];
+            defaultFilterCheckBox.Setting = MovingPicturesCore.Settings["use_default_filter"];
 
             passwordTextBox.Enabled = parentalControlsCheckBox.Checked;
             parentalContolsButton.Enabled = parentalControlsCheckBox.Checked;
             defineCategoriesButton.Enabled = categoriesCheckBox.Checked;
+            defaultFilterCombo.Enabled = defaultFilterCheckBox.Checked;
  
             sortFieldComboBox.Setting = MovingPicturesCore.Settings["default_sort_field"];
             sortFieldComboBox.EnumType = typeof(SortingFields);
@@ -53,6 +56,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             dvdInsertedAction = MovingPicturesCore.Settings["on_disc_loaded"];
             defaultView = MovingPicturesCore.Settings["default_view"];
 
+            // initialize filter combo to manage the default filter
+            defaultFilterCombo.TreePanel.TranslationParser = new TranslationParserDelegate(Translation.ParseString);
+            defaultFilterCombo.Menu = MovingPicturesCore.Settings.FilterMenu;
+            defaultFilterCombo.SelectedNode = MovingPicturesCore.Settings.DefaultFilter;
 
         }
 
@@ -259,6 +266,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void categoriesCheckBox_CheckedChanged(object sender, EventArgs e) {
             defineCategoriesButton.Enabled = categoriesCheckBox.Checked;
+        }
+
+        private void defaultFilterCombo_SelectedIndexChanged(object sender, EventArgs e) {
+            if (defaultFilterCombo.SelectedNode != null)
+                MovingPicturesCore.Settings.DefaultFilter = (DBNode<DBMovieInfo>) defaultFilterCombo.SelectedNode;
+        }
+
+        private void defaultFilterCheckBox_CheckedChanged(object sender, EventArgs e) {
+            defaultFilterCombo.Enabled = defaultFilterCheckBox.Checked;
         }
     }
 }
