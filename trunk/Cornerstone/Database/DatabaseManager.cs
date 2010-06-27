@@ -862,6 +862,9 @@ namespace Cornerstone.Database {
         }
 
         public string GetWhereClause() {
+            if (field == null)
+                return "";
+
             return " where " + GetClause();
         }
 

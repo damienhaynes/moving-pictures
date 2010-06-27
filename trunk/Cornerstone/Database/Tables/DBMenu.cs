@@ -40,6 +40,29 @@ namespace Cornerstone.Database.Tables {
         RelationList<DBMenu<T>, DBNode<T>> _rootNodes;
         
         #endregion
+
+        #region Helper Methods
+
+        public List<DBNode<T>> FindNode(string nodeName) {
+            return FindNode(nodeName, RootNodes);
+        }
+
+        private List<DBNode<T>> FindNode(string nodeName, IList<DBNode<T>> nodes) {
+            List<DBNode<T>> results = new List<DBNode<T>>();
+            foreach (DBNode<T> currNode in nodes) {
+                // check if this is the node we are looking for
+                if (currNode.Name == nodeName) 
+                    results.Add(currNode);
+                
+                // recursively search the children
+                if (currNode.Children.Count > 0) 
+                    results.AddRange(FindNode(nodeName, currNode.Children));
+            }
+
+            return results;
+        }
+
+        #endregion
     }
 
     public interface IDBMenu { }

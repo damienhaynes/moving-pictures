@@ -98,6 +98,8 @@ namespace Cornerstone.GUI.Filtering {
             //throw new NotImplementedException();
         }
 
+        #endregion
+
         #region IMenuTreePanel Members
 
         public event DBNodeEventHandler SelectedNodeChanged;
@@ -114,19 +116,42 @@ namespace Cornerstone.GUI.Filtering {
 
         public TranslationParserDelegate TranslationParser {
             get { return _translationParser; }
-            set { _translationParser = value; }
+            set { 
+                _translationParser = value;
+                RepopulateTree();
+            }
         } TranslationParserDelegate _translationParser = null;
 
-        #endregion
-
+        public bool ButtonsVisible {
+            get { return toolStrip1.Visible; }
+            set { toolStrip1.Visible = value; }
+        }
 
         public IDBMenu Menu {
             get { return _menu; }
-            set { 
+            set {
                 _menu = (DBMenu<T>)value;
                 RepopulateTree();
             }
         } private DBMenu<T> _menu;
+
+        public IDBNode SelectedNode {
+            get {
+                if (treeView.SelectedNode != null && treeView.SelectedNode.Tag is DBNode<T>)
+                    return (DBNode<T>)treeView.SelectedNode.Tag;
+
+                return null;
+            }
+
+            set {
+                if (value != null)
+                    treeView.SelectedNode = treeNodeLookup[(DBNode<T>)value];
+            }
+        }
+
+        public TreeView TreeView {
+            get { return treeView; }
+        }
 
         #endregion
 
@@ -309,7 +334,7 @@ namespace Cornerstone.GUI.Filtering {
                     clearReferences(childNode);
         }
 
-        private void RepopulateTree() {
+        public void RepopulateTree() {
             if (_menu == null) return;
 
             // stop drawing and clear tree
@@ -322,7 +347,6 @@ namespace Cornerstone.GUI.Filtering {
                 treeView.Nodes.Add(createTreeNode(currNode));
             
             // restrart drawing
-            treeView.ExpandAll();
             treeView.EndUpdate();
         }
 
@@ -1036,6 +1060,22 @@ namespace Cornerstone.GUI.Filtering {
         TranslationParserDelegate TranslationParser {
             get;
             set;
-        } 
+        }
+
+        IDBNode SelectedNode {
+            get;
+            set;
+        }
+
+        bool ButtonsVisible {
+            get;
+            set;
+        }
+
+        TreeView TreeView {
+            get;
+        }
+
+        void RepopulateTree();
     }
 }

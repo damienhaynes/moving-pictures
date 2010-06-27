@@ -341,7 +341,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
             }
             
-            // Check wether the plugin is initialized.
+            // Check whether the plugin is initialized.
             if (!initComplete) {
 
                 // avoid showing a dialog on load when we are the last active module being started
@@ -412,7 +412,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.MovieSelectionChanged += new MovieBrowser.MovieSelectionChangedDelegate(MovieDetailsPublisher);
                 browser.NodeSelectionChanged += new MovieBrowser.NodeSelectionChangedDelegate(PublishCategoryDetails);
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
-                browser.ViewChanged +=new MovieBrowser.ViewChangedDelegate(OnBrowserViewChanged);
+                browser.ViewChanged += new MovieBrowser.ViewChangedDelegate(OnBrowserViewChanged);
 
                 // Load all available translation strings
                 foreach (string name in Translation.Strings.Keys) {
@@ -422,7 +422,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
                 SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
 
+                // if enabled, activate the default filter
+                if (MovingPicturesCore.Settings.DefaultFilterEnabled)
+                    browser.FilterNode = MovingPicturesCore.Settings.DefaultFilter;
+
                 if (filteringIndicator != null) filteringIndicator.Visible = false;
+
                 PublishFilterDetails();
             }
 

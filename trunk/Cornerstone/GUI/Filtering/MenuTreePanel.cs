@@ -46,7 +46,27 @@ namespace Cornerstone.GUI.Filtering {
         public TranslationParserDelegate TranslationParser {
             get { return ((IMenuTreePanel)genericMenuTreePanel).TranslationParser; }
             set { ((IMenuTreePanel)genericMenuTreePanel).TranslationParser = value; }
-        } 
+        }
+
+        public bool ButtonsVisible {
+            get { return ((IMenuTreePanel)genericMenuTreePanel).ButtonsVisible; }
+            set { ((IMenuTreePanel)genericMenuTreePanel).ButtonsVisible = value; }
+        }
+        
+        [ReadOnly(true)]
+        public IDBNode SelectedNode {
+            get { return ((IMenuTreePanel)genericMenuTreePanel).SelectedNode; }
+            set { ((IMenuTreePanel)genericMenuTreePanel).SelectedNode = value; }
+        }
+
+        [ReadOnly(true)]
+        public TreeView TreeView {
+            get { return ((IMenuTreePanel)genericMenuTreePanel).TreeView; }
+        }
+
+        public void RepopulateTree() {
+            ((IMenuTreePanel)genericMenuTreePanel).RepopulateTree();
+        }
 
         #endregion
 
@@ -89,6 +109,16 @@ namespace Cornerstone.GUI.Filtering {
             Type filterType = typeof(DatabaseTable);
             if (_fieldSettings != null) filterType = _fieldSettings.Table;
 
+            if (filterType == null)
+                return;
+
+            bool buttonsVisible = true;
+            TranslationParserDelegate translationParser = null;
+            if (genericMenuTreePanel != null) {
+                buttonsVisible = ((IMenuTreePanel)genericMenuTreePanel).ButtonsVisible;
+                translationParser = ((IMenuTreePanel)genericMenuTreePanel).TranslationParser; 
+            }
+
             // create an instance of the filter panel specific to the type we are filtering
             genericMenuTreePanel = null;
             Type genericType = typeof(GenericMenuTreePanel<>).GetGenericTypeDefinition();
@@ -100,6 +130,9 @@ namespace Cornerstone.GUI.Filtering {
             // link new control to existing settings
             ((IMenuTreePanel)genericMenuTreePanel).DBManager = DBManager;
             ((IFieldDisplaySettingsOwner)genericMenuTreePanel).FieldDisplaySettings = FieldDisplaySettings;
+            ((IMenuTreePanel)genericMenuTreePanel).TranslationParser = translationParser;
+            ((IMenuTreePanel)genericMenuTreePanel).ButtonsVisible = buttonsVisible;
+
 
             SuspendLayout();
             Controls.Clear();
