@@ -156,12 +156,6 @@
     <Compile Include="ConfigScreen\Popups\DataProviderSetupPopup.Designer.cs">
       <DependentUpon>DataProviderSetupPopup.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\Popups\FilterSelectionPopup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\Popups\FilterSelectionPopup.Designer.cs">
-      <DependentUpon>FilterSelectionPopup.cs</DependentUpon>
-    </Compile>
     <Compile Include="ConfigScreen\Popups\MovieFilterEditorPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -648,9 +642,6 @@
     <EmbeddedResource Include="ConfigScreen\ContributersScrollPanel.resx">
       <DependentUpon>ContributersScrollPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\Popups\FilterSelectionPopup.resx">
-      <DependentUpon>FilterSelectionPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\SocialPane.resx">
       <DependentUpon>SocialPane.cs</DependentUpon>
