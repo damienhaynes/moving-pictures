@@ -183,8 +183,17 @@ namespace MediaPortal.Plugins.MovingPictures {
                 genres += "|" + genre;
             }
 
-            mpsMovie.SourceName = movie.PrimarySource.Provider.Name;
-            mpsMovie.SourceId = movie.GetSourceMovieInfo(movie.PrimarySource).Identifier;
+
+            if (movie.PrimarySource == null || movie.PrimarySource.Provider == null) {
+                mpsMovie.SourceName = "";
+                mpsMovie.SourceId = "";
+                mpsMovie.Locale = "";
+            }
+            else {
+                mpsMovie.SourceName = movie.PrimarySource.Provider.Name;
+                mpsMovie.SourceId = movie.GetSourceMovieInfo(movie.PrimarySource).Identifier;
+                mpsMovie.Locale = movie.PrimarySource.Provider.LanguageCode;
+            }
             mpsMovie.Title = movie.Title;
             mpsMovie.Year = movie.Year.ToString();
             mpsMovie.Certification = movie.Certification;
@@ -198,7 +207,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             mpsMovie.Directors = directors;
             mpsMovie.Cast = actors;
             mpsMovie.TranslatedTitle = movie.Title;
-            mpsMovie.Locale = movie.PrimarySource.Provider.LanguageCode;
             return mpsMovie;
         }
 
