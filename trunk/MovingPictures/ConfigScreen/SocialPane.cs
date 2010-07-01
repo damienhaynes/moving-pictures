@@ -181,7 +181,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 foreach (var movie in allMovies) {
                     count++;
                     MovingPicturesSocialAPI.MovieDTO mpsMovie = MovingPicturesCore.Social.MovieToMPSMovie(movie);
-                    mpsMovies.Add(mpsMovie);
+                    if (mpsMovie.SourceName.Length > 0 && mpsMovie.SourceId.Length > 0)
+                        mpsMovies.Add(mpsMovie);
 
                     if (progress != null)
                         progress("Syncing All Movies to MPS", (int)(count * 100 / allMovies.Count));
