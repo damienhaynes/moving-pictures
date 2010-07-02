@@ -394,6 +394,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return UserSettings[0];
             }
         }
+
+        [DBField(Filterable= false)]
+        public int MpsId {
+            get { return _mpsId; }
+
+            set {
+                _mpsId = value;
+                commitNeeded = true;
+            }
+        } private int _mpsId;
+
+
         #endregion
 
         #region General Management Methods

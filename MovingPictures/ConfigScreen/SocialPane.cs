@@ -172,6 +172,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void SyncAllMovies(ProgressDelegate progress) {
             try {
                 List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
+                logger.Debug("Syncing {0} movies", allMovies.Count);
 
                 allMovies = allMovies.OrderBy(m => m.DateAdded).ToList();
 
@@ -181,17 +182,33 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 foreach (var movie in allMovies) {
                     count++;
                     MovingPicturesSocialAPI.MovieDTO mpsMovie = MovingPicturesCore.Social.MovieToMPSMovie(movie);
-                    if (mpsMovie.SourceName.Length > 0 && mpsMovie.SourceId.Length > 0)
+                    if (mpsMovie.ResourceIds.Length > 1) {
+                        logger.Debug("Adding {0} to movies to be synced", movie.Title);
                         mpsMovies.Add(mpsMovie);
+                    }
+                    else {
+                        logger.Debug("Skipping {0} because it doesn't have source information", movie.Title);
+                    }
 
                     if (progress != null)
                         progress("Syncing All Movies to MPS", (int)(count * 100 / allMovies.Count));
-                    if (mpsMovies.Count >= 100) {
-                        MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(mpsMovies);
+
+                    if (mpsMovies.Count >= 100 || count == allMovies.Count) {
+                        logger.Debug("Sending batch of {0} movies", mpsMovies.Count);
+                        MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref mpsMovies);
+
+                        // update MpsId on the DBMovieInfo object
+                        foreach (MovieDTO mpsMovieDTO in mpsMovies) {
+                            DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
+                            if (m != null) {
+                                m.MpsId = mpsMovieDTO.MovieId;
+                                m.Commit();
+                            }
+                        }
+
                         mpsMovies.Clear();
                     }
                 }
-                MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(mpsMovies);
             }
             catch (Exception ex) {
                 logger.ErrorException("", ex);
