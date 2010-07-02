@@ -166,34 +166,31 @@ namespace MediaPortal.Plugins.MovingPictures {
         /// </summary>
         public MovingPicturesSocialAPI.MovieDTO MovieToMPSMovie(DBMovieInfo movie) {
             MovingPicturesSocialAPI.MovieDTO mpsMovie = new MovingPicturesSocialAPI.MovieDTO();
-            string directors = "";
-            string actors = "";
-            string writers = "";
-            string genres = "";
+            mpsMovie.InternalId = movie.ID.GetValueOrDefault();
+            mpsMovie.Directors = "";
+            mpsMovie.Cast = "";
+            mpsMovie.Genres = "";
             foreach (var person in movie.Directors) {
-                directors += "|" + person;
+                mpsMovie.Directors += "|" + person;
             }
             foreach (var person in movie.Actors) {
-                actors += "|" + person;
-            }
-            foreach (var person in movie.Writers) {
-                writers += "|" + person;
+                mpsMovie.Cast += "|" + person;
             }
             foreach (var genre in movie.Genres) {
-                genres += "|" + genre;
+                mpsMovie.Genres += "|" + genre;
             }
 
+            mpsMovie.ResourceNames = "";
+            mpsMovie.ResourceIds = "";
+            mpsMovie.Locale = "";
+            foreach (DBSourceMovieInfo smi in movie.SourceMovieInfo) {
+                mpsMovie.ResourceNames += "|" + smi.Source.Provider.Name;
+                mpsMovie.ResourceIds += "|" + smi.Identifier;
+                if (smi.Source == movie.PrimarySource) {
+                    mpsMovie.Locale = smi.Source.Provider.LanguageCode;
+                }
+            }
 
-            if (movie.PrimarySource == null || movie.PrimarySource.Provider == null) {
-                mpsMovie.SourceName = "";
-                mpsMovie.SourceId = "";
-                mpsMovie.Locale = "";
-            }
-            else {
-                mpsMovie.SourceName = movie.PrimarySource.Provider.Name;
-                mpsMovie.SourceId = movie.GetSourceMovieInfo(movie.PrimarySource).Identifier;
-                mpsMovie.Locale = movie.PrimarySource.Provider.LanguageCode;
-            }
             mpsMovie.Title = movie.Title;
             mpsMovie.Year = movie.Year.ToString();
             mpsMovie.Certification = movie.Certification;
@@ -203,9 +200,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             mpsMovie.Score = movie.Score.ToString();
             mpsMovie.Popularity = movie.Popularity.ToString();
             mpsMovie.Runtime = movie.Runtime.ToString();
-            mpsMovie.Genres = genres;
-            mpsMovie.Directors = directors;
-            mpsMovie.Cast = actors;
             mpsMovie.TranslatedTitle = movie.Title;
             return mpsMovie;
         }

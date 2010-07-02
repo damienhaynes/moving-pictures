@@ -5,14 +5,32 @@ using System.Text;
 
 namespace MovingPicturesSocialAPI {
     public class MovieDTO {
+
         /// <summary>
-        /// The name of the third party site used to gather data (ex: imdb)
+        /// Id of the movie in your own internal system.  (ex: the id of the DBMovieInfo record).
+        /// This will be passed back from some MPS bulk operations, for easier identification
         /// </summary>
-        public string SourceName { get; set; }
+        public int InternalId { 
+            get { return _internalId; }
+            set { _internalId = value; }
+        } private int _internalId = 0;
+
         /// <summary>
-        /// The id of the movie at the third party site (ex: imdbid)
+        /// Id of the movie in Moving Pictures Social
         /// </summary>
-        public string SourceId { get; set; }
+        public int MovieId {
+            get { return _movieId; }
+            set { _movieId = value; }
+        } private int _movieId = 0;
+
+        /// <summary>
+        /// Pipe delimited list of the third party resources for the movie (ex: imdb.com)
+        /// </summary>
+        public string ResourceNames { get; set; }
+        /// <summary>
+        /// Pipe delimited list of the ids of the movie at the third party site (ex: imdbid)
+        /// </summary>
+        public string ResourceIds { get; set; }
         public string Title { get; set; }
         public string Year { get; set; }
         public string Certification { get; set; }

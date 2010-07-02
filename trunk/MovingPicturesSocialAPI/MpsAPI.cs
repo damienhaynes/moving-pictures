@@ -75,19 +75,29 @@ namespace MovingPicturesSocialAPI {
         /// <summary>
         /// Adds a collection of new movies with data to MPS, and adds it to the user's collection.
         /// </summary>
-        public bool AddMoviesToCollection(ICollection<MovieDTO> movies) {
+        public void AddMoviesToCollection(ref List<MovieDTO> movies) {
             var proxy = CreateProxy();
-            proxy.AddMoviesToCollectionWithData(((List<MovieDTO>)movies).ToArray());
-            return true;
+            var movieIds = proxy.AddMoviesToCollectionWithData(movies.ToArray());
+
+            // insert the MpsId's into the original list
+            foreach (XmlRpcStruct movieId in movieIds) {
+                MovieDTO movieDTO = movies.Find(
+                    delegate(MovieDTO a) {
+                        return a.InternalId == Convert.ToInt32(movieId["InternalId"]);
+                    });
+                if (movieDTO != null) {
+                    movieDTO.MovieId = Convert.ToInt32(movieId["MovieId"]);
+                }
+            }
         }
 
         /// <summary>
         /// Adds a new movie with data to MPS, and adds it to the user's collection.
         /// </summary>
-        public void AddMoviesToCollection(MovieDTO mpsMovie) {
+        public void AddMoviesToCollection(ref MovieDTO mpsMovie) {
             List<MovieDTO> movies = new List<MovieDTO>();
             movies.Add(mpsMovie);
-            AddMoviesToCollection(movies);
+            AddMoviesToCollection(ref movies);
         }
 
 
@@ -95,16 +105,15 @@ namespace MovingPicturesSocialAPI {
         /// <summary>
         /// Remove a movie from an user's collection
         /// </summary>
-        /// <param name="sourceName"></param>
-        /// <param name="sourceId"></param>
+        /// <param name="MovieId"></param>
         /// <returns></returns>
-        public bool RemoveMovieFromCollection(string sourceName, string sourceId) {
+        public bool RemoveMovieFromCollection(int movieId) {
             var proxy = CreateProxy();
-            proxy.RemoveMovieFromCollection(sourceName, sourceId);
+            proxy.RemoveMovieFromCollection(movieId);
             return true;
         }
 
-        public bool UploadCover(string sourceName, string sourceId, string file) {
+        public bool UploadCover(int movieId, string file) {
             FileStream fileStream = new FileStream(file, FileMode.Open, FileAccess.Read);
 
             byte[] binaryData = new Byte[fileStream.Length];
@@ -115,7 +124,7 @@ namespace MovingPicturesSocialAPI {
                 System.Convert.ToBase64String(binaryData, 0, binaryData.Length);
 
             var proxy = CreateProxy();
-            proxy.UploadCover(sourceName, sourceId, base64String);
+            proxy.UploadCover(movieId, base64String);
 
             return true;
         }
@@ -137,22 +146,21 @@ namespace MovingPicturesSocialAPI {
                         tli.ItemType = TaskItemType.Cover;
                         break;
                 }
-                tli.SourceName = task["SourceName"].ToString();
-                tli.SourceId = task["SourceId"].ToString();
+                tli.MovieId = (int)task["MovieId"];
                 result.Add(tli);
             }
 
             return result;
         }
 
-        public void SetMovieRating(string sourceName, string sourceId, int rating) {
+        public void SetMovieRating(int movieId, int rating) {
             var proxy = CreateProxy();
-            proxy.SetMovieRating(sourceName, sourceId, rating.ToString());
+            proxy.SetMovieRating(movieId, rating.ToString());
         }
 
-        public void SetWatchCount(string sourceName, string sourceId, int watchCount) {
+        public void SetWatchCount(int movieId, int watchCount) {
             var proxy = CreateProxy();
-            proxy.SetWatchCount(sourceName, sourceId, watchCount);
+            proxy.SetWatchCount(movieId, watchCount);
         }
 
         #region Static Methods
@@ -248,8 +256,7 @@ namespace MovingPicturesSocialAPI {
 
     public struct TaskListItem {
         public TaskItemType ItemType;
-        public string SourceName;
-        public string SourceId;
+        public int MovieId;
     }
 
     public enum TaskItemType {
@@ -269,42 +276,21 @@ namespace MovingPicturesSocialAPI {
         object UpdateUser(string Email, string Locale, string PluginVersion, string PrivateProfile);
 
         [XmlRpcMethod("AddMoviesToCollectionWithData", StructParams = true)]
-        object AddMoviesToCollectionWithData(MovieDTO[] movies);
+        object[] AddMoviesToCollectionWithData(MovieDTO[] movies);
 
         [XmlRpcMethod("RemoveMovieFromCollection", StructParams = true)]
-        object RemoveMovieFromCollection(string SourceName, string SourceId);
+        object RemoveMovieFromCollection(int MovieId);
 
         [XmlRpcMethod("GetUserTaskList")]
         object[] GetUserTaskList();
 
         [XmlRpcMethod("UploadCover", StructParams = true)]
-        object UploadCover(string SourceName, string SourceId, string Base64File);
+        object UploadCover(int MovieId, string Base64File);
 
         [XmlRpcMethod("SetMovieRating", StructParams = true)]
-        object SetMovieRating(string SourceName, string SourceId, string Rating);
+        object SetMovieRating(int MovieId, string Rating);
 
         [XmlRpcMethod("SetWatchCount", StructParams = true)]
-        object SetWatchCount(string SourceName, string SourceId, int WatchCount);
+        object SetWatchCount(int MovieId, int WatchCount);
     }
-
-    public struct MovieData {
-        public string SourceName;
-        public string SourceId;
-        public string Title;
-        public string Year;
-        public string Certification;
-        public string Language;
-        public string Tagline;
-        public string Summary;
-        public string Score;
-        public string Popularity;
-        public string Runtime;
-        public string Genres;
-        public string Directors;
-        public string Cast;
-        public string TranslatedTitle;
-        public string Locale;
-
-    }
-
 }
