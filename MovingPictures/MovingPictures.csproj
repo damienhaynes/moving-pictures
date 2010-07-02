@@ -216,6 +216,12 @@
     <Compile Include="ConfigScreen\Popups\MenuEditorPopup.Designer.cs">
       <DependentUpon>MenuEditorPopup.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\Popups\RenameConfirmationPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigScreen\Popups\RenameConfirmationPopup.Designer.cs">
+      <DependentUpon>RenameConfirmationPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConfigScreen\Popups\ScriptVersionPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,6 +278,11 @@
     <Compile Include="Database\DBWatchedHistory.cs" />
     <Compile Include="Database\LocalMediaListExtensions.cs" />
     <Compile Include="Extensions\MovieTitleStringExtensions.cs" />
+    <Compile Include="LocalMediaManagement\MovieRenamer\MovieRenamer.cs" />
+    <Compile Include="LocalMediaManagement\MovieRenamer\Renamable.cs" />
+    <Compile Include="LocalMediaManagement\MovieRenamer\RenamableDirectory.cs" />
+    <Compile Include="LocalMediaManagement\MovieRenamer\RenamableFile.cs" />
+    <Compile Include="LocalMediaManagement\MovieRenamer\RenamableListExtensions.cs" />
     <Compile Include="LocalMediaManagement\MovieResources\Backdrop.cs" />
     <Compile Include="LocalMediaManagement\MovieResources\Cover.cs" />
     <Compile Include="LocalMediaManagement\MovieResources\FileBasedResource.cs" />
@@ -291,7 +302,6 @@
     <Compile Include="DataProviders\MyVideosProvider.cs" />
     <Compile Include="DataProviders\ScriptableProvider.cs" />
     <Compile Include="LocalMediaManagement\DeviceManager.cs" />
-    <Compile Include="LocalMediaManagement\MovieRenamer.cs" />
     <Compile Include="LocalMediaManagement\MovieResources\ImageResource.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\BlurayMetaBuilder.cs" />
     <Compile Include="LocalMediaManagement\MovieSignatureBuilders\HashBuilder.cs">
@@ -642,6 +652,9 @@
     <EmbeddedResource Include="ConfigScreen\ContributersScrollPanel.resx">
       <DependentUpon>ContributersScrollPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConfigScreen\Popups\RenameConfirmationPopup.resx">
+      <DependentUpon>RenameConfirmationPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\SocialPane.resx">
       <DependentUpon>SocialPane.cs</DependentUpon>

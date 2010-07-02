@@ -21,6 +21,7 @@ using MediaPortal.Plugins.MovingPictures.DataProviders;
 using System.IO;
 using Cornerstone.GUI.Dialogs;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieRenamer;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovieManagerPane : UserControl {
@@ -864,66 +865,43 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void updateFileNameToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (CurrentMovie == null)
+            if (movieListBox.SelectedItems.Count == 0)
                 return;
 
-            // Check if all files belonging to the movie are available.
-            bool continueReassign = false;
-            while (!continueReassign) {
-                continueReassign = true;
-                foreach (DBLocalMedia localMedia in CurrentMovie.LocalMedia) {
-                    // if the file is offline
-                    if (!localMedia.IsAvailable) {
-                        // do not continue
-                        continueReassign = false;
+            List<DBMovieInfo> movies = new List<DBMovieInfo>();
+            foreach (ListViewItem currItem in movieListBox.SelectedItems)
+                movies.Add((DBMovieInfo)currItem.Tag);
 
-                        // Prompt the user to insert the media containing the files
-                        string connect = string.Empty;
-                        if (localMedia.DriveLetter != null) {
-                            if (localMedia.ImportPath.GetDriveType() == DriveType.CDRom)
-                                connect = "Cannot rename a file on a CD/DVD.";
-                            else
-                                connect = "Please reconnect the media labeled '" + localMedia.MediaLabel + "' to " + localMedia.DriveLetter;
-                        }
-                        else {
-                            connect = "Please make sure the network share '" + localMedia.FullPath + "' is available.";
-                        }
-
-                        // Show dialog
-                        DialogResult resultInsert = MessageBox.Show(
-                        "The file or files you want to rename are currently not available.\n\n" + connect,
-                        "File(s) not available.", MessageBoxButtons.RetryCancel);
-
-                        // if cancel is pressed stop the reassign process.
-                        if (resultInsert == DialogResult.Cancel)
-                            return;
-
-                        // break foreach loop (and recheck condition)
-                        break;
-                    }
-                }
-            }
-
-            // If we made it this far all files are available and we can notify the user
-            // about what the reassign process is going to do.
-            DialogResult result = MessageBox.Show(
-                    "You are about to rename this file or set of files.\n\n" +
-                    "Are you sure you want to continue?",
-                    "Rename Movie File", MessageBoxButtons.YesNo);
-
-            if (result == System.Windows.Forms.DialogResult.Yes) {
-                List<DBLocalMedia> localMedia = new List<DBLocalMedia>(CurrentMovie.LocalMedia);
-
-                MovieRenamer FileRename = new MovieRenamer();
-                FileRename.StartRename(CurrentMovie);
-            }
+            RenameConfirmationPopup popup = new RenameConfirmationPopup(movies);
+            popup.Owner = ParentForm;
+            popup.ShowDialog(this);
         }
 
         //medthod to undo a file name change processed by the MovieFileRenamer class.
         private void returnToOriginalFileNameToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (CurrentMovie == null)
+            if (CurrentMovie != null && !verifyAvailability())
                 return;
 
+            // If we made it this far all files are available and we can notify the user
+            // about what the reassign process is going to do.
+            DialogResult result = MessageBox.Show(
+                    "You are about to revert the selected file or files to\n" +
+                    "the original file and folder names.\n\n" +
+                    "Are you sure you want to continue?",
+                    "Rename Movie File", MessageBoxButtons.YesNo);
+
+            if (result == System.Windows.Forms.DialogResult.Yes) {
+                processingMovies = new List<DBMovieInfo>();
+                foreach (ListViewItem currItem in movieListBox.SelectedItems)
+                    processingMovies.Add((DBMovieInfo)currItem.Tag);
+
+                ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(RevertRenamesWorker));
+                popup.Owner = ParentForm;
+                popup.ShowDialog();
+            }
+        }
+
+        private bool verifyAvailability() {
             //do a check to see if the first file in this movie has been renamed. If not, halt.
             if (CurrentMovie.LocalMedia[0].OriginalFileName == String.Empty) {
                 DialogResult noOriginal = MessageBox.Show(
@@ -931,7 +909,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     "filename because the current movie has not been\n" +
                     "renamed.",
                     "Error", MessageBoxButtons.OK);
-                return;
+                return false;
             }
 
             // Check if all files belonging to the movie are available.
@@ -963,7 +941,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                         // if cancel is pressed stop the reassign process.
                         if (resultInsert == DialogResult.Cancel)
-                            return;
+                            return false;
 
                         // break foreach loop (and recheck condition)
                         break;
@@ -971,21 +949,31 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 }
             }
 
-            // If we made it this far all files are available and we can notify the user
-            // about what the reassign process is going to do.
-            DialogResult result = MessageBox.Show(
-                    "You are about to rename this file or set of files.\n\n" +
-                    "Are you sure you want to continue?",
-                    "Rename Movie File", MessageBoxButtons.YesNo);
+            return true;
+        }
 
-            if (result == System.Windows.Forms.DialogResult.Yes) {
-                List<DBLocalMedia> localMedia = new List<DBLocalMedia>(CurrentMovie.LocalMedia);
+        private void RevertRenamesWorker(ProgressDelegate progress) {
+            MovieRenamer renamer = new MovieRenamer();
 
-                MovieRenamer FileRename = new MovieRenamer();
-                FileRename.UndoRename(CurrentMovie);
+            int total = processingMovies.Count;
+            int processed = 0;
+            int percentDone = 0;
+
+            foreach(DBMovieInfo currMovie in processingMovies) {
+                percentDone = (int)Math.Round(100.0 * (processed) / total);
+
+                bool available = currMovie.LocalMedia.IsAvailable();
+                bool isDisk = currMovie.LocalMedia[0].ImportPath.IsOpticalDrive;
+
+                if (available && !isDisk) {
+                    progress("Reverting " + currMovie.Title + "...", percentDone);
+                    renamer.Revert(currMovie);
+                }
+
+                processed++;
             }
 
-
+            progress("Done!", 100);
         }
     }
 
