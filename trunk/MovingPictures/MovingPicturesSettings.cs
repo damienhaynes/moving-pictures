@@ -32,6 +32,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private int _threadCount;
 
+
         [CornerstoneSetting(
             Name = "Regular Expression Noise Filter",
             Description = "A regular expression that removes common used keywords from the folder/filename.",
@@ -1658,6 +1659,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         private string _fileRenameString;
 
         [CornerstoneSetting(
+            Name = "Directory Rename Pattern",
+            Description = "When using the file renamer functionality, directories will be renamed based on this pattern.",
+            Groups = "|Extras|File Renamer|",
+            Identifier = "directory_rename_string",
+            Default = @"${movie.title} (${movie.year})")]
+        public string DirectoryRenameString {
+            get { return _directoryRenameString; }
+            set {
+                _directoryRenameString = value;
+                OnSettingChanged("directory_rename_string");
+            }
+        }
+        private string _directoryRenameString;
+
+        [CornerstoneSetting(
             Name = "Multi-Part Rename Pattern",
             Description = "When using the file renamer functionality, this filename pattern will be appended to the regular pattern for movies made up of multiple files.",
             Groups = "|Extras|File Renamer|",
@@ -1671,6 +1687,72 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private string _file_multipart;
+
+        [CornerstoneSetting(
+             Name = "Additional Files Type to Rename",
+             Description = "When using the file renamer functionality, files starting with the original filename and with one of these extension will be renamed too.",
+             Groups = "|Extras|File Renamer|",
+             Identifier = "file_rename_other_filetypes",
+             Default = @".srt|.idx|.sub|.ac3|.dts|.nfo|.txt")]
+        public string Rename_SecondaryFileTypes
+        {
+            get { return _file_rename_other_filetypes; }
+            set
+            {
+                _file_rename_other_filetypes = value;
+                OnSettingChanged("file_rename_other_filetypes");
+            }
+        }
+        private string _file_rename_other_filetypes;
+
+        [CornerstoneSetting(
+             Name = "Include Folders When Renaming",
+             Description = "If true, when renaming files for a movie, the folder containing the files will be renamed as well.",
+             Groups = "|Extras|File Renamer|",
+             Identifier = "file_rename_folder",
+             Default = false)]
+        public bool RenameFolders
+        {
+            get { return _file_rename_folder; }
+            set
+            {
+                _file_rename_folder = value;
+                OnSettingChanged("file_rename_folder");
+            }
+        }
+        private bool _file_rename_folder;
+
+        [CornerstoneSetting(
+          Name = "Include Files When Renaming",
+          Description = "If true, when renaming, the movie files will be renamed.",
+          Groups = "|Extras|File Renamer|",
+          Identifier = "rename_files",
+          Default = false)]
+        public bool RenameFiles
+        {
+            get { return _renameFiles; }
+            set
+            {
+                _renameFiles = value;
+                OnSettingChanged("rename_files");
+            }
+        }
+        private bool _renameFiles;
+
+        [CornerstoneSetting(
+            Name = "Include Secondary Files When Renaming",
+            Description = "If true, when renaming files for a movie, thesecondary files will be renamed as well.",
+            Groups = "|Extras|File Renamer|",
+            Identifier = "rename_secondary_files",
+            Default = false)]
+        public bool RenameSecondaryFiles {
+            get { return _renameSecondaryFiles; }
+            set {
+                _renameSecondaryFiles = value;
+                OnSettingChanged("rename_secondary_files");
+            }
+        }
+        private bool _renameSecondaryFiles;
 
         #endregion
         #endregion

@@ -250,6 +250,20 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } RelationList<DBMovieInfo, DBLocalMedia> _localMedia;
 
+        [DBFieldAttribute(AllowDynamicFiltering = false)]
+        public string OriginalDirectoryName {
+            get {
+                if (_originalDirectoryName == " ")
+                    return String.Empty;
+
+                return _originalDirectoryName;
+            }
+
+            set {
+                _originalDirectoryName = value;
+                commitNeeded = true;
+            }
+        } private string _originalDirectoryName;
 
         [DBRelation(AutoRetrieve = true, Filterable=false)]
         public RelationList<DatabaseTable, DBAttribute> Attributes {
