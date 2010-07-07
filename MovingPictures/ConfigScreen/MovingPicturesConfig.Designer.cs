@@ -24,6 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MovingPicturesConfig));
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.managerTab = new System.Windows.Forms.TabPage();
             this.movieManagerPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManagerPane();
@@ -182,11 +183,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.ClientSize = new System.Drawing.Size(620, 653);
             this.Controls.Add(this.mainTabControl);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(628, 650);
             this.Name = "MovingPicturesConfig";
-            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Moving Pictures Configuration";
             this.Load += new System.EventHandler(this.MoviesPluginConfig_Load);
