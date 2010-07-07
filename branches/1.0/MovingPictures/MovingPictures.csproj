@@ -23,6 +23,7 @@
     <StartupObject>
     </StartupObject>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationIcon>Resources\Images\logo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -672,6 +673,7 @@
     <Content Include="Resources\language\sl.xml" />
     <Content Include="Resources\language\sv.xml" />
     <Content Include="Resources\Images\page_gear.png" />
+    <None Include="Resources\logo.ico" />
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>

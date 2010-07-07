@@ -17,6 +17,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         public MovingPicturesConfig() {
             InitializeComponent();
 
+            #if DEBUG
+            ShowInTaskbar = true;
+            #endif
+
             // if we are in designer, break to prevent errors with rendering, it cant access the DB...
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
                 return;
