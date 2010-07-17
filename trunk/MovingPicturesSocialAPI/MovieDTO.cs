@@ -54,5 +54,10 @@ namespace MovingPicturesSocialAPI {
         public string Cast { get; set; }
         public string TranslatedTitle { get; set; }
         public string Locale { get; set; }
+
+        public int WatchCount { get; set; }
+        public DateTime LastWatchDate { get; set; }
+        public int UserRating { get; set; }
+
     }
 }

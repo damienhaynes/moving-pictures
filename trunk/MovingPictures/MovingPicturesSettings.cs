@@ -1855,7 +1855,10 @@ namespace MediaPortal.Plugins.MovingPictures {
         public string SocialURLBase {
             get { return _socialURLBase; }
             set {
-                _socialURLBase = value;
+                _socialURLBase = value.Trim();
+                if (!_socialURLBase.EndsWith("/"))
+                    _socialURLBase += "/";
+
                 OnSettingChanged("socialurlbase");
             }
         }
