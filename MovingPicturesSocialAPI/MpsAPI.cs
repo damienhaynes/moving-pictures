@@ -158,9 +158,9 @@ namespace MovingPicturesSocialAPI {
             proxy.SetMovieRating(movieId, rating.ToString());
         }
 
-        public void SetWatchCount(int movieId, int watchCount) {
+        public void WatchMovie(int movieId, int newWatchCount) {
             var proxy = CreateProxy();
-            proxy.SetWatchCount(movieId, watchCount);
+            proxy.WatchMovie(movieId, newWatchCount);
         }
 
         #region Static Methods
@@ -290,7 +290,7 @@ namespace MovingPicturesSocialAPI {
         [XmlRpcMethod("SetMovieRating", StructParams = true)]
         object SetMovieRating(int MovieId, string Rating);
 
-        [XmlRpcMethod("SetWatchCount", StructParams = true)]
-        object SetWatchCount(int MovieId, int WatchCount);
+        [XmlRpcMethod("WatchMovie", StructParams = true)]
+        object WatchMovie(int MovieId, int NewWatchCount);
     }
 }

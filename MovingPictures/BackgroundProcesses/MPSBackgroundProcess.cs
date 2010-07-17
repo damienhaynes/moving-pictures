@@ -13,7 +13,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         AddMoviesToCollection,
         RemoveMovieFromCollection,
         UpdateUserRating,
-        SetWatchCount,
+        WatchMovie,
         ProcessTaskList
     }
     public class MPSBackgroundProcess : AbstractBackgroundProcess {
@@ -69,10 +69,10 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                         MovingPicturesCore.Social.SocialAPI.SetMovieRating(FirstMovie.MpsId, newRating);
                         break;
 
-                    case MPSActions.SetWatchCount:
+                    case MPSActions.WatchMovie:
                         int newWatchCount = FirstMovie.ActiveUserSettings.WatchedCount;
                         logger.Info("Setting MPS watch count for {0} to {1}", FirstMovie.Title, newWatchCount);
-                        MovingPicturesCore.Social.SocialAPI.SetWatchCount(FirstMovie.MpsId, newWatchCount);
+                        MovingPicturesCore.Social.SocialAPI.WatchMovie(FirstMovie.MpsId, newWatchCount);
                         break;
 
 

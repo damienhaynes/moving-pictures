@@ -49,16 +49,30 @@ namespace MediaPortal.Plugins.MovingPictures {
                 MovingPicturesCore.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
                 MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
                 MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);
-
+                MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectInserted);
                 if (MovingPicturesCore.Settings.SocialTaskListTimer > 0) {
                     taskListTimer = new Timer(taskListTimerCallback, null, 0, MovingPicturesCore.Settings.SocialTaskListTimer * 60000);
                 }
             }
         }
 
+        void DatabaseManager_ObjectInserted(DatabaseTable obj)
+        {
+            if (obj.GetType() != typeof(DBWatchedHistory))
+                return;
+
+            DBWatchedHistory wh = (DBWatchedHistory)obj;
+            DBMovieInfo movie = wh.Movie;
+
+            MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+            bgProc.Action = MPSActions.WatchMovie;
+            bgProc.Movies.Add(movie);
+            MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+        }
+
         private void DatabaseManager_ObjectUpdated(DatabaseTable obj) {
             try {
-                // we're looking for user rating changes and watch count changes
+                // we're looking for user rating changes
                 if (obj.GetType() != typeof(DBUserMovieSettings))
                     return;
 
@@ -73,18 +87,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                     // reset the flag
                     settings.RatingChanged = false;
-                }
-
-                if (settings.WatchCountChanged) {
-                    DBMovieInfo movie = settings.AttachedMovies[0];
-
-                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                    bgProc.Action = MPSActions.SetWatchCount;
-                    bgProc.Movies.Add(movie);
-                    MovingPicturesCore.ProcessManager.StartProcess(bgProc);
-
-                    // reset the flag
-                    settings.WatchCountChanged = false;
                 }
             }
             catch (Exception ex) {
@@ -201,6 +203,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             mpsMovie.Popularity = movie.Popularity.ToString();
             mpsMovie.Runtime = movie.Runtime.ToString();
             mpsMovie.TranslatedTitle = movie.Title;
+
+            mpsMovie.WatchCount = movie.ActiveUserSettings.WatchedCount;
+            if (movie.WatchedHistory.Count > 0)
+                mpsMovie.LastWatchDate = movie.WatchedHistory[movie.WatchedHistory.Count-1].DateWatched;
+            
+            mpsMovie.UserRating = movie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
+
             return mpsMovie;
         }
 
