@@ -193,20 +193,27 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
             }
 
-            mpsMovie.Title = movie.Title;
-            mpsMovie.Year = movie.Year.ToString();
-            mpsMovie.Certification = movie.Certification;
-            mpsMovie.Language = movie.Language;
-            mpsMovie.Tagline = movie.Tagline;
-            mpsMovie.Summary = movie.Summary;
-            mpsMovie.Score = movie.Score.ToString();
-            mpsMovie.Popularity = movie.Popularity.ToString();
-            mpsMovie.Runtime = movie.Runtime.ToString();
-            mpsMovie.TranslatedTitle = movie.Title;
+            if (mpsMovie.ResourceNames.Length == 0) {
+                mpsMovie.ResourceNames = "imdb.com";
+                mpsMovie.ResourceIds = movie.ImdbID + "";
+            }
+
+            mpsMovie.Title = movie.Title + "";
+            mpsMovie.Year = movie.Year.ToString() + "";
+            mpsMovie.Certification = movie.Certification + "";
+            mpsMovie.Language = movie.Language + "";
+            mpsMovie.Tagline = movie.Tagline + "";
+            mpsMovie.Summary = movie.Summary + "";
+            mpsMovie.Score = movie.Score.ToString() + "";
+            mpsMovie.Popularity = movie.Popularity.ToString() + "";
+            mpsMovie.Runtime = movie.Runtime.ToString() + "";
+            mpsMovie.TranslatedTitle = movie.Title + "";
 
             mpsMovie.WatchCount = movie.ActiveUserSettings.WatchedCount;
             if (movie.WatchedHistory.Count > 0)
-                mpsMovie.LastWatchDate = movie.WatchedHistory[movie.WatchedHistory.Count-1].DateWatched;
+                mpsMovie.LastWatchDate = movie.WatchedHistory[movie.WatchedHistory.Count - 1].DateWatched;
+            else
+                mpsMovie.LastWatchDate = DateTime.MinValue;
             
             mpsMovie.UserRating = movie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
 
