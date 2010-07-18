@@ -186,6 +186,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             mpsMovie.ResourceIds = "";
             mpsMovie.Locale = "";
             foreach (DBSourceMovieInfo smi in movie.SourceMovieInfo) {
+                if (smi.Source == null || smi.Source.Provider == null)
+                    continue;
                 mpsMovie.ResourceNames += "|" + smi.Source.Provider.Name;
                 mpsMovie.ResourceIds += "|" + smi.Identifier;
                 if (smi.Source == movie.PrimarySource) {
