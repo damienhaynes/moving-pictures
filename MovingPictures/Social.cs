@@ -8,6 +8,7 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MovingPicturesSocialAPI;
 using NLog;
 using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
+using System.Linq;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class Social {
@@ -140,10 +141,20 @@ namespace MediaPortal.Plugins.MovingPictures {
                     return;
 
                 DBMovieInfo movie = (DBMovieInfo)obj;
-                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                bgProc.Action = MPSActions.RemoveMovieFromCollection;
-                bgProc.Movies.Add(movie);
-                MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+
+                List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
+
+                int mpsIdMovieCount = (from m in allMovies
+                                       where m.MpsId == movie.MpsId
+                                       select m).Count();
+
+                if (mpsIdMovieCount == 0)
+                {
+                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                    bgProc.Action = MPSActions.RemoveMovieFromCollection;
+                    bgProc.Movies.Add(movie);
+                    MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+                }
 
             }
             catch (Exception ex) {
@@ -222,12 +233,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             return mpsMovie;
         }
 
-        void _socialAPI_RequestEvent(string RequestText) {
+        public void _socialAPI_RequestEvent(string RequestText) {
             string logtext = ScrubLogText(RequestText);
             logger.Debug("Request sent to MPS: " + logtext);
         }
 
-        void _socialAPI_ResponseEvent(string ResponseText) {
+        public void _socialAPI_ResponseEvent(string ResponseText) {
             string logtext = ScrubLogText(ResponseText);
             logger.Debug("Response received from MPS: " + logtext);
         }
