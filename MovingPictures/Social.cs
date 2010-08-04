@@ -196,6 +196,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             mpsMovie.ResourceNames = "";
             mpsMovie.ResourceIds = "";
             mpsMovie.Locale = "";
+            bool foundIMDB = false;
             foreach (DBSourceMovieInfo smi in movie.SourceMovieInfo) {
                 if (smi.Source == null || smi.Source.Provider == null)
                     continue;
@@ -204,11 +205,13 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (smi.Source == movie.PrimarySource) {
                     mpsMovie.Locale = smi.Source.Provider.LanguageCode;
                 }
+                if (smi.Source.Provider.Name.ToLower().Contains("imdb"))
+                    foundIMDB = true;
             }
 
-            if (mpsMovie.ResourceNames.Length == 0) {
-                mpsMovie.ResourceNames = "imdb.com";
-                mpsMovie.ResourceIds = movie.ImdbID + "";
+            if (!foundIMDB) {
+                mpsMovie.ResourceNames += "|" + "imdb.com";
+                mpsMovie.ResourceIds += "|" + movie.ImdbID;
             }
 
             mpsMovie.Title = movie.Title + "";
