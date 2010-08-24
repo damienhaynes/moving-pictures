@@ -1,4 +1,4 @@
-<ScriptableScraper>
+﻿<ScriptableScraper>
   <details>
     <!-- These details are for display purposes only. -->
     <name>Scope.dk</name>
@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141316</id>
-    <version major="1" minor="0" point="5"/>
-    <published month="01" day="16" year="2010"/>
+    <version major="1" minor="0" point="6"/>
+    <published month="08" day="19" year="2010"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -71,7 +71,7 @@
 
     <set name="rx_year">
       <![CDATA[
-      Produktionsår[^\n]+\n(?:[^>]+>)(?<MovieYear>[^<]+)
+      Produktions\D+?(?<MovieYear>\d+)</td>
       ]]>
     </set>
 
@@ -212,7 +212,7 @@
 
     <set name="rx_year">
       <![CDATA[
-      Produktionsår[^\n]+\n(?:[^>]+>)(?<MovieYear>[^<]+)
+      Produktions\D+?(?<MovieYear>\d+)</td>
       ]]>
     </set>
 
@@ -333,12 +333,12 @@
     <!-- IMDB id -->
     <if test='${movie.imdb_id}='>
       <retrieve name="imdb_find" url="http://www.google.com/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.title:safe}+(${movie.year:safe})" />
-      <parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
+      <parse name="imdb_parser" input="${imdb_find}" regex="&lt;h3\sclass=&quot;r&quot;&gt;&lt;a\shref=&quot;[^&quot;]+imdb\.com/title/(tt\d+)\/&quot;.+?&lt;em&gt;${movie.title}&lt;/em&gt;\s*\(&lt;em&gt;${movie.year}&lt;/em&gt;\)&lt;/a&gt;&lt;/h3&gt;" />
       <set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
       <!-- If no IMDB try to get it with the first alternate title. -->
       <if test='${movie.imdb_id}='>
         <retrieve name="imdb_find" url="http://www.google.com/search?hl=it&amp;hs=a8f&amp;q=site%3Awww.imdb.com+${movie.alternate_titles}+(${movie.year:safe})" />
-        <parse name="imdb_parser" input="${imdb_find}" regex='&lt;h3\sclass=r&gt;&lt;a\s+href="[^"]+imdb\.com/title/(tt\d+)/"[^&gt;]*&gt;(.+?)(?=&lt;/a&gt;)' />
+        <parse name="imdb_parser" input="${imdb_find}" regex="&lt;h3\sclass=&quot;r&quot;&gt;&lt;a\shref=&quot;[^&quot;]+imdb\.com/title/(tt\d+)\/&quot;.+?&lt;em&gt;${movie.title}&lt;/em&gt;\s*\(&lt;em&gt;${movie.year}&lt;/em&gt;\)&lt;/a&gt;&lt;/h3&gt;" />
         <set name="movie.imdb_id" value="${imdb_parser[0][0]}"/>
       </if>
     </if>
@@ -347,9 +347,9 @@
   <action name="get_cover_art">
 
     <set name="rx_poster_link">
-      <![CDATA[
-	  billede.php.fil=(?<MovieCover>[^&]+)
-	  ]]>
+	<![CDATA[
+	<meta\sproperty="og:image"\scontent="(?<MovieCover>[^"]+)"\s/>
+	]]>
     </set>
 
 
