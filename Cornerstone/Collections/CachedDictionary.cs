@@ -5,19 +5,19 @@ namespace Cornerstone.Collections {
 
     public class CachedDictionary<TKey, TValue> : Dictionary<TKey, TValue> {
 
-        private Dictionary<TKey, DateTime> cache {
+        private Dictionary<TKey, DateTime> LastAccessed {
             get {
-                if (_cache == null)
-                    _cache = new Dictionary<TKey, DateTime>();
+                if (_lastAccessed == null)
+                    _lastAccessed = new Dictionary<TKey, DateTime>();
 
-                return _cache;
+                return _lastAccessed;
             }
-        } private Dictionary<TKey, DateTime> _cache;
+        } private Dictionary<TKey, DateTime> _lastAccessed;
 
         /// <summary>
         /// Get/set the value after which items should expire
         /// </summary>
-        public TimeSpan ExpireAfter {
+        public TimeSpan Timeout {
             get { return ttl; }
             set { 
                 if (value == null) 
@@ -25,45 +25,66 @@ namespace Cornerstone.Collections {
                 else
                     ttl = value;  
                 }
-        } private TimeSpan ttl = TimeSpan.Zero;
-        
+        } private TimeSpan ttl = new TimeSpan(0, 10, 0);
+
         /// <summary>
-        /// Gets a value indicating wether this item has expired
+        /// Purge all expired items from memory. Items otherwise will not be removed
+        /// until attempted access.
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public bool HasExpired(TKey key) {
-            if (ttl != TimeSpan.Zero && cache.ContainsKey(key)) {
-                return (cache[key].Add(ttl) <= DateTime.Now);
+        public void Compact() {
+            foreach (TKey currKey in Keys) {
+                CheckExpiration(currKey);
             }
-            return true;
+        }
+
+        // remove key / value pair if the given key exists and has expired
+        protected void CheckExpiration(TKey key) {
+            if (LastAccessed.ContainsKey(key) && DateTime.Now - LastAccessed[key] > Timeout) {
+                this.Remove(key);
+                LastAccessed.Remove(key);
+            }
         }
 
         #region Dictionary methods
 
         public new void Add(TKey key, TValue value) {
-            cache.Add(key, DateTime.Now);
+            LastAccessed.Add(key, DateTime.Now);
             base.Add(key, value);
         }
 
         public new bool Remove(TKey key) {
-            cache.Remove(key);
+            LastAccessed.Remove(key);
             return base.Remove(key);
         }
 
         public new TValue this[TKey key] {
             get {
+                CheckExpiration(key);
+
+                if (LastAccessed.ContainsKey(key)) LastAccessed[key] = DateTime.Now;
                 return base[key];
             }
             set {
-                cache[key] = DateTime.Now;
+                LastAccessed[key] = DateTime.Now;
                 base[key] = value;
             }
         }
 
         public new void Clear() {
-            cache.Clear();
+            LastAccessed.Clear();
             base.Clear();
+        }
+
+        public new bool ContainsKey(TKey key) {
+            CheckExpiration(key);
+
+            if (LastAccessed.ContainsKey(key)) LastAccessed[key] = DateTime.Now;
+            return base.ContainsKey(key);
+        }
+
+        public new bool TryGetValue(TKey key, out TValue value) {
+            CheckExpiration(key);
+            return TryGetValue(key, out value);
         }
 
         #endregion

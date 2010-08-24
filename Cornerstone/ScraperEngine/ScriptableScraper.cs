@@ -11,10 +11,12 @@ using System.Reflection;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.ScraperEngine.Nodes;
 using System.Threading;
+using Cornerstone.Collections;
 
 namespace Cornerstone.ScraperEngine {
     public class ScriptableScraper {
         private static Logger logger = LogManager.GetCurrentClassLogger();
+        private CachedDictionary<string, string> cache = new CachedDictionary<string, string>();
 
         #region Properties
 
@@ -208,9 +210,13 @@ namespace Cornerstone.ScraperEngine {
         }
 
         private void loadActionNodes() {
+            InternalScriptSettings settings = new InternalScriptSettings();
+            settings.DebugMode = DebugMode;
+            settings.Cache = cache;
+
             actionNodes = new Dictionary<string, ScraperNode>();
             foreach (XmlNode currAction in xml.DocumentElement.SelectNodes("child::action")) {
-                ActionNode newNode = (ActionNode) ScraperNode.Load(currAction, debug);
+                ActionNode newNode = (ActionNode)ScraperNode.Load(currAction, settings);
                 if (newNode != null && newNode.LoadSuccess)
                     actionNodes[newNode.Name] = newNode;
                 else {
@@ -233,5 +239,17 @@ namespace Cornerstone.ScraperEngine {
             return null;
         }
         
+    }
+
+    public class InternalScriptSettings {
+        public bool DebugMode {
+            get;
+            set;
+        }
+
+        public CachedDictionary<string, string> Cache {
+            get;
+            set;
+        }
     }
 }

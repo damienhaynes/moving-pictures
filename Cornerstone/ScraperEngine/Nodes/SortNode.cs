@@ -18,8 +18,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return sortBy; }
         } protected string sortBy;
 
-        public SortNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public SortNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
 
             // Load attributes
             foreach (XmlAttribute attr in xmlNode.Attributes) {
@@ -50,7 +50,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            if (DebugMode) logger.Debug("executing sort: " + xmlNode.OuterXml);
+            if (ScriptSettings.DebugMode) logger.Debug("executing sort: " + xmlNode.OuterXml);
 
             // get our initial parsed settings from the script
             string arrayName = parseString(variables, Name);

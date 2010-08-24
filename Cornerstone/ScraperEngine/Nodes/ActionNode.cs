@@ -8,8 +8,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
     public class ActionNode: ScraperNode {
 
 
-        public ActionNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public ActionNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
         }
 
         public override void Execute(Dictionary<string, string> variables) {

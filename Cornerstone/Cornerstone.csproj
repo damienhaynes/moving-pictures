@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{14201B8D-31C3-4FB5-9356-9485676C147B}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -234,6 +234,7 @@
     <Compile Include="ScraperEngine\Nodes\ParseNode.cs" />
     <Compile Include="ScraperEngine\Nodes\ReplaceNode.cs" />
     <Compile Include="ScraperEngine\Nodes\RetrieveNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\SleepNode.cs" />
     <Compile Include="ScraperEngine\ScraperNode.cs" />
     <Compile Include="ScraperEngine\Nodes\SetNode.cs" />
     <Compile Include="ScraperEngine\Nodes\SortNode.cs" />

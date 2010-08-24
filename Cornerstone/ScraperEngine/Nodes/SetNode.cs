@@ -17,10 +17,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         #region Methods
 
-        public SetNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public SetNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
 
-            if (DebugMode) logger.Debug("executing set: " + xmlNode.OuterXml);
+            if (settings.DebugMode) logger.Debug("executing set: " + xmlNode.OuterXml);
 
             // Load attributes
             foreach (XmlAttribute attr in xmlNode.Attributes) {

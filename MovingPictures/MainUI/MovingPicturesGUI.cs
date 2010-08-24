@@ -702,7 +702,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 int artworkDelay = MovingPicturesCore.Settings.ArtworkLoadingDelay;
 
                 // setup the time for the random category backdrop refresh
-                activeMovieLookup.ExpireAfter = new TimeSpan(0, 0, MovingPicturesCore.Settings.CategoryRandomArtworkRefreshInterval);
+                activeMovieLookup.Timeout = new TimeSpan(0, 0, MovingPicturesCore.Settings.CategoryRandomArtworkRefreshInterval);
 
                 // create backdrop image swapper
                 backdrop = new ImageSwapper();
@@ -2020,7 +2020,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     HashSet<DBMovieInfo> movies = browser.GetAvailableMovies(node);
                     lock (backdropSync) {
                         // Check if this node has an active movie cached and if it's still active.
-                        if (!activeMovieLookup.HasExpired(node) && movies.Contains(activeMovieLookup[node])) {
+                        if (activeMovieLookup.ContainsKey(node) && movies.Contains(activeMovieLookup[node])) {
                             movie = activeMovieLookup[node];
                         } else {
                             // grab a new random movie from the visible movies that has a backdrop
