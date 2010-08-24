@@ -364,7 +364,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Script_Filmtipset);
             AddSource(typeof(ScriptableProvider), Resources.Script_Ptgate);
             AddSource(typeof(ScriptableProvider), Resources.Script_Daum);
-            AddSource(typeof(ScriptableProvider), Resources.Script_kvikmyndir);
+            AddSource(typeof(ScriptableProvider), Resources.Script_EmberMediaManager);            
             AddSource(typeof(MyVideosProvider));
 
             normalizePriorities();

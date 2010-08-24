@@ -14,8 +14,8 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="5" point="0"/>
-	<published month="1" day="28" year="2010"/>
+	<version major="1" minor="5" point="1"/>
+	<published month="07" day="27" year="2010"/>
 
 	<!--
 	These fields are used for categorization purposes. Seperate multiple 
@@ -216,7 +216,7 @@
 			</set>
 			<set name="rx_language">
 				<![CDATA[
-				<a\shref=./Sections/Languages/[^/]+/">\s+([^<]+)</a>
+				<a\shref=./Sections/Languages/[^/]+/">\s*([^<]+)</a>
 				]]>
 			</set>
 			
@@ -272,7 +272,7 @@
 
 			<!-- Certification -->
 			<retrieve name="imdb_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
-			<parse name="certification" input="${imdb_page}" regex='&gt;\s+Sweden:((?:Banned)|(?:11)|(?:15)|(?:18)|(?:7)|(?:Btl))&lt;/a&gt;'/>
+			<parse name="certification" input="${imdb_page}" regex='&gt;Sweden:((?:Banned)|(?:11)|(?:15)|(?:18)|(?:7)|(?:Btl))&lt;/a&gt;'/>
 			<set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
 
 			<!-- Language -->
