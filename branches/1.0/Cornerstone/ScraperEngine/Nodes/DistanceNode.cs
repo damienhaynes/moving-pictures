@@ -16,8 +16,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return string2; }
         } protected string string2;
 
-        public DistanceNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public DistanceNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
 
             // Load attributes
             foreach (XmlAttribute attr in xmlNode.Attributes) {
@@ -48,11 +48,11 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            if (DebugMode) logger.Debug("executing distance: " + xmlNode.OuterXml);
+            if (ScriptSettings.DebugMode) logger.Debug("executing distance: " + xmlNode.OuterXml);
 
             string parsedString1 = parseString(variables, string1);
             string parsedString2 = parseString(variables, string2);
-            if (DebugMode) logger.Debug("executing distance: " + parsedString1 + " vs. " + parsedString2);
+            if (ScriptSettings.DebugMode) logger.Debug("executing distance: " + parsedString1 + " vs. " + parsedString2);
 
             int distance = AdvancedStringComparer.Levenshtein(parsedString1, parsedString2);
 

@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874903</id>
-    <version major="1" minor="3" point="0"/>
-    <published month="4" day="21" year="2010"/>
+    <version major="1" minor="4" point="1"/>
+    <published month="8" day="24" year="2010"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -112,7 +112,7 @@
       <loop name="curr_year" on="year">
         <!-- we dont want to do uneeded work though, so only proceed if we haven't found covers yet -->
         <if test="${cover_art[0].url}=">
-          <retrieve name="year_page" url="http://www.impawards.com/${curr_year}/standard.html" useragent="${userAgent}" />
+          <retrieve name="year_page" url="http://www.impawards.com/${curr_year}/std.html" useragent="${userAgent}" />
           <parse name="movies" input="${year_page}" regex="&lt;td&gt;&lt;font size=\+1&gt;([^&lt;]+).+?&lt;/tr&gt;"/>
 
           <!-- loop through all movies of this year and create distance values from the title for each -->
@@ -121,16 +121,16 @@
           </loop>
 
           <!-- 
-        sort our possible covers by match then check the first 5 closest matches to see if any
+        sort our possible covers by match then check the first 3 closest matches to see if any
         are the one we are looking for 
         -->
           <sort name='movies' by='distance'/>
-          <loop name='curr_movie' on='movies' limit='5'>
+          <loop name='curr_movie' on='movies' limit='3'>
             <!-- we dont want to do uneeded work though, so only proceed if we haven't found covers yet -->
             <if test="${cover_art[0].url}=">
 
               <!-- get the list of covers for this possible match -->
-              <parse name="covers" input="${curr_movie}" regex='&lt;A HREF = "([^"]+)"&gt;'/>
+              <parse name="covers" input="${curr_movie}" regex='&lt;a href=([^&gt;]+)&gt;'/>
 
               <!-- goto the first coverpage and check if it's the right movie, if so loop through and load all covers -->
               <retrieve name='test_cover_page' url='http://www.impawards.com/${curr_year}/${covers[0][0]}' useragent="${userAgent}" />

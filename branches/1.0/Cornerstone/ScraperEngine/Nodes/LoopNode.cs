@@ -21,10 +21,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         #region Methods
 
-        public LoopNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public LoopNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
 
-            if (DebugMode) logger.Debug("executing loop: " + xmlNode.OuterXml);
+            if (ScriptSettings.DebugMode) logger.Debug("executing loop: " + xmlNode.OuterXml);
 
             // Load attributes
             foreach (XmlAttribute attr in xmlNode.Attributes) {
