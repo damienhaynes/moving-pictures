@@ -1,4 +1,4 @@
-Moving Pictures 1.0.5
+Moving Pictures 1.0.7
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -13,6 +13,35 @@ Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 
 Change Log
+================================================================================
+1.0.7
+--------------------------------------------------------------------------------
+**********:     Updated scraper engine to cache data from URLs that are retrived
+                mulitple times. This will both imrpove the speed of some scripts
+                and reduce the burden placed on websites being scraped.
+
+**********:     Fixed retrieval issues in impawards script.
+
+Issue #863:	Fixed bugs in CSFD.cz script.
+
+Issue #865:	Fixed bugs in kvikmyndir script.
+
+Issue #850:	Added Ember Media Manager import script.
+
+Issue #866:	Updated Hebrew Translation.
+
+Issue #871:	Fixed bugs in FilmWeb.pl script.
+
+Issue #872:	Fixed bugs in Filmtipset.se script.
+
+Issue #878:	Fixed bugs in Scope script.
+
+================================================================================
+1.0.6
+--------------------------------------------------------------------------------
+Issue #861:     Fixed issue causing bluray playback to fail to start in full
+                screen in some situations.
+
 ================================================================================
 1.0.5
 --------------------------------------------------------------------------------
