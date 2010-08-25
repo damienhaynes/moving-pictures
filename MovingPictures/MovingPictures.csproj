@@ -604,7 +604,6 @@
     <Content Include="MainUI\Generic Skin\4x3\dialogGeneralRating.xml" />
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.facade.xml" />
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.xml" />
-    <None Include="Properties\RevisionInfo.cs" />
     <None Include="Resources\Images\splash_small.jpg" />
     <None Include="Resources\Images\splash_large.jpg" />
     <None Include="Resources\Images\brick.png" />
