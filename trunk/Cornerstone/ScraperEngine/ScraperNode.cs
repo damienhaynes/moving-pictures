@@ -37,18 +37,19 @@ namespace Cornerstone.ScraperEngine {
         }
         protected bool loadSuccess;
 
-        public bool DebugMode {
-            get { return debugMode; }
-        } private bool debugMode;
+        public InternalScriptSettings ScriptSettings {
+            get;
+            private set;
+        } 
 
         #endregion
 
         #region Methods
 
-        public ScraperNode(XmlNode xmlNode, bool debugMode) {
+        public ScraperNode(XmlNode xmlNode, InternalScriptSettings settings) {
             this.xmlNode = xmlNode;
             children = new List<ScraperNode>();
-            this.debugMode = debugMode;
+            this.ScriptSettings = settings;
             loadSuccess = loadChildren();
 
             // try to load our node attrbute
@@ -89,13 +90,13 @@ namespace Cornerstone.ScraperEngine {
         
         protected virtual void setVariable(Dictionary<string, string> variables, string key, string value) {
             variables[key] = value;
-            if (value.Length < 500 && DebugMode) logger.Debug("Assigned variable: " + key + " = " + value);
+            if (value.Length < 500 && ScriptSettings.DebugMode) logger.Debug("Assigned variable: " + key + " = " + value);
         }
 
         protected virtual void removeVariable(Dictionary<string, string> variables, string key) {
             variables.Remove(key);
             removeArrayValues(variables, key);
-            if (DebugMode) logger.Debug("Removed variable: " + key);
+            if (ScriptSettings.DebugMode) logger.Debug("Removed variable: " + key);
         }
 
         private void removeArrayValues(Dictionary<string, string> variables, string key) {
@@ -111,7 +112,7 @@ namespace Cornerstone.ScraperEngine {
 
             children.Clear();
             foreach (XmlNode currXmlNode in xmlNode.ChildNodes) {
-                ScraperNode newScraperNode = ScraperNode.Load(currXmlNode, debugMode);
+                ScraperNode newScraperNode = ScraperNode.Load(currXmlNode, ScriptSettings);
                 if (newScraperNode != null && newScraperNode.loadSuccess) 
                     children.Add(newScraperNode);
                 
@@ -204,7 +205,7 @@ namespace Cornerstone.ScraperEngine {
             nodeTypes = new Dictionary<string, Type>();
         }
 
-        public static ScraperNode Load(XmlNode xmlNode, bool debugMode) {
+        public static ScraperNode Load(XmlNode xmlNode, InternalScriptSettings settings) {
           if (xmlNode == null || xmlNode.NodeType == XmlNodeType.Comment || xmlNode.NodeType == XmlNodeType.CDATA)
                 return null;
             
@@ -241,8 +242,8 @@ namespace Cornerstone.ScraperEngine {
             
             // try to create a new scraper node object
             try {
-                ConstructorInfo constructor = nodeType.GetConstructor(new Type[] { typeof(XmlNode), typeof(bool) });
-                ScraperNode newNode = (ScraperNode)constructor.Invoke(new object[] { xmlNode, debugMode });
+                ConstructorInfo constructor = nodeType.GetConstructor(new Type[] { typeof(XmlNode), typeof(InternalScriptSettings) });
+                ScraperNode newNode = (ScraperNode)constructor.Invoke(new object[] { xmlNode, settings });
                 return newNode;
             }
             catch (Exception e) {

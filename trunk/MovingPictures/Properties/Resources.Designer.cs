@@ -525,6 +525,26 @@ namespace MediaPortal.Plugins.MovingPictures.Properties {
         ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
         ///  &lt;details&gt;
         ///    &lt;!-- These details are for display purposes only. --&gt;
+        ///    &lt;name&gt;Ember Media Manager (Local)&lt;/name&gt;
+        ///    &lt;author&gt;LRFalk01&lt;/author&gt;
+        ///    &lt;description&gt;This script pulls data from an Ember Media Manager NFO export.&lt;/description&gt;
+        ///    
+        ///    &lt;!-- 
+        ///    These fields uniquely identify the script. The ID should never 
+        ///    change and should be unique (no other script should use this ID). With
+        ///    new versions of the script the version numbers should change. EVEN FOR 
+        ///    MINO [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Script_EmberMediaManager {
+            get {
+                return ResourceManager.GetString("Script_EmberMediaManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ScriptableScraper&gt;
+        ///  &lt;details&gt;
+        ///    &lt;!-- These details are for display purposes only. --&gt;
         ///    &lt;name&gt;FilmAffinity.com&lt;/name&gt;
         ///    &lt;author&gt;LRFalk01&lt;/author&gt;
         ///    &lt;description&gt;This script pulls data from FilmAffinity.com (Spanish).&lt;/description&gt;

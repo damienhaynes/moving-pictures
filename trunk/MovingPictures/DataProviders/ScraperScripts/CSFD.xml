@@ -13,12 +13,12 @@
     change and should be unique (no other script should use this ID). With
     new versions of the script the version numbers should change. EVEN FOR 
     MINOR CHANGES, you should change the version number if you are going to
-    disribute it to anyone but internal testers. The point number 
+    distribute it to anyone but internal testers. The point number 
     is for minor bug fix releases. Use it.
     -->
     <id>874940</id>
-    <version major="0" minor="1" point="3"/>
-    <published month="3" day="3" year="2010"/>
+    <version major="0" minor="1" point="9"/>
+    <published month="6" day="28" year="2010"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -43,6 +43,12 @@
       ]]>
     </set>
 
+    <set name="rx_search_titles_years">
+      <![CDATA[
+      <title>(.+?)\s\((\d{4})\).*?</title>
+      ]]>
+    </set>
+
     <set name="rx_search_results_block">
       <![CDATA[
       >v originálních názvech</td>.+</body>
@@ -51,13 +57,7 @@
 
     <set name="rx_verify">
       <![CDATA[
-      &nbsp;&nbsp;&nbsp;<img.*?>&nbsp;&nbsp;<a href="/film/(.+?)"\s.*?">(.+?)</a>\s\((.+?)\)
-      ]]>
-    </set>
-
-    <set name="rx_search_titles_years">
-      <![CDATA[
-      <title>CSFD.cz\s\-\s(.+?)\s\((\d{4})\).*?</title>
+      &nbsp;&nbsp;&nbsp;<img.*?>&nbsp;&nbsp;<a href="/film/(.+?)"\s.*?">(.+?)</a>\s\((\d{4})\)
       ]]>
     </set>
 
@@ -69,35 +69,39 @@
 
     <!-- Retrieve results using Title -->
     <replace name="search.title" input="${search.title}" pattern="(^The\s+)|(^An?\s+)|(^De[rsmn]\s+)|(^Die\s+)|(^Das\s+)|(^Ein(e[srmn]?)?\s+)|(^El\s+)" with=""/>
-    <retrieve name="search_page" url="${site}hledani-filmu-hercu-reziseru-ve-filmove-databazi/?search=${search.title:safe}" encoding="utf-8" />
+    <retrieve name="search_page" url="${site}hledani-filmu-hercu-reziseru-ve-filmove-databazi/?search=${search.title:safe}" encoding="utf-8" retries="10" timeout_increment="3000" />
 
     <!-- If we got a details page, this is used. If not, regex does not match so we dont process the loop -->
     <parse name="site_id" input="${search_page}" regex="${rx_details_site_id}"/>
-    <retrieve name="details_page" url="${site}film/${site_id[0][0]}" encoding="utf-8" />
-    <parse name="title_year" input="${details_page}" regex="${rx_search_titles_years}"/>
-    <set name="movie[0].title" value="${title_year[0][0]}" />
-    <set name="movie[0].year" value="${title_year[0][1]}" />
-    <set name="movie[0].site_id" value="${site_id[0][0]}" />
+    <if test="${site_id[0][0]}!=">
+      <retrieve name="details_page" url="${site}film/${site_id[0][0]}" encoding="utf-8" retries="10" timeout_increment="3000" allow_unsafe_header="true" />
+      <parse name="title_year" input="${details_page}" regex="${rx_search_titles_years}"/>
+      <set name="movie[0].title" value="${title_year[0][0]}" />
+      <set name="movie[0].year" value="${title_year[0][1]}" />
+      <set name="movie[0].site_id" value="${site_id[0][0]}" />
+    </if>
 
     <!-- If we got a search result page, this is used. If not, regex does not match so we dont process the outer loop. -->
     <parse name="search_results_block" input="${search_page}" regex="${rx_search_results_block}"/>
-    <loop name="search_results_verified" on="search_results_block">
-      <parse name="movie_details" input="${search_results_verified}" regex="${rx_verify}" />
-      <loop name="curr_details" on="movie_details" limit="20">
-        <add name="counter" value1="${count}" value2="${offset}" />
-        <parse name="title" input="${curr_details[1]:htmldecode}" regex="(.+?)(?:, (The|A|An|Ein|El|Das|Die|Der|Les|Une))?$" />
-        <set name="movie[${counter}].title" value="${title[0][1]} ${title[0][0]}" />
-        <set name="movie[${counter}].year" value="${curr_details[2]:htmldecode}" />
-        <set name="movie[${counter}].site_id" value="${curr_details[0]}" />
-        <set name="movie[${counter}].details_url" value="${site}film/${curr_details[0]}"/>
-        <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}" />
+    <if test="${search_results_block}!=">
+      <loop name="search_results_verified" on="search_results_block">
+        <parse name="movie_details" input="${search_results_verified}" regex="${rx_verify}" />
+        <loop name="curr_details" on="movie_details" limit="20">
+          <add name="counter" value1="${count}" value2="${offset}" />
+          <parse name="title" input="${curr_details[1]:htmldecode}" regex="(.+?)(?:, (The|A|An|Ein|El|Das|Die|Der|Les|Un|Une))?$" />
+          <set name="movie[${counter}].title" value="${title[0][1]} ${title[0][0]}" />
+          <set name="movie[${counter}].year" value="${curr_details[2]:htmldecode}" />
+          <set name="movie[${counter}].site_id" value="${curr_details[0]}" />
+          <set name="movie[${counter}].details_url" value="${site}film/${curr_details[0]}"/>
+          <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}" />
+        </loop>
       </loop>
-    </loop>
+    </if>
  
     <!-- This is ran if no movies were found on the first attempt.
          The intention here is to let the user use the CSFD.cz ID to find a movie. -->
     <if test="${movie[0].title}=">
-      <retrieve name="search_page" url="${site}film/${search.title:safe}" regex="(\d+)" encoding="utf-8" />
+      <retrieve name="search_page" url="${site}film/${search.title:safe}" regex="(\d+)" encoding="utf-8" retries="10" timeout_increment="3000" allow_unsafe_header="true" />
       <parse name="title_year" input="${search_page}" regex="${rx_search_titles_years}"/>
       <!-- makes sure a title was found on this page. If not there is no reason to ad anything else. -->
       <if test="${title_year[0][0]:htmldecode}!=">
@@ -122,13 +126,19 @@
       <!-- Regular Expressions -->
       <set name="rx_title">
         <![CDATA[
-        <title>CSFD.cz\s\-\s(.+?)(?:, (The|A|An|Ein|El|Das|Der|Die|Les|Une))?(?:\s/\s(.+?)(?:, (The|A|Ein|El|Das|Die|Der|Les|Une))?)?\s\((\d{4})\).*</title>
+        <h1.+?>\s*(?<movieTitle>.+?)(?:, (?<movieTitleArticle>The|A|An|Ein|El|Das|Der|Die|Les|Un|Une))?(?:\s/\s(?<movieAlternateTitle>.+?)(?:, (?<movieAlternateTitleArticle>The|A|An|Ein|El|Das|Der|Die|Les|Un|Une))?)?</h1>
+        ]]>
+      </set>
+
+      <set name="rx_year">
+        <![CDATA[
+        <title>.*\((\d{4})\).*</title>
         ]]>
       </set>
 
       <set name="rx_akas">
         <![CDATA[
-        vspace='2'\s></td><td>(.+?)(?:, (The|A|An|Ein|El|Das|Der|Die|Les|Une))?</td></tr></table>
+        vspace='2'\s></td><td>(.+?)(?:, (The|A|An|Ein|El|Das|Der|Die|Les|Un|Une))?</td></tr></table>
         ]]>
       </set>
 
@@ -158,7 +168,7 @@
 
       <set name="rx_genres_block">
         <![CDATA[
-        <h1.*?>.+?</h1>.+<b>\s(.+?)&nbsp;<br>.+</b><BR><BR>
+        <h1.*?>.+?</h1>.+<br><b>(.+?)&nbsp;<br>.+</b><BR><BR>
         ]]>
       </set>
 
@@ -170,19 +180,25 @@
 
       <set name="rx_votes">
         <![CDATA[
-        >všechna&nbsp;hodnocení<br>\((d+)\)</a></td>
+        >všechna&nbsp;hodnocení<br>\((\d+)\)</a></td>
+        ]]>
+      </set>
+
+      <set name="rx_movie.site_id2">
+        <![CDATA[
+        title="Sdílet na Twitteru">.+?\&url=http://www.csfd.cz/film/(.+?)"
         ]]>
       </set>
 
       <set name="rx_plot">
         <![CDATA[
-        <br>Obsah:.+?float:left.+?>(.+?)&nbsp;&nbsp;&nbsp;<b><i>\(.*?\)</i></b></div></span></span></td>
+        <br>Obsah:.+?float:left.+?>(.+?)&nbsp;&nbsp;&nbsp;<b><i>
         ]]>
       </set>
 
       <set name="rx_plot2">
         <![CDATA[
-        <br>Obsah:.+?float:left.+?>.+?&nbsp;\(<a href="(.+?)"\s.+?">zobrazit&nbsp;celý&nbsp;text</a>\)</div>\s</span></span></td>
+        <br>Obsah:.+?float:left.+?>.+?&nbsp;\(<a href="(.+?)".+?\)
         ]]>
       </set>
 
@@ -194,7 +210,7 @@
 
       <set name="rx_language">
         <![CDATA[
-        <a\shref=./Sections/Languages/[^/]+/">\s+([^<]+)</a>
+        <a\shref="/Sections/Languages/[^/]+/">([^<]+)</a>
         ]]>
       </set>
 
@@ -207,19 +223,29 @@
       <!-- Retrieve details -->
       <set name="movie.details_url" value="${site}${movie.site_id}" />
 
-      <retrieve name="details_page" url="${movie.details_url}" encoding="utf-8" />
+      <retrieve name="details_page" url="${movie.details_url}" encoding="utf-8" retries="10" timeout_increment="3000" allow_unsafe_header="true" />
 
-      <!-- Title and Year -->
-      <parse name="title_year" input="${details_page}" regex="${rx_title}" />
-      <set name="movie.title" value="${title_year[0][1]} ${title_year[0][0]}" />
-      <set name="movie.year" value="${title_year[0][4]}" />
+      <!-- Title -->
+      <parse name="title" input="${details_page}" regex="${rx_title}" />
+      <set name="movie.title" value="${title[0][1]} ${title[0][0]:htmldecode}" />
+
+      <!-- Year -->
+      <parse name="year" input="${details_page}" regex="${rx_year}" />
+      <set name="movie.year" value="${year[0][0]}" />
 
       <!-- Alternate Title -->
       <parse name="akas" input="${details_page}" regex="${rx_akas}" />  
-      <set name="movie.alternate_titles" value="${title_year[0][3]} ${title_year[0][2]}" />
+      <set name="movie.alternate_titles" value="${title[0][3]} ${title[0][2]}" />
       <loop name="currAka" on="akas">
-        <set name="movie.alternate_titles" value="${movie.alternate_titles}|${currAka[1]:htmldecode} ${currAka[0]:htmldecode}" />
+        <set name="currAkaTemp" value='' />
+        <if test="${currAka[1]}!=">
+          <set name="currAkaTemp" value="${currAka[1]:htmldecode} " />
+        </if>
+        <set name="movie.alternate_titles" value="${movie.alternate_titles}|${currAkaTemp}${currAka[0]:htmldecode}" />
       </loop>
+
+      <!-- Sort by Czech title -->
+      <set name="movie.sortby" value="${movie.title}" />
 
       <!-- Directors -->
       <parse name="directors_block" input="${details_page}" regex="${rx_directors_block}" />
@@ -266,7 +292,8 @@
       <if test="${movie.summary}=">
       <parse name="summary_id" input="${details_page}" regex="${rx_plot2}" />
       <set name="movie.summary_id" value="${summary_id[0][0]}" />      
-      <retrieve name="summary_page" url="${site}${movie.site_id}${movie.summary_id}" encoding="utf-8" />
+      <parse name="movie.site_id2" input="${details_page}" regex="${rx_movie.site_id2}" />
+      <retrieve name="summary_page" url="${site}${movie.site_id2[0][0]}${movie.summary_id}" encoding="utf-8" retries="10" timeout_increment="3000" allow_unsafe_header="true" />
         <parse name="summary2" input="${summary_page}" regex="${rx_plot}"/>
         <set name="summary_clean" value="${summary2[0][0]:striptags}" />
         <set name="movie.summary" value="${summary_clean:htmldecode}" />
@@ -276,12 +303,9 @@
       <parse name="imdb" input="${details_page}" regex="(tt[\d]+)" />
       <set name="movie.imdb_id" value="${imdb[0][0]}" />
 
-      <!-- Sort by Czech title -->
-      <set name="movie.sortby" value="${movie.title}" />
-
       <!-- Retrieve other details from IMDb -->
       <if test="${movie.imdb_id}!=">
-        <retrieve name="imdb_details_page" url="http://www.imdb.com/title/${movie.imdb_id}" />
+        <retrieve name="imdb_details_page" url="http://www.imdb.com/title/${movie.imdb_id}" retries="10" timeout_increment="3000" />
 
         <!-- IMDb ID -->
         <parse name="imdb" input="${imdb_details_page}" regex='&lt;link rel="canonical" href="http://www.imdb.com/title/(tt[\d]{7})/" /&gt;' />
@@ -296,7 +320,7 @@
         </loop>
 
         <!-- Certification -->
-        <parse name="certification" input="${imdb_details_page}" regex='&gt;\s+UK:((?:U)|(?:PG)|(?:12)|(?:12A)|(?:15)|(?:18)|(?:R18))&lt;/a&gt;'/>
+        <parse name="certification" input="${imdb_details_page}" regex='&gt;UK:((?:U)|(?:PG)|(?:12)|(?:12A)|(?:15)|(?:18)|(?:R18))&lt;/a&gt;'/>
         <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
 
         <replace name="movie.certification" input="${movie.certification}" pattern="(U)" with="Pro všechny věkové skupiny" />
@@ -318,16 +342,6 @@
         <!-- Tagline -->
         <parse name="tagline" input="${imdb_details_page}" regex="${rx_tagline}" />
         <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
-
-        <!-- Language (all matches)
-        <parse name="language_block" input="${imdb_details_page}" regex='&lt;h5&gt;Language:&lt;/h5&gt;(.+?)\s&lt;/div&gt;'/>
-        <parse name='language' input='"${language_block}' regex='&lt;a href="/Sections/Languages/[^/]+/"&gt;\s+([^&lt;]+)&lt;/a&gt;'/>
-        <set name='movie.language' value=''/>
-        <loop name='currLanguage' on='language'>
-          <set name='movie.language' value='${movie.language}|${currLanguage[0]:htmldecode}'/>
-        </loop>
-        <set name='movie.language' value='${movie.language}|' />
-        -->
 
         <!-- Language (only first match) -->
         <parse name="language" input="${imdb_details_page}" regex="${rx_language}" />

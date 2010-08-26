@@ -23,6 +23,7 @@
     <StartupObject>
     </StartupObject>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationIcon>Resources\Images\logo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -469,6 +470,7 @@
     <Content Include="DataProviders\ScraperScripts\Alpacine.xml" />
     <Content Include="DataProviders\ScraperScripts\CSFD.xml" />
     <Content Include="DataProviders\ScraperScripts\Daum.xml" />
+    <Content Include="DataProviders\ScraperScripts\EmberMediaManager.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmAffinity.xml" />
     <None Include="DataProviders\ScraperScripts\filmtipset.se.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmWeb.xml" />
@@ -622,7 +624,6 @@
     <Content Include="MainUI\Generic Skin\4x3\dialogGeneralRating.xml" />
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.facade.xml" />
     <Content Include="MainUI\Generic Skin\4x3\movingpictures.xml" />
-    <None Include="Properties\RevisionInfo.cs" />
     <None Include="Resources\Images\splash_small.jpg" />
     <None Include="Resources\Images\splash_large.jpg" />
     <None Include="Resources\Images\brick.png" />
@@ -703,6 +704,7 @@
     <Content Include="Resources\language\sl.xml" />
     <Content Include="Resources\language\sv.xml" />
     <Content Include="Resources\Images\page_gear.png" />
+    <None Include="Resources\logo.ico" />
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>

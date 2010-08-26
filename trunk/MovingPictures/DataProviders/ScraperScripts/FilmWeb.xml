@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141516</id>
-    <version major="2" minor="0" point="1"/>
-    <published month="06" day="04" year="2010"/>
+    <version major="2" minor="0" point="2"/>
+    <published month="07" day="26" year="2010"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -30,7 +30,7 @@
   <action name="search">
 	<set name="rx_search_return">
 	  <![CDATA[
-		<li\s+class="gr.">(?<SearchReturn>.+?)</li>
+		<li\sclass=.searchResult\sHorListItem.(.+?)</li>
 	  ]]>
 	</set>
 	<set name="rx_title_link">
@@ -124,7 +124,7 @@
 		</set>
 		<set name="rx_directors">
 		  <![CDATA[
-			reżyseria.+?<td>(.+?)</td>
+			re.yseria.+?<td>(.+?)</td>
 		  ]]>
 		</set>
 		<set name="rx_writers">
@@ -144,7 +144,7 @@
 		</set>
 		<set name="rx_rating">
 		  <![CDATA[
-			<strong>\s+(?<rating>\d*|\d,\d)\s+</strong>
+			<span\sclass="average">(?<rating>\d*|\d,\d)</span>
 		  ]]>
 		</set>
 		<set name="rx_genres">
