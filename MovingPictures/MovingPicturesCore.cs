@@ -312,8 +312,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }        
 
         private static void initLogger() {
-            LoggingConfiguration config = new LoggingConfiguration();
-
+            // backup the current log file and clear for the new one
             try {
                 FileInfo logFile = new FileInfo(Config.GetFile(Config.Dir.Log, logFileName));
                 if (logFile.Exists) {
@@ -326,15 +325,19 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
             catch (Exception) { }
 
+            // if no configuration exists go ahead and create one
+            if (LogManager.Configuration == null) LogManager.Configuration = new LoggingConfiguration();
 
-            FileTarget fileTarget = new FileTarget();
-            fileTarget.FileName = Config.GetFile(Config.Dir.Log, logFileName);
-            fileTarget.Layout = "${date:format=dd-MMM-yyyy HH\\:mm\\:ss} " +
+            // build the logging target for moving pics logging
+            FileTarget movPicsLogTarget = new FileTarget();
+            movPicsLogTarget.Name = "moving-pictures";
+            movPicsLogTarget.FileName = Config.GetFile(Config.Dir.Log, logFileName);
+            movPicsLogTarget.Layout = "${date:format=dd-MMM-yyyy HH\\:mm\\:ss} " +
                                 "${level:fixedLength=true:padding=5} " +
                                 "[${logger:fixedLength=true:padding=20:shortName=true}]: ${message} " +
                                 "${exception:format=tostring}";
 
-            config.AddTarget("file", fileTarget);
+            LogManager.Configuration.AddTarget("moving-pictures", movPicsLogTarget);
 
             // Get current Log Level from MediaPortal 
             LogLevel logLevel;
@@ -359,10 +362,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             logLevel = LogLevel.Debug;
             #endif
 
-            LoggingRule rule = new LoggingRule("*", logLevel, fileTarget);
-            config.LoggingRules.Add(rule);
+            // set the logging rules for moving pics logging
+            LoggingRule movPicsRule = new LoggingRule("MediaPortal.Plugins.MovingPictures.*", logLevel, movPicsLogTarget);
+            LoggingRule cornerstoneRule = new LoggingRule("Cornerstone.*", logLevel, movPicsLogTarget);
+            LogManager.Configuration.LoggingRules.Add(movPicsRule);
+            LogManager.Configuration.LoggingRules.Add(cornerstoneRule);
 
-            LogManager.Configuration = config;
+            // force NLog to reload the configuration data
+            LogManager.Configuration = LogManager.Configuration;
         }
 
         //for production, replace all references in this method from "SettingsManagerNew" to "SettingsManager"

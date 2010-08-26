@@ -28,8 +28,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         #region Methods
 
-        public ParseNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public ParseNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
 
             // Load attributes
             foreach (XmlAttribute attr in xmlNode.Attributes) {
@@ -63,7 +63,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            if (DebugMode) logger.Debug("executing parse: " + xmlNode.OuterXml);
+            if (ScriptSettings.DebugMode) logger.Debug("executing parse: " + xmlNode.OuterXml);
             // parse variables from the input string
             string parsedInput = parseString(variables, input);
             string parsedName = parseString(variables, Name);
@@ -79,7 +79,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         private void processPattern(Dictionary<string, string> variables, string parsedInput, string parsedName) {
             string parsedPattern = parseString(variables, pattern);
 
-            if (DebugMode) logger.Debug("name: " + parsedName + " ||| pattern: " + parsedPattern + " ||| input: " + parsedInput);
+            if (ScriptSettings.DebugMode) logger.Debug("name: " + parsedName + " ||| pattern: " + parsedPattern + " ||| input: " + parsedInput);
 
             // try to find matches via regex pattern
             MatchCollection matches;
@@ -98,7 +98,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             setVariable(variables, parsedName + ".count", matches.Count.ToString());
 
             if (matches.Count == 0) {
-                if (DebugMode) logger.Debug("Parse node returned no results... " + xmlNode.OuterXml);
+                if (ScriptSettings.DebugMode) logger.Debug("Parse node returned no results... " + xmlNode.OuterXml);
                 return;
             }
 

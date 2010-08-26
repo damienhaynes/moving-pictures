@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>354001</id>
-    <version major="1" minor="1" point="26"></version>
-    <published month="03" day="29" year="2010"></published>
+    <version major="1" minor="1" point="27"></version>
+    <published month="08" day="23" year="2010"></published>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -159,7 +159,7 @@
     
     <!-- Setja kvikmyndir.is ID í breytu -->
     <set name="kvikmyndir.movie_id" value="${movie.imdb_id}"></set>
-    <replace name="kvikmyndir.movie_id" input="${movie.imdb_id}" pattern="tt" with="?id="></replace>/>
+    <replace name="kvikmyndir.movie_id" input="${movie.imdb_id}" pattern="tt" with="?id="></replace>
     <set name="kvikmyndir.movie_id" value="${kvikmyndir.movie_id}"></set>
     <set name="kvikmyndir.site_id" value="${kvikmyndir.movie_id}"></set>
     

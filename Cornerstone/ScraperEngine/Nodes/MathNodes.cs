@@ -23,8 +23,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
         } protected ResultTypeEnum resultType;
 
 
-        public MathNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public MathNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
 
             // Load attributes
             string resultTypeStr = null;
@@ -68,14 +68,14 @@ namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("add")]
     public class AddNode : MathNode {
 
-        public AddNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public AddNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
 
 
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            if (DebugMode) logger.Debug("executing add: " + xmlNode.OuterXml);
+            if (ScriptSettings.DebugMode) logger.Debug("executing add: " + xmlNode.OuterXml);
 
             string parsedValue1 = parseString(variables, value1);
             string parsedValue2 = parseString(variables, value2);
@@ -101,12 +101,12 @@ namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("subtract")]
     public class SubtractNode : MathNode {
 
-        public SubtractNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public SubtractNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            if (DebugMode) logger.Debug("executing subtract: " + xmlNode.OuterXml);
+            if (ScriptSettings.DebugMode) logger.Debug("executing subtract: " + xmlNode.OuterXml);
 
             string parsedValue1 = parseString(variables, value1);
             string parsedValue2 = parseString(variables, value2);
@@ -132,12 +132,12 @@ namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("multiply")]
     public class MultiplyNode : MathNode {
 
-        public MultiplyNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public MultiplyNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            if (DebugMode) logger.Debug("executing multiply: " + xmlNode.OuterXml);
+            if (ScriptSettings.DebugMode) logger.Debug("executing multiply: " + xmlNode.OuterXml);
             string parsedValue1 = parseString(variables, value1);
             string parsedValue2 = parseString(variables, value2);
 
@@ -162,12 +162,12 @@ namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("divide")]
     public class DivideNode : MathNode {
 
-        public DivideNode(XmlNode xmlNode, bool debugMode)
-            : base(xmlNode, debugMode) {
+        public DivideNode(XmlNode xmlNode, InternalScriptSettings settings)
+            : base(xmlNode, settings) {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            if (DebugMode) logger.Debug("executing divide: " + xmlNode.OuterXml);
+            if (ScriptSettings.DebugMode) logger.Debug("executing divide: " + xmlNode.OuterXml);
             string parsedValue1 = parseString(variables, value1);
             string parsedValue2 = parseString(variables, value2);
 
