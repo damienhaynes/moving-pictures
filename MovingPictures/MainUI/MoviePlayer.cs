@@ -138,6 +138,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public void Play(DBMovieInfo movie, int part) {
+
+            // stop the internal player if it's running
+            if (g_Player.Playing)
+                g_Player.Stop();
+
             // set player state working
             _playerState = MoviePlayerState.Processing;
             
@@ -155,7 +160,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public void Stop() {
-            if (g_Player.Player.Playing)
+            if (g_Player.Playing)
                 g_Player.Stop();
             
             resetPlayer();
