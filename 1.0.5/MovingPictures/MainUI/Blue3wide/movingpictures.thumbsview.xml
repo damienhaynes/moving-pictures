@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+This file should contain the list view
+-->
+<window>
+	<controls>
+	
+		<!-- Movie Details -->
+		<control>
+		  <description>Movie Title Shadow</description>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>21</posX>
+		  <posY>241</posY>
+		  <width>500</width>
+		  <font>font16</font>
+		  <label>#MovingPictures.SelectedMovie.title</label>
+		  <textcolor>ff222222</textcolor>		  
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>
+		<control>
+		  <description>Movie Title</description>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>20</posX>
+		  <posY>240</posY>
+		  <width>500</width>
+		  <font>font16</font>
+		  <label>#MovingPictures.SelectedMovie.title</label>
+		  <textcolor>ffFFFFFF</textcolor>		  
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>
+		
+		<control>
+		  <description>Genres Shadow</description>
+		  <type>label</type>
+		  <label>#MovingPictures.SelectedMovie.genres</label>
+		  <id>0</id>
+		  <posX>21</posX>
+		  <posY>271</posY>
+		  <width>500</width>
+		  <font>font12</font>
+		  <textcolor>ff222222</textcolor>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>
+		<control>
+		  <description>Genres</description>
+		  <type>label</type>
+		  <label>#MovingPictures.SelectedMovie.genres</label>
+		  <id>0</id>
+		  <posX>20</posX>
+		  <posY>270</posY>
+		  <width>500</width>
+		  <font>font12</font>
+		  <textcolor>ffa9d0f7</textcolor>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>
+		
+		<control>
+		  <description>Directors Label Shadow</description>
+		  <type>label</type>
+		  <label>#MovingPictures.Translation.Director.Label</label>
+		  <posX>21</posX>
+		  <posY>301</posY>
+		  <font>font11</font>
+		  <textcolor>ff222222</textcolor>		 
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>
+		<control>
+		  <description>Directors Label</description>
+		  <type>label</type>
+		  <label>#MovingPictures.Translation.Director.Label</label>
+		  <posX>20</posX>
+		  <posY>300</posY>
+		  <font>font11</font>
+		  <textcolor>ffFFFFFF</textcolor>		 
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>
+		<control>
+		  <description>Director Shadow</description>
+		  <id>1003</id>
+		  <type>label</type>
+		  <label>#MovingPictures.SelectedMovie.extra.directors.1</label>
+		  <posX>21</posX>
+		  <posY>321</posY>
+		  <width>200</width>
+		  <font>font10</font>
+		  <textcolor>ff222222</textcolor>		  
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>
+		<control>
+		  <description>Director</description>
+		  <id>1003</id>
+		  <type>label</type>
+		  <label>#MovingPictures.SelectedMovie.extra.directors.1</label>
+		  <posX>20</posX>
+		  <posY>320</posY>
+		  <width>200</width>
+		  <font>font10</font>
+		  <textcolor>ffa9d0f7</textcolor>		  
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>
+
+		<control>
+		  <description>Writer Label Shadow</description>
+		  <type>label</type>
+		  <label>#MovingPictures.Translation.Writer.Label</label>
+		  <posX>301</posX>
+		  <posY>301</posY>
+		  <font>font11</font>
+		  <textcolor>ff222222</textcolor>		 
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>		  
+		</control>
+		<control>
+		  <description>Writer Label</description>
+		  <type>label</type>
+		  <label>#MovingPictures.Translation.Writer.Label</label>
+		  <posX>300</posX>
+		  <posY>300</posY>
+		  <font>font11</font>
+		  <textcolor>ffFFFFFF</textcolor>		 
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>		  
+		</control>
+		<control>
+		  <description>Writer Shadow</description>
+		  <id>1004</id>
+		  <type>label</type>
+		  <label>#MovingPictures.SelectedMovie.extra.writers.1</label>
+		  <posX>301</posX>
+		  <posY>321</posY>
+		  <width>255</width>
+		  <font>font10</font>
+		  <textcolor>ff222222</textcolor>		  
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>		
+		</control>
+		<control>
+		  <description>Writer</description>
+		  <id>1004</id>
+		  <type>label</type>
+		  <label>#MovingPictures.SelectedMovie.extra.writers.1</label>
+		  <posX>300</posX>
+		  <posY>320</posY>
+		  <width>255</width>
+		  <font>font10</font>
+		  <textcolor>ffa9d0f7</textcolor>		  
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>		
+		</control>
+		
+		<control>
+		  <description>Summary</description>
+		  <type>textboxscrollup</type>
+		  <id>0</id>
+		  <posX>20</posX>
+		  <posY>360</posY>
+		  <width>500</width>
+		  <height>220</height>
+		  <textcolor>ffFFFFFF</textcolor>
+		  <seperator>-----------------------------------------------------------------------------------</seperator>
+		  <font>font11</font>
+		  <scrollStartDelaySec>#textboxscrolldelay.thumbs</scrollStartDelaySec>
+		  <label>#MovingPictures.SelectedMovie.summary</label>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>
+		
+		<!-- Star Rating -->
+		<control>
+		  <type>label</type>
+		  <label>#MovingPictures.Translation.StarRating.Label:</label>
+		  <posX>20</posX>
+		  <posY>640</posY>
+		  <width>360</width>
+		  <font>font11</font>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>		
+		<control>
+		  <type>image</type>
+		  <id>1001</id>
+		  <posX>230</posX>
+		  <posY>640</posY>		  
+		  <width>115</width>
+		  <height>22</height>		 
+		  <align>left</align>		  
+		  <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>		
+		<control>
+		  <type>label</type>
+		  <label>#MovingPictures.SelectedMovie.score.localized / 10</label>
+		  <posX>231</posX>
+		  <posY>663</posY>
+		  <width>360</width>
+		  <font>font11</font>		  
+		  <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
+		</control>	
+		
+	</controls>
+</window>
