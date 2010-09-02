@@ -1716,6 +1716,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // publish the selected index in the facade
                 int selectedIndex = browser.SelectedIndex + 1;
                 SetProperty("#MovingPictures.SelectedIndex", selectedIndex.ToString());
+                SetProperty("#MovingPictures.Settings.BackdropMovieTitle", movie.Title);
             }
 
             if (selectedMovieWatchedIndicator != null) {
@@ -1726,7 +1727,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             PublishArtwork(movie);
-            SetProperty("#MovingPictures.Settings.BackdropMovieTitle", movie.Title);
         }
 
         /// <summary>
