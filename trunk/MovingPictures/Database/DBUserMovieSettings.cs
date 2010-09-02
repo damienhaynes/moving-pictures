@@ -45,7 +45,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (_userRating != value) {
                     _userRating = value;
                     commitNeeded = true;
-                    RatingChanged = true;
+                    if (!RetrievalInProcess) RatingChanged = true;
                 }
             }
         } private int? _userRating;
@@ -57,7 +57,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (_watched != value) {
                     _watched = value;
                     commitNeeded = true;
-                    WatchCountChanged = true;
+                    if (!RetrievalInProcess) WatchCountChanged = true;
                 }
             }
         } private int _watched;

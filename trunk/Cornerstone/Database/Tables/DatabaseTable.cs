@@ -38,6 +38,11 @@ namespace Cornerstone.Database.Tables {
             set { commitInProcess = value; }
         } protected bool commitInProcess = false;
 
+        public bool RetrievalInProcess {
+            get;
+            set;
+        }
+
         protected void commitNeededEventHandler(object sender, EventArgs e) {
             commitNeeded = true;
         }
@@ -68,6 +73,7 @@ namespace Cornerstone.Database.Tables {
 
         // Loads data into this object based on the given database record.
         public void LoadByRow(SQLiteResultSet.Row row) {
+            RetrievalInProcess = true; 
             ReadOnlyCollection<DBField> fieldList = DBField.GetFieldList(this.GetType());
 
             // load each field one at a time. they should have been retrieved in the
@@ -85,6 +91,7 @@ namespace Cornerstone.Database.Tables {
 
             // all values are in sync with DB so no commit needed.
             commitNeeded = false;
+            RetrievalInProcess = false;
         }
 
 
