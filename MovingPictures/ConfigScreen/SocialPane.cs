@@ -131,6 +131,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 MpsAPI api = new MpsAPI(txtLinkUsername.Text, txtLinkPassword.Text
                     , MovingPicturesCore.Social.SocialAPIURL);
 
+                api.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(MovingPicturesCore.Social._socialAPI_RequestEvent);
+                api.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(MovingPicturesCore.Social._socialAPI_ResponseEvent);
+
                 if (api.CheckAuthentication()) {
                     logger.Debug("Login succeeded for user {0}.  Linking with MPS", txtLinkUsername.Text);
                     MovingPicturesCore.Settings.SocialUsername = txtLinkUsername.Text;
