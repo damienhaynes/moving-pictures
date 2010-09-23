@@ -476,7 +476,6 @@
     <Content Include="DataProviders\ScraperScripts\IMDb.es.xml" />
     <Content Include="DataProviders\ScraperScripts\IMDb.fr.xml" />
     <Content Include="DataProviders\ScraperScripts\IMDb.it.xml" />
-    <Content Include="DataProviders\ScraperScripts\IMPAwards.xml" />
     <Content Include="DataProviders\ScraperScripts\Kinopoisk.xml" />
     <Content Include="DataProviders\ScraperScripts\kvikmyndir.xml" />
     <Content Include="DataProviders\ScraperScripts\MoTechPosters.xml" />
