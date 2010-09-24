@@ -1912,6 +1912,25 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private int _socialTaskListTimer;
+
+
+        [CornerstoneSetting(
+            Name = "SocialLastRetrieved",
+            Description = "DateTime representing the last data that was retrieved from MPS",
+            Groups = "|Social|",
+            Identifier = "sociallastretrieved",
+            Default = "",
+            Hidden = true)]
+        public String SocialLastRetrieved
+        {
+            get { return _socialLastRetrieved; }
+            set
+            {
+                _socialLastRetrieved = value;
+                OnSettingChanged("sociallastretrieved");
+            }
+        }
+        private String _socialLastRetrieved;
         #endregion
 
     }
