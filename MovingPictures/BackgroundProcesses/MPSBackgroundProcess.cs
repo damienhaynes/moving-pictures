@@ -14,7 +14,8 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         RemoveMovieFromCollection,
         UpdateUserRating,
         WatchMovie,
-        ProcessTaskList
+        ProcessTaskList,
+        GetUserSyncData
     }
     public class MPSBackgroundProcess : AbstractBackgroundProcess {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -52,6 +53,8 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                             DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
                             if (m != null) {
                                 m.MpsId = mpsMovieDTO.MovieId;
+                                if (mpsMovieDTO.UserRating > 0)
+                                    m.ActiveUserSettings.UserRating = mpsMovieDTO.UserRating;
                                 m.Commit();
                             }
                         }
@@ -97,7 +100,35 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                             }
                         }
                         break;
+                    case MPSActions.GetUserSyncData:
+                        logger.Debug("Getting user sync data from MPS");
+                        DateTime lastRetrived;
+                        if (!DateTime.TryParse(MovingPicturesCore.Settings.SocialLastRetrieved, out lastRetrived))
+                            lastRetrived = DateTime.MinValue;
+                        List<UserSyncData> allUsd = MovingPicturesCore.Social.SocialAPI.GetUserSyncData(lastRetrived);
 
+                        if (allUsd.Count > 0)
+                        {
+                            logger.Debug("User Sync Data contains {0} items", allUsd.Count);
+                            List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
+
+                            foreach (UserSyncData usd in allUsd)
+                            {
+                                logger.Debug("movie {0} was rated {1} on MPS", usd.MovieId, usd.Rating);
+                                DBMovieInfo foundMovie = allMovies.Find(delegate(DBMovieInfo m) {
+                                    return m.MpsId == usd.MovieId;
+                                });
+
+                                if (foundMovie != null) {
+                                    foundMovie.ActiveUserSettings.UserRating = usd.Rating;
+                                }
+                                if (usd.RatingDate > lastRetrived)
+                                    lastRetrived = usd.RatingDate;
+                            }
+
+                            MovingPicturesCore.Settings.SocialLastRetrieved = lastRetrived.ToString();
+                        }
+                        break;
 
 
                     default:

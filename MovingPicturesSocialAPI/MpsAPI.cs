@@ -87,6 +87,7 @@ namespace MovingPicturesSocialAPI {
                     });
                 if (movieDTO != null) {
                     movieDTO.MovieId = Convert.ToInt32(movieId["MovieId"]);
+                    movieDTO.UserRating = Convert.ToInt32(movieId["UserRating"]);
                 }
             }
         }
@@ -148,6 +149,23 @@ namespace MovingPicturesSocialAPI {
                 }
                 tli.MovieId = (int)task["MovieId"];
                 result.Add(tli);
+            }
+
+            return result;
+        }
+
+        public List<UserSyncData> GetUserSyncData(DateTime startDate) {
+            var proxy = CreateProxy();
+            var xmlData = proxy.GetUserSyncData(startDate);
+            List<UserSyncData> result = new List<UserSyncData>();
+
+            foreach (XmlRpcStruct item in xmlData)
+            {
+                UserSyncData usd = new UserSyncData();
+                usd.MovieId = int.Parse(item["MovieId"].ToString());
+                usd.Rating = int.Parse(item["Rating"].ToString());
+                usd.RatingDate = DateTime.Parse(item["RatingDate"].ToString());
+                result.Add(usd);
             }
 
             return result;
@@ -263,6 +281,11 @@ namespace MovingPicturesSocialAPI {
         Cover
     }
 
+    public struct UserSyncData {
+        public int MovieId;
+        public int Rating;
+        public DateTime RatingDate;
+    }
 
     [XmlRpcUrl("http://localhost:8080/api/1.0/api")]
     public interface IMPSApi : IXmlRpcProxy {
@@ -292,5 +315,8 @@ namespace MovingPicturesSocialAPI {
 
         [XmlRpcMethod("WatchMovie", StructParams = true)]
         object WatchMovie(int MovieId, int NewWatchCount);
+
+        [XmlRpcMethod("GetUserSyncData", StructParams = true)]
+        object[] GetUserSyncData(DateTime startDate);
     }
 }

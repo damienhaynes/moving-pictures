@@ -172,6 +172,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("", ex);
             }
+
+            try {
+                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                bgProc.Action = MPSActions.GetUserSyncData;
+                MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+            }
+            catch (Exception ex) {
+                logger.ErrorException("", ex);
+            }
         }
 
         /// <summary>
