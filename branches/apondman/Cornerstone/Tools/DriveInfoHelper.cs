@@ -31,22 +31,26 @@ namespace Cornerstone.Tools {
             if (drive == null)
                 return null;
 
+            DriveInfo driveInfo = null;
+            
             lock (syncRoot) {
+
                 // if this is the first request create the driveinfo collection cache
                 if (driveInfoPool == null)
                     driveInfoPool = new Dictionary<string, DriveInfo>();
 
-                if (!driveInfoPool.ContainsKey(drive)) {
+                if (!driveInfoPool.TryGetValue(drive, out driveInfo)) {
                     try {
-                        driveInfoPool.Add(drive, new DriveInfo(drive));
+                        driveInfo = new DriveInfo(drive);
+                        driveInfoPool.Add(drive, driveInfo);
                     }
                     catch (Exception e) {
                         logger.Error("Error retrieving driveinfo object for '{0}': {1}", drive, e.Message);
-                        return null;
                     }
                 }
             }
-            return driveInfoPool[drive];
+
+            return driveInfo;
         }
 
     }
