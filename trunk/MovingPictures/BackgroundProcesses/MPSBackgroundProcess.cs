@@ -121,6 +121,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
                                 if (foundMovie != null) {
                                     foundMovie.ActiveUserSettings.UserRating = usd.Rating;
+                                    foundMovie.ActiveUserSettings.RatingChanged = false;
                                 }
                                 if (usd.RatingDate > lastRetrived)
                                     lastRetrived = usd.RatingDate;
