@@ -124,7 +124,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         // Update System Managed Import Paths
         public static void UpdateImportPaths() {
             
-            // remove invalid import paths
+            // remove obsolete or invalid import paths
             foreach (DBImportPath currPath in DBImportPath.GetAll()) {
                 if (currPath.Directory == null)
                     currPath.Delete();
@@ -132,6 +132,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (currPath.InternallyManaged && currPath.GetDriveType() == DriveType.NoRootDirectory) {
                     currPath.Delete();
                     logger.Info("Removed system managed import path: {0} (drive does not exist)", currPath.FullPath);
+                }
+
+                // Automatically remove import paths that were marked as replaced and don't have any related media (left)
+                if (currPath.Replaced) {
+                    // get related local media (we append % so we get all paths starting with the import path)
+                    List<DBLocalMedia> attachedLocalMedia = DBLocalMedia.GetAll(currPath.FullPath + "%");
+                    if (attachedLocalMedia.Count == 0) {
+                        currPath.Delete();
+                        logger.Info("Removed import path: {0} (was marked as replaced and doesn't have any related files)", currPath.FullPath);
+                    }
                 }
 
             }

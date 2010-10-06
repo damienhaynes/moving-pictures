@@ -966,7 +966,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     if (existingMedia != null && existingMedia.Count > 0) {
                         bool moved = false;
                         foreach (DBLocalMedia oldMedia in existingMedia) {
-                            if (oldMedia.IsRemoved) {
+                            if (oldMedia.ImportPath.Replaced || oldMedia.IsRemoved) {
                                 logger.Info("File '{0}' was moved/renamed to '{1}'. Updating existing entry.", oldMedia.FullPath, currFile.FullPath);
                                 // update our old media object with the new information
                                 oldMedia.ImportPath = currFile.ImportPath;

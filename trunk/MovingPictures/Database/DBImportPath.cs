@@ -108,9 +108,22 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         [DBFieldAttribute(Default = "false")]
         public bool InternallyManaged {
             get { return _internallyManaged;}
-            set {_internallyManaged = value;}
+            set {
+                _internallyManaged = value;
+                commitNeeded = true;
+            }
         }
         private bool _internallyManaged;
+
+        [DBFieldAttribute(Default = "false")]
+        public bool Replaced {
+          get { return _replaced; }
+          set { 
+              _replaced = value;
+              commitNeeded = true;
+          }
+        }
+        private bool _replaced;
 
         #endregion
 
@@ -133,7 +146,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             string serial = string.Empty;
 
             // validate the import path
-            if (this.IsAvailable) {
+            if (!_replaced && this.IsAvailable) {
                 if (!this.IsUnc) {
                     // Logical volume (can be a mapped network share)
                     int retry = 0;
