@@ -1,4 +1,4 @@
-Moving Pictures 1.0.7
+Moving Pictures 1.0.8
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -13,6 +13,29 @@ Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 
 Change Log
+================================================================================
+1.0.8
+--------------------------------------------------------------------------------
+Issue #890:	Updated IMDb script to work with new layout. Thanks RoChess!
+
+Issue #899:	Updated Filmtipset.se.xml. Thanks Hexago!
+
+**********:     Updated scraper for themoviedb.org to use fuzzy matching for 
+                covers and backdrops. This should improve results for non english 
+                speaking users.
+
+Issue #811:	Fixed bug causing internal playback to NOT stop when using external 
+                HD player.
+
+Issue #887:	Fixed bug in reading bluray meta file info on movie import.
+
+Issue #881:	Added support for alternate MediaPortalDirs.xml location under 
+                "My Documents".
+
+Issue #891:	Removed IMPAwards script as requested by site operator.
+
+
+
 ================================================================================
 1.0.7
 --------------------------------------------------------------------------------
