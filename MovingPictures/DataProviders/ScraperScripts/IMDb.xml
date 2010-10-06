@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="2" minor="0" point="0" />
-    <published month="09" day="20" year="2010" />
+    <version major="2" minor="0" point="1" />
+    <published month="09" day="25" year="2010" />
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -255,7 +255,7 @@
 
       <set name="rx_language">
 	<![CDATA[
-	<a\shref=./Sections/Languages/[^/]+/?">\s*(?<movieLanguage>[^<]+)</a>
+	<a\shref=./Sections/Languages/[^/]+/?">\s*(?<movieLanguage>[^<]+)</a>|<a\shref=./language/[^"]+">(?<movieLanguage>[^<]+)</a>
 	]]>
       </set>
 
