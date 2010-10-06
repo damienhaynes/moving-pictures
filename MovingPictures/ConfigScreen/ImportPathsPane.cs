@@ -19,7 +19,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class ImportPathsPane : UserControl {
         private List<DBImportPath> paths = new List<DBImportPath>();
         private BindingSource pathBindingSource;
-        
+        private Color normalColor;
+
         public ImportPathsPane() {
             InitializeComponent();
 
@@ -34,6 +35,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             // grab all user defined paths
             paths = DBImportPath.GetAllUserDefined();
+            
+            // get normal row color
+            normalColor = pathsGridView.DefaultCellStyle.ForeColor;
 
             // set up the binding for the on screen control
             pathBindingSource = new BindingSource();
@@ -48,26 +52,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             importDvdCheckBox.Setting = MovingPicturesCore.Settings["importer_disc_enabled"];
 
             this.HandleDestroyed += new EventHandler(ImportPathsPane_HandleDestroyed);
-
-            addTooltips();
-        }
-
-        private void addTooltips() {
-            foreach (DataGridViewRow currRow in pathsGridView.Rows) {
-                DBImportPath path = (DBImportPath) currRow.DataBoundItem;
-
-                string toolTipText = path.FullPath + "\n" + "Drive Type: " + path.GetDriveType().ToString();
-                if (path.IsRemovable)
-                    toolTipText += " (Removable)\nOnline: " + path.IsAvailable;
-                
-                currRow.Cells[0].ToolTipText = toolTipText;
-            }
         }
 
         // Commits new and existing itmes on addition or modification.
         void pathBindingSource_ListChanged(object sender, ListChangedEventArgs e) {
             if (e.ListChangedType != ListChangedType.ItemDeleted) {
-
                 DBImportPath changedObj = (DBImportPath)pathBindingSource[e.NewIndex];
                 changedObj.Commit();
             }
@@ -98,7 +87,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 if (newPath.InternallyManaged != true) {
                     pathBindingSource.Add(newPath);
                     MovingPicturesCore.Importer.RestartScanner();
-                    addTooltips();
                 }
 
             }
@@ -169,12 +157,54 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 if (newPath.InternallyManaged != true) {
                     pathBindingSource.Add(newPath);
                     MovingPicturesCore.Importer.RestartScanner();
-                    addTooltips();
                 }
 
             }
 
         }
 
+        private void markAsReplacedToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (pathBindingSource.Current != null) {
+                DBImportPath importPath = pathBindingSource.Current as DBImportPath;
+
+                string message = "This will mark the import path as replaced. You can use this option to recover from a hardware replacement and are unable to recreate the same import path again. Movies that were previously on this import path will be moved to a new import path once they are detected during a scan. Continue?";
+                if (importPath.Replaced) {
+                    message = "This wil remove the replaced flag and return the import path back to normal. Continue?";
+                }
+                
+                DialogResult result = MessageBox.Show(message, "Warning!", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes) {
+                    // stop the importer
+                    MovingPicturesCore.Importer.Stop(); ;
+
+                    // mark as replaced
+                    importPath.Replaced = !(importPath.Replaced);
+                    importPath.Commit();
+
+                    // restart the importer
+                    MovingPicturesCore.Importer.RestartScanner();
+                }
+            }
+        }
+
+        private void pathsGridView_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e) {
+            DataGridViewRow row = pathsGridView.Rows[e.RowIndex];
+            DBImportPath path = row.DataBoundItem as DBImportPath;
+
+            string toolTipText = path.FullPath + "\n" + "Drive Type: " + path.GetDriveType().ToString();
+            if (path.IsRemovable)
+                toolTipText += " (Removable)\nOnline: " + path.IsAvailable;
+            
+            if (path.Replaced) {
+                toolTipText += " (Replaced)";
+                row.DefaultCellStyle.ForeColor = Color.DarkGray;
+            }
+            else {
+                row.DefaultCellStyle.ForeColor = normalColor;
+            }
+
+            // add tooltip text
+            row.Cells[0].ToolTipText = toolTipText;
+        }
     }
 }
