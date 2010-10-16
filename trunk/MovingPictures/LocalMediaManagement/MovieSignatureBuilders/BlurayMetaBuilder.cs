@@ -17,6 +17,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         public SignatureBuilderResult UpdateSignature(MovieSignature signature) {
             if (signature.LocalMedia[0].IsBluray) {
                 if (signature.LocalMedia[0].File.Directory.Exists) {
+                    
                     // verify our meta file exists
                     string metaFilePath = Path.Combine(signature.LocalMedia[0].File.DirectoryName, @"META\DL\bdmt_eng.xml");
                     if (!File.Exists(metaFilePath))
@@ -27,19 +28,21 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                         XPathNavigator navigator = metaXML.CreateNavigator();
                         XmlNamespaceManager ns = new XmlNamespaceManager(navigator.NameTable);
                         ns.AddNamespace("", "urn:BDA:bdmv;disclib");
-                        ns.AddNamespace("di", "urn:BDA:bdmv;discinfo");                        
+                        ns.AddNamespace("di", "urn:BDA:bdmv;discinfo");
                         navigator.MoveToFirst();
                         XPathNavigator node = navigator.SelectSingleNode("//di:discinfo/di:title/di:name", ns);
-                        string title = node.ToString().Trim();
-                        if (title != string.Empty) {
-                            signature.Title = title;
-                            logger.Debug("Lookup Bluray Metafile={0}: Title= '{1}'", metaFilePath, title);
-                            return SignatureBuilderResult.CONCLUSIVE;
+                        if (node != null) {
+                            string title = node.ToString().Trim();
+                            if (title != string.Empty) {
+                                signature.Title = title;
+                                logger.Debug("Lookup Bluray Metafile={0}: Title= '{1}'", metaFilePath, title);
+                                return SignatureBuilderResult.CONCLUSIVE;
+                            }
                         }
-                        else {
-                            logger.Debug("Lookup Bluray Metafile={0}: No Title Found", metaFilePath);
-                            return SignatureBuilderResult.INCONCLUSIVE;
-                        }
+
+                        // node or title not found in metafile
+                        logger.Debug("Lookup Bluray Metafile={0}: No Title Found", metaFilePath);
+                        return SignatureBuilderResult.INCONCLUSIVE;
                     }
                     catch (Exception e) {
                         if (e is ThreadAbortException)

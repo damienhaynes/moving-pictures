@@ -114,8 +114,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             // during the internal provider loading process.
             updateOnly = MovingPicturesCore.Settings.DataProvidersInitialized;
             LoadInternalProviders();
-            updateOnly = false;
 
+            updateOnly = false;
             MovingPicturesCore.Settings.DataProvidersInitialized = true;
         }
 
@@ -344,7 +344,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             logger.Info("Checking internal scripts for updates...");
 
             AddSource(typeof(LocalProvider));
-            AddSource(typeof(ScriptableProvider), Resources.Script_IMPAwards);          
             AddSource(typeof(ScriptableProvider), Resources.Script_IMDb);
             AddSource(typeof(TheMovieDbProvider));
             AddSource(typeof(MovieMeterProvider));
@@ -366,6 +365,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Script_Daum);
             AddSource(typeof(ScriptableProvider), Resources.Script_EmberMediaManager);            
             AddSource(typeof(MyVideosProvider));
+
+            // remove the impawards script (requested by site owner)
+            DBSourceInfo impSource = DBSourceInfo.GetFromScriptID(874903);
+            if (impSource != null) {
+                logger.Warn("IMPAwards script has been disabled at the website operators request. Very sorry!");
+                RemoveSource(impSource);
+            }
 
             normalizePriorities();
         }
@@ -477,6 +483,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public void RemoveSource(DBSourceInfo source) {
+            if (source == null)
+                return;
+
             foreach (DataType currType in Enum.GetValues(typeof(DataType)))
                 lock (getEditableList(currType)) 
                     getEditableList(currType).Remove(source);

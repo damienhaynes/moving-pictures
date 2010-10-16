@@ -397,7 +397,14 @@ Function getPluginDir
     Push $2
 
 	#grab the plugins folder
+	${xml::LoadFile} "$DOCUMENTS\Team MediaPortal\MediaPortalDirs.xml" $1
+	IntCmp $1 0 specialdir
+	SetShellVarContext current
+	${xml::LoadFile} "$DOCUMENTS\Team MediaPortal\MediaPortalDirs.xml" $1
+	IntCmp $1 0 specialdir
 	${xml::LoadFile} "$MEDIAPORTAL_DIR\MediaPortalDirs.xml" $1
+	specialdir:
+	SetShellVarContext all
     IntCmp $1 -1 fail
     ${xml::RootElement} $0 $1
     IntCmp $1 -1 fail
@@ -431,7 +438,14 @@ Function getSkinDir
     Push $2
 
 	#grab the skin folder
+	${xml::LoadFile} "$DOCUMENTS\Team MediaPortal\MediaPortalDirs.xml" $1
+	IntCmp $1 0 specialdir
+	SetShellVarContext current
+	${xml::LoadFile} "$DOCUMENTS\Team MediaPortal\MediaPortalDirs.xml" $1
+	IntCmp $1 0 specialdir
 	${xml::LoadFile} "$MEDIAPORTAL_DIR\MediaPortalDirs.xml" $1
+	specialdir:
+	SetShellVarContext all
     IntCmp $1 -1 fail
     ${xml::RootElement} $0 $1
     IntCmp $1 -1 fail
@@ -465,7 +479,14 @@ Function getDatabaseDir
     Push $2
 
 	#grab the database folder
+	${xml::LoadFile} "$DOCUMENTS\Team MediaPortal\MediaPortalDirs.xml" $1
+	IntCmp $1 0 specialdir
+	SetShellVarContext current
+	${xml::LoadFile} "$DOCUMENTS\Team MediaPortal\MediaPortalDirs.xml" $1
+	IntCmp $1 0 specialdir
 	${xml::LoadFile} "$MEDIAPORTAL_DIR\MediaPortalDirs.xml" $1
+	specialdir:
+	SetShellVarContext all
     IntCmp $1 -1 fail
     ${xml::RootElement} $0 $1
     IntCmp $1 -1 fail
