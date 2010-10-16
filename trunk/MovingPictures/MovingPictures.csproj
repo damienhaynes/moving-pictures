@@ -779,6 +779,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\AssemblyInfoTemplate.txt" />
+  </ItemGroup>  
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
     <VisualStudio AllowExistingFolder="true" />
@@ -788,7 +791,6 @@
 copy "$(ProjectDir)..\External\merge.bat" "$(TargetDir)" /Y
 copy "$(ProjectDir)..\External\ilmerge.exe" "$(TargetDir)" /Y
 </PostBuildEvent>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>"$(ProjectDir)..\External\REVSTAMP.EXE" http://moving-pictures.googlecode.com/svn "$(ProjectDir)\Properties\AssemblyInfoTemplate.txt" "$(ProjectDir)\Properties\AssemblyInfo.cs"</PreBuildEvent>
   </PropertyGroup>
 </Project>
