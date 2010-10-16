@@ -70,7 +70,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return true;
 
             // do we have an id?
-            string tmdbID = getTheMovieDbId(movie);
+            string tmdbID = getTheMovieDbId(movie, true);
             if (tmdbID == null) {
                 return false;
             }
@@ -114,13 +114,24 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                }
            }
            
-           results = getMoviesByTitle(movieSignature.Title);
+           // grab results, if year based search comes up dry, search without a year
+           results = Search(movieSignature.Title, movieSignature.Year);
+           if (results.Count == 0) results = Search(movieSignature.Title);
+
            return results;
         }
 
-        private List<DBMovieInfo> getMoviesByTitle(string title) {
+        private List<DBMovieInfo> Search(string title) {
+            return Search(title, null);
+        }
+
+        private List<DBMovieInfo> Search(string title, int? year) {
             List<DBMovieInfo> results = new List<DBMovieInfo>();
-            XmlNodeList xml = getXML(apiMovieSearch + title);
+            
+            string url = apiMovieSearch + title;
+            if (year != null) url += "+" + year;
+
+            XmlNodeList xml = getXML(url);
             if (xml == null)
                 return results;
 
@@ -259,7 +270,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movie == null)
                 return UpdateResults.FAILED;
 
-            string tmdbId = getTheMovieDbId(movie);
+            string tmdbId = getTheMovieDbId(movie, false);
             // check if tmdbId is still null, if so request id.
             if (tmdbId == null)
                 return UpdateResults.FAILED_NEED_ID;
@@ -281,7 +292,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return false;
 
             // do we have an id?
-            string tmdbID = getTheMovieDbId(movie);
+            string tmdbID = getTheMovieDbId(movie, true);
             if (tmdbID == null) {
                 return false;
             }
@@ -328,34 +339,73 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             return false;
         }
 
-        private string getTheMovieDbId(DBMovieInfo movie) {
-            string tmdbID = null;
+        private string getTheMovieDbId(DBMovieInfo movie, bool fuzzyMatch) {            
+            // check for internally stored ID
             DBSourceMovieInfo idObj = movie.GetSourceMovieInfo(SourceInfo);
             if (idObj != null && idObj.Identifier != null) {
-                tmdbID = idObj.Identifier;
+                return idObj.Identifier;
             }
-            else {
-                // Translate IMDB code to a TMDB ID
 
-                if (movie.ImdbID == null) {
-                    return null;
-                }
-
+            // if available, lookup based on imdb ID
+            else if (movie.ImdbID != null && movie.ImdbID.Trim().Length > 0) {
                 string imdbId = movie.ImdbID.Trim();
-                if (imdbId.Length == 0)
-                    return null;
-
-                // Do an IMDB lookup
                 XmlNodeList xml = getXML(apiMovieImdbLookup + imdbId);
                 if (xml != null && xml.Count > 0) {
                     // Get TMDB Id
                     XmlNodeList idNodes = xml.Item(0).SelectNodes("//id");
                     if (idNodes.Count != 0) {
-                        tmdbID = idNodes[0].InnerText;
+                        return idNodes[0].InnerText;
                     }
                 }
             }
-            return tmdbID;
+
+            // if asked for, do a fuzzy match based on title
+            else if (fuzzyMatch) {
+                // grab possible matches by main title
+                List<DBMovieInfo> results = Search(movie.Title, movie.Year);
+                if (results.Count == 0) results = Search(movie.Title);
+
+                // grab possible matches by alt titles
+                foreach (string currAltTitle in movie.AlternateTitles) {
+                    List<DBMovieInfo> tempResults = Search(movie.Title, movie.Year);
+                    if (results.Count == 0) tempResults = Search(movie.Title);
+
+                    results.AddRange(tempResults);
+                }
+
+                // pick a possible match if one meets our requirements
+                foreach (DBMovieInfo currMatch in results) {
+                    if (CloseEnough(currMatch, movie))
+                        return currMatch.GetSourceMovieInfo(SourceInfo).Identifier;
+                }
+            }
+            
+            return null;
+        }
+
+        private bool CloseEnough(DBMovieInfo movie1, DBMovieInfo movie2) {
+            if (CloseEnough(movie1.Title, movie2)) return true;
+
+            foreach (string currAltTitle in movie1.AlternateTitles) 
+                if (CloseEnough(currAltTitle, movie2)) return true;
+
+            return false;
+        }
+
+        private bool CloseEnough(string title, DBMovieInfo movie) {
+            int distance;
+            
+            distance = AdvancedStringComparer.Levenshtein(title, movie.Title);
+            if (distance <= MovingPicturesCore.Settings.AutoApproveThreshold)
+                return true;
+
+            foreach (string currAltTitle in movie.AlternateTitles) {
+                distance = AdvancedStringComparer.Levenshtein(title, currAltTitle);
+                if (distance <= MovingPicturesCore.Settings.AutoApproveThreshold)
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
