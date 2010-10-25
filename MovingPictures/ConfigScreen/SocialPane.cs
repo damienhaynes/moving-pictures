@@ -86,7 +86,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                                     txtRegisterUsername.Text
                                     , txtRegisterPassword.Text
                                     , txtRegisterEmail.Text
-                                    , "en", "1.0"
+                                    , "en"
                                     , chkRegisterPrivateProfile.Checked
                                     , MovingPicturesCore.Settings["socialurlbase"].Value.ToString() + "api/1.0/"
                                     );
