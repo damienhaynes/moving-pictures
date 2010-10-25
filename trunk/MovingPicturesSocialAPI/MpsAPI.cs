@@ -61,12 +61,11 @@ namespace MovingPicturesSocialAPI {
         /// </summary>
         /// <param name="email"></param>
         /// <param name="locale"></param>
-        /// <param name="pluginVersion"></param>
         /// <param name="privateProfile"></param>
         /// <returns></returns>
-        public bool UpdateUser(string email, string locale, string pluginVersion, bool privateProfile) {
+        public bool UpdateUser(string email, string locale, bool privateProfile) {
             var proxy = CreateProxy();
-            proxy.UpdateUser(email, locale, pluginVersion, privateProfile.ToString());
+            proxy.UpdateUser(email, locale, privateProfile.ToString());
             return true;
         }
 
@@ -183,10 +182,10 @@ namespace MovingPicturesSocialAPI {
 
         #region Static Methods
 
-        public static bool CreateUser(string username, string password, string email, string locale, string pluginVersion, bool privateProfile, string APIURL) {
+        public static bool CreateUser(string username, string password, string email, string locale, bool privateProfile, string APIURL) {
             var proxy = CreateProxy(APIURL);
             try {
-                proxy.CreateUser(username, password, email, locale, pluginVersion, privateProfile.ToString());
+                proxy.CreateUser(username, password, email, locale, privateProfile.ToString());
             }
             catch (XmlRpcFaultException ex) {
                 if (ex.FaultCode == 1) { // missing required field
@@ -293,10 +292,10 @@ namespace MovingPicturesSocialAPI {
         object CheckAuthentication();
 
         [XmlRpcMethod("CreateUser", StructParams = true)]
-        object CreateUser(string Username, string Password, string Email, string Locale, string PluginVersion, string PrivateProfile);
+        object CreateUser(string Username, string Password, string Email, string Locale, string PrivateProfile);
 
         [XmlRpcMethod("UpdateUser", StructParams = true)]
-        object UpdateUser(string Email, string Locale, string PluginVersion, string PrivateProfile);
+        object UpdateUser(string Email, string Locale, string PrivateProfile);
 
         [XmlRpcMethod("AddMoviesToCollectionWithData", StructParams = true)]
         object[] AddMoviesToCollectionWithData(MovieDTO[] movies);
