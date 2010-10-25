@@ -49,6 +49,10 @@ namespace MovingPicturesSocialAPI {
         /// </summary>
         public string Directors { get; set; }
         /// <summary>
+        /// Pipe delimited list of writers
+        /// </summary>
+        public string Writers { get; set; }
+        /// <summary>
         /// Pipe delimited list of actors
         /// </summary>
         public string Cast { get; set; }

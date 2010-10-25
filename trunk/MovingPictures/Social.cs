@@ -190,10 +190,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             MovingPicturesSocialAPI.MovieDTO mpsMovie = new MovingPicturesSocialAPI.MovieDTO();
             mpsMovie.InternalId = movie.ID.GetValueOrDefault();
             mpsMovie.Directors = "";
+            mpsMovie.Writers = "";
             mpsMovie.Cast = "";
             mpsMovie.Genres = "";
             foreach (var person in movie.Directors) {
                 mpsMovie.Directors += "|" + person;
+            }
+            foreach (var person in movie.Writers) {
+                mpsMovie.Writers += "|" + person;
             }
             foreach (var person in movie.Actors) {
                 mpsMovie.Cast += "|" + person;
