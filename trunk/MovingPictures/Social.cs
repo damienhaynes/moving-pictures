@@ -227,6 +227,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                 mpsMovie.ResourceIds += "|" + movie.ImdbID;
             }
 
+            if (MovingPicturesCore.Settings.EnableSocialFileHashSync)
+                mpsMovie.FileHash = movie.LocalMedia[0].FileHash;
+
             mpsMovie.Title = movie.Title + "";
             mpsMovie.Year = movie.Year.ToString() + "";
             mpsMovie.Certification = movie.Certification + "";
