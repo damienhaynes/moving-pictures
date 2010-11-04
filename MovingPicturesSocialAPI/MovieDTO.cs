@@ -31,6 +31,11 @@ namespace MovingPicturesSocialAPI {
         /// Pipe delimited list of the ids of the movie at the third party site (ex: imdbid)
         /// </summary>
         public string ResourceIds { get; set; }
+        public string FileHash {
+            get { return _fileHash; }
+            set { _fileHash = value; }
+        } private string _fileHash = "";
+
         public string Title { get; set; }
         public string Year { get; set; }
         public string Certification { get; set; }

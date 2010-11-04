@@ -1931,6 +1931,24 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private String _socialLastRetrieved;
+
+        
+        [CornerstoneSetting(
+            Name = "Enable Syncing of File Hashes to MPS",
+            Description = "Enable Syncing of File Hashes to MPS",
+            Groups = "|Social|",
+            Identifier = "socialfilehashsync",
+            Default = true)]
+        public bool EnableSocialFileHashSync {
+            get { return _enableSocialFileHashSync; }
+            set {
+                _enableSocialFileHashSync = value;
+                OnSettingChanged("socialfilehashsync");
+            }
+        }
+        private bool _enableSocialFileHashSync;
+
+        
         #endregion
 
     }
