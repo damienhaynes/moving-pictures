@@ -145,14 +145,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void ClearFocus() {
-            if (cycleViewButton != null) cycleViewButton.Focus = false;
-            if (viewMenuButton != null) viewMenuButton.Focus = false;
-            if (filterButton != null) filterButton.Focus = false;
-            if (settingsButton != null) settingsButton.Focus = false;
-            if (playButton != null) playButton.Focus = false;
-            if (textToggleButton != null) textToggleButton.Focus = false;
-            if (sortMenuButton != null) sortMenuButton.Focus = false;
-            if (toggleParentalControlsButton != null) toggleParentalControlsButton.Focus = false;
+            foreach (System.Windows.UIElement currControl in this.controlList) {
+                if (currControl is GUIButtonControl) ((GUIButtonControl)currControl).Focus = false;
+            }
         }
 
         public void ShowMessage(string heading, string lines) {
@@ -1852,6 +1847,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             int hours = (totalSeconds / 3600); 
             int minutes = ((totalSeconds / 60) % 60);
             int seconds = (totalSeconds % 60);
+            int totalMinutes = (totalSeconds / 60);
             
             // publish the value indicating wether this is the actual runtime
             SetProperty(labelPrefix + "actual", actualRuntime.ToString(), forceLogging);
@@ -1915,6 +1911,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // When the duration is less than an hour it will display the localized long string.
             valueStr = (hours < 1) ? string.Format(Translation.RuntimeLong, minLocalized, secLocalized) : string.Format(Translation.RuntimeLongExtended, hourLocalized, minLocalized, secLocalized);
             SetProperty(labelPrefix + "localized.long.extended", valueStr, forceLogging);
+
+            // publish the runtime in total minutes 
+            SetProperty(labelPrefix + "totalminutes", totalMinutes.ToString(), forceLogging);
         }
 
         /// <summary>
