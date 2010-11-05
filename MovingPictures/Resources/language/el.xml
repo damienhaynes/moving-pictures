@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- Moving Pictures translation file -->
-<!-- Greek (EL) -->
-<!-- Last Updated: 29th Jan 2010 -->
+<!-- Greek (EL) Last Updated: 18th Oct 2010-->
 <!-- Note: English is the fallback for any strings not found in other languages -->
 <strings>
   <!-- A -->
@@ -10,13 +9,13 @@
   <string Field="AllMovies">Όλες οι ταινίες</string>
   <!-- C -->
   <string Field="Cancel">Άκυρο</string>
-  <string Field="CannotDeleteOffline">Αδύνατη η διαγραφή του {0}\n επειδή το αρχείο είναι offline</string>
+  <string Field="CannotDeleteOffline">Αδύνατη η διαγραφή του {0}\n επειδή το αρχείο είναι εκτός σύνδεσης</string>
   <string Field="CannotDeleteReadOnly">Αδύνατη η διαγραφή μιας "μόνο για ανάγνωση" ταινίας.\nΘέλετε το Moving Pictures να την αγνοήσει;</string>
   <string Field="CategoryEmptyDescription">Δεν υπάρχουν ταινίες\nσε αυτή την κατηγορία.</string>
-  <string Field="CategoryEmptyHeader">Αυτή η κατηγορία είναι άδεια</string>
+  <string Field="CategoryEmptyHeader">Αυτή η κατηγορία είναι κενή</string>
   <string Field="Certification">Καταλληλότητα</string>
   <string Field="ChangeView">Αλλαγή προβολής</string>
-  <string Field="CheckForMissingArtwork">Έλεγχος για ελλιπή Artwork Online</string>
+  <string Field="CheckForMissingArtwork">Έλεγχος για ελλιπή Artwork στο διαδίκτυο</string>
   <string Field="ContinueToNextPartBody">Θέλετε να συνεχίσετε με το μέρος {0};</string>
   <string Field="ContinueToNextPartHeader">Συνέχεια στο επόμενο μέρος;</string>
   <string Field="CycleCoverArt">Αλλαγή Cover-Art</string>
@@ -41,7 +40,7 @@
   <string Field="DeleteMovie">Διαγραφή ταινίας</string>
   <string Field="Director">Σκηνοθέτης</string>
   <string Field="Directors">Σκηνοθέτες</string>
-  <string Field="DownAbbreviation">(dn)</string>
+  <string Field="DownAbbreviation">(κάτω)</string>
   <string Field="DoYouWantToDelete">Θέλετε να διαγράψετε μόνιμα το \n{0}\nαπό το σκληρό δίσκο;</string>
   <!-- E -->
   <string Field="EarlierThisYear">Νωρίτερα αυτό το έτος</string>
@@ -58,7 +57,7 @@
   <string Field="Genres">Είδη</string>
   <!-- I -->
   <string Field="InvalidPin">Μη έγκυρος κωδικός PIN!</string>
-  <string Field="InvalidVideoDiscFormat">Είτε η εικόνα δεν περιέχει\nέγκυρο φορμά βίντεο, είτε οι ρυθμίσεις του Daemon\nTools στο MediaPortal configuration δεν είναι σωστές.</string>
+  <string Field="InvalidVideoDiscFormat">Είτε η εικόνα δεν περιέχει\nέγκυρο φορμά βίντεο, είτε οι ρυθμίσεις του Daemon\nTools, στις ρυθμίσεις του MediaPortal, δεν είναι σωστές.</string>
   <!-- L -->
   <string Field="Language">Γλώσσα</string>
   <string Field="LargeThumbnailView">Προβολή μεγάλων μικρογραφιών</string>
@@ -66,7 +65,7 @@
   <string Field="LastWeek">Τελευταία εβδομάδα</string>
   <string Field="LastYear">Τελευταίο έτος</string>
   <string Field="ListView">Προβολή λίστας</string>
-  <string Field="LockRestrictedMovies">Κλείδωμα απαγορευμένων ταινιών</string>
+  <string Field="LockRestrictedMovies">Κλείδωμα ακατάλληλων ταινιών</string>
   <!-- M -->
   <string Field="MarkAsUnwatched">Σημείωση ως μη προβληθείσας</string>
   <string Field="MarkAsWatched">Σημείωση ως προβληθείσας</string>
@@ -80,15 +79,15 @@
   <string Field="MovieOptions">Επιλογές ταινίας</string>
   <string Field="Movies">Ταινίες</string>
   <!-- N -->
-  <string Field="NoImportPathsBody">Δεν φαίνεται να έχετε\nορίσει μονοπάτι(α) εισαγωγής. Θα πρέπει\nνα κλείσετε το MediaPortal και να\nτρέξετε το MediaPortal\nConfiguration για να\nρυθμίσετε το Moving Pictures.</string>
+  <string Field="NoImportPathsBody">Δεν φαίνεται να έχετε\nορίσει μονοπάτι(α) εισαγωγής. Θα πρέπει\nνα κλείσετε το MediaPortal και να\nτρέξετε τις ρυθμίσεις του MediaPortal\nγια να\nρυθμίσετε το Moving Pictures.</string>
   <string Field="NoImportPathsHeading">Κανένα μονοπάτι(α) εισαγωγής!</string>
   <!-- O -->
   <string Field="Older">Παλαιότερο</string>
   <!-- P -->
   <string Field="ParentalControlsDisabled">Ο γονικός έλεγχος είναι απενεργοποιημένος.</string>
-  <string Field="PinCodeHeader">Ξεκλείδωμα απαγορευμένου περιεχομένου</string>
+  <string Field="PinCodeHeader">Ξεκλείδωμα ακατάλληλου περιεχομένου</string>
   <string Field="PinCodePrompt">Εισάγετε τον κωδικό PIN για να συνεχίσετε:</string>
-  <string Field="PlaybackFailed">Η αναπαραγωγή δεν είναι δυνατή επειδή η επέκταση'{0}'\nδεν υπάρχει στις ρυθμίσεις του mediaportal.\nΠροσθέστε την επέκταση\nκαι δοκιμάστε ξανά.</string>
+  <string Field="PlaybackFailed">Η αναπαραγωγή δεν είναι δυνατή, επειδή η επέκταση'{0}'\nδεν υπάρχει στις ρυθμίσεις του mediaportal.\nΠροσθέστε την επέκταση\nκαι δοκιμάστε ξανά.</string>
   <string Field="PlaybackFailedHeader">Αποτυχία αναπαραγωγής</string>
   <string Field="ProblemLoadingSkinFile">Παρουσιάστηκε κάποιο πρόβλημα στη φόρτωση του θέματος</string>
   <!-- R -->
@@ -129,10 +128,10 @@
   <string Field="RuntimeShortExtended">{0}ω{1:00}λ{2:00}δ</string>
   <!-- S -->
   <string Field="Saturday">Σάββατο</string>
-  <string Field="Score">Μουσικό θέμα</string>
-  <string Field="SelectYourRating">Επιλέξτε την βαθμολογία σας για το {0}</string>
+  <string Field="Score">Βαθμολογία</string>
+  <string Field="SelectYourRating">Επιλέξτε την βαθμολογία σας για την {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Προβολή μη προβληθέντων ταινιών</string>
-  <string Field="ShowWatchedAndUnwatchedMovies">Προβολή και των δύο</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Προβολή όλων</string>
   <string Field="SkinDoesNotSupportCategories">Αυτό το θέμα δεν υποστηρίζει κατηγορίες.</string>
   <string Field="SkinDoesNotSupportPinDialog">Αυτό το θέμα δεν υποστηρίζει τη χρήση κωδικού Pin.</string>
   <string Field="SkinDoesNotSupportRatingDialog">Αυτό το θέμα δεν υποστηρίζει τη δυνατότητα βαθμολόγησης.</string>
@@ -148,7 +147,7 @@
   <string Field="ThreeWeeksAgo">Πριν τρεις εβδομάδες</string>
   <string Field="ThumbnailView">Προβολή μικρογραφιών</string>
   <string Field="Thursday">Πέμπτη</string>
-  <string Field="Title">Τίτλος</string>
+  <string Field="Title">Τίτλο</string>
   <string Field="Today">Σήμερα</string>
   <string Field="ToggleParentalLock">Ενεργοποίηση γονικού ελέγχου</string>
   <string Field="Tuesday">Τρίτη</string>
@@ -156,15 +155,16 @@
   <string Field="TwoWeeksAgo">Πριν δύο εβδομάδες</string>
   <!-- U -->
   <string Field="Unknown">Άγνωστο</string>
-  <string Field="UnlockRestrictedMovies">Ξεκλείδωμα απαγορευμένων ταινιών</string>
+  <string Field="UnlockRestrictedMovies">Ξεκλείδωμα ακατάλληλων ταινιών</string>
   <string Field="UnwatchedMovies">Μη προβληθείσες ταινίες</string>
-  <string Field="UpAbbreviation">(up)</string>
-  <string Field="UpdateDetailsFromOnline">Ενημέρωση λεπτομερειών Online</string>
+  <string Field="UpAbbreviation">(πάνω)</string>
+  <string Field="UpdateDetailsFromOnline">Ενημέρωση λεπτομερειών από το διαδύκτιο</string>
   <string Field="UpdateMovieDetailsBody">Πρόκειται να ενημερώσετε τις λεπτομέρειες της ταινίας, \nδιαγράφοντας οποιεσδήποτε προσωπικές μεταβολές. Θέλετε\nνα συνεχίσετε;</string>
   <string Field="UpdateMovieDetailsHeader">Ενημέρωση λεπτομερειών ταινίας</string>
   <!-- V -->
   <string Field="VirtualDriveHeader">Ο εικονικός οδηγός δεν είναι έτοιμος.</string>
   <string Field="VirtualDriveMessage">Ο εικονικός οδηγός δεν είναι έτοιμος.\nΔοκιμάστε ξανά ή ακυρώστε την αναπαραγωγή.</string>
+  <string Field="Votes">ψήφοι</string>
   <!-- W -->
   <string Field="Wednesday">Τετάρτη</string>
   <string Field="Writer">Σεναριογράφος</string>
