@@ -182,6 +182,13 @@ namespace MovingPicturesSocialAPI {
 
         #region Static Methods
 
+        public static bool CheckUsernameAvailability(string username, string APIURL) {
+            var proxy = CreateProxy(APIURL);
+
+            var xmlData = (XmlRpcStruct)proxy.CheckUsernameAvailability(username);
+            return bool.Parse(xmlData["available"].ToString());
+        }
+
         public static bool CreateUser(string username, string password, string email, string locale, bool privateProfile, string APIURL) {
             var proxy = CreateProxy(APIURL);
             try {
@@ -290,6 +297,9 @@ namespace MovingPicturesSocialAPI {
     public interface IMPSApi : IXmlRpcProxy {
         [XmlRpcMethod("CheckAuthentication")]
         object CheckAuthentication();
+
+        [XmlRpcMethod("CheckUsernameAvailability", StructParams = true)]
+        object CheckUsernameAvailability(string Username);
 
         [XmlRpcMethod("CreateUser", StructParams = true)]
         object CreateUser(string Username, string Password, string Email, string Locale, string PrivateProfile);
