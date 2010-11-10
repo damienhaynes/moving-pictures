@@ -7,6 +7,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using System.Threading;
 using MovingPicturesSocialAPI;
+using MovingPicturesSocialAPI.Data;
 
 namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
     public enum MPSActions {
@@ -42,14 +43,14 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
             try {
                 switch (Action) {
                     case MPSActions.AddMoviesToCollection:
-                        List<MovieDTO> movieDTOs = new List<MovieDTO>();
+                        List<MpsMovie> movieDTOs = new List<MpsMovie>();
                         foreach (DBMovieInfo movie in Movies) {
                             logger.Info("Adding {0} to Moving Pictures Social Collection", movie.Title);
                             movieDTOs.Add(MovingPicturesCore.Social.MovieToMPSMovie(movie));
                         }
                         MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref movieDTOs);
                         // update MpsId on the DBMovieInfo object
-                        foreach (MovieDTO mpsMovieDTO in movieDTOs) {
+                        foreach (MpsMovie mpsMovieDTO in movieDTOs) {
                             DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
                             if (m != null) {
                                 m.MpsId = mpsMovieDTO.MovieId;

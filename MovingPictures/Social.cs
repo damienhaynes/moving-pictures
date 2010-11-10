@@ -9,6 +9,7 @@ using MovingPicturesSocialAPI;
 using NLog;
 using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 using System.Linq;
+using MovingPicturesSocialAPI.Data;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class Social {
@@ -33,11 +34,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             get {
                 lock (socialAPILock) {
                     if (_socialAPI == null) {
-                        _socialAPI = new MpsAPI(MovingPicturesCore.Settings.SocialUsername
-                            , MovingPicturesCore.Settings.SocialPassword
-                            , SocialAPIURL);
-                        _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
-                        _socialAPI.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(_socialAPI_ResponseEvent);
+                        _socialAPI = MpsAPI.Login(MovingPicturesCore.Settings.SocialUsername,
+                                                  MovingPicturesCore.Settings.SocialPassword,
+                                                  SocialAPIURL);
+
+                        if (_socialAPI != null) {
+                            _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
+                            _socialAPI.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(_socialAPI_ResponseEvent);
+                        }
                     }
                     return _socialAPI;
                 }
@@ -186,8 +190,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         /// <summary>
         /// Translates a DBMovieInfo object to a MPS MovieDTO object.
         /// </summary>
-        public MovingPicturesSocialAPI.MovieDTO MovieToMPSMovie(DBMovieInfo movie) {
-            MovingPicturesSocialAPI.MovieDTO mpsMovie = new MovingPicturesSocialAPI.MovieDTO();
+        public MpsMovie MovieToMPSMovie(DBMovieInfo movie) {
+            MpsMovie mpsMovie = new MpsMovie();
             mpsMovie.InternalId = movie.ID.GetValueOrDefault();
             mpsMovie.Directors = "";
             mpsMovie.Writers = "";
