@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MovingPicturesSocialAPI {
-    public class MovieDTO {
+namespace MovingPicturesSocialAPI.Data {
+    public class MpsMovie {
 
         /// <summary>
         /// Id of the movie in your own internal system.  (ex: the id of the DBMovieInfo record).

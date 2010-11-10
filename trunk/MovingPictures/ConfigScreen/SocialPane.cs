@@ -12,6 +12,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using System.Security.Cryptography;
 using Cornerstone.GUI.Dialogs;
+using MovingPicturesSocialAPI.Data;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class SocialPane : UserControl {
@@ -93,7 +94,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 if (bSuccess) {
                     logger.Debug("MPS Registration successful for user {0}.  Linking with MPS.", txtRegisterUsername.Text);
                     MovingPicturesCore.Settings.SocialUsername = txtRegisterUsername.Text;
-                    MovingPicturesCore.Settings.SocialPassword = HashMPSPassword(txtRegisterPassword.Text);
+                    MovingPicturesCore.Settings.SocialPassword = MpsAPI.HashPassword(txtRegisterPassword.Text);
 
                     SwitchToTab(this.tabAlreadyLinked);
                     MessageBox.Show("Your Moving Pictures Social account was created successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -128,16 +129,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void btnLinkNext_Click(object sender, EventArgs e) {
             try {
-                MpsAPI api = new MpsAPI(txtLinkUsername.Text, txtLinkPassword.Text
-                    , MovingPicturesCore.Social.SocialAPIURL);
+                logger.Debug("Logging '{0}' into Moving Pictures Social.", txtLinkUsername.Text);
+                MpsAPI api = MpsAPI.Login(txtLinkUsername.Text, MpsAPI.HashPassword(txtLinkPassword.Text), MovingPicturesCore.Social.SocialAPIURL);
 
-                api.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(MovingPicturesCore.Social._socialAPI_RequestEvent);
-                api.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(MovingPicturesCore.Social._socialAPI_ResponseEvent);
+                if (api != null) {                    
 
-                if (api.CheckAuthentication()) {
-                    logger.Debug("Login succeeded for user {0}.  Linking with MPS", txtLinkUsername.Text);
+                    api.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(MovingPicturesCore.Social._socialAPI_RequestEvent);
+                    api.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(MovingPicturesCore.Social._socialAPI_ResponseEvent);
+
                     MovingPicturesCore.Settings.SocialUsername = txtLinkUsername.Text;
-                    MovingPicturesCore.Settings.SocialPassword = HashMPSPassword(txtLinkPassword.Text);
+                    MovingPicturesCore.Settings.SocialPassword = MpsAPI.HashPassword(txtLinkPassword.Text);
 
                     SwitchToTab(this.tabAlreadyLinked);
                     MessageBox.Show("Moving Pictures has been successfully linked to your Moving Pictures Social account.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -148,7 +149,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 }
             }
             catch (Exception ex) {
-                logger.ErrorException("", ex);
+                logger.ErrorException("Unexpected error connecting to Moving Pictures Social.", ex);
                 MessageBox.Show(String.Format("An unexpected error occurred while linking with Moving Pictures Social.\n{0}", ex.Message)
                     , "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -179,12 +180,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 allMovies = allMovies.OrderBy(m => m.DateAdded).ToList();
 
-                List<MovingPicturesSocialAPI.MovieDTO> mpsMovies = new List<MovingPicturesSocialAPI.MovieDTO>();
+                List<MpsMovie> mpsMovies = new List<MpsMovie>();
 
                 int count = 0;
                 foreach (var movie in allMovies) {
                     count++;
-                    MovingPicturesSocialAPI.MovieDTO mpsMovie = MovingPicturesCore.Social.MovieToMPSMovie(movie);
+                    MpsMovie mpsMovie = MovingPicturesCore.Social.MovieToMPSMovie(movie);
                     if (mpsMovie.ResourceIds.Length > 1) {
                         logger.Debug("Adding {0} to movies to be synced", movie.Title);
                         mpsMovies.Add(mpsMovie);
@@ -201,7 +202,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                         MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref mpsMovies);
 
                         // update MpsId on the DBMovieInfo object
-                        foreach (MovieDTO mpsMovieDTO in mpsMovies) {
+                        foreach (MpsMovie mpsMovieDTO in mpsMovies) {
                             DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
                             if (m != null) {
                                 m.MpsId = mpsMovieDTO.MovieId;
@@ -228,18 +229,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
-        private string HashMPSPassword(string password) {
-            // salt + hash
-            string salt = "52c3a0d0-f793-46fb-a4c0-35a0ff6844c8";
-            string saltedPassword = password + salt;
-            SHA1CryptoServiceProvider sha1Obj = new SHA1CryptoServiceProvider();
-            byte[] bHash = sha1Obj.ComputeHash(Encoding.ASCII.GetBytes(saltedPassword));
-            string sHash = "";
-            foreach (byte b in bHash) {
-                sHash += b.ToString("x2");
-            }
-            return sHash;
-        }
+
 
     }
 }

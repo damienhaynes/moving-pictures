@@ -63,7 +63,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External\NLog.dll</HintPath>
@@ -781,7 +780,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\AssemblyInfoTemplate.txt" />
-  </ItemGroup>  
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
     <VisualStudio AllowExistingFolder="true" />

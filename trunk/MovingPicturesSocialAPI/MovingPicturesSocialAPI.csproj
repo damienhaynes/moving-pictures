@@ -59,7 +59,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -70,9 +72,52 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MovieDTO.cs" />
+    <Compile Include="Data\MpsMovie.cs" />
+    <Compile Include="IMpsProxy.cs" />
     <Compile Include="MpsAPI.cs" />
+    <Compile Include="Data\MpsUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Panels\LoginExistingUserPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\LoginExistingUserPanel.Designer.cs">
+      <DependentUpon>LoginExistingUserPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Panels\LoginNewUserPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\LoginNewUserPanel.Designer.cs">
+      <DependentUpon>LoginNewUserPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Panels\LoginSuccessPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\LoginSuccessPanel.Designer.cs">
+      <DependentUpon>LoginSuccessPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Panels\LoginWelcomePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\LoginWelcomePanel.Designer.cs">
+      <DependentUpon>LoginWelcomePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Panels\SplashPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\SplashPanel.Designer.cs">
+      <DependentUpon>SplashPanel.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -93,6 +138,31 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\AssemblyInfoTemplate.txt" />
+    <Content Include="Resources\Images\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Panels\LoginExistingUserPanel.resx">
+      <DependentUpon>LoginExistingUserPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Panels\LoginNewUserPanel.resx">
+      <DependentUpon>LoginNewUserPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Panels\LoginSuccessPanel.resx">
+      <DependentUpon>LoginSuccessPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Panels\LoginWelcomePanel.resx">
+      <DependentUpon>LoginWelcomePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Panels\SplashPanel.resx">
+      <DependentUpon>SplashPanel.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

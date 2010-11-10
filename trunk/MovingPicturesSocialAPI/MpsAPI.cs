@@ -4,56 +4,151 @@ using System.IO;
 using System.Net;
 using System.Text;
 using CookComputing.XmlRpc;
+using MovingPicturesSocialAPI.Data;
+using System.Security.Cryptography;
 
 namespace MovingPicturesSocialAPI {
     public class MpsAPI {
 
-        private string APIURL { get; set; }
-        private string Username { get; set; }
-        private string Password { get; set; }
+        public static readonly string DefaultUrl = "http://social.moving-pictures.tv/api/1.0/";
+
+        public MpsUser User {
+            get;
+            internal set;
+        }
+
+        public IMpsProxy Proxy { 
+            get; 
+            internal set; 
+        }
+        
+        public string ApiUrl { 
+            get; 
+            internal set; 
+        }
+
         public event MpsAPIRequestDelegate RequestEvent;
         public event MpsAPIResponseDelegate ResponseEvent;
+
         public delegate void MpsAPIRequestDelegate(string RequestText);
         public delegate void MpsAPIResponseDelegate(string ResponseText);
 
+        #region Static Methods
+
+        /// <summary>
+        /// Attempts to login with the given username and password.
+        /// </summary>
+        /// <returns>An MpsAPI object if login is successful.</returns>
+        public static MpsAPI Login(string username, string hashedPassword) {
+            return Login(username, hashedPassword, DefaultUrl);
+        }
+
+        /// <summary>
+        /// Attempts to login with the given username and password.
+        /// </summary>
+        /// <returns>An MpsAPI object if login is successful.</returns>
+        public static MpsAPI Login(string username, string hashedPassword, string apiUrl) {
+            if (apiUrl == null) apiUrl = DefaultUrl;
+
+            IMpsProxy proxy = CreateProxy(username, hashedPassword, apiUrl);
+
+            try { object result = proxy.CheckAuthentication(); }
+            catch (XmlRpcServerException ex) {
+                if (ex.Message == "Unauthorized") return null;
+                else throw;
+            }
+
+            MpsAPI api = new MpsAPI(username, hashedPassword, apiUrl, proxy);
+            proxy.RequestEvent += new XmlRpcRequestEventHandler(api.proxy_RequestEvent);
+            proxy.ResponseEvent += new XmlRpcResponseEventHandler(api.proxy_ResponseEvent);
+
+            return api;
+        }
+
+        public static bool CreateUser(string username, string password, string email, string locale, bool privateProfile) {
+            return CreateUser(username, password, email, locale, privateProfile);
+        }
+
+        public static bool CreateUser(string username, string password, string email, string locale, bool privateProfile, string APIURL) {
+            if (APIURL == null) APIURL = DefaultUrl;
+            
+            var proxy = CreateProxy(null, null, APIURL);
+            try {
+                proxy.CreateUser(username, password, email, locale, privateProfile);
+            }
+            catch (XmlRpcFaultException ex) {
+                if (ex.FaultCode == 1) { // missing required field
+                    string fieldname = ex.FaultString.Substring(0, ex.FaultString.IndexOf(" "));
+                    throw new RequiredFieldMissingException(fieldname);
+                }
+
+                else if (ex.FaultCode == 2)
+                    throw new UsernameAlreadyExistsException();
+
+                else
+                    throw;
+            }
+
+            return true;
+        }
+
+        public static bool IsUsernameAvailable(string username) {
+            return IsUsernameAvailable(username, DefaultUrl);
+        }
+
+        public static bool IsUsernameAvailable(string username, string APIURL) {
+            if (APIURL == null) APIURL = DefaultUrl;
+            var proxy = CreateProxy(null, null, APIURL);
+
+            var xmlData = (XmlRpcStruct)proxy.CheckUsernameAvailability(username);
+            return bool.Parse(xmlData["available"].ToString());
+        }
+
+        public static string HashPassword(string password) {
+            // salt + hash
+            string salt = "52c3a0d0-f793-46fb-a4c0-35a0ff6844c8";
+            string saltedPassword = password + salt;
+            SHA1CryptoServiceProvider sha1Obj = new SHA1CryptoServiceProvider();
+            byte[] bHash = sha1Obj.ComputeHash(Encoding.ASCII.GetBytes(saltedPassword));
+            string sHash = "";
+            foreach (byte b in bHash) 
+                sHash += b.ToString("x2");            
+            return sHash;
+        }
+
+        private static IMpsProxy CreateProxy(string username, string password, string apiUrl) {
+            if (apiUrl == null) apiUrl = DefaultUrl;
+            
+            IMpsProxy proxy = XmlRpcProxyGen.Create<IMpsProxy>();
+            proxy.Url = apiUrl;
+            proxy.UserAgent = "Moving Pictures Social C# API";
+            proxy.KeepAlive = false;
+
+            if (username != null && username.Length > 0 && password != null && password.Length > 0) {
+                string auth = username + ":" + password;
+                auth = Convert.ToBase64String(Encoding.Default.GetBytes(auth));
+                proxy.Headers["Authorization"] = "Basic " + auth;
+            }
+
+            return proxy;
+        }
+
+        #endregion
+
         #region Constructors
 
-        private MpsAPI() {
-            // do not allow empty constructor
-        }
-
-        public MpsAPI(string Username, string Password) {
-            new MpsAPI(Username, Password, "http://social.moving-pictures.tv/api/1.0/");
-        }
-
-        public MpsAPI(string Username, string Password, string APIURLBase) {
-            this.Username = Username;
-            this.Password = Password;
-            this.APIURL = APIURLBase;
+        private MpsAPI(string username, string hashedPassword, string apiUrl, IMpsProxy proxy) {
+            User = new MpsUser();
+            User.Name = username;
+            User.HashedPassword = hashedPassword;            
+            
+            ApiUrl = apiUrl;
+            Proxy = proxy;
         }
 
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Checks the username/password against Moving Pictures Social
-        /// </summary>
-        /// <returns>True if the authentication passed, False if it did not</returns>
-        public bool CheckAuthentication() {
-
-            IMPSApi proxy = CreateProxy();
-            try {
-                object result = proxy.CheckAuthentication();
-            }
-            catch (XmlRpcServerException ex) {
-                if (ex.Message == "Unauthorized")
-                    return false;
-                else
-                    throw;
-            }
-            return true;
-        }
 
 
         /// <summary>
@@ -64,8 +159,7 @@ namespace MovingPicturesSocialAPI {
         /// <param name="privateProfile"></param>
         /// <returns></returns>
         public bool UpdateUser(string email, string locale, bool privateProfile) {
-            var proxy = CreateProxy();
-            proxy.UpdateUser(email, locale, privateProfile.ToString());
+            Proxy.UpdateUser(email, locale, privateProfile);
             return true;
         }
 
@@ -74,16 +168,16 @@ namespace MovingPicturesSocialAPI {
         /// <summary>
         /// Adds a collection of new movies with data to MPS, and adds it to the user's collection.
         /// </summary>
-        public void AddMoviesToCollection(ref List<MovieDTO> movies) {
-            var proxy = CreateProxy();
-            var movieIds = proxy.AddMoviesToCollectionWithData(movies.ToArray());
+        public void AddMoviesToCollection(ref List<MpsMovie> movies) {
+            var movieIds = Proxy.AddMoviesToCollectionWithData(movies.ToArray());
 
             // insert the MpsId's into the original list
             foreach (XmlRpcStruct movieId in movieIds) {
-                MovieDTO movieDTO = movies.Find(
-                    delegate(MovieDTO a) {
+                MpsMovie movieDTO = movies.Find(
+                    delegate(MpsMovie a) {
                         return a.InternalId == Convert.ToInt32(movieId["InternalId"]);
                     });
+
                 if (movieDTO != null) {
                     movieDTO.MovieId = Convert.ToInt32(movieId["MovieId"]);
                     movieDTO.UserRating = Convert.ToInt32(movieId["UserRating"]);
@@ -94,8 +188,8 @@ namespace MovingPicturesSocialAPI {
         /// <summary>
         /// Adds a new movie with data to MPS, and adds it to the user's collection.
         /// </summary>
-        public void AddMoviesToCollection(ref MovieDTO mpsMovie) {
-            List<MovieDTO> movies = new List<MovieDTO>();
+        public void AddMoviesToCollection(ref MpsMovie mpsMovie) {
+            List<MpsMovie> movies = new List<MpsMovie>() { mpsMovie };
             movies.Add(mpsMovie);
             AddMoviesToCollection(ref movies);
         }
@@ -108,8 +202,7 @@ namespace MovingPicturesSocialAPI {
         /// <param name="MovieId"></param>
         /// <returns></returns>
         public bool RemoveMovieFromCollection(int movieId) {
-            var proxy = CreateProxy();
-            proxy.RemoveMovieFromCollection(movieId);
+            Proxy.RemoveMovieFromCollection(movieId);
             return true;
         }
 
@@ -123,8 +216,7 @@ namespace MovingPicturesSocialAPI {
             string base64String =
                 System.Convert.ToBase64String(binaryData, 0, binaryData.Length);
 
-            var proxy = CreateProxy();
-            proxy.UploadCover(movieId, base64String);
+            Proxy.UploadCover(movieId, base64String);
 
             return true;
         }
@@ -133,8 +225,7 @@ namespace MovingPicturesSocialAPI {
         public List<TaskListItem> GetUserTaskList() {
             List<TaskListItem> result = new List<TaskListItem>();
 
-            var proxy = CreateProxy();
-            var tasks = proxy.GetUserTaskList();
+            var tasks = Proxy.GetUserTaskList();
 
             foreach (XmlRpcStruct task in tasks) {
                 TaskListItem tli = new TaskListItem();
@@ -154,8 +245,7 @@ namespace MovingPicturesSocialAPI {
         }
 
         public List<UserSyncData> GetUserSyncData(DateTime startDate) {
-            var proxy = CreateProxy();
-            var xmlData = proxy.GetUserSyncData(startDate);
+            var xmlData = Proxy.GetUserSyncData(startDate);
             List<UserSyncData> result = new List<UserSyncData>();
 
             foreach (XmlRpcStruct item in xmlData)
@@ -171,68 +261,16 @@ namespace MovingPicturesSocialAPI {
         }
 
         public void SetMovieRating(int movieId, int rating) {
-            var proxy = CreateProxy();
-            proxy.SetMovieRating(movieId, rating.ToString());
+            Proxy.SetMovieRating(movieId, rating.ToString());
         }
 
         public void WatchMovie(int movieId, int newWatchCount) {
-            var proxy = CreateProxy();
-            proxy.WatchMovie(movieId, newWatchCount);
+            Proxy.WatchMovie(movieId, newWatchCount);
         }
-
-        #region Static Methods
-
-        public static bool CheckUsernameAvailability(string username, string APIURL) {
-            var proxy = CreateProxy(APIURL);
-
-            var xmlData = (XmlRpcStruct)proxy.CheckUsernameAvailability(username);
-            return bool.Parse(xmlData["available"].ToString());
-        }
-
-        public static bool CreateUser(string username, string password, string email, string locale, bool privateProfile, string APIURL) {
-            var proxy = CreateProxy(APIURL);
-            try {
-                proxy.CreateUser(username, password, email, locale, privateProfile.ToString());
-            }
-            catch (XmlRpcFaultException ex) {
-                if (ex.FaultCode == 1) { // missing required field
-                    string fieldname = ex.FaultString.Substring(0, ex.FaultString.IndexOf(" "));
-                    throw new RequiredFieldMissingException(fieldname);
-                }
-
-                else if (ex.FaultCode == 2)
-                    throw new UsernameAlreadyExistsException();
-
-                else
-                    throw;
-            }
-
-            return true;
-        }
-
-        #endregion
 
         #endregion
 
         #region Private Methods
-
-
-        private IMPSApi CreateProxy() {
-            IMPSApi proxy = XmlRpcProxyGen.Create<IMPSApi>();
-            proxy.Url = this.APIURL;
-            proxy.UserAgent = "MovPic"; // todo
-            proxy.KeepAlive = false;
-
-            proxy.RequestEvent += new XmlRpcRequestEventHandler(proxy_RequestEvent);
-            proxy.ResponseEvent += new XmlRpcResponseEventHandler(proxy_ResponseEvent);
-
-            if (this.Username.Length > 0 && this.Password.Length > 0) {
-                string auth = this.Username + ":" + this.Password;
-                auth = Convert.ToBase64String(Encoding.Default.GetBytes(auth));
-                proxy.Headers["Authorization"] = "Basic " + auth;
-            }
-            return proxy;
-        }
 
 
         void proxy_RequestEvent(object sender, XmlRpcRequestEventArgs args) {
@@ -251,14 +289,6 @@ namespace MovingPicturesSocialAPI {
             }
         }
 
-
-        private static IMPSApi CreateProxy(string APIURL) {
-            IMPSApi proxy = XmlRpcProxyGen.Create<IMPSApi>();
-            proxy.Url = APIURL;
-            proxy.UserAgent = "MovPic"; // todo
-
-            return proxy;
-        }
         #endregion
     }
 
@@ -293,39 +323,4 @@ namespace MovingPicturesSocialAPI {
         public DateTime RatingDate;
     }
 
-    [XmlRpcUrl("http://localhost:8080/api/1.0/api")]
-    public interface IMPSApi : IXmlRpcProxy {
-        [XmlRpcMethod("CheckAuthentication")]
-        object CheckAuthentication();
-
-        [XmlRpcMethod("CheckUsernameAvailability", StructParams = true)]
-        object CheckUsernameAvailability(string Username);
-
-        [XmlRpcMethod("CreateUser", StructParams = true)]
-        object CreateUser(string Username, string Password, string Email, string Locale, string PrivateProfile);
-
-        [XmlRpcMethod("UpdateUser", StructParams = true)]
-        object UpdateUser(string Email, string Locale, string PrivateProfile);
-
-        [XmlRpcMethod("AddMoviesToCollectionWithData", StructParams = true)]
-        object[] AddMoviesToCollectionWithData(MovieDTO[] movies);
-
-        [XmlRpcMethod("RemoveMovieFromCollection", StructParams = true)]
-        object RemoveMovieFromCollection(int MovieId);
-
-        [XmlRpcMethod("GetUserTaskList")]
-        object[] GetUserTaskList();
-
-        [XmlRpcMethod("UploadCover", StructParams = true)]
-        object UploadCover(int MovieId, string Base64File);
-
-        [XmlRpcMethod("SetMovieRating", StructParams = true)]
-        object SetMovieRating(int MovieId, string Rating);
-
-        [XmlRpcMethod("WatchMovie", StructParams = true)]
-        object WatchMovie(int MovieId, int NewWatchCount);
-
-        [XmlRpcMethod("GetUserSyncData", StructParams = true)]
-        object[] GetUserSyncData(DateTime startDate);
-    }
 }
