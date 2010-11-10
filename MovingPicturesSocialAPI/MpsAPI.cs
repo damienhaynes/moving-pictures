@@ -66,7 +66,7 @@ namespace MovingPicturesSocialAPI {
         }
 
         public static bool CreateUser(string username, string password, string email, string locale, bool privateProfile) {
-            return CreateUser(username, password, email, locale, privateProfile);
+            return CreateUser(username, password, email, locale, privateProfile, DefaultUrl);
         }
 
         public static bool CreateUser(string username, string password, string email, string locale, bool privateProfile, string APIURL) {
