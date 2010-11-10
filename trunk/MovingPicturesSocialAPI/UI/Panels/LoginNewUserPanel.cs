@@ -57,7 +57,7 @@ namespace MovingPicturesSocialAPI.UI.Panels {
                     string username = usernameTextBox.Text;
                     string password = passwordTextBox.Text;
 
-                    bool success = MpsAPI.CreateUser(username, password, emailTextBox.Text, "en", privateCheckBox.Checked, "http://social-dev.moving-pictures.tv/api/1.0/");
+                    bool success = MpsAPI.CreateUser(username, password, emailTextBox.Text, "en", privateCheckBox.Checked, ApiUrl);
 
                     if (success) {
                         api = MpsAPI.Login(username, password, ApiUrl);
@@ -170,7 +170,7 @@ namespace MovingPicturesSocialAPI.UI.Panels {
 
             ThreadStart actions = delegate {
                 lastCheckedName = usernameTextBox.Text;
-                try { usernameAvailable = MpsAPI.IsUsernameAvailable(usernameTextBox.Text, "http://social-dev.moving-pictures.tv/api/1.0/"); }
+                try { usernameAvailable = MpsAPI.IsUsernameAvailable(usernameTextBox.Text, ApiUrl); }
                 catch (Exception ex) {
                     UnexpectedError(ex);
                     return;
