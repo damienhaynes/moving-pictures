@@ -210,15 +210,17 @@ namespace MediaPortal.Plugins.MovingPictures {
                 mpsMovie.Genres += "|" + genre;
             }
 
-            mpsMovie.ResourceNames = "";
-            mpsMovie.ResourceIds = "";
+            mpsMovie.Resources = "";
             mpsMovie.Locale = "";
             bool foundIMDB = false;
             foreach (DBSourceMovieInfo smi in movie.SourceMovieInfo) {
                 if (smi.Source == null || smi.Source.Provider == null)
                     continue;
-                mpsMovie.ResourceNames += "|" + smi.Source.Provider.Name;
-                mpsMovie.ResourceIds += "|" + smi.Identifier;
+                mpsMovie.Resources += "|" 
+                    + System.Web.HttpUtility.UrlEncode(smi.Source.Provider.Name)
+                    + "="
+                    + System.Web.HttpUtility.UrlEncode(smi.Identifier)
+                    ;
                 if (smi.Source == movie.PrimarySource) {
                     mpsMovie.Locale = smi.Source.Provider.LanguageCode;
                 }
@@ -227,23 +229,27 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             if (!foundIMDB) {
-                mpsMovie.ResourceNames += "|" + "imdb.com";
-                mpsMovie.ResourceIds += "|" + movie.ImdbID;
+                mpsMovie.Resources += "|"
+                    + "imdb.com="
+                    + System.Web.HttpUtility.UrlEncode(movie.ImdbID)
+                    ;
             }
 
             if (MovingPicturesCore.Settings.EnableSocialFileHashSync)
                 mpsMovie.FileHash = movie.LocalMedia[0].FileHash;
+            else
+                mpsMovie.FileHash = "";
 
-            mpsMovie.Title = movie.Title + "";
-            mpsMovie.Year = movie.Year.ToString() + "";
-            mpsMovie.Certification = movie.Certification + "";
-            mpsMovie.Language = movie.Language + "";
-            mpsMovie.Tagline = movie.Tagline + "";
-            mpsMovie.Summary = movie.Summary + "";
-            mpsMovie.Score = movie.Score.ToString() + "";
-            mpsMovie.Popularity = movie.Popularity.ToString() + "";
-            mpsMovie.Runtime = movie.Runtime.ToString() + "";
-            mpsMovie.TranslatedTitle = movie.Title + "";
+            mpsMovie.Title = movie.Title ?? "";
+            mpsMovie.Year = movie.Year.ToString() ?? "";
+            mpsMovie.Certification = movie.Certification ?? "";
+            mpsMovie.Language = movie.Language ?? "";
+            mpsMovie.Tagline = movie.Tagline ?? "";
+            mpsMovie.Summary = movie.Summary ?? "";
+            mpsMovie.Score = movie.Score.ToString() ?? "";
+            mpsMovie.Popularity = movie.Popularity.ToString() ?? "";
+            mpsMovie.Runtime = movie.Runtime.ToString() ?? "";
+            mpsMovie.TranslatedTitle = movie.Title ?? "";
 
             mpsMovie.WatchCount = movie.ActiveUserSettings.WatchedCount;
             if (movie.WatchedHistory.Count > 0)

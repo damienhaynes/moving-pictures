@@ -24,13 +24,9 @@ namespace MovingPicturesSocialAPI.Data {
         } private int _movieId = 0;
 
         /// <summary>
-        /// Pipe delimited list of the third party resources for the movie (ex: imdb.com)
+        /// Pipe delimited list of name=value pairs the third party resources for the movie (ex: imdb.com=tt000000)
         /// </summary>
-        public string ResourceNames { get; set; }
-        /// <summary>
-        /// Pipe delimited list of the ids of the movie at the third party site (ex: imdbid)
-        /// </summary>
-        public string ResourceIds { get; set; }
+        public string Resources { get; set; }
         public string FileHash {
             get { return _fileHash; }
             set { _fileHash = value; }
