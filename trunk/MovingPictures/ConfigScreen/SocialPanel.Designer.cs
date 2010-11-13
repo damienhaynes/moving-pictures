@@ -203,9 +203,9 @@
             this.restrictSyncedMoviesCheckBox.Location = new System.Drawing.Point(127, 148);
             this.restrictSyncedMoviesCheckBox.Name = "restrictSyncedMoviesCheckBox";
             this.restrictSyncedMoviesCheckBox.Setting = null;
-            this.restrictSyncedMoviesCheckBox.Size = new System.Drawing.Size(336, 17);
+            this.restrictSyncedMoviesCheckBox.Size = new System.Drawing.Size(339, 17);
             this.restrictSyncedMoviesCheckBox.TabIndex = 21;
-            this.restrictSyncedMoviesCheckBox.Text = "Restrict what movies are synchronized to Moving Pictures Social.";
+            this.restrictSyncedMoviesCheckBox.Text = "Restrict which movies are synchronized to Moving Pictures Social.";
             this.restrictSyncedMoviesCheckBox.UseVisualStyleBackColor = true;
             this.restrictSyncedMoviesCheckBox.CheckedChanged += new System.EventHandler(this.restrictSyncedMoviesCheckBox_CheckedChanged);
             // 
