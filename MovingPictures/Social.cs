@@ -10,6 +10,7 @@ using NLog;
 using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 using System.Linq;
 using MovingPicturesSocialAPI.Data;
+using Cornerstone.GUI.Dialogs;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class Social {
@@ -46,6 +47,91 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (MovingPicturesCore.Settings.SocialTaskListTimer > 0) {
                     taskListTimer = new Timer(taskListTimerCallback, null, 0, MovingPicturesCore.Settings.SocialTaskListTimer * 60000);
                 }
+            }
+        }
+
+        public void Synchronize() {
+            Synchronize(null);
+        }
+
+        public void Synchronize(ProgressDelegate progress) {
+            try {
+                logger.Info("Synchronizing with moving Pictures Social.");
+                List<DBMovieInfo> moviesToSynch;
+                List<DBMovieInfo> moviesToExclude;
+
+                if (MovingPicturesCore.Settings.RestrictSynchronizedMovies) {
+                    moviesToSynch = new List<DBMovieInfo>();
+                    moviesToExclude = new List<DBMovieInfo>();
+
+                    moviesToSynch.AddRange(MovingPicturesCore.Settings.SocialSyncFilter.Filter(DBMovieInfo.GetAll()));
+                    moviesToExclude.AddRange(DBMovieInfo.GetAll().Except(moviesToSynch));
+
+                    logger.Debug("Using synchronization filter. Syncing {0} movies. Excluding {1} movies.", moviesToSynch.Count, moviesToExclude.Count);
+                }
+                else {
+                    moviesToSynch = DBMovieInfo.GetAll();
+                    moviesToExclude = new List<DBMovieInfo>();
+                    logger.Debug("Syncing {0} movies.", moviesToSynch.Count);
+                }
+
+                moviesToSynch = moviesToSynch.OrderBy(m => m.DateAdded).ToList();
+
+                UploadMovieInfo(moviesToSynch, progress);
+                RemoveFilteredMovies(moviesToExclude, progress);
+            }
+            catch (Exception ex) {
+                logger.ErrorException("Unexpected error synchronizing with Moving Pictures Social!", ex);
+            }
+        }
+
+        private void UploadMovieInfo(List<DBMovieInfo> movies, ProgressDelegate progress) {
+            List<MpsMovie> mpsMovies = new List<MpsMovie>();
+
+            int count = 0;
+            foreach (var movie in movies) {
+                count++;
+                MpsMovie mpsMovie = MovingPicturesCore.Social.MovieToMPSMovie(movie);
+                if (mpsMovie.Resources.Length > 1) {
+                    logger.Debug("Adding {0} to movies to be synced", movie.Title);
+                    mpsMovies.Add(mpsMovie);
+                }
+                else {
+                    logger.Debug("Skipping {0} because it doesn't have source information", movie.Title);
+                }
+
+                if (progress != null)
+                    progress("Syncing All Movies to MPS", (int)(count * 100 / movies.Count));
+
+                if (mpsMovies.Count >= 100 || count == movies.Count) {
+                    logger.Debug("Sending batch of {0} movies", mpsMovies.Count);
+                    MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref mpsMovies);
+
+                    // update MpsId on the DBMovieInfo object
+                    foreach (MpsMovie mpsMovieDTO in mpsMovies) {
+                        DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
+                        if (m != null) {
+                            m.MpsId = mpsMovieDTO.MovieId;
+                            m.Commit();
+                        }
+                    }
+
+                    mpsMovies.Clear();
+                }
+            }
+        }
+
+        private void RemoveFilteredMovies(List<DBMovieInfo> movies, ProgressDelegate progress) {
+            int count = 0;
+            foreach (var movie in movies) {
+                count++;
+                if (movie.MpsId != null && movie.MpsId != 0) {
+                    logger.Debug("Removing {0} from Moving Pictures Social because it has been excluded by a filter.", movie.Title);
+                    SocialAPI.RemoveMovieFromCollection((int)movie.MpsId);
+                }
+
+                if (progress != null)
+                    progress("Removing excluded movies from MPS", (int)(count * 100 / movies.Count));
             }
         }
 

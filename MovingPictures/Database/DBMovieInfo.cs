@@ -396,14 +396,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         [DBField(Filterable= false)]
-        public int MpsId {
+        public int? MpsId {
             get { return _mpsId; }
 
             set {
                 _mpsId = value;
                 commitNeeded = true;
             }
-        } private int _mpsId;
+        } private int? _mpsId;
 
 
         #endregion

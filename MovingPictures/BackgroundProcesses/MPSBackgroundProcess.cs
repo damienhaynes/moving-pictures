@@ -62,21 +62,27 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                         break;
 
                     case MPSActions.RemoveMovieFromCollection:
-                        logger.Info("Removing {0} from MPS collection", FirstMovie.Title);
-                        MovingPicturesCore.Social.SocialAPI.RemoveMovieFromCollection(FirstMovie.MpsId);
+                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                            logger.Info("Removing {0} from MPS collection", FirstMovie.Title);
+                            MovingPicturesCore.Social.SocialAPI.RemoveMovieFromCollection((int)FirstMovie.MpsId);
+                        }
                         break;
 
 
                     case MPSActions.UpdateUserRating:
-                        int newRating = FirstMovie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
-                        logger.Info("Updating MPS movie rating for {0} to {1} stars", FirstMovie.Title, newRating);
-                        MovingPicturesCore.Social.SocialAPI.SetMovieRating(FirstMovie.MpsId, newRating);
+                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                            int newRating = FirstMovie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
+                            logger.Info("Updating MPS movie rating for {0} to {1} stars", FirstMovie.Title, newRating);
+                            MovingPicturesCore.Social.SocialAPI.SetMovieRating((int)FirstMovie.MpsId, newRating);
+                        }
                         break;
 
                     case MPSActions.WatchMovie:
-                        int newWatchCount = FirstMovie.ActiveUserSettings.WatchedCount;
-                        logger.Info("Setting MPS watch count for {0} to {1}", FirstMovie.Title, newWatchCount);
-                        MovingPicturesCore.Social.SocialAPI.WatchMovie(FirstMovie.MpsId, newWatchCount);
+                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                            int newWatchCount = FirstMovie.ActiveUserSettings.WatchedCount;
+                            logger.Info("Setting MPS watch count for {0} to {1}", FirstMovie.Title, newWatchCount);
+                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, newWatchCount);
+                        }
                         break;
 
 
@@ -96,7 +102,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
                                 if (foundMovie != null && foundMovie.CoverFullPath.Trim().Length > 0) {
                                     logger.Debug("Cover found.  Uploading for movie {0}", taskItem.MovieId);
-                                    MovingPicturesCore.Social.SocialAPI.UploadCover(foundMovie.MpsId, foundMovie.CoverFullPath);
+                                    MovingPicturesCore.Social.SocialAPI.UploadCover((int)foundMovie.MpsId, foundMovie.CoverFullPath);
                                 }
                             }
                         }

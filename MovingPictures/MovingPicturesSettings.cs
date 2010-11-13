@@ -1987,6 +1987,41 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _enableSocialFileHashSync;
 
+        [CornerstoneSetting(
+            Name = "MPS Movie Synch Filter ID",
+            Description = "The filter used to restrict which movies are synchronized to Moving Pictures Social.",
+            Groups = "|Social|",
+            Identifier = "social_sync_filter_id",
+            Default = "null",
+            Hidden = true)]
+        public string SocialSyncFilterID {
+            get { return _socialSyncFilterID; }
+            set {
+                _socialSyncFilterID = value;
+                OnSettingChanged("social_sync_filter_id");
+            }
+        }
+        private string _socialSyncFilterID;
+
+        public DBFilter<DBMovieInfo> SocialSyncFilter {
+            get {
+                if (_socialSyncFilter == null) {
+                    // grab or create the filter object attached to MPS synching
+                    string filterID = MovingPicturesCore.Settings.SocialSyncFilterID;
+                    if (filterID == "null") {
+                        _socialSyncFilter = new DBFilter<DBMovieInfo>();
+                        _socialSyncFilter.Name = "Synchronized Movies";
+                        MovingPicturesCore.DatabaseManager.Commit(_socialSyncFilter);
+                        SocialSyncFilterID = _socialSyncFilter.ID.ToString();
+                    }
+                    else {
+                        _socialSyncFilter = MovingPicturesCore.DatabaseManager.Get<DBFilter<DBMovieInfo>>(int.Parse(filterID));
+                    }
+                }
+
+                return _socialSyncFilter;
+            }
+        } private DBFilter<DBMovieInfo> _socialSyncFilter = null;
         
         #endregion
 
