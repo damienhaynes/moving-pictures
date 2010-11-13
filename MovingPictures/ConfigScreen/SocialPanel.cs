@@ -38,7 +38,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void DisconnectMps() {
-            DialogResult response = MessageBox.Show("Are you sure you want to disconnect this computer\n from Moving Pictures Social?", "moving Pictures Social", MessageBoxButtons.YesNo);
+            DialogResult response = MessageBox.Show("Are you sure you want to disconnect this computer\nfrom Moving Pictures Social?", "Moving Pictures Social", MessageBoxButtons.YesNo);
             if (response == DialogResult.Yes) {
                 MovingPicturesCore.Settings.SocialEnabled = false;
                 MovingPicturesCore.Settings.SocialUsername = "";
@@ -126,6 +126,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 statusLabel.ForeColor = Label.DefaultForeColor;
 
                 userLinkLabel.Visible = true;
+                userLinkLabel.Text = MovingPicturesCore.Settings.SocialUsername;
 
                 accountButton.Text = "Disconnect Account";
 
