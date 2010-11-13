@@ -12,6 +12,8 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MovingPicturesSocialAPI.Data;
 using NLog;
 using System.Diagnostics;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using Cornerstone.GUI;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class SocialPanel : UserControl {
@@ -48,61 +50,33 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
 
         private void Sync() {
-            ProgressPopup popup = new Cornerstone.GUI.Dialogs.ProgressPopup(new TrackableWorkerDelegate(SyncWorker));
+            ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(MovingPicturesCore.Social.Synchronize));
             popup.Owner = this.ParentForm;
             popup.ShowDialog();
-        }
-
-        private void SyncWorker(ProgressDelegate progress) {
-            try {
-                List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
-                logger.Debug("Syncing {0} movies", allMovies.Count);
-
-                allMovies = allMovies.OrderBy(m => m.DateAdded).ToList();
-
-                List<MpsMovie> mpsMovies = new List<MpsMovie>();
-
-                int count = 0;
-                foreach (var movie in allMovies) {
-                    count++;
-                    MpsMovie mpsMovie = MovingPicturesCore.Social.MovieToMPSMovie(movie);
-                    if (mpsMovie.Resources.Length > 1) {
-                        logger.Debug("Adding {0} to movies to be synced", movie.Title);
-                        mpsMovies.Add(mpsMovie);
-                    }
-                    else {
-                        logger.Debug("Skipping {0} because it doesn't have source information", movie.Title);
-                    }
-
-                    if (progress != null)
-                        progress("Syncing All Movies to MPS", (int)(count * 100 / allMovies.Count));
-
-                    if (mpsMovies.Count >= 100 || count == allMovies.Count) {
-                        logger.Debug("Sending batch of {0} movies", mpsMovies.Count);
-                        MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref mpsMovies);
-
-                        // update MpsId on the DBMovieInfo object
-                        foreach (MpsMovie mpsMovieDTO in mpsMovies) {
-                            DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
-                            if (m != null) {
-                                m.MpsId = mpsMovieDTO.MovieId;
-                                m.Commit();
-                            }
-                        }
-
-                        mpsMovies.Clear();
-                    }
-                }
-            }
-            catch (Exception ex) {
-                logger.ErrorException("", ex);
-            }
         }
 
         private void OpenUserPage() {
             string url = String.Format("{0}u/{1}", MovingPicturesCore.Settings.SocialURLBase, MovingPicturesCore.Settings.SocialUsername);
             ProcessStartInfo processInfo = new ProcessStartInfo(url);
             Process.Start(processInfo);
+        }
+
+        private void TogglePrivateProfile() {
+            ProgressPopup popup = new ProgressPopup(new WorkerDelegate(() => {
+                MovingPicturesCore.Social.SocialAPI.UpdateUser("", "en", !publicProfileCheckBox.Checked);
+            }));
+
+            popup.Owner = this.ParentForm;
+            popup.ShowDialog();
+        }
+
+        private void LaunchSyncFilterDialog() {
+            MovieFilterEditorPopup popup = new MovieFilterEditorPopup();
+
+            // attach the filter, show the popup, and if necisarry, save the results
+            popup.FilterPane.AttachedFilter = MovingPicturesCore.Settings.SocialSyncFilter;
+            popup.ShowDialog();
+            MovingPicturesCore.Settings.SocialSyncFilter.Commit();
         }
 
         private void UpdateControls() {
@@ -115,6 +89,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 userLinkLabel.Visible = false;
 
                 accountButton.Text = "Setup Account";
+
+                if (MovingPicturesCore.Settings.SocialEnabled)
+                    publicProfileCheckBox.Checked = !MovingPicturesCore.Social.SocialAPI.User.PrivateProfile;
+                else
+                    publicProfileCheckBox.Checked = false;
 
                 restrictMoviesButton.Enabled = false;
                 restrictSyncedMoviesCheckBox.Enabled = false;
@@ -133,8 +112,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 restrictSyncedMoviesCheckBox.Enabled = true;
                 publicProfileCheckBox.Enabled = true;
                 syncButton.Enabled = true;
-
             }
+
+            // temporarily disable private profile
+            publicProfileCheckBox.Enabled = false;
         }
 
         private void accountButton_Click(object sender, EventArgs e) {
@@ -155,11 +136,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void restrictMoviesButton_Click(object sender, EventArgs e) {
-
+            LaunchSyncFilterDialog();
         }
 
         private void publicProfileCheckBox_CheckedChanged(object sender, EventArgs e) {
-
+            TogglePrivateProfile();
         }
 
         private void userLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {

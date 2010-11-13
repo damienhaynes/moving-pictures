@@ -158,8 +158,11 @@ namespace MovingPicturesSocialAPI {
         /// <param name="locale"></param>
         /// <param name="privateProfile"></param>
         /// <returns></returns>
-        public bool UpdateUser(string email, string locale, bool privateProfile) {
-            Proxy.UpdateUser(email, locale, privateProfile);
+        public bool UpdateUser(string email, string locale, bool? privateProfile) {
+            if (email == null) email = User.Email;
+            if (locale == null) locale = User.Locale;
+            if (privateProfile == null) privateProfile = User.PrivateProfile;
+            Proxy.UpdateUser(email, locale, (bool)privateProfile);
             return true;
         }
 
