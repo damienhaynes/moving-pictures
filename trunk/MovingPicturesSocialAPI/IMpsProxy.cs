@@ -20,6 +20,9 @@ namespace MovingPicturesSocialAPI {
         [XmlRpcMethod("UpdateUser", StructParams = true)]
         object UpdateUser(string Email, string Locale, bool PrivateProfile);
 
+        [XmlRpcMethod("GetUserData")]
+        object GetUserData();
+
         [XmlRpcMethod("AddMoviesToCollectionWithData", StructParams = true)]
         object[] AddMoviesToCollectionWithData(MpsMovie[] movies);
 

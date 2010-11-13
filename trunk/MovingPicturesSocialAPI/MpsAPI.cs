@@ -167,6 +167,27 @@ namespace MovingPicturesSocialAPI {
         }
 
 
+        public void GetUserData() {
+            string username;
+            string email;
+            bool privateProfile;
+            string privateURL;
+            string locale;
+            bool adultMovies;
+            DateTime lastSeen;
+
+            XmlRpcStruct userData = (XmlRpcStruct)Proxy.GetUserData();
+            username = userData["Username"].ToString();
+            email = userData["Email"].ToString();
+            privateProfile = (userData["PrivateProfile"].ToString() == "1");
+            privateURL = userData["PrivateURL"].ToString();
+            locale = userData["Locale"].ToString();
+            adultMovies = userData["AdultMovies"].ToString() == "1";
+            lastSeen = DateTime.Parse(userData["LastSeen"].ToString());
+            
+
+        }
+
 
         /// <summary>
         /// Adds a collection of new movies with data to MPS, and adds it to the user's collection.
