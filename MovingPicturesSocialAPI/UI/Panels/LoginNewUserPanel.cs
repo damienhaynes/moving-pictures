@@ -60,7 +60,7 @@ namespace MovingPicturesSocialAPI.UI.Panels {
                     bool success = MpsAPI.CreateUser(username, password, emailTextBox.Text, "en", privateCheckBox.Checked, ApiUrl);
 
                     if (success) {
-                        api = MpsAPI.Login(username, password, ApiUrl);
+                        api = MpsAPI.Login(username, MpsAPI.HashPassword(password), ApiUrl);
                         ValidatedUser = api.User;
                     }
                     else {

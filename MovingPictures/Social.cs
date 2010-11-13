@@ -17,26 +17,14 @@ namespace MediaPortal.Plugins.MovingPictures {
         private static object socialAPILock = new Object();
         private Timer taskListTimer;
 
-        public string SocialAPIURL {
-            get {
-                return MovingPicturesCore.Settings.SocialURLBase + "api/1.0/";
-            }
-        }
-
-        public bool HasSocial {
-            get {
-                return MovingPicturesCore.Settings.SocialUsername.Trim().Length > 0;
-            }
-        }
-
         // The MpsAPI object that should be used by all components of the plugin.
         public MovingPicturesSocialAPI.MpsAPI SocialAPI {
             get {
                 lock (socialAPILock) {
                     if (_socialAPI == null) {
                         _socialAPI = MpsAPI.Login(MovingPicturesCore.Settings.SocialUsername,
-                                                  MovingPicturesCore.Settings.SocialPassword,
-                                                  SocialAPIURL);
+                                                  MovingPicturesCore.Settings.SocialHashedPassword,
+                                                  MovingPicturesCore.Settings.SocialUrl);
 
                         if (_socialAPI != null) {
                             _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
@@ -50,7 +38,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public Social() {
             MovingPicturesCore.Settings.SettingChanged += new SettingChangedDelegate(Settings_SettingChanged);
-            if (HasSocial) {
+            if (MovingPicturesCore.Settings.SocialEnabled) {
                 MovingPicturesCore.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
                 MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
                 MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);

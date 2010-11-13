@@ -1845,6 +1845,39 @@ namespace MediaPortal.Plugins.MovingPictures {
         #endregion
 
         #region Social
+
+        [CornerstoneSetting(
+            Name = "Moving Pictures Social Enabled",
+            Description = "Connect this instance of Moving Pictures to the Moving Pictures Social website.",
+            Groups = "|Social|",
+            Identifier = "social_enabled",
+            Default = false,
+            Hidden = true)]
+        public bool SocialEnabled {
+            get { return _socialEnabled; }
+            set {
+                _socialEnabled = value;
+                OnSettingChanged("social_enabled");
+            }
+        }
+        private bool _socialEnabled;
+
+        [CornerstoneSetting(
+            Name = "Restrict Synchronized Movies",
+            Description = "If true, when synchronizing with Moving Pictures Social the movies synced will be filtered.",
+            Groups = "|Social|",
+            Identifier = "mps_restrict_synched_movies",
+            Default = false,
+            Hidden = true)]
+        public bool RestrictSynchronizedMovies {
+            get { return _restrictSynchronizedMovies; }
+            set {
+                _restrictSynchronizedMovies = value;
+                OnSettingChanged("mps_restrict_synched_movies");
+            }
+        }
+        private bool _restrictSynchronizedMovies;
+
         [CornerstoneSetting(
             Name = "SocialURLBase",
             Description = "Base URL for Moving Pictures Social.",
@@ -1863,6 +1896,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private string _socialURLBase;
+
+        public string SocialUrl {
+            get {
+                return SocialURLBase + "/api/1.0/";
+            }
+        }
 
         [CornerstoneSetting(
             Name = "SocialUsername",
@@ -1888,7 +1927,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Default = "",
             Hidden = true,
             Sensitive = true)]
-        public string SocialPassword {
+        public string SocialHashedPassword {
             get { return _socialPassword; }
             set {
                 _socialPassword = value;

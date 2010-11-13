@@ -1,5 +1,5 @@
 ﻿namespace MovingPicturesSocialAPI.UI {
-    partial class LoginForm {
+    partial class MpsLoginForm {
         /// <summary>
         /// Required designer variable.
         /// </summary>

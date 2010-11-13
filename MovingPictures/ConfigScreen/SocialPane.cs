@@ -32,7 +32,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void SocialPane_Load(object sender, EventArgs e) {
             if (!DesignMode) {
-                if (MovingPicturesCore.Social.HasSocial) {
+                if (MovingPicturesCore.Settings.SocialEnabled) {
                     SwitchToTab(this.tabAlreadyLinked);
                 }
                 else {
@@ -94,7 +94,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 if (bSuccess) {
                     logger.Debug("MPS Registration successful for user {0}.  Linking with MPS.", txtRegisterUsername.Text);
                     MovingPicturesCore.Settings.SocialUsername = txtRegisterUsername.Text;
-                    MovingPicturesCore.Settings.SocialPassword = MpsAPI.HashPassword(txtRegisterPassword.Text);
+                    MovingPicturesCore.Settings.SocialHashedPassword = MpsAPI.HashPassword(txtRegisterPassword.Text);
 
                     SwitchToTab(this.tabAlreadyLinked);
                     MessageBox.Show("Your Moving Pictures Social account was created successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -130,7 +130,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void btnLinkNext_Click(object sender, EventArgs e) {
             try {
                 logger.Debug("Logging '{0}' into Moving Pictures Social.", txtLinkUsername.Text);
-                MpsAPI api = MpsAPI.Login(txtLinkUsername.Text, MpsAPI.HashPassword(txtLinkPassword.Text), MovingPicturesCore.Social.SocialAPIURL);
+                MpsAPI api = MpsAPI.Login(txtLinkUsername.Text, MpsAPI.HashPassword(txtLinkPassword.Text), MovingPicturesCore.Settings.SocialUrl);
 
                 if (api != null) {                    
 
@@ -138,7 +138,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     api.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(MovingPicturesCore.Social._socialAPI_ResponseEvent);
 
                     MovingPicturesCore.Settings.SocialUsername = txtLinkUsername.Text;
-                    MovingPicturesCore.Settings.SocialPassword = MpsAPI.HashPassword(txtLinkPassword.Text);
+                    MovingPicturesCore.Settings.SocialHashedPassword = MpsAPI.HashPassword(txtLinkPassword.Text);
 
                     SwitchToTab(this.tabAlreadyLinked);
                     MessageBox.Show("Moving Pictures has been successfully linked to your Moving Pictures Social account.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -224,7 +224,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             if (result == DialogResult.Yes) {
                 logger.Debug("Removing linked MPS account {0}", MovingPicturesCore.Settings.SocialUsername);
                 MovingPicturesCore.Settings.SocialUsername = "";
-                MovingPicturesCore.Settings.SocialPassword = "";
+                MovingPicturesCore.Settings.SocialHashedPassword = "";
                 SwitchToTab(this.tabStartWizard);
             }
         }

@@ -49,7 +49,7 @@ namespace MovingPicturesSocialAPI.UI.Panels {
             signInOkButton.Enabled = false;
 
             ThreadStart actions = delegate {
-                try { api = MpsAPI.Login(usernameTextBox.Text, passwordTextBox.Text, ApiUrl); }
+                try { api = MpsAPI.Login(usernameTextBox.Text, MpsAPI.HashPassword(passwordTextBox.Text), ApiUrl); }
                 catch (Exception ex) {                    
                     LoginFailed(ex);
                     return;
@@ -88,6 +88,7 @@ namespace MovingPicturesSocialAPI.UI.Panels {
                 signInOkButton.Enabled = true;
                 verified = true;
 
+                ValidatedUser = api.User;
                 if (ActionSelected != null) ActionSelected(Action.VALIDATED);  
             }
         }
