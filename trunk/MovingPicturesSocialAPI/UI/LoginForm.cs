@@ -10,7 +10,7 @@ using MovingPicturesSocialAPI.UI.Panels;
 using MovingPicturesSocialAPI.Data;
 
 namespace MovingPicturesSocialAPI.UI {
-    public partial class LoginForm : Form {
+    public partial class MpsLoginForm : Form {
 
         public MpsUser ValidatedUser {
             get;
@@ -34,7 +34,7 @@ namespace MovingPicturesSocialAPI.UI {
         private LoginExistingUserPanel existingUserPanel;
         private LoginSuccessPanel successPanel;
            
-        public LoginForm() {
+        public MpsLoginForm() {
             InitializeComponent();
 
             newUserPanel = new LoginNewUserPanel();
@@ -96,7 +96,7 @@ namespace MovingPicturesSocialAPI.UI {
                     break;
                 case LoginExistingUserPanel.Action.VALIDATED:
                     successPanel.Visible = true;
-                    ValidatedUser = newUserPanel.ValidatedUser;
+                    ValidatedUser = existingUserPanel.ValidatedUser;
                     break;
             }
         }

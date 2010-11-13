@@ -74,11 +74,11 @@
     <Compile Include="SkinSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MediaPortal\Core\Core.csproj">
+    <ProjectReference Include="..\External\MediaPortal\mediaportal\Core\Core.csproj">
       <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MediaPortal\Dialogs\Dialogs.csproj">
+    <ProjectReference Include="..\External\MediaPortal\mediaportal\Dialogs\Dialogs.csproj">
       <Project>{396C5208-5D46-4A11-92C1-FD0F2F42D7DD}</Project>
       <Name>Dialogs</Name>
     </ProjectReference>
@@ -102,7 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\AssemblyInfoTemplate.txt" />
-  </ItemGroup>  
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>"$(ProjectDir)..\External\REVSTAMP.EXE" http://moving-pictures.googlecode.com/svn "$(ProjectDir)\Properties\AssemblyInfoTemplate.txt" "$(ProjectDir)\Properties\AssemblyInfo.cs"</PreBuildEvent>

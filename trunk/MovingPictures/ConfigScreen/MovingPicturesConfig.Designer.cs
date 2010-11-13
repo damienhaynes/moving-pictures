@@ -36,7 +36,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importerSettingsTab = new System.Windows.Forms.TabPage();
             this.importerSettingsPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImporterSettingsPane();
             this.socialTab = new System.Windows.Forms.TabPage();
-            this.socialPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.SocialPane();
+            this.socialPanel1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.SocialPanel();
             this.aboutTabPage = new System.Windows.Forms.TabPage();
             this.aboutPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AboutPane();
             this.mainTabControl.SuspendLayout();
@@ -106,7 +106,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieImporterPane1.Location = new System.Drawing.Point(3, 166);
             this.movieImporterPane1.MinimumSize = new System.Drawing.Size(422, 250);
             this.movieImporterPane1.Name = "movieImporterPane1";
-            this.movieImporterPane1.Size = new System.Drawing.Size(582, 434);
+            this.movieImporterPane1.Size = new System.Drawing.Size(582, 431);
             this.movieImporterPane1.TabIndex = 1;
             // 
             // importPathsListView1
@@ -161,22 +161,22 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // socialTab
             // 
-            this.socialTab.Controls.Add(this.socialPane1);
+            this.socialTab.Controls.Add(this.socialPanel1);
             this.socialTab.Location = new System.Drawing.Point(4, 22);
             this.socialTab.Name = "socialTab";
             this.socialTab.Padding = new System.Windows.Forms.Padding(3);
             this.socialTab.Size = new System.Drawing.Size(588, 603);
             this.socialTab.TabIndex = 7;
-            this.socialTab.Text = "Social";
+            this.socialTab.Text = "Synchronization";
             this.socialTab.UseVisualStyleBackColor = true;
             // 
-            // socialPane1
+            // socialPanel1
             // 
-            this.socialPane1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.socialPane1.Location = new System.Drawing.Point(3, 3);
-            this.socialPane1.Name = "socialPane1";
-            this.socialPane1.Size = new System.Drawing.Size(582, 597);
-            this.socialPane1.TabIndex = 0;
+            this.socialPanel1.Location = new System.Drawing.Point(6, 6);
+            this.socialPanel1.MinimumSize = new System.Drawing.Size(512, 87);
+            this.socialPanel1.Name = "socialPanel1";
+            this.socialPanel1.Size = new System.Drawing.Size(576, 329);
+            this.socialPanel1.TabIndex = 0;
             // 
             // aboutTabPage
             // 
@@ -196,7 +196,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.aboutPane1.Location = new System.Drawing.Point(3, 3);
             this.aboutPane1.MinimumSize = new System.Drawing.Size(528, 545);
             this.aboutPane1.Name = "aboutPane1";
-            this.aboutPane1.Size = new System.Drawing.Size(582, 597);
+            this.aboutPane1.Size = new System.Drawing.Size(528, 545);
             this.aboutPane1.TabIndex = 0;
             // 
             // MovingPicturesConfig
@@ -213,9 +213,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.Name = "MovingPicturesConfig";
             this.ShowInTaskbar = false;
             this.Text = "Moving Pictures Configuration";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MovingPicturesConfig_FormClosing);
             this.Load += new System.EventHandler(this.MoviesPluginConfig_Load);
             this.Shown += new System.EventHandler(this.MovingPicturesConfig_Shown);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MovingPicturesConfig_FormClosing);
             this.mainTabControl.ResumeLayout(false);
             this.managerTab.ResumeLayout(false);
             this.importSettingsTab.ResumeLayout(false);
@@ -242,6 +242,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private GUISettingsPane guiSettingsPane1;
         private AboutPane aboutPane1;
         private System.Windows.Forms.TabPage socialTab;
-        private SocialPane socialPane1;
+        private SocialPanel socialPanel1;
     }
 }
