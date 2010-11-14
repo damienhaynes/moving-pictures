@@ -66,6 +66,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             logger.Info("Removing {0} from MPS collection", FirstMovie.Title);
                             MovingPicturesCore.Social.SocialAPI.RemoveMovieFromCollection((int)FirstMovie.MpsId);
+                            FirstMovie.MpsId = null;
                         }
                         break;
 

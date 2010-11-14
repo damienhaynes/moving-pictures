@@ -84,6 +84,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             popup.FilterPane.AttachedFilter = MovingPicturesCore.Settings.SocialSyncFilter;
             popup.ShowDialog();
             MovingPicturesCore.Settings.SocialSyncFilter.Commit();
+
+            Sync();
         }
 
         private void UpdateControls() {
