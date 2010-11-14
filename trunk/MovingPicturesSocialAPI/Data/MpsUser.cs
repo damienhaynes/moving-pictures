@@ -7,7 +7,7 @@ namespace MovingPicturesSocialAPI.Data {
     public class MpsUser {
         public string Name {
             get;
-            set;
+            internal set;
         }
 
         public string HashedPassword {
@@ -17,20 +17,35 @@ namespace MovingPicturesSocialAPI.Data {
 
         public string Email {
             get;
-            set;
+            internal set;
         }
 
         public string Locale {
             get;
-            set;
+            internal set;
         }
 
         public bool PrivateProfile {
             get;
-            set;
+            internal set;
+        }
+
+        public string PrivateUrl {
+            get;
+            internal set;
+        }
+
+        public bool AdultMoviesVisible {
+            get;
+            internal set;
         }
 
         public string ApiUrl {
+            get;
+            internal set;
+        }
+
+        public DateTime LastSeen {
             get;
             internal set;
         }

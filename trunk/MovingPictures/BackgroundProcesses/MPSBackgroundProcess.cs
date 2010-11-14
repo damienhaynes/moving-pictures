@@ -15,6 +15,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         RemoveMovieFromCollection,
         UpdateUserRating,
         WatchMovie,
+        WatchMovieIgnoreStream,
         ProcessTaskList,
         GetUserSyncData
     }
@@ -76,12 +77,20 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                             MovingPicturesCore.Social.SocialAPI.SetMovieRating((int)FirstMovie.MpsId, newRating);
                         }
                         break;
-
+                        
                     case MPSActions.WatchMovie:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             int newWatchCount = FirstMovie.ActiveUserSettings.WatchedCount;
                             logger.Info("Setting MPS watch count for {0} to {1}", FirstMovie.Title, newWatchCount);
-                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, newWatchCount);
+                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, newWatchCount, true);
+                        }
+                        break;
+
+                    case MPSActions.WatchMovieIgnoreStream:
+                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                            int newWatchCount = FirstMovie.ActiveUserSettings.WatchedCount;
+                            logger.Info("Setting MPS watch count for {0} to {1}", FirstMovie.Title, newWatchCount);
+                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, newWatchCount, false);
                         }
                         break;
 

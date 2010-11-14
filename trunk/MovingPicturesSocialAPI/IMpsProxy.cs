@@ -39,7 +39,7 @@ namespace MovingPicturesSocialAPI {
         object SetMovieRating(int MovieId, string Rating);
 
         [XmlRpcMethod("WatchMovie", StructParams = true)]
-        object WatchMovie(int MovieId, int NewWatchCount);
+        object WatchMovie(int MovieId, int NewWatchCount, bool InsertInStream);
 
         [XmlRpcMethod("GetUserSyncData", StructParams = true)]
         object[] GetUserSyncData(DateTime startDate);

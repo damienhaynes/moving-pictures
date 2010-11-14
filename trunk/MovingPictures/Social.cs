@@ -39,8 +39,13 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public Social() {
             MovingPicturesCore.Settings.SettingChanged += new SettingChangedDelegate(Settings_SettingChanged);
+            Init();
+        }
+
+        private void Init() {
+            _socialAPI = null;
+
             if (MovingPicturesCore.Settings.SocialEnabled) {
-                MovingPicturesCore.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(movieStatusChangedListener);
                 MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
                 MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);
                 MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectInserted);
@@ -48,6 +53,13 @@ namespace MediaPortal.Plugins.MovingPictures {
                     taskListTimer = new Timer(taskListTimerCallback, null, 0, MovingPicturesCore.Settings.SocialTaskListTimer * 60000);
                 }
             }
+            else {
+                if (taskListTimer != null) taskListTimer.Dispose();
+                MovingPicturesCore.DatabaseManager.ObjectDeleted -= new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
+                MovingPicturesCore.DatabaseManager.ObjectUpdated -= new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);
+                MovingPicturesCore.DatabaseManager.ObjectInserted -= new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectInserted);
+            }
+
         }
 
         public void Synchronize() {
@@ -93,11 +105,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                 count++;
                 MpsMovie mpsMovie = MovingPicturesCore.Social.MovieToMPSMovie(movie);
                 if (mpsMovie.Resources.Length > 1) {
-                    logger.Debug("Adding {0} to movies to be synced", movie.Title);
+                    logger.Debug("Adding '{0}' to list of movies to be synced.", movie.Title);
                     mpsMovies.Add(mpsMovie);
                 }
                 else {
-                    logger.Debug("Skipping {0} because it doesn't have source information", movie.Title);
+                    logger.Debug("Skipping '{0}' because it doesn't have source information.", movie.Title);
                 }
 
                 if (progress != null)
@@ -126,7 +138,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             foreach (var movie in movies) {
                 count++;
                 if (movie.MpsId != null && movie.MpsId != 0) {
-                    logger.Debug("Removing {0} from Moving Pictures Social because it has been excluded by a filter.", movie.Title);
+                    logger.Debug("Removing '{0}' from Moving Pictures Social because it has been excluded by a filter.", movie.Title);
                     SocialAPI.RemoveMovieFromCollection((int)movie.MpsId);
                 }
 
@@ -135,18 +147,30 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
 
-        void DatabaseManager_ObjectInserted(DatabaseTable obj)
-        {
-            if (obj.GetType() != typeof(DBWatchedHistory))
-                return;
-
-            DBWatchedHistory wh = (DBWatchedHistory)obj;
-            DBMovieInfo movie = wh.Movie;
-
+        public void UpdateWatchedCount(DBMovieInfo movie, bool includeInStream) {
             MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-            bgProc.Action = MPSActions.WatchMovie;
+            bgProc.Action = includeInStream ? MPSActions.WatchMovie : MPSActions.WatchMovieIgnoreStream;
             bgProc.Movies.Add(movie);
             MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+        }
+
+        void DatabaseManager_ObjectInserted(DatabaseTable obj) {
+            if (obj.GetType() == typeof(DBWatchedHistory)) {
+                DBWatchedHistory wh = (DBWatchedHistory)obj;
+                DBMovieInfo movie = wh.Movie;
+
+                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                bgProc.Action = MPSActions.WatchMovie;
+                bgProc.Movies.Add(movie);
+                MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+            }
+            else if (obj.GetType() == typeof(DBMovieInfo)) {
+                DBMovieInfo movie = (DBMovieInfo)obj;
+                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                bgProc.Action = MPSActions.AddMoviesToCollection;
+                bgProc.Movies.Add(movie);
+                MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+            }
         }
 
         private void DatabaseManager_ObjectUpdated(DatabaseTable obj) {
@@ -167,6 +191,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     // reset the flag
                     settings.RatingChanged = false;
                 }
+
             }
             catch (Exception ex) {
                 logger.ErrorException("", ex);
@@ -176,11 +201,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         private void Settings_SettingChanged(DBSetting setting, object oldValue) {
             try {
                 // Reinitializes the SocialAPI object when Username, Password, or URLBase changes.
-                if (setting.Key == "socialurlbase"
-                    || setting.Key == "socialusername"
-                    || setting.Key == "socialpassword") {
-                    _socialAPI = null;
-                    if (taskListTimer != null) taskListTimer.Dispose();
+                if (setting.Key == "socialurlbase" || setting.Key == "socialusername" || setting.Key == "socialpassword") {
+                        Init();
                 }
 
                 // Recreate the timer if the timer setting changes
@@ -195,22 +217,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 logger.ErrorException("", ex);
             }
         }
-
-        private static void movieStatusChangedListener(MovieMatch obj, MovieImporterAction action) {
-            try {
-                if (action == MovieImporterAction.COMMITED) {
-                    DBMovieInfo movie = obj.Selected.Movie;
-                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                    bgProc.Action = MPSActions.AddMoviesToCollection;
-                    bgProc.Movies.Add(movie);
-                    MovingPicturesCore.ProcessManager.StartProcess(bgProc);
-                }
-            }
-            catch (Exception ex) {
-                logger.ErrorException("", ex);
-            }
-        }
-
 
         private void movieDeletedListener(DatabaseTable obj) {
             try {
