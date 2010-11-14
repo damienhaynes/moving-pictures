@@ -1710,7 +1710,7 @@ namespace MediaPortal.Plugins.MovingPictures {
              Description = "If true, when renaming files for a movie, the folder containing the files will be renamed as well.",
              Groups = "|Extras|File Renamer|",
              Identifier = "file_rename_folder",
-             Default = false)]
+             Default = true)]
         public bool RenameFolders
         {
             get { return _file_rename_folder; }
@@ -1727,7 +1727,7 @@ namespace MediaPortal.Plugins.MovingPictures {
           Description = "If true, when renaming, the movie files will be renamed.",
           Groups = "|Extras|File Renamer|",
           Identifier = "rename_files",
-          Default = false)]
+          Default = true)]
         public bool RenameFiles
         {
             get { return _renameFiles; }
@@ -1744,7 +1744,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If true, when renaming files for a movie, thesecondary files will be renamed as well.",
             Groups = "|Extras|File Renamer|",
             Identifier = "rename_secondary_files",
-            Default = false)]
+            Default = true)]
         public bool RenameSecondaryFiles {
             get { return _renameSecondaryFiles; }
             set {

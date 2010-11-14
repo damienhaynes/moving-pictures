@@ -60,6 +60,8 @@
             Cornerstone.GUI.Controls.FieldProperty fieldProperty35 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty36 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty37 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty38 = new Cornerstone.GUI.Controls.FieldProperty();
+            Cornerstone.GUI.Controls.FieldProperty fieldProperty39 = new Cornerstone.GUI.Controls.FieldProperty();
             this.userMovieDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.movieDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.SuspendLayout();
@@ -179,6 +181,16 @@
             fieldProperty37.FieldName = "PrimarySource";
             fieldProperty37.Visible = true;
             fieldProperty37.ReadOnly = true;
+            fieldProperty38.ColumnWidth = null;
+            fieldProperty38.DisplayName = "Social ID";
+            fieldProperty38.FieldName = "MpsId";
+            fieldProperty38.Visible = false;
+            fieldProperty38.ReadOnly = true;
+            fieldProperty39.ColumnWidth = null;
+            fieldProperty39.DisplayName = "Original Directory";
+            fieldProperty39.FieldName = "OriginalDirectoryName";
+            fieldProperty39.Visible = false;
+            fieldProperty39.ReadOnly = true;
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty7);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty8);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty9);
@@ -196,6 +208,7 @@
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty21);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty22);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty23);
+            this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty38);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty24);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty25);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty26);
@@ -210,6 +223,7 @@
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty35);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty36);
             this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty37);
+            this.movieDetailsList.FieldDisplaySettings.FieldProperties.Add(fieldProperty39);
             this.movieDetailsList.ForeColor = System.Drawing.SystemColors.ControlText;
             this.movieDetailsList.Location = new System.Drawing.Point(0, 0);
             this.movieDetailsList.Name = "movieDetailsList";
