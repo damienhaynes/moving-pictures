@@ -310,7 +310,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             if (MovingPicturesCore.Settings.EnableSocialFileHashSync)
-                mpsMovie.FileHash = movie.LocalMedia[0].FileHash;
+                mpsMovie.FileHash = movie.LocalMedia[0].FileHash ?? "";
             else
                 mpsMovie.FileHash = "";
 
