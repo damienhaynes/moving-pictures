@@ -59,6 +59,8 @@ namespace MovingPicturesSocialAPI {
             }
 
             MpsAPI api = new MpsAPI(username, hashedPassword, apiUrl, proxy);
+            api.GetUserData();
+
             proxy.RequestEvent += new XmlRpcRequestEventHandler(api.proxy_RequestEvent);
             proxy.ResponseEvent += new XmlRpcResponseEventHandler(api.proxy_ResponseEvent);
 
@@ -159,8 +161,8 @@ namespace MovingPicturesSocialAPI {
         /// <param name="privateProfile"></param>
         /// <returns></returns>
         public bool UpdateUser(string email, string locale, bool? privateProfile) {
-            if (email == null) email = User.Email;
-            if (locale == null) locale = User.Locale;
+            if (email == null) email = "";
+            if (locale == null) locale = "";
             if (privateProfile == null) privateProfile = User.PrivateProfile;
             Proxy.UpdateUser(email, locale, (bool)privateProfile);
             return true;
@@ -168,24 +170,17 @@ namespace MovingPicturesSocialAPI {
 
 
         public void GetUserData() {
-            string username;
-            string email;
-            bool privateProfile;
-            string privateURL;
-            string locale;
-            bool adultMovies;
-            DateTime lastSeen;
+            if (User == null)
+                return;
 
             XmlRpcStruct userData = (XmlRpcStruct)Proxy.GetUserData();
-            username = userData["Username"].ToString();
-            email = userData["Email"].ToString();
-            privateProfile = (userData["PrivateProfile"].ToString() == "1");
-            privateURL = userData["PrivateURL"].ToString();
-            locale = userData["Locale"].ToString();
-            adultMovies = userData["AdultMovies"].ToString() == "1";
-            lastSeen = DateTime.Parse(userData["LastSeen"].ToString());
-            
-
+            User.Name = userData["Username"].ToString();
+            User.Email = userData["Email"].ToString();
+            User.PrivateProfile = (userData["PrivateProfile"].ToString() == "1");
+            User.PrivateUrl = userData["PrivateURL"].ToString();
+            User.Locale = userData["Locale"].ToString();
+            User.AdultMoviesVisible = userData["AdultMovies"].ToString() == "1";
+            User.LastSeen = DateTime.Parse(userData["LastSeen"].ToString());
         }
 
 
@@ -288,8 +283,8 @@ namespace MovingPicturesSocialAPI {
             Proxy.SetMovieRating(movieId, rating.ToString());
         }
 
-        public void WatchMovie(int movieId, int newWatchCount) {
-            Proxy.WatchMovie(movieId, newWatchCount);
+        public void WatchMovie(int movieId, int newWatchCount, bool insertIntoStream) {
+            Proxy.WatchMovie(movieId, newWatchCount, insertIntoStream);
         }
 
         #endregion

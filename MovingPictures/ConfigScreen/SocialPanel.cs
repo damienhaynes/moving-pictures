@@ -19,6 +19,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class SocialPanel : UserControl {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
+        bool updatingControls = false;
+
         public SocialPanel() {
             InitializeComponent();
 
@@ -36,6 +38,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 MovingPicturesCore.Settings.SocialEnabled = true;
                 MovingPicturesCore.Settings.SocialUsername = loginForm.ValidatedUser.Name;
                 MovingPicturesCore.Settings.SocialHashedPassword = loginForm.ValidatedUser.HashedPassword;
+
+                Sync();
             }
         }
 
@@ -62,6 +66,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void TogglePrivateProfile() {
+            if (updatingControls)
+                return;
+
             ProgressPopup popup = new ProgressPopup(new WorkerDelegate(() => {
                 MovingPicturesCore.Social.SocialAPI.UpdateUser("", "en", !publicProfileCheckBox.Checked);
             }));
@@ -80,6 +87,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void UpdateControls() {
+            updatingControls = true;
+
             restrictMoviesButton.Enabled = restrictSyncedMoviesCheckBox.Checked;
 
             if (!MovingPicturesCore.Settings.SocialEnabled) {
@@ -90,11 +99,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 accountButton.Text = "Setup Account";
 
-                if (MovingPicturesCore.Settings.SocialEnabled)
-                    publicProfileCheckBox.Checked = !MovingPicturesCore.Social.SocialAPI.User.PrivateProfile;
-                else
-                    publicProfileCheckBox.Checked = false;
-
+                publicProfileCheckBox.Checked = false;
                 restrictMoviesButton.Enabled = false;
                 restrictSyncedMoviesCheckBox.Enabled = false;
                 publicProfileCheckBox.Enabled = false;
@@ -109,13 +114,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 accountButton.Text = "Disconnect Account";
 
+                publicProfileCheckBox.Checked = !MovingPicturesCore.Social.SocialAPI.User.PrivateProfile;
+
                 restrictSyncedMoviesCheckBox.Enabled = true;
                 publicProfileCheckBox.Enabled = true;
                 syncButton.Enabled = true;
             }
 
-            // temporarily disable private profile
-            publicProfileCheckBox.Enabled = false;
+            updatingControls = false;
         }
 
         private void accountButton_Click(object sender, EventArgs e) {
