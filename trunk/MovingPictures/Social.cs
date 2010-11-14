@@ -140,6 +140,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (movie.MpsId != null && movie.MpsId != 0) {
                     logger.Debug("Removing '{0}' from Moving Pictures Social because it has been excluded by a filter.", movie.Title);
                     SocialAPI.RemoveMovieFromCollection((int)movie.MpsId);
+                    movie.MpsId = null;
                 }
 
                 if (progress != null)
