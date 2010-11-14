@@ -1,5 +1,11 @@
-Moving Pictures 1.0.8
+Moving Pictures 1.1.0 Alpha
 ================================================================================
+
+Please be aware that this is an alpha build so you will most likely run into a 
+bug or two here or there. The included features will also most likely change over 
+time as we approach a Beta release. Thank you for helping with testing!
+
+--------------------------------------------------------------------------------
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
 plug-in itself along with Blue3Wide (16x9) and Blue 3 (4x3)skin support.
@@ -7,12 +13,20 @@ If you have any problems or questions about the plug-in you can visit the
 forums to interact with the community and developers, or you can visit the 
 Moving Pictures Wiki for access to the user's guide and frequently asked questions.
 
+Moving Pictures Social:         http://social.moving-pictures.tv
+
 Moving Pictures Wiki:           http://moving-pictures.tv
 Moving Pictures Forum:          http://forum.team-mediaportal.com/moving-pictures-284/
 Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 
 Change Log
+================================================================================
+1.1.0
+--------------------------------------------------------------------------------
+TODO
+
+
 ================================================================================
 1.0.8
 --------------------------------------------------------------------------------
