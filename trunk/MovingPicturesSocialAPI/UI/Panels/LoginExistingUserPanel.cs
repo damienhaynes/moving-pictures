@@ -106,6 +106,8 @@ namespace MovingPicturesSocialAPI.UI.Panels {
             statusLabel.ForeColor = Color.Red;
             if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Not Found")
                 statusLabel.Text = "Unable to connect to server!";
+            else if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Forbidden")
+                statusLabel.Text = "This account is currently locked!";
             else
                 statusLabel.Text = "Unexpected Error: " + ex.Message;
         }
