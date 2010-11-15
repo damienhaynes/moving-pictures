@@ -54,6 +54,7 @@
             // newAccountButton
             // 
             this.newAccountButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.newAccountButton.Enabled = false;
             this.newAccountButton.Location = new System.Drawing.Point(0, 145);
             this.newAccountButton.Name = "newAccountButton";
             this.newAccountButton.Size = new System.Drawing.Size(125, 23);

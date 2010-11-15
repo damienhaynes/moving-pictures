@@ -1,11 +1,5 @@
-Moving Pictures 1.1.0 Alpha
+Moving Pictures 1.1.0
 ================================================================================
-
-Please be aware that this is an alpha build so you will most likely run into a 
-bug or two here or there. The included features will also most likely change over 
-time as we approach a Beta release. Thank you for helping with testing!
-
---------------------------------------------------------------------------------
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
 plug-in itself along with Blue3Wide (16x9) and Blue 3 (4x3)skin support.
@@ -24,29 +18,90 @@ Change Log
 ================================================================================
 1.1.0
 --------------------------------------------------------------------------------
-TODO
+Enhancements
+--------------------------------------------------------------------------------
+Issue #680:     Integration with Moving Pictures Social.
 
+Issue #230:     Video files can now be renamed based via the Movie Manager.
+
+Issue #638:     It is now possible to select a default filter to be applied when 
+                launching Moving Pictures.
+
+Issue #800:     When a movie is deleted in the GUI, the position in the list will 
+                be retained.
+
+Issue #584:     It is now possible to specify a specific view (Filmstrip, List, 
+                etc) for a specific category.
+
+Issue #625:     Image files should again be properly detected "out of the box".
+
+Issue #509:     The optional grouping headers have been improved when sorting by 
+                Score.
+
+Issue #900:     An import path can now be flagged for replacement to ease hardware 
+                replacement and file system reogranization.
+
+Issue #541:     The parental controls filter will now automatically be reenabled 
+                when the system has gone idle.
+
+Issue #716:     Added new skin property for movie name of current backdrop.
+
+Issue #911:     Added "Total Runtime Minutes" Skin Property.
+
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------		
+Issue #796:     Adjusted multipart pattern matching logic to improve multipart 
+                movie detection.
+				
+Issue #782:     It is now possible to enter the parental control code via the 
+                remote.
+				
+Issue #819:     Popularity has been added as an available field in the filtering 
+                dialog.
+				
+Issue #798:     You can now use the up button in the Rating Dialog to increase 
+                star rating.
+				
+Issue #910:     Updated the Hebrew scraper script (Sratim).
+
+--------------------------------------------------------------------------------
+Translation Updates
+--------------------------------------------------------------------------------	
+Issue #799:     Added Norwegian translation.
+
+Issue #806:     Added Brazillian Portuguese translation.
+
+Issue #790:     Added Icelandic translation.
+
+Issue #834:     Added a Korean translation.
+
+Issue #794:     Updated Swedish translation.
+
+Issue #814:     Updated Spanish translation.
+
+Issue #907:     Updated Greek translation.
 
 ================================================================================
 1.0.8
 --------------------------------------------------------------------------------
-Issue #890:	Updated IMDb script to work with new layout. Thanks RoChess!
+Issue #890:     Updated IMDb script to work with new layout. Thanks RoChess!
 
-Issue #899:	Updated Filmtipset.se.xml. Thanks Hexago!
+Issue #899:     Updated Filmtipset.se.xml. Thanks Hexago!
 
 **********:     Updated scraper for themoviedb.org to use fuzzy matching for 
                 covers and backdrops. This should improve results for non english 
                 speaking users.
 
-Issue #811:	Fixed bug causing internal playback to NOT stop when using external 
+Issue #811:     Fixed bug causing internal playback to NOT stop when using external 
                 HD player.
 
-Issue #887:	Fixed bug in reading bluray meta file info on movie import.
+Issue #887:     Fixed bug in reading bluray meta file info on movie import.
 
-Issue #881:	Added support for alternate MediaPortalDirs.xml location under 
+Issue #881:     Added support for alternate MediaPortalDirs.xml location under 
                 "My Documents".
 
-Issue #891:	Removed IMPAwards script as requested by site operator.
+Issue #891:     Removed IMPAwards script as requested by site operator.
 
 
 
@@ -59,19 +114,19 @@ Issue #891:	Removed IMPAwards script as requested by site operator.
 
 **********:     Fixed retrieval issues in impawards script.
 
-Issue #863:	Fixed bugs in CSFD.cz script.
+Issue #863:     Fixed bugs in CSFD.cz script.
 
-Issue #865:	Fixed bugs in kvikmyndir script.
+Issue #865:     Fixed bugs in kvikmyndir script.
 
-Issue #850:	Added Ember Media Manager import script.
+Issue #850:     Added Ember Media Manager import script.
 
-Issue #866:	Updated Hebrew Translation.
+Issue #866:     Updated Hebrew Translation.
 
-Issue #871:	Fixed bugs in FilmWeb.pl script.
+Issue #871:     Fixed bugs in FilmWeb.pl script.
 
-Issue #872:	Fixed bugs in Filmtipset.se script.
+Issue #872:     Fixed bugs in Filmtipset.se script.
 
-Issue #878:	Fixed bugs in Scope script.
+Issue #878:     Fixed bugs in Scope script.
 
 ================================================================================
 1.0.6
