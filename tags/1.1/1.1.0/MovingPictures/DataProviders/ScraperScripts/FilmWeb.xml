@@ -1,0 +1,284 @@
+﻿<ScriptableScraper>
+  <details>
+    <!-- These details are for display purposes only. -->
+    <name>FilmWeb.pl</name>
+    <author>LRFalk01</author>
+    <description>This script pulls data from FilmWeb.pl.</description>
+    
+    <!-- 
+    These fields uniquely identify the script. The ID should never 
+    change and should be unique (no other script should use this ID). With
+    new versions of the script the version numbers should change. EVEN FOR 
+    MINOR CHANGES, you should change the version number if you are going to
+    disribute it to anyone but internal testers. The point number 
+    is for minor bug fix releases. Use it.
+    -->
+    <id>141516</id>
+    <version major="2" minor="0" point="2"/>
+    <published month="07" day="26" year="2010"/>
+    
+    <!--
+    These fields are used for categorization purposes. Seperate multiple 
+    types with a pipe | character.
+    -->
+    <type>MovieDetailsFetcher|MovieCoverFetcher</type>
+    <language>pl</language>
+
+   </details>
+  
+  
+  <action name="search">
+	<set name="rx_search_return">
+	  <![CDATA[
+		<li\sclass=.searchResult\sHorListItem.(.+?)</li>
+	  ]]>
+	</set>
+	<set name="rx_title_link">
+	  <![CDATA[
+		searchResultTitle"\shref="(?<pageLink>[^"]+)">(?<Title>.+?)</a>
+	  ]]>
+	</set>
+	<set name="rx_alternate_title">
+	  <![CDATA[
+		searchResultOtherTitle">(?<AlternateTitles>.+?)</span>
+	  ]]>
+	</set>
+	<set name="rx_year">
+	  <![CDATA[
+		searchResultDetails[^\d]+(?<year>\d{4})
+	  ]]>
+	</set>
+	<set name="rx_alternate_check">
+	  <![CDATA[
+		(\s/\s)
+	  ]]>
+	</set>
+	<set name="rx_title_alternate">
+	  <![CDATA[
+		(.+?)\s/\s(.+?)\s/\s
+	  ]]>
+	</set>
+	<set name="rx_ad_check">
+	  <![CDATA[
+		(<body\sclass="welcomeScreenBackground">)
+	  ]]>
+	</set>
+	
+	<set name="filmweb_url" value="http://www.filmweb.pl/search/film?q=${search.title:safe(utf-8)}" />
+	<if test='${search.year}!=0'>
+		<set name="filmweb_url" value="${filmweb_url}&amp;startYear=${search.year}&amp;endYear=${search.year}" />
+	</if>
+	<retrieve name="search_page" url="${filmweb_url}" allow_unsafe_header="true" />
+
+	<!-- if ad page try again -->
+	<parse name="check" input="${search_page}" regex="${rx_ad_check}" />
+	<if test='${check[0][0]}!='>
+		<retrieve name="search_page" url="${filmweb_url}" allow_unsafe_header="true" />
+	</if>
+	
+	<if test='${search_page}!='>
+		<parse name="returns" input="${search_page}" regex="${rx_search_return}" />
+		<loop name="return" on="returns">
+			<parse name="title_link" input="${return}" regex="${rx_title_link}" />
+			
+			<parse name="alt_check" input="${title_link[0][1]}" regex="${rx_alternate_check}" />
+			<if test='${alt_check[0][0]}!='>
+				<parse name="title_alternate" input="${title_link[0][1]} / " regex="${rx_title_alternate}" />
+				<set name='movietitle' value='${title_alternate[0][0]:striptags}' />
+				<set name='movie[${count}].title' value='${movietitle:htmldecode}' />
+
+				<set name='alternateTitle' value='${title_alternate[0][1]:striptags}' />
+				<set name='movie[${count}].alternate_titles' value='${alternateTitle:htmldecode}' />
+			</if>
+			<if test='${alt_check[0][0]}='>
+				<set name='movietitle' value='${title_link[0][1]:striptags}' />
+				<set name='movie[${count}].title' value='${movietitle:htmldecode}' />
+			</if>
+			<set name='alt_check[0][0]' value='' />
+			
+			<parse name="alternate" input="${return}" regex="${rx_alternate_title}" />
+			<if test='${alternate[0][0]}!='>
+				<replace name='alternate' input='${alternate[0][0]}' pattern='aka\:' with='' />
+				<set name='alternateTitle' value='${movie[${count}].alternate_titles}' />
+				<set name='alternate' value='${alternate:striptags}' />
+				<set name='movie[${count}].alternate_titles' value='${alternateTitle}|${alternate:htmldecode}' />
+			</if>
+			
+			<parse name="year" input="${return}" regex="${rx_year}" />
+			<if test='${year[0][0]}!='>
+				<set name='movie[${count}].year' value='${year[0][0]}' />
+			</if>
+			<set name="movie[${count}].site_id" value="${title_link[0][0]}"/>
+			<set name="movie[${count}].details_url" value="http://www.filmweb.pl${title_link[0][0]}"/>
+			<subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
+			
+		</loop>
+	</if>
+  </action>
+  
+    <action name="get_details">
+		<set name="rx_title_alternate_year">
+		  <![CDATA[
+			original\-title">\n\s*(?<orgTitle>[^<]*)[^\d]+(?<year>\d{4})
+		  ]]>
+		</set>
+		<set name="rx_directors">
+		  <![CDATA[
+			re.yseria.+?<td>(.+?)</td>
+		  ]]>
+		</set>
+		<set name="rx_writers">
+		  <![CDATA[
+			scenariusz.+?<td>(.+?)</td>
+		  ]]>
+		</set>
+		<set name="rx_subItem">
+		  <![CDATA[
+			<a[^>]+>(?<item>[^<]+)
+		  ]]>
+		</set>
+		<set name="rx_title">
+		  <![CDATA[
+			pageTitle">(?<title>.+?)</h1
+		  ]]>
+		</set>
+		<set name="rx_rating">
+		  <![CDATA[
+			<span\sclass="average">(?<rating>\d*|\d,\d)</span>
+		  ]]>
+		</set>
+		<set name="rx_genres">
+		  <![CDATA[
+			gatunek.+?<td>(.+?)</td>
+		  ]]>
+		</set>
+		<set name="rx_summary">
+		  <![CDATA[
+			filmDescrBg">(.+?)</span
+		  ]]>
+		</set>
+		<set name="rx_altTitle">
+		  <![CDATA[
+			inne\stytuly[^>]+>[^>]+>(?<altTitle>[^<]+)
+		  ]]>
+		</set>
+		<set name="rx_runtime">
+		  <![CDATA[
+			"time">(\d*)<
+		  ]]>
+		</set>
+		<set name="rx_actor_block">
+		  <![CDATA[
+			role\-actors">\n\s*aktor.+?<dd>(.+?)</dd>
+		  ]]>
+		</set>
+		<set name="rx_actor">
+		  <![CDATA[
+			<li.+?<span>([^<]+)
+		  ]]>
+		</set>
+		<set name="rx_ad_check">
+		  <![CDATA[
+			(<body\sclass="welcomeScreenBackground">)
+		  ]]>
+		</set>
+	
+		<if test='${movie.site_id}!='>
+			<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}" allow_unsafe_header="true" />
+
+			<!-- if ad page try again -->
+			<parse name="check" input="${details_page}" regex="${rx_ad_check}" />
+			<if test='${check[0][0]}!='>
+				<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}" allow_unsafe_header="true" />
+			</if>
+	
+			
+			<parse name="altTitleYear" input="${details_page}" regex="${rx_title_alternate_year}" />
+			<if test='${altTitleYear[0][0]}!='>
+				<set name='altTitle' value='${altTitleYear[0][0]:striptags}' />
+				<set name='movie.alternate_titles' value='${altTitleYear[0][0]:htmldecode}' />
+			</if>
+			<if test='${altTitleYear[0][1]}!='>
+				<set name='movie.year' value='${altTitleYear[0][1]}' />
+			</if>
+			
+			<parse name="title" input="${details_page}" regex="${rx_title}" />
+			<set name='movie.title' value='${title[0][0]:striptags}' />
+			<set name='movie.title' value='${movie.title:htmldecode}' />
+			
+			<parse name="rating" input="${details_page}" regex="${rx_rating}" />
+			<set name='movie.score' value='${rating[0][0]}' />
+			
+			<parse name="summary" input="${details_page}" regex="${rx_summary}" />
+			<set name='movie.summary' value='${summary[0][0]:striptags}' />
+			<set name='movie.summary' value='${movie.summary:htmldecode}' />
+			
+			<parse name="runtime" input="${details_page}" regex="${rx_runtime}" />
+			<set name='movie.runtime' value='${runtime[0][0]}' />
+			
+			<parse name="directors" input="${details_page}" regex="${rx_directors}" />
+			<parse name="directors" input="${directors[0][0]}" regex="${rx_subItem}" />
+			<loop name="director" on="directors">
+				<replace name='director[0]' input='${director[0]}' pattern=',' with='' />
+				<set name="movie.directors" value="${movie.directors}|${director[0]:htmldecode}"/>
+			</loop>
+			
+			<parse name="writers" input="${details_page}" regex="${rx_writers}" />
+			<parse name="writers" input="${writers[0][0]}" regex="${rx_subItem}" />
+			<loop name="writer" on="writers">
+				<if test='${writer[0]}!=(więcej...)'>
+					<replace name='writer[0]' input='${writer[0]}' pattern=',' with='' />
+					<set name="movie.writers" value="${movie.writers}|${writer[0]:htmldecode}"/>
+				</if>
+			</loop>
+			
+			<parse name="genres" input="${details_page}" regex="${rx_genres}" />
+			<parse name="genres" input="${genres[0][0]}" regex="${rx_subItem}" />
+			<loop name="genre" on="genres">
+				<replace name='genre[0]' input='${genre[0]}' pattern=',' with='' />
+				<set name="movie.genres" value="${movie.genres}|${genre[0]:htmldecode}"/>
+			</loop>
+			
+			<retrieve name="cast_page" url="http://www.filmweb.pl${movie.site_id}/cast" allow_unsafe_header="true" />
+			
+			<parse name="actors" input="${cast_page}" regex="${rx_actor_block}" />
+			<parse name="actors" input="${actors[0][0]}" regex="${rx_actor}" />
+			<loop name="actor" on="actors">
+				<if test='${count}&lt;6'>
+					<set name="movie.actors" value="${movie.actors}|${actor[0]:htmldecode}"/>
+				</if>
+			</loop>
+			
+		</if>
+	</action>
+	
+	<action name="get_cover_art">
+		<set name="rx_cover_art">
+		  <![CDATA[
+			</a>[^<]+<img\ssrc="(.+?\.2\.jpg)[^"]+"\salt="[^"]+"\sonclick
+		  ]]>
+		</set>
+		<set name="rx_ad_check">
+		  <![CDATA[
+			(<body\sclass="welcomeScreenBackground">)
+		  ]]>
+		</set>
+	
+		<if test='${movie.site_id}!='>
+			<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}/posters" allow_unsafe_header="true" />
+
+			<!-- if ad page try again -->
+			<parse name="check" input="${details_page}" regex="${rx_ad_check}" />
+			<if test='${check[0][0]}!='>
+				<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}/posters" allow_unsafe_header="true" />
+			</if>
+			
+			<parse name="cover_arts" input="${details_page}" regex="${rx_cover_art}" />
+			<loop name="cover_art" on="cover_arts">
+				<replace name='cover_art[0]' input='${cover_art[0]}' pattern='\.2\.' with='.3.' />
+				<set name='cover_art[${count}].url' value='${cover_art[0]}'/>
+			</loop>
+	
+		</if>	
+	</action>
+  </ScriptableScraper>
