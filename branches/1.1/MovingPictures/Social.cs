@@ -11,6 +11,7 @@ using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 using System.Linq;
 using MovingPicturesSocialAPI.Data;
 using Cornerstone.GUI.Dialogs;
+using CookComputing.XmlRpc;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class Social {
@@ -28,13 +29,22 @@ namespace MediaPortal.Plugins.MovingPictures {
                                                       MovingPicturesCore.Settings.SocialHashedPassword,
                                                       MovingPicturesCore.Settings.SocialUrl);
 
+                            if (_socialAPI == null) {
+                                logger.Error("Failed to log in to Moving Pictures Social: Invalid Username or Password!");
+                            }
+
                             if (_socialAPI != null) {
                                 _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
                                 _socialAPI.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(_socialAPI_ResponseEvent);
                             }
                         }
-                        catch (Exception ex){ 
-                            logger.Error("Failed to login to Moving Pictures Social: " + ex.Message);
+                        catch (Exception ex){
+                            if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Not Found")
+                                logger.Error("Failed to log in to Moving Pictures Social: Unable to connect to server!");
+                            else if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Forbidden")
+                                logger.Error("Failed to log in to Moving Pictures Social: This account is currently locked!");
+                            else
+                                logger.Error("Failed to log in to Moving Pictures Social, Unexpected Error: " + ex.Message);
                         }
                     }
                     return _socialAPI;

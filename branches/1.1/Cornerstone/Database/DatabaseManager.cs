@@ -222,6 +222,42 @@ namespace Cornerstone.Database {
             }
         }
 
+        public void Revert(DatabaseTable dbObject) {
+            if (dbObject == null || dbObject.RevertInProcess)
+                return;
+
+            dbObject.RevertInProcess = true;
+
+            // recursively revert any child objects
+            foreach (DBRelation currRelation in DBRelation.GetRelations(dbObject.GetType())) 
+                foreach (DatabaseTable subObj in currRelation.GetRelationList(dbObject))
+                    Revert(subObj);
+
+            // revert any objects directly linked to
+            foreach (DBField currField in DBField.GetFieldList(dbObject.GetType())) 
+                if (currField.DBType == DBField.DBDataType.DB_OBJECT) 
+                    Commit((DatabaseTable)currField.GetValue(dbObject));
+
+            // revert any modified relationships
+            foreach (DBRelation currRelation in DBRelation.GetRelations(dbObject.GetType()))
+                if (currRelation.GetRelationList(dbObject).CommitNeeded) {
+                    currRelation.GetRelationList(dbObject).Populated = false;
+                    getRelationData(dbObject, currRelation);
+                }
+
+            dbObject.RevertInProcess = false;
+
+            // if this object has never been committed or has not been changed, just quit
+            if (dbObject.ID == null || !dbObject.CommitNeeded)
+                return;
+
+            // regrab, copy values and reupdate cache
+            cache.Remove(dbObject);
+            DatabaseTable oldVersion = Get(dbObject.GetType(), (int)dbObject.ID);
+            dbObject.Copy(oldVersion);
+            cache.Replace(dbObject);
+        }
+
         public void Populate(IRelationList relationList) {
             getRelationData(relationList.Owner, relationList.MetaData);
         }
@@ -796,7 +832,6 @@ namespace Cornerstone.Database {
                        relation.TableName + " where " + relation.PrimaryColumnName + "=" + dbObject.ID;
 
             // and retireve relations
-            //logger.Debug("Getting Relation Data for " + dbObject.GetType().Name + "[" + dbObject.ID + "]" + relation.SecondaryType.Name + "::: " + selectQuery);
             SQLiteResultSet resultSet;
             lock (lockObject) resultSet = dbClient.Execute(selectQuery);
 

@@ -82,10 +82,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             // attach the filter, show the popup, and if necisarry, save the results
             popup.FilterPane.AttachedFilter = MovingPicturesCore.Settings.SocialSyncFilter;
-            popup.ShowDialog();
-            MovingPicturesCore.Settings.SocialSyncFilter.Commit();
+            DialogResult result = popup.ShowDialog();
+            if (result == DialogResult.OK) {
+                MovingPicturesCore.Settings.SocialSyncFilter.Commit();
+                Sync();
+            }
+            else
+                MovingPicturesCore.Settings.SocialSyncFilter.Revert();
 
-            Sync();
         }
 
         private void UpdateControls() {
