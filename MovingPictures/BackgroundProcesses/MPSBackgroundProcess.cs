@@ -42,6 +42,11 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
         public override void Work() {
             try {
+                if (MovingPicturesCore.Settings.SocialEnabled == false || MovingPicturesCore.Social.SocialAPI == null) {
+                    logger.Warn("Attempting to perform Moving Pictures Social actions when feature is disabled or when server is unavailable.");
+                    return;
+                }
+
                 switch (Action) {
                     case MPSActions.AddMoviesToCollection:
                         List<MpsMovie> movieDTOs = new List<MpsMovie>();
@@ -97,11 +102,11 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
 
                     case MPSActions.ProcessTaskList:
-                        logger.Debug("Getting task list from MPS");
+                        logger.Info("Getting task list from MPS");
                         List<TaskListItem> taskList = MovingPicturesCore.Social.SocialAPI.GetUserTaskList();
 
                         if (taskList.Count > 0) {
-                            logger.Debug("MPS Task list contains {0} items", taskList.Count);
+                            logger.Info("MPS Task list contains {0} items", taskList.Count);
                             List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
 
                             foreach (TaskListItem taskItem in taskList) {
@@ -154,7 +159,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                 }
             }
             catch (Exception ex) {
-                logger.ErrorException("", ex);
+                logger.ErrorException("Unexpected error connecting to Moving Pictures Social.\n", ex);
             }
 
         }

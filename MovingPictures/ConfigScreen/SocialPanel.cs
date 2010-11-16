@@ -116,7 +116,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 accountButton.Text = "Disconnect Account";
 
-                publicProfileCheckBox.Checked = !MovingPicturesCore.Social.SocialAPI.User.PrivateProfile;
+                try { publicProfileCheckBox.Checked = !MovingPicturesCore.Social.SocialAPI.User.PrivateProfile; }
+                catch { }
 
                 restrictSyncedMoviesCheckBox.Enabled = true;
                 publicProfileCheckBox.Enabled = true;

@@ -23,13 +23,18 @@ namespace MediaPortal.Plugins.MovingPictures {
             get {
                 lock (socialAPILock) {
                     if (_socialAPI == null) {
-                        _socialAPI = MpsAPI.Login(MovingPicturesCore.Settings.SocialUsername,
-                                                  MovingPicturesCore.Settings.SocialHashedPassword,
-                                                  MovingPicturesCore.Settings.SocialUrl);
+                        try {
+                            _socialAPI = MpsAPI.Login(MovingPicturesCore.Settings.SocialUsername,
+                                                      MovingPicturesCore.Settings.SocialHashedPassword,
+                                                      MovingPicturesCore.Settings.SocialUrl);
 
-                        if (_socialAPI != null) {
-                            _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
-                            _socialAPI.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(_socialAPI_ResponseEvent);
+                            if (_socialAPI != null) {
+                                _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
+                                _socialAPI.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(_socialAPI_ResponseEvent);
+                            }
+                        }
+                        catch (Exception ex){ 
+                            logger.Error("Failed to login to Moving Pictures Social: " + ex.Message);
                         }
                     }
                     return _socialAPI;
@@ -294,19 +299,26 @@ namespace MediaPortal.Plugins.MovingPictures {
             mpsMovie.Resources = "";
             mpsMovie.Locale = "";
             bool foundIMDB = false;
+
+            if (movie.PrimarySource != null && movie.PrimarySource.Provider != null)
+                mpsMovie.Locale = movie.PrimarySource.Provider.LanguageCode;
+
             foreach (DBSourceMovieInfo smi in movie.SourceMovieInfo) {
                 if (smi.Source == null || smi.Source.Provider == null)
                     continue;
+
                 mpsMovie.Resources += "|" 
                     + System.Web.HttpUtility.UrlEncode(smi.Source.Provider.Name)
                     + "="
                     + System.Web.HttpUtility.UrlEncode(smi.Identifier)
                     ;
-                if (smi.Source == movie.PrimarySource) {
-                    mpsMovie.Locale = smi.Source.Provider.LanguageCode;
-                }
+
                 if (smi.Source.Provider.Name.ToLower().Contains("imdb"))
                     foundIMDB = true;
+
+                if (string.IsNullOrEmpty(mpsMovie.Locale)) {
+                    mpsMovie.Locale = smi.Source.Provider.LanguageCode;
+                }
             }
 
             if (!foundIMDB) {
