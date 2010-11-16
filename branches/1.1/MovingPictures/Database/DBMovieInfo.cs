@@ -576,11 +576,11 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             try {
                 newCover = Image.FromFile(filename);
             }
-            catch (OutOfMemoryException e) {
-                logger.DebugException("Invalid image or image format not supported.", e);
+            catch (OutOfMemoryException) {
+                logger.Debug("Invalid image or image format not supported: " + filename);
             }
-            catch (FileNotFoundException e) {
-                logger.DebugException("File not found.", e);
+            catch (FileNotFoundException) {
+                logger.Debug("File not found: " + filename);
             }
 
             if (newCover == null) {

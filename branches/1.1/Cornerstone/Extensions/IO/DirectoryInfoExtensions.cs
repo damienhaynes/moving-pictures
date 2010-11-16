@@ -15,20 +15,21 @@ namespace Cornerstone.Extensions.IO {
         /// <param name="self"></param>
         /// <returns>True if available</returns>
         public static bool IsAccessible(this DirectoryInfo self) {
-            if (self.Exists) {
+            if (!self.Exists) 
+                return false;
 
-                if (!self.IsReparsePoint())
-                    return true;
+            // unless this is a special case path, trust the DirectoryInfo.Exists call
+            if (!self.IsReparsePoint() && !self.IsUncPath()) 
+                return true;
 
-                try {
-                    self.GetDirectories();
-                    // directory access successful, directory is available
-                    return true;
-                }
-                // ignore the exception, failure means it is not available 
-                catch (DirectoryNotFoundException) { }
+            // for special cases, attempt to get a directory listing, if this succeeds the path is online
+            try {
+                self.GetDirectories();
+                return true;
             }
-            return false;
+            catch (DirectoryNotFoundException) {
+                return false;
+            }
         }
 
         /// <summary>
