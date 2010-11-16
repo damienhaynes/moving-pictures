@@ -16,6 +16,13 @@ namespace Cornerstone.Database {
             cache = new Dictionary<Type, Dictionary<int, DatabaseTable>>();
         }
 
+        public bool Contains(DatabaseTable obj) {
+            if (obj == null || cache[obj.GetType()] == null)
+                return false;
+
+            return cache[obj.GetType()].ContainsValue(obj);
+        }
+
         public DatabaseTable Get(Type type, int id) {
             if (cache.ContainsKey(type) && cache[type].ContainsKey(id))
                 return cache[type][id];
@@ -70,6 +77,17 @@ namespace Cornerstone.Database {
                 return;
 
             cache[obj.GetType()].Remove((int)obj.ID);
+        }
+
+        // remove the existing object with the same ID from the cache and store this one instead.
+        public void Replace(DatabaseTable obj) {
+            if (obj == null || obj.ID == null)
+                return;
+
+            if (!cache.ContainsKey(obj.GetType()))
+                cache[obj.GetType()] = new Dictionary<int, DatabaseTable>();
+
+            cache[obj.GetType()][(int)obj.ID] = obj;
         }
 
         

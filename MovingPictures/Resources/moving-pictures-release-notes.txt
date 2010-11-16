@@ -26,6 +26,9 @@ Bug Fixes
 **********:     Improved logging and fixed a few bugs that occur when the MPS 
                 website is unavailable.
 
+**********:     Added cancel button to the Moving Pictures Social Synchronization
+                filter and the Parental Controls filter.				
+				
 **********:     Fixed bug causing movies on a UNC path to be removed from Moving 
                 Pictures when resuming from standby.
 

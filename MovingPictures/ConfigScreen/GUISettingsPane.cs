@@ -171,8 +171,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 Process.Start(processInfo);
             });
 
-            popup.ShowDialog();
-            MovingPicturesCore.Settings.ParentalControlsFilter.Commit();
+            DialogResult result = popup.ShowDialog();
+            if (result == DialogResult.OK)
+                MovingPicturesCore.Settings.ParentalControlsFilter.Commit();
+            else
+                MovingPicturesCore.Settings.ParentalControlsFilter.Revert();
         }
 
         private void parentalControlsCheckBox_CheckedChanged(object sender, EventArgs e) {
