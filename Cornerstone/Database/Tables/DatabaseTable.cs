@@ -38,6 +38,11 @@ namespace Cornerstone.Database.Tables {
             set { commitInProcess = value; }
         } protected bool commitInProcess = false;
 
+        public bool RevertInProcess {
+            get { return _revertInProcess; }
+            internal set { _revertInProcess = value; }
+        } protected bool _revertInProcess = false;
+
         public bool RetrievalInProcess {
             get;
             set;
@@ -150,6 +155,15 @@ namespace Cornerstone.Database.Tables {
             protectExistingValuesFromCopy = true;
         }
 
+        // Updates the current object with all fields in the newData object
+        public void Copy(DatabaseTable newData) {
+            if (newData == null) return;
+            ReadOnlyCollection<DBField> fieldList = DBField.GetFieldList(newData.GetType());
+
+            foreach (DBField currField in fieldList) 
+                currField.SetValue(this, currField.GetValue(newData));
+        }
+
         // initialize all values of the given object. essentially makes the object a new refernece
         // and a new row will be created if commited
         public void Clear() {
@@ -180,6 +194,11 @@ namespace Cornerstone.Database.Tables {
         public virtual void Commit() {
             if (DBManager != null)
                 DBManager.Commit(this);
+        }
+
+        public virtual void Revert() {
+            if (DBManager != null)
+                DBManager.Revert(this);
         }
 
         public virtual void Delete() {

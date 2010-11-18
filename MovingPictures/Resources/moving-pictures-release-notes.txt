@@ -1,4 +1,4 @@
-Moving Pictures 1.1.0
+Moving Pictures 1.1.1
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -15,6 +15,24 @@ Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 
 Change Log
+================================================================================
+1.1.1
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+**********:     Fixed bug causing some movies information to be submitted to MPS
+                with the wrong locale information.
+
+**********:     Improved logging and fixed a few bugs that occur when the MPS 
+                website is unavailable.
+
+**********:     Added cancel button to the Moving Pictures Social Synchronization
+                filter and the Parental Controls filter.				
+				
+**********:     Fixed bug causing movies on a UNC path to be removed from Moving 
+                Pictures when resuming from standby.
+
+
 ================================================================================
 1.1.0
 --------------------------------------------------------------------------------
