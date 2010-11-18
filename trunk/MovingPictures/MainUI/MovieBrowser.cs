@@ -35,6 +35,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region Properties
 
+        public bool RememberLastState
+        {
+            get{ return rememberLastState; }
+            set { rememberLastState = value; }
+        } private bool rememberLastState = false;
+
         /// <summary>
         /// Gets an object that can be used to synchronize access to the movie browser
         /// </summary>
@@ -61,6 +67,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     
                     // set the selected movie
                     selectedMovie = value;
+
+                    if (rememberLastState) _lastSelectedMovie = value;
 
                     // resets the selected movie to the first movie in the list
                     if (selectedMovie == null) {
@@ -113,8 +121,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return;
 
                 // update the state variables
-                if (currentView != value)
+                if (currentView != value) {
                     previousView = currentView;
+                    if (rememberLastState) _lastView = value;
+                }
                 
                 // Set view and reload it
                 currentView = value;
@@ -237,6 +247,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // set the new node as current node
                 _currentNode = value;
 
+                //set the new node as last node when mopi was not started in movie details view
+                if (rememberLastState) _lastNode = value;
+
                 // prepare settings for the new node
                 if (_currentNode != null) {
                     // add current node filters
@@ -293,6 +306,70 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             get { return _currentNode; }
         } public DBNode<DBMovieInfo> _currentNode;
+
+        /// <summary>
+        /// Returns the node that marks to topmost possible position in the categories-tree. When
+        /// this topmost level is reached (if TopLevelNode is null this is the root level) and the
+        /// user presses back the plugin will exit and return to the previous menu
+        /// </summary>
+        public DBNode<DBMovieInfo> TopLevelNode
+        {
+            set
+            {
+                _topLevelNode = value;
+            }
+            get { return _topLevelNode; }
+        } public DBNode<DBMovieInfo> _topLevelNode = null;
+
+        /// <summary>
+        /// Returns the view that is set as the topmost possible view. When this topmost view 
+        /// is reached (if this is the root level TopLevelView is BrowserViewMode.CATEGORIES)
+        /// and the user presses back the plugin will exit and return to the previous menu
+        /// </summary>
+        public BrowserViewMode TopLevelView
+        {
+            set
+            {
+                _topLevelView = value;
+            }
+            get { return _topLevelView; }
+        } public BrowserViewMode _topLevelView = BrowserViewMode.CATEGORIES;
+
+        /// <summary>
+        /// The last node before exiting the application (null if no history)
+        /// </summary>
+        public DBNode<DBMovieInfo> LastNode
+        {
+            set
+            {
+                _lastNode = value;
+            }
+            get { return _lastNode; }
+        }public DBNode<DBMovieInfo> _lastNode = null;
+
+        /// <summary>
+        /// The last view before exiting the plugin (BrowserViewMode.CATEGORIES if no history)
+        /// </summary>
+        public BrowserViewMode LastView
+        {
+            set
+            {
+                _lastView = value;
+            }
+            get { return _lastView; }
+        }public BrowserViewMode _lastView = BrowserViewMode.CATEGORIES;
+
+        /// <summary>
+        /// The last selected movie before exiting the plugin (null if no history)
+        /// </summary>
+        public DBMovieInfo LastSelectedMovie
+        {
+            set
+            {
+                _lastSelectedMovie = value;
+            }
+            get { return _lastSelectedMovie; }
+        }public DBMovieInfo _lastSelectedMovie = null;
 
         /// <summary>
         /// Returns the Categories Menu Node currently highlighted in the browser. This is a child of the
