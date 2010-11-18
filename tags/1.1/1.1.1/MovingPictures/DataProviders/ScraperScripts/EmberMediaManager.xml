@@ -1,0 +1,165 @@
+<ScriptableScraper>
+  <details>
+    <!-- These details are for display purposes only. -->
+    <name>Ember Media Manager (Local)</name>
+    <author>LRFalk01</author>
+    <description>This script pulls data from an Ember Media Manager NFO export.</description>
+    
+    <!-- 
+    These fields uniquely identify the script. The ID should never 
+    change and should be unique (no other script should use this ID). With
+    new versions of the script the version numbers should change. EVEN FOR 
+    MINOR CHANGES, you should change the version number if you are going to
+    disribute it to anyone but internal testers. The point number 
+    is for minor bug fix releases. Use it.
+    -->
+    <id>141416</id>
+    <version major="1" minor="0" point="2"/>
+    <published month="06" day="02" year="2010"/>
+    
+    <!--
+    These fields are used for categorization purposes. Seperate multiple 
+    types with a pipe | character.
+    -->
+    <type>MovieDetailsFetcher|MovieCoverFetcher|MovieBackdropFetcher</type>
+    <language>various</language>
+
+   </details>
+  
+  
+  <action name="search">
+	<!-- regex to check to see if this is an info file from Ember Media Manager -->
+	<set name="rx_file_check">
+	  <![CDATA[
+		(?<genres></title>[^<]+<originaltitle)
+	  ]]>
+	</set>
+	<set name="rx_year">
+	  <![CDATA[
+		(?<year>\d{4})
+	  ]]>
+	</set>
+	
+	<set name="filename" value="${search.basepath}\${search.filename_noext}" />
+	
+	<retrieve name="file" file="${filename}.nfo" encoding="UTF-8"/>
+	<parse name="fileCheck" input="${file}" regex="${rx_file_check}" />
+	<if test='${fileCheck[0][0]}!='>
+		<parse name="result" input="${file}" xpath="//movie" />
+		
+		<set name="movie[0].title" value="${result[0].title}" />
+		
+		<!-- by setting the alternative title to the search title we garantee a match-->
+		<set name="movie[0].alternate_titles" value="|${search.title}|"/>
+		<if test='${result[0].originaltitle}!=${result[0].title}'>
+			<set name="movie[0].alternate_titles" value="${movie[0].alternate_titles}|${result[0].originaltitle}|"/>
+		</if>		
+
+		<set name="year" value="${result[0].releasedate}" />
+		<parse name="yearCheck" input="${year}" regex="${rx_year}" />
+		<if test='${yearCheck[0][0]}!='>
+			<set name="movie[0].year" value="${yearCheck[0][0]}" />
+		</if>
+		
+		<set name="movie[0].popularity" value="100"/>
+		  
+		<!-- we set the filename as the site id -->
+		<set name="movie[0].site_id" value="${filename}"/>
+	</if>
+  </action>
+  
+    <action name="get_details">
+		
+    <if test='${movie.site_id}!='>
+			<set name="rx_split">
+			  <![CDATA[
+			  (?<split>[^/]+)/
+			  ]]>
+			</set>
+			
+			<set name="rx_imdb">
+			  <![CDATA[
+			  (?<imdb>tt\d{7})
+			  ]]>
+			</set>
+			
+			<set name="rx_runtime">
+			  <![CDATA[
+			  (?<runtime>\d+)
+			  ]]>
+			</set>
+			<set name="rx_certification">
+			  <![CDATA[
+				\:(?<certification>[^<]+)
+			  ]]>
+			</set>
+			
+			<retrieve name="file" file="${movie.site_id}.nfo" encoding="UTF-8"/>
+			<parse name="result" input="${file}" xpath="//movie" />
+			
+			<set name="movie.title" value="${result[0].title}" />
+			
+			<set name="year" value="${result[0].releasedate}" />
+			<parse name="yearCheck" input="${year}" regex="${rx_year}" />
+			<if test='${yearCheck[0][0]}!='>
+				<set name="movie.year" value="${yearCheck[0][0]}" />
+			</if>
+		
+			
+			<set name='movie.score' value='${result[0].rating}' />
+			<set name='movie.votes' value='${result[0].votes}' />
+			<set name='movie.summary' value='${result[0].plot:htmldecode}' />
+			<set name='movie.tagline' value='${result[0].tagline:htmldecode}' />
+			
+			<parse name="directors" input="${result[0].director}/" regex="${rx_split}"/>
+			<set name="movie.directors" value=""/>
+			<loop name="director" on="directors">
+				<set name="movie.directors" value="${movie.directors}|${director[0]:htmldecode}"/>
+			</loop>
+
+			<parse name="certification" input="${result[0].certification}" regex="${rx_certification}"/>
+			<set name='movie.certification' value='${certification[0][0]}' />
+			
+			<parse name="runtime" input="${result[0].runtime}" regex="${rx_runtime}"/>
+			<set name='movie.runtime' value='${runtime[0][0]}' />
+			
+			<set name='movie.imdb_id' value='${result[0].id}' />
+			<if test="${movie.imdb_id}=">
+				<parse name="imdbid" input="${file}" regex="${rx_imdb}" />
+				<if test='${imdbid[0][0]}!='>
+					<set name='movie.imdb_id' value='${imdbid[0][0]}' />
+				</if>
+			</if>
+			
+			<parse name="genres" input="${result[0].genre}/" regex="${rx_split}"/>
+			<set name="movie.genres" value=""/>
+			<loop name="genre" on="genres">
+				<set name="movie.genres" value="${movie.genres}|${genre[0]:htmldecode}"/>
+			</loop>
+
+			<parse name="writers" input="${result[0].credits}/" regex="${rx_split}"/>
+			<set name="movie.writers" value=""/>
+			<loop name="writer" on="writers">
+				<if test='${writer[0]:htmldecode}!= See more'>
+					<set name="movie.writers" value="${movie.writers}|${writer[0]:htmldecode}"/>
+				</if>
+			</loop>
+
+			<parse name="actors" input="${file}" xpath="//movie/actor/name"/>
+			 <set name="movie.actors" value="" />
+			<loop name="actor" on="actors">
+				<set name="movie.actors" value="${movie.actors}|${actor:htmldecode}"/>
+			</loop> 
+		</if>
+	</action>
+	<action name="get_cover_art">
+		<if test='${movie.site_id}!='>
+			<set name="cover_art[0].file" value="${movie.site_id}.tbn" />
+		</if>	
+	</action>
+	<action name="get_backdrop">
+		<if test='${movie.site_id}!='>
+			<set name="backdrop[0].file" value="${movie.site_id}-fanart.jpg" />
+		</if>	
+	</action>
+  </ScriptableScraper>
