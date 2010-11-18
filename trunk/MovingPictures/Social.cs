@@ -11,6 +11,7 @@ using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 using System.Linq;
 using MovingPicturesSocialAPI.Data;
 using Cornerstone.GUI.Dialogs;
+using CookComputing.XmlRpc;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class Social {
@@ -23,13 +24,27 @@ namespace MediaPortal.Plugins.MovingPictures {
             get {
                 lock (socialAPILock) {
                     if (_socialAPI == null) {
-                        _socialAPI = MpsAPI.Login(MovingPicturesCore.Settings.SocialUsername,
-                                                  MovingPicturesCore.Settings.SocialHashedPassword,
-                                                  MovingPicturesCore.Settings.SocialUrl);
+                        try {
+                            _socialAPI = MpsAPI.Login(MovingPicturesCore.Settings.SocialUsername,
+                                                      MovingPicturesCore.Settings.SocialHashedPassword,
+                                                      MovingPicturesCore.Settings.SocialUrl);
 
-                        if (_socialAPI != null) {
-                            _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
-                            _socialAPI.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(_socialAPI_ResponseEvent);
+                            if (_socialAPI == null) {
+                                logger.Error("Failed to log in to Moving Pictures Social: Invalid Username or Password!");
+                            }
+
+                            if (_socialAPI != null) {
+                                _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
+                                _socialAPI.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(_socialAPI_ResponseEvent);
+                            }
+                        }
+                        catch (Exception ex){
+                            if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Not Found")
+                                logger.Error("Failed to log in to Moving Pictures Social: Unable to connect to server!");
+                            else if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Forbidden")
+                                logger.Error("Failed to log in to Moving Pictures Social: This account is currently locked!");
+                            else
+                                logger.Error("Failed to log in to Moving Pictures Social, Unexpected Error: " + ex.Message);
                         }
                     }
                     return _socialAPI;
@@ -294,19 +309,26 @@ namespace MediaPortal.Plugins.MovingPictures {
             mpsMovie.Resources = "";
             mpsMovie.Locale = "";
             bool foundIMDB = false;
+
+            if (movie.PrimarySource != null && movie.PrimarySource.Provider != null)
+                mpsMovie.Locale = movie.PrimarySource.Provider.LanguageCode;
+
             foreach (DBSourceMovieInfo smi in movie.SourceMovieInfo) {
                 if (smi.Source == null || smi.Source.Provider == null)
                     continue;
+
                 mpsMovie.Resources += "|" 
                     + System.Web.HttpUtility.UrlEncode(smi.Source.Provider.Name)
                     + "="
                     + System.Web.HttpUtility.UrlEncode(smi.Identifier)
                     ;
-                if (smi.Source == movie.PrimarySource) {
-                    mpsMovie.Locale = smi.Source.Provider.LanguageCode;
-                }
+
                 if (smi.Source.Provider.Name.ToLower().Contains("imdb"))
                     foundIMDB = true;
+
+                if (string.IsNullOrEmpty(mpsMovie.Locale)) {
+                    mpsMovie.Locale = smi.Source.Provider.LanguageCode;
+                }
             }
 
             if (!foundIMDB) {

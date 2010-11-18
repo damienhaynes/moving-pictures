@@ -24,12 +24,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             set;
         }
 
-        public bool ExitOk {
-            get {
-                return _exitOk;
-            }
-        } private bool _exitOk;
-
         public FilterEditorPane FilterPane {
             get {
                 return filterEditorPane1;
@@ -50,12 +44,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
         }
 
         private void okButton_Click(object sender, EventArgs e) {
-            _exitOk = true;
             Close();
         }
 
         private void cancelButton_Click(object sender, EventArgs e) {
-            _exitOk = false;
             Close();
         }
 
