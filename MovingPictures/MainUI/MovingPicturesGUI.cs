@@ -20,6 +20,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.MainUI.Filters;
+using MediaPortal.Plugins.MovingPictures.Extensions;
 using MediaPortal.Profile;
 using MediaPortal.Util;
 using MediaPortal.Ripper;
@@ -27,12 +28,13 @@ using NLog;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Media.Animation;
+using System.Reflection;
 
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class MovingPicturesGUI : GUIWindow {
         public enum DiskInsertedAction { PLAY, DETAILS, NOTHING }
-		
+
         #region Private Variables
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -47,14 +49,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private readonly object propertySync = new object();
         CachedDictionary<DBNode<DBMovieInfo>, DBMovieInfo> activeMovieLookup = new CachedDictionary<DBNode<DBMovieInfo>, DBMovieInfo>();
         private readonly object backdropSync = new object();
-        
+
 
         private bool loaded = false;
 
         GUIDialogProgress initDialog;
         private bool initComplete = false;
         private string initProgressLastAction = string.Empty;
-        private int initProgressLastPercent = 0;     
+        private int initProgressLastPercent = 0;
         private Thread initThread;
         private bool preventDialogOnLoad = false;
 
@@ -71,6 +73,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private double lastPublished = 0;
         private Timer publishTimer;
         private Timer parentalFilterTimer;
+
+        private string lastParsedParam = "";
 
         #endregion
 
@@ -135,16 +139,61 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #endregion
 
+
         public MovingPicturesGUI() {
         }
 
-        ~MovingPicturesGUI() {      }
+        ~MovingPicturesGUI() { }
 
         public bool IsActive {
             get {
                 return (GetID == GUIWindowManager.ActiveWindow);
             }
         }
+
+        public string UnparsedLoadParameter {
+            get {
+                FieldInfo method = typeof(GUIWindow).GetField("_loadParameter", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (method == null) return null;
+
+                return (string) method.GetValue(this);
+            }
+        } 
+
+        /// <summary>
+        /// The movie passed to Moving Pictures when the plugin window was activated.
+        /// </summary>
+        public DBMovieInfo MovieLoadParamater {
+            get {
+                if (lastParsedParam != UnparsedLoadParameter) 
+                    ParseParameters();
+                    
+                return _movieLoadParamater;
+            }
+
+            internal set {
+                _movieLoadParamater = value;
+            }
+        } 
+        private DBMovieInfo _movieLoadParamater = null;
+        
+
+        /// <summary>
+        /// The category passed to Moving Pictures when the plugin window was activated.
+        /// </summary>
+        public DBNode<DBMovieInfo> CategoryLoadParamater {
+            get {
+                if (lastParsedParam != UnparsedLoadParameter) 
+                    ParseParameters();
+
+                return _categoryLoadParamater;
+            }
+
+            internal set {
+                _categoryLoadParamater = value;
+            }
+        } 
+        private DBNode<DBMovieInfo> _categoryLoadParamater = null;
 
         private void ClearFocus() {
             foreach (System.Windows.UIElement currControl in this.controlList) {
@@ -215,7 +264,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void OnBrowserContentsChanged() {
             // update properties
             PublishViewDetails();
-            
+
             // publish current node settings if any
             if (browser.CurrentNode != null) {
                 PublishDetails(browser.CurrentNode, "CurrentNode");
@@ -224,7 +273,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else {
                 SetProperty("#MovingPictures.CurrentNode.name", MovingPicturesCore.Settings.HomeScreenName);
             }
-            
+
             // set the label for the remoteFiltering indicator
             if (remoteFilteringIndicator != null && remoteFilter.Active) {
                 SetProperty("#MovingPictures.Filter.Label", remoteFilter.Text);
@@ -282,7 +331,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // get last active module settings 
             bool lastActiveModuleSetting = MovingPicturesCore.MediaPortalSettings.GetValueAsBool("general", "showlastactivemodule", false);
-            int lastActiveModule = MovingPicturesCore.MediaPortalSettings.GetValueAsInt("general", "lastactivemodule", -1); 
+            int lastActiveModule = MovingPicturesCore.MediaPortalSettings.GetValueAsInt("general", "lastactivemodule", -1);
             preventDialogOnLoad = (lastActiveModuleSetting && (lastActiveModule == GetID));
 
             // set some skin properties
@@ -309,8 +358,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 initThread.Abort();
                 // wait for the thread to be aborted
                 initThread.Join();
-            }    
-        
+            }
+
             MovingPicturesCore.Shutdown();
             initComplete = false;
             logger.Info("GUI Deinitialization Complete");
@@ -318,7 +367,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         protected override void OnPageLoad() {
             logger.Debug("OnPageLoad() Started.");
-            
+
             // if the component didn't load properly we probably have a bad skin file
             if (facade == null) {
                 // avoid showing a dialog on load when we are the last active module being started
@@ -335,7 +384,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 GUIWindowManager.ShowPreviousWindow();
                 return;
             }
-            
+
             // Check whether the plugin is initialized.
             if (!initComplete) {
 
@@ -349,15 +398,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // if we are not initialized yet show a loading dialog
                 // this will 'block' untill loading has finished or the user 
                 // pressed cancel or ESC
-                showLoadingDialog();                
-                
+                showLoadingDialog();
+
                 // if the initialization is not complete the user cancelled
                 if (!initComplete) {
                     // return to where the user came from
                     GUIWindowManager.ShowPreviousWindow();
                     return;
                 }
-            }            
+            }
 
             // notify if the skin doesnt support categories
             if (categoriesFacade == null && MovingPicturesCore.Settings.CategoriesEnabled) {
@@ -386,7 +435,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
                 GUIWindowManager.ShowPreviousWindow();
                 return;
-            }            
+            }
+
+            // if we were passed a parameter we cant parse, exit back
+            if (MovieLoadParamater == null && CategoryLoadParamater == null && !string.IsNullOrEmpty(UnparsedLoadParameter)) {
+                logger.Warn("Moving Pictures can not understand the following paramater: " + UnparsedLoadParameter);
+                GUIWindowManager.ShowPreviousWindow();           
+            }
 
             if (browser == null) {
                 browser = new MovieBrowser(skinSettings);
@@ -426,7 +481,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 PublishFilterDetails();
             }
 
-            if (recentInsertedDiskSerials == null) {              
+            if (recentInsertedDiskSerials == null) {
                 // Also listen to new movies added as part of the autoplay/details functionality
                 if (diskInsertedAction != DiskInsertedAction.NOTHING) {
                     recentInsertedDiskSerials = new Dictionary<string, string>();
@@ -444,29 +499,69 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             browser.Facade = facade;
             browser.CategoriesFacade = categoriesFacade;
 
-            // first time setup tasks
-            if (!loaded) {
-                if (browser.CategoriesAvailable)
-                    browser.CurrentNode = null;
-                else
+            // we are supposed to launch on a movie page, pass this to movie browser
+            if (MovieLoadParamater != null) {
+                browser.RememberLastState = false;
+
+                browser.SelectedMovie = MovieLoadParamater;
+                browser.CurrentView = BrowserViewMode.DETAILS;
+                browser.TopLevelView = BrowserViewMode.DETAILS;
+            }
+
+            // we are supposed to launch on a category page, pass this to movie browser
+            else if (CategoryLoadParamater != null && browser.CategoriesAvailable) {
+                browser.RememberLastState = true;
+
+                browser.TopLevelNode = CategoryLoadParamater;
+                browser.CurrentNode = CategoryLoadParamater;
+
+                if (CategoryLoadParamater.HasChildren) {
+                    browser.TopLevelView = BrowserViewMode.CATEGORIES;
+                    browser.CurrentView = BrowserViewMode.CATEGORIES;
+                }
+                else {
+                    browser.TopLevelView = browser.DefaultView;
                     browser.CurrentView = browser.DefaultView;
+                }
+
                 loaded = true;
                 preventDialogOnLoad = false;
-            } 
-            else {
-                // if we have loaded before, reload the view
-                browser.ReloadView();          
+
             }
-            
+
+            // standard loading logic
+            else {
+                if (browser.CategoriesAvailable || browser.LastView != BrowserViewMode.CATEGORIES) {
+                    browser.TopLevelView = BrowserViewMode.CATEGORIES;
+                    browser.TopLevelNode = null;
+                    browser.RememberLastState = true;
+
+                    if (browser.LastView == BrowserViewMode.DETAILS) {
+                        browser.SelectedMovie = browser.LastSelectedMovie;
+                        browser.CurrentView = BrowserViewMode.DETAILS;
+                    }
+                    else {
+                        browser.SelectedMovie = browser.LastSelectedMovie;
+                        browser.CurrentNode = browser.LastNode;
+                        browser.CurrentView = browser.LastView;
+                    }
+                }
+                else {
+                    //the skin doesn't support categories
+                    browser.CurrentNode = null;
+                    browser.CurrentView = browser.DefaultView;
+                }
+            }
+
             // Enable browser auto-refresh
             browser.AutoRefresh = true;
-            
+
             setWorkingAnimationStatus(false);
             if (movieStartIndicator != null)
                 movieStartIndicator.Visible = false;
 
             // Take control and disable MediaPortal AutoPlay when the plugin has focus
-            disableNativeAutoplay();            
+            disableNativeAutoplay();
 
             if (awaitingUserRatingMovie != null) {
                 GetUserRating(awaitingUserRatingMovie);
@@ -474,6 +569,78 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             logger.Debug("OnPageLoad() Ended.");
+        }
+
+        /// <summary>
+        /// If functionality is available, parses paramaters from GUIWindow.LoadParamater
+        /// </summary>
+        /// <param name="parameterString">String that should be parsed</param>
+        private void ParseParameters() {
+            // if we cant load params or there is no param passed, quit
+            if (string.IsNullOrEmpty(UnparsedLoadParameter)) {
+                MovieLoadParamater = null;
+                CategoryLoadParamater = null;
+                return;
+            }
+
+            try {
+                foreach (String currParam in UnparsedLoadParameter.Split('|')) {
+                    String[] keyValue = currParam.Split(':');
+                    String key = keyValue[0];
+                    String value = keyValue[1];
+
+                    try {
+                        switch (key) {
+                            case "categoryid":
+                                CategoryLoadParamater = MovingPicturesCore.DatabaseManager.Get<DBNode<DBMovieInfo>>(Int32.Parse(value));
+                                break;
+                            case "categoryname":
+                                CategoryLoadParamater = GetCategoryByName(value);
+                                break;
+                            case "movieid":
+                                MovieLoadParamater = DBMovieInfo.Get(Int32.Parse(value));
+                                break;
+                        }
+                    }
+                    catch (FormatException) {
+                        logger.Warn("Received invalid parameter: " + currParam);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                logger.ErrorException("Unexpected error parsing paramater: " + UnparsedLoadParameter, ex);
+            }
+            
+
+        }
+
+        /// <summary>
+        /// Finds a menu level by it's name.
+        /// </summary>
+        /// <param name="categoryName">Name of the category</param>
+        /// <returns>The first match found or null if nothing is found</returns>
+        private DBNode<DBMovieInfo> GetCategoryByName(string categoryName) {
+            return GetCategoryByName(MovingPicturesCore.Settings.CategoriesMenu.RootNodes, categoryName);
+        }
+
+        /// <summary>
+        /// Finds a menu level by it's name
+        /// </summary>
+        /// <param name="nodeList">List of the root nodes where the search is started</param>
+        /// <param name="categoryName">Name of the category</param>
+        /// <returns>The first match found or null if nothing is found</returns>
+        private DBNode<DBMovieInfo> GetCategoryByName(List<DBNode<DBMovieInfo>> nodeList, string categoryName) {
+            for (int i = 0; i < nodeList.Count; i++) {
+                if (nodeList[i].Name.Equals(categoryName)) {
+                    return nodeList[i];
+                }
+
+                if (nodeList[i].HasChildren) {
+                    DBNode<DBMovieInfo> result = GetCategoryByName(nodeList[i].Children, categoryName);
+                    if (result != null) return result;
+                }
+            }
+            return null;
         }
 
         protected override void OnPageDestroy(int new_windowId) {
@@ -581,21 +748,37 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     GUIWindowManager.ShowPreviousWindow();
                     break;
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PREVIOUS_MENU:
-                    
-                    if (browser.CurrentView == BrowserViewMode.DETAILS)
-                        // return to the one of the facade screens
-                        browser.CurrentView = browser.PreviousView;
-                    else if (remoteFilter.Active)
+
+                    if (browser.CurrentView == BrowserViewMode.DETAILS) {
+                        if (browser.TopLevelView == BrowserViewMode.DETAILS) {
+                            //the skin opened movingpictures to show movie details -> return to mp on back
+                            browser.SelectedMovie = null;
+                            GUIWindowManager.ShowPreviousWindow();
+                        }
+                        else {
+                            // return to the one of the facade screens
+                            browser.CurrentView = browser.PreviousView;
+                        }
+                    }
+                    else if (remoteFilter.Active) {
                         // if a remote filter is active remove it
                         remoteFilter.Clear();
-                    else if (browser.CategoriesAvailable && browser.CurrentNode != null)
+                    }
+                    else if (browser.CategoriesAvailable && browser.CurrentNode != null && browser.CurrentNode != browser.TopLevelNode) {
                         // go to the parent category
                         browser.CurrentNode = browser.CurrentNode.Parent;
-                    else
-                        // show previous screen (exit the plug-in
+                    }
+                    else {
+                        // The user presses back in the topmost node -> clear the history and exit
+                        browser.LastNode = null;
+                        browser.LastView = BrowserViewMode.CATEGORIES;
+                        browser.LastSelectedMovie = null;
+                        browser.SelectedMovie = null;
+                        // show previous screen (exit the plug-in)
                         GUIWindowManager.ShowPreviousWindow();
+                    }
 
-                        break;
+                    break;
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PLAY:
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_MUSIC_PLAY:
                     // don't be confused, this in some cases is the generic PLAY action
@@ -609,7 +792,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         bool changedFilter = false;
                         if (action.m_key != null)
                             changedFilter = remoteFilter.KeyPress((char)action.m_key.KeyChar);
-                        
+
                         // if update failed (an incorrect key press?) use standard key processing
                         if (!changedFilter)
                             base.OnAction(action);
@@ -657,15 +840,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void ResetParentalFilterTimer() {
-            if (MovingPicturesCore.Settings.ParentalControlsEnabled 
-                && parentalControlsFilter.Active == false 
+            if (MovingPicturesCore.Settings.ParentalControlsEnabled
+                && parentalControlsFilter.Active == false
                 && MovingPicturesCore.Settings.ParentalControlsTimeout > 0
                 && !moviePlayer.IsPlaying
                 ) {
                 if (parentalFilterTimer == null) {
                     parentalFilterTimer = new Timer(delegate {
-                            logger.Info("Reactivating parental filter after {0} minutes idle", MovingPicturesCore.Settings.ParentalControlsTimeout);
-                            parentalControlsFilter.Active = true;
+                        logger.Info("Reactivating parental filter after {0} minutes idle", MovingPicturesCore.Settings.ParentalControlsTimeout);
+                        parentalControlsFilter.Active = true;
                     }, null, MovingPicturesCore.Settings.ParentalControlsTimeout * 60 * 1000, Timeout.Infinite);
                 }
                 else {
@@ -699,7 +882,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Update the progress variables
             if (percentDone == 100) {
                 actionName = "Loading GUI ...";
-            }            
+            }
             initProgressLastAction = actionName;
             initProgressLastPercent = percentDone;
 
@@ -746,7 +929,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 cover.Property = "#MovingPictures.Coverart";
                 cover.Delay = artworkDelay;
 
-                
+
 
                 // instantiate player
                 moviePlayer = new MoviePlayer(this);
@@ -880,7 +1063,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
 
                 if (browser.CurrentNode != null) {
-                    foreach (DBFilter<DBMovieInfo> currFilter in browser.CurrentNode.GetAllFilters()) 
+                    foreach (DBFilter<DBMovieInfo> currFilter in browser.CurrentNode.GetAllFilters())
                         availableMovies = currFilter.Filter(availableMovies);
                 }
             }
@@ -1061,7 +1244,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (dialog.SelectedId == filmItem.ItemId) {
                 browser.CurrentView = BrowserViewMode.FILMSTRIP;
-            } 
+            }
         }
 
         private void showDetailsContext() {
@@ -1157,7 +1340,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 logger.Info("Marking '{0}' as unwatched.", selectedMovie.Title);
                 updateMovieWatchedCount(selectedMovie, 0);
                 browser.SelectedIndex = selectedIndex;
-               
+
             }
             else if (dialog.SelectedId == watchedItem.ItemId) {
                 logger.Info("Marking '{0}' as watched.", selectedMovie.Title);
@@ -1178,12 +1361,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private bool GetUserRating(DBMovieInfo movie) {
             GUIGeneralRating ratingDlg = (GUIGeneralRating)GUIWindowManager.GetWindow(GUIGeneralRating.ID);
             ratingDlg.Reset();
-			ratingDlg.SetHeading(Translation.RateHeading);
+            ratingDlg.SetHeading(Translation.RateHeading);
             ratingDlg.SetLine(1, String.Format(Translation.SelectYourRating, movie.Title));
-            DBUserMovieSettings userMovieSettings = movie.ActiveUserSettings;			
+            DBUserMovieSettings userMovieSettings = movie.ActiveUserSettings;
             ratingDlg.Rating = userMovieSettings.UserRating.GetValueOrDefault(3);
-			ratingDlg.DisplayStars = GUIGeneralRating.StarDisplay.FIVE_STARS;
-			SetRatingDescriptions(ratingDlg);
+            ratingDlg.DisplayStars = GUIGeneralRating.StarDisplay.FIVE_STARS;
+            SetRatingDescriptions(ratingDlg);
 
             try {
                 ratingDlg.DoModal(GetID);
@@ -1199,14 +1382,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return ratingDlg.IsSubmitted;
         }
 
-		private void SetRatingDescriptions(GUIGeneralRating ratingDlg) {
-			ratingDlg.FiveStarRateOneDesc = Translation.RateFiveStarOne;
-			ratingDlg.FiveStarRateTwoDesc = Translation.RateFiveStarTwo;
-			ratingDlg.FiveStarRateThreeDesc = Translation.RateFiveStarThree;
-			ratingDlg.FiveStarRateFourDesc = Translation.RateFiveStarFour;
-			ratingDlg.FiveStarRateFiveDesc = Translation.RateFiveStarFive;
-			return;
-		}
+        private void SetRatingDescriptions(GUIGeneralRating ratingDlg) {
+            ratingDlg.FiveStarRateOneDesc = Translation.RateFiveStarOne;
+            ratingDlg.FiveStarRateTwoDesc = Translation.RateFiveStarTwo;
+            ratingDlg.FiveStarRateThreeDesc = Translation.RateFiveStarThree;
+            ratingDlg.FiveStarRateFourDesc = Translation.RateFiveStarFour;
+            ratingDlg.FiveStarRateFiveDesc = Translation.RateFiveStarFive;
+            return;
+        }
 
         private void toggleParentalControls() {
             if (!MovingPicturesCore.Settings.ParentalControlsEnabled) {
@@ -1442,14 +1625,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 enableNativeAutoplay();
 
             ResetParentalFilterTimer();
-        }           
+        }
 
         private void onMovieEnded(DBMovieInfo movie) {
-            
+
             // Rating
             if (MovingPicturesCore.Settings.AutoPromptForRating)
                 awaitingUserRatingMovie = movie;
-            
+
             // Reapply Filters
             browser.UpdateListColors(movie);
             browser.ReapplyFilters();
@@ -1537,7 +1720,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // Clear recent disc information
                 logger.Debug("Resetting Recent Disc Information.");
-                recentInsertedDiskSerials.Clear();                
+                recentInsertedDiskSerials.Clear();
 
                 // DVD / Blu-ray 
                 // Try to grab a valid video path from the disc
@@ -1551,14 +1734,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 if (localMedia.IsVideoDisc) {
 
-                    logger.Info("Video Disc Detected.");                 
-                    
+                    logger.Info("Video Disc Detected.");
+
                     // For DVDs we have to make sure this is the correct
                     // media file, a simple availability check will point out 
                     // if we should requery the database using the discid
                     if (!localMedia.IsAvailable)
                         localMedia = DBLocalMedia.GetDisc(moviePath, localMedia.VideoFormat.GetIdentifier(moviePath));
-                    
+
                     if (localMedia.ID != null) {
 
                         if (localMedia.AttachedMovies.Count > 0) {
@@ -1581,7 +1764,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         }
 
-        private void OnVolumeRemoved(string volume, string serial) {            
+        private void OnVolumeRemoved(string volume, string serial) {
             // if we are playing something from this volume stop it
             if (moviePlayer.IsPlaying)
                 if (moviePlayer.CurrentMedia.DriveLetter == volume)
@@ -1607,7 +1790,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             try {
                 lock (propertySync) {
-                   
+
                     if (loggedProperties == null)
                         loggedProperties = new Dictionary<string, bool>();
 
@@ -1659,11 +1842,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Publish instantly when previous request has passed the required delay
             if (MovingPicturesCore.Settings.DetailsLoadingDelay < (int)(tickCount - lastPublished)) {
                 lastPublished = tickCount;
-                
+
                 // publish using the threadpool (experimental tweak!)
                 MoviePublishWorker publisher = new MoviePublishWorker(PublishMovieDetails);
                 publisher.BeginInvoke(movie, null, null);
-                return;          
+                return;
             }
 
             // Publish on timer using the delay specified in settings
@@ -1674,10 +1857,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else {
                 publishTimer.Change(MovingPicturesCore.Settings.DetailsLoadingDelay, Timeout.Infinite);
-            }           
-            
+            }
+
         }
-        
+
         /// <summary>
         /// Publishes movie details to the skin instantly
         /// </summary>
@@ -1718,7 +1901,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 selectedMovieWatchedIndicator.Visible = false;
                 if (movie != null && movie.ActiveUserSettings != null)
                     if (movie.ActiveUserSettings.WatchedCount > 0)
-                        selectedMovieWatchedIndicator.Visible = true;             
+                        selectedMovieWatchedIndicator.Visible = true;
             }
 
             PublishArtwork(movie);
@@ -1814,9 +1997,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
 
                     float score = (float)currField.GetValue(obj);
-                    int percentage = (int) Math.Floor((score * 10));
-                    int major = (int) Math.Floor(score);
-                    int minor = (int) Math.Floor(((score - major) * 10));
+                    int percentage = (int)Math.Floor((score * 10));
+                    int major = (int)Math.Floor(score);
+                    int minor = (int)Math.Floor(((score - major) * 10));
                     int rounded = (int)(score + 0.5f);
 
                     NumberFormatInfo localizedScoreFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
@@ -1855,17 +2038,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         // convert from minutes to seconds
                         seconds = (movie.Runtime * 60);
                     }
-                    
+
                     // Publish the runtime
-                    PublishRuntime(seconds, actualRuntime, "#MovingPictures." + prefix + ".runtime.", forceLogging);         
-                    
+                    PublishRuntime(seconds, actualRuntime, "#MovingPictures." + prefix + ".runtime.", forceLogging);
+
                 }
                 // for the popularity we add a localized property to make it easier to read in skins
-                else if (currField.FieldName == "popularity" && tableType == typeof(DBMovieInfo)){
+                else if (currField.FieldName == "popularity" && tableType == typeof(DBMovieInfo)) {
                     propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
 
                     int popularity = (int)currField.GetValue(obj);
-                    
+
                     NumberFormatInfo localizedScoreFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
                     localizedScoreFormat.NumberDecimalDigits = 0;
 
@@ -1911,7 +2094,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             string bcPrefix = labelPrefix.Replace(".runtime.", ".extra.runtime.");
 
             // create the time components
-            int hours = (totalSeconds / 3600); 
+            int hours = (totalSeconds / 3600);
             int minutes = ((totalSeconds / 60) % 60);
             int seconds = (totalSeconds % 60);
             int totalMinutes = (totalSeconds / 60);
@@ -1968,9 +2151,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     valueStr = hourLocalized;
             } else { // display minutes
                 valueStr = minLocalized;
-            }            
+            }
             SetProperty(labelPrefix + "localized.long", valueStr, forceLogging);
-            
+
             // pre-0.8
             SetProperty(bcPrefix + "en.pretty", valueStr, forceLogging);
 
@@ -2031,7 +2214,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
         }
-        
+
         /// <summary>
         /// Publishes movie related artwork  to the skin
         /// </summary>
@@ -2049,7 +2232,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             cover.Filename = movie.CoverFullPath;
             backdrop.Filename = movie.BackdropFullPath;
         }
-        
+
         /// <summary>
         /// Publishes category (node) related artwork to the skin
         /// </summary>
