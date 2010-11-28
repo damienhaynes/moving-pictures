@@ -121,6 +121,78 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             if (MaintenanceProgress != null) MaintenanceProgress("", 100);
         }
 
+        public static void VerifyDataSources() {
+            logger.Info("Checking for bad data source entries...");
+
+            // check records tieing a movie to a data source for bad data
+            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
+                List<DBSourceMovieInfo> infoList = currMovie.SourceMovieInfo.FindAll(info => info.Source == null);
+
+                if (infoList.Count == 0)
+                    continue;
+
+                logger.Debug("Found " + infoList.Count + " invalid source references for '" + currMovie.Title + "'. Removing.");
+
+                foreach (DBSourceMovieInfo currInfo in infoList) {
+                    currMovie.SourceMovieInfo.Remove(currInfo);
+                    currInfo.Delete();
+                }
+
+                currMovie.Commit();
+            }
+
+            // check for scripts that have no contents
+            List<DBScriptInfo> scripts = MovingPicturesCore.DatabaseManager.Get<DBScriptInfo>(null);
+            foreach (DBScriptInfo currScript in scripts) {
+                if (currScript.Contents == null || currScript.Contents.Trim() == "") {
+                    logger.Debug("Found empty script, removing...");
+
+                    // first get rid of any references to this script
+                    foreach (DBSourceInfo currSource in DBSourceInfo.GetAll()) {
+                        bool changed = false;
+                        if (currSource.Scripts.Contains(currScript)) {
+                            currSource.Scripts.Remove(currScript);
+                            changed = true;
+                        }
+
+                        if (currSource.SelectedScript == currScript) {
+                            currSource.SelectedScript = null;
+                            changed = true;
+                        }
+
+                        if (changed) currSource.Commit();
+                    }
+                    
+                    // and get rid of the script
+                    currScript.Delete();
+                }
+            }
+
+            // check for sources that have no scripts
+            foreach (DBSourceInfo currSource in  DBSourceInfo.GetAll()) {
+                if (currSource.IsScriptable() && currSource.SelectedScript == null) {
+                    if (currSource.Scripts.Count > 0) {
+                        currSource.SelectedScript = currSource.Scripts[0];
+                        currSource.Commit();
+                    }
+                    else {
+                        logger.Debug("Found scriptable provider with no attached scripts! Removing...");
+                        
+                        // remove any references to this source from our movie collection
+                        foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
+                            if (currMovie.SourceMovieInfo.FindAll(info => info.Source == currSource).Count > 0) {
+                                currMovie.SourceMovieInfo.RemoveAll(info => info.Source == currSource);
+                                currMovie.Commit();
+                            }
+                        }
+
+                        // and get rid of the source
+                        currSource.Delete();
+                    }
+                }
+            }
+        }
+
         // Update System Managed Import Paths
         public static void UpdateImportPaths() {
             

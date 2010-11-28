@@ -96,7 +96,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         #endregion
 
         public override string ToString() {
-            return "DBSourceMovieInfo [title='" + Movie.Title + "', identifier='" + identifier + "', provider='" + Source.Provider.Name + "']";
+            return "DBSourceMovieInfo [title='" + (Movie == null ? "???" : Movie.Title) + "',  identifier='" + (identifier == null ? "???" : identifier) + "', provider='" + (Source == null || Source.Provider == null ? "???" : Source.Provider.Name) + "']";
         }
 
     }
