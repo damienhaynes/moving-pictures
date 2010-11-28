@@ -30,6 +30,9 @@ namespace Cornerstone.Extensions.IO {
             catch (DirectoryNotFoundException) {
                 return false;
             }
+            catch (IOException) {
+                return false;
+            }
         }
 
         /// <summary>
