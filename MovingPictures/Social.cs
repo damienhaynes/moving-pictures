@@ -317,6 +317,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (smi.Source == null || smi.Source.Provider == null)
                     continue;
 
+                if (String.IsNullOrEmpty(smi.Identifier))
+                    continue;
+
                 mpsMovie.Resources += "|" 
                     + System.Web.HttpUtility.UrlEncode(smi.Source.Provider.Name)
                     + "="
