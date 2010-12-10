@@ -43,7 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
         public override void Work() {
             try {
-                if (MovingPicturesCore.Settings.SocialEnabled == false || MovingPicturesCore.Social.SocialAPI == null) {
+                if (MovingPicturesCore.Settings.SocialEnabled == false || !MovingPicturesCore.Social.IsOnline == null) {
                     logger.Warn("Attempting to perform Moving Pictures Social actions when feature is disabled or when server is unavailable.");
                     return;
                 }
@@ -159,9 +159,11 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
             }
             catch (WebException ex) {
                 logger.Error("There was a problem connecting to the Moving Pictures Social Server! " + ex.Message);
+                MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error connecting to Moving Pictures Social.\n", ex);
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
             }
 
         }

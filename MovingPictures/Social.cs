@@ -12,15 +12,21 @@ using System.Linq;
 using MovingPicturesSocialAPI.Data;
 using Cornerstone.GUI.Dialogs;
 using CookComputing.XmlRpc;
+using System.Net;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class Social {
+        public enum StatusEnum { CONNECTED, DISABLED, BLOCKED, CONNECTION_ERROR, INTERNAL_ERROR }
+        public delegate void StatusChangedDelegate(StatusEnum status);
+
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private static object socialAPILock = new Object();
         private Timer taskListTimer;
 
         private DateTime lastConnectAttempt = new DateTime(1900, 1, 1);
 
+        public event StatusChangedDelegate StatusChanged;
+        
         // The MpsAPI object that should be used by all components of the plugin.
         public MovingPicturesSocialAPI.MpsAPI SocialAPI {
             get {
@@ -57,6 +63,22 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         } private static MovingPicturesSocialAPI.MpsAPI _socialAPI = null;
 
+        public StatusEnum Status {
+            get {
+                if (IsOnline && _status != StatusEnum.CONNECTED) {
+                    _status = StatusEnum.CONNECTED;
+                    if (StatusChanged != null) StatusChanged(_status);
+                }
+
+                return _status;
+            }
+            internal set {
+                _status = value;
+
+                if (StatusChanged != null) StatusChanged(_status);
+            }
+        } private StatusEnum _status = StatusEnum.CONNECTED;
+
         public bool IsOnline {
             get { return SocialAPI != null; }
         }
@@ -84,6 +106,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                 MovingPicturesCore.DatabaseManager.ObjectInserted -= new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectInserted);
             }
 
+        }
+
+        private bool Reconnect() {
+            lastConnectAttempt = new DateTime(1900, 1, 1);
+            return IsOnline;
         }
 
         public void Synchronize() {
@@ -129,6 +156,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error synchronizing with Moving Pictures Social!", ex);
                 _socialAPI = null;
+                Status = StatusEnum.INTERNAL_ERROR;
                 return;
             }
 
@@ -182,9 +210,14 @@ namespace MediaPortal.Plugins.MovingPictures {
                     }
                 }
             }
+            catch (WebException ex) {
+                logger.Error("There was a problem connecting to the Moving Pictures Social Server! " + ex.Message);
+                MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
+            }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error uploading movie information to Moving Pictures Social!", ex);
                 _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -216,9 +249,14 @@ namespace MediaPortal.Plugins.MovingPictures {
                         progress("Removing excluded movies from MPS", (int)(count * 100 / movies.Count));
                 }
             }
+            catch (WebException ex) {
+                logger.Error("There was a problem connecting to the Moving Pictures Social Server! " + ex.Message);
+                MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
+            }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error removing movies from your Moving Pictures Social collection!", ex);
                 _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -245,6 +283,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error sending 'movie watched' information to Moving Pictures Social!", ex);
                 _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -283,6 +322,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error connecting to Moving Pictures Social!", ex);
                 _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
             }
         }
 
@@ -318,6 +358,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error sending rating information to MovingPicturesSocial!", ex);
+                _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
             }
         }
 
@@ -376,6 +418,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error removing an object from your Moving Pictures Social collection!", ex);
+                _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
             }
 
         }
@@ -387,7 +431,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 MovingPicturesCore.ProcessManager.StartProcess(bgProc);
             }
             catch (Exception ex) {
-                logger.ErrorException("", ex);
+                logger.ErrorException("", ex); 
+                _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                return;
             }
 
             try {
@@ -397,6 +444,8 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
             catch (Exception ex) {
                 logger.ErrorException("", ex);
+                _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
             }
         }
 
