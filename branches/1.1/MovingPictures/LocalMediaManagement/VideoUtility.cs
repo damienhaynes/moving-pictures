@@ -288,19 +288,31 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// <param name="path">filepath to validate</param>
         /// <returns>True if the file validates as a video file</returns>
         public static bool IsVideoFile(string path) {
-            VideoFormat format = GetVideoFormat(path);
-            if (format == VideoFormat.NotSupported)
-                return false;
+            try {
+                VideoFormat format = GetVideoFormat(path);
+                if (format == VideoFormat.NotSupported)
+                    return false;
 
-            // image files are only valid if DaemonTools is enabled
-            if (format == VideoFormat.Unknown && !MediaPortal.Util.DaemonTools.IsEnabled)
-                return false;
+                // image files are only valid if DaemonTools is enabled
+                if (format == VideoFormat.Unknown && !MediaPortal.Util.DaemonTools.IsEnabled)
+                    return false;
 
-            return true;
+                return true;
+            }
+            catch (Exception e) {
+                logger.Error("Error in video file scan for \"{0}\": {1}", path, e.Message);
+                return false;
+            }
         }
 
         public static bool IsVideoFile(FileInfo fileInfo) {
-            return IsVideoFile(fileInfo.FullName);
+            try {
+                return IsVideoFile(fileInfo.FullName);
+            }
+            catch (Exception e) {
+                logger.Error("Error in video file scan: {0}", e.Message);
+                return false;
+            }
         }
 
         /// <summary>
