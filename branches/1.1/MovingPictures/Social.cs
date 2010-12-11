@@ -193,7 +193,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     if (progress != null)
                         progress("Syncing All Movies to MPS", (int)(count * 100 / movies.Count));
 
-                    if (mpsMovies.Count >= 100 || count == movies.Count) {
+                    if (mpsMovies.Count >= MovingPicturesCore.Settings.SocialBatchSize || count == movies.Count) {
                         logger.Debug("Sending batch of {0} movies", mpsMovies.Count);
                         MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref mpsMovies);
 

@@ -2038,7 +2038,24 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return _socialSyncFilter;
             }
         } private DBFilter<DBMovieInfo> _socialSyncFilter = null;
-        
+
+
+
+        [CornerstoneSetting(
+            Name = "MPS Sync Batch Size",
+            Description = "The number of movies to sync to MPS in each request",
+            Groups = "|Social|",
+            Identifier = "socialbatchsize",
+            Default = 100)]
+        public int SocialBatchSize {
+            get { return _socialBatchSize; }
+            set {
+                _socialBatchSize = value;
+                OnSettingChanged("socialbatchsize");
+            }
+        }
+        private int _socialBatchSize;
+
         #endregion
 
     }
