@@ -132,8 +132,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             string labelText = "--- " + groupLabel + " ";
             float textwidth = 0; float textheight = 0;
             int iterationCap = 100;
-            while (textwidth <= Browser.Facade.ListView.Width) {
-                GUIFontManager.GetFont(Browser.Facade.ListView.FontName).GetTextExtent(labelText, ref textwidth, ref textheight);
+            while (textwidth <= Browser.Facade.ListLayout().Width) {
+                GUIFontManager.GetFont(Browser.Facade.ListLayout().FontName).GetTextExtent(labelText, ref textwidth, ref textheight);
                 labelText += "-";
 
                 if (iterationCap-- <= 0)
