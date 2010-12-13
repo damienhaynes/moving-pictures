@@ -486,19 +486,29 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // Switch facade view
             switch (currentView) {
                 case BrowserViewMode.CATEGORIES:
-                    _categoriesFacade.View = GUIFacadeControl.ViewMode.List;
+                    //_categoriesFacade.View = GUIFacadeControl.ViewMode.List;
+                    //_categoriesFacade.CurrentLayout = GUIFacadeControl.Layout.List;
+                    _categoriesFacade.SetCurrentLayout("List");
                     break;
                 case BrowserViewMode.LIST:
-                    facade.View = GUIFacadeControl.ViewMode.List;
+                    //facade.View = GUIFacadeControl.ViewMode.List;
+                    //facade.CurrentLayout = GUIFacadeControl.Layout.List;
+                    facade.SetCurrentLayout("List");
                     break;
                 case BrowserViewMode.SMALLICON:
-                    facade.View = GUIFacadeControl.ViewMode.SmallIcons;
+                    //facade.View = GUIFacadeControl.ViewMode.SmallIcons;
+                    //facade.CurrentLayout = GUIFacadeControl.Layout.SmallIcons;
+                    facade.SetCurrentLayout("SmallIcons");
                     break;
                 case BrowserViewMode.LARGEICON:
-                    facade.View = GUIFacadeControl.ViewMode.LargeIcons;
+                    //facade.View = GUIFacadeControl.ViewMode.LargeIcons;
+                    //facade.CurrentLayout = GUIFacadeControl.Layout.LargeIcons;
+                    facade.SetCurrentLayout("LargeIcons");
                     break;
                 case BrowserViewMode.FILMSTRIP:
-                    facade.View = GUIFacadeControl.ViewMode.Filmstrip;
+                    //facade.View = GUIFacadeControl.ViewMode.Filmstrip;
+                    //facade.CurrentLayout = GUIFacadeControl.Layout.Filmstrip;
+                    facade.SetCurrentLayout("Filmstrip");
                     break;
             }
 
