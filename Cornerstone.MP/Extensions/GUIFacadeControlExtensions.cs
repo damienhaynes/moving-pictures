@@ -166,7 +166,7 @@ namespace Cornerstone.MP.Extensions {
 
         private static Dictionary<string, PropertyInfo> propertyCache = new Dictionary<string, PropertyInfo>();
 
-        private static PropertyInfo GetPropertyInfo<T>(string newName, string oldName)
+        public static PropertyInfo GetPropertyInfo<T>(string newName, string oldName)
         {
             PropertyInfo property = null;
             Type type = typeof(T);
