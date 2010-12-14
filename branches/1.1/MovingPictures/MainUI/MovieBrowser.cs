@@ -474,12 +474,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // Facade visibility
             if (currentView != BrowserViewMode.CATEGORIES && _categoriesFacade != null) {
-                _categoriesFacade.Focus(false);
+                _categoriesFacade.Unfocus();
                 _categoriesFacade.Visible(false);
             }
             
             if (currentView == BrowserViewMode.CATEGORIES || currentView == BrowserViewMode.DETAILS) {
-                facade.Focus(false);
+                facade.Unfocus();
                 facade.Visible(false);
             }
 
@@ -816,11 +816,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public void Focus() {
             if (CurrentView == BrowserViewMode.CATEGORIES) {
-                _categoriesFacade.Focus = true;
+                _categoriesFacade.Focus();
                 _categoriesFacade.Visible = true;
             }
             else if (CurrentView != BrowserViewMode.DETAILS) {
-                facade.Focus = true;
+
+                facade.Focus();
                 facade.Visible = true;
             }
         }

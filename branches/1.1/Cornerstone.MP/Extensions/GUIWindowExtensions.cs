@@ -14,7 +14,7 @@ namespace Cornerstone.MP.Extensions
         /// Same as Children and controlList but used for backwards compatibility between mediaportal 1.1 and 1.2
         /// </summary>
         /// <param name="self"></param>
-        /// <returns></returns>
+        /// <returns>IEnumerable of GUIControls</returns>
         public static IEnumerable GetControlList(this GUIWindow self)
         {
             PropertyInfo property = GUIFacadeControlExtensions.GetPropertyInfo<GUIWindow>("Children", null);
