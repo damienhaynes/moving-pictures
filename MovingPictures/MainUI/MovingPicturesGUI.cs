@@ -577,7 +577,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             switch (action.wID) {
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PARENT_DIR:
-                case MediaPortal.GUI.Library.Action.ActionType.ACTION_HOME:
                     GUIWindowManager.ShowPreviousWindow();
                     break;
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PREVIOUS_MENU:
