@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="AsyncImageResource.cs" />
     <Compile Include="Extensions\GUIFacadeControlExtensions.cs" />
+    <Compile Include="Extensions\GUIWindowExtensions.cs" />
     <Compile Include="GUIGeneralRating.cs" />
     <Compile Include="GUIPinCodeDialog.cs" />
     <Compile Include="ImageSwapper.cs" />
