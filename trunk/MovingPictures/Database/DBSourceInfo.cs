@@ -104,7 +104,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public bool IsScriptable() {
-            return !(SelectedScript == null || SelectedScript.Contents.Trim().Length == 0);
+            return ProviderType == typeof(ScriptableProvider);
         }
 
         #endregion
@@ -116,7 +116,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (SelectedScript != null && !(SelectedScript.Contents.Trim().Length == 0))
                     return SelectedScript.Provider;       
 
-                if (provider == null) {
+                if (provider == null && !IsScriptable()) {
                     try {
                         provider = (IMovieProvider)Activator.CreateInstance(providerType);
                     }

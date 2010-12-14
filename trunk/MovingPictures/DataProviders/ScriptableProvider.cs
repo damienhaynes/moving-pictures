@@ -379,6 +379,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public override bool Equals(object obj) {
+            if (obj == null) return false;
+
             if (obj.GetType() != typeof(ScriptableProvider))
                 return base.Equals(obj);
 

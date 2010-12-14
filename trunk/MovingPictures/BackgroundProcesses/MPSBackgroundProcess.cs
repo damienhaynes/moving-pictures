@@ -8,6 +8,7 @@ using NLog;
 using System.Threading;
 using MovingPicturesSocialAPI;
 using MovingPicturesSocialAPI.Data;
+using System.Net;
 
 namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
     public enum MPSActions {
@@ -42,7 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
         public override void Work() {
             try {
-                if (MovingPicturesCore.Settings.SocialEnabled == false || MovingPicturesCore.Social.SocialAPI == null) {
+                if (MovingPicturesCore.Settings.SocialEnabled == false || !MovingPicturesCore.Social.IsOnline == null) {
                     logger.Warn("Attempting to perform Moving Pictures Social actions when feature is disabled or when server is unavailable.");
                     return;
                 }
@@ -52,7 +53,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                         List<MpsMovie> movieDTOs = new List<MpsMovie>();
                         foreach (DBMovieInfo movie in Movies) {
                             logger.Info("Adding {0} to Moving Pictures Social Collection", movie.Title);
-                            movieDTOs.Add(MovingPicturesCore.Social.MovieToMPSMovie(movie));
+                            movieDTOs.Add(Social.MovieToMPSMovie(movie));
                         }
                         MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref movieDTOs);
                         // update MpsId on the DBMovieInfo object
@@ -83,7 +84,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                             MovingPicturesCore.Social.SocialAPI.SetMovieRating((int)FirstMovie.MpsId, newRating);
                         }
                         break;
-                        
+
                     case MPSActions.WatchMovie:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             int newWatchCount = FirstMovie.ActiveUserSettings.WatchedCount;
@@ -129,13 +130,11 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                             lastRetrived = DateTime.MinValue;
                         List<UserSyncData> allUsd = MovingPicturesCore.Social.SocialAPI.GetUserSyncData(lastRetrived);
 
-                        if (allUsd.Count > 0)
-                        {
+                        if (allUsd.Count > 0) {
                             logger.Debug("User Sync Data contains {0} items", allUsd.Count);
                             List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
 
-                            foreach (UserSyncData usd in allUsd)
-                            {
+                            foreach (UserSyncData usd in allUsd) {
                                 logger.Debug("movie {0} was rated {1} on MPS", usd.MovieId, usd.Rating);
                                 DBMovieInfo foundMovie = allMovies.Find(delegate(DBMovieInfo m) {
                                     return m.MpsId == usd.MovieId;
@@ -158,8 +157,13 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                         break;
                 }
             }
+            catch (WebException ex) {
+                logger.Error("There was a problem connecting to the Moving Pictures Social Server! " + ex.Message);
+                MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
+            }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error connecting to Moving Pictures Social.\n", ex);
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
             }
 
         }

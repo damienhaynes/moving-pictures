@@ -41,6 +41,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,6 +51,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -67,6 +69,7 @@
   <ItemGroup>
     <Compile Include="AsyncImageResource.cs" />
     <Compile Include="Extensions\GUIFacadeControlExtensions.cs" />
+    <Compile Include="Extensions\GUIWindowExtensions.cs" />
     <Compile Include="GUIGeneralRating.cs" />
     <Compile Include="GUIPinCodeDialog.cs" />
     <Compile Include="ImageSwapper.cs" />

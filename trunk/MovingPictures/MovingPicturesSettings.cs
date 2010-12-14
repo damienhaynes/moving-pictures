@@ -1879,7 +1879,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _restrictSynchronizedMovies;
 
         [CornerstoneSetting(
-            Name = "SocialURLBase",
+            Name = "Moving Pictures Social URL",
             Description = "Base URL for Moving Pictures Social.",
             Groups = "|Social|",
             Identifier = "socialurlbase",
@@ -1904,7 +1904,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         [CornerstoneSetting(
-            Name = "SocialUsername",
+            Name = "Username",
             Description = "Username for Moving Pictures Social.",
             Groups = "|Social|",
             Identifier = "socialusername",
@@ -1920,7 +1920,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private string _socialUsername;
 
         [CornerstoneSetting(
-            Name = "SocialPassword",
+            Name = "Password",
             Description = "Password for Moving Pictures Social.",
             Groups = "|Social|",
             Identifier = "socialpassword",
@@ -1937,8 +1937,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         private string _socialPassword;
 
         [CornerstoneSetting(
-            Name = "SocialTaskListTimer",
-            Description = "Minutes for checking Moving Pictures Social Task List.  0 to disable.",
+            Name = "Task List Timer",
+            Description = "The number of minutes between each check for Moving Pictures Social tasks such as pulling down ratings from the webstie or uploading missing artwork. Enter 0 minutes to disable.",
             Groups = "|Social|",
             Identifier = "socialtasklisttimer",
             Default = 60,
@@ -1951,6 +1951,22 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private int _socialTaskListTimer;
+
+        [CornerstoneSetting(
+            Name = "Social Retry Time",
+            Description = "Number of minutes to wait before reattempting to connect to Moving Pictures Social when a connection error occured.",
+            Groups = "|Social|",
+            Identifier = "socialretrytime",
+            Default = 1,
+            Hidden = false)]
+        public int SocialRetryTime {
+            get { return _socialRetryTime; }
+            set {
+                _socialRetryTime = value;
+                OnSettingChanged("socialretrytime");
+            }
+        }
+        private int _socialRetryTime;
 
 
         [CornerstoneSetting(
@@ -2022,7 +2038,24 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return _socialSyncFilter;
             }
         } private DBFilter<DBMovieInfo> _socialSyncFilter = null;
-        
+
+
+
+        [CornerstoneSetting(
+            Name = "MPS Sync Batch Size",
+            Description = "The number of movies to sync to MPS in each request",
+            Groups = "|Social|",
+            Identifier = "socialbatchsize",
+            Default = 100)]
+        public int SocialBatchSize {
+            get { return _socialBatchSize; }
+            set {
+                _socialBatchSize = value;
+                OnSettingChanged("socialbatchsize");
+            }
+        }
+        private int _socialBatchSize;
+
         #endregion
 
     }
