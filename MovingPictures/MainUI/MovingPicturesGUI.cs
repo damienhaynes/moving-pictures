@@ -196,7 +196,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private DBNode<DBMovieInfo> _categoryLoadParamater = null;
 
         private void ClearFocus() {
-            foreach (System.Windows.UIElement currControl in this.controlList) {
+            foreach (GUIControl currControl in this.GetControlList()) {
                 if (currControl is GUIButtonControl) ((GUIButtonControl)currControl).Focus = false;
             }
         }
@@ -241,7 +241,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (linesArray.Length > 3) dialog.SetLine(4, linesArray[3]);
                 dialog.SetDefaultToYes(defaultYes);
 
-                foreach (System.Windows.UIElement item in dialog.Children) {
+                foreach (GUIControl item in dialog.GetControlList()) {
                     if (item is GUIButtonControl) {
                         GUIButtonControl btn = (GUIButtonControl)item;
                         if (btn.GetID == 11 && !String.IsNullOrEmpty(yesLabel)) // Yes button

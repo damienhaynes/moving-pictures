@@ -26,6 +26,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             restrictSyncedMoviesCheckBox.Setting = MovingPicturesCore.Settings["mps_restrict_synched_movies"];
 
+            MovingPicturesCore.Social.StatusChanged += new Social.StatusChangedDelegate(Social_StatusChanged);
+
             UpdateControls();
         }
 
@@ -129,6 +131,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
 
             updatingControls = false;
+        }
+
+        private void Social_StatusChanged(Social.StatusEnum status) {
+            if (InvokeRequired) Invoke(new Social.StatusChangedDelegate(Social_StatusChanged), new object[] { status });
+
+            UpdateControls();
         }
 
         private void accountButton_Click(object sender, EventArgs e) {

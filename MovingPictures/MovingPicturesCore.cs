@@ -197,7 +197,11 @@ namespace MediaPortal.Plugins.MovingPictures {
             newAction = new WorkerDelegate(checkVersionInfo);
             actionDescriptions.Add(newAction, "Initializing Version Information...");
             initActions.Add(newAction);
-
+            
+            newAction = new WorkerDelegate(DatabaseMaintenanceManager.VerifyDataSources);
+            actionDescriptions.Add(newAction, "Verifying Data Sources...");
+            initActions.Add(newAction);
+            
             newAction = new WorkerDelegate(DataProviderManager.Initialize);
             actionDescriptions.Add(newAction, "Initializing Data Provider Manager...");
             initActions.Add(newAction);
