@@ -410,8 +410,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             string fps = ((int)(queuedMedia.VideoFrameRate + 0.5f)).ToString();
             arguments = arguments.Replace("%filename%", filename);
             arguments = arguments.Replace("%fps%", fps);
+            arguments = arguments.Replace("%root%", videoRoot);
 
-            logger.Debug("External Player: Video='{0}', FPS={1}, ExecCommandLine={2} {3}", filename, fps, execPath, arguments);
+            logger.Debug("External Player: Video='{0}', Root={1}, FPS={2}, ExecCommandLine={3} {4}", filename, videoRoot, fps, execPath, arguments);
 
             // Set Refresh Rate Based On FPS if needed
             if (MovingPicturesCore.Settings.UseDynamicRefreshRateChangerWithExternalPlayer) {
