@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncImageResource.cs" />
+    <Compile Include="Extensions\GUIControlExtensions.cs" />
     <Compile Include="Extensions\GUIFacadeControlExtensions.cs" />
     <Compile Include="Extensions\GUIWindowExtensions.cs" />
     <Compile Include="GUIGeneralRating.cs" />
