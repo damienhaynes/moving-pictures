@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 namespace MovingPicturesSocialAPI {
     public class MpsAPI {
 
-        public static readonly string DefaultUrl = "http://social.moving-pictures.tv/api/1.0/";
+        public static readonly string DefaultUrl = "http://social.moving-pictures.tv/api/2/";
 
         public MpsUser User {
             get;
@@ -200,6 +200,7 @@ namespace MovingPicturesSocialAPI {
                 if (movieDTO != null) {
                     movieDTO.MovieId = Convert.ToInt32(movieId["MovieId"]);
                     movieDTO.UserRating = Convert.ToInt32(movieId["UserRating"]);
+                    movieDTO.Watched = Convert.ToString(movieId["Watched"]) == "1";
                 }
             }
         }
@@ -270,9 +271,25 @@ namespace MovingPicturesSocialAPI {
             foreach (XmlRpcStruct item in xmlData)
             {
                 UserSyncData usd = new UserSyncData();
-                usd.MovieId = int.Parse(item["MovieId"].ToString());
-                usd.Rating = int.Parse(item["Rating"].ToString());
-                usd.RatingDate = DateTime.Parse(item["RatingDate"].ToString());
+                switch(item["UserSyncType"].ToString())
+                {
+                    case "Rating":
+                        usd.UserSyncType = UserSyncType.Rating;
+                        usd.MovieId = int.Parse(item["MovieId"].ToString());
+                        usd.Rating = int.Parse(item["Rating"].ToString());
+                        usd.RatingDate = DateTime.Parse(item["RatingDate"].ToString());
+                        break;
+                    case "Watch":
+                        usd.UserSyncType = UserSyncType.Watch;
+                        usd.MovieId = int.Parse(item["MovieId"].ToString());
+                        usd.WatchDate = DateTime.Parse(item["WatchDate"].ToString());
+                        break;
+                    case "Unwatch":
+                        usd.UserSyncType = UserSyncType.Unwatch;
+                        usd.MovieId = int.Parse(item["MovieId"].ToString());
+                        usd.WatchDate = DateTime.Parse(item["UnwatchDate"].ToString());
+                        break;
+                }
                 result.Add(usd);
             }
 
@@ -283,8 +300,12 @@ namespace MovingPicturesSocialAPI {
             Proxy.SetMovieRating(movieId, rating.ToString());
         }
 
-        public void WatchMovie(int movieId, int newWatchCount, bool insertIntoStream) {
-            Proxy.WatchMovie(movieId, newWatchCount, insertIntoStream);
+        public void WatchMovie(int movieId, bool insertIntoStream) {
+            Proxy.WatchMovie(movieId, insertIntoStream);
+        }
+
+        public void UnwatchMovie(int movieId) {
+            Proxy.UnwatchMovie(movieId);
         }
 
         #endregion
@@ -337,9 +358,15 @@ namespace MovingPicturesSocialAPI {
     }
 
     public struct UserSyncData {
+        public UserSyncType UserSyncType;
         public int MovieId;
         public int Rating;
         public DateTime RatingDate;
+        public DateTime WatchDate;
+    }
+
+    public enum UserSyncType {
+        Rating, Watch, Unwatch
     }
 
 }

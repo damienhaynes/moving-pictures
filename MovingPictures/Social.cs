@@ -129,7 +129,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             try {
-                logger.Info("Synchronizing with moving Pictures Social.");
+                logger.Info("Synchronizing with Moving Pictures Social.");
                 List<DBMovieInfo> moviesToSynch;
                 List<DBMovieInfo> moviesToExclude;
 
@@ -202,6 +202,14 @@ namespace MediaPortal.Plugins.MovingPictures {
                             DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
                             if (m != null) {
                                 m.MpsId = mpsMovieDTO.MovieId;
+                                if (mpsMovieDTO.UserRating > 0)
+                                    m.ActiveUserSettings.UserRating = mpsMovieDTO.UserRating;
+                                if (mpsMovieDTO.Watched && m.ActiveUserSettings.WatchedCount == 0)
+                                    m.ActiveUserSettings.WatchedCount = 1;
+
+                                // prevent sending this data back to MPS
+                                m.ActiveUserSettings.RatingChanged = false;
+                                m.ActiveUserSettings.WatchCountChanged = false;
                                 m.Commit();
                             }
                         }
@@ -263,7 +271,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             return true;
         }
 
-        public bool UpdateWatchedCount(DBMovieInfo movie, bool includeInStream) {
+        public bool WatchMovie(DBMovieInfo movie, bool includeInStream) {
             if (!MovingPicturesCore.Settings.SocialEnabled) {
                 logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
                 return false;
@@ -290,6 +298,33 @@ namespace MediaPortal.Plugins.MovingPictures {
             return true;
         }
 
+        public bool UnwatchMovie(DBMovieInfo movie) {
+            if (!MovingPicturesCore.Settings.SocialEnabled) {
+                logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
+                return false;
+            }
+
+            if (!IsOnline) {
+                logger.Warn("Can not send movie watched count to Moving Pictures Social because service is offline");
+                return false;
+            }
+
+            try {
+                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                bgProc.Action = MPSActions.UnwatchMovie;
+                bgProc.Movies.Add(movie);
+                MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+            }
+            catch (Exception ex) {
+                logger.ErrorException("Unexpected error sending 'unwatch movie' information to Moving Pictures Social!", ex);
+                _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                return false;
+            }
+
+            return true;
+        }
+
         private void DatabaseManager_ObjectInserted(DatabaseTable obj) {
             if (!MovingPicturesCore.Settings.SocialEnabled) {
                 logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
@@ -306,10 +341,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     DBWatchedHistory wh = (DBWatchedHistory)obj;
                     DBMovieInfo movie = wh.Movie;
 
-                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                    bgProc.Action = MPSActions.WatchMovie;
-                    bgProc.Movies.Add(movie);
-                    MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+                    WatchMovie(movie, true);
                 }
                 else if (obj.GetType() == typeof(DBMovieInfo)) {
                     DBMovieInfo movie = (DBMovieInfo)obj;
@@ -523,11 +555,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             mpsMovie.Runtime = movie.Runtime.ToString() ?? "";
             mpsMovie.TranslatedTitle = movie.Title ?? "";
 
-            mpsMovie.WatchCount = movie.ActiveUserSettings.WatchedCount;
-            if (movie.WatchedHistory.Count > 0)
-                mpsMovie.LastWatchDate = movie.WatchedHistory[movie.WatchedHistory.Count - 1].DateWatched;
-            else
+            if (movie.ActiveUserSettings.WatchedCount > 0) {
+                mpsMovie.Watched = true;
+                if (movie.WatchedHistory.Count > 0)
+                    mpsMovie.LastWatchDate = movie.WatchedHistory[movie.WatchedHistory.Count - 1].DateWatched;
+            }
+            else {
+                mpsMovie.Watched = false;
                 mpsMovie.LastWatchDate = DateTime.MinValue;
+            }
             
             mpsMovie.UserRating = movie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
 

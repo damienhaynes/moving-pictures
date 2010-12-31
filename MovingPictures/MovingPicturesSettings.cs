@@ -1899,7 +1899,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public string SocialUrl {
             get {
-                return SocialURLBase + "/api/1.0/";
+                return SocialURLBase + "api/2/";
             }
         }
 

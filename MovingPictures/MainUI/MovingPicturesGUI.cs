@@ -1297,9 +1297,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ReloadMovieFacade();
             }
 
-            // (re-)public movie details if the movie is still the same
+            // (re-)publish movie details if the movie is still the same
             if (browser.SelectedMovie == movie)
                 PublishMovieDetails(movie);
+
+            if (newWatchedCount == 0)
+                MovingPicturesCore.Social.UnwatchMovie(movie);
+            else
+                MovingPicturesCore.Social.WatchMovie(movie, false);
         }
 
         /// <summary>
