@@ -168,7 +168,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         // logical volumes SHOULD have a serial number or something went wrong
                         // Currently the only exception is when a NDFS filesystem is detected to cover the special case of network paths mounted by 3rd party programs
                         // todo: to prevent more exceptions in the future we should keep an eye out for these special cases and come up with a better solution
-                        if (serial == string.Empty && format == "NDFS")
+                        if (serial == string.Empty && format != "NDFS")
                         {
                             // If we tried 3 times already then we should report a failure 
                             if (retry == 3) {
