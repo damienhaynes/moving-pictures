@@ -2046,7 +2046,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The number of movies to sync to MPS in each request",
             Groups = "|Social|",
             Identifier = "socialbatchsize",
-            Default = 100)]
+            Default = 30)]
         public int SocialBatchSize {
             get { return _socialBatchSize; }
             set {
