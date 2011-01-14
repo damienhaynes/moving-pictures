@@ -47,6 +47,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                             if (_socialAPI != null) {
                                 _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
                                 _socialAPI.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(_socialAPI_ResponseEvent);
+
+                                logger.Info("Logged in to MPS as {0}.", _socialAPI.User.Name);
                             }
                         }
                         catch (Exception ex){
