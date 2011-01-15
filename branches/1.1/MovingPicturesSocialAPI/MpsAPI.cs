@@ -308,6 +308,14 @@ namespace MovingPicturesSocialAPI {
             Proxy.UnwatchMovie(movieId);
         }
 
+        public void WatchingMovie(int movieId) {
+            Proxy.WatchingMovie(movieId);
+        }
+
+        public void StopWatchingMovie(int movieId) {
+            Proxy.StopWatchingMovie(movieId);
+        }
+
         #endregion
 
         #region Private Methods
