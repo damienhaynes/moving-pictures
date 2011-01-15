@@ -46,5 +46,11 @@ namespace MovingPicturesSocialAPI {
 
         [XmlRpcMethod("GetUserSyncData", StructParams = true)]
         object[] GetUserSyncData(DateTime startDate);
+
+        [XmlRpcMethod("WatchingMovie", StructParams = true)]
+        object WatchingMovie(int MovieId);
+
+        [XmlRpcMethod("StopWatchingMovie", StructParams = true)]
+        object StopWatchingMovie(int MovieId);
     }
 }
