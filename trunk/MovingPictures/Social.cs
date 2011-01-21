@@ -47,6 +47,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                             if (_socialAPI != null) {
                                 _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
                                 _socialAPI.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(_socialAPI_ResponseEvent);
+
+                                logger.Info("Logged in to MPS as {0}.", _socialAPI.User.Name);
                             }
                         }
                         catch (Exception ex){
@@ -129,7 +131,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             try {
-                logger.Info("Synchronizing with moving Pictures Social.");
+                logger.Info("Synchronizing with Moving Pictures Social.");
                 List<DBMovieInfo> moviesToSynch;
                 List<DBMovieInfo> moviesToExclude;
 
@@ -202,6 +204,14 @@ namespace MediaPortal.Plugins.MovingPictures {
                             DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
                             if (m != null) {
                                 m.MpsId = mpsMovieDTO.MovieId;
+                                if (mpsMovieDTO.UserRating > 0)
+                                    m.ActiveUserSettings.UserRating = mpsMovieDTO.UserRating;
+                                if (mpsMovieDTO.Watched && m.ActiveUserSettings.WatchedCount == 0)
+                                    m.ActiveUserSettings.WatchedCount = 1;
+
+                                // prevent sending this data back to MPS
+                                m.ActiveUserSettings.RatingChanged = false;
+                                m.ActiveUserSettings.WatchCountChanged = false;
                                 m.Commit();
                             }
                         }
@@ -263,7 +273,112 @@ namespace MediaPortal.Plugins.MovingPictures {
             return true;
         }
 
-        public bool UpdateWatchedCount(DBMovieInfo movie, bool includeInStream) {
+        public void ProcessTasks() {
+            ProcessTasks(null);
+        }
+
+        public void ProcessTasks(DateTime? forcedStartTime) {
+            try {
+                logger.Debug("Synchronizing with Moving Pictures Social...");
+
+                // store the current time and grab info on the last time we processed our task list
+                DateTime currentSyncTime;
+                DateTime lastRetrived;
+                if (!DateTime.TryParse(MovingPicturesCore.Settings.LastSynchTime, out lastRetrived))
+                    lastRetrived = DateTime.MinValue;
+
+                // if we have been passed a hard coded start time, use that instead
+                if (forcedStartTime != null) lastRetrived = (DateTime)forcedStartTime;
+
+                List<TaskListItem> taskList = SocialAPI.GetUserTaskList(lastRetrived, out currentSyncTime);
+                logger.Debug("{0} Moving Pictures Social synchronization tasks require attention.", taskList.Count);
+                if (taskList.Count == 0) return;
+                
+
+                // first process all id changes
+                foreach (TaskListItem currTask in taskList)
+                    if (currTask.Task == TaskItemType.UpdatedMovieId)
+                        UpdateLocalMovieId(currTask);
+
+                // then process everything else
+                foreach (TaskListItem currTask in taskList)
+                    switch (currTask.Task) {
+                        case TaskItemType.CoverRequest:
+                            SubmitCover(currTask.MovieId);
+                            break;
+                        case TaskItemType.NewRating:
+                            UpdateLocalRating(currTask);
+                            break;
+                        case TaskItemType.NewWatchedStatus:
+                            UpdateLocalWatchedStatus(currTask);
+                            break;
+                        case TaskItemType.UpdatedMovieId:
+                            // handled above
+                            break;
+                    }
+
+                // set the time only at the end in case an error occured
+                MovingPicturesCore.Settings.LastSynchTime = currentSyncTime.ToString();
+                logger.Info("Moving Pictures Social synchronization complete...");
+            }
+            catch (WebException ex) {
+                logger.Error("There was a problem connecting to the Moving Pictures Social Server! " + ex.Message);
+                Status = Social.StatusEnum.CONNECTION_ERROR;
+            }
+            catch (Exception ex) {
+                logger.ErrorException("Unexpected error connecting to Moving Pictures Social.\n", ex);
+                Status = Social.StatusEnum.INTERNAL_ERROR;
+            }
+        }
+
+        public void SubmitCover(int mpsId) {
+            logger.Debug("Checking for cover for MPS ID #{0}", mpsId);
+
+            DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(mpsId);
+
+            if (matchingMovie != null && matchingMovie.CoverFullPath.Trim().Length > 0) {
+                logger.Info("Submitting cover for '{0}' to Moving Pictures Social.", matchingMovie.Title);
+                MovingPicturesCore.Social.SocialAPI.UploadCover(mpsId, matchingMovie.CoverFullPath);
+            }
+        }
+
+        private void UpdateLocalMovieId(TaskListItem taskDetails) {
+            DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(taskDetails.MovieId);
+            if (matchingMovie == null) return;
+
+            logger.Debug("The MPS ID for {0} has changed from {1} to {2}.", matchingMovie.Title, taskDetails.MovieId, taskDetails.NewMovieId);
+            matchingMovie.MpsId = taskDetails.NewMovieId;
+            matchingMovie.Commit();
+        }
+
+        private void UpdateLocalRating(TaskListItem taskDetails) {
+            DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(taskDetails.MovieId);
+            if (matchingMovie == null) return;
+
+            logger.Info("Importing rating of {0} for '{1}' from Moving Pictures Social.", taskDetails.Rating, matchingMovie.Title);
+            matchingMovie.ActiveUserSettings.UserRating = taskDetails.Rating;
+            matchingMovie.Commit();
+        }
+
+        private void UpdateLocalWatchedStatus(TaskListItem taskDetails) {
+            DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(taskDetails.MovieId);
+            if (matchingMovie == null) return;
+
+            logger.Info("Importing watched status from Moving Pictures Social for '{0}'. Watched: {1}", matchingMovie.Title, taskDetails.Watched);
+            if (((bool)taskDetails.Watched) && matchingMovie.ActiveUserSettings.WatchedCount == 0) {
+                matchingMovie.ActiveUserSettings.WatchedCount = 1;
+                matchingMovie.Commit();
+            }
+
+            if (!((bool)taskDetails.Watched) && matchingMovie.ActiveUserSettings.WatchedCount > 0) {
+                matchingMovie.ActiveUserSettings.WatchedCount = 0;
+                matchingMovie.Commit();
+            }
+
+            matchingMovie.Commit();
+        }
+
+        public bool WatchMovie(DBMovieInfo movie, bool includeInStream) {
             if (!MovingPicturesCore.Settings.SocialEnabled) {
                 logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
                 return false;
@@ -290,6 +405,33 @@ namespace MediaPortal.Plugins.MovingPictures {
             return true;
         }
 
+        public bool UnwatchMovie(DBMovieInfo movie) {
+            if (!MovingPicturesCore.Settings.SocialEnabled) {
+                logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
+                return false;
+            }
+
+            if (!IsOnline) {
+                logger.Warn("Can not send movie watched count to Moving Pictures Social because service is offline");
+                return false;
+            }
+
+            try {
+                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                bgProc.Action = MPSActions.UnwatchMovie;
+                bgProc.Movies.Add(movie);
+                MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+            }
+            catch (Exception ex) {
+                logger.ErrorException("Unexpected error sending 'unwatch movie' information to Moving Pictures Social!", ex);
+                _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                return false;
+            }
+
+            return true;
+        }
+
         private void DatabaseManager_ObjectInserted(DatabaseTable obj) {
             if (!MovingPicturesCore.Settings.SocialEnabled) {
                 logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
@@ -306,10 +448,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     DBWatchedHistory wh = (DBWatchedHistory)obj;
                     DBMovieInfo movie = wh.Movie;
 
-                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                    bgProc.Action = MPSActions.WatchMovie;
-                    bgProc.Movies.Add(movie);
-                    MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+                    WatchMovie(movie, true);
                 }
                 else if (obj.GetType() == typeof(DBMovieInfo)) {
                     DBMovieInfo movie = (DBMovieInfo)obj;
@@ -436,17 +575,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
                 return;
             }
-
-            try {
-                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                bgProc.Action = MPSActions.GetUserSyncData;
-                MovingPicturesCore.ProcessManager.StartProcess(bgProc);
-            }
-            catch (Exception ex) {
-                logger.ErrorException("", ex);
-                _socialAPI = null;
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
-            }
         }
 
         /// <summary>
@@ -523,11 +651,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             mpsMovie.Runtime = movie.Runtime.ToString() ?? "";
             mpsMovie.TranslatedTitle = movie.Title ?? "";
 
-            mpsMovie.WatchCount = movie.ActiveUserSettings.WatchedCount;
-            if (movie.WatchedHistory.Count > 0)
-                mpsMovie.LastWatchDate = movie.WatchedHistory[movie.WatchedHistory.Count - 1].DateWatched;
-            else
+            if (movie.ActiveUserSettings.WatchedCount > 0) {
+                mpsMovie.Watched = true;
+                if (movie.WatchedHistory.Count > 0)
+                    mpsMovie.LastWatchDate = movie.WatchedHistory[movie.WatchedHistory.Count - 1].DateWatched;
+            }
+            else {
+                mpsMovie.Watched = false;
                 mpsMovie.LastWatchDate = DateTime.MinValue;
+            }
             
             mpsMovie.UserRating = movie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
 

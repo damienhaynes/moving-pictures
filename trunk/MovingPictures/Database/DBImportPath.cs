@@ -144,6 +144,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             string volume = string.Empty;
             string label = string.Empty;
             string serial = string.Empty;
+            string format = string.Empty;
 
             // validate the import path
             if (!_replaced && this.IsAvailable) {
@@ -159,13 +160,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                             volume = driveInfo.GetDriveLetter();
                             label = driveInfo.VolumeLabel;
                             serial = driveInfo.GetVolumeSerial();
-                            logger.Debug("Drive='{0}', Label='{1}', Serial='{2}'", volume, label, serial);
+                            format = driveInfo.DriveFormat;
+                            logger.Debug("Drive='{0}', Label='{1}', Serial='{2}', Format='{3}'", volume, label, serial, format);
                         }
 
                         // check if the serial is empty
                         // logical volumes SHOULD have a serial number or something went wrong
-                        if (serial == string.Empty) {
-                            
+                        // Currently the only exception is when a NDFS filesystem is detected to cover the special case of network paths mounted by 3rd party programs
+                        // todo: to prevent more exceptions in the future we should keep an eye out for these special cases and come up with a better solution
+                        if (serial == string.Empty && format != "NDFS")
+                        {
                             // If we tried 3 times already then we should report a failure 
                             if (retry == 3) {
                                 logger.Error("Canceled scan for '{0}': Could not get required volume information.", Directory.FullName);

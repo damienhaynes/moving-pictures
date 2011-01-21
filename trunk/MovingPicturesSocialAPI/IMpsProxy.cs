@@ -6,7 +6,7 @@ using CookComputing.XmlRpc;
 using MovingPicturesSocialAPI.Data;
 
 namespace MovingPicturesSocialAPI {
-    [XmlRpcUrl("http://localhost:8080/api/1.0/api")]
+    [XmlRpcUrl("")]
     public interface IMpsProxy : IXmlRpcProxy {
         [XmlRpcMethod("CheckAuthentication")]
         object CheckAuthentication();
@@ -29,8 +29,8 @@ namespace MovingPicturesSocialAPI {
         [XmlRpcMethod("RemoveMovieFromCollection", StructParams = true)]
         object RemoveMovieFromCollection(int MovieId);
 
-        [XmlRpcMethod("GetUserTaskList")]
-        object[] GetUserTaskList();
+        [XmlRpcMethod("GetUserTaskList", StructParams = true)]
+        object[] GetUserTaskList(DateTime? startDate);
 
         [XmlRpcMethod("UploadCover", StructParams = true)]
         object UploadCover(int MovieId, string Base64File);
@@ -39,9 +39,15 @@ namespace MovingPicturesSocialAPI {
         object SetMovieRating(int MovieId, string Rating);
 
         [XmlRpcMethod("WatchMovie", StructParams = true)]
-        object WatchMovie(int MovieId, int NewWatchCount, bool InsertInStream);
+        object WatchMovie(int MovieId, bool InsertInStream);
 
-        [XmlRpcMethod("GetUserSyncData", StructParams = true)]
-        object[] GetUserSyncData(DateTime startDate);
+        [XmlRpcMethod("UnwatchMovie", StructParams = true)]
+        object UnwatchMovie(int MovieId);
+
+        [XmlRpcMethod("WatchingMovie", StructParams = true)]
+        object WatchingMovie(int MovieId);
+
+        [XmlRpcMethod("StopWatchingMovie", StructParams = true)]
+        object StopWatchingMovie(int MovieId);
     }
 }

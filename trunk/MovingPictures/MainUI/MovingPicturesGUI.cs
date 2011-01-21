@@ -194,13 +194,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         } 
         private DBNode<DBMovieInfo> _categoryLoadParamater = null;
-
-        private void ClearFocus() {
-            foreach (GUIControl currControl in this.GetControlList()) {
-                if (currControl is GUIButtonControl) ((GUIButtonControl)currControl).Focus = false;
-            }
-        }
-
         public void ShowMessage(string heading, string lines) {
             string line1 = null, line2 = null, line3 = null, line4 = null;
             string[] linesArray = lines.Split(new string[] { "\\n" }, StringSplitOptions.None);
@@ -304,7 +297,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
             if (currentView == BrowserViewMode.DETAILS) {
-                if (playButton != null) playButton.Focus = true;
+                GUIControl.FocusControl(GUIWindowManager.ActiveWindow, playButton.GetID);
             }
 
             // set the backdrop visibility based on the skin settings
@@ -454,9 +447,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 parentalControlsFilter = MovingPicturesCore.Settings.ParentalControlsFilter;
                 parentalControlsFilter.Active = MovingPicturesCore.Settings.ParentalControlsEnabled;
                 browser.Filters.Add(parentalControlsFilter);
-
-                // give the browser a delegate to the method to clear focus from all existing controls
-                browser.ClearFocusAction = new MovieBrowser.ClearFocusDelegate(ClearFocus);
 
                 // setup browser events
                 browser.MovieSelectionChanged += new MovieBrowser.MovieSelectionChangedDelegate(MovieDetailsPublisher);
@@ -710,7 +700,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case 4:
                     showFilterContext();
                     browser.Focus();
-                    if (filterButton != null) filterButton.Focus = false;
                     break;
 
                 // a click on the play button
@@ -722,14 +711,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case 14:
                     showSortContext();
                     browser.Focus();
-                    if (sortMenuButton != null) sortMenuButton.Focus = false;
                     break;
 
                 // parental controls button clicked
                 case 15:
                     toggleParentalControls();
                     browser.Focus();
-                    if (toggleParentalControlsButton != null) toggleParentalControlsButton.Focus = false;
                     break;
             }
 
@@ -744,7 +731,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             switch (action.wID) {
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PARENT_DIR:
-                case MediaPortal.GUI.Library.Action.ActionType.ACTION_HOME:
                     GUIWindowManager.ShowPreviousWindow();
                     break;
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PREVIOUS_MENU:
@@ -1481,9 +1467,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ReloadMovieFacade();
             }
 
-            // (re-)public movie details if the movie is still the same
+            // (re-)publish movie details if the movie is still the same
             if (browser.SelectedMovie == movie)
                 PublishMovieDetails(movie);
+
+            if (newWatchedCount == 0)
+                MovingPicturesCore.Social.UnwatchMovie(movie);
+            else
+                MovingPicturesCore.Social.WatchMovie(movie, false);
         }
 
         /// <summary>

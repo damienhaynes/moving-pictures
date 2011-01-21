@@ -17,8 +17,8 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         UpdateUserRating,
         WatchMovie,
         WatchMovieIgnoreStream,
-        ProcessTaskList,
-        GetUserSyncData
+        UnwatchMovie,
+        ProcessTaskList
     }
     public class MPSBackgroundProcess : AbstractBackgroundProcess {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -43,7 +43,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
         public override void Work() {
             try {
-                if (MovingPicturesCore.Settings.SocialEnabled == false || !MovingPicturesCore.Social.IsOnline == null) {
+                if (MovingPicturesCore.Settings.SocialEnabled == false || !MovingPicturesCore.Social.IsOnline) {
                     logger.Warn("Attempting to perform Moving Pictures Social actions when feature is disabled or when server is unavailable.");
                     return;
                 }
@@ -63,6 +63,10 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                                 m.MpsId = mpsMovieDTO.MovieId;
                                 if (mpsMovieDTO.UserRating > 0)
                                     m.ActiveUserSettings.UserRating = mpsMovieDTO.UserRating;
+                                if (mpsMovieDTO.Watched && m.ActiveUserSettings.WatchedCount == 0)
+                                    m.ActiveUserSettings.WatchedCount = 1;
+                                m.ActiveUserSettings.WatchCountChanged = false;
+                                m.ActiveUserSettings.RatingChanged = false;
                                 m.Commit();
                             }
                         }
@@ -87,71 +91,29 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
                     case MPSActions.WatchMovie:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
-                            int newWatchCount = FirstMovie.ActiveUserSettings.WatchedCount;
-                            logger.Info("Setting MPS watch count for {0} to {1}", FirstMovie.Title, newWatchCount);
-                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, newWatchCount, true);
+                            logger.Info("Setting MPS watched for {0}", FirstMovie.Title);
+                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, true);
                         }
                         break;
 
                     case MPSActions.WatchMovieIgnoreStream:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
-                            int newWatchCount = FirstMovie.ActiveUserSettings.WatchedCount;
-                            logger.Info("Setting MPS watch count for {0} to {1}", FirstMovie.Title, newWatchCount);
-                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, newWatchCount, false);
+                            logger.Info("Setting MPS watched for {0}", FirstMovie.Title);
+                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, false);
                         }
                         break;
 
+
+                    case MPSActions.UnwatchMovie:
+                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                            logger.Info("Setting MPS unwatched for {0}", FirstMovie.Title);
+                            MovingPicturesCore.Social.SocialAPI.UnwatchMovie((int)FirstMovie.MpsId);
+                        }
+                        break;
 
                     case MPSActions.ProcessTaskList:
-                        logger.Info("Getting task list from MPS");
-                        List<TaskListItem> taskList = MovingPicturesCore.Social.SocialAPI.GetUserTaskList();
-
-                        if (taskList.Count > 0) {
-                            logger.Info("MPS Task list contains {0} items", taskList.Count);
-                            List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
-
-                            foreach (TaskListItem taskItem in taskList) {
-                                logger.Debug("Checking for cover for movie {0}", taskItem.MovieId);
-                                DBMovieInfo foundMovie = allMovies.Find(delegate(DBMovieInfo m) {
-                                    return m.MpsId == taskItem.MovieId;
-                                });
-
-                                if (foundMovie != null && foundMovie.CoverFullPath.Trim().Length > 0) {
-                                    logger.Debug("Cover found.  Uploading for movie {0}", taskItem.MovieId);
-                                    MovingPicturesCore.Social.SocialAPI.UploadCover((int)foundMovie.MpsId, foundMovie.CoverFullPath);
-                                }
-                            }
-                        }
+                        MovingPicturesCore.Social.ProcessTasks();
                         break;
-                    case MPSActions.GetUserSyncData:
-                        logger.Debug("Getting user sync data from MPS");
-                        DateTime lastRetrived;
-                        if (!DateTime.TryParse(MovingPicturesCore.Settings.SocialLastRetrieved, out lastRetrived))
-                            lastRetrived = DateTime.MinValue;
-                        List<UserSyncData> allUsd = MovingPicturesCore.Social.SocialAPI.GetUserSyncData(lastRetrived);
-
-                        if (allUsd.Count > 0) {
-                            logger.Debug("User Sync Data contains {0} items", allUsd.Count);
-                            List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
-
-                            foreach (UserSyncData usd in allUsd) {
-                                logger.Debug("movie {0} was rated {1} on MPS", usd.MovieId, usd.Rating);
-                                DBMovieInfo foundMovie = allMovies.Find(delegate(DBMovieInfo m) {
-                                    return m.MpsId == usd.MovieId;
-                                });
-
-                                if (foundMovie != null) {
-                                    foundMovie.ActiveUserSettings.UserRating = usd.Rating;
-                                    foundMovie.ActiveUserSettings.RatingChanged = false;
-                                }
-                                if (usd.RatingDate > lastRetrived)
-                                    lastRetrived = usd.RatingDate;
-                            }
-
-                            MovingPicturesCore.Settings.SocialLastRetrieved = lastRetrived.ToString();
-                        }
-                        break;
-
 
                     default:
                         break;

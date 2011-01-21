@@ -781,6 +781,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (File.Exists(e.OldFullPath))
                     return;
 
+                // update queued files
+                processRenamedFilesInQueue(e.OldFullPath, e.FullPath);
+
                 DBLocalMedia localMedia = DBLocalMedia.Get(e.OldFullPath, e.FullPath.PathToFileInfo().GetDriveVolumeSerial());
                 // if this file is not in our database, return
                 if (localMedia.ID == null)
@@ -795,6 +798,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // if the old directory still exists then this probably isn't a reliable rename event
                 if (Directory.Exists(e.OldFullPath))
                     return;
+
+                // update queued files
+                processRenamedFilesInQueue(e.OldFullPath, e.FullPath);
                 
                 // This is a directory so we are going to get all localmedia that uses 
                 // this directory we can do this by adding a % character to the end of 
@@ -859,6 +865,25 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             }
         }
 
+        /// <summary>
+        /// Processes renamed files that are in queue and not-persisted.
+        /// </summary>
+        /// <param name="oldPath">The old path.</param>
+        /// <param name="newPath">The new path.</param>
+        private void processRenamedFilesInQueue(string oldPath, string newPath)
+        {
+            lock (filesQueue)
+            {
+                IEnumerable<DBLocalMedia> affectedMedia = filesQueue.Where(f => f.FullPath.StartsWith(oldPath));
+                foreach (DBLocalMedia media in affectedMedia)
+                {
+                    string oldFullPath = media.FullPath;
+                    media.FullPath = oldFullPath.Replace(oldPath, newPath);
+                    logger.Info("Queued media '{0}' was renamed to '{1}'", oldFullPath, media.FullPath);
+                }
+            }
+        }
+
         // triggers when a new file is flagged as being queued
         private void onFileQueued(object sender, NotifyCollectionChangedEventArgs e) {
             // only take action when a new item is added to the list
@@ -887,7 +912,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // put the queued files back into the system
             lock (filesAdded.SyncRoot) {
-                filesAdded.AddRange(queuedFiles);
+                foreach (DBLocalMedia file in queuedFiles)
+                {
+                    // only put the file back into the system if it still exists
+                    if (File.Exists(file.FullPath))
+                    {
+                        filesAdded.Add(file);
+                    }
+                }
             }
 
         }
