@@ -242,55 +242,46 @@ namespace MovingPicturesSocialAPI {
         }
 
 
-        public List<TaskListItem> GetUserTaskList() {
+        public List<TaskListItem> GetUserTaskList(DateTime? startDate, out DateTime serverTime) {
             List<TaskListItem> result = new List<TaskListItem>();
+            serverTime = DateTime.MinValue;
 
-            var tasks = Proxy.GetUserTaskList();
-
+            var tasks = Proxy.GetUserTaskList(startDate);
             foreach (XmlRpcStruct task in tasks) {
+                // if we havnt grbabed the time yet, grab it and move on to the real records
+                if (serverTime == DateTime.MinValue) {
+                    DateTime.TryParse(task["ServerTime"].ToString(), out serverTime);
+                    continue;
+                }
+
                 TaskListItem tli = new TaskListItem();
                 switch (task["ItemType"].ToString()) {
-                    case "cover":
-                        tli.ItemType = TaskItemType.Cover;
+                    case "cover_request":
+                        tli.Task = TaskItemType.CoverRequest;
+                        tli.MovieId = (int)task["MovieId"];
+                        result.Add(tli);
+                        break;
+                    case "new_rating":
+                        tli.Task = TaskItemType.NewRating;
+                        tli.MovieId = (int)task["MovieId"];
+                        tli.Rating = (int)task["Rating"];
+                        result.Add(tli);
+                        break;
+                    case "new_watched_status":
+                        tli.Task = TaskItemType.NewWatchedStatus;
+                        tli.MovieId = (int)task["MovieId"];
+                        tli.Watched = ((string)task["Watched"]) == "1";
+                        result.Add(tli);
+                        break;
+                    case "updated_movie_id":
+                        tli.Task = TaskItemType.UpdatedMovieId;
+                        tli.MovieId = (int)task["MovieId"];
+                        tli.NewMovieId = (int)task["NewMovieId"];
+                        result.Add(tli);
                         break;
                     default:
-                        tli.ItemType = TaskItemType.Cover;
                         break;
                 }
-                tli.MovieId = (int)task["MovieId"];
-                result.Add(tli);
-            }
-
-            return result;
-        }
-
-        public List<UserSyncData> GetUserSyncData(DateTime startDate) {
-            var xmlData = Proxy.GetUserSyncData(startDate);
-            List<UserSyncData> result = new List<UserSyncData>();
-
-            foreach (XmlRpcStruct item in xmlData)
-            {
-                UserSyncData usd = new UserSyncData();
-                switch(item["UserSyncType"].ToString())
-                {
-                    case "Rating":
-                        usd.UserSyncType = UserSyncType.Rating;
-                        usd.MovieId = int.Parse(item["MovieId"].ToString());
-                        usd.Rating = int.Parse(item["Rating"].ToString());
-                        usd.RatingDate = DateTime.Parse(item["RatingDate"].ToString());
-                        break;
-                    case "Watch":
-                        usd.UserSyncType = UserSyncType.Watch;
-                        usd.MovieId = int.Parse(item["MovieId"].ToString());
-                        usd.WatchDate = DateTime.Parse(item["WatchDate"].ToString());
-                        break;
-                    case "Unwatch":
-                        usd.UserSyncType = UserSyncType.Unwatch;
-                        usd.MovieId = int.Parse(item["MovieId"].ToString());
-                        usd.WatchDate = DateTime.Parse(item["UnwatchDate"].ToString());
-                        break;
-                }
-                result.Add(usd);
             }
 
             return result;
@@ -357,24 +348,17 @@ namespace MovingPicturesSocialAPI {
     }
 
     public struct TaskListItem {
-        public TaskItemType ItemType;
+        public TaskItemType Task;
         public int MovieId;
+        public int? Rating;
+        public bool? Watched;
+        public int? NewMovieId;
     }
 
     public enum TaskItemType {
-        Cover
+        CoverRequest,
+        NewRating,
+        NewWatchedStatus,
+        UpdatedMovieId
     }
-
-    public struct UserSyncData {
-        public UserSyncType UserSyncType;
-        public int MovieId;
-        public int Rating;
-        public DateTime RatingDate;
-        public DateTime WatchDate;
-    }
-
-    public enum UserSyncType {
-        Rating, Watch, Unwatch
-    }
-
 }

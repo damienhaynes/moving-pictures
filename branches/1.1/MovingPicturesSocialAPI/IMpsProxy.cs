@@ -29,8 +29,8 @@ namespace MovingPicturesSocialAPI {
         [XmlRpcMethod("RemoveMovieFromCollection", StructParams = true)]
         object RemoveMovieFromCollection(int MovieId);
 
-        [XmlRpcMethod("GetUserTaskList")]
-        object[] GetUserTaskList();
+        [XmlRpcMethod("GetUserTaskList", StructParams = true)]
+        object[] GetUserTaskList(DateTime? startDate);
 
         [XmlRpcMethod("UploadCover", StructParams = true)]
         object UploadCover(int MovieId, string Base64File);
@@ -43,9 +43,6 @@ namespace MovingPicturesSocialAPI {
 
         [XmlRpcMethod("UnwatchMovie", StructParams = true)]
         object UnwatchMovie(int MovieId);
-
-        [XmlRpcMethod("GetUserSyncData", StructParams = true)]
-        object[] GetUserSyncData(DateTime startDate);
 
         [XmlRpcMethod("WatchingMovie", StructParams = true)]
         object WatchingMovie(int MovieId);
