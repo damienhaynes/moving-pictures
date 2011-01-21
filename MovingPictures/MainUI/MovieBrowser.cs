@@ -465,19 +465,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public SortingFields CurrentSortField { get; set; }
         public SortingDirections CurrentSortDirection { get; set; }
 
-
-        /// <summary>
-        /// Delegate to be called to clear focus of all on screen controls. This
-        /// is unfortunately necessary due to MPs poor handling of focus changes.
-        /// </summary>
-        public ClearFocusDelegate ClearFocusAction {
-            set {
-                _clearFocusAction = value;
-            }
-        }
-        public delegate void ClearFocusDelegate();
-        private ClearFocusDelegate _clearFocusAction;
-
         #endregion
 
         #region Events
@@ -546,17 +533,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public void ReloadView() {
             logger.Debug("CurrentView: {0}", currentView.ToString());
 
-            // Clear focus
-            if (_clearFocusAction != null) _clearFocusAction();
-
             // Facade visibility
             if (currentView != BrowserViewMode.CATEGORIES && _categoriesFacade != null) {
-                _categoriesFacade.Focus(false);
                 _categoriesFacade.Visible(false);
             }
             
             if (currentView == BrowserViewMode.CATEGORIES || currentView == BrowserViewMode.DETAILS) {
-                facade.Focus(false);
                 facade.Visible(false);
             }
 
@@ -893,11 +875,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public void Focus() {
             if (CurrentView == BrowserViewMode.CATEGORIES) {
-                _categoriesFacade.Focus = true;
+                GUIControl.FocusControl(GUIWindowManager.ActiveWindow, _categoriesFacade.GetID);
                 _categoriesFacade.Visible = true;
             }
             else if (CurrentView != BrowserViewMode.DETAILS) {
-                facade.Focus = true;
+                GUIControl.FocusControl(GUIWindowManager.ActiveWindow, facade.GetID);
                 facade.Visible = true;
             }
         }

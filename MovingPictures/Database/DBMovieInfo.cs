@@ -801,6 +801,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(id);
         }
 
+        public static DBMovieInfo GetByMpsId(int id) {
+            ICriteria mpsIdFilter = new BaseCriteria(DBField.GetField(typeof(DBMovieInfo), "MpsId"), "=", id);
+            List<DBMovieInfo> foundMovies = MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(mpsIdFilter);
+
+            if (foundMovies.Count > 0)
+                return foundMovies[0];
+
+            return null;
+        }
+
         public static List<DBMovieInfo> GetAll() {
             return MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(null);
         }

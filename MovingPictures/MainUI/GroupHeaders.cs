@@ -31,7 +31,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 
                 if (priorGroupName != thisGroupName) {
                     // if this movie's group differs from the prior, insert a group header
-                    InsertGroupHeader(i, thisGroupName);
+                    try { InsertGroupHeader(i, thisGroupName); }
+                    catch (TypeLoadException) {
+                        logger.Warn("Grouping headers are not supported with this version of MediaPortal!");
+                    }
                 }
             }
         }

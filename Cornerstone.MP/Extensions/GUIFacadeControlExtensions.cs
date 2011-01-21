@@ -36,19 +36,6 @@ namespace Cornerstone.MP.Extensions {
         }
 
         /// <summary>
-        /// Sets the specified focus property on the facade and all children lists
-        /// </summary>
-        /// <param name="self"></param>
-        /// <param name="value"></param>
-        public static void Focus(this GUIFacadeControl self, bool value) {
-            self.Focus = value;
-            if (self.ListLayout() != null) self.ListLayout().Focus = value;
-            if (self.ThumbnailLayout() != null) self.ThumbnailLayout().Focus = value;
-            if (self.AlbumListLayout() != null) self.AlbumListLayout().Focus = value;
-            if (self.FilmstripLayout() != null) self.FilmstripLayout().Focus = value;
-        }  
-
-        /// <summary>
         /// Sets the specified visible property on the facade and all children lists
         /// </summary>
         /// <param name="self"></param>
@@ -166,6 +153,14 @@ namespace Cornerstone.MP.Extensions {
 
         private static Dictionary<string, PropertyInfo> propertyCache = new Dictionary<string, PropertyInfo>();
 
+        /// <summary>
+        /// Gets the property info object for a property using reflection.
+        /// The property info object will be cached in memory for later requests.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="newName">The name of the property in 1.2</param>
+        /// <param name="oldName">The name of the property in 1.1</param>
+        /// <returns>instance PropertyInfo or null if not found</returns>
         public static PropertyInfo GetPropertyInfo<T>(string newName, string oldName)
         {
             PropertyInfo property = null;
@@ -186,30 +181,60 @@ namespace Cornerstone.MP.Extensions {
             return property;
         }
 
+        /// <summary>
+        /// Acts the same as the ListLayout / ListView property.
+        /// </summary>
+        /// <remarks>this extension method was added to allow backwards compatibility with MediaPortal 1.1</remarks>
+        /// <param name="self"></param>
+        /// <returns>instance of GUIListControl or null</returns>
         public static GUIListControl ListLayout(this GUIFacadeControl self)
         {
             PropertyInfo property = GetPropertyInfo<GUIFacadeControl>("ListLayout", "ListView");
             return (GUIListControl)property.GetValue(self, null);
         }
 
+        /// <summary>
+        /// Acts the same as the FilmstripLayout / FilmstripView property.
+        /// </summary>
+        /// <remarks>this extension method was added to allow backwards compatibility with MediaPortal 1.1</remarks>
+        /// <param name="self"></param>
+        /// <returns>instance of GUIListControl or null</returns>
         public static GUIFilmstripControl FilmstripLayout(this GUIFacadeControl self)
         {
             PropertyInfo property = GetPropertyInfo<GUIFacadeControl>("FilmstripLayout", "FilmstripView");
             return (GUIFilmstripControl)property.GetValue(self, null);
         }
 
+        /// <summary>
+        /// Acts the same as the ThumbnailLayout / ThumbnailView property.
+        /// </summary>
+        /// <remarks>this extension method was added to allow backwards compatibility with MediaPortal 1.1</remarks>
+        /// <param name="self"></param>
+        /// <returns>instance of GUIListControl or null</returns>
         public static GUIThumbnailPanel ThumbnailLayout(this GUIFacadeControl self)
         {
             PropertyInfo property = GetPropertyInfo<GUIFacadeControl>("ThumbnailLayout", "ThumbnailView");
             return (GUIThumbnailPanel)property.GetValue(self, null);
         }
 
+        /// <summary>
+        /// Acts the same as the AlbumListLayout / AlbumListView property.
+        /// </summary>
+        /// <remarks>this extension method was added to allow backwards compatibility with MediaPortal 1.1</remarks>
+        /// <param name="self"></param>
+        /// <returns>instance of GUIListControl or null</returns>
         public static GUIListControl AlbumListLayout(this GUIFacadeControl self)
         {
             PropertyInfo property = GetPropertyInfo<GUIFacadeControl>("AlbumListLayout", "AlbumListView");
             return (GUIListControl)property.GetValue(self, null);
         }
 
+        /// <summary>
+        /// Acts the same as the CurrentLayout / View property.
+        /// </summary>
+        /// <remarks>this extension method was added to allow backwards compatibility with MediaPortal 1.1</remarks>
+        /// <param name="self"></param>
+        /// <returns>instance of GUIListControl or null</returns>
         public static void SetCurrentLayout(this GUIFacadeControl self, string layout) 
         {
             PropertyInfo property = GetPropertyInfo<GUIFacadeControl>("CurrentLayout", "View");

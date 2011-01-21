@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 namespace MovingPicturesSocialAPI {
     public class MpsAPI {
 
-        public static readonly string DefaultUrl = "http://social.moving-pictures.tv/api/1.0/";
+        public static readonly string DefaultUrl = "http://social.moving-pictures.tv/api/2/";
 
         public MpsUser User {
             get;
@@ -200,6 +200,7 @@ namespace MovingPicturesSocialAPI {
                 if (movieDTO != null) {
                     movieDTO.MovieId = Convert.ToInt32(movieId["MovieId"]);
                     movieDTO.UserRating = Convert.ToInt32(movieId["UserRating"]);
+                    movieDTO.Watched = Convert.ToString(movieId["Watched"]) == "1";
                 }
             }
         }
@@ -241,39 +242,43 @@ namespace MovingPicturesSocialAPI {
         }
 
 
-        public List<TaskListItem> GetUserTaskList() {
+        public List<TaskListItem> GetUserTaskList(DateTime? startDate, out DateTime serverTime) {
             List<TaskListItem> result = new List<TaskListItem>();
+            serverTime = DateTime.MinValue;
 
-            var tasks = Proxy.GetUserTaskList();
-
+            var tasks = Proxy.GetUserTaskList(startDate);
             foreach (XmlRpcStruct task in tasks) {
                 TaskListItem tli = new TaskListItem();
                 switch (task["ItemType"].ToString()) {
-                    case "cover":
-                        tli.ItemType = TaskItemType.Cover;
+                    case "server_time":
+                        DateTime.TryParse(task["ServerTime"].ToString(), out serverTime);
+                        break;
+                    case "cover_request":
+                        tli.Task = TaskItemType.CoverRequest;
+                        tli.MovieId = (int)task["MovieId"];
+                        result.Add(tli);
+                        break;
+                    case "new_rating":
+                        tli.Task = TaskItemType.NewRating;
+                        tli.MovieId = (int)task["MovieId"];
+                        tli.Rating = (int)task["Rating"];
+                        result.Add(tli);
+                        break;
+                    case "new_watched_status":
+                        tli.Task = TaskItemType.NewWatchedStatus;
+                        tli.MovieId = (int)task["MovieId"];
+                        tli.Watched = ((string)task["Watched"]) == "1";
+                        result.Add(tli);
+                        break;
+                    case "updated_movie_id":
+                        tli.Task = TaskItemType.UpdatedMovieId;
+                        tli.MovieId = (int)task["MovieId"];
+                        tli.NewMovieId = (int)task["NewMovieId"];
+                        result.Add(tli);
                         break;
                     default:
-                        tli.ItemType = TaskItemType.Cover;
                         break;
                 }
-                tli.MovieId = (int)task["MovieId"];
-                result.Add(tli);
-            }
-
-            return result;
-        }
-
-        public List<UserSyncData> GetUserSyncData(DateTime startDate) {
-            var xmlData = Proxy.GetUserSyncData(startDate);
-            List<UserSyncData> result = new List<UserSyncData>();
-
-            foreach (XmlRpcStruct item in xmlData)
-            {
-                UserSyncData usd = new UserSyncData();
-                usd.MovieId = int.Parse(item["MovieId"].ToString());
-                usd.Rating = int.Parse(item["Rating"].ToString());
-                usd.RatingDate = DateTime.Parse(item["RatingDate"].ToString());
-                result.Add(usd);
             }
 
             return result;
@@ -283,8 +288,20 @@ namespace MovingPicturesSocialAPI {
             Proxy.SetMovieRating(movieId, rating.ToString());
         }
 
-        public void WatchMovie(int movieId, int newWatchCount, bool insertIntoStream) {
-            Proxy.WatchMovie(movieId, newWatchCount, insertIntoStream);
+        public void WatchMovie(int movieId, bool insertIntoStream) {
+            Proxy.WatchMovie(movieId, insertIntoStream);
+        }
+
+        public void UnwatchMovie(int movieId) {
+            Proxy.UnwatchMovie(movieId);
+        }
+
+        public void WatchingMovie(int movieId) {
+            Proxy.WatchingMovie(movieId);
+        }
+
+        public void StopWatchingMovie(int movieId) {
+            Proxy.StopWatchingMovie(movieId);
         }
 
         #endregion
@@ -328,18 +345,17 @@ namespace MovingPicturesSocialAPI {
     }
 
     public struct TaskListItem {
-        public TaskItemType ItemType;
+        public TaskItemType Task;
         public int MovieId;
+        public int? Rating;
+        public bool? Watched;
+        public int? NewMovieId;
     }
 
     public enum TaskItemType {
-        Cover
+        CoverRequest,
+        NewRating,
+        NewWatchedStatus,
+        UpdatedMovieId
     }
-
-    public struct UserSyncData {
-        public int MovieId;
-        public int Rating;
-        public DateTime RatingDate;
-    }
-
 }

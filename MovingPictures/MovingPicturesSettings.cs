@@ -1899,7 +1899,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public string SocialUrl {
             get {
-                return SocialURLBase + "/api/1.0/";
+                return SocialURLBase + "api/2/";
             }
         }
 
@@ -1970,17 +1970,15 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         [CornerstoneSetting(
-            Name = "SocialLastRetrieved",
-            Description = "DateTime representing the last data that was retrieved from MPS",
+            Name = "Last Synchronization Time",
+            Description = "Date and time Moving Pictures Social synchronization tasks were last processed.",
             Groups = "|Social|",
             Identifier = "sociallastretrieved",
             Default = "",
             Hidden = true)]
-        public String SocialLastRetrieved
-        {
+        public String LastSynchTime {
             get { return _socialLastRetrieved; }
-            set
-            {
+            set {
                 _socialLastRetrieved = value;
                 OnSettingChanged("sociallastretrieved");
             }
@@ -2046,7 +2044,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The number of movies to sync to MPS in each request",
             Groups = "|Social|",
             Identifier = "socialbatchsize",
-            Default = 100)]
+            Default = 30)]
         public int SocialBatchSize {
             get { return _socialBatchSize; }
             set {

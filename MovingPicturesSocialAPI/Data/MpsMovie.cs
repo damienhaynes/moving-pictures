@@ -60,7 +60,7 @@ namespace MovingPicturesSocialAPI.Data {
         public string TranslatedTitle { get; set; }
         public string Locale { get; set; }
 
-        public int WatchCount { get; set; }
+        public bool Watched { get; set; }
         public DateTime LastWatchDate { get; set; }
         public int UserRating { get; set; }
 
