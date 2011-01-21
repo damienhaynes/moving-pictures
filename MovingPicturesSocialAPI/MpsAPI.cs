@@ -248,14 +248,11 @@ namespace MovingPicturesSocialAPI {
 
             var tasks = Proxy.GetUserTaskList(startDate);
             foreach (XmlRpcStruct task in tasks) {
-                // if we havnt grbabed the time yet, grab it and move on to the real records
-                if (serverTime == DateTime.MinValue) {
-                    DateTime.TryParse(task["ServerTime"].ToString(), out serverTime);
-                    continue;
-                }
-
                 TaskListItem tli = new TaskListItem();
                 switch (task["ItemType"].ToString()) {
+                    case "server_time":
+                        DateTime.TryParse(task["ServerTime"].ToString(), out serverTime);
+                        break;
                     case "cover_request":
                         tli.Task = TaskItemType.CoverRequest;
                         tli.MovieId = (int)task["MovieId"];
