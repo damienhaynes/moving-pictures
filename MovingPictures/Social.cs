@@ -13,6 +13,7 @@ using MovingPicturesSocialAPI.Data;
 using Cornerstone.GUI.Dialogs;
 using CookComputing.XmlRpc;
 using System.Net;
+using System.Globalization;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class Social {
@@ -22,6 +23,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         private static object socialAPILock = new Object();
         private Timer taskListTimer;
+
+        private HashSet<DBMovieInfo> currentlySyncingMovies = new HashSet<DBMovieInfo>();
 
         private DateTime lastConnectAttempt = new DateTime(1900, 1, 1);
 
@@ -279,16 +282,16 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public void ProcessTasks(DateTime? forcedStartTime) {
             try {
-                logger.Debug("Synchronizing with Moving Pictures Social...");
-
                 // store the current time and grab info on the last time we processed our task list
                 DateTime currentSyncTime;
                 DateTime lastRetrived;
-                if (!DateTime.TryParse(MovingPicturesCore.Settings.LastSynchTime, out lastRetrived))
+                if (!DateTime.TryParse(MovingPicturesCore.Settings.LastSynchTime, new CultureInfo("en-US"), System.Globalization.DateTimeStyles.None, out lastRetrived))
                     lastRetrived = DateTime.MinValue;
 
                 // if we have been passed a hard coded start time, use that instead
                 if (forcedStartTime != null) lastRetrived = (DateTime)forcedStartTime;
+
+                logger.Debug("Synchronizing with Moving Pictures Social (last synced {0})...", lastRetrived);
 
                 List<TaskListItem> taskList = SocialAPI.GetUserTaskList(lastRetrived, out currentSyncTime);
                 logger.Debug("{0} Moving Pictures Social synchronization tasks require attention.", taskList.Count);
@@ -318,7 +321,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     }
 
                 // set the time only at the end in case an error occured
-                MovingPicturesCore.Settings.LastSynchTime = currentSyncTime.ToString();
+                MovingPicturesCore.Settings.LastSynchTime = currentSyncTime.ToString(new CultureInfo("en-US"));
                 logger.Info("Moving Pictures Social synchronization complete...");
             }
             catch (WebException ex) {
@@ -355,14 +358,20 @@ namespace MediaPortal.Plugins.MovingPictures {
             DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(taskDetails.MovieId);
             if (matchingMovie == null) return;
 
+            currentlySyncingMovies.Add(matchingMovie);
+
             logger.Info("Importing rating of {0} for '{1}' from Moving Pictures Social.", taskDetails.Rating, matchingMovie.Title);
             matchingMovie.ActiveUserSettings.UserRating = taskDetails.Rating;
             matchingMovie.Commit();
+
+            currentlySyncingMovies.Remove(matchingMovie);
         }
 
         private void UpdateLocalWatchedStatus(TaskListItem taskDetails) {
             DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(taskDetails.MovieId);
             if (matchingMovie == null) return;
+
+            currentlySyncingMovies.Add(matchingMovie);
 
             logger.Info("Importing watched status from Moving Pictures Social for '{0}'. Watched: {1}", matchingMovie.Title, taskDetails.Watched);
             if (((bool)taskDetails.Watched) && matchingMovie.ActiveUserSettings.WatchedCount == 0) {
@@ -376,9 +385,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             matchingMovie.Commit();
+            currentlySyncingMovies.Remove(matchingMovie);
         }
 
         public bool WatchMovie(DBMovieInfo movie, bool includeInStream) {
+            if (currentlySyncingMovies.Contains(movie))
+                return true;
+
             if (!MovingPicturesCore.Settings.SocialEnabled) {
                 logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
                 return false;
@@ -406,6 +419,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         public bool UnwatchMovie(DBMovieInfo movie) {
+            if (currentlySyncingMovies.Contains(movie))
+                return true;
+
             if (!MovingPicturesCore.Settings.SocialEnabled) {
                 logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
                 return false;
@@ -484,6 +500,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                 DBUserMovieSettings settings = (DBUserMovieSettings)obj;
                 if (settings.RatingChanged) {
                     DBMovieInfo movie = settings.AttachedMovies[0];
+
+                    if (currentlySyncingMovies.Contains(movie))
+                        return;
 
                     MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
                     bgProc.Action = MPSActions.UpdateUserRating;

@@ -189,8 +189,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                 initActions.Add(newAction);
 
                 // artwork
-                newAction = new WorkerDelegate(DatabaseMaintenanceManager.PerformArtworkUpgradeCheck);
-                actionDescriptions.Add(newAction, "Reconfiguring Artwork...");
+                newAction = new WorkerDelegate(DatabaseMaintenanceManager.PerformGenericUpgradeChecks);
+                actionDescriptions.Add(newAction, "Performing additional upgrade tasks...");
                 initActions.Add(newAction);
             }            
 
