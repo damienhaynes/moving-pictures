@@ -196,7 +196,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private DBNode<DBMovieInfo> _categoryLoadParamater = null;
         public void ShowMessage(string heading, string lines) {
             string line1 = null, line2 = null, line3 = null, line4 = null;
-            string[] linesArray = lines.Split(new string[] { "\\n" }, StringSplitOptions.None);
+            string[] linesArray = lines.Split(new string[] { "\\n", "\n" }, StringSplitOptions.None);
 
             if (linesArray.Length >= 1) line1 = linesArray[0];
             if (linesArray.Length >= 2) line2 = linesArray[1];
@@ -227,7 +227,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             try {
                 dialog.Reset();
                 dialog.SetHeading(heading);
-                string[] linesArray = lines.Split(new string[] { "\\n" }, StringSplitOptions.None);
+                string[] linesArray = lines.Split(new string[] { "\\n", "\n" }, StringSplitOptions.None);
                 if (linesArray.Length > 0) dialog.SetLine(1, linesArray[0]);
                 if (linesArray.Length > 1) dialog.SetLine(2, linesArray[1]);
                 if (linesArray.Length > 2) dialog.SetLine(3, linesArray[2]);
@@ -297,6 +297,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
             if (currentView == BrowserViewMode.DETAILS) {
+                GUIWindowManager.Process();
                 GUIControl.FocusControl(GUIWindowManager.ActiveWindow, playButton.GetID);
             }
 

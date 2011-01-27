@@ -146,13 +146,18 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Only Auto Approve from Primary Data Source",
-            Description = "When enabled this option will auto-approve matches only from the primary data source. Other matches will be available, but not auto approved.",
+            Description = "When enabled this option will auto-approve matches only from the primary data source. Other matches will be available, but not auto approved. This will be overridden if the Auto Approval Rate is set to 'High' or 'Reckless!'",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_autoapprove_primary_source",
             Default = true,
             Hidden = false)]
         public bool AutoApproveOnlyPrimarySource {
-            get { return _autoApproveOnlyPrimarySource; }
+            get { 
+                if (AutoApproveThreshold > 1)
+                    return false;
+                
+                return _autoApproveOnlyPrimarySource; 
+            }
             set {
                 _autoApproveOnlyPrimarySource = value;
                 OnSettingChanged("importer_autoapprove_primary_source");
