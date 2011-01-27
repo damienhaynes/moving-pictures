@@ -707,7 +707,9 @@
     <Content Include="Resources\language\da.xml" />
     <Content Include="Resources\language\de.xml" />
     <Content Include="Resources\language\el.xml" />
-    <Content Include="Resources\language\en-US.xml" />
+    <Content Include="Resources\language\en-US.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\language\es.xml" />
     <Content Include="Resources\language\fr.xml" />
     <Content Include="Resources\language\he.xml" />
