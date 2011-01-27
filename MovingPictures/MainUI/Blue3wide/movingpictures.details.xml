@@ -190,7 +190,7 @@ This file should contain the details view
       <posY>445</posY>
       <align>left</align>
       <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>Star Rating Value</description>
@@ -202,7 +202,7 @@ This file should contain the details view
       <width>200</width>
       <align>left</align>
       <font>font10</font>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>Dummy User Star Rating Value</description>
@@ -211,7 +211,7 @@ This file should contain the details view
       <label>#MovingPictures.UserMovieSettings.user_rating</label>
       <posX>-50</posX>
       <posY>-50</posY>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
       <description>User Star Rating Value</description>
@@ -223,7 +223,7 @@ This file should contain the details view
       <width>200</width>
       <align>left</align>
       <font>font10</font>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+Control.HasText(199)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)+Control.HasText(199)</visible>
     </control>
     <control>
       <description>Popularity (No. of Votes)</description>
@@ -235,7 +235,7 @@ This file should contain the details view
       <width>200</width>
       <align>left</align>
       <font>font10</font>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+!Control.HasText(199)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)+!Control.HasText(199)</visible>
     </control>
     <control>
       <description>Popularity (No. of Votes)</description>
@@ -247,7 +247,7 @@ This file should contain the details view
       <width>200</width>
       <align>left</align>
       <font>font10</font>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)+Control.HasText(199)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)+Control.HasText(199)</visible>
     </control>
 	
     <control>

@@ -125,7 +125,7 @@ multiple view modes.
       <height>768</height>
       <colordiffuse>aaffffff</colordiffuse>
       <texture>MovingPictures\grey.png</texture>
-      <visible>[facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
 
@@ -150,7 +150,7 @@ multiple view modes.
       <height>468</height>
       <width>1366</width>
       <texture>MovingPictures\overlay_bottom.png</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -164,7 +164,7 @@ multiple view modes.
       <height>35</height>
       <textureFocus>MovingPictures\moving_pictures_play_focus.png</textureFocus>
       <textureNoFocus>MovingPictures\moving_pictures_play.png</textureNoFocus>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <!--control>
@@ -178,7 +178,7 @@ multiple view modes.
       <height>35</height>
       <textureFocus>moving_pictures_details_focus.png</textureFocus>
       <textureNoFocus>moving_pictures_details.png</textureNoFocus>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control-->
 
     <control>
@@ -191,7 +191,7 @@ multiple view modes.
       <width>200</width>
       <height>300</height>
       <texture>#MovingPictures.Coverart</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -203,7 +203,7 @@ multiple view modes.
       <height>340</height>
       <width>240</width>
       <texture>MovingPictures\dvd_frame.png</texture>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -218,7 +218,7 @@ multiple view modes.
       <seperator>-----------------------------------------------------------------------------------</seperator>
       <font>font12</font>
       <label>#MovingPictures.SelectedMovie.summary</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -230,7 +230,7 @@ multiple view modes.
       <textcolor>#smalltitle.color</textcolor>
       <font>font14</font>
       <label>DIRECTOR</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -242,7 +242,7 @@ multiple view modes.
       <textcolor>ffffff</textcolor>
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.directors</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -254,7 +254,7 @@ multiple view modes.
       <textcolor>#smalltitle.color</textcolor>
       <font>font14</font>
       <label>GENRE</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -267,7 +267,7 @@ multiple view modes.
       <textcolor>ffffff</textcolor>
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.genres</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -279,7 +279,7 @@ multiple view modes.
       <textcolor>#smalltitle.color</textcolor>
       <font>font14</font>
       <label>YEAR</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -292,7 +292,7 @@ multiple view modes.
       <textcolor>ffffff</textcolor>
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.year</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -304,7 +304,7 @@ multiple view modes.
       <textcolor>#smalltitle.color</textcolor>
       <font>font14</font>
       <label>RATING</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -316,7 +316,7 @@ multiple view modes.
       <textcolor>#smalltitle.color</textcolor>
       <font>font14</font>
       <label>RUNTIME</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -328,7 +328,7 @@ multiple view modes.
       <textcolor>ffffff</textcolor>
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.runtime.localized.long</label>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
 
     <!--*********************ListView Only**************************-->
@@ -341,7 +341,7 @@ multiple view modes.
       <width>400</width>
       <height>768</height>
       <texture>MovingPictures\overlay_left.png</texture>
-      <visible>facadeview.list+Control.IsVisible(50)</visible>
+      <visible>facadeview.list+control.isvisible(50)</visible>
     </control>
 
     <!-- ****************** Facade *************************************** -->
@@ -358,7 +358,7 @@ multiple view modes.
       <width>1366</width>
       <height>220</height>
       <texture>MovingPictures\list_bar.png</texture>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -370,7 +370,7 @@ multiple view modes.
       <width>196</width>
       <height>255</height>
       <texture>MovingPictures\dvd_frame.png</texture>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -382,7 +382,7 @@ multiple view modes.
       <width>166</width>
       <height>228</height>
       <texture>#MovingPictures.Coverart</texture>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -397,7 +397,7 @@ multiple view modes.
       <seperator>-----------------------------------------------------------------------------------</seperator>
       <font>font12</font>
       <label>#MovingPictures.SelectedMovie.summary</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -409,7 +409,7 @@ multiple view modes.
       <textcolor>#smalltitle.color</textcolor>
       <font>font14</font>
       <label>DIRECTOR:</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -422,7 +422,7 @@ multiple view modes.
       <textcolor>000000</textcolor>
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.directors</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -434,7 +434,7 @@ multiple view modes.
       <textcolor>#smalltitle.color</textcolor>
       <font>font14</font>
       <label>WRITER:</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -447,7 +447,7 @@ multiple view modes.
       <textcolor>000000</textcolor>
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.writers</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -459,7 +459,7 @@ multiple view modes.
       <textcolor>#smalltitle.color</textcolor>
       <font>font14</font>
       <label>GENRE:</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -472,7 +472,7 @@ multiple view modes.
       <textcolor>000000</textcolor>
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.genres</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -484,7 +484,7 @@ multiple view modes.
       <textcolor>#smalltitle.color</textcolor>
       <font>font14</font>
       <label>YEAR:</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -497,7 +497,7 @@ multiple view modes.
       <textcolor>000000</textcolor>
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.year</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -509,7 +509,7 @@ multiple view modes.
       <textcolor>#smalltitle.color</textcolor>
       <font>font14</font>
       <label>RUNTIME:</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <control>
@@ -522,7 +522,7 @@ multiple view modes.
       <textcolor>000000</textcolor>
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.runtime.localized.long</label>
-      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+Control.IsVisible(50)</visible>
+      <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+control.isvisible(50)</visible>
     </control>
 
     <!-- ***************** All Views  (Details at the top) ***************************************** -->
@@ -548,7 +548,7 @@ multiple view modes.
       <label>#MovingPictures.SelectedMovie.title</label>
       <align>center</align>
       <textcolor>ffffff</textcolor>
-      <visible>!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -562,7 +562,7 @@ multiple view modes.
       <font>font14</font>
       <label>#MovingPictures.SelectedMovie.tagline</label>
       <align>center</align>
-      <visible>!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(51)</visible>
     </control>
 
     <control>
@@ -583,7 +583,7 @@ multiple view modes.
       <align>left</align>
       <imagesToDraw>10</imagesToDraw>
       <percentage>#MovingPictures.SelectedMovie.score.localized</percentage>
-      <visible>!Control.IsVisible(51)</visible>
+      <visible>!control.isvisible(51)</visible>
     </control>
 
     <!-- ***************************** Filtering Indicator ******************************* -->
@@ -596,7 +596,7 @@ multiple view modes.
       <height>45</height>
       <width>160</width>
       <texture>MovingPictures\filters_bg.png</texture>
-      <visible>Control.IsVisible(50)+[[Control.IsVisible(8)+!Control.IsVisible(10)]|[!Control.IsVisible(8)+Control.IsVisible(10)]]</visible>
+      <visible>control.isvisible(50)+[[control.isvisible(8)+!control.isvisible(10)]|[!control.isvisible(8)+control.isvisible(10)]]</visible>
       <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
       <animation effect="slide" end="-300,0" time="500">Hidden</animation>
     </control>
@@ -609,7 +609,7 @@ multiple view modes.
       <height>45</height>
       <width>300</width>
       <texture>MovingPictures\filters_bg.png</texture>
-      <visible>Control.IsVisible(50)+[Control.IsVisible(8)+Control.IsVisible(10)]</visible>
+      <visible>control.isvisible(50)+[control.isvisible(8)+control.isvisible(10)]</visible>
       <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
       <animation effect="slide" end="-300,0" time="500">Hidden</animation>
     </control>
@@ -623,7 +623,7 @@ multiple view modes.
       <textcolor>000000</textcolor>
       <font>font10</font>
       <label>Unwatched Movies</label>
-      <visible>Control.IsVisible(50)+Control.IsVisible(8)+!Control.IsVisible(10)</visible>
+      <visible>control.isvisible(50)+control.isvisible(8)+!control.isvisible(10)</visible>
       <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
       <animation effect="slide" end="-300,0" time="500">Hidden</animation>
     </control>
@@ -637,7 +637,7 @@ multiple view modes.
       <textcolor>000000</textcolor>
       <font>font10</font>
       <label>#MovingPictures.Filter.Label</label>
-      <visible>Control.IsVisible(50)+!Control.IsVisible(8)+Control.IsVisible(10)</visible>
+      <visible>control.isvisible(50)+!control.isvisible(8)+control.isvisible(10)</visible>
       <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
       <animation effect="slide" end="-300,0" time="500">Hidden</animation>
     </control>
@@ -651,7 +651,7 @@ multiple view modes.
       <textcolor>000000</textcolor>
       <font>font10</font>
       <label>Unwatched + #MovingPictures.Filter.Label</label>
-      <visible>Control.IsVisible(50)+Control.IsVisible(8)+Control.IsVisible(10)</visible>
+      <visible>control.isvisible(50)+control.isvisible(8)+control.isvisible(10)</visible>
       <animation effect="slide" start="-300,0" end="0,0" time="500">Visible</animation>
       <animation effect="slide" end="-300,0" time="500">Hidden</animation>
     </control>
@@ -691,7 +691,7 @@ multiple view modes.
       <height>81</height>
       <textureFocus>MovingPictures\moving_pictures_view_focus.png</textureFocus>
       <textureNoFocus>MovingPictures\moving_pictures_view.png</textureNoFocus>
-      <visible>Control.IsVisible(50)</visible>
+      <visible>control.isvisible(50)</visible>
     </control-->
 
     <!-- This is an alternate view button that brings up a menu for view 
@@ -708,7 +708,7 @@ multiple view modes.
       <height>81</height>
       <textureFocus>moving_pictures_view_focus.png</textureFocus>
       <textureNoFocus>moving_pictures_view.png</textureNoFocus>
-      <visible>Control.IsVisible(50)</visible>
+      <visible>control.isvisible(50)</visible>
     </control>
     
     <control>
@@ -722,7 +722,7 @@ multiple view modes.
       <height>81</height>
       <textureFocus>MovingPictures\moving_pictures_filter_focus.png</textureFocus>
       <textureNoFocus>MovingPictures\moving_pictures_filter.png</textureNoFocus>
-      <visible>Control.IsVisible(50)</visible>
+      <visible>control.isvisible(50)</visible>
     </control>
     
     <control>
@@ -736,7 +736,7 @@ multiple view modes.
       <height>81</height>
       <textureFocus>MovingPictures\moving_pictures_settings_focus.png</textureFocus>
       <textureNoFocus>MovingPictures\moving_pictures_settings.png</textureNoFocus>
-      <visible>Control.IsVisible(50)</visible>
+      <visible>control.isvisible(50)</visible>
     </control-->
 
     <control>
@@ -748,7 +748,7 @@ multiple view modes.
       <textcolor>ffffff</textcolor>
       <font>font14</font>
       <label>categories</label>
-      <visible>Control.IsVisible(51)</visible>
+      <visible>control.isvisible(51)</visible>
     </control>
     <control>
       <description>test</description>
@@ -759,7 +759,7 @@ multiple view modes.
       <textcolor>ffffff</textcolor>
       <font>font14</font>
       <label>movies</label>
-      <visible>Control.IsVisible(50)</visible>
+      <visible>control.isvisible(50)</visible>
     </control>
 
   </controls>
