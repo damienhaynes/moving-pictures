@@ -23,7 +23,6 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginWelcomePanel));
             this.label1 = new System.Windows.Forms.Label();
             this.existingAccountButton = new System.Windows.Forms.Button();
             this.newAccountButton = new System.Windows.Forms.Button();
@@ -38,12 +37,14 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(289, 116);
             this.label1.TabIndex = 6;
-            this.label1.Text = resources.GetString("label1.Text");
+            this.label1.Text = "Using follw.it you can connect with your friends and family about the movies you " +
+                "own and watch. Rate, review, and recommend!\r\n\r\nComing soon, integration with Fac" +
+                "ebook and other social networks!";
             // 
             // existingAccountButton
             // 
             this.existingAccountButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.existingAccountButton.Location = new System.Drawing.Point(131, 145);
+            this.existingAccountButton.Location = new System.Drawing.Point(131, 132);
             this.existingAccountButton.Name = "existingAccountButton";
             this.existingAccountButton.Size = new System.Drawing.Size(154, 23);
             this.existingAccountButton.TabIndex = 5;
@@ -54,8 +55,7 @@
             // newAccountButton
             // 
             this.newAccountButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.newAccountButton.Enabled = false;
-            this.newAccountButton.Location = new System.Drawing.Point(0, 145);
+            this.newAccountButton.Location = new System.Drawing.Point(0, 132);
             this.newAccountButton.Name = "newAccountButton";
             this.newAccountButton.Size = new System.Drawing.Size(125, 23);
             this.newAccountButton.TabIndex = 1;
@@ -71,7 +71,7 @@
             this.Controls.Add(this.existingAccountButton);
             this.Controls.Add(this.newAccountButton);
             this.Name = "LoginWelcomePanel";
-            this.Size = new System.Drawing.Size(292, 171);
+            this.Size = new System.Drawing.Size(292, 158);
             this.ResumeLayout(false);
 
         }

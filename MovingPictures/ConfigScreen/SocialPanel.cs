@@ -46,7 +46,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void DisconnectMps() {
-            DialogResult response = MessageBox.Show("Are you sure you want to disconnect this computer\nfrom Moving Pictures Social?", "Moving Pictures Social", MessageBoxButtons.YesNo);
+            DialogResult response = MessageBox.Show("Are you sure you want to disconnect this computer\nfrom follw.it?", "follw.it", MessageBoxButtons.YesNo);
             if (response == DialogResult.Yes) {
                 MovingPicturesCore.Settings.SocialEnabled = false;
                 MovingPicturesCore.Settings.SocialUsername = "";
@@ -100,7 +100,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             restrictMoviesButton.Enabled = restrictSyncedMoviesCheckBox.Checked;
 
             if (!MovingPicturesCore.Settings.SocialEnabled) {
-                statusLabel.Text = "Not connected to Moving Pictures Social!";
+                statusLabel.Text = "Not connected to follw.it!";
                 statusLabel.ForeColor = Color.Red;
 
                 userLinkLabel.Visible = false;
@@ -166,6 +166,19 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void userLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             OpenUserPage();
+        }
+
+        private void logoPanel1_Click(object sender, EventArgs e) {
+            ProcessStartInfo processInfo = new ProcessStartInfo(MovingPicturesCore.Settings.SocialURLBase);
+            Process.Start(processInfo);
+        }
+
+        private void logoPanel1_MouseEnter(object sender, EventArgs e) {
+            Cursor = Cursors.Hand;
+        }
+
+        private void logoPanel1_MouseLeave(object sender, EventArgs e) {
+            Cursor = Cursors.Arrow;
         }
     }
 }
