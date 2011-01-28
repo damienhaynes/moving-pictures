@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="2" minor="1" point="1" />
-    <published month="01" day="26" year="2011" />
+    <version major="2" minor="1" point="3" />
+    <published month="01" day="28" year="2011" />
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -34,13 +34,13 @@
     <!-- Regular Expressions -->
     <set name="rx_details_page_block">
 	<![CDATA[
-	<title>.+?\((?:TV )?\d{4}[\/IVX]*\).*?</title>.+</body>
+	<title>.+?\((?:TV )?(?:Video )?\d{4}[\/IVX]*\).*?</title>.+</body>
 	]]>
     </set>
 
     <set name="rx_title_year">
 	<![CDATA[
-	<title>(.+?)\((?:TV )?(\d{4})[\/IVX]*\).*?</title>
+	<title>(.+?)\((?:TV )?(?:Video )?(\d{4})[\/IVX]*\).*?</title>
 	]]>
     </set>
 
@@ -171,7 +171,7 @@
 
       <set name="rx_title_year">
 	<![CDATA[
-	<title>(?<movieTitle>[^\(]+?)\s?\((?:TV )?(?<movieYear>\d{4})[\/IVX]*\).*?</title>
+	<title>(?<movieTitle>[^\(]+?)\s?\((?:TV )?(?:Video )?(?<movieYear>\d{4})[\/IVX]*\).*?</title>
 	]]>
       </set>
 
@@ -223,6 +223,12 @@
 	]]>
       </set>
 
+      <set name="rx_certification_details">
+        <![CDATA[
+      <div class="infobar">\s+<img width="\d+" alt="((?:G)|(?:PG)|(?:PG-13)|(?:R)|(?:X)|(?:NC-17))
+      ]]>
+      </set>
+        
       <set name="rx_certification">
 	<![CDATA[
 	(?:>\s*USA:|Rated\s*?)(?<movieCertification>(?:G)|(?:PG)|(?:PG-13)|(?:R)|(?:X)|(?:NC-17))(?:</a>|\s*?for)
@@ -317,7 +323,7 @@
       </loop>
 
       <!-- Certification -->
-      <parse name="certification" input="${details_page}" regex="${rx_certification}" />
+      <parse name="certification" input="${details_page}" regex="${rx_certification_details}" />
       <set name='movie.certification' value='${certification[0][0]:htmldecode}' />
       <if test="${movie.certification}=">
         <retrieve name='parentalguide_page' url='${site}/parentalguide' />

@@ -648,13 +648,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
            newThread.Start();
 
            // only invoke movie started event if we were not playing this movie before
-           if ((previousMovie != CurrentMovie) && (MovieStarted != null))
-               MovieStarted(CurrentMovie);
+           if (previousMovie != CurrentMovie) {
+               MovingPicturesCore.Social.CurrentlyWatching(localMedia.AttachedMovies[0], true);
+               if (MovieStarted != null) MovieStarted(CurrentMovie);
+           }
         }
 
         private void onMovieStopped(DBMovieInfo movie) {
             // reset player
             resetPlayer();
+
+            MovingPicturesCore.Social.CurrentlyWatching(movie, false);
 
             // invoke event
             if (MovieStopped != null)
@@ -670,6 +674,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // reset player
             resetPlayer();
+
+            MovingPicturesCore.Social.CurrentlyWatching(movie, false);
 
             // invoke event
             if (MovieEnded != null)
