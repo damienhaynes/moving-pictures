@@ -41,7 +41,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 MovingPicturesCore.Settings.SocialUsername = loginForm.ValidatedUser.Name;
                 MovingPicturesCore.Settings.SocialHashedPassword = loginForm.ValidatedUser.HashedPassword;
 
-                Sync();
+                MovingPicturesCore.Social.Reconnect();
+                DialogResult response = MessageBox.Show("Do you want to synchronize your collection with follw.it now?", "follw.it", MessageBoxButtons.YesNo);
+                if (response == DialogResult.Yes) {
+                    Sync();
+                }
             }
         }
 

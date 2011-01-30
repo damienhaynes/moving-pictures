@@ -1,95 +1,174 @@
-<?xml version="1.0" encoding="windows-1251"?>
+п»ї<?xml version="1.0" encoding="UTF-8"?>
 <!-- Moving Pictures translation file -->
-<!-- Russuan (RU) -->
+<!-- Russian (RU) -->
 <!-- Note: English is the fallback for any strings not found in other languages -->
-<!-- Contributed by mitiok2002 in Issue#20 -->
-
 <strings>
-  <string Field="ProblemLoadingSkinFile">Проблема при загрузке skin-файла...</string>
-  <string Field="NoImportPathsHeading">Отсутствуют пути для импорта!</string>
-  <string Field="NoImportPathsBody">Похоже что вы не определили\nни одного пути для импорта. Вам\nследует закрыть MediaPortal и\nзапустить MediaPortal\nConfiguration Screen для\nнастройки Moving Pictures.</string>
-  <string Field="ShowAllMovies">Все фильмы</string>
-  <string Field="ShowOnlyUnwatchedMovies">Только непросмотренные фильмы</string>
-  <string Field="SortBy">Сорт.</string>
-  <string Field="ChangeView">Изм. вид</string>
-  <string Field="ListView">Список</string>
-  <string Field="ThumbnailView">Иконки</string>
-  <string Field="LargeThumbnailView">Большие иконки</string>
-  <string Field="FilmstripView">Обложки</string>
-  <string Field="UpdateDetailsFromOnline">Обновить данные из Internet</string>
-  <string Field="CycleCoverArt">Следующая Обложка</string>
-  <string Field="CheckForMissingArtwork">Проверить постеры в Internet</string>
-  <string Field="MarkAsUnwatched">Отметить как непросмотренный</string>
-  <string Field="MarkAsWatched">Отметить как просмотренный</string>
-  <string Field="DeleteMovie">Удалить фильм</string>
-  <string Field="CannotDeleteReadOnly">Файл только для чтения, невозможно удалить.\nВы хотите чтобы Moving Pictures пропустил этот фильм?</string>
-  <string Field="CannotDeleteOffline">Не возможно удалить {0}\n т.к. файл отсутствует</string>
-  <string Field="DoYouWantToDelete">Вы деуствительно хотите удалить \n{0}\nс жесткого диска?</string>
-  <string Field="DeleteFailed">Ошибка при удалении</string>
-  <string Field="UpdateMovieDetailsHeader">Обновить данные о фильме</string>
-  <string Field="UpdateMovieDetailsBody">Вы собираетесь все данные по фильму, все ручные \nисправления будут отменены. Продолжать?</string>
-  <string Field="MediaNotAvailableHeader">Источник не доступен</string>
-  <string Field="MediaNotAvailableBody">Источник для фильма не доступен в настоящий\nмомент. Пожалуйста, подключите или вставьте\nисточник: {0}</string>
-  <string Field="VirtualDriveHeader">Вирутальный диск не готов</string>
-  <string Field="VirtualDriveMessage">Виртуальные диск не готов. Пожалуйста, попробуйте\nеще раз или отмените воспроизведение.</string>
-  <string Field="Retry">Повтор</string>
-  <string Field="Cancel">Отмена</string>
-  <string Field="Error">Ошибка</string>
-  <string Field="MediaIsMissing">Источник, который вы выбрали для фильма отсутствует!\nЧто то пошло не так...</string>
-  <string Field="FailedMountingImage">Ошибка при сборке образа DVD</string>
-  <string Field="PlaybackFailedHeader">Ошибка при воспроизведении</string>
-  <string Field="PlaybackFailed">Воспроизведение не возможно, т.к. '{0}'\n расширение не записано в конфигурации Mediaportal.\nДобавьте расширение или используйте внешний плейер.</string>
-  <string Field="MissingExternalPlayerExe">Внешний плейер не найден.\nИсправьте путь к файлу плейера.</string>
-  <string Field="ResumeFromLast">Воспроизвести, где остановились?</string>
-  <string Field="ResumeFrom">Воспроизведение с:</string>
-  <string Field="InvalidVideoDiscFormat">Либо файл образа записан неправильно,\n либо конфигурация Daemon Tools\nв MediaPortal не корректна.</string>
-  <string Field="ContinueToNextPartHeader">Продолжить со след. части?</string>
-  <string Field="ContinueToNextPartBody">Хотите продолжить со части {0}?</string>
-  <string Field="Rate">Оценить</string>
-  <string Field="SelectYourRating">Поставить оценку для {0}</string>
-  
-      <!-- friendly names for sorting -->
-  <string Field="Title">Название</string>
-  <string Field="DateAdded">Добавлено</string>
-  <string Field="Year">Год</string>
-  <string Field="Certification">Рейтинг MPAA</string>
-  <string Field="Language">Язык</string>
-  <string Field="Score">Рейтинг</string>
-  <string Field="Runtime">Время</string>
-  <string Field="FilePath">Путь</string>
-  
-	  <!-- Group names for the date added sorting -->
-  <string Field="Future">В будущем</string>
-  <string Field="Today">Сегодня</string>
-  <string Field="Yesterday">Вчера</string>
-  <string Field="Sunday">Воскресенье</string>
-  <string Field="Monday">Понедельник</string>
-  <string Field="Tuesday">Вторник</string>
-  <string Field="Wednesday">Среда</string>
-  <string Field="Thursday">Четверг</string>
-  <string Field="Friday">Пятница</string>
-  <string Field="Saturday">Суббота</string>
-  <string Field="LastWeek">Неделю назад</string>
-  <string Field="TwoWeeksAgo">Две недели назад</string>
-  <string Field="ThreeWeeksAgo">Три недели назад</string>
-  <string Field="LastMonth">Месяц назад</string>
-  <string Field="TwoMonthsAgo">Два месяца назад</string>
-  <string Field="ThreeMonthsAgo">Три месяца назад</string>
-  <string Field="EarlierThisYear">В этом году</string>
-  <string Field="LastYear">В прошлом году</string>
-  <string Field="Older">Старше</string>
-
-  <!-- Remote Control Numeric Alphabet -->
-
-  <string Field="RemoteNumericAlphabet0"></string>
-  <string Field="RemoteNumericAlphabet1"></string>
-  <string Field="RemoteNumericAlphabet2">abcАБВГ</string>
-  <string Field="RemoteNumericAlphabet3">defДЕЖЗ</string>
-  <string Field="RemoteNumericAlphabet4">ghiИЙКЛ</string>
-  <string Field="RemoteNumericAlphabet5">jklМНОП</string>
-  <string Field="RemoteNumericAlphabet6">mnoРСТУ</string>
-  <string Field="RemoteNumericAlphabet7">pqrsФХЦЧ</string>
-  <string Field="RemoteNumericAlphabet8">tuvШЩЪЫ</string>
-  <string Field="RemoteNumericAlphabet9">wxyzЬЭЮЯ</string> 
-  
+  <!-- A -->
+  <string Field="Actor">РђРєС‚РµСЂ</string>
+  <string Field="Actors">РђРєС‚РµСЂС‹</string>
+  <string Field="AllMovies">Р’СЃРµ С„РёР»СЊРјС‹</string>
+  <!-- C -->
+  <string Field="Cancel">РћС‚РјРµРЅР°</string>
+  <string Field="CannotDeleteOffline">РќРµ РІРѕР·РјРѕР¶РЅРѕ СѓРґР°Р»РёС‚СЊ {0}\n С‚.Рє. С„Р°Р№Р» РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚</string>
+  <string Field="CannotDeleteReadOnly">Р¤Р°Р№Р» С‚РѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ, РЅРµРІРѕР·РјРѕР¶РЅРѕ СѓРґР°Р»РёС‚СЊ.\nР’С‹ С…РѕС‚РёС‚Рµ С‡С‚РѕР±С‹ Moving Pictures РїСЂРѕРїСѓСЃС‚РёР» СЌС‚РѕС‚ С„РёР»СЊРј?</string>
+  <string Field="CategoryEmptyDescription">Р’ СЌС‚РѕР№ РєР°С‚РµРіРѕСЂРёРё РЅРµС‚ С„РёР»СЊРјРѕРІ.</string>
+  <string Field="CategoryEmptyHeader">Р’ РєР°С‚РµРіРѕСЂРёРё РїСѓСЃС‚Рѕ</string>
+  <string Field="Certification">Р РµР№С‚РёРЅРі MPAA</string>
+  <string Field="ChangeView">РР·Рј. РІРёРґ</string>
+  <string Field="CheckForMissingArtwork">РџСЂРѕРІРµСЂРёС‚СЊ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‰РёРµ РїРѕСЃС‚РµСЂС‹ РІ РёРЅС‚РµСЂРЅРµС‚</string>
+  <string Field="ContinueToNextPartBody">РҐРѕС‚РёС‚Рµ РїСЂРѕРґРѕР»Р¶РёС‚СЊ СЃ С‡Р°СЃС‚Рё {0}?</string>
+  <string Field="ContinueToNextPartHeader">РџСЂРѕРґРѕР»Р¶РёС‚СЊ СЃРѕ СЃР»РµРґ. С‡Р°СЃС‚Рё?</string>
+  <string Field="CycleCoverArt">РџРѕРІС‚РѕСЂСЏС‚СЊ РѕР±Р»РѕР¶РєСѓ</string>
+  <string Field="CycleView">РЎР»РµРґСѓСЋС‰РёР№ РІРёРґ</string>
+  <!-- D -->
+  <string Field="DateAdded">Р”РѕР±Р°РІР»РµРЅРѕ</string>
+  <string Field="DateDay">РґРµРЅСЊ</string>
+  <string Field="DateDays">РґРЅРё</string>
+  <string Field="DateMonth">РјРµСЃСЏС†</string>
+  <string Field="DateMonths">РјРµСЃСЏС†С‹</string>
+  <string Field="DatePartAgo">{0} {1} РЅР°Р·Р°Рґ</string>
+  <string Field="DatePartWithinDays">Р—Р° РїРѕСЃР»РµРґРЅРёРµ {0} РґРЅСЏ(РµР№)</string>
+  <string Field="DatePartWithinMonths">Р—Р° РїРѕСЃР»РµРґРЅРёРµ {0} РјРµСЃСЏС†(Р°)</string>
+  <string Field="DatePartWithinWeeks">Р—Р° РїРѕСЃР»РµРґРЅРёРµ {0} РЅРµРґРµР»СЋ(Рё)</string>
+  <string Field="DatePartWithinYears">Р—Р° РїРѕСЃР»РµРґРЅРёРµ {0} РіРѕРґ(Р°)</string>
+  <string Field="DateWeek">РЅРµРґРµР»СЏ</string>
+  <string Field="DateWeeks">РЅРµРґРµР»Рё</string>
+  <string Field="DateYear">РіРѕРґ</string>
+  <string Field="DateYears">РіРѕРґС‹</string>
+  <string Field="DecadeShort">{0}0Р№</string>
+  <string Field="DeleteFailed">РћС€РёР±РєР° РїСЂРё СѓРґР°Р»РµРЅРёРё</string>
+  <string Field="DeleteMovie">РЈРґР°Р»РёС‚СЊ С„РёР»СЊРј</string>
+  <string Field="Director">Р РµР¶РёСЃРµСЂ</string>
+  <string Field="Directors">Р РµР¶РёСЃРµСЂС‹</string>
+  <string Field="DownAbbreviation">(РІРЅРёР·)</string>
+  <string Field="DoYouWantToDelete">Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ\n{0}\nСЃ Р¶РµСЃС‚РєРѕРіРѕ РґРёСЃРєР°?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Р Р°РЅРµРµ РІ СЌС‚РѕРј РіРѕРґСѓ</string>
+  <string Field="Error">РћС€РёР±РєР°</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">Рљ СЃРѕР¶Р°Р»РµРЅРёСЋ, РЅРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊ РѕР±СЂР°Р· DVD</string>
+  <string Field="FilePath">РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ</string>
+  <string Field="FilmstripView">РћР±Р»РѕР¶РєРё</string>
+  <string Field="FilterBy">Р¤РёР»СЊС‚СЂ</string>
+  <string Field="Friday">РџСЏС‚РЅРёС†Р°</string>
+  <string Field="Future">Р’ Р±СѓРґСѓС‰РµРј</string>
+  <!-- G -->
+  <string Field="Genre">Р–Р°РЅСЂ</string>
+  <string Field="Genres">Р–Р°РЅСЂС‹</string>
+  <!-- I -->
+  <string Field="InvalidPin">РќРµРІРµСЂРЅС‹Р№ PIN-РєРѕРґ!</string>
+  <string Field="InvalidVideoDiscFormat">Р›РёР±Рѕ С„Р°Р№Р» РѕР±СЂР°Р·Р° РЅРµ СЃРѕРґРµСЂР¶РёС‚ РґРѕРїСѓСЃС‚РёРјС‹Р№\nС„РѕСЂРјР°С‚ РІРёРґРµРѕ, Р»РёР±Рѕ РєРѕРЅС„РёРіСѓСЂР°С†РёСЏ Daemon Tools\nРІ РњРµРґРёР°РїРѕСЂС‚Р°Р»Рµ РЅРµ РєРѕСЂСЂРµРєС‚РЅР°.</string>
+  <!-- L -->
+  <string Field="Language">РЇР·С‹Рє</string>
+  <string Field="LargeThumbnailView">Р‘РѕР»СЊС€РёРµ РјРёРЅРёР°С‚СЋСЂС‹</string>
+  <string Field="LastMonth">РњРµСЃСЏС† РЅР°Р·Р°Рґ</string>
+  <string Field="LastWeek">РќРµРґРµР»СЋ РЅР°Р·Р°Рґ</string>
+  <string Field="LastYear">Р’ РїСЂРѕС€Р»РѕРј РіРѕРґСѓ</string>
+  <string Field="ListView">РЎРїРёСЃРѕРє</string>
+  <string Field="LockRestrictedMovies">Р—Р°Р±Р»РѕРєРёСЂРѕРІР°С‚СЊ РѕРіСЂР°РЅРёС‡РµРЅРЅС‹Рµ С„РёР»СЊРјС‹</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">РћС‚РјРµС‚РёС‚СЊ РєР°Рє РЅРµРїСЂРѕСЃРјРѕС‚СЂРµРЅРЅС‹Р№</string>
+  <string Field="MarkAsWatched">РћС‚РјРµС‚РёС‚СЊ РєР°Рє РїСЂРѕСЃРјРѕС‚СЂРµРЅРЅС‹Р№</string>
+  <string Field="MediaIsMissing">РСЃС‚РѕС‡РЅРёРє, РєРѕС‚РѕСЂС‹Р№ РІС‹Р±СЂР°РЅ РґР»СЏ С„РёР»СЊРјР°, РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚!\nРћС‡РµРЅСЊ Р¶Р°Р»СЊ, РЅРѕ С‡С‚Рѕ-С‚Рѕ РїРѕС€Р»Рѕ РЅРµ С‚Р°Рє...</string>
+  <string Field="MediaNotAvailableBody">РСЃС‚РѕС‡РЅРёРє РґР»СЏ РІС‹Р±СЂР°РЅРЅРѕРіРѕ С„РёР»СЊРјР° РЅРµ РґРѕСЃС‚СѓРїРµРЅ РІ РЅР°СЃС‚РѕСЏС‰РёР№\nРјРѕРјРµРЅС‚. РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РїРѕРґРєР»СЋС‡РёС‚Рµ РёР»Рё РІСЃС‚Р°РІСЊС‚Рµ\nРёСЃС‚РѕС‡РЅРёРє: {0}</string>
+  <string Field="MediaNotAvailableHeader">РСЃС‚РѕС‡РЅРёРє РЅРµ РґРѕСЃС‚СѓРїРµРЅ</string>
+  <string Field="MissingExternalPlayerExe">Р’РЅРµС€РЅРёР№ РїР»РµРµСЂ РґР»СЏ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ HD РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚.\nРСЃРїСЂР°РІСЊС‚Рµ РїСѓС‚СЊ Рє С„Р°Р№Р»Сѓ РїР»РµР№РµСЂР°.</string>
+  <string Field="Monday">РџРѕРЅРµРґРµР»СЊРЅРёРє</string>
+  <string Field="Movie">Р¤РёР»СЊРј</string>
+  <string Field="MovieDetails">Р”Р°РЅРЅС‹Рµ Рѕ С„РёР»СЊРјРµ</string>
+  <string Field="MovieOptions">РџР°СЂР°РјРµС‚СЂС‹ С„РёР»СЊРјР°</string>
+  <string Field="Movies">Р¤РёР»СЊРјС‹</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">РџРѕС…РѕР¶Рµ С‡С‚Рѕ РІС‹ РЅРµ РѕРїСЂРµРґРµР»РёР»Рё\nРЅРё РѕРґРЅРѕРіРѕ РїСѓС‚Рё РґР»СЏ РёРјРїРѕСЂС‚Р°. Р’Р°Рј\nСЃР»РµРґСѓРµС‚ Р·Р°РєСЂС‹С‚СЊ РњРµРґРёР°РїРѕСЂС‚Р°Р» Рё\nР·Р°РїСѓСЃС‚РёС‚СЊ РљРѕРЅС„РёРіСѓСЂР°С‚РѕСЂ\n РњРµРґРёР°РїРѕСЂС‚Р°Р»Р° РґР»СЏ\nРЅР°СЃС‚СЂРѕР№РєРё Moving Pictures.</string>
+  <string Field="NoImportPathsHeading">РћС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РїСѓС‚Рё РґР»СЏ РёРјРїРѕСЂС‚Р°!</string>
+  <!-- O -->
+  <string Field="Older">РЎС‚Р°СЂС€Рµ</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Р РѕРґРёС‚РµР»СЊСЃРєРёР№ РєРѕРЅС‚СЂРѕР»СЊ РЅРµ РІРєР»СЋС‡РµРЅ.</string>
+  <string Field="PinCodeHeader">Р Р°Р·Р±Р»РѕРєРёСЂРѕРІР°РЅРёРµ РѕРіСЂР°РЅРёС‡РµРЅРЅРѕРіРѕ СЃРѕРґРµСЂР¶Р°РЅРёСЏ</string>
+  <string Field="PinCodePrompt">РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ PIN-РєРѕРґ РґР»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ:</string>
+  <string Field="PlaybackFailed">Р’РѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёРµ РЅРµ РІРѕР·РјРѕР¶РЅРѕ, С‚.Рє. '{0}'\nСЂР°СЃС€РёСЂРµРЅРёРµ РЅРµ Р·Р°РїРёСЃР°РЅРѕ РІ РєРѕРЅС„РёРіСѓСЂР°С†РёРё РњРµРґРёР°РїРѕСЂС‚Р°Р»Р°.\nР”РѕР±Р°РІСЊС‚Рµ СЂР°СЃС€РёСЂРµРЅРёРµ РёР»Рё РЅР°СЃС‚СЂРѕР№С‚Рµ РІРЅРµС€РЅРёР№ РїР»РµРµСЂ\nРё РїРѕРїСЂРѕР±СѓР№С‚Рµ СЃРЅРѕРІР°.</string>
+  <string Field="PlaybackFailedHeader">РћС€РёР±РєР° РїСЂРё РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёРё</string>
+  <string Field="ProblemLoadingSkinFile">Рљ СЃРѕР¶Р°Р»РµРЅРёСЋ, РІРѕР·РЅРёРєР»Р° РїСЂРѕР±Р»РµРјР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ С„Р°Р№Р»Р° РѕР±РѕР»РѕС‡РєРё...</string>
+  <!-- R -->
+  <string Field="Rate">Р РµР№С‚РёРЅРі</string>
+  <string Field="Rated">РћС†РµРЅРєР°</string>
+  <string Field="RateFiveStarFive">РЁРµРґРµРІСЂ</string>
+  <string Field="RateFiveStarFour">Р’РµР»РёРєРѕР»РµРїРЅС‹Р№</string>
+  <string Field="RateFiveStarOne">РЈР¶Р°СЃРЅС‹Р№</string>
+  <string Field="RateFiveStarThree">РҐРѕСЂРѕС€РёР№</string>
+  <string Field="RateFiveStarTwo">РџРѕСЃСЂРµРґСЃС‚РІРµРЅРЅС‹Р№</string>
+  <string Field="RateHeading">РћС†РµРЅРєР° С„РёР»СЊРјР°</string>
+  <string Field="RecentlyAddedMovies">РќРµРґР°РІРЅРѕ РґРѕР±Р°РІР»РµРЅРЅС‹Рµ С„РёР»СЊРјС‹</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abcРђР‘Р’Р“</string>
+  <string Field="RemoteNumericAlphabet3">defР”Р•Р–Р—</string>
+  <string Field="RemoteNumericAlphabet4">ghiРР™РљР›</string>
+  <string Field="RemoteNumericAlphabet5">jklРњРќРћРџ</string>
+  <string Field="RemoteNumericAlphabet6">mnoР РЎРўРЈ</string>
+  <string Field="RemoteNumericAlphabet7">pqrsР¤РҐР¦Р§</string>
+  <string Field="RemoteNumericAlphabet8">tuvРЁР©РЄР«</string>
+  <string Field="RemoteNumericAlphabet9">wxyzР¬Р­Р®РЇ</string> 
+  <string Field="ResumeFrom">Р’РѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёРµ СЃ:</string>
+  <string Field="ResumeFromLast">Р’РѕСЃРїСЂРѕРёР·РІРµСЃС‚Рё, РіРґРµ РѕСЃС‚Р°РЅРѕРІРёР»РёСЃСЊ?</string>
+  <string Field="Retry">РџРѕРІС‚РѕСЂ</string>
+  <string Field="Runtime">РџСЂРѕРґРѕР»Р¶РёС‚РµР»СЊРЅРѕСЃС‚СЊ</string>
+  <string Field="RuntimeHour">{0} С‡Р°СЃ</string>
+  <string Field="RuntimeHours">{0} С‡Р°СЃР°</string>
+  <string Field="RuntimeLong">{0} Рё {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} Рё {2}</string>
+  <string Field="RuntimeMinute">{0} РјРёРЅСѓС‚Р°</string>
+  <string Field="RuntimeMinutes">{0} РјРёРЅСѓС‚(С‹)</string>
+  <string Field="RuntimeSecond">{0} СЃРµРєСѓРЅРґР°</string>
+  <string Field="RuntimeSeconds">{0} СЃРµРєСѓРЅРґ(С‹)</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}С‡{1:00}Рј{2:00}СЃ</string>
+  <!-- S -->
+  <string Field="Saturday">РЎСѓР±Р±РѕС‚Р°</string>
+  <string Field="Score">Р РµР№С‚РёРЅРі</string>
+  <string Field="SelectYourRating">РЈРєР°Р¶РёС‚Рµ СЂРµР№С‚РёРЅРі РґР»СЏ {0}</string>
+   <string Field="ShowOnlyUnwatchedMovies">РўРѕР»СЊРєРѕ РЅРµРїСЂРѕСЃРјРѕС‚СЂРµРЅРЅС‹Рµ С„РёР»СЊРјС‹</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">РџСЂРѕСЃРјРѕС‚СЂРµРЅРЅС‹Рµ Рё РЅРµРїСЂРѕСЃРјРѕС‚СЂРµРЅРЅС‹Рµ С„РёР»СЊРјС‹</string>
+  <string Field="SkinDoesNotSupportCategories">Р­С‚Р° РѕР±РѕР»РѕС‡РєР° РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ РєР°С‚РµРіРѕСЂРёРё.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Р­С‚Р° РѕР±РѕР»РѕС‡РєР° РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ PIN-РєРѕРґ.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Р­С‚Р° РѕР±РѕР»РѕС‡РєР° РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ СЂРµР№С‚РёРЅРі.</string>
+  <string Field="SortBy">РЎРѕСЂС‚РёСЂРѕРІРєР°</string>
+  <string Field="SortDirection">РќР°РїСЂР°РІР»РµРЅРёРµ СЃРѕСЂС‚РёСЂРѕРІРєРё</string>
+  <string Field="StarRating">Р РµР№С‚РёРЅРі</string>
+  <string Field="Sunday">Р’РѕСЃРєСЂРµСЃРµРЅСЊРµ</string>
+  <!-- T -->
+  <string Field="ThisMonth">Р—Р° СЌС‚РѕС‚ РјРµСЃСЏС†</string>
+  <string Field="ThisWeek">Р—Р° СЌС‚Сѓ РЅРµРґРµР»СЋ</string>
+  <string Field="ThisYear">Р—Р° СЌС‚РѕС‚ РіРѕРґ</string>
+  <string Field="ThreeMonthsAgo">РўСЂРё РјРµСЃСЏС†Р° РЅР°Р·Р°Рґ</string>
+  <string Field="ThreeWeeksAgo">РўСЂРё РЅРµРґРµР»Рё РЅР°Р·Р°Рґ</string>
+  <string Field="ThumbnailView">РњРёРЅРёР°С‚СЋСЂС‹</string>
+  <string Field="Thursday">Р§РµС‚РІРµСЂРі</string>
+  <string Field="Title">РќР°Р·РІР°РЅРёРµ</string>
+  <string Field="Today">РЎРµРіРѕРґРЅСЏ</string>
+  <string Field="ToggleParentalLock">РџРµСЂРµРєР»СЋС‡РёС‚СЊ СЂРѕРґРёС‚РµР»СЊСЃРєРёР№ РєРѕРЅС‚СЂРѕР»СЊ</string>
+  <string Field="Tuesday">Р’С‚РѕСЂРЅРёРє</string>
+  <string Field="TwoMonthsAgo">Р”РІР° РјРµСЃСЏС†Р° РЅР°Р·Р°Рґ</string>
+  <string Field="TwoWeeksAgo">Р”РІРµ РЅРµРґРµР»Рё РЅР°Р·Р°Рґ</string>
+  <!-- U -->
+  <string Field="Unknown">РќРµРёР·РІРµСЃС‚РЅ.</string>
+  <string Field="UnlockRestrictedMovies">РћС‚РєСЂС‹С‚СЊ РѕРіСЂР°РЅРёС‡РµРЅРЅС‹Рµ С„РёР»СЊРјС‹</string>
+  <string Field="UnwatchedMovies">РќРµРїСЂРѕСЃРјРѕС‚СЂРµРЅРЅС‹Рµ С„РёР»СЊРјС‹</string>
+  <string Field="UpAbbreviation">(РІРІРµСЂС…)</string>
+  <string Field="UpdateDetailsFromOnline">РћР±РЅРѕРІРёС‚СЊ РґР°РЅРЅС‹Рµ РёР· РёРЅС‚РµСЂРЅРµС‚</string>
+  <string Field="UpdateMovieDetailsBody">Р’С‹ СЃРѕР±РёСЂР°РµС‚РµСЃСЊ РѕР±РЅРѕРІРёС‚СЊ РІСЃРµ РґР°РЅРЅС‹Рµ РїРѕ С„РёР»СЊРјСѓ, Р»СЋР±С‹Рµ\nРїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РёСЃРїСЂР°РІР»РµРЅРёСЏ Р±СѓРґСѓС‚ РѕС‚РјРµРЅРµРЅС‹. РџСЂРѕРґРѕР»Р¶Р°С‚СЊ?</string>
+  <string Field="UpdateMovieDetailsHeader">РћР±РЅРѕРІРёС‚СЊ РґР°РЅРЅС‹Рµ Рѕ С„РёР»СЊРјРµ</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Р’РёСЂСѓС‚Р°Р»СЊРЅС‹Р№ РґРёСЃРє РЅРµ РіРѕС‚РѕРІ</string>
+  <string Field="VirtualDriveMessage">Р’РёСЂС‚СѓР°Р»СЊРЅС‹Р№ РґРёСЃРє РЅРµ РіРѕС‚РѕРІ. РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РїРѕРїСЂРѕР±СѓР№С‚Рµ\nРµС‰Рµ СЂР°Р· РёР»Рё РѕС‚РјРµРЅРёС‚Рµ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёРµ.</string>
+  <!-- W -->
+  <string Field="Wednesday">РЎСЂРµРґР°</string>
+  <string Field="Writer">РђРІС‚РѕСЂ</string>
+  <string Field="Writers">РђРІС‚РѕСЂС‹</string>
+  <!-- Y -->
+  <string Field="Year">Р“РѕРґ</string>
+  <string Field="Yesterday">Р’С‡РµСЂР°</string>
 </strings>

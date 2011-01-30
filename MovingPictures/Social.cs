@@ -113,7 +113,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         }
 
-        private bool Reconnect() {
+        public bool Reconnect() {
             lastConnectAttempt = new DateTime(1900, 1, 1);
             return IsOnline;
         }
