@@ -1888,7 +1888,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Base URL for follw.it.",
             Groups = "|follw.it|",
             Identifier = "socialurlbase",
-            Default = "http://social.moving-pictures.tv/",
+            Default = "http://follw.it/",
             Hidden = false)]
         public string SocialURLBase {
             get { return _socialURLBase; }
