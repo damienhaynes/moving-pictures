@@ -95,6 +95,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void Init() {
             _socialAPI = null;
+            lastConnectAttempt = new DateTime(1900, 1, 1);
 
             if (MovingPicturesCore.Settings.SocialEnabled) {
                 MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
@@ -552,7 +553,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             try {
                 // Reinitializes the SocialAPI object when Username, Password, or URLBase changes.
                 if (setting.Key == "socialurlbase" || setting.Key == "socialusername" || setting.Key == "socialpassword") {
-                        Init();
+                    Init();
                 }
 
                 // Recreate the timer if the timer setting changes
