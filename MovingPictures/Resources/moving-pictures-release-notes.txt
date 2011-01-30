@@ -8,9 +8,10 @@ forums to interact with the community and developers, or you can visit the
 Moving Pictures Wiki for access to the user's guide and frequently asked questions.
 
 Moving Pictures now optionally integrates with the follw.it website (formerly Moving 
-Pictures Social). follw.it is all about the social aspects of watching movies. You 
-can follow what your friends are watching, share with people what you have been 
-seeing lately, get recommendation about movies you may enjoy, and more.
+Pictures Social). follw.it is an opt in service that is all about the social 
+aspects of watching movies. You can follow what your friends are watching, share 
+with people what you have been seeing lately, get recommendation about movies
+you may enjoy, and more.
 
 follw.it                        http://follw.it
 follw.it Bug Tracker:           http://trac.follw.it
