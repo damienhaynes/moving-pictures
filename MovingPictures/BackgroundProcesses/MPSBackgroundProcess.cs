@@ -15,6 +15,8 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         AddMoviesToCollection,
         RemoveMovieFromCollection,
         UpdateUserRating,
+        BeginWatching,
+        EndWatching,
         WatchMovie,
         WatchMovieIgnoreStream,
         UnwatchMovie,
@@ -24,12 +26,12 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public override string Name {
-            get { return "MPS Background Process"; }
+            get { return "follw.it Background Process"; }
         }
 
         public override string Description {
             get {
-                return "This process sends data to Moving Pictures Social.";
+                return "This process sends data to follw.it.";
             }
         }
 
@@ -44,7 +46,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         public override void Work() {
             try {
                 if (MovingPicturesCore.Settings.SocialEnabled == false || !MovingPicturesCore.Social.IsOnline) {
-                    logger.Warn("Attempting to perform Moving Pictures Social actions when feature is disabled or when server is unavailable.");
+                    logger.Warn("Attempting to perform follw.it actions when feature is disabled or when server is unavailable.");
                     return;
                 }
 
@@ -52,7 +54,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                     case MPSActions.AddMoviesToCollection:
                         List<MpsMovie> movieDTOs = new List<MpsMovie>();
                         foreach (DBMovieInfo movie in Movies) {
-                            logger.Info("Adding {0} to Moving Pictures Social Collection", movie.Title);
+                            logger.Info("Adding {0} to follw.it Collection", movie.Title);
                             movieDTOs.Add(Social.MovieToMPSMovie(movie));
                         }
                         MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref movieDTOs);
@@ -74,7 +76,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
                     case MPSActions.RemoveMovieFromCollection:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
-                            logger.Info("Removing {0} from MPS collection", FirstMovie.Title);
+                            logger.Info("Removing {0} from follw.it collection", FirstMovie.Title);
                             MovingPicturesCore.Social.SocialAPI.RemoveMovieFromCollection((int)FirstMovie.MpsId);
                             FirstMovie.MpsId = null;
                         }
@@ -84,21 +86,35 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                     case MPSActions.UpdateUserRating:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             int newRating = FirstMovie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
-                            logger.Info("Updating MPS movie rating for {0} to {1} stars", FirstMovie.Title, newRating);
+                            logger.Info("Updating follw.it movie rating for {0} to {1} stars", FirstMovie.Title, newRating);
                             MovingPicturesCore.Social.SocialAPI.SetMovieRating((int)FirstMovie.MpsId, newRating);
                         }
                         break;
 
+                    case MPSActions.BeginWatching:
+                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                            logger.Info("Notifying follw.it you are watching '{0}'.", FirstMovie.Title);
+                            MovingPicturesCore.Social.SocialAPI.WatchingMovie((int)FirstMovie.MpsId);
+                        }
+                        break;
+                    
+                    case MPSActions.EndWatching:
+                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                            logger.Info("Notifying follw.it you are done watching '{0}'.", FirstMovie.Title);
+                            MovingPicturesCore.Social.SocialAPI.StopWatchingMovie((int)FirstMovie.MpsId);
+                        }
+                        break;
+                    
                     case MPSActions.WatchMovie:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
-                            logger.Info("Setting MPS watched for {0}", FirstMovie.Title);
+                            logger.Info("Setting follw.it watched for {0}", FirstMovie.Title);
                             MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, true);
                         }
                         break;
 
                     case MPSActions.WatchMovieIgnoreStream:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
-                            logger.Info("Setting MPS watched for {0}", FirstMovie.Title);
+                            logger.Info("Setting follw.it watched for {0}", FirstMovie.Title);
                             MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, false);
                         }
                         break;
@@ -106,7 +122,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
                     case MPSActions.UnwatchMovie:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
-                            logger.Info("Setting MPS unwatched for {0}", FirstMovie.Title);
+                            logger.Info("Setting follw.it unwatched for {0}", FirstMovie.Title);
                             MovingPicturesCore.Social.SocialAPI.UnwatchMovie((int)FirstMovie.MpsId);
                         }
                         break;
@@ -120,11 +136,11 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                 }
             }
             catch (WebException ex) {
-                logger.Error("There was a problem connecting to the Moving Pictures Social Server! " + ex.Message);
+                logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
                 MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
-                logger.ErrorException("Unexpected error connecting to Moving Pictures Social.\n", ex);
+                logger.ErrorException("Unexpected error connecting to follw.it.\n", ex);
                 MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
             }
 

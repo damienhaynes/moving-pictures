@@ -60,7 +60,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(285, 52);
             this.label2.TabIndex = 2;
-            this.label2.Text = "You are now connected to Moving Pictures Social! ";
+            this.label2.Text = "You are now connected to follw.it! ";
             // 
             // LoginSuccessPanel
             // 

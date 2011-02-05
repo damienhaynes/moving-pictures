@@ -114,11 +114,11 @@
     <Compile Include="UI\Panels\LoginWelcomePanel.Designer.cs">
       <DependentUpon>LoginWelcomePanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Panels\SplashPanel.cs">
+    <Compile Include="UI\Panels\LogoPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Panels\SplashPanel.Designer.cs">
-      <DependentUpon>SplashPanel.cs</DependentUpon>
+    <Compile Include="UI\Panels\LogoPanel.Designer.cs">
+      <DependentUpon>LogoPanel.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -162,8 +162,8 @@
     <EmbeddedResource Include="UI\Panels\LoginWelcomePanel.resx">
       <DependentUpon>LoginWelcomePanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Panels\SplashPanel.resx">
-      <DependentUpon>SplashPanel.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Panels\LogoPanel.resx">
+      <DependentUpon>LogoPanel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

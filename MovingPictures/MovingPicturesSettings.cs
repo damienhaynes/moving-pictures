@@ -1849,12 +1849,12 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
-        #region Social
+        #region follw.it
 
         [CornerstoneSetting(
-            Name = "Moving Pictures Social Enabled",
-            Description = "Connect this instance of Moving Pictures to the Moving Pictures Social website.",
-            Groups = "|Social|",
+            Name = "follw.it Enabled",
+            Description = "Connect this instance of Moving Pictures to follw.it.",
+            Groups = "|follw.it|",
             Identifier = "social_enabled",
             Default = false,
             Hidden = true)]
@@ -1869,8 +1869,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Restrict Synchronized Movies",
-            Description = "If true, when synchronizing with Moving Pictures Social the movies synced will be filtered.",
-            Groups = "|Social|",
+            Description = "If true, when synchronizing with follw.it the movies synced will be filtered.",
+            Groups = "|follw.it|",
             Identifier = "mps_restrict_synched_movies",
             Default = false,
             Hidden = true)]
@@ -1884,11 +1884,11 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _restrictSynchronizedMovies;
 
         [CornerstoneSetting(
-            Name = "Moving Pictures Social URL",
-            Description = "Base URL for Moving Pictures Social.",
-            Groups = "|Social|",
+            Name = "follw.it URL",
+            Description = "Base URL for follw.it.",
+            Groups = "|follw.it|",
             Identifier = "socialurlbase",
-            Default = "http://social.moving-pictures.tv/",
+            Default = "http://follw.it/",
             Hidden = false)]
         public string SocialURLBase {
             get { return _socialURLBase; }
@@ -1910,8 +1910,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Username",
-            Description = "Username for Moving Pictures Social.",
-            Groups = "|Social|",
+            Description = "Username for follw.it.",
+            Groups = "|follw.it|",
             Identifier = "socialusername",
             Default = "",
             Hidden = true)]
@@ -1926,8 +1926,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Password",
-            Description = "Password for Moving Pictures Social.",
-            Groups = "|Social|",
+            Description = "Password for follw.it.",
+            Groups = "|follw.it|",
             Identifier = "socialpassword",
             Default = "",
             Hidden = true,
@@ -1943,8 +1943,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Task List Timer",
-            Description = "The number of minutes between each check for Moving Pictures Social tasks such as pulling down ratings from the webstie or uploading missing artwork. Enter 0 minutes to disable.",
-            Groups = "|Social|",
+            Description = "The number of minutes between each check for follw.it tasks such as pulling down ratings from the webstie or uploading missing artwork. Enter 0 minutes to disable.",
+            Groups = "|follw.it|",
             Identifier = "socialtasklisttimer",
             Default = 60,
             Hidden = false)]
@@ -1959,8 +1959,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Social Retry Time",
-            Description = "Number of minutes to wait before reattempting to connect to Moving Pictures Social when a connection error occured.",
-            Groups = "|Social|",
+            Description = "Number of minutes to wait before reattempting to connect to follw.it when a connection error occured.",
+            Groups = "|follw.it|",
             Identifier = "socialretrytime",
             Default = 1,
             Hidden = false)]
@@ -1976,8 +1976,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Last Synchronization Time",
-            Description = "Date and time Moving Pictures Social synchronization tasks were last processed.",
-            Groups = "|Social|",
+            Description = "Date and time follw.it synchronization tasks were last processed.",
+            Groups = "|follw.it|",
             Identifier = "sociallastretrieved",
             Default = "",
             Hidden = true)]
@@ -1992,9 +1992,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         
         [CornerstoneSetting(
-            Name = "Enable Syncing of File Hashes to MPS",
-            Description = "Enable Syncing of File Hashes to MPS",
-            Groups = "|Social|",
+            Name = "Enable Syncing of File Hashes to follw.it",
+            Description = "Enable Syncing of File Hashes to follw.it",
+            Groups = "|follw.it|",
             Identifier = "socialfilehashsync",
             Default = true)]
         public bool EnableSocialFileHashSync {
@@ -2007,9 +2007,9 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _enableSocialFileHashSync;
 
         [CornerstoneSetting(
-            Name = "MPS Movie Synch Filter ID",
-            Description = "The filter used to restrict which movies are synchronized to Moving Pictures Social.",
-            Groups = "|Social|",
+            Name = "follw.it Movie Synch Filter ID",
+            Description = "The filter used to restrict which movies are synchronized to follw.it.",
+            Groups = "|follw.it|",
             Identifier = "social_sync_filter_id",
             Default = "null",
             Hidden = true)]
@@ -2025,7 +2025,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         public DBFilter<DBMovieInfo> SocialSyncFilter {
             get {
                 if (_socialSyncFilter == null) {
-                    // grab or create the filter object attached to MPS synching
+                    // grab or create the filter object attached to follw.it synching
                     string filterID = MovingPicturesCore.Settings.SocialSyncFilterID;
                     if (filterID == "null") {
                         _socialSyncFilter = new DBFilter<DBMovieInfo>();
@@ -2045,9 +2045,9 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         [CornerstoneSetting(
-            Name = "MPS Sync Batch Size",
-            Description = "The number of movies to sync to MPS in each request",
-            Groups = "|Social|",
+            Name = "follw.it Sync Batch Size",
+            Description = "The number of movies to sync to follw.it in each request",
+            Groups = "|follw.it|",
             Identifier = "socialbatchsize",
             Default = 30)]
         public int SocialBatchSize {

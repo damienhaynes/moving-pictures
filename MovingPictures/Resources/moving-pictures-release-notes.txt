@@ -1,20 +1,78 @@
-Moving Pictures 1.1.1
+Moving Pictures 1.1.2
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
-plug-in itself along with Blue3Wide (16x9) and Blue 3 (4x3)skin support.
+plug-in itself along with Blue3Wide (16x9) and Blue 3 (4x3) skin support.
 If you have any problems or questions about the plug-in you can visit the 
 forums to interact with the community and developers, or you can visit the 
 Moving Pictures Wiki for access to the user's guide and frequently asked questions.
 
-Moving Pictures Social:         http://social.moving-pictures.tv
+Moving Pictures now optionally integrates with the follw.it website (formerly Moving 
+Pictures Social). follw.it is an opt in service that is all about the social 
+aspects of watching movies. You can follow what your friends are watching, share 
+with people what you have been seeing lately, get recommendation about movies
+you may enjoy, and more.
+
+follw.it                        http://follw.it
+follw.it Bug Tracker:           http://trac.follw.it
 
 Moving Pictures Wiki:           http://moving-pictures.tv
 Moving Pictures Forum:          http://forum.team-mediaportal.com/moving-pictures-284/
 Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 
+
+
 Change Log
+================================================================================
+1.1.2
+--------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+**********:     Moving Pictures Social is now known as follw.it.
+ 
+**********:     Watched flags and rating will now be synced between Moving Pictures
+                installations for users of follw.it.
+
+**********:     If using follw.it, real time notifications of what you are watching
+                will be visible on your profile. Please note that this is only 
+                enabled if you explicitely sign up for a follw.it account.
+
+Issue #927:     Moving Pictures is now compatable with MediaPortal 1.2.
+
+**********:     If the auto approval rate slider is increased, match criteria will
+                continue to be reduced but matches from secondary sites will now be 
+                available for auto approval as well.
+
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #944:     Fixed bug causing a crash when resuming from standby for users
+                with UNC import paths.
+
+**********:     Fixed bug causing follw.it actions to fail to complete successfully
+                immediately after connecting an account.
+
+**********:     Fixed bug causing popup line breaks to not be rendered properly for 
+                english speaking users not in the en-US locale.
+
+Issue #841:     Fixed bug causing problems with Blue3 / Blue3Wide skin files for
+                users with a Turkish locale.
+
+**********:     Fixed problem with importing remote drives made local via NetDrive.
+
+--------------------------------------------------------------------------------
+Script and Translation Updates
+--------------------------------------------------------------------------------
+**********:     Updated IMDb script. Should now properly retrieve made for TV 
+                and strait to video movies.
+
+Issue #928:     Updated Filmtipset.se script. Thanks Hexago!
+
+Issue #915:     Updated filmweb.pl script. Thanks Piernik!
+
+Issue #918:     Updated Russian translation file. Thanks evolik!
+
 ================================================================================
 1.1.1
 --------------------------------------------------------------------------------
