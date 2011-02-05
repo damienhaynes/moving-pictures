@@ -44,7 +44,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                                                       MovingPicturesCore.Settings.SocialUrl);
 
                             if (_socialAPI == null) {
-                                logger.Error("Failed to log in to Moving Pictures Social: Invalid Username or Password!");
+                                logger.Error("Failed to log in to follw.it: Invalid Username or Password!");
                             }
 
                             if (_socialAPI != null) {
@@ -56,11 +56,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                         }
                         catch (Exception ex){
                             if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Not Found")
-                                logger.Error("Failed to log in to Moving Pictures Social: Unable to connect to server!");
+                                logger.Error("Failed to log in to follw.it: Unable to connect to server!");
                             else if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Forbidden")
-                                logger.Error("Failed to log in to Moving Pictures Social: This account is currently locked!");
+                                logger.Error("Failed to log in to follw.it: This account is currently locked!");
                             else
-                                logger.Error("Failed to log in to Moving Pictures Social, Unexpected Error: " + ex.Message);
+                                logger.Error("Failed to log in to follw.it, Unexpected Error: " + ex.Message);
                         }
                     }
                     return _socialAPI;
@@ -95,6 +95,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void Init() {
             _socialAPI = null;
+            lastConnectAttempt = new DateTime(1900, 1, 1);
 
             if (MovingPicturesCore.Settings.SocialEnabled) {
                 MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
@@ -113,7 +114,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         }
 
-        private bool Reconnect() {
+        public bool Reconnect() {
             lastConnectAttempt = new DateTime(1900, 1, 1);
             return IsOnline;
         }
@@ -124,17 +125,17 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public void Synchronize(ProgressDelegate progress) {
             if (!MovingPicturesCore.Settings.SocialEnabled) {
-                logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
+                logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return;
             }
 
             if (!IsOnline) {
-                logger.Warn("Can not synchonize to Moving Pictures Social because service is offline");
+                logger.Warn("Can not synchonize to follw.it because service is offline");
                 return;
             }
 
             try {
-                logger.Info("Synchronizing with Moving Pictures Social.");
+                logger.Info("Synchronizing with follw.it.");
                 List<DBMovieInfo> moviesToSynch;
                 List<DBMovieInfo> moviesToExclude;
 
@@ -159,7 +160,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 RemoveFilteredMovies(moviesToExclude, progress);
             }
             catch (Exception ex) {
-                logger.ErrorException("Unexpected error synchronizing with Moving Pictures Social!", ex);
+                logger.ErrorException("Unexpected error synchronizing with follw.it!", ex);
                 _socialAPI = null;
                 Status = StatusEnum.INTERNAL_ERROR;
                 return;
@@ -170,12 +171,12 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private bool UploadMovieInfo(List<DBMovieInfo> movies, ProgressDelegate progress) {
             if (!MovingPicturesCore.Settings.SocialEnabled) {
-                logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
+                logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return false;
             }
 
             if (!IsOnline) {
-                logger.Warn("Can not upload movie info to Moving Pictures Social because service is offline");
+                logger.Warn("Can not upload movie info to follw.it because service is offline");
                 return false;
             }
 
@@ -224,11 +225,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
             }
             catch (WebException ex) {
-                logger.Error("There was a problem connecting to the Moving Pictures Social Server! " + ex.Message);
+                logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
                 MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
-                logger.ErrorException("Unexpected error uploading movie information to Moving Pictures Social!", ex);
+                logger.ErrorException("Unexpected error uploading movie information to follw.it!", ex);
                 _socialAPI = null;
                 MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
                 return false;
@@ -239,12 +240,12 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private bool RemoveFilteredMovies(List<DBMovieInfo> movies, ProgressDelegate progress) {
             if (!MovingPicturesCore.Settings.SocialEnabled) {
-                logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
+                logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return false;
             }
 
             if (!IsOnline) {
-                logger.Warn("Can not remove movies from Moving Pictures Social collection because service is offline");
+                logger.Warn("Can not remove movies from follw.it collection because service is offline");
                 return false;
             }
 
@@ -253,7 +254,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 foreach (var movie in movies) {
                     count++;
                     if (movie.MpsId != null && movie.MpsId != 0) {
-                        logger.Debug("Removing '{0}' from Moving Pictures Social because it has been excluded by a filter.", movie.Title);
+                        logger.Debug("Removing '{0}' from follw.it because it has been excluded by a filter.", movie.Title);
                         SocialAPI.RemoveMovieFromCollection((int)movie.MpsId);
                         movie.MpsId = null;
                     }
@@ -263,11 +264,11 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
             }
             catch (WebException ex) {
-                logger.Error("There was a problem connecting to the Moving Pictures Social Server! " + ex.Message);
+                logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
                 MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
-                logger.ErrorException("Unexpected error removing movies from your Moving Pictures Social collection!", ex);
+                logger.ErrorException("Unexpected error removing movies from your follw.it collection!", ex);
                 _socialAPI = null;
                 MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
                 return false;
@@ -291,10 +292,10 @@ namespace MediaPortal.Plugins.MovingPictures {
                 // if we have been passed a hard coded start time, use that instead
                 if (forcedStartTime != null) lastRetrived = (DateTime)forcedStartTime;
 
-                logger.Debug("Synchronizing with Moving Pictures Social (last synced {0})...", lastRetrived);
+                logger.Debug("Synchronizing with follw.it (last synced {0})...", lastRetrived);
 
                 List<TaskListItem> taskList = SocialAPI.GetUserTaskList(lastRetrived, out currentSyncTime);
-                logger.Debug("{0} Moving Pictures Social synchronization tasks require attention.", taskList.Count);
+                logger.Debug("{0} follw.it synchronization tasks require attention.", taskList.Count);
                 if (taskList.Count == 0) return;
                 
 
@@ -322,14 +323,14 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 // set the time only at the end in case an error occured
                 MovingPicturesCore.Settings.LastSynchTime = currentSyncTime.ToString(new CultureInfo("en-US"));
-                logger.Info("Moving Pictures Social synchronization complete...");
+                logger.Info("follw.it synchronization complete...");
             }
             catch (WebException ex) {
-                logger.Error("There was a problem connecting to the Moving Pictures Social Server! " + ex.Message);
+                logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
                 Status = Social.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
-                logger.ErrorException("Unexpected error connecting to Moving Pictures Social.\n", ex);
+                logger.ErrorException("Unexpected error connecting to follw.it.\n", ex);
                 Status = Social.StatusEnum.INTERNAL_ERROR;
             }
         }
@@ -340,7 +341,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(mpsId);
 
             if (matchingMovie != null && matchingMovie.CoverFullPath.Trim().Length > 0) {
-                logger.Info("Submitting cover for '{0}' to Moving Pictures Social.", matchingMovie.Title);
+                logger.Info("Submitting cover for '{0}' to follw.it.", matchingMovie.Title);
                 MovingPicturesCore.Social.SocialAPI.UploadCover(mpsId, matchingMovie.CoverFullPath);
             }
         }
@@ -360,7 +361,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             currentlySyncingMovies.Add(matchingMovie);
 
-            logger.Info("Importing rating of {0} for '{1}' from Moving Pictures Social.", taskDetails.Rating, matchingMovie.Title);
+            logger.Info("Importing rating of {0} for '{1}' from follw.it.", taskDetails.Rating, matchingMovie.Title);
             matchingMovie.ActiveUserSettings.UserRating = taskDetails.Rating;
             matchingMovie.Commit();
 
@@ -373,7 +374,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             currentlySyncingMovies.Add(matchingMovie);
 
-            logger.Info("Importing watched status from Moving Pictures Social for '{0}'. Watched: {1}", matchingMovie.Title, taskDetails.Watched);
+            logger.Info("Importing watched status from follw.it for '{0}'. Watched: {1}", matchingMovie.Title, taskDetails.Watched);
             if (((bool)taskDetails.Watched) && matchingMovie.ActiveUserSettings.WatchedCount == 0) {
                 matchingMovie.ActiveUserSettings.WatchedCount = 1;
                 matchingMovie.Commit();
@@ -388,17 +389,44 @@ namespace MediaPortal.Plugins.MovingPictures {
             currentlySyncingMovies.Remove(matchingMovie);
         }
 
+        public bool CurrentlyWatching(DBMovieInfo movie, bool isWatching) {
+            if (!MovingPicturesCore.Settings.SocialEnabled) {
+                logger.Warn("Attempt to call follw.it made when service is disabled.");
+                return false;
+            }
+
+            if (!IsOnline) {
+                logger.Warn("Can not send movie watched count to follw.it because service is offline");
+                return false;
+            }
+
+            try {
+                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
+                bgProc.Action = isWatching ? MPSActions.BeginWatching : MPSActions.EndWatching;
+                bgProc.Movies.Add(movie);
+                MovingPicturesCore.ProcessManager.StartProcess(bgProc);
+            }
+            catch (Exception ex) {
+                logger.ErrorException("Unexpected error sending 'now watching' information to follw.it!", ex);
+                _socialAPI = null;
+                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                return false;
+            }
+
+            return true;
+        }
+
         public bool WatchMovie(DBMovieInfo movie, bool includeInStream) {
             if (currentlySyncingMovies.Contains(movie))
                 return true;
 
             if (!MovingPicturesCore.Settings.SocialEnabled) {
-                logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
+                logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return false;
             }
 
             if (!IsOnline) {
-                logger.Warn("Can not send movie watched count to Moving Pictures Social because service is offline");
+                logger.Warn("Can not send movie watched count to follw.it because service is offline");
                 return false;
             }
 
@@ -409,7 +437,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 MovingPicturesCore.ProcessManager.StartProcess(bgProc);
             }
             catch (Exception ex) {
-                logger.ErrorException("Unexpected error sending 'movie watched' information to Moving Pictures Social!", ex);
+                logger.ErrorException("Unexpected error sending 'movie watched' information to follw.it!", ex);
                 _socialAPI = null;
                 MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
                 return false;
@@ -423,12 +451,12 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return true;
 
             if (!MovingPicturesCore.Settings.SocialEnabled) {
-                logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
+                logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return false;
             }
 
             if (!IsOnline) {
-                logger.Warn("Can not send movie watched count to Moving Pictures Social because service is offline");
+                logger.Warn("Can not send movie watched count to follw.it because service is offline");
                 return false;
             }
 
@@ -439,7 +467,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 MovingPicturesCore.ProcessManager.StartProcess(bgProc);
             }
             catch (Exception ex) {
-                logger.ErrorException("Unexpected error sending 'unwatch movie' information to Moving Pictures Social!", ex);
+                logger.ErrorException("Unexpected error sending 'unwatch movie' information to follw.it!", ex);
                 _socialAPI = null;
                 MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
                 return false;
@@ -450,12 +478,12 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void DatabaseManager_ObjectInserted(DatabaseTable obj) {
             if (!MovingPicturesCore.Settings.SocialEnabled) {
-                logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
+                logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return;
             }
 
             if (!IsOnline) {
-                logger.Warn("Can not connect to Moving Pictures Social because service is offline");
+                logger.Warn("Can not connect to follw.it because service is offline");
                 return;
             }
 
@@ -475,7 +503,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
             }
             catch (Exception ex) {
-                logger.ErrorException("Unexpected error connecting to Moving Pictures Social!", ex);
+                logger.ErrorException("Unexpected error connecting to follw.it!", ex);
                 _socialAPI = null;
                 MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
             }
@@ -483,12 +511,12 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void DatabaseManager_ObjectUpdated(DatabaseTable obj) {
             if (!MovingPicturesCore.Settings.SocialEnabled) {
-                logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
+                logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return;
             }
 
             if (!IsOnline) {
-                logger.Warn("Can not send rating info to Moving Pictures Social because service is offline");
+                logger.Warn("Can not send rating info to follw.it because service is offline");
                 return;
             }
 
@@ -525,7 +553,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             try {
                 // Reinitializes the SocialAPI object when Username, Password, or URLBase changes.
                 if (setting.Key == "socialurlbase" || setting.Key == "socialusername" || setting.Key == "socialpassword") {
-                        Init();
+                    Init();
                 }
 
                 // Recreate the timer if the timer setting changes
@@ -543,12 +571,12 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         private void movieDeletedListener(DatabaseTable obj) {
             if (!MovingPicturesCore.Settings.SocialEnabled) {
-                logger.Warn("Attempt to call Moving Pictures Social made when service is disabled.");
+                logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return;
             }
 
             if (!IsOnline) {
-                logger.Warn("Can not remove movie from Moving Pictures Social collection because service is offline");
+                logger.Warn("Can not remove movie from follw.it collection because service is offline");
                 return;
             }
 
@@ -575,7 +603,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             }
             catch (Exception ex) {
-                logger.ErrorException("Unexpected error removing an object from your Moving Pictures Social collection!", ex);
+                logger.ErrorException("Unexpected error removing an object from your follw.it collection!", ex);
                 _socialAPI = null;
                 MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
             }
