@@ -43,7 +43,7 @@
             this.restrictSyncedMoviesCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.logoPanel1 = new MovingPicturesSocialAPI.UI.Panels.LogoPanel();
+            this.logoPanel1 = new Follwit.API.UI.Panels.LogoPanel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -277,7 +277,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private Cornerstone.GUI.Controls.SettingCheckBox restrictSyncedMoviesCheckBox;
         private System.Windows.Forms.Button restrictMoviesButton;
-        private MovingPicturesSocialAPI.UI.Panels.LogoPanel logoPanel1;
+        private Follwit.API.UI.Panels.LogoPanel logoPanel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
     }

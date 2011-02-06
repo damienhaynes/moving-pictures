@@ -6,9 +6,8 @@ using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using System.Threading;
-using MovingPicturesSocialAPI;
-using MovingPicturesSocialAPI.Data;
 using System.Net;
+using Follwit.API.Data;
 
 namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
     public enum MPSActions {
@@ -52,14 +51,14 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
                 switch (Action) {
                     case MPSActions.AddMoviesToCollection:
-                        List<MpsMovie> movieDTOs = new List<MpsMovie>();
+                        List<FitMovie> movieDTOs = new List<FitMovie>();
                         foreach (DBMovieInfo movie in Movies) {
                             logger.Info("Adding {0} to follw.it Collection", movie.Title);
-                            movieDTOs.Add(Social.MovieToMPSMovie(movie));
+                            movieDTOs.Add(FollwitConnector.MovieToMPSMovie(movie));
                         }
-                        MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref movieDTOs);
+                        MovingPicturesCore.Social.FollwitApi.AddMoviesToCollection(ref movieDTOs);
                         // update MpsId on the DBMovieInfo object
-                        foreach (MpsMovie mpsMovieDTO in movieDTOs) {
+                        foreach (FitMovie mpsMovieDTO in movieDTOs) {
                             DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
                             if (m != null) {
                                 m.MpsId = mpsMovieDTO.MovieId;
@@ -77,7 +76,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                     case MPSActions.RemoveMovieFromCollection:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             logger.Info("Removing {0} from follw.it collection", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.RemoveMovieFromCollection((int)FirstMovie.MpsId);
+                            MovingPicturesCore.Social.FollwitApi.RemoveMovieFromCollection((int)FirstMovie.MpsId);
                             FirstMovie.MpsId = null;
                         }
                         break;
@@ -87,35 +86,35 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             int newRating = FirstMovie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
                             logger.Info("Updating follw.it movie rating for {0} to {1} stars", FirstMovie.Title, newRating);
-                            MovingPicturesCore.Social.SocialAPI.SetMovieRating((int)FirstMovie.MpsId, newRating);
+                            MovingPicturesCore.Social.FollwitApi.SetMovieRating((int)FirstMovie.MpsId, newRating);
                         }
                         break;
 
                     case MPSActions.BeginWatching:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             logger.Info("Notifying follw.it you are watching '{0}'.", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.WatchingMovie((int)FirstMovie.MpsId);
+                            MovingPicturesCore.Social.FollwitApi.WatchingMovie((int)FirstMovie.MpsId);
                         }
                         break;
                     
                     case MPSActions.EndWatching:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             logger.Info("Notifying follw.it you are done watching '{0}'.", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.StopWatchingMovie((int)FirstMovie.MpsId);
+                            MovingPicturesCore.Social.FollwitApi.StopWatchingMovie((int)FirstMovie.MpsId);
                         }
                         break;
                     
                     case MPSActions.WatchMovie:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             logger.Info("Setting follw.it watched for {0}", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, true);
+                            MovingPicturesCore.Social.FollwitApi.WatchMovie((int)FirstMovie.MpsId, true);
                         }
                         break;
 
                     case MPSActions.WatchMovieIgnoreStream:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             logger.Info("Setting follw.it watched for {0}", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, false);
+                            MovingPicturesCore.Social.FollwitApi.WatchMovie((int)FirstMovie.MpsId, false);
                         }
                         break;
 
@@ -123,7 +122,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                     case MPSActions.UnwatchMovie:
                         if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
                             logger.Info("Setting follw.it unwatched for {0}", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.UnwatchMovie((int)FirstMovie.MpsId);
+                            MovingPicturesCore.Social.FollwitApi.UnwatchMovie((int)FirstMovie.MpsId);
                         }
                         break;
 
@@ -137,11 +136,11 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
             }
             catch (WebException ex) {
                 logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
-                MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error connecting to follw.it.\n", ex);
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
             }
 
         }

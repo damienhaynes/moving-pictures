@@ -5,18 +5,18 @@ using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using MovingPicturesSocialAPI;
 using NLog;
 using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 using System.Linq;
-using MovingPicturesSocialAPI.Data;
 using Cornerstone.GUI.Dialogs;
 using CookComputing.XmlRpc;
 using System.Net;
 using System.Globalization;
+using Follwit.API;
+using Follwit.API.Data;
 
 namespace MediaPortal.Plugins.MovingPictures {
-    public class Social {
+    public class FollwitConnector {
         public enum StatusEnum { CONNECTED, DISABLED, BLOCKED, CONNECTION_ERROR, INTERNAL_ERROR }
         public delegate void StatusChangedDelegate(StatusEnum status);
 
@@ -31,7 +31,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         public event StatusChangedDelegate StatusChanged;
         
         // The MpsAPI object that should be used by all components of the plugin.
-        public MovingPicturesSocialAPI.MpsAPI SocialAPI {
+        public FollwitApi FollwitApi {
             get {
                 lock (socialAPILock) {
                     TimeSpan retryDelay = new TimeSpan(0, MovingPicturesCore.Settings.SocialRetryTime, 0);
@@ -39,7 +39,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                         lastConnectAttempt = DateTime.Now;
 
                         try {
-                            _socialAPI = MpsAPI.Login(MovingPicturesCore.Settings.SocialUsername,
+                            _socialAPI = FollwitApi.Login(MovingPicturesCore.Settings.SocialUsername,
                                                       MovingPicturesCore.Settings.SocialHashedPassword,
                                                       MovingPicturesCore.Settings.SocialUrl);
 
@@ -48,8 +48,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                             }
 
                             if (_socialAPI != null) {
-                                _socialAPI.RequestEvent += new MpsAPI.MpsAPIRequestDelegate(_socialAPI_RequestEvent);
-                                _socialAPI.ResponseEvent += new MpsAPI.MpsAPIResponseDelegate(_socialAPI_ResponseEvent);
+                                _socialAPI.RequestEvent += new FollwitApi.FitAPIRequestDelegate(_socialAPI_RequestEvent);
+                                _socialAPI.ResponseEvent += new FollwitApi.FitAPIResponseDelegate(_socialAPI_ResponseEvent);
 
                                 logger.Info("Logged in to MPS as {0}.", _socialAPI.User.Name);
                             }
@@ -66,7 +66,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     return _socialAPI;
                 }
             }
-        } private static MovingPicturesSocialAPI.MpsAPI _socialAPI = null;
+        } private static FollwitApi _socialAPI = null;
 
         public StatusEnum Status {
             get {
@@ -85,10 +85,10 @@ namespace MediaPortal.Plugins.MovingPictures {
         } private StatusEnum _status = StatusEnum.CONNECTED;
 
         public bool IsOnline {
-            get { return SocialAPI != null; }
+            get { return FollwitApi != null; }
         }
 
-        public Social() {
+        public FollwitConnector() {
             MovingPicturesCore.Settings.SettingChanged += new SettingChangedDelegate(Settings_SettingChanged);
             Init();
         }
@@ -182,12 +182,12 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             try {
 
-                List<MpsMovie> mpsMovies = new List<MpsMovie>();
+                List<FitMovie> mpsMovies = new List<FitMovie>();
 
                 int count = 0;
                 foreach (var movie in movies) {
                     count++;
-                    MpsMovie mpsMovie = Social.MovieToMPSMovie(movie);
+                    FitMovie mpsMovie = FollwitConnector.MovieToMPSMovie(movie);
                     if (mpsMovie.Resources.Length > 1) {
                         logger.Debug("Adding '{0}' to list of movies to be synced.", movie.Title);
                         mpsMovies.Add(mpsMovie);
@@ -201,10 +201,10 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                     if (mpsMovies.Count >= MovingPicturesCore.Settings.SocialBatchSize || count == movies.Count) {
                         logger.Debug("Sending batch of {0} movies", mpsMovies.Count);
-                        MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref mpsMovies);
+                        MovingPicturesCore.Social.FollwitApi.AddMoviesToCollection(ref mpsMovies);
 
                         // update MpsId on the DBMovieInfo object
-                        foreach (MpsMovie mpsMovieDTO in mpsMovies) {
+                        foreach (FitMovie mpsMovieDTO in mpsMovies) {
                             DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
                             if (m != null) {
                                 m.MpsId = mpsMovieDTO.MovieId;
@@ -226,12 +226,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
             catch (WebException ex) {
                 logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
-                MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error uploading movie information to follw.it!", ex);
                 _socialAPI = null;
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -255,7 +255,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     count++;
                     if (movie.MpsId != null && movie.MpsId != 0) {
                         logger.Debug("Removing '{0}' from follw.it because it has been excluded by a filter.", movie.Title);
-                        SocialAPI.RemoveMovieFromCollection((int)movie.MpsId);
+                        FollwitApi.RemoveMovieFromCollection((int)movie.MpsId);
                         movie.MpsId = null;
                     }
 
@@ -265,12 +265,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
             catch (WebException ex) {
                 logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
-                MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error removing movies from your follw.it collection!", ex);
                 _socialAPI = null;
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -294,7 +294,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 logger.Debug("Synchronizing with follw.it (last synced {0})...", lastRetrived);
 
-                List<TaskListItem> taskList = SocialAPI.GetUserTaskList(lastRetrived, out currentSyncTime);
+                List<TaskListItem> taskList = FollwitApi.GetUserTaskList(lastRetrived, out currentSyncTime);
                 logger.Debug("{0} follw.it synchronization tasks require attention.", taskList.Count);
                 if (taskList.Count == 0) return;
                 
@@ -327,11 +327,11 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
             catch (WebException ex) {
                 logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
-                Status = Social.StatusEnum.CONNECTION_ERROR;
+                Status = FollwitConnector.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error connecting to follw.it.\n", ex);
-                Status = Social.StatusEnum.INTERNAL_ERROR;
+                Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
             }
         }
 
@@ -342,7 +342,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             if (matchingMovie != null && matchingMovie.CoverFullPath.Trim().Length > 0) {
                 logger.Info("Submitting cover for '{0}' to follw.it.", matchingMovie.Title);
-                MovingPicturesCore.Social.SocialAPI.UploadCover(mpsId, matchingMovie.CoverFullPath);
+                MovingPicturesCore.Social.FollwitApi.UploadCover(mpsId, matchingMovie.CoverFullPath);
             }
         }
 
@@ -409,7 +409,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error sending 'now watching' information to follw.it!", ex);
                 _socialAPI = null;
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -439,7 +439,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error sending 'movie watched' information to follw.it!", ex);
                 _socialAPI = null;
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -469,7 +469,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error sending 'unwatch movie' information to follw.it!", ex);
                 _socialAPI = null;
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -505,7 +505,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error connecting to follw.it!", ex);
                 _socialAPI = null;
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
             }
         }
 
@@ -545,7 +545,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error sending rating information to MovingPicturesSocial!", ex);
                 _socialAPI = null;
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
             }
         }
 
@@ -605,7 +605,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error removing an object from your follw.it collection!", ex);
                 _socialAPI = null;
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
             }
 
         }
@@ -619,7 +619,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             catch (Exception ex) {
                 logger.ErrorException("", ex); 
                 _socialAPI = null;
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return;
             }
         }
@@ -627,8 +627,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         /// <summary>
         /// Translates a DBMovieInfo object to a MPS MovieDTO object.
         /// </summary>
-        public static MpsMovie MovieToMPSMovie(DBMovieInfo movie) {
-            MpsMovie mpsMovie = new MpsMovie();
+        public static FitMovie MovieToMPSMovie(DBMovieInfo movie) {
+            FitMovie mpsMovie = new FitMovie();
             mpsMovie.InternalId = movie.ID.GetValueOrDefault();
             mpsMovie.Directors = "";
             mpsMovie.Writers = "";
