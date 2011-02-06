@@ -355,7 +355,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Social.cs" />
+    <Compile Include="FollwitConnector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.Database.MoviesPluginTables.DBUser.datasource" />
@@ -727,6 +727,10 @@
     <None Include="DataProviders\ScraperScripts\IMDb.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\External\FollwitApi\FollwitApi.csproj">
+      <Project>{75EBA361-8137-4107-A5B5-753CE959983B}</Project>
+      <Name>FollwitApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\External\MediaPortal\mediaportal\Core\Core.csproj">
       <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
       <Name>Core</Name>
@@ -758,10 +762,6 @@
     <ProjectReference Include="..\Cornerstone\Cornerstone.csproj">
       <Project>{14201B8D-31C3-4FB5-9356-9485676C147B}</Project>
       <Name>Cornerstone</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MovingPicturesSocialAPI\MovingPicturesSocialAPI.csproj">
-      <Project>{75EBA361-8137-4107-A5B5-753CE959983B}</Project>
-      <Name>MovingPicturesSocialAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

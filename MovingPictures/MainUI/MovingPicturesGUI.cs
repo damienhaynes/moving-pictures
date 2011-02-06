@@ -1457,7 +1457,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     if (visible)
                         workingAnimation.AllocResources();
                     else
-                        workingAnimation.FreeResources();
+                        workingAnimation.Dispose();
 
                     workingAnimation.Visible = visible;
                 }

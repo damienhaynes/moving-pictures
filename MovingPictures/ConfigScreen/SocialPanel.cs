@@ -6,14 +6,13 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using MovingPicturesSocialAPI.UI;
 using Cornerstone.GUI.Dialogs;
 using MediaPortal.Plugins.MovingPictures.Database;
-using MovingPicturesSocialAPI.Data;
 using NLog;
 using System.Diagnostics;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.GUI;
+using Follwit.API.UI;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class SocialPanel : UserControl {
@@ -26,13 +25,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             restrictSyncedMoviesCheckBox.Setting = MovingPicturesCore.Settings["mps_restrict_synched_movies"];
 
-            MovingPicturesCore.Social.StatusChanged += new Social.StatusChangedDelegate(Social_StatusChanged);
+            MovingPicturesCore.Social.StatusChanged += new FollwitConnector.StatusChangedDelegate(Social_StatusChanged);
 
             UpdateControls();
         }
 
         private void ConnectMps() {
-            MpsLoginForm loginForm = new MpsLoginForm();
+            LoginForm loginForm = new LoginForm();
             loginForm.ApiUrl = MovingPicturesCore.Settings.SocialUrl;
 
             DialogResult result = loginForm.ShowDialog();
@@ -76,7 +75,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
 
             ProgressPopup popup = new ProgressPopup(new WorkerDelegate(() => {
-                MovingPicturesCore.Social.SocialAPI.UpdateUser("", "en", !publicProfileCheckBox.Checked);
+                MovingPicturesCore.Social.FollwitApi.UpdateUser("", "en", !publicProfileCheckBox.Checked);
             }));
 
             popup.Owner = this.ParentForm;
@@ -126,7 +125,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                 accountButton.Text = "Disconnect Account";
 
-                try { publicProfileCheckBox.Checked = !MovingPicturesCore.Social.SocialAPI.User.PrivateProfile; }
+                try { publicProfileCheckBox.Checked = !MovingPicturesCore.Social.FollwitApi.User.PrivateProfile; }
                 catch { }
 
                 restrictSyncedMoviesCheckBox.Enabled = true;
@@ -137,8 +136,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             updatingControls = false;
         }
 
-        private void Social_StatusChanged(Social.StatusEnum status) {
-            if (InvokeRequired) Invoke(new Social.StatusChangedDelegate(Social_StatusChanged), new object[] { status });
+        private void Social_StatusChanged(FollwitConnector.StatusEnum status) {
+            if (InvokeRequired) Invoke(new FollwitConnector.StatusChangedDelegate(Social_StatusChanged), new object[] { status });
 
             UpdateControls();
         }
