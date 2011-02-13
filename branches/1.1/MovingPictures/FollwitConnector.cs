@@ -401,6 +401,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             try {
+                if (MovingPicturesCore.Settings.RestrictSynchronizedMovies) {
+                    var filtered = MovingPicturesCore.Settings.SocialSyncFilter.Filter(new List<DBMovieInfo>() {movie});
+                    if (filtered.Count == 0)
+                        return false;
+                }                
+
                 MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
                 bgProc.Action = isWatching ? MPSActions.BeginWatching : MPSActions.EndWatching;
                 bgProc.Movies.Add(movie);
