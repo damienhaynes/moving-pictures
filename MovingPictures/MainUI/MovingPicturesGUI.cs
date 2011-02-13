@@ -262,6 +262,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 PublishMovieDetails(browser.SelectedMovie);
         }
 
+        void GUIWindowManager_OnActivateWindow(int windowId) {
+            if (windowId == (int)Window.WINDOW_HOME || windowId == (int)Window.WINDOW_SECOND_HOME || windowId == (int)Window.WINDOW_MYPLUGINS) {
+                if (MovingPicturesCore.Settings.ParentalControlsEnabled && parentalControlsFilter != null && !parentalControlsFilter.Active) {
+                    parentalControlsFilter.Active = true;
+                    if (parentalFilterTimer != null) {
+                        parentalFilterTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
+                    }
+                }
+            }
+        }
+
+        void GUIWindowManager_OnNewAction(MediaPortal.GUI.Library.Action action) {
+            ResetParentalFilterTimer();
+        }
+
         #region GUIWindow Methods
 
         public override int GetID {
@@ -290,6 +305,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // ... and listen to the progress
             MovingPicturesCore.InitializeProgress += new ProgressDelegate(onCoreInitializationProgress);
+
+            GUIWindowManager.OnNewAction += new OnActionHandler(GUIWindowManager_OnNewAction);
+            GUIWindowManager.OnActivateWindow += new GUIWindowManager.WindowActivationHandler(GUIWindowManager_OnActivateWindow);
 
             return success;
         }
@@ -480,13 +498,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // But only when we are not playing something
                 if (!moviePlayer.IsPlaying) {
                     enableNativeAutoplay();
-
-                    if (MovingPicturesCore.Settings.ParentalControlsEnabled && parentalControlsFilter.Active == false) {
-                        parentalControlsFilter.Active = true;
-                        if (parentalFilterTimer != null) {
-                            parentalFilterTimer.Change(System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
-                        }
-                    }
                 }
 
                 base.OnPageDestroy(new_windowId);
@@ -557,7 +568,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             base.OnClicked(controlId, control, actionType);
-            ResetParentalFilterTimer();
         }
 
         public override void OnAction(MediaPortal.GUI.Library.Action action) {
@@ -640,14 +650,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     base.OnAction(action);
                     break;
             }
-
-            ResetParentalFilterTimer();
-
         }
 
         private void ResetParentalFilterTimer() {
-            if (MovingPicturesCore.Settings.ParentalControlsEnabled 
-                && parentalControlsFilter.Active == false 
+            if (MovingPicturesCore.Settings.ParentalControlsEnabled
+                && parentalControlsFilter != null
+                && !parentalControlsFilter.Active
                 && MovingPicturesCore.Settings.ParentalControlsTimeout > 0
                 && !moviePlayer.IsPlaying
                 ) {
