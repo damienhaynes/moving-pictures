@@ -128,20 +128,36 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         // loads from scratch all movies in the database into the side panel
         public void ReloadList() {
             // turn off redraws temporarily and clear the list
-            movieListBox.BeginUpdate();
+            
             movieListBox.Items.Clear();
+
+            Thread thread = new Thread(new ThreadStart(delegate {
+                Invoke(new InvokeDelegate(delegate { loadingMoviesPanel.Visible = true; }));
+                Invoke(new InvokeDelegate(delegate { movieListBox.BeginUpdate(); }));
+
+                foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
+                    ListViewItem listItem = createMovieItem(currMovie);
+                    addMovie(currMovie, listItem);
+                }
+
+                Invoke(new InvokeDelegate(delegate { movieListBox.EndUpdate(); }));
+                Invoke(new InvokeDelegate(delegate { loadingMoviesPanel.Visible = false; }));
+            }));
+
+            thread.IsBackground = true;
+            thread.Name = "movie manager list populator";
+            thread.Start();
+
+            //movieListBox.EndUpdate();
+
             
-            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) 
-                addMovie(currMovie);
-            
-            movieListBox.EndUpdate();
 
             if (movieListBox.Items.Count > 0)
                 movieListBox.Items[0].Selected = true;
         }
 
         // adds the given movie and it's related files to the tree view
-        private void addMovie(DBMovieInfo movie) {
+        private ListViewItem createMovieItem(DBMovieInfo movie) {
             ListViewItem newItem = new ListViewItem(movie.Title);
             newItem.Tag = movie;
             
@@ -152,11 +168,19 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     newItem.ToolTipText = "This movie is currently offline.";
                 }
             }
-            
-            // add to list
-            movieListBox.Items.Add(newItem);
+
+            return newItem;
+        }
+
+        private void addMovie(DBMovieInfo movie, ListViewItem item) {
+            if (InvokeRequired) {
+                Invoke(new InvokeDelegate(delegate { addMovie(movie, item); }));
+                return;
+            }
+
+            movieListBox.Items.Add(item);
             lock (lockList) {
-                listItems[movie] = newItem;
+                listItems[movie] = item;
             }
         }
 
@@ -205,7 +229,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
 
             // add movie to the list
-            addMovie((DBMovieInfo)obj);
+            createMovieItem((DBMovieInfo)obj);
 
             bool reassigning = false;
             foreach (DBLocalMedia currFile in processingFiles) {
