@@ -127,7 +127,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         // The Social object that should be used by all components of the plugin.
-        public static FollwitConnector Social {
+        public static FollwitConnector Follwit {
             get {
                 lock (socialLock) {
                     if (_social == null) {

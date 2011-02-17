@@ -395,15 +395,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
-        [DBField(Filterable= false)]
-        public int? MpsId {
-            get { return _mpsId; }
+        [DBField(FieldName="mpsid", Filterable= false)]
+        public int? FitId {
+            get { return _fitId; }
 
             set {
-                _mpsId = value;
+                _fitId = value;
                 commitNeeded = true;
             }
-        } private int? _mpsId;
+        } private int? _fitId;
 
 
         #endregion
@@ -801,9 +801,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             return MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(id);
         }
 
-        public static DBMovieInfo GetByMpsId(int id) {
-            ICriteria mpsIdFilter = new BaseCriteria(DBField.GetField(typeof(DBMovieInfo), "MpsId"), "=", id);
-            List<DBMovieInfo> foundMovies = MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(mpsIdFilter);
+        public static DBMovieInfo GetByFitId(int id) {
+            ICriteria fitIdFilter = new BaseCriteria(DBField.GetField(typeof(DBMovieInfo), "FitId"), "=", id);
+            List<DBMovieInfo> foundMovies = MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(fitIdFilter);
 
             if (foundMovies.Count > 0)
                 return foundMovies[0];

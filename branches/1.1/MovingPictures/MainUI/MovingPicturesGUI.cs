@@ -1300,9 +1300,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 PublishMovieDetails(movie);
 
             if (newWatchedCount == 0)
-                MovingPicturesCore.Social.UnwatchMovie(movie);
+                MovingPicturesCore.Follwit.UnwatchMovie(movie);
             else
-                MovingPicturesCore.Social.WatchMovie(movie, false);
+                MovingPicturesCore.Follwit.WatchMovie(movie, false);
         }
 
         /// <summary>

@@ -216,8 +216,8 @@
             fieldProperty24.FieldName = "OriginalDirectoryName";
             fieldProperty24.Visible = false;
             fieldProperty25.ColumnWidth = null;
-            fieldProperty25.DisplayName = "Mps Id";
-            fieldProperty25.FieldName = "MpsId";
+            fieldProperty25.DisplayName = "Follw.it Id";
+            fieldProperty25.FieldName = "FitId";
             fieldProperty25.Visible = false;
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty1);
             fieldDisplaySettings1.FieldProperties.Add(fieldProperty2);
@@ -335,8 +335,8 @@
             fieldProperty50.DisplayName = "Original Directory Name";
             fieldProperty50.FieldName = "OriginalDirectoryName";
             fieldProperty51.ColumnWidth = null;
-            fieldProperty51.DisplayName = "Mps Id";
-            fieldProperty51.FieldName = "MpsId";
+            fieldProperty51.DisplayName = "Follw.it Id";
+            fieldProperty51.FieldName = "FitId";
             fieldDisplaySettings2.FieldProperties.Add(fieldProperty26);
             fieldDisplaySettings2.FieldProperties.Add(fieldProperty27);
             fieldDisplaySettings2.FieldProperties.Add(fieldProperty28);

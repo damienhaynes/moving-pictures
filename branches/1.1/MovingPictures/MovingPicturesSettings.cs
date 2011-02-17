@@ -1858,14 +1858,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             Identifier = "social_enabled",
             Default = false,
             Hidden = true)]
-        public bool SocialEnabled {
-            get { return _socialEnabled; }
+        public bool FollwitEnabled {
+            get { return _follwitEnabled; }
             set {
-                _socialEnabled = value;
+                _follwitEnabled = value;
                 OnSettingChanged("social_enabled");
             }
         }
-        private bool _socialEnabled;
+        private bool _follwitEnabled;
 
         [CornerstoneSetting(
             Name = "Restrict Synchronized Movies",
@@ -1890,21 +1890,21 @@ namespace MediaPortal.Plugins.MovingPictures {
             Identifier = "socialurlbase",
             Default = "http://follw.it/",
             Hidden = false)]
-        public string SocialURLBase {
-            get { return _socialURLBase; }
+        public string FollwitURLBase {
+            get { return _follwitURLBase; }
             set {
-                _socialURLBase = value.Trim();
-                if (!_socialURLBase.EndsWith("/"))
-                    _socialURLBase += "/";
+                _follwitURLBase = value.Trim();
+                if (!_follwitURLBase.EndsWith("/"))
+                    _follwitURLBase += "/";
 
                 OnSettingChanged("socialurlbase");
             }
         }
-        private string _socialURLBase;
+        private string _follwitURLBase;
 
-        public string SocialUrl {
+        public string FollwitUrl {
             get {
-                return SocialURLBase + "api/2/";
+                return FollwitURLBase + "api/2/";
             }
         }
 
@@ -1915,14 +1915,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             Identifier = "socialusername",
             Default = "",
             Hidden = true)]
-        public string SocialUsername {
-            get { return _socialUsername; }
+        public string FollwitUsername {
+            get { return _follwitUsername; }
             set {
-                _socialUsername = value;
+                _follwitUsername = value;
                 OnSettingChanged("socialusername");
             }
         }
-        private string _socialUsername;
+        private string _follwitUsername;
 
         [CornerstoneSetting(
             Name = "Password",
@@ -1932,14 +1932,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             Default = "",
             Hidden = true,
             Sensitive = true)]
-        public string SocialHashedPassword {
-            get { return _socialPassword; }
+        public string FollwitHashedPassword {
+            get { return _follwitPassword; }
             set {
-                _socialPassword = value;
+                _follwitPassword = value;
                 OnSettingChanged("socialpassword");
             }
         }
-        private string _socialPassword;
+        private string _follwitPassword;
 
         [CornerstoneSetting(
             Name = "Task List Timer",
@@ -1948,30 +1948,30 @@ namespace MediaPortal.Plugins.MovingPictures {
             Identifier = "socialtasklisttimer",
             Default = 60,
             Hidden = false)]
-        public int SocialTaskListTimer {
-            get { return _socialTaskListTimer; }
+        public int FollwitTaskListTimer {
+            get { return _follwitTaskListTimer; }
             set {
-                _socialTaskListTimer = value;
+                _follwitTaskListTimer = value;
                 OnSettingChanged("socialtasklisttimer");
             }
         }
-        private int _socialTaskListTimer;
+        private int _follwitTaskListTimer;
 
         [CornerstoneSetting(
-            Name = "Social Retry Time",
+            Name = "Follw.it Retry Time",
             Description = "Number of minutes to wait before reattempting to connect to follw.it when a connection error occured.",
             Groups = "|follw.it|",
             Identifier = "socialretrytime",
             Default = 1,
             Hidden = false)]
-        public int SocialRetryTime {
-            get { return _socialRetryTime; }
+        public int FollwitRetryTime {
+            get { return _follwitRetryTime; }
             set {
-                _socialRetryTime = value;
+                _follwitRetryTime = value;
                 OnSettingChanged("socialretrytime");
             }
         }
-        private int _socialRetryTime;
+        private int _follwitRetryTime;
 
 
         [CornerstoneSetting(
@@ -1982,13 +1982,13 @@ namespace MediaPortal.Plugins.MovingPictures {
             Default = "",
             Hidden = true)]
         public String LastSynchTime {
-            get { return _socialLastRetrieved; }
+            get { return _follwitLastRetrieved; }
             set {
-                _socialLastRetrieved = value;
+                _follwitLastRetrieved = value;
                 OnSettingChanged("sociallastretrieved");
             }
         }
-        private String _socialLastRetrieved;
+        private String _follwitLastRetrieved;
 
         
         [CornerstoneSetting(
@@ -1997,14 +1997,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             Groups = "|follw.it|",
             Identifier = "socialfilehashsync",
             Default = true)]
-        public bool EnableSocialFileHashSync {
-            get { return _enableSocialFileHashSync; }
+        public bool EnableFollwitFileHashSync {
+            get { return _enableFollwitFileHashSync; }
             set {
-                _enableSocialFileHashSync = value;
+                _enableFollwitFileHashSync = value;
                 OnSettingChanged("socialfilehashsync");
             }
         }
-        private bool _enableSocialFileHashSync;
+        private bool _enableFollwitFileHashSync;
 
         [CornerstoneSetting(
             Name = "follw.it Movie Synch Filter ID",
@@ -2013,34 +2013,34 @@ namespace MediaPortal.Plugins.MovingPictures {
             Identifier = "social_sync_filter_id",
             Default = "null",
             Hidden = true)]
-        public string SocialSyncFilterID {
-            get { return _socialSyncFilterID; }
+        public string FollwitSyncFilterID {
+            get { return _follwitSyncFilterID; }
             set {
-                _socialSyncFilterID = value;
+                _follwitSyncFilterID = value;
                 OnSettingChanged("social_sync_filter_id");
             }
         }
-        private string _socialSyncFilterID;
+        private string _follwitSyncFilterID;
 
-        public DBFilter<DBMovieInfo> SocialSyncFilter {
+        public DBFilter<DBMovieInfo> FollwitSyncFilter {
             get {
-                if (_socialSyncFilter == null) {
+                if (_follwitSyncFilter == null) {
                     // grab or create the filter object attached to follw.it synching
-                    string filterID = MovingPicturesCore.Settings.SocialSyncFilterID;
+                    string filterID = MovingPicturesCore.Settings.FollwitSyncFilterID;
                     if (filterID == "null") {
-                        _socialSyncFilter = new DBFilter<DBMovieInfo>();
-                        _socialSyncFilter.Name = "Synchronized Movies";
-                        MovingPicturesCore.DatabaseManager.Commit(_socialSyncFilter);
-                        SocialSyncFilterID = _socialSyncFilter.ID.ToString();
+                        _follwitSyncFilter = new DBFilter<DBMovieInfo>();
+                        _follwitSyncFilter.Name = "Synchronized Movies";
+                        MovingPicturesCore.DatabaseManager.Commit(_follwitSyncFilter);
+                        FollwitSyncFilterID = _follwitSyncFilter.ID.ToString();
                     }
                     else {
-                        _socialSyncFilter = MovingPicturesCore.DatabaseManager.Get<DBFilter<DBMovieInfo>>(int.Parse(filterID));
+                        _follwitSyncFilter = MovingPicturesCore.DatabaseManager.Get<DBFilter<DBMovieInfo>>(int.Parse(filterID));
                     }
                 }
 
-                return _socialSyncFilter;
+                return _follwitSyncFilter;
             }
-        } private DBFilter<DBMovieInfo> _socialSyncFilter = null;
+        } private DBFilter<DBMovieInfo> _follwitSyncFilter = null;
 
 
 
@@ -2050,14 +2050,14 @@ namespace MediaPortal.Plugins.MovingPictures {
             Groups = "|follw.it|",
             Identifier = "socialbatchsize",
             Default = 30)]
-        public int SocialBatchSize {
-            get { return _socialBatchSize; }
+        public int FollwitBatchSize {
+            get { return _follwitBatchSize; }
             set {
-                _socialBatchSize = value;
+                _follwitBatchSize = value;
                 OnSettingChanged("socialbatchsize");
             }
         }
-        private int _socialBatchSize;
+        private int _follwitBatchSize;
 
         #endregion
 

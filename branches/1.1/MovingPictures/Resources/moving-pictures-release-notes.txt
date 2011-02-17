@@ -1,4 +1,4 @@
-Moving Pictures 1.1.2
+Moving Pictures 1.1.3
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -22,8 +22,26 @@ Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 
 
-
 Change Log
+================================================================================
+1.1.3
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #858:     Parental Controls will now only reset when the idle timer 
+                fires or when exiting to one of the home screens. Jumping over
+				to SubCentral (or other plugins) will no longer reset parental
+				controls.
+				
+Issue #947:     "Now Watching" information will no longer be sent to follw.it 
+                if a movie is on the exclusion list.
+				
+Issue #949:     If Moving Pictures has trouble connecting to follw.it, this
+                will be notated in the configuration screen along with a link 
+				to retry connecting. 
+				
+Issue #952:     Updated the CSFD.cz scraper. Thanks Trottel!
+
 ================================================================================
 1.1.2
 --------------------------------------------------------------------------------

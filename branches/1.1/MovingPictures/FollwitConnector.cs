@@ -21,7 +21,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         public delegate void StatusChangedDelegate(StatusEnum status);
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private static object socialAPILock = new Object();
+        private static object follwitAPILock = new Object();
         private Timer taskListTimer;
 
         private HashSet<DBMovieInfo> currentlySyncingMovies = new HashSet<DBMovieInfo>();
@@ -30,28 +30,28 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         public event StatusChangedDelegate StatusChanged;
 
-        // The MpsAPI object that should be used by all components of the plugin.
+        // The API object that should be used by all components of the plugin.
         public FollwitApi FollwitApi {
             get {
-                TimeSpan retryDelay = new TimeSpan(0, MovingPicturesCore.Settings.SocialRetryTime, 0);
-                if (_socialAPI == null && (DateTime.Now - lastConnectAttempt > retryDelay)) {
+                TimeSpan retryDelay = new TimeSpan(0, MovingPicturesCore.Settings.FollwitRetryTime, 0);
+                if (_follwitAPI == null && (DateTime.Now - lastConnectAttempt > retryDelay)) {
                     lastConnectAttempt = DateTime.Now;
 
                     try {
-                        lock (socialAPILock) {
-                            _socialAPI = FollwitApi.Login(MovingPicturesCore.Settings.SocialUsername,
-                                                      MovingPicturesCore.Settings.SocialHashedPassword,
-                                                      MovingPicturesCore.Settings.SocialUrl);
+                        lock (follwitAPILock) {
+                            _follwitAPI = FollwitApi.Login(MovingPicturesCore.Settings.FollwitUsername,
+                                                      MovingPicturesCore.Settings.FollwitHashedPassword,
+                                                      MovingPicturesCore.Settings.FollwitUrl);
                         }
-                        if (_socialAPI == null) {
+                        if (_follwitAPI == null) {
                             logger.Error("Failed to log in to follw.it: Invalid Username or Password!");
                         }
 
-                        if (_socialAPI != null) {
-                            _socialAPI.RequestEvent += new FollwitApi.FitAPIRequestDelegate(_socialAPI_RequestEvent);
-                            _socialAPI.ResponseEvent += new FollwitApi.FitAPIResponseDelegate(_socialAPI_ResponseEvent);
+                        if (_follwitAPI != null) {
+                            _follwitAPI.RequestEvent += new FollwitApi.FitAPIRequestDelegate(_follwitAPI_RequestEvent);
+                            _follwitAPI.ResponseEvent += new FollwitApi.FitAPIResponseDelegate(_follwitAPI_ResponseEvent);
 
-                            logger.Info("Logged in to MPS as {0}.", _socialAPI.User.Name);
+                            logger.Info("Logged in to follw.it as {0}.", _follwitAPI.User.Name);
                             Status = StatusEnum.CONNECTED;
                         }
                     }
@@ -70,9 +70,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                         }
                     }
                 }
-                return _socialAPI;
+                return _follwitAPI;
             }
-        } private static FollwitApi _socialAPI = null;
+        } private static FollwitApi _follwitAPI = null;
 
         public StatusEnum Status {
             get {
@@ -100,15 +100,15 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void Init() {
-            _socialAPI = null;
+            _follwitAPI = null;
             lastConnectAttempt = new DateTime(1900, 1, 1);
 
-            if (MovingPicturesCore.Settings.SocialEnabled) {
+            if (MovingPicturesCore.Settings.FollwitEnabled) {
                 MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
                 MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);
                 MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectInserted);
-                if (MovingPicturesCore.Settings.SocialTaskListTimer > 0) {
-                    taskListTimer = new Timer(taskListTimerCallback, null, 0, MovingPicturesCore.Settings.SocialTaskListTimer * 60000);
+                if (MovingPicturesCore.Settings.FollwitTaskListTimer > 0) {
+                    taskListTimer = new Timer(taskListTimerCallback, null, 0, MovingPicturesCore.Settings.FollwitTaskListTimer * 60000);
                 }
             }
             else {
@@ -130,7 +130,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         public void Synchronize(ProgressDelegate progress) {
-            if (!MovingPicturesCore.Settings.SocialEnabled) {
+            if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return;
             }
@@ -149,7 +149,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     moviesToSynch = new List<DBMovieInfo>();
                     moviesToExclude = new List<DBMovieInfo>();
 
-                    moviesToSynch.AddRange(MovingPicturesCore.Settings.SocialSyncFilter.Filter(DBMovieInfo.GetAll()));
+                    moviesToSynch.AddRange(MovingPicturesCore.Settings.FollwitSyncFilter.Filter(DBMovieInfo.GetAll()));
                     moviesToExclude.AddRange(DBMovieInfo.GetAll().Except(moviesToSynch));
 
                     logger.Debug("Using synchronization filter. Syncing {0} movies. Excluding {1} movies.", moviesToSynch.Count, moviesToExclude.Count);
@@ -167,7 +167,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error synchronizing with follw.it!", ex);
-                _socialAPI = null;
+                _follwitAPI = null;
                 Status = StatusEnum.INTERNAL_ERROR;
                 return;
             }
@@ -176,7 +176,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private bool UploadMovieInfo(List<DBMovieInfo> movies, ProgressDelegate progress) {
-            if (!MovingPicturesCore.Settings.SocialEnabled) {
+            if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return false;
             }
@@ -188,56 +188,56 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             try {
 
-                List<FitMovie> mpsMovies = new List<FitMovie>();
+                List<FitMovie> fitMovies = new List<FitMovie>();
 
                 int count = 0;
                 foreach (var movie in movies) {
                     count++;
-                    FitMovie mpsMovie = FollwitConnector.MovieToMPSMovie(movie);
-                    if (mpsMovie.Resources.Length > 1) {
+                    FitMovie fitMovie = FollwitConnector.MovieToFitMovie(movie);
+                    if (fitMovie.Resources.Length > 1) {
                         logger.Debug("Adding '{0}' to list of movies to be synced.", movie.Title);
-                        mpsMovies.Add(mpsMovie);
+                        fitMovies.Add(fitMovie);
                     }
                     else {
                         logger.Debug("Skipping '{0}' because it doesn't have source information.", movie.Title);
                     }
 
                     if (progress != null)
-                        progress("Syncing All Movies to MPS", (int)(count * 100 / movies.Count));
+                        progress("Syncing All Movies to follw.it", (int)(count * 100 / movies.Count));
 
-                    if (mpsMovies.Count >= MovingPicturesCore.Settings.SocialBatchSize || count == movies.Count) {
-                        logger.Debug("Sending batch of {0} movies", mpsMovies.Count);
-                        MovingPicturesCore.Social.FollwitApi.AddMoviesToCollection(ref mpsMovies);
+                    if (fitMovies.Count >= MovingPicturesCore.Settings.FollwitBatchSize || count == movies.Count) {
+                        logger.Debug("Sending batch of {0} movies", fitMovies.Count);
+                        MovingPicturesCore.Follwit.FollwitApi.AddMoviesToCollection(ref fitMovies);
 
-                        // update MpsId on the DBMovieInfo object
-                        foreach (FitMovie mpsMovieDTO in mpsMovies) {
-                            DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
+                        // update fitId on the DBMovieInfo object
+                        foreach (FitMovie fitMovieDTO in fitMovies) {
+                            DBMovieInfo m = DBMovieInfo.Get(fitMovieDTO.InternalId);
                             if (m != null) {
-                                m.MpsId = mpsMovieDTO.MovieId;
-                                if (mpsMovieDTO.UserRating > 0)
-                                    m.ActiveUserSettings.UserRating = mpsMovieDTO.UserRating;
-                                if (mpsMovieDTO.Watched && m.ActiveUserSettings.WatchedCount == 0)
+                                m.FitId = fitMovieDTO.MovieId;
+                                if (fitMovieDTO.UserRating > 0)
+                                    m.ActiveUserSettings.UserRating = fitMovieDTO.UserRating;
+                                if (fitMovieDTO.Watched && m.ActiveUserSettings.WatchedCount == 0)
                                     m.ActiveUserSettings.WatchedCount = 1;
 
-                                // prevent sending this data back to MPS
+                                // prevent sending this data back to follw.it
                                 m.ActiveUserSettings.RatingChanged = false;
                                 m.ActiveUserSettings.WatchCountChanged = false;
                                 m.Commit();
                             }
                         }
 
-                        mpsMovies.Clear();
+                        fitMovies.Clear();
                     }
                 }
             }
             catch (WebException ex) {
                 logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.CONNECTION_ERROR;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error uploading movie information to follw.it!", ex);
-                _socialAPI = null;
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
+                _follwitAPI = null;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -245,7 +245,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private bool RemoveFilteredMovies(List<DBMovieInfo> movies, ProgressDelegate progress) {
-            if (!MovingPicturesCore.Settings.SocialEnabled) {
+            if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return false;
             }
@@ -259,24 +259,24 @@ namespace MediaPortal.Plugins.MovingPictures {
                 int count = 0;
                 foreach (var movie in movies) {
                     count++;
-                    if (movie.MpsId != null && movie.MpsId != 0) {
+                    if (movie.FitId != null && movie.FitId != 0) {
                         logger.Debug("Removing '{0}' from follw.it because it has been excluded by a filter.", movie.Title);
-                        FollwitApi.RemoveMovieFromCollection((int)movie.MpsId);
-                        movie.MpsId = null;
+                        FollwitApi.RemoveMovieFromCollection((int)movie.FitId);
+                        movie.FitId = null;
                     }
 
                     if (progress != null)
-                        progress("Removing excluded movies from MPS", (int)(count * 100 / movies.Count));
+                        progress("Removing excluded movies from follw.it", (int)(count * 100 / movies.Count));
                 }
             }
             catch (WebException ex) {
                 logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.CONNECTION_ERROR;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error removing movies from your follw.it collection!", ex);
-                _socialAPI = null;
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
+                _follwitAPI = null;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -341,28 +341,28 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
 
-        public void SubmitCover(int mpsId) {
-            logger.Debug("Checking for cover for MPS ID #{0}", mpsId);
+        public void SubmitCover(int fitId) {
+            logger.Debug("Checking for cover for follw.it ID #{0}", fitId);
 
-            DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(mpsId);
+            DBMovieInfo matchingMovie = DBMovieInfo.GetByFitId(fitId);
 
             if (matchingMovie != null && matchingMovie.CoverFullPath.Trim().Length > 0) {
                 logger.Info("Submitting cover for '{0}' to follw.it.", matchingMovie.Title);
-                MovingPicturesCore.Social.FollwitApi.UploadCover(mpsId, matchingMovie.CoverFullPath);
+                MovingPicturesCore.Follwit.FollwitApi.UploadCover(fitId, matchingMovie.CoverFullPath);
             }
         }
 
         private void UpdateLocalMovieId(TaskListItem taskDetails) {
-            DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(taskDetails.MovieId);
+            DBMovieInfo matchingMovie = DBMovieInfo.GetByFitId(taskDetails.MovieId);
             if (matchingMovie == null) return;
 
-            logger.Debug("The MPS ID for {0} has changed from {1} to {2}.", matchingMovie.Title, taskDetails.MovieId, taskDetails.NewMovieId);
-            matchingMovie.MpsId = taskDetails.NewMovieId;
+            logger.Debug("The follw.it ID for {0} has changed from {1} to {2}.", matchingMovie.Title, taskDetails.MovieId, taskDetails.NewMovieId);
+            matchingMovie.FitId = taskDetails.NewMovieId;
             matchingMovie.Commit();
         }
 
         private void UpdateLocalRating(TaskListItem taskDetails) {
-            DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(taskDetails.MovieId);
+            DBMovieInfo matchingMovie = DBMovieInfo.GetByFitId(taskDetails.MovieId);
             if (matchingMovie == null) return;
 
             currentlySyncingMovies.Add(matchingMovie);
@@ -375,7 +375,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void UpdateLocalWatchedStatus(TaskListItem taskDetails) {
-            DBMovieInfo matchingMovie = DBMovieInfo.GetByMpsId(taskDetails.MovieId);
+            DBMovieInfo matchingMovie = DBMovieInfo.GetByFitId(taskDetails.MovieId);
             if (matchingMovie == null) return;
 
             currentlySyncingMovies.Add(matchingMovie);
@@ -396,7 +396,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         public bool CurrentlyWatching(DBMovieInfo movie, bool isWatching) {
-            if (!MovingPicturesCore.Settings.SocialEnabled) {
+            if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return false;
             }
@@ -408,20 +408,20 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             try {
                 if (MovingPicturesCore.Settings.RestrictSynchronizedMovies) {
-                    var filtered = MovingPicturesCore.Settings.SocialSyncFilter.Filter(new List<DBMovieInfo>() {movie});
+                    var filtered = MovingPicturesCore.Settings.FollwitSyncFilter.Filter(new List<DBMovieInfo>() {movie});
                     if (filtered.Count == 0)
                         return false;
                 }                
 
-                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                bgProc.Action = isWatching ? MPSActions.BeginWatching : MPSActions.EndWatching;
+                FollwitBackgroundProcess bgProc = new FollwitBackgroundProcess();
+                bgProc.Action = isWatching ? FitActions.BeginWatching : FitActions.EndWatching;
                 bgProc.Movies.Add(movie);
                 MovingPicturesCore.ProcessManager.StartProcess(bgProc);
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error sending 'now watching' information to follw.it!", ex);
-                _socialAPI = null;
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
+                _follwitAPI = null;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -432,7 +432,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (currentlySyncingMovies.Contains(movie))
                 return true;
 
-            if (!MovingPicturesCore.Settings.SocialEnabled) {
+            if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return false;
             }
@@ -443,15 +443,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             try {
-                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                bgProc.Action = includeInStream ? MPSActions.WatchMovie : MPSActions.WatchMovieIgnoreStream;
+                FollwitBackgroundProcess bgProc = new FollwitBackgroundProcess();
+                bgProc.Action = includeInStream ? FitActions.WatchMovie : FitActions.WatchMovieIgnoreStream;
                 bgProc.Movies.Add(movie);
                 MovingPicturesCore.ProcessManager.StartProcess(bgProc);
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error sending 'movie watched' information to follw.it!", ex);
-                _socialAPI = null;
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
+                _follwitAPI = null;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -462,7 +462,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (currentlySyncingMovies.Contains(movie))
                 return true;
 
-            if (!MovingPicturesCore.Settings.SocialEnabled) {
+            if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return false;
             }
@@ -473,15 +473,15 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
 
             try {
-                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                bgProc.Action = MPSActions.UnwatchMovie;
+                FollwitBackgroundProcess bgProc = new FollwitBackgroundProcess();
+                bgProc.Action = FitActions.UnwatchMovie;
                 bgProc.Movies.Add(movie);
                 MovingPicturesCore.ProcessManager.StartProcess(bgProc);
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error sending 'unwatch movie' information to follw.it!", ex);
-                _socialAPI = null;
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
+                _follwitAPI = null;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return false;
             }
 
@@ -489,7 +489,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void DatabaseManager_ObjectInserted(DatabaseTable obj) {
-            if (!MovingPicturesCore.Settings.SocialEnabled) {
+            if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return;
             }
@@ -508,21 +508,21 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
                 else if (obj.GetType() == typeof(DBMovieInfo)) {
                     DBMovieInfo movie = (DBMovieInfo)obj;
-                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                    bgProc.Action = MPSActions.AddMoviesToCollection;
+                    FollwitBackgroundProcess bgProc = new FollwitBackgroundProcess();
+                    bgProc.Action = FitActions.AddMoviesToCollection;
                     bgProc.Movies.Add(movie);
                     MovingPicturesCore.ProcessManager.StartProcess(bgProc);
                 }
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error connecting to follw.it!", ex);
-                _socialAPI = null;
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
+                _follwitAPI = null;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
             }
         }
 
         private void DatabaseManager_ObjectUpdated(DatabaseTable obj) {
-            if (!MovingPicturesCore.Settings.SocialEnabled) {
+            if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return;
             }
@@ -544,8 +544,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                     if (currentlySyncingMovies.Contains(movie))
                         return;
 
-                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                    bgProc.Action = MPSActions.UpdateUserRating;
+                    FollwitBackgroundProcess bgProc = new FollwitBackgroundProcess();
+                    bgProc.Action = FitActions.UpdateUserRating;
                     bgProc.Movies.Add(movie);
                     MovingPicturesCore.ProcessManager.StartProcess(bgProc);
 
@@ -555,15 +555,15 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             }
             catch (Exception ex) {
-                logger.ErrorException("Unexpected error sending rating information to MovingPicturesSocial!", ex);
-                _socialAPI = null;
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
+                logger.ErrorException("Unexpected error sending rating information to follw.it!", ex);
+                _follwitAPI = null;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
             }
         }
 
         private void Settings_SettingChanged(DBSetting setting, object oldValue) {
             try {
-                // Reinitializes the SocialAPI object when Username, Password, or URLBase changes.
+                // Reinitializes the follwitAPI object when Username, Password, or URLBase changes.
                 if (setting.Key == "socialurlbase" || setting.Key == "socialusername" || setting.Key == "socialpassword") {
                     Init();
                 }
@@ -571,8 +571,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                 // Recreate the timer if the timer setting changes
                 if (setting.Key == "socialtasklisttimer") {
                     if (taskListTimer != null) taskListTimer.Dispose();
-                    if (MovingPicturesCore.Settings.SocialTaskListTimer > 0) {
-                        taskListTimer = new Timer(taskListTimerCallback, null, 0, MovingPicturesCore.Settings.SocialTaskListTimer * 60000);
+                    if (MovingPicturesCore.Settings.FollwitTaskListTimer > 0) {
+                        taskListTimer = new Timer(taskListTimerCallback, null, 0, MovingPicturesCore.Settings.FollwitTaskListTimer * 60000);
                     }
                 }
             }
@@ -582,7 +582,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
 
         private void movieDeletedListener(DatabaseTable obj) {
-            if (!MovingPicturesCore.Settings.SocialEnabled) {
+            if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return;
             }
@@ -601,14 +601,14 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 List<DBMovieInfo> allMovies = DBMovieInfo.GetAll();
 
-                int mpsIdMovieCount = (from m in allMovies
-                                       where m.MpsId == movie.MpsId
+                int fitIdMovieCount = (from m in allMovies
+                                       where m.FitId == movie.FitId
                                        select m).Count();
 
-                if (mpsIdMovieCount == 0)
+                if (fitIdMovieCount == 0)
                 {
-                    MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                    bgProc.Action = MPSActions.RemoveMovieFromCollection;
+                    FollwitBackgroundProcess bgProc = new FollwitBackgroundProcess();
+                    bgProc.Action = FitActions.RemoveMovieFromCollection;
                     bgProc.Movies.Add(movie);
                     MovingPicturesCore.ProcessManager.StartProcess(bgProc);
                 }
@@ -616,55 +616,55 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error removing an object from your follw.it collection!", ex);
-                _socialAPI = null;
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
+                _follwitAPI = null;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
             }
 
         }
 
         private void taskListTimerCallback(object state) {
             try {
-                MPSBackgroundProcess bgProc = new MPSBackgroundProcess();
-                bgProc.Action = MPSActions.ProcessTaskList;
+                FollwitBackgroundProcess bgProc = new FollwitBackgroundProcess();
+                bgProc.Action = FitActions.ProcessTaskList;
                 MovingPicturesCore.ProcessManager.StartProcess(bgProc);
             }
             catch (Exception ex) {
                 logger.ErrorException("", ex); 
-                _socialAPI = null;
-                MovingPicturesCore.Social.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
+                _follwitAPI = null;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
                 return;
             }
         }
 
         /// <summary>
-        /// Translates a DBMovieInfo object to a MPS MovieDTO object.
+        /// Translates a DBMovieInfo object to a follw.it MovieDTO object.
         /// </summary>
-        public static FitMovie MovieToMPSMovie(DBMovieInfo movie) {
-            FitMovie mpsMovie = new FitMovie();
-            mpsMovie.InternalId = movie.ID.GetValueOrDefault();
-            mpsMovie.Directors = "";
-            mpsMovie.Writers = "";
-            mpsMovie.Cast = "";
-            mpsMovie.Genres = "";
+        public static FitMovie MovieToFitMovie(DBMovieInfo movie) {
+            FitMovie fitMovie = new FitMovie();
+            fitMovie.InternalId = movie.ID.GetValueOrDefault();
+            fitMovie.Directors = "";
+            fitMovie.Writers = "";
+            fitMovie.Cast = "";
+            fitMovie.Genres = "";
             foreach (var person in movie.Directors) {
-                mpsMovie.Directors += "|" + person;
+                fitMovie.Directors += "|" + person;
             }
             foreach (var person in movie.Writers) {
-                mpsMovie.Writers += "|" + person;
+                fitMovie.Writers += "|" + person;
             }
             foreach (var person in movie.Actors) {
-                mpsMovie.Cast += "|" + person;
+                fitMovie.Cast += "|" + person;
             }
             foreach (var genre in movie.Genres) {
-                mpsMovie.Genres += "|" + genre;
+                fitMovie.Genres += "|" + genre;
             }
 
-            mpsMovie.Resources = "";
-            mpsMovie.Locale = "";
+            fitMovie.Resources = "";
+            fitMovie.Locale = "";
             bool foundIMDB = false;
 
             if (movie.PrimarySource != null && movie.PrimarySource.Provider != null)
-                mpsMovie.Locale = movie.PrimarySource.Provider.LanguageCode;
+                fitMovie.Locale = movie.PrimarySource.Provider.LanguageCode;
 
             foreach (DBSourceMovieInfo smi in movie.SourceMovieInfo) {
                 if (smi.Source == null || smi.Source.Provider == null)
@@ -673,7 +673,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (String.IsNullOrEmpty(smi.Identifier))
                     continue;
 
-                mpsMovie.Resources += "|" 
+                fitMovie.Resources += "|" 
                     + System.Web.HttpUtility.UrlEncode(smi.Source.Provider.Name)
                     + "="
                     + System.Web.HttpUtility.UrlEncode(smi.Identifier)
@@ -682,57 +682,57 @@ namespace MediaPortal.Plugins.MovingPictures {
                 if (smi.Source.Provider.Name.ToLower().Contains("imdb"))
                     foundIMDB = true;
 
-                if (string.IsNullOrEmpty(mpsMovie.Locale)) {
-                    mpsMovie.Locale = smi.Source.Provider.LanguageCode;
+                if (string.IsNullOrEmpty(fitMovie.Locale)) {
+                    fitMovie.Locale = smi.Source.Provider.LanguageCode;
                 }
             }
 
             if (!foundIMDB) {
-                mpsMovie.Resources += "|"
+                fitMovie.Resources += "|"
                     + "imdb.com="
                     + System.Web.HttpUtility.UrlEncode(movie.ImdbID)
                     ;
             }
 
-            if (MovingPicturesCore.Settings.EnableSocialFileHashSync)
-                mpsMovie.FileHash = movie.LocalMedia[0].FileHash ?? "";
+            if (MovingPicturesCore.Settings.EnableFollwitFileHashSync)
+                fitMovie.FileHash = movie.LocalMedia[0].FileHash ?? "";
             else
-                mpsMovie.FileHash = "";
+                fitMovie.FileHash = "";
 
-            mpsMovie.Title = movie.Title ?? "";
-            mpsMovie.Year = movie.Year.ToString() ?? "";
-            mpsMovie.Certification = movie.Certification ?? "";
-            mpsMovie.Language = movie.Language ?? "";
-            mpsMovie.Tagline = movie.Tagline ?? "";
-            mpsMovie.Summary = movie.Summary ?? "";
-            mpsMovie.Score = movie.Score.ToString() ?? "";
-            mpsMovie.Popularity = movie.Popularity.ToString() ?? "";
-            mpsMovie.Runtime = movie.Runtime.ToString() ?? "";
-            mpsMovie.TranslatedTitle = movie.Title ?? "";
+            fitMovie.Title = movie.Title ?? "";
+            fitMovie.Year = movie.Year.ToString() ?? "";
+            fitMovie.Certification = movie.Certification ?? "";
+            fitMovie.Language = movie.Language ?? "";
+            fitMovie.Tagline = movie.Tagline ?? "";
+            fitMovie.Summary = movie.Summary ?? "";
+            fitMovie.Score = movie.Score.ToString() ?? "";
+            fitMovie.Popularity = movie.Popularity.ToString() ?? "";
+            fitMovie.Runtime = movie.Runtime.ToString() ?? "";
+            fitMovie.TranslatedTitle = movie.Title ?? "";
 
             if (movie.ActiveUserSettings.WatchedCount > 0) {
-                mpsMovie.Watched = true;
+                fitMovie.Watched = true;
                 if (movie.WatchedHistory.Count > 0)
-                    mpsMovie.LastWatchDate = movie.WatchedHistory[movie.WatchedHistory.Count - 1].DateWatched;
+                    fitMovie.LastWatchDate = movie.WatchedHistory[movie.WatchedHistory.Count - 1].DateWatched;
             }
             else {
-                mpsMovie.Watched = false;
-                mpsMovie.LastWatchDate = DateTime.MinValue;
+                fitMovie.Watched = false;
+                fitMovie.LastWatchDate = DateTime.MinValue;
             }
             
-            mpsMovie.UserRating = movie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
+            fitMovie.UserRating = movie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
 
-            return mpsMovie;
+            return fitMovie;
         }
 
-        internal void _socialAPI_RequestEvent(string RequestText) {
+        internal void _follwitAPI_RequestEvent(string RequestText) {
             string logtext = ScrubLogText(RequestText);
-            logger.Debug("Request sent to MPS: " + logtext);
+            logger.Debug("Request sent to follw.it: " + logtext);
         }
 
-        internal void _socialAPI_ResponseEvent(string ResponseText) {
+        internal void _follwitAPI_ResponseEvent(string ResponseText) {
             string logtext = ScrubLogText(ResponseText);
-            logger.Debug("Response received from MPS: " + logtext);
+            logger.Debug("Response received from follw.it: " + logtext);
         }
 
         private string ScrubLogText(string RequestText) {
