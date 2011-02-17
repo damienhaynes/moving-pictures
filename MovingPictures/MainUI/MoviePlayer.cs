@@ -649,8 +649,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // only invoke movie started event if we were not playing this movie before
             if (previousMovie != CurrentMovie) {
-                if (MovingPicturesCore.Settings.SocialEnabled)
-                    MovingPicturesCore.Social.CurrentlyWatching(localMedia.AttachedMovies[0], true);
+                if (MovingPicturesCore.Settings.FollwitEnabled)
+                    MovingPicturesCore.Follwit.CurrentlyWatching(localMedia.AttachedMovies[0], true);
                 if (MovieStarted != null) MovieStarted(CurrentMovie);
             }
         }
@@ -659,8 +659,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // reset player
             resetPlayer();
 
-            if (MovingPicturesCore.Settings.SocialEnabled) 
-                MovingPicturesCore.Social.CurrentlyWatching(movie, false);
+            if (MovingPicturesCore.Settings.FollwitEnabled) 
+                MovingPicturesCore.Follwit.CurrentlyWatching(movie, false);
 
             // invoke event
             if (MovieStopped != null)
@@ -677,8 +677,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // reset player
             resetPlayer();
 
-            if (MovingPicturesCore.Settings.SocialEnabled) 
-                MovingPicturesCore.Social.CurrentlyWatching(movie, false);
+            if (MovingPicturesCore.Settings.FollwitEnabled) 
+                MovingPicturesCore.Follwit.CurrentlyWatching(movie, false);
 
             // invoke event
             if (MovieEnded != null)

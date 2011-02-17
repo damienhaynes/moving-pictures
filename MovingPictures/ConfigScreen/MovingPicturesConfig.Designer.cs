@@ -35,8 +35,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.guiSettingsPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.GUISettingsPane();
             this.importerSettingsTab = new System.Windows.Forms.TabPage();
             this.importerSettingsPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.ImporterSettingsPane();
-            this.socialTab = new System.Windows.Forms.TabPage();
-            this.socialPanel1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.SocialPanel();
+            this.follwitTab = new System.Windows.Forms.TabPage();
+            this.follwitPanel1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.FollwitPanel();
             this.aboutTabPage = new System.Windows.Forms.TabPage();
             this.aboutPane1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AboutPane();
             this.mainTabControl.SuspendLayout();
@@ -44,7 +44,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importSettingsTab.SuspendLayout();
             this.guiTab.SuspendLayout();
             this.importerSettingsTab.SuspendLayout();
-            this.socialTab.SuspendLayout();
+            this.follwitTab.SuspendLayout();
             this.aboutTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,7 +57,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.mainTabControl.Controls.Add(this.importSettingsTab);
             this.mainTabControl.Controls.Add(this.guiTab);
             this.mainTabControl.Controls.Add(this.importerSettingsTab);
-            this.mainTabControl.Controls.Add(this.socialTab);
+            this.mainTabControl.Controls.Add(this.follwitTab);
             this.mainTabControl.Controls.Add(this.aboutTabPage);
             this.mainTabControl.Location = new System.Drawing.Point(12, 12);
             this.mainTabControl.Name = "mainTabControl";
@@ -159,24 +159,24 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importerSettingsPane1.Size = new System.Drawing.Size(582, 597);
             this.importerSettingsPane1.TabIndex = 1;
             // 
-            // socialTab
+            // follwitTab
             // 
-            this.socialTab.Controls.Add(this.socialPanel1);
-            this.socialTab.Location = new System.Drawing.Point(4, 22);
-            this.socialTab.Name = "socialTab";
-            this.socialTab.Padding = new System.Windows.Forms.Padding(3);
-            this.socialTab.Size = new System.Drawing.Size(588, 603);
-            this.socialTab.TabIndex = 7;
-            this.socialTab.Text = "Synchronization";
-            this.socialTab.UseVisualStyleBackColor = true;
+            this.follwitTab.Controls.Add(this.follwitPanel1);
+            this.follwitTab.Location = new System.Drawing.Point(4, 22);
+            this.follwitTab.Name = "follwitTab";
+            this.follwitTab.Padding = new System.Windows.Forms.Padding(3);
+            this.follwitTab.Size = new System.Drawing.Size(588, 603);
+            this.follwitTab.TabIndex = 7;
+            this.follwitTab.Text = "Synchronization";
+            this.follwitTab.UseVisualStyleBackColor = true;
             // 
-            // socialPanel1
+            // follwitPanel1
             // 
-            this.socialPanel1.Location = new System.Drawing.Point(6, 6);
-            this.socialPanel1.MinimumSize = new System.Drawing.Size(512, 87);
-            this.socialPanel1.Name = "socialPanel1";
-            this.socialPanel1.Size = new System.Drawing.Size(576, 329);
-            this.socialPanel1.TabIndex = 0;
+            this.follwitPanel1.Location = new System.Drawing.Point(6, 6);
+            this.follwitPanel1.MinimumSize = new System.Drawing.Size(512, 87);
+            this.follwitPanel1.Name = "follwitPanel1";
+            this.follwitPanel1.Size = new System.Drawing.Size(576, 329);
+            this.follwitPanel1.TabIndex = 0;
             // 
             // aboutTabPage
             // 
@@ -221,7 +221,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.importSettingsTab.ResumeLayout(false);
             this.guiTab.ResumeLayout(false);
             this.importerSettingsTab.ResumeLayout(false);
-            this.socialTab.ResumeLayout(false);
+            this.follwitTab.ResumeLayout(false);
             this.aboutTabPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -241,7 +241,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private System.Windows.Forms.TabPage aboutTabPage;
         private GUISettingsPane guiSettingsPane1;
         private AboutPane aboutPane1;
-        private System.Windows.Forms.TabPage socialTab;
-        private SocialPanel socialPanel1;
+        private System.Windows.Forms.TabPage follwitTab;
+        private FollwitPanel follwitPanel1;
     }
 }

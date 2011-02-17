@@ -87,7 +87,7 @@
   <ItemGroup>
     <Compile Include="BackgroundProcesses\FileSyncProcess.cs" />
     <Compile Include="BackgroundProcesses\MediaInfoUpdateProcess.cs" />
-    <Compile Include="BackgroundProcesses\MPSBackgroundProcess.cs" />
+    <Compile Include="BackgroundProcesses\FollwitBackgroundProcess.cs" />
     <Compile Include="BackgroundProcesses\UpdateArtworkProcess.cs" />
     <Compile Include="ConfigScreen\AboutPane.cs">
       <SubType>UserControl</SubType>
@@ -266,11 +266,11 @@
     <Compile Include="ConfigScreen\Popups\TranslationPopup.Designer.cs">
       <DependentUpon>TranslationPopup.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\SocialPanel.cs">
+    <Compile Include="ConfigScreen\FollwitPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ConfigScreen\SocialPanel.Designer.cs">
-      <DependentUpon>SocialPanel.cs</DependentUpon>
+    <Compile Include="ConfigScreen\FollwitPanel.Designer.cs">
+      <DependentUpon>FollwitPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="ConfigScreen\SplashPane.cs">
       <SubType>UserControl</SubType>
@@ -470,8 +470,8 @@
       <DependentUpon>TranslationPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\SocialPanel.resx">
-      <DependentUpon>SocialPanel.cs</DependentUpon>
+    <EmbeddedResource Include="ConfigScreen\FollwitPanel.resx">
+      <DependentUpon>FollwitPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\SplashPane.resx">
       <DependentUpon>SplashPane.cs</DependentUpon>

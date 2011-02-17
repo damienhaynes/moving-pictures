@@ -1,6 +1,6 @@
 ﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen
 {
-    partial class SocialPanel
+    partial class FollwitPanel
     {
         /// <summary> 
         /// Required designer variable.
@@ -248,7 +248,7 @@
             this.retryLinkLabel.Text = "Retry";
             this.retryLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.retryLinkLabel_LinkClicked);
             // 
-            // SocialPanel
+            // FollwitPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -264,7 +264,7 @@
             this.Controls.Add(this.publicProfileCheckBox);
             this.Controls.Add(this.label2);
             this.MinimumSize = new System.Drawing.Size(555, 87);
-            this.Name = "SocialPanel";
+            this.Name = "FollwitPanel";
             this.Size = new System.Drawing.Size(555, 235);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
