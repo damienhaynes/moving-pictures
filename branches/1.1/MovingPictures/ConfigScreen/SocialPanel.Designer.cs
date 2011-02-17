@@ -44,6 +44,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.logoPanel1 = new Follwit.API.UI.Panels.LogoPanel();
+            this.retryLinkLabel = new System.Windows.Forms.LinkLabel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -64,6 +65,7 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.retryLinkLabel);
             this.panel1.Controls.Add(this.userLinkLabel);
             this.panel1.Controls.Add(this.statusLabel);
             this.panel1.Location = new System.Drawing.Point(127, 82);
@@ -233,6 +235,19 @@
             this.logoPanel1.MouseEnter += new System.EventHandler(this.logoPanel1_MouseEnter);
             this.logoPanel1.MouseLeave += new System.EventHandler(this.logoPanel1_MouseLeave);
             // 
+            // retryLinkLabel
+            // 
+            this.retryLinkLabel.AutoSize = true;
+            this.retryLinkLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.retryLinkLabel.Location = new System.Drawing.Point(105, 0);
+            this.retryLinkLabel.Name = "retryLinkLabel";
+            this.retryLinkLabel.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.retryLinkLabel.Size = new System.Drawing.Size(37, 13);
+            this.retryLinkLabel.TabIndex = 3;
+            this.retryLinkLabel.TabStop = true;
+            this.retryLinkLabel.Text = "Retry";
+            this.retryLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.retryLinkLabel_LinkClicked);
+            // 
             // SocialPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -280,5 +295,6 @@
         private Follwit.API.UI.Panels.LogoPanel logoPanel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.LinkLabel retryLinkLabel;
     }
 }

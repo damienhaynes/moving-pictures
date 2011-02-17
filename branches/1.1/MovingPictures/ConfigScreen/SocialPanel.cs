@@ -107,6 +107,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 statusLabel.ForeColor = Color.Red;
 
                 userLinkLabel.Visible = false;
+                retryLinkLabel.Visible = false;
 
                 accountButton.Text = "Setup Account";
 
@@ -117,11 +118,24 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 syncButton.Enabled = false;
             }
             else {
-                statusLabel.Text = "Currently linked to:";
-                statusLabel.ForeColor = Label.DefaultForeColor;
 
-                userLinkLabel.Visible = true;
-                userLinkLabel.Text = MovingPicturesCore.Settings.SocialUsername;
+                if (MovingPicturesCore.Social.FollwitApi == null) {
+                    statusLabel.Text = "Unable to connect to follw.it!";
+                    statusLabel.ForeColor = Color.Red;
+
+                    userLinkLabel.Visible = false;
+                    retryLinkLabel.Visible = true;
+
+                }
+                else {
+                    statusLabel.Text = "Currently linked to:";
+                    statusLabel.ForeColor = Label.DefaultForeColor;
+
+                    userLinkLabel.Visible = true;
+                    retryLinkLabel.Visible = false;
+                    userLinkLabel.Text = MovingPicturesCore.Settings.SocialUsername;
+                }
+
 
                 accountButton.Text = "Disconnect Account";
 
@@ -182,6 +196,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void logoPanel1_MouseLeave(object sender, EventArgs e) {
             Cursor = Cursors.Arrow;
+        }
+
+        private void retryLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            ProgressPopup popup = new ProgressPopup(new WorkerDelegate(delegate { MovingPicturesCore.Social.Reconnect(); }));
+            UpdateControls();
+
+            if (MovingPicturesCore.Social.FollwitApi == null) {
+                MessageBox.Show(this, "Unable to reconnect to follw.it!", "Error");
+            }
         }
     }
 }
