@@ -637,28 +637,30 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void onMediaStarted(DBLocalMedia localMedia) {
-           // set playback active
-           _playerState = MoviePlayerState.Playing;
-           
-           DBMovieInfo previousMovie = CurrentMovie;
-           activeMedia = localMedia;
+            // set playback active
+            _playerState = MoviePlayerState.Playing;
 
-           // Update OSD (delayed)
-           Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
-           newThread.Start();
+            DBMovieInfo previousMovie = CurrentMovie;
+            activeMedia = localMedia;
 
-           // only invoke movie started event if we were not playing this movie before
-           if (previousMovie != CurrentMovie) {
-               MovingPicturesCore.Social.CurrentlyWatching(localMedia.AttachedMovies[0], true);
-               if (MovieStarted != null) MovieStarted(CurrentMovie);
-           }
+            // Update OSD (delayed)
+            Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
+            newThread.Start();
+
+            // only invoke movie started event if we were not playing this movie before
+            if (previousMovie != CurrentMovie) {
+                if (MovingPicturesCore.Settings.FollwitEnabled)
+                    MovingPicturesCore.Follwit.CurrentlyWatching(localMedia.AttachedMovies[0], true);
+                if (MovieStarted != null) MovieStarted(CurrentMovie);
+            }
         }
 
         private void onMovieStopped(DBMovieInfo movie) {
             // reset player
             resetPlayer();
 
-            MovingPicturesCore.Social.CurrentlyWatching(movie, false);
+            if (MovingPicturesCore.Settings.FollwitEnabled) 
+                MovingPicturesCore.Follwit.CurrentlyWatching(movie, false);
 
             // invoke event
             if (MovieStopped != null)
@@ -675,7 +677,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // reset player
             resetPlayer();
 
-            MovingPicturesCore.Social.CurrentlyWatching(movie, false);
+            if (MovingPicturesCore.Settings.FollwitEnabled) 
+                MovingPicturesCore.Follwit.CurrentlyWatching(movie, false);
 
             // invoke event
             if (MovieEnded != null)

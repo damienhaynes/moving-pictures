@@ -388,14 +388,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             #region Upgrades required for 1.1.2
 
             if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.1.2.1216")) {
-                MovingPicturesCore.Settings.SocialURLBase = "http://follw.it/";
-                MovingPicturesCore.Settings.SocialBatchSize = 30;
+                MovingPicturesCore.Settings.FollwitURLBase = "http://follw.it/";
+                MovingPicturesCore.Settings.FollwitBatchSize = 30;
             }
 
             if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.1.2")) {
-                // force a full MPS synchronization for MPS ID changes, watched status changes and ratings changes as these are new features
-                if (MovingPicturesCore.Settings.SocialEnabled)
-                    MovingPicturesCore.Social.ProcessTasks(DateTime.MinValue);
+                // force a full follw.it synchronization for follw.it ID changes, watched status changes and ratings changes as these are new features
+                if (MovingPicturesCore.Settings.FollwitEnabled)
+                    MovingPicturesCore.Follwit.ProcessTasks(DateTime.MinValue);
             }
 
             #endregion

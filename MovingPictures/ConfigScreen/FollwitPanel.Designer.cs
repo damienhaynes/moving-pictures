@@ -1,6 +1,6 @@
 ﻿namespace MediaPortal.Plugins.MovingPictures.ConfigScreen
 {
-    partial class SocialPanel
+    partial class FollwitPanel
     {
         /// <summary> 
         /// Required designer variable.
@@ -43,7 +43,8 @@
             this.restrictSyncedMoviesCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.logoPanel1 = new MovingPicturesSocialAPI.UI.Panels.LogoPanel();
+            this.logoPanel1 = new Follwit.API.UI.Panels.LogoPanel();
+            this.retryLinkLabel = new System.Windows.Forms.LinkLabel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -64,6 +65,7 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.retryLinkLabel);
             this.panel1.Controls.Add(this.userLinkLabel);
             this.panel1.Controls.Add(this.statusLabel);
             this.panel1.Location = new System.Drawing.Point(127, 82);
@@ -233,7 +235,20 @@
             this.logoPanel1.MouseEnter += new System.EventHandler(this.logoPanel1_MouseEnter);
             this.logoPanel1.MouseLeave += new System.EventHandler(this.logoPanel1_MouseLeave);
             // 
-            // SocialPanel
+            // retryLinkLabel
+            // 
+            this.retryLinkLabel.AutoSize = true;
+            this.retryLinkLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.retryLinkLabel.Location = new System.Drawing.Point(105, 0);
+            this.retryLinkLabel.Name = "retryLinkLabel";
+            this.retryLinkLabel.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.retryLinkLabel.Size = new System.Drawing.Size(37, 13);
+            this.retryLinkLabel.TabIndex = 3;
+            this.retryLinkLabel.TabStop = true;
+            this.retryLinkLabel.Text = "Retry";
+            this.retryLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.retryLinkLabel_LinkClicked);
+            // 
+            // FollwitPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -249,7 +264,7 @@
             this.Controls.Add(this.publicProfileCheckBox);
             this.Controls.Add(this.label2);
             this.MinimumSize = new System.Drawing.Size(555, 87);
-            this.Name = "SocialPanel";
+            this.Name = "FollwitPanel";
             this.Size = new System.Drawing.Size(555, 235);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -277,8 +292,9 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private Cornerstone.GUI.Controls.SettingCheckBox restrictSyncedMoviesCheckBox;
         private System.Windows.Forms.Button restrictMoviesButton;
-        private MovingPicturesSocialAPI.UI.Panels.LogoPanel logoPanel1;
+        private Follwit.API.UI.Panels.LogoPanel logoPanel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.LinkLabel retryLinkLabel;
     }
 }

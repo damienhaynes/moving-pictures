@@ -6,42 +6,41 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using MovingPicturesSocialAPI.UI;
 using Cornerstone.GUI.Dialogs;
 using MediaPortal.Plugins.MovingPictures.Database;
-using MovingPicturesSocialAPI.Data;
 using NLog;
 using System.Diagnostics;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.GUI;
+using Follwit.API.UI;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
-    public partial class SocialPanel : UserControl {
+    public partial class FollwitPanel : UserControl {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         bool updatingControls = false;
 
-        public SocialPanel() {
+        public FollwitPanel() {
             InitializeComponent();
 
             restrictSyncedMoviesCheckBox.Setting = MovingPicturesCore.Settings["mps_restrict_synched_movies"];
 
-            MovingPicturesCore.Social.StatusChanged += new Social.StatusChangedDelegate(Social_StatusChanged);
+            MovingPicturesCore.Follwit.StatusChanged += new FollwitConnector.StatusChangedDelegate(Follwit_StatusChanged);
 
             UpdateControls();
         }
 
-        private void ConnectMps() {
-            MpsLoginForm loginForm = new MpsLoginForm();
-            loginForm.ApiUrl = MovingPicturesCore.Settings.SocialUrl;
+        private void ConnectFollwit() {
+            LoginForm loginForm = new LoginForm();
+            loginForm.ApiUrl = MovingPicturesCore.Settings.FollwitUrl;
 
             DialogResult result = loginForm.ShowDialog();
             if (result == DialogResult.OK) {
-                MovingPicturesCore.Settings.SocialEnabled = true;
-                MovingPicturesCore.Settings.SocialUsername = loginForm.ValidatedUser.Name;
-                MovingPicturesCore.Settings.SocialHashedPassword = loginForm.ValidatedUser.HashedPassword;
+                MovingPicturesCore.Settings.FollwitEnabled = true;
+                MovingPicturesCore.Settings.FollwitUsername = loginForm.ValidatedUser.Name;
+                MovingPicturesCore.Settings.FollwitHashedPassword = loginForm.ValidatedUser.HashedPassword;
 
-                MovingPicturesCore.Social.Reconnect();
+                MovingPicturesCore.Follwit.Reconnect();
                 DialogResult response = MessageBox.Show("Do you want to synchronize your collection with follw.it now?", "follw.it", MessageBoxButtons.YesNo);
                 if (response == DialogResult.Yes) {
                     Sync();
@@ -49,24 +48,24 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
         }
 
-        private void DisconnectMps() {
+        private void DisconnectFollwit() {
             DialogResult response = MessageBox.Show("Are you sure you want to disconnect this computer\nfrom follw.it?", "follw.it", MessageBoxButtons.YesNo);
             if (response == DialogResult.Yes) {
-                MovingPicturesCore.Settings.SocialEnabled = false;
-                MovingPicturesCore.Settings.SocialUsername = "";
-                MovingPicturesCore.Settings.SocialHashedPassword = "";
+                MovingPicturesCore.Settings.FollwitEnabled = false;
+                MovingPicturesCore.Settings.FollwitUsername = "";
+                MovingPicturesCore.Settings.FollwitHashedPassword = "";
             }
         }
 
 
         private void Sync() {
-            ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(MovingPicturesCore.Social.Synchronize));
+            ProgressPopup popup = new ProgressPopup(new TrackableWorkerDelegate(MovingPicturesCore.Follwit.Synchronize));
             popup.Owner = this.ParentForm;
             popup.ShowDialog();
         }
 
         private void OpenUserPage() {
-            string url = String.Format("{0}u/{1}", MovingPicturesCore.Settings.SocialURLBase, MovingPicturesCore.Settings.SocialUsername);
+            string url = String.Format("{0}u/{1}", MovingPicturesCore.Settings.FollwitURLBase, MovingPicturesCore.Settings.FollwitUsername);
             ProcessStartInfo processInfo = new ProcessStartInfo(url);
             Process.Start(processInfo);
         }
@@ -76,7 +75,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
 
             ProgressPopup popup = new ProgressPopup(new WorkerDelegate(() => {
-                MovingPicturesCore.Social.SocialAPI.UpdateUser("", "en", !publicProfileCheckBox.Checked);
+                MovingPicturesCore.Follwit.FollwitApi.UpdateUser("", "en", !publicProfileCheckBox.Checked);
             }));
 
             popup.Owner = this.ParentForm;
@@ -87,14 +86,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             MovieFilterEditorPopup popup = new MovieFilterEditorPopup();
 
             // attach the filter, show the popup, and if necisarry, save the results
-            popup.FilterPane.AttachedFilter = MovingPicturesCore.Settings.SocialSyncFilter;
+            popup.FilterPane.AttachedFilter = MovingPicturesCore.Settings.FollwitSyncFilter;
             DialogResult result = popup.ShowDialog();
             if (result == DialogResult.OK) {
-                MovingPicturesCore.Settings.SocialSyncFilter.Commit();
+                MovingPicturesCore.Settings.FollwitSyncFilter.Commit();
                 Sync();
             }
             else
-                MovingPicturesCore.Settings.SocialSyncFilter.Revert();
+                MovingPicturesCore.Settings.FollwitSyncFilter.Revert();
 
         }
 
@@ -103,11 +102,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             restrictMoviesButton.Enabled = restrictSyncedMoviesCheckBox.Checked;
 
-            if (!MovingPicturesCore.Settings.SocialEnabled) {
+            if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 statusLabel.Text = "Not connected to follw.it!";
                 statusLabel.ForeColor = Color.Red;
 
                 userLinkLabel.Visible = false;
+                retryLinkLabel.Visible = false;
 
                 accountButton.Text = "Setup Account";
 
@@ -118,15 +118,28 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 syncButton.Enabled = false;
             }
             else {
-                statusLabel.Text = "Currently linked to:";
-                statusLabel.ForeColor = Label.DefaultForeColor;
 
-                userLinkLabel.Visible = true;
-                userLinkLabel.Text = MovingPicturesCore.Settings.SocialUsername;
+                if (MovingPicturesCore.Follwit.FollwitApi == null) {
+                    statusLabel.Text = "Unable to connect to follw.it!";
+                    statusLabel.ForeColor = Color.Red;
+
+                    userLinkLabel.Visible = false;
+                    retryLinkLabel.Visible = true;
+
+                }
+                else {
+                    statusLabel.Text = "Currently linked to:";
+                    statusLabel.ForeColor = Label.DefaultForeColor;
+
+                    userLinkLabel.Visible = true;
+                    retryLinkLabel.Visible = false;
+                    userLinkLabel.Text = MovingPicturesCore.Settings.FollwitUsername;
+                }
+
 
                 accountButton.Text = "Disconnect Account";
 
-                try { publicProfileCheckBox.Checked = !MovingPicturesCore.Social.SocialAPI.User.PrivateProfile; }
+                try { publicProfileCheckBox.Checked = !MovingPicturesCore.Follwit.FollwitApi.User.PrivateProfile; }
                 catch { }
 
                 restrictSyncedMoviesCheckBox.Enabled = true;
@@ -137,17 +150,17 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             updatingControls = false;
         }
 
-        private void Social_StatusChanged(Social.StatusEnum status) {
-            if (InvokeRequired) Invoke(new Social.StatusChangedDelegate(Social_StatusChanged), new object[] { status });
+        private void Follwit_StatusChanged(FollwitConnector.StatusEnum status) {
+            if (InvokeRequired) Invoke(new FollwitConnector.StatusChangedDelegate(Follwit_StatusChanged), new object[] { status });
 
             UpdateControls();
         }
 
         private void accountButton_Click(object sender, EventArgs e) {
-            if (MovingPicturesCore.Settings.SocialEnabled)
-                DisconnectMps();
+            if (MovingPicturesCore.Settings.FollwitEnabled)
+                DisconnectFollwit();
             else
-                ConnectMps();
+                ConnectFollwit();
 
             UpdateControls();
         }
@@ -173,7 +186,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void logoPanel1_Click(object sender, EventArgs e) {
-            ProcessStartInfo processInfo = new ProcessStartInfo(MovingPicturesCore.Settings.SocialURLBase);
+            ProcessStartInfo processInfo = new ProcessStartInfo(MovingPicturesCore.Settings.FollwitURLBase);
             Process.Start(processInfo);
         }
 
@@ -183,6 +196,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void logoPanel1_MouseLeave(object sender, EventArgs e) {
             Cursor = Cursors.Arrow;
+        }
+
+        private void retryLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            ProgressPopup popup = new ProgressPopup(new WorkerDelegate(delegate { MovingPicturesCore.Follwit.Reconnect(); }));
+            UpdateControls();
+
+            if (MovingPicturesCore.Follwit.FollwitApi == null) {
+                MessageBox.Show(this, "Unable to reconnect to follw.it!", "Error");
+            }
         }
     }
 }
