@@ -50,6 +50,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.advancedButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.updateMediaInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendToImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.titleSortByFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dateDateAddedFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.renameFilesAndFoldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.revertToOriginalNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteMovieButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -59,20 +65,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.watchedToggleButton = new System.Windows.Forms.ToolStripButton();
             this.playMovieButton = new System.Windows.Forms.ToolStripButton();
             this.movieListBox = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.titleLabel = new System.Windows.Forms.Label();
+            this.loadingListProgressBar = new System.Windows.Forms.ProgressBar();
+            this.loadingMoviesPanel = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.movieDetailsSubPane = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager.MovieDetailsSubPane();
             this.fileDetailsSubPane = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager.FileDetailsSubPane();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.titleSortByFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dateDateAddedFieldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.renameFilesAndFoldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.revertToOriginalNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coverPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.coverImage)).BeginInit();
             this.coverToolStrip.SuspendLayout();
             this.movieToolStrip.SuspendLayout();
+            this.loadingMoviesPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // coverPanel
@@ -325,7 +329,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.updateMediaInfoToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.page_gear;
             this.updateMediaInfoToolStripMenuItem.Name = "updateMediaInfoToolStripMenuItem";
-            this.updateMediaInfoToolStripMenuItem.Size = new System.Drawing.Size(281, 22);
+            this.updateMediaInfoToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.updateMediaInfoToolStripMenuItem.Text = "Update MediaInfo";
             this.updateMediaInfoToolStripMenuItem.Click += new System.EventHandler(this.updateMediaInfoToolStripMenuItem_Click);
             // 
@@ -333,9 +337,55 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.sendToImporterToolStripMenuItem.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.arrow_down;
             this.sendToImporterToolStripMenuItem.Name = "sendToImporterToolStripMenuItem";
-            this.sendToImporterToolStripMenuItem.Size = new System.Drawing.Size(281, 22);
+            this.sendToImporterToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.sendToImporterToolStripMenuItem.Text = "Send To Importer";
             this.sendToImporterToolStripMenuItem.Click += new System.EventHandler(this.sendToImporterToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.titleSortByFieldToolStripMenuItem,
+            this.dateDateAddedFieldToolStripMenuItem});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(169, 22);
+            this.toolStripMenuItem1.Text = "Update Sorting";
+            // 
+            // titleSortByFieldToolStripMenuItem
+            // 
+            this.titleSortByFieldToolStripMenuItem.Name = "titleSortByFieldToolStripMenuItem";
+            this.titleSortByFieldToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.titleSortByFieldToolStripMenuItem.Text = "Title (Sort By Field)";
+            this.titleSortByFieldToolStripMenuItem.Click += new System.EventHandler(this.updateTitleSortingMenuItem_Click);
+            // 
+            // dateDateAddedFieldToolStripMenuItem
+            // 
+            this.dateDateAddedFieldToolStripMenuItem.Name = "dateDateAddedFieldToolStripMenuItem";
+            this.dateDateAddedFieldToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.dateDateAddedFieldToolStripMenuItem.Text = "Date (Date Added Field)";
+            this.dateDateAddedFieldToolStripMenuItem.Click += new System.EventHandler(this.updateDateSortingMenuItem_Click);
+            // 
+            // renameToolStripMenuItem
+            // 
+            this.renameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.renameFilesAndFoldersToolStripMenuItem,
+            this.revertToOriginalNamesToolStripMenuItem});
+            this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.renameToolStripMenuItem.Text = "Rename";
+            // 
+            // renameFilesAndFoldersToolStripMenuItem
+            // 
+            this.renameFilesAndFoldersToolStripMenuItem.Name = "renameFilesAndFoldersToolStripMenuItem";
+            this.renameFilesAndFoldersToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.renameFilesAndFoldersToolStripMenuItem.Text = "Rename Files and Folders";
+            this.renameFilesAndFoldersToolStripMenuItem.Click += new System.EventHandler(this.updateFileNameToolStripMenuItem_Click);
+            // 
+            // revertToOriginalNamesToolStripMenuItem
+            // 
+            this.revertToOriginalNamesToolStripMenuItem.Name = "revertToOriginalNamesToolStripMenuItem";
+            this.revertToOriginalNamesToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.revertToOriginalNamesToolStripMenuItem.Text = "Revert to Original Names";
+            this.revertToOriginalNamesToolStripMenuItem.Click += new System.EventHandler(this.returnToOriginalFileNameToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
@@ -428,9 +478,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieListBox.FullRowSelect = true;
             this.movieListBox.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.movieListBox.HideSelection = false;
-            this.movieListBox.Location = new System.Drawing.Point(3, 3);
+            this.movieListBox.Location = new System.Drawing.Point(3, 10);
             this.movieListBox.Name = "movieListBox";
-            this.movieListBox.Size = new System.Drawing.Size(178, 288);
+            this.movieListBox.Size = new System.Drawing.Size(178, 281);
             this.movieListBox.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.movieListBox.TabIndex = 2;
             this.movieListBox.UseCompatibleStateImageBehavior = false;
@@ -450,6 +500,35 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.titleLabel.Size = new System.Drawing.Size(58, 29);
             this.titleLabel.TabIndex = 16;
             this.titleLabel.Text = "Title";
+            // 
+            // loadingListProgressBar
+            // 
+            this.loadingListProgressBar.Location = new System.Drawing.Point(16, 33);
+            this.loadingListProgressBar.MarqueeAnimationSpeed = 20;
+            this.loadingListProgressBar.Name = "loadingListProgressBar";
+            this.loadingListProgressBar.Size = new System.Drawing.Size(91, 15);
+            this.loadingListProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.loadingListProgressBar.TabIndex = 19;
+            // 
+            // loadingMoviesPanel
+            // 
+            this.loadingMoviesPanel.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.loadingMoviesPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.loadingMoviesPanel.Controls.Add(this.label1);
+            this.loadingMoviesPanel.Controls.Add(this.loadingListProgressBar);
+            this.loadingMoviesPanel.Location = new System.Drawing.Point(32, 120);
+            this.loadingMoviesPanel.Name = "loadingMoviesPanel";
+            this.loadingMoviesPanel.Size = new System.Drawing.Size(121, 61);
+            this.loadingMoviesPanel.TabIndex = 20;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "Loading Movies...";
             // 
             // movieDetailsSubPane
             // 
@@ -475,56 +554,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.fileDetailsSubPane.TabIndex = 18;
             this.fileDetailsSubPane.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
             // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.titleSortByFieldToolStripMenuItem,
-            this.dateDateAddedFieldToolStripMenuItem});
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(169, 22);
-            this.toolStripMenuItem1.Text = "Update Sorting";
-            // 
-            // titleSortByFieldToolStripMenuItem
-            // 
-            this.titleSortByFieldToolStripMenuItem.Name = "titleSortByFieldToolStripMenuItem";
-            this.titleSortByFieldToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.titleSortByFieldToolStripMenuItem.Text = "Title (Sort By Field)";
-            this.titleSortByFieldToolStripMenuItem.Click += new System.EventHandler(this.updateTitleSortingMenuItem_Click);
-            // 
-            // dateDateAddedFieldToolStripMenuItem
-            // 
-            this.dateDateAddedFieldToolStripMenuItem.Name = "dateDateAddedFieldToolStripMenuItem";
-            this.dateDateAddedFieldToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.dateDateAddedFieldToolStripMenuItem.Text = "Date (Date Added Field)";
-            this.dateDateAddedFieldToolStripMenuItem.Click += new System.EventHandler(this.updateDateSortingMenuItem_Click);
-            // 
-            // renameToolStripMenuItem
-            // 
-            this.renameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.renameFilesAndFoldersToolStripMenuItem,
-            this.revertToOriginalNamesToolStripMenuItem});
-            this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.renameToolStripMenuItem.Text = "Rename";
-            // 
-            // renameFilesAndFoldersToolStripMenuItem
-            // 
-            this.renameFilesAndFoldersToolStripMenuItem.Name = "renameFilesAndFoldersToolStripMenuItem";
-            this.renameFilesAndFoldersToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.renameFilesAndFoldersToolStripMenuItem.Text = "Rename Files and Folders";
-            this.renameFilesAndFoldersToolStripMenuItem.Click += new System.EventHandler(this.updateFileNameToolStripMenuItem_Click);
-            // 
-            // revertToOriginalNamesToolStripMenuItem
-            // 
-            this.revertToOriginalNamesToolStripMenuItem.Name = "revertToOriginalNamesToolStripMenuItem";
-            this.revertToOriginalNamesToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.revertToOriginalNamesToolStripMenuItem.Text = "Revert to Original Names";
-            this.revertToOriginalNamesToolStripMenuItem.Click += new System.EventHandler(this.returnToOriginalFileNameToolStripMenuItem_Click);
-            // 
             // MovieManagerPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.loadingMoviesPanel);
             this.Controls.Add(this.movieToolStrip);
             this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.coverPanel);
@@ -541,6 +575,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.coverToolStrip.PerformLayout();
             this.movieToolStrip.ResumeLayout(false);
             this.movieToolStrip.PerformLayout();
+            this.loadingMoviesPanel.ResumeLayout(false);
+            this.loadingMoviesPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -592,5 +628,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private ToolStripMenuItem renameToolStripMenuItem;
         private ToolStripMenuItem renameFilesAndFoldersToolStripMenuItem;
         private ToolStripMenuItem revertToOriginalNamesToolStripMenuItem;
+        private ProgressBar loadingListProgressBar;
+        private Panel loadingMoviesPanel;
+        private Label label1;
     }
 }
