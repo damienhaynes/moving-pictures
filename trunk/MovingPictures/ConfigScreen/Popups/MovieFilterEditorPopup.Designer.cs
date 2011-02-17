@@ -197,8 +197,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             fieldProperty51.FieldName = "OriginalDirectoryName";
             fieldProperty51.Visible = false;
             fieldProperty52.ColumnWidth = null;
-            fieldProperty52.DisplayName = "Mps Id";
-            fieldProperty52.FieldName = "MpsId";
+            fieldProperty52.DisplayName = "Follw.it Id";
+            fieldProperty52.FieldName = "FitId";
             fieldProperty52.Visible = false;
             fieldDisplaySettings2.FieldProperties.Add(fieldProperty27);
             fieldDisplaySettings2.FieldProperties.Add(fieldProperty28);

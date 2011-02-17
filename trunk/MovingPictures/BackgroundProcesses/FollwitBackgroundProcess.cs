@@ -6,12 +6,11 @@ using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using System.Threading;
-using MovingPicturesSocialAPI;
-using MovingPicturesSocialAPI.Data;
 using System.Net;
+using Follwit.API.Data;
 
 namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
-    public enum MPSActions {
+    public enum FitActions {
         AddMoviesToCollection,
         RemoveMovieFromCollection,
         UpdateUserRating,
@@ -22,7 +21,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         UnwatchMovie,
         ProcessTaskList
     }
-    public class MPSBackgroundProcess : AbstractBackgroundProcess {
+    public class FollwitBackgroundProcess : AbstractBackgroundProcess {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public override string Name {
@@ -35,7 +34,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
             }
         }
 
-        public MPSActions Action;
+        public FitActions Action;
         public List<DBMovieInfo> Movies = new List<DBMovieInfo>();
         private DBMovieInfo FirstMovie {
             get {
@@ -45,27 +44,27 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
 
         public override void Work() {
             try {
-                if (MovingPicturesCore.Settings.SocialEnabled == false || !MovingPicturesCore.Social.IsOnline) {
+                if (MovingPicturesCore.Settings.FollwitEnabled == false || !MovingPicturesCore.Follwit.IsOnline) {
                     logger.Warn("Attempting to perform follw.it actions when feature is disabled or when server is unavailable.");
                     return;
                 }
 
                 switch (Action) {
-                    case MPSActions.AddMoviesToCollection:
-                        List<MpsMovie> movieDTOs = new List<MpsMovie>();
+                    case FitActions.AddMoviesToCollection:
+                        List<FitMovie> movieDTOs = new List<FitMovie>();
                         foreach (DBMovieInfo movie in Movies) {
                             logger.Info("Adding {0} to follw.it Collection", movie.Title);
-                            movieDTOs.Add(Social.MovieToMPSMovie(movie));
+                            movieDTOs.Add(FollwitConnector.MovieToFitMovie(movie));
                         }
-                        MovingPicturesCore.Social.SocialAPI.AddMoviesToCollection(ref movieDTOs);
-                        // update MpsId on the DBMovieInfo object
-                        foreach (MpsMovie mpsMovieDTO in movieDTOs) {
-                            DBMovieInfo m = DBMovieInfo.Get(mpsMovieDTO.InternalId);
+                        MovingPicturesCore.Follwit.FollwitApi.AddMoviesToCollection(ref movieDTOs);
+                        // update FitId on the DBMovieInfo object
+                        foreach (FitMovie fitMovieDTO in movieDTOs) {
+                            DBMovieInfo m = DBMovieInfo.Get(fitMovieDTO.InternalId);
                             if (m != null) {
-                                m.MpsId = mpsMovieDTO.MovieId;
-                                if (mpsMovieDTO.UserRating > 0)
-                                    m.ActiveUserSettings.UserRating = mpsMovieDTO.UserRating;
-                                if (mpsMovieDTO.Watched && m.ActiveUserSettings.WatchedCount == 0)
+                                m.FitId = fitMovieDTO.MovieId;
+                                if (fitMovieDTO.UserRating > 0)
+                                    m.ActiveUserSettings.UserRating = fitMovieDTO.UserRating;
+                                if (fitMovieDTO.Watched && m.ActiveUserSettings.WatchedCount == 0)
                                     m.ActiveUserSettings.WatchedCount = 1;
                                 m.ActiveUserSettings.WatchCountChanged = false;
                                 m.ActiveUserSettings.RatingChanged = false;
@@ -74,61 +73,61 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                         }
                         break;
 
-                    case MPSActions.RemoveMovieFromCollection:
-                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                    case FitActions.RemoveMovieFromCollection:
+                        if (FirstMovie.FitId != null && FirstMovie.FitId != 0) {
                             logger.Info("Removing {0} from follw.it collection", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.RemoveMovieFromCollection((int)FirstMovie.MpsId);
-                            FirstMovie.MpsId = null;
+                            MovingPicturesCore.Follwit.FollwitApi.RemoveMovieFromCollection((int)FirstMovie.FitId);
+                            FirstMovie.FitId = null;
                         }
                         break;
 
 
-                    case MPSActions.UpdateUserRating:
-                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                    case FitActions.UpdateUserRating:
+                        if (FirstMovie.FitId != null && FirstMovie.FitId != 0) {
                             int newRating = FirstMovie.ActiveUserSettings.UserRating.GetValueOrDefault(0);
                             logger.Info("Updating follw.it movie rating for {0} to {1} stars", FirstMovie.Title, newRating);
-                            MovingPicturesCore.Social.SocialAPI.SetMovieRating((int)FirstMovie.MpsId, newRating);
+                            MovingPicturesCore.Follwit.FollwitApi.SetMovieRating((int)FirstMovie.FitId, newRating);
                         }
                         break;
 
-                    case MPSActions.BeginWatching:
-                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                    case FitActions.BeginWatching:
+                        if (FirstMovie.FitId != null && FirstMovie.FitId != 0) {
                             logger.Info("Notifying follw.it you are watching '{0}'.", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.WatchingMovie((int)FirstMovie.MpsId);
+                            MovingPicturesCore.Follwit.FollwitApi.WatchingMovie((int)FirstMovie.FitId);
                         }
                         break;
                     
-                    case MPSActions.EndWatching:
-                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                    case FitActions.EndWatching:
+                        if (FirstMovie.FitId != null && FirstMovie.FitId != 0) {
                             logger.Info("Notifying follw.it you are done watching '{0}'.", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.StopWatchingMovie((int)FirstMovie.MpsId);
+                            MovingPicturesCore.Follwit.FollwitApi.StopWatchingMovie((int)FirstMovie.FitId);
                         }
                         break;
                     
-                    case MPSActions.WatchMovie:
-                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                    case FitActions.WatchMovie:
+                        if (FirstMovie.FitId != null && FirstMovie.FitId != 0) {
                             logger.Info("Setting follw.it watched for {0}", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, true);
+                            MovingPicturesCore.Follwit.FollwitApi.WatchMovie((int)FirstMovie.FitId, true);
                         }
                         break;
 
-                    case MPSActions.WatchMovieIgnoreStream:
-                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                    case FitActions.WatchMovieIgnoreStream:
+                        if (FirstMovie.FitId != null && FirstMovie.FitId != 0) {
                             logger.Info("Setting follw.it watched for {0}", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.WatchMovie((int)FirstMovie.MpsId, false);
+                            MovingPicturesCore.Follwit.FollwitApi.WatchMovie((int)FirstMovie.FitId, false);
                         }
                         break;
 
 
-                    case MPSActions.UnwatchMovie:
-                        if (FirstMovie.MpsId != null && FirstMovie.MpsId != 0) {
+                    case FitActions.UnwatchMovie:
+                        if (FirstMovie.FitId != null && FirstMovie.FitId != 0) {
                             logger.Info("Setting follw.it unwatched for {0}", FirstMovie.Title);
-                            MovingPicturesCore.Social.SocialAPI.UnwatchMovie((int)FirstMovie.MpsId);
+                            MovingPicturesCore.Follwit.FollwitApi.UnwatchMovie((int)FirstMovie.FitId);
                         }
                         break;
 
-                    case MPSActions.ProcessTaskList:
-                        MovingPicturesCore.Social.ProcessTasks();
+                    case FitActions.ProcessTaskList:
+                        MovingPicturesCore.Follwit.ProcessTasks();
                         break;
 
                     default:
@@ -137,11 +136,11 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
             }
             catch (WebException ex) {
                 logger.Error("There was a problem connecting to the follw.it Server! " + ex.Message);
-                MovingPicturesCore.Social.Status = Social.StatusEnum.CONNECTION_ERROR;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.CONNECTION_ERROR;
             }
             catch (Exception ex) {
                 logger.ErrorException("Unexpected error connecting to follw.it.\n", ex);
-                MovingPicturesCore.Social.Status = Social.StatusEnum.INTERNAL_ERROR;
+                MovingPicturesCore.Follwit.Status = FollwitConnector.StatusEnum.INTERNAL_ERROR;
             }
 
         }
