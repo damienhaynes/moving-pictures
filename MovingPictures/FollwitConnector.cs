@@ -29,42 +29,48 @@ namespace MediaPortal.Plugins.MovingPictures {
         private DateTime lastConnectAttempt = new DateTime(1900, 1, 1);
 
         public event StatusChangedDelegate StatusChanged;
-        
+
         // The MpsAPI object that should be used by all components of the plugin.
         public FollwitApi FollwitApi {
             get {
-                lock (socialAPILock) {
-                    TimeSpan retryDelay = new TimeSpan(0, MovingPicturesCore.Settings.SocialRetryTime, 0);
-                    if (_socialAPI == null && (DateTime.Now - lastConnectAttempt > retryDelay)) {
-                        lastConnectAttempt = DateTime.Now;
+                TimeSpan retryDelay = new TimeSpan(0, MovingPicturesCore.Settings.SocialRetryTime, 0);
+                if (_socialAPI == null && (DateTime.Now - lastConnectAttempt > retryDelay)) {
+                    lastConnectAttempt = DateTime.Now;
 
-                        try {
+                    try {
+                        lock (socialAPILock) {
                             _socialAPI = FollwitApi.Login(MovingPicturesCore.Settings.SocialUsername,
                                                       MovingPicturesCore.Settings.SocialHashedPassword,
                                                       MovingPicturesCore.Settings.SocialUrl);
-
-                            if (_socialAPI == null) {
-                                logger.Error("Failed to log in to follw.it: Invalid Username or Password!");
-                            }
-
-                            if (_socialAPI != null) {
-                                _socialAPI.RequestEvent += new FollwitApi.FitAPIRequestDelegate(_socialAPI_RequestEvent);
-                                _socialAPI.ResponseEvent += new FollwitApi.FitAPIResponseDelegate(_socialAPI_ResponseEvent);
-
-                                logger.Info("Logged in to MPS as {0}.", _socialAPI.User.Name);
-                            }
                         }
-                        catch (Exception ex){
-                            if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Not Found")
-                                logger.Error("Failed to log in to follw.it: Unable to connect to server!");
-                            else if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Forbidden")
-                                logger.Error("Failed to log in to follw.it: This account is currently locked!");
-                            else
-                                logger.Error("Failed to log in to follw.it, Unexpected Error: " + ex.Message);
+                        if (_socialAPI == null) {
+                            logger.Error("Failed to log in to follw.it: Invalid Username or Password!");
+                        }
+
+                        if (_socialAPI != null) {
+                            _socialAPI.RequestEvent += new FollwitApi.FitAPIRequestDelegate(_socialAPI_RequestEvent);
+                            _socialAPI.ResponseEvent += new FollwitApi.FitAPIResponseDelegate(_socialAPI_ResponseEvent);
+
+                            logger.Info("Logged in to MPS as {0}.", _socialAPI.User.Name);
+                            Status = StatusEnum.CONNECTED;
                         }
                     }
-                    return _socialAPI;
+                    catch (Exception ex) {
+                        if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Not Found") {
+                            logger.Error("Failed to log in to follw.it: Unable to connect to server!");
+                            Status = StatusEnum.CONNECTION_ERROR;
+                        }
+                        else if (ex is XmlRpcServerException && ((XmlRpcServerException)ex).Message == "Forbidden") {
+                            logger.Error("Failed to log in to follw.it: This account is currently locked!");
+                            Status = StatusEnum.BLOCKED;
+                        }
+                        else {
+                            logger.Error("Failed to log in to follw.it, Unexpected Error: " + ex.Message);
+                            Status = StatusEnum.INTERNAL_ERROR;
+                        }
+                    }
                 }
+                return _socialAPI;
             }
         } private static FollwitApi _socialAPI = null;
 
