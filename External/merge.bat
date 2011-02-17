@@ -1,7 +1,7 @@
 @echo off
 
 md tmp
-ilmerge /out:tmp\MovingPictures.dll MovingPictures.dll CookComputing.XmlRpcV2.dll MovingPicturesSocialAPI.dll
+ilmerge /out:tmp\MovingPictures.dll MovingPictures.dll CookComputing.XmlRpcV2.dll FollwitApi.dll
 IF EXIST MovingPictures_UNMERGED.dll del MovingPictures_UNMERGED.dll
 ren MovingPictures.dll MovingPictures_UNMERGED.dll
 IF EXIST MovingPictures_UNMERGED.pdb del MovingPictures_UNMERGED.pdb
