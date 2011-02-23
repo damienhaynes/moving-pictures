@@ -102,90 +102,100 @@ namespace Cornerstone.Tools {
         #region Public methods
 
         public bool GetResponse() {
-            bool completed = false;
-            int tryCount = 0;
+            try {
 
-            // enable unsafe header parsing if needed
-            if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(true);
+                bool completed = false;
+                int tryCount = 0;
 
-            // setup some request properties
-            request.Proxy = WebRequest.DefaultWebProxy;
-            request.Proxy.Credentials = CredentialCache.DefaultCredentials;
-            request.UserAgent = userAgent;
-            request.CookieContainer = new CookieContainer();
+                // enable unsafe header parsing if needed
+                if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(true);
 
-            while (!completed) {
-                tryCount++;
+                // setup some request properties
+                request.Proxy = WebRequest.DefaultWebProxy;
+                request.Proxy.Credentials = CredentialCache.DefaultCredentials;
+                request.UserAgent = userAgent;
+                request.CookieContainer = new CookieContainer();
 
-                request.Timeout = timeout + (timeoutIncrement * tryCount);
-                if (cookieHeader != null)
-                    request.CookieContainer.SetCookies(request.RequestUri, cookieHeader.Replace(';', ','));
+                while (!completed) {
+                    tryCount++;
 
-                try {
-                    response = (HttpWebResponse)request.GetResponse();
-                    completed = true;
-                }
-                catch (WebException e) {
+                    request.Timeout = timeout + (timeoutIncrement * tryCount);
+                    if (cookieHeader != null)
+                        request.CookieContainer.SetCookies(request.RequestUri, cookieHeader.Replace(';', ','));
 
-                    // Skip retry logic on protocol errors
-                    if (e.Status == WebExceptionStatus.ProtocolError) {
-                        HttpStatusCode statusCode = ((HttpWebResponse)e.Response).StatusCode;
-                        switch (statusCode) {
-                            // Currently the only exception is the service temporarily unavailable status
-                            // So keep retrying when this is the case
-                            case HttpStatusCode.ServiceUnavailable:
-                                break;
-                            // all other status codes mostly indicate problems that won't be
-                            // solved within the retry period so fail these immediatly
-                            default:
-                                logger.Error("Connection failed: URL={0}, Status={1}, Description={2}.", requestUrl, statusCode, ((HttpWebResponse)e.Response).StatusDescription);
-                                return false;
+                    try {
+                        response = (HttpWebResponse)request.GetResponse();
+                        completed = true;
+                    }
+                    catch (WebException e) {
+
+                        // Skip retry logic on protocol errors
+                        if (e.Status == WebExceptionStatus.ProtocolError) {
+                            HttpStatusCode statusCode = ((HttpWebResponse)e.Response).StatusCode;
+                            switch (statusCode) {
+                                // Currently the only exception is the service temporarily unavailable status
+                                // So keep retrying when this is the case
+                                case HttpStatusCode.ServiceUnavailable:
+                                    break;
+                                // all other status codes mostly indicate problems that won't be
+                                // solved within the retry period so fail these immediatly
+                                default:
+                                    logger.Error("Connection failed: URL={0}, Status={1}, Description={2}.", requestUrl, statusCode, ((HttpWebResponse)e.Response).StatusDescription);
+                                    return false;
+                            }
+                        }
+
+                        // Return when hitting maximum retries.
+                        if (tryCount == maxRetries) {
+                            logger.Warn("Connection failed: Reached retry limit of " + maxRetries + ". URL=" + requestUrl);
+                            return false;
+                        }
+
+                        // If we did not experience a timeout but some other error
+                        // use the timeout value as a pause between retries
+                        if (e.Status != WebExceptionStatus.Timeout) {
+                            Thread.Sleep(timeout + (timeoutIncrement * tryCount));
                         }
                     }
-
-                    // Return when hitting maximum retries.
-                    if (tryCount == maxRetries) {
-                        logger.Warn("Connection failed: Reached retry limit of " + maxRetries + ". URL=" + requestUrl);
+                    catch (NotSupportedException e) {
+                        logger.Error("Connection failed.", e);
                         return false;
                     }
-
-                    // If we did not experience a timeout but some other error
-                    // use the timeout value as a pause between retries
-                    if (e.Status != WebExceptionStatus.Timeout) {
-                        Thread.Sleep(timeout + (timeoutIncrement * tryCount));
+                    catch (ProtocolViolationException e) {
+                        logger.Error("Connection failed.", e);
+                        return false;
+                    }
+                    catch (InvalidOperationException e) {
+                        logger.Error("Connection failed.", e);
+                        return false;
+                    }
+                    finally {
+                        // disable unsafe header parsing if it was enabled
+                        if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(false);
                     }
                 }
-                catch (NotSupportedException e) {
-                    logger.Error("Connection failed.", e);
-                    return false;
-                }
-                catch (ProtocolViolationException e) {
-                    logger.Error("Connection failed.", e);
-                    return false;
-                }
-                catch (InvalidOperationException e) {
-                    logger.Error("Connection failed.", e);
-                    return false;
-                }
-                finally {
-                    // disable unsafe header parsing if it was enabled
-                    if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(false);
-                }
+
+                // persist the cookie header
+                cookieHeader = request.CookieContainer.GetCookieHeader(request.RequestUri);
+
+                // Debug
+                if (_debug) logger.Debug("GetResponse: URL={0}, UserAgent={1}, CookieHeader={3}", requestUrl, userAgent, cookieHeader);
+
+                // disable unsafe header parsing if it was enabled
+                if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(false);
+
+                return true;
             }
-
-            // persist the cookie header
-            cookieHeader = request.CookieContainer.GetCookieHeader(request.RequestUri);
-
-            // Debug
-            if (_debug) logger.Debug("GetResponse: URL={0}, UserAgent={1}, CookieHeader={3}", requestUrl, userAgent, cookieHeader);
-
-            // disable unsafe header parsing if it was enabled
-            if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(false);
-
-            return true;
+            catch (Exception e) {
+                logger.Warn("Unexpected error getting http response from '{0}': {1}", requestUrl, e.Message);
+                return false;
+            }
         }
 
         public string GetString() {
+            if (response == null)
+                return null;
+
             // If encoding was not set manually try to detect it
             if (encoding == null) {
                 try {
