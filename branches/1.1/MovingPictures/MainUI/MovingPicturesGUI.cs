@@ -469,7 +469,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ReloadView();          
             }
             
-            // Enable browser auto-refresh
+            MediaPortal.GUI.Library.GUIPropertyManager.SetProperty("#currentmodule", MovingPicturesCore.Settings.HomeScreenName);
             browser.AutoRefresh = true;
             
             setWorkingAnimationStatus(false);
