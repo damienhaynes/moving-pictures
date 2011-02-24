@@ -172,6 +172,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             return newItem;
         }
 
+        private void addMovie(DBMovieInfo movie) {
+            Thread thread = new Thread(new ThreadStart(delegate() {
+                addMovie(movie, createMovieItem(movie));
+            }));
+            thread.IsBackground = true;
+            thread.Name = "add movie to moviemanager thread";
+            thread.Start();
+        }
+
         private void addMovie(DBMovieInfo movie, ListViewItem item) {
             if (InvokeRequired) {
                 Invoke(new InvokeDelegate(delegate { addMovie(movie, item); }));
@@ -229,7 +238,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
 
             // add movie to the list
-            createMovieItem((DBMovieInfo)obj);
+            addMovie((DBMovieInfo)obj);
 
             bool reassigning = false;
             foreach (DBLocalMedia currFile in processingFiles) {
