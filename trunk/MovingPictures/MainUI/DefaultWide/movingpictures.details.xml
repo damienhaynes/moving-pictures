@@ -42,12 +42,13 @@ This file should contain the details view
       <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
-      <description>Trailer (Online Videos)</description>
+      <description>Trailer (Online Videos/IMDb Trailers)</description>
       <type>button</type>
       <id>4755</id>
       <label>Trailer</label>
       <hyperlink>4755</hyperlink>
-      <hyperlinkParameter>site:iTunes Movie Trailers|search:#MovingPictures.SelectedMovie.title|return:Locked</hyperlinkParameter>
+			<!-- Search by IMDB ID if available otherwise by Title -->
+      <hyperlinkParameter>site:IMDb Movie Trailers|search:#(iif(neq(#MovingPictures.SelectedMovie.imdb_id,''),#MovingPictures.SelectedMovie.imdb_id,#MovingPictures.SelectedMovie.title))|return:Locked</hyperlinkParameter>
       <onup>4755</onup>
       <ondown>4755</ondown>
       <onright>6</onright>
