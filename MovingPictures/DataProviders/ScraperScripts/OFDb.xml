@@ -18,8 +18,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874920</id>
-    <version major="2" minor="3" point="1"/>
-    <published month="2" day="19" year="2010"/>
+    <version major="2" minor="3" point="2"/>
+    <published month="4" day="16" year="2011"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -186,12 +186,12 @@
       <!-- Runtime (IMDB) -->
       <retrieve name="imdb_details" url="http://www.imdb.com/title/${movie.imdb_id}"/>
 
-      <parse name="runtime" input="${imdb_details}" regex="&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+"/>
+      <parse name="runtime" input="${imdb_details}" regex="&lt;h4 class=&quot;inline&quot;&gt;Runtime:&lt;/h4&gt;.*?(\d+) min\s+"/>
       <set name='movie.runtime' value="${runtime[0][0]:htmldecode}"/>
 
       <!-- Tagline (IMDB) -->
 
-      <parse name="tagline" input="${imdb_details}" regex='&lt;h5&gt;Tagline:&lt;/h5&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
+      <parse name="tagline" input="${imdb_details}" regex='&lt;h4 class=&quot;inline&quot;&gt;Taglines:&lt;/h4&gt;\s+([^\n\r]+?)(?:\s+)?&lt;'/>
       <set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
 
       <!-- Certification (IMDB) -->
