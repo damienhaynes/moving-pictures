@@ -8,7 +8,11 @@ using MediaPortal.Common.Utils;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+#if MP12_BETA
+[assembly: AssemblyTitle("Cornerstone.MP (Compiled for MediaPortal 1.2 Beta)")]
+#else
 [assembly: AssemblyTitle("Cornerstone.MP")]
+#endif
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
