@@ -157,21 +157,6 @@ This file should contain the facade view
 			</control>
 		</control>
 	
-		<!-- Movie Count -->
-		<control>
-		  <type>label</type>
-		  <id>0</id>
-		  <posX>970</posX>
-		  <posY>672</posY>
-		  <width>350</width>
-		  <font>font11</font>
-		  <textcolor>ffa9d0f7</textcolor>
-		  <align>left</align>
-		  <label>#MovingPictures.general.itemcount</label>
-		  <visible>!facadeview.filmstrip+control.isvisible(50)</visible>
-			<animation effect="fade" time="250">WindowClose</animation>
-		</control>
-		
 		<!-- Selected Category Facade Item -->	
 		<control>
 			<description>Default Image</description>

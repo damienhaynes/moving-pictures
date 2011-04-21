@@ -205,12 +205,12 @@ multiple view modes.
 		  <animation effect="fade" time="250">WindowClose</animation>
 		</control>
 		<control>
-		  <description>Date</description>
+		  <description>Date / Time</description>
 		  <type>label</type>
 		  <id>0</id>
 		  <posX>1244</posX>
 		  <posY>2</posY>
-		  <label>#date</label>
+		  <label>#date / #time</label>
 		  <align>right</align>
 		  <font>font11</font>
 		  <textcolor>ffa9d0f7</textcolor>
@@ -218,17 +218,18 @@ multiple view modes.
 		  <animation effect="fade" time="250">WindowClose</animation>
 		</control>
 		<control>
-		  <description>Time</description>
+		  <description>Movie Count</description>
 		  <type>label</type>
 		  <id>0</id>
 		  <posX>1244</posX>
 		  <posY>23</posY>
-		  <label>#time</label>
+		  <label>#MovingPictures.general.itemcount</label>
 		  <align>right</align>
 		  <font>font11</font>
 		  <textcolor>ffFFFFFF</textcolor>
 		  <animation effect="fade" time="250">WindowOpen</animation>
 		  <animation effect="fade" time="250">WindowClose</animation>
+      <visible>control.isvisible(50)</visible>
 		</control>
 		<control>
 		  <description>Parental Controls Lock Indicator</description>
