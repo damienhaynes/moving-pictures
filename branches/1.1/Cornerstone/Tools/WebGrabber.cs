@@ -87,6 +87,11 @@ namespace Cornerstone.Tools {
             set { cookieHeader = value; }
         } private string cookieHeader;
 
+        public string Method {
+            get { return _method; }
+            set { _method = value; }
+        } private string _method = "GET";
+
         public bool Debug {
             get { return _debug; }
             set { _debug = value; }
@@ -114,6 +119,7 @@ namespace Cornerstone.Tools {
                 request.Proxy = WebRequest.DefaultWebProxy;
                 request.Proxy.Credentials = CredentialCache.DefaultCredentials;
                 request.UserAgent = userAgent;
+                request.Method = _method;
                 request.CookieContainer = new CookieContainer();
 
                 while (!completed) {

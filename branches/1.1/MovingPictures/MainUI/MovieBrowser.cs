@@ -126,6 +126,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         CurrentNode.Commit();
                     }
                 }
+
+                if (!MovingPicturesCore.Settings.CategoriesEnabled) {
+                    MovingPicturesCore.Settings.LastUsedView = value;
+                }
             }
         } private BrowserViewMode currentView; 
 
@@ -454,6 +458,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Reloads the current view to the GUI.
         /// </summary>
         public void ReloadView() {
+            if (currentView == BrowserViewMode.LASTUSED) {
+                currentView = MovingPicturesCore.Settings.LastUsedView;
+            }
+
             logger.Debug("CurrentView: {0}", currentView.ToString());
 
             // Facade visibility

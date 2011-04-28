@@ -75,7 +75,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
 
             ProgressPopup popup = new ProgressPopup(new WorkerDelegate(() => {
-                MovingPicturesCore.Follwit.FollwitApi.UpdateUser("", "en", !publicProfileCheckBox.Checked);
+                MovingPicturesCore.Follwit.FollwitApi.UpdateUser("", "", !publicProfileCheckBox.Checked);
             }));
 
             popup.Owner = this.ParentForm;
@@ -151,7 +151,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void Follwit_StatusChanged(FollwitConnector.StatusEnum status) {
-            if (InvokeRequired) Invoke(new FollwitConnector.StatusChangedDelegate(Follwit_StatusChanged), new object[] { status });
+            if (InvokeRequired) {
+                Invoke(new FollwitConnector.StatusChangedDelegate(Follwit_StatusChanged), new object[] { status });
+                return;
+            }
 
             UpdateControls();
         }

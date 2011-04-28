@@ -51,6 +51,11 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return cookies; }
         } protected string cookies = null;
 
+        public string Method {
+            get { return _method; }
+        } protected string _method;
+
+
         #endregion
 
         #region Methods
@@ -64,6 +69,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             maxRetries = 5;
             timeout = 5000;
             timeoutIncrement = 2000;
+            _method = "GET";
 
             // Load attributes
             foreach (XmlAttribute attr in xmlNode.Attributes) {
@@ -124,6 +130,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
                     case "cookies":
                         cookies = attr.Value;
                         break;
+                    case "method":
+                        _method = attr.Value.Trim().ToUpper();
+                        break;
+
                 }
             }
 
@@ -185,6 +195,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 grabber.MaxRetries = maxRetries;
                 grabber.AllowUnsafeHeader = allowUnsafeHeader;
                 grabber.CookieHeader = cookies;
+                
                 grabber.Debug = ScriptSettings.DebugMode;
 
 
@@ -212,7 +223,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 if (e is ThreadAbortException)
                     throw e;
 
-                logger.Warn("Could not connect to " + parsedUrl, e);
+                logger.Warn("Could not connect to " + parsedUrl + ". " + e.Message);
             }
 
             return pageContents;
