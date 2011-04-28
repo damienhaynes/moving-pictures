@@ -8,8 +8,13 @@
 
 # Required MediaPortal Version
 !define MP_MAJOR 1
-!define MP_MINOR 0
-!define MP_POINT 2
+!define MP_MINOR 1
+!define MP_POINT 0
+
+# Max MediaPortal Version
+!define MP_MAX_MAJOR 1
+!define MP_MAX_MINOR 1
+!define MP_MAX_POINT 5
 
 # grab version from DLL
 !system "GetVersion.exe"
@@ -521,7 +526,7 @@ Function verifyMediaPortalVer
     IntOp $R4 $R1 / 0x00010000
     IntOp $R5 $R1 & 0x0000FFFF
     
-
+    # verify we meet the minimum version requirement
     IntCmp $R2 ${MP_MAJOR} check_minor_ver fail success 
     check_minor_ver:
         IntCmp $R3 ${MP_MINOR} check_point_ver fail success 
@@ -531,7 +536,19 @@ Function verifyMediaPortalVer
         MessageBox MB_OK|MB_ICONEXCLAMATION "$(OLD_VER1)${MP_MAJOR}.${MP_MINOR}.${MP_POINT}$(OLD_VER2)"
         Abort
     success:
+	
+	# verify we meet the max version requirement
+	IntCmp $R2 ${MP_MAX_MAJOR} check_minor_ver2 success2 fail2 
+    check_minor_ver2:
+        IntCmp $R3 ${MP_MAX_MINOR} check_point_ver2 success2 fail2 
+    check_point_ver2:
+        IntCmp $R4 ${MP_MAX_POINT} success2 success2 fail2 
+    fail2:
+        MessageBox MB_OK|MB_ICONEXCLAMATION "$(NOT_12B)"
+        Abort
+    success2:
     
+	
 FunctionEnd
 
 # grabs the install number counter from the registry and increments

@@ -26,12 +26,30 @@ Change Log
 ================================================================================
 1.1.3
 --------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+**********:     Tweaked code to allow skin designers to have varying backdrop 
+                sizes in different views. http://bit.ly/mEyy94
+				
+**********:     Added ability for a scraper script to use the POST method with 
+                the retrieve node. Still not possible to supply a payload for 
+                the POST. http://bit.ly/jldeyK				
+
+--------------------------------------------------------------------------------
 Bug Fixes
 --------------------------------------------------------------------------------
 Issue #858:     Parental Controls will now only reset when the idle timer 
                 fires or when exiting to one of the home screens. Jumping over
                 to SubCentral (or other plugins) will no longer reset parental
                 controls.
+
+Issue #956:     Fixed bug causing GUI to render incorrectly when categories are
+                disabled and the user has selected to "Use Last View" by default 
+				in the GUI Options.
+
+Issue #974:     Fixed bug causing the IMDb preprocessor to fail for made for TV 
+                and strait to video movies. Should improve import of movies using
+                an NFO file for an IMDb hint.
 				
 Issue #947:     "Now Watching" information will no longer be sent to follw.it 
                 if a movie is on the exclusion list.
@@ -40,9 +58,27 @@ Issue #949:     If Moving Pictures has trouble connecting to follw.it, this
                 will be notated in the configuration screen along with a link 
                 to retry connecting. 
 				
+**********:     Fixed bug in follw.it panel causing (harmless) threading 
+                exceptions to sometimes appear in the log.
+				
+Issue #980:     Fixed bug causing plugin in some cases to incorrectly set the 
+                user's locale on follw.it to english.
+
+Issue #969:     Fixed bug rarely causing some follw.it events to be sent to the 
+                server multiple times.
+				
+--------------------------------------------------------------------------------
+Script and Translation Updates
+--------------------------------------------------------------------------------				
 Issue #952:     Updated the CSFD.cz scraper. Thanks Trottel!
 
 Issue #936:     Updated kinopoisk.ru scraper. Thanks sborovsk!
+
+Issue #920:     Fixed runtime and tagline issue with OFDb script. Thanks ncohrt!
+
+Issue #990:     Updated scope.dk scraper script. Thanks RoChess!
+
+Issue #983:     Updated swedish language file. Thanks Mr. Rafael!
 
 Issue #954:     Added Croation translation file. Thanks Mikeyy!
 
