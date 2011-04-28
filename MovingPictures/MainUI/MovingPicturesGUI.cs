@@ -737,6 +737,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 backdrop = new ImageSwapper();
                 backdrop.ImageResource.Delay = artworkDelay;
                 backdrop.PropertyOne = "#MovingPictures.Backdrop";
+                backdrop.PropertyTwo = "#MovingPictures.Backdrop2";
 
                 // create cover image swapper
                 cover = new AsyncImageResource();

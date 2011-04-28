@@ -999,6 +999,55 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _defaultView;
 
+        [CornerstoneSetting(
+            Name = "Last Used View",
+            Description = "The last view used in the GUI. This only applies when categories are disabled. When categories are enabled, this is stored on a node by node basis. Valid options are \"list\", \"thumbs\", \"largethumbs\", and \"filmstrip\".",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "last_used_view",
+            Default = "list",
+            Hidden = true)]
+        public string LastUsedViewStr {
+            get { return _lastUsedView; }
+            set {
+                _lastUsedView = value;
+                OnSettingChanged("last_used_view");
+            }
+        }
+        private string _lastUsedView;
+
+        public BrowserViewMode LastUsedView {
+            get {
+                if (LastUsedViewStr == "list")
+                    return BrowserViewMode.LIST;
+                if (LastUsedViewStr == "thumbs")
+                    return BrowserViewMode.SMALLICON;
+                if (LastUsedViewStr == "largethumbs")
+                    return BrowserViewMode.LARGEICON;
+                if (LastUsedViewStr == "filmstrip")
+                    return BrowserViewMode.FILMSTRIP;
+
+                return BrowserViewMode.LIST;
+            }
+
+            set {
+                switch (value) {
+                    case BrowserViewMode.SMALLICON:
+                        LastUsedViewStr = "thumbs";
+                        break;
+                    case BrowserViewMode.LARGEICON:
+                        LastUsedViewStr = "largethumbs";
+                        break;
+                    case BrowserViewMode.FILMSTRIP:
+                        LastUsedViewStr = "filmstrip";
+                        break;
+                    case BrowserViewMode.LIST:
+                    default:
+                        LastUsedViewStr = "list";
+                        break;
+
+                }
+            }
+        }
 
         [CornerstoneSetting(
             Name = "Click Shows Details",
