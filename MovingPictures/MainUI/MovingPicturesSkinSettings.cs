@@ -25,6 +25,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             switch (view) {
                 case BrowserViewMode.FILMSTRIP:
                     return FilmstripViewAvailable;
+                case BrowserViewMode.COVERFLOW:
+                    return CoverFlowViewAvailable;
                 case BrowserViewMode.LARGEICON:
                     return LargeIconViewAvailable;
                 case BrowserViewMode.SMALLICON:
@@ -80,6 +82,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
         private bool _filmstripViewAvailable;
 
+        /// <summary>
+        /// True if the current skin has implemented the coverflow view.
+        /// </summary>
+        [SkinSetting("#coverflow.available", true)]
+        public bool CoverFlowViewAvailable
+        {
+            get { return _coverflowViewAvailable; }
+            private set { _coverflowViewAvailable = value; }
+        }
+        private bool _coverflowViewAvailable;
+
         #endregion
 
         #region Backdrop Usage
@@ -91,6 +104,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             switch (view) {
                 case BrowserViewMode.FILMSTRIP:
                     return UseBackdropInFilmstripView;
+                case BrowserViewMode.COVERFLOW:
+                    return UseBackdropInCoverFlowView;
                 case BrowserViewMode.LARGEICON:
                     return UseBackdropInLargeIconView;
                 case BrowserViewMode.SMALLICON:
@@ -150,6 +165,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             private set { _useBackdropInFilmstripView = value; }
         }
         private bool _useBackdropInFilmstripView;
+
+        /// <summary>
+        /// True if the backdrop should be used in the coverflow view.
+        /// </summary>
+        [SkinSetting("#coverflow.backdrop.used", true)]
+        public bool UseBackdropInCoverFlowView
+        {
+            get { return _useBackdropInCoverFlowView; }
+            private set { _useBackdropInCoverFlowView = value; }
+        }
+        private bool _useBackdropInCoverFlowView;
 
 
         /// <summary>

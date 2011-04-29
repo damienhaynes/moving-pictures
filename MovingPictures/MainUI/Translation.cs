@@ -163,6 +163,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string ContinueToNextPartHeader = "Continue to next part?";
         public static string CycleCoverArt = "Cycle Cover-Art";
         public static string CycleView = "Cycle View";
+        public static string CoverFlowView = "Coverflow View";
 
         // D
         public static string DateAdded = "Date Added";

@@ -122,6 +122,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 case BrowserViewMode.FILMSTRIP:
                     viewComboBox.SelectedIndex = 5;
                     break;
+                case BrowserViewMode.COVERFLOW:
+                    viewComboBox.SelectedIndex = 6;
+                    break;
                 case BrowserViewMode.PARENT:
                 default:
                     viewComboBox.SelectedIndex = 0;
@@ -262,6 +265,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     break;
                 case 5:
                     settings.MovieView = BrowserViewMode.FILMSTRIP;
+                    break;
+                case 6:
+                    settings.MovieView = BrowserViewMode.COVERFLOW;
                     break;
             }
         }

@@ -89,7 +89,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private SortingDirections _sortDirection = SortingDirections.Ascending;
 
         // movie view assigned to the category
-        // possible options include PARENT, LIST, SMALLICON, LARGEICON, FILMSTRIP, LASTUSED
+        // possible options include PARENT, LIST, SMALLICON, LARGEICON, FILMSTRIP, COVERFLOW, LASTUSED
         [DBField]
         public BrowserViewMode MovieView {
             get { return _movieView; }
@@ -99,6 +99,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     || value == BrowserViewMode.SMALLICON
                     || value == BrowserViewMode.LARGEICON
                     || value == BrowserViewMode.FILMSTRIP
+                    || value == BrowserViewMode.COVERFLOW
                     || value == BrowserViewMode.LASTUSED
                     ) {
                     _movieView = value;
@@ -108,7 +109,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private BrowserViewMode _movieView = BrowserViewMode.PARENT;
 
         // view that is used when the movie view is set to "lastused"
-        // possible options include LIST, SMALLICON, LARGEICON, FILMSTRIP
+        // possible options include LIST, SMALLICON, LARGEICON, FILMSTRIP, COVERFLOW
         [DBField]
         public Nullable<BrowserViewMode> LastMovieView {
             get { return _lastMovieView; }
@@ -117,6 +118,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     || value == BrowserViewMode.SMALLICON
                     || value == BrowserViewMode.LARGEICON
                     || value == BrowserViewMode.FILMSTRIP
+                    || value == BrowserViewMode.COVERFLOW
                     ) {
                     _lastMovieView = value;
                     commitNeeded = true;

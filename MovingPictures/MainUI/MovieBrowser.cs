@@ -165,6 +165,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return BrowserViewMode.LARGEICON;
                 else if (defaultView.Equals("filmstrip"))
                     return BrowserViewMode.FILMSTRIP;
+                else if (defaultView.Equals("coverflow"))
+                    return BrowserViewMode.COVERFLOW;
                 else if (defaultView.Equals("lastused"))
                     return BrowserViewMode.LASTUSED;
                 else {
@@ -520,7 +522,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             do {
                 // rotate view until one is available
-                if (newView == BrowserViewMode.FILMSTRIP)
+                if (newView == BrowserViewMode.COVERFLOW)
                     newView = BrowserViewMode.LIST;
                 else
                     newView++;
@@ -576,6 +578,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     //facade.View = GUIFacadeControl.ViewMode.Filmstrip;
                     //facade.CurrentLayout = GUIFacadeControl.Layout.Filmstrip;
                     facade.SetCurrentLayout("Filmstrip");
+                    break;
+                case BrowserViewMode.COVERFLOW:
+                    facade.SetCurrentLayout("CoverFlow");
                     break;
             }
 
