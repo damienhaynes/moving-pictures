@@ -113,76 +113,44 @@ Section "Moving Pictures Plugin" SEC0000
     Call updateRegistry
 SectionEnd
 
-Section "Blue3wide Skin Support" SEC0002
-    ${If} ${FileExists} $SKIN_DIR\Blue3wide\*.*
+Section "DefaultWide Skin Support" SEC0002
+    ${If} ${FileExists} $SKIN_DIR\DefaultWide\*.*
         SetOverwrite ifnewer
 
-        SetOutPath $SKIN_DIR\Blue3wide
-        File "..\MovingPictures\MainUI\Blue3wide\*.*"
+        SetOutPath $SKIN_DIR\DefaultWide
+        File "..\MovingPictures\Resources\skins\DefaultWide\*.*"
 
-        SetOutPath $SKIN_DIR\Blue3wide\Media
-        File "..\MovingPictures\MainUI\Blue3wide\Media\*.*"  
+        SetOutPath $SKIN_DIR\DefaultWide\Media
+        File "..\MovingPictures\Resources\skins\DefaultWide\Media\*.*"  
         
-        SetOutPath $SKIN_DIR\Blue3wide\Media\Logos
-        File "..\MovingPictures\MainUI\Blue3wide\Media\Logos\*.*"  
-
-        SetOutPath $SKIN_DIR\Blue3wide\Media\Categories
-        File "..\MovingPictures\MainUI\Blue3wide\Media\Categories\*.*"  
+        SetOutPath $SKIN_DIR\DefaultWide\Media\Categories
+        File "..\MovingPictures\Resources\skins\DefaultWide\Media\Categories\*.*"  
 
     ${EndIf}
 SectionEnd
 
-Section "Blue3 Skin Support" SEC0003
-    ${If} ${FileExists} $SKIN_DIR\Blue3\*.*
+Section "Default Skin Support" SEC0003
+    ${If} ${FileExists} $SKIN_DIR\Default\*.*
         SetOverwrite ifnewer
 
-        SetOutPath $SKIN_DIR\Blue3
-        File "..\MovingPictures\MainUI\Blue3\*.*"
+        SetOutPath $SKIN_DIR\Default
+        File "..\MovingPictures\Resources\skins\Default\*.*"
 
-        SetOutPath $SKIN_DIR\Blue3\Media
-        File "..\MovingPictures\MainUI\Blue3\Media\*.*"  
+        SetOutPath $SKIN_DIR\Default\Media
+        File "..\MovingPictures\Resources\skins\Default\Media\*.*"  
         
-        SetOutPath $SKIN_DIR\Blue3\Media\Logos
-        File "..\MovingPictures\MainUI\Blue3\Media\Logos\*.*"  
-
-        SetOutPath $SKIN_DIR\Blue3\Media\Categories
-        File "..\MovingPictures\MainUI\Blue3\Media\Categories\*.*"  
+        SetOutPath $SKIN_DIR\Default\Media\Categories
+        File "..\MovingPictures\Resources\skins\Default\Media\Categories\*.*"  
 
     ${EndIf}
 SectionEnd
-
-# Loops through each skin folder and sends them off
-# for processing and possible generic skin installation
-#Section "Generic Skin Support" SEC0001
-    # loop through folders in the skin folder 
-#    FindFirst $0 $1 "$SKIN_DIR\*.*"
-#    directory_loop:
-        # if no results, quit
-#        StrCmp $1 "" directory_loop_done
-        
-        # if this is the current or previous directory, skip
-#        StrCmp $1 "." next
-#        StrCmp $1 ".." next
-
-        # if this is a folder check the movingpictures.xml
-#        IfFileExists "$SKIN_DIR\$1\*.*" 0 not_a_directory
-#            StrCpy $CURR_SKIN $1
-#			Call processCurrentSkin            
-#        not_a_directory:
-        
-        # setup iteration variables for next loop
-#        next:
-#        FindNext $0 $1
-#        goto directory_loop
-#    directory_loop_done:
-#SectionEnd
 
 # set description text for install components
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0000} $(DLL_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0001} $(GENERIC_SKIN_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC0002} $(BLUE3WIDE_SKIN_DESCRIPTION)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC0003} $(BLUE3_SKIN_DESCRIPTION)  
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC0002} $(DEFAULTWIDE_SKIN_DESCRIPTION)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC0003} $(DEFAULT_SKIN_DESCRIPTION)  
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 # startup tasks
@@ -204,104 +172,6 @@ Function .onInit
 	Call getDatabaseDir
     Call getPreviousInstallInfo
     
-FunctionEnd
-
-# Checks if the current skin should be updated, and if so,
-# sends it off for file copying.
-Function processCurrentSkin
-    Push $0 
-
-    # if this skin already has a movingpictures.xml file, 
-    # check if it's the generic skin 
-    ${If} ${FileExists} $SKIN_DIR\$CURR_SKIN\movingpictures.xml
-    
-        # determine the filesize of the movingpixtures.xml file
-        # for this skin       
-        Push "$SKIN_DIR\$CURR_SKIN\movingpictures.xml"
-        Call FileSize
-        Pop $0
-
-        # if the filesize matches a known size for a 0.6 generic skin, copy
-        # this should be removed for 0.8
-        ${If} $0 == 23571
-        ${OrIf} $0 == 23544
-        ${OrIf} $0 == 29568
-            goto copy
-        ${EndIf}
-        
-        # try to grab the <movingpictures_generic_skin> node if we fail at any step,
-        # assume this is NOT a generic skin
-        push $0
-        push $1
-        ${xml::LoadFile} "$SKIN_DIR\$CURR_SKIN\movingpictures.xml" $1
-        IntCmp $1 -1 xmlfail
-        ${xml::RootElement} $0 $1
-        IntCmp $1 -1 xmlfail
-        ${xml::XPathNode} "//movingpictures_generic_skin" $1
-        IntCmp $1 -1 xmlfail
-        ${xml::GetText} $GENERIC_SKIN_TAG_VALUE $1
-        IntCmp $1 -1 xmlfail   
-        goto xmlsuccess 
-
-        # clean up after XML processing                  
-        xmlfail:   
-            StrCpy $GENERIC_SKIN_TAG_VALUE "false"
-        xmlsuccess:
-        pop $1
-        pop $0
-        
-        # check the <movingpictures_generic_skin> value to see if this is 
-        # the generic skin
-        StrCmp $GENERIC_SKIN_TAG_VALUE "true" copy
-        
-        # if we didnt meet one of the above conditions, it's not the generic 
-        # skin file, so we dont copy any files
-        goto done
-    ${EndIf}
-    
-    # copy the skin files to the folder       
-    copy:
-    call copyGenericSkin    
-
-    done:
-    pop $0
-FunctionEnd
-
-# Copies generic skin files to the current skin folder based on
-# the CURR_SKIN_ASPECT_RATIO variable
-Function copyGenericSkin
-    ;MessageBox MB_OK "Installing Generic Skin for $CURR_SKIN..."
-
-    Call backupOldSkinFiles
-    Call determineSkinAspectRatio
-    
-    # jump to the appropriate copy section based on aspect ratio
-    SetOverwrite ifnewer
-    StrCmp $CURR_SKIN_ASPECT_RATIO "4x3" _4x3
-    StrCmp $CURR_SKIN_ASPECT_RATIO "16x9" _16x9
-    goto unknown
-    
-    # copy over 4x3 skin files for this skin
-    _4x3:
-        SetOutPath $SKIN_DIR\$CURR_SKIN
-        File "..\MovingPictures\MainUI\Generic Skin\4x3\*.*"
-        SetOutPath $SKIN_DIR\$CURR_SKIN\Media\MovingPictures
-        File "..\MovingPictures\MainUI\Generic Skin\16x9\Media\MovingPictures\*.*"
-        goto done
-        
-    # copy over 16x9 skin files for this skin        
-    _16x9:    
-        SetOutPath $SKIN_DIR\$CURR_SKIN
-        File "..\MovingPictures\MainUI\Generic Skin\16x9\*.*"
-        SetOutPath $SKIN_DIR\$CURR_SKIN\Media\MovingPictures
-        File "..\MovingPictures\MainUI\Generic Skin\16x9\Media\MovingPictures\*.*"
-        goto done
-    
-    #unkown aspect ratio. implies the script has no references.xml
-    unknown:
-        MessageBox MB_OK|MB_ICONEXCLAMATION "$(INVALID_SKIN1)$CURR_SKIN$(INVALID_SKIN2)$CURR_SKIN."
-    done:
-
 FunctionEnd
 
 # reads the references.xml file from the skin folder to determine
