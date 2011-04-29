@@ -54,9 +54,9 @@
             this.label28 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -379,6 +379,17 @@
             this.label12.Text = "Benjamin Gmeiner";
             this.toolTip.SetToolTip(this.label12, "DieBagger");
             // 
+            // label14
+            // 
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(231, 131);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(78, 13);
+            this.label14.TabIndex = 71;
+            this.label14.Text = "Nico Hartmann";
+            this.toolTip.SetToolTip(this.label14, "ncoH");
+            // 
             // label23
             // 
             this.label23.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -398,17 +409,6 @@
             this.label17.Size = new System.Drawing.Size(37, 13);
             this.label17.TabIndex = 68;
             this.label17.Text = "Harley";
-            // 
-            // label14
-            // 
-            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(231, 131);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(72, 13);
-            this.label14.TabIndex = 71;
-            this.label14.Text = "Nico Hartman";
-            this.toolTip.SetToolTip(this.label14, "ncoH");
             // 
             // ContributersScrollPanel
             // 
