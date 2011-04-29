@@ -24,6 +24,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         private static object follwitAPILock = new Object();
         private Timer taskListTimer;
 
+        private bool receivingEvents = false;
+
         private HashSet<DBMovieInfo> currentlySyncingMovies = new HashSet<DBMovieInfo>();
 
         private DateTime lastConnectAttempt = new DateTime(1900, 1, 1);
@@ -104,9 +106,12 @@ namespace MediaPortal.Plugins.MovingPictures {
             lastConnectAttempt = new DateTime(1900, 1, 1);
 
             if (MovingPicturesCore.Settings.FollwitEnabled) {
-                MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
-                MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);
-                MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectInserted);
+                if (!receivingEvents) {
+                    MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
+                    MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);
+                    MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectInserted);
+                    receivingEvents = true;
+                }
                 if (MovingPicturesCore.Settings.FollwitTaskListTimer > 0) {
                     taskListTimer = new Timer(taskListTimerCallback, null, 0, MovingPicturesCore.Settings.FollwitTaskListTimer * 60000);
                 }
@@ -116,6 +121,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 MovingPicturesCore.DatabaseManager.ObjectDeleted -= new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
                 MovingPicturesCore.DatabaseManager.ObjectUpdated -= new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);
                 MovingPicturesCore.DatabaseManager.ObjectInserted -= new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectInserted);
+                receivingEvents = false;
             }
 
         }
@@ -494,11 +500,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
-            if (!IsOnline) {
-                logger.Warn("Can not connect to follw.it because service is offline");
-                return;
-            }
-
             try {
                 if (obj.GetType() == typeof(DBWatchedHistory)) {
                     DBWatchedHistory wh = (DBWatchedHistory)obj;
@@ -527,11 +528,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
-            if (!IsOnline) {
-                logger.Warn("Can not send rating info to follw.it because service is offline");
-                return;
-            }
-
             try {
                 // we're looking for user rating changes
                 if (obj.GetType() != typeof(DBUserMovieSettings))
@@ -539,6 +535,11 @@ namespace MediaPortal.Plugins.MovingPictures {
 
                 DBUserMovieSettings settings = (DBUserMovieSettings)obj;
                 if (settings.RatingChanged) {
+                    if (!IsOnline) {
+                        logger.Warn("Can not send rating info to follw.it because service is offline");
+                        return;
+                    }
+                    
                     DBMovieInfo movie = settings.AttachedMovies[0];
 
                     if (currentlySyncingMovies.Contains(movie))
@@ -587,15 +588,15 @@ namespace MediaPortal.Plugins.MovingPictures {
                 return;
             }
 
-            if (!IsOnline) {
-                logger.Warn("Can not remove movie from follw.it collection because service is offline");
-                return;
-            }
-
             try {
                 // if this is not a movie object, break
                 if (obj.GetType() != typeof(DBMovieInfo))
                     return;
+
+                if (!IsOnline) {
+                    logger.Warn("Can not remove movie from follw.it collection because service is offline");
+                    return;
+                }
 
                 DBMovieInfo movie = (DBMovieInfo)obj;
 

@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- Moving Pictures translation file -->
 <!-- Svenska (se) -->
 <!-- Note: English is the fallback for any strings not found in other languages -->
-<!-- Updated 20101209 -->
+<!-- Updated 20110405 -->
 <strings>
   <!-- A -->
   <string Field="Actor">Skådespelare</string>
   <string Field="Actors">Skådespelare</string>
-  <string Field="AllMovies">Alls filmer</string>
+  <string Field="AllMovies">Alla filmer</string>
   <!-- C -->
   <string Field="Cancel">Avbryt</string>
   <string Field="CannotDeleteOffline">Kan ej ta bort, {0}\n filen är offline</string>

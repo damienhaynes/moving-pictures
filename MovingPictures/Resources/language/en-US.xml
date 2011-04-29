@@ -79,7 +79,7 @@
   <string Field="MovieOptions">Movie Options</string>
   <string Field="Movies">Movies</string>
   <!-- N -->
-  <string Field="NoImportPathsBody">It doesn't look like you have\ndefined any import paths. You\nshould close MediaPortal and\nlaunch the MediaPortal\nConfiguration Screen to\nconfigure Moving Pictures.</string>
+  <string Field="NoImportPathsBody">You do not have any import\npaths defined. Please close\nclose MediaPortal and launch\nlaunch MP Configuration.</string>
   <string Field="NoImportPathsHeading">No Import Paths!</string>
   <!-- O -->
   <string Field="Older">Older</string>

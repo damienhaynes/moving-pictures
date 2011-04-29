@@ -7,7 +7,7 @@
   <string Field="Actors">Aktorzy</string>
   <string Field="AllMovies">Wszystkie filmy</string>
   <string Field="Cancel">Anuluj</string>
-  <string Field="CannotDeleteOffline">Nie mozna usunąć {0},\n ponieważ plik jest niedostępny</string>
+  <string Field="CannotDeleteOffline">Nie można usunąć {0},\n ponieważ plik jest niedostępny</string>
   <string Field="CannotDeleteReadOnly">Nie mozna usunąć filmu, który jest\nTylko do odczytu. Czy chcesz go zignorować?</string>
   <string Field="CategoryEmptyDescription">Aktualnie nie ma filmów\nw tej kategorii.</string>
   <string Field="CategoryEmptyHeader">Kategoria jest pusta.</string>
@@ -75,7 +75,7 @@
   <string Field="PinCodeHeader">Odblokowanie dostępu</string>
   <string Field="PinCodePrompt">Wpisz kod PIN:</string>
   <string Field="PlaybackFailedHeader">Odtwarzanie nie udało się</string>
-  <string Field="ProblemLoadingSkinFile">Wystąpił problem przy ładowaniu skóry.</string>
+  <string Field="ProblemLoadingSkinFile">Wystąpił problem przy ładowaniu skórki.</string>
   <string Field="Rate">Oceń</string>
   <string Field="Rated">Oceniony</string>
   <string Field="RateFiveStarFive">Doskonały</string>
@@ -104,9 +104,9 @@
   <string Field="SelectYourRating">Wybierz swoją ocenę dla {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Pokaż tylko nieoglądane filmy</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Pokaż oglądane i nieoglądane filmy</string>
-  <string Field="SkinDoesNotSupportCategories">Ta skóra nie obsługuje kategorii.</string>
-  <string Field="SkinDoesNotSupportPinDialog">Ta skóra nie obsługuje dialogu kodu PIN.</string>
-  <string Field="SkinDoesNotSupportRatingDialog">Ta skóra nie obsługuje dialogu oceny.</string>
+  <string Field="SkinDoesNotSupportCategories">Ta skórka nie obsługuje kategorii.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Ta skórka nie obsługuje dialogu kodu PIN.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Ta skórka nie obsługuje dialogu oceny.</string>
   <string Field="SortBy">Sortuj według</string>
   <string Field="SortDirection">Porządek sortowania</string>
   <string Field="Sunday">Niedziela</string>

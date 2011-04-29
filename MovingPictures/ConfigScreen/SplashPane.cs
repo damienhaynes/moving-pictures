@@ -62,6 +62,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void SplashPane_Load(object sender, EventArgs e) {
             versionLabel.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            #if DEBUG
+            alphaLabel.Visible = true;
+            #endif
             updateComponentVisibility();
         }
 
