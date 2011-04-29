@@ -239,7 +239,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         filename = filename.Replace("%filename%", videoFileName);
                     }
 
-                    filenames.Add(filename);
+                    filenames.Add(filename.ToValidFilename());
                 }
                 return filenames;
             }

@@ -67,7 +67,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public bool IsVideoDisc {
             get {
                 if (File != null)
-                    return (VideoFormat != VideoFormat.Unknown && VideoFormat != VideoFormat.File);
+                    return (VideoFormat != VideoFormat.NotSupported && VideoFormat != VideoFormat.Unknown && VideoFormat != VideoFormat.File);
 
                 return false;
             }

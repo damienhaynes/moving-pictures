@@ -35,7 +35,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 return SignatureBuilderResult.INCONCLUSIVE;
 
             // See if we get a Title and Year from the title node
-            Regex expr = new Regex(@"<title>([^\(]+?)\((\d{4})[\/IVX]*\).*?</title>", RegexOptions.IgnoreCase);
+            Regex expr = new Regex(@"<title>([^\(]+?)\((?:TV )?(?:Video )?(\d{4})[\/IVX]*\).*?</title>", RegexOptions.IgnoreCase);
             Match details = expr.Match(detailsPage);
             if (details.Success) {
                 try {
