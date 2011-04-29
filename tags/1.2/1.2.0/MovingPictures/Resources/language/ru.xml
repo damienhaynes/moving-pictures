@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Moving Pictures translation file -->
+<!-- Russian (RU) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">Актер</string>
+  <string Field="Actors">Актеры</string>
+  <string Field="AllMovies">Все фильмы</string>
+  <!-- C -->
+  <string Field="Cancel">Отмена</string>
+  <string Field="CannotDeleteOffline">Не возможно удалить {0}\n т.к. файл отсутствует</string>
+  <string Field="CannotDeleteReadOnly">Файл только для чтения, невозможно удалить.\nВы хотите чтобы Moving Pictures пропустил этот фильм?</string>
+  <string Field="CategoryEmptyDescription">В этой категории нет фильмов.</string>
+  <string Field="CategoryEmptyHeader">В категории пусто</string>
+  <string Field="Certification">Рейтинг MPAA</string>
+  <string Field="ChangeView">Изм. вид</string>
+  <string Field="CheckForMissingArtwork">Проверить отсутствующие постеры в интернет</string>
+  <string Field="ContinueToNextPartBody">Хотите продолжить с части {0}?</string>
+  <string Field="ContinueToNextPartHeader">Продолжить со след. части?</string>
+  <string Field="CycleCoverArt">Повторять обложку</string>
+  <string Field="CycleView">Следующий вид</string>
+  <!-- D -->
+  <string Field="DateAdded">Добавлено</string>
+  <string Field="DateDay">день</string>
+  <string Field="DateDays">дни</string>
+  <string Field="DateMonth">месяц</string>
+  <string Field="DateMonths">месяцы</string>
+  <string Field="DatePartAgo">{0} {1} назад</string>
+  <string Field="DatePartWithinDays">За последние {0} дня(ей)</string>
+  <string Field="DatePartWithinMonths">За последние {0} месяц(а)</string>
+  <string Field="DatePartWithinWeeks">За последние {0} неделю(и)</string>
+  <string Field="DatePartWithinYears">За последние {0} год(а)</string>
+  <string Field="DateWeek">неделя</string>
+  <string Field="DateWeeks">недели</string>
+  <string Field="DateYear">год</string>
+  <string Field="DateYears">годы</string>
+  <string Field="DecadeShort">{0}0й</string>
+  <string Field="DeleteFailed">Ошибка при удалении</string>
+  <string Field="DeleteMovie">Удалить фильм</string>
+  <string Field="Director">Режисер</string>
+  <string Field="Directors">Режисеры</string>
+  <string Field="DownAbbreviation">(вниз)</string>
+  <string Field="DoYouWantToDelete">Вы действительно хотите удалить\n{0}\nс жесткого диска?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Ранее в этом году</string>
+  <string Field="Error">Ошибка</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">К сожалению, не удалось подключить образ DVD</string>
+  <string Field="FilePath">Путь к файлу</string>
+  <string Field="FilmstripView">Обложки</string>
+  <string Field="FilterBy">Фильтр</string>
+  <string Field="Friday">Пятница</string>
+  <string Field="Future">В будущем</string>
+  <!-- G -->
+  <string Field="Genre">Жанр</string>
+  <string Field="Genres">Жанры</string>
+  <!-- I -->
+  <string Field="InvalidPin">Неверный PIN-код!</string>
+  <string Field="InvalidVideoDiscFormat">Либо файл образа не содержит допустимый\nформат видео, либо конфигурация Daemon Tools\nв Медиапортале не корректна.</string>
+  <!-- L -->
+  <string Field="Language">Язык</string>
+  <string Field="LargeThumbnailView">Большие миниатюры</string>
+  <string Field="LastMonth">Месяц назад</string>
+  <string Field="LastWeek">Неделю назад</string>
+  <string Field="LastYear">В прошлом году</string>
+  <string Field="ListView">Список</string>
+  <string Field="LockRestrictedMovies">Заблокировать ограниченные фильмы</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Отметить как непросмотренный</string>
+  <string Field="MarkAsWatched">Отметить как просмотренный</string>
+  <string Field="MediaIsMissing">Источник, который выбран для фильма, отсутствует!\nОчень жаль, но что-то пошло не так...</string>
+  <string Field="MediaNotAvailableBody">Источник для выбранного фильма не доступен в настоящий\nмомент. Пожалуйста, подключите или вставьте\nисточник: {0}</string>
+  <string Field="MediaNotAvailableHeader">Источник не доступен</string>
+  <string Field="MissingExternalPlayerExe">Внешний плеер для воспроизведения HD отсутствует.\nИсправьте путь к файлу плейера.</string>
+  <string Field="Monday">Понедельник</string>
+  <string Field="Movie">Фильм</string>
+  <string Field="MovieDetails">Данные о фильме</string>
+  <string Field="MovieOptions">Параметры фильма</string>
+  <string Field="Movies">Фильмы</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">Похоже что вы не определили\nни одного пути для импорта. Вам\nследует закрыть Медиапортал и\nзапустить Конфигуратор\n Медиапортала для\nнастройки Moving Pictures.</string>
+  <string Field="NoImportPathsHeading">Отсутствуют пути для импорта!</string>
+  <!-- O -->
+  <string Field="Older">Старше</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Родительский контроль не включен.</string>
+  <string Field="PinCodeHeader">Разблокирование ограниченного содержания</string>
+  <string Field="PinCodePrompt">Пожалуйста, введите PIN-код для продолжения:</string>
+  <string Field="PlaybackFailed">Воспроизведение не возможно, т.к. '{0}'\nрасширение не записано в конфигурации Медиапортала.\nДобавьте расширение или настройте внешний плеер\nи попробуйте снова.</string>
+  <string Field="PlaybackFailedHeader">Ошибка при воспроизведении</string>
+  <string Field="ProblemLoadingSkinFile">К сожалению, возникла проблема при загрузке файла оболочки...</string>
+  <!-- R -->
+  <string Field="Rate">Рейтинг</string>
+  <string Field="Rated">Оценка</string>
+  <string Field="RateFiveStarFive">Шедевр</string>
+  <string Field="RateFiveStarFour">Великолепный</string>
+  <string Field="RateFiveStarOne">Ужасный</string>
+  <string Field="RateFiveStarThree">Хороший</string>
+  <string Field="RateFiveStarTwo">Посредственный</string>
+  <string Field="RateHeading">Оценка фильма</string>
+  <string Field="RecentlyAddedMovies">Недавно добавленные фильмы</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abcАБВГ</string>
+  <string Field="RemoteNumericAlphabet3">defДЕЖЗ</string>
+  <string Field="RemoteNumericAlphabet4">ghiИЙКЛ</string>
+  <string Field="RemoteNumericAlphabet5">jklМНОП</string>
+  <string Field="RemoteNumericAlphabet6">mnoРСТУ</string>
+  <string Field="RemoteNumericAlphabet7">pqrsФХЦЧ</string>
+  <string Field="RemoteNumericAlphabet8">tuvШЩЪЫ</string>
+  <string Field="RemoteNumericAlphabet9">wxyzЬЭЮЯ</string> 
+  <string Field="ResumeFrom">Воспроизведение с:</string>
+  <string Field="ResumeFromLast">Воспроизвести, где остановились?</string>
+  <string Field="Retry">Повтор</string>
+  <string Field="Runtime">Продолжительность</string>
+  <string Field="RuntimeHour">{0} час</string>
+  <string Field="RuntimeHours">{0} часа</string>
+  <string Field="RuntimeLong">{0} и {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} и {2}</string>
+  <string Field="RuntimeMinute">{0} минута</string>
+  <string Field="RuntimeMinutes">{0} минут(ы)</string>
+  <string Field="RuntimeSecond">{0} секунда</string>
+  <string Field="RuntimeSeconds">{0} секунд(ы)</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}ч{1:00}м{2:00}с</string>
+  <!-- S -->
+  <string Field="Saturday">Суббота</string>
+  <string Field="Score">Рейтинг</string>
+  <string Field="SelectYourRating">Укажите рейтинг для {0}</string>
+   <string Field="ShowOnlyUnwatchedMovies">Только непросмотренные фильмы</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Просмотренные и непросмотренные фильмы</string>
+  <string Field="SkinDoesNotSupportCategories">Эта оболочка не поддерживает категории.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Эта оболочка не поддерживает PIN-код.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Эта оболочка не поддерживает рейтинг.</string>
+  <string Field="SortBy">Сортировка</string>
+  <string Field="SortDirection">Направление сортировки</string>
+  <string Field="StarRating">Рейтинг</string>
+  <string Field="Sunday">Воскресенье</string>
+  <!-- T -->
+  <string Field="ThisMonth">За этот месяц</string>
+  <string Field="ThisWeek">За эту неделю</string>
+  <string Field="ThisYear">За этот год</string>
+  <string Field="ThreeMonthsAgo">Три месяца назад</string>
+  <string Field="ThreeWeeksAgo">Три недели назад</string>
+  <string Field="ThumbnailView">Миниатюры</string>
+  <string Field="Thursday">Четверг</string>
+  <string Field="Title">Название</string>
+  <string Field="Today">Сегодня</string>
+  <string Field="ToggleParentalLock">Переключить родительский контроль</string>
+  <string Field="Tuesday">Вторник</string>
+  <string Field="TwoMonthsAgo">Два месяца назад</string>
+  <string Field="TwoWeeksAgo">Две недели назад</string>
+  <!-- U -->
+  <string Field="Unknown">Неизвестн.</string>
+  <string Field="UnlockRestrictedMovies">Открыть ограниченные фильмы</string>
+  <string Field="UnwatchedMovies">Непросмотренные фильмы</string>
+  <string Field="UpAbbreviation">(вверх)</string>
+  <string Field="UpdateDetailsFromOnline">Обновить данные из интернет</string>
+  <string Field="UpdateMovieDetailsBody">Вы собираетесь обновить все данные по фильму, любые\nпользовательские исправления будут отменены. Продолжать?</string>
+  <string Field="UpdateMovieDetailsHeader">Обновить данные о фильме</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Вирутальный диск не готов</string>
+  <string Field="VirtualDriveMessage">Виртуальный диск не готов. Пожалуйста, попробуйте\nеще раз или отмените воспроизведение.</string>
+  <!-- W -->
+  <string Field="Wednesday">Среда</string>
+  <string Field="Writer">Автор</string>
+  <string Field="Writers">Авторы</string>
+  <!-- Y -->
+  <string Field="Year">Год</string>
+  <string Field="Yesterday">Вчера</string>
+</strings>
