@@ -33,12 +33,12 @@ Issue #906:     Added support for the CoverFlow layout. Implemented for Default
 
 Issue #901:     Other plugins and skins can now jump directly to a movie or 
                 category in Moving Pictures (i.e. parameterized launch). Thanks
-				for the patch bgmeiner!
+                for the patch bgmeiner!
 				
 --------------------------------------------------------------------------------
 Bug Fixes
 --------------------------------------------------------------------------------
-Issue #665:     Config screen should not launch much more quickly for people with
+Issue #665:     Config screen should now launch much more quickly for people with
                 large collections stored on a remote drive.
 
 ================================================================================
