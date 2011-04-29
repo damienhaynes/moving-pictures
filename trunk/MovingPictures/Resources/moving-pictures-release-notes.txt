@@ -1,8 +1,8 @@
-Moving Pictures 1.1.3
+Moving Pictures 1.2.0
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
-plug-in itself along with Blue3Wide (16x9) and Blue 3 (4x3) skin support.
+plug-in itself along with DefaultWide (16x9) and Default (4x3) skin support.
 If you have any problems or questions about the plug-in you can visit the 
 forums to interact with the community and developers, or you can visit the 
 Moving Pictures Wiki for access to the user's guide and frequently asked questions.
@@ -23,6 +23,24 @@ Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 
 Change Log
+================================================================================
+1.2.0
+--------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+Issue #906:     Added support for the CoverFlow layout. Implemented for Default
+                and DefaultWide skins initially. Thanks ncohrt!
+
+Issue #901:     Other plugins and skins can now jump directly to a movie or 
+                category in Moving Pictures (i.e. parameterized launch). Thanks
+				for the patch bgmeiner!
+				
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #665:     Config screen should not launch much more quickly for people with
+                large collections stored on a remote drive.
+
 ================================================================================
 1.1.3
 --------------------------------------------------------------------------------
