@@ -9,4 +9,4 @@
 
 !insertmacro LANG_STRING DLL_DESCRIPTION "Moving Pictures-pluginet."
 !insertmacro LANG_STRING GENERIC_SKIN_DESCRIPTION "Installera standard-skinfilerna för skin som inte har stöd för Moving Pictures. Alla befintliga filer kommer att säkerhetskopieras."
-!insertmacro LANG_STRING BLUE3WIDE_SKIN_DESCRIPTION "Installera skinfiler för Blue3wide-skinnet. Nyare filer skrivs ej över."
+!insertmacro LANG_STRING DEFAULTWIDE_SKIN_DESCRIPTION "Installera skinfiler för DefaultWide-skinnet. Nyare filer skrivs ej över."

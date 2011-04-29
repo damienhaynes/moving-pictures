@@ -11,4 +11,4 @@
 
 !insertmacro LANG_STRING DLL_DESCRIPTION "Die Moving Pictures Erweiterung."
 !insertmacro LANG_STRING GENERIC_SKIN_DESCRIPTION "Wenn ausgewählt, installiert generische Dateien für alle Skins ohne Moving Pictures Unterstützung. Alle existierenden Dateien werden gesichert."
-!insertmacro LANG_STRING BLUE3WIDE_SKIN_DESCRIPTION "Wenn ausgewählt, installiert Skin Dateien für den Blue3wide Skin. Neuere Dateien werden nicht überschrieben."
+!insertmacro LANG_STRING DEFAULTWIDE_SKIN_DESCRIPTION "Wenn ausgewählt, installiert Skin Dateien für den DefaultWide Skin. Neuere Dateien werden nicht überschrieben."

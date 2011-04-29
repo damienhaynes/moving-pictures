@@ -11,4 +11,4 @@
 
 !insertmacro LANG_STRING DLL_DESCRIPTION "El plug-in Moving Pictures."
 !insertmacro LANG_STRING GENERIC_SKIN_DESCRIPTION "Si lo selecciona, se instalarán los archivos del skin genérico para los skins que no soporten Moving Pictures. Se hará una copia de todos los datos"
-!insertmacro LANG_STRING BLUE3WIDE_SKIN_DESCRIPTION "Si lo selecciona, se instalarán los archivos del skin Blue3wide. Esto no sobreescribirá archivos recientes."
+!insertmacro LANG_STRING DEFAULTWIDE_SKIN_DESCRIPTION "Si lo selecciona, se instalarán los archivos del skin DefaultWide. Esto no sobreescribirá archivos recientes."
