@@ -1227,6 +1227,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 dialog.Add(filmItem);
             }
 
+            GUIListItem flowItem = new GUIListItem(Translation.CoverFlowView);
+            if (skinSettings.CoverFlowViewAvailable)
+            {
+                flowItem.ItemId = currID++;
+                dialog.Add(flowItem);
+            }
+
             dialog.DoModal(GUIWindowManager.ActiveWindow);
 
             if (dialog.SelectedId == listItem.ItemId) {
@@ -1240,6 +1247,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (dialog.SelectedId == filmItem.ItemId) {
                 browser.CurrentView = BrowserViewMode.FILMSTRIP;
+            }
+            else if (dialog.SelectedId == flowItem.ItemId)
+            {
+                browser.CurrentView = BrowserViewMode.COVERFLOW;
             }
         }
 

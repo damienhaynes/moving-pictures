@@ -274,7 +274,8 @@
             "List View",
             "Poster View",
             "Large Poster View",
-            "Filmstrip View"});
+            "Filmstrip View",
+            "Coverflow View"});
             this.viewComboBox.Location = new System.Drawing.Point(211, 193);
             this.viewComboBox.Name = "viewComboBox";
             this.viewComboBox.Size = new System.Drawing.Size(128, 21);

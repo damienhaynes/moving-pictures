@@ -25,6 +25,9 @@ multiple view modes.
 	<define>#filmstrip.available:true</define>       		<!-- Set to true if this skin implements the filmstrip view -->
 	<define>#filmstrip.backdrop.used:true</define>   		<!-- true if backdrop (fanart) should be displayed in this view -->
 
+	<define>#coverflow.available:true</define>       		<!-- Set to true if this skin implements the coverflow view -->
+	<define>#coverflow.backdrop.used:true</define>   		<!-- true if backdrop (fanart) should be displayed in this view -->
+
 	<define>#categories.backdrop.used:true</define>     <!-- true if backdrop (fanart) should be displayed in this view -->
 	<define>#details.backdrop.used:true</define>   	    <!-- true if backdrop (fanart) should be displayed in this view -->
 
@@ -127,7 +130,7 @@ multiple view modes.
 		  <height>720</height>
 		  <texture>#MovingPictures.Backdrop2</texture>
 		  <animation effect="fade" start="0" end="100" time="200">Visible</animation>
-		  <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
+		  <animation effect="fade" start="100" end="0" time="200"delay="200">Hidden</animation>
 		  <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above 
 			   defines for conditional visibility if you dont want to use fan-art only specific views. -->
 		</control>
@@ -141,7 +144,7 @@ multiple view modes.
 		  <width>1280</width>
 		  <height>720</height>
 		  <texture>mainoverlay.png</texture>
-		  <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+[control.isvisible(50)|control.isvisible(51)]</visible>
+		  <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons|facadeview.coverflow]+[control.isvisible(50)|control.isvisible(51)]</visible>
 		</control>
 
 		<control>
@@ -186,6 +189,7 @@ multiple view modes.
 		<import>movingpictures.listview.xml</import>
 		<import>movingpictures.thumbsview.xml</import>
 		<import>movingpictures.filmstripview.xml</import>
+		<import>movingpictures.coverflowview.xml</import>
 		<import>movingpictures.details.xml</import>
 		
 		<import>movingpictures.facade.xml</import>

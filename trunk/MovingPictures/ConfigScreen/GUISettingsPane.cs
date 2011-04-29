@@ -78,6 +78,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 defaultViewComboBox.SelectedIndex = 3;
             else if (defaultView.StringValue.Equals("filmstrip"))
                 defaultViewComboBox.SelectedIndex = 4;
+            else if (defaultView.StringValue.Equals("coverflow"))
+                defaultViewComboBox.SelectedIndex = 5;
 
             // movie clicked action init
             if ((bool)clickGoesToDetails.Value)
@@ -148,6 +150,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 defaultView.Value = "largethumbs";
             if (defaultViewComboBox.SelectedIndex == 4)
                 defaultView.Value = "filmstrip";
+            if (defaultViewComboBox.SelectedIndex == 5)
+                defaultView.Value = "coverflow";
         }
 
         private void helpButton_Click(object sender, EventArgs e) {
