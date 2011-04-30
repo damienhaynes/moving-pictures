@@ -139,7 +139,7 @@
 		  <width>77</width>
 		  <height>52</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
-		  <visible>control.isvisible(50)+!facadeview.filmstrip</visible>
+		  <visible>control.isvisible(50)+!facadeview.filmstrip+!facadeview.coverflow</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 		<control>
@@ -151,7 +151,7 @@
 		  <width>77</width>
 		  <height>52</height>
 		  <texture>Logos\AVC.png</texture>
-		  <visible>control.isvisible(50)+!facadeview.filmstrip+string.equals(#MovingPictures.LocalMedia.videocodec,H264)</visible>
+		  <visible>control.isvisible(50)+!facadeview.filmstrip+!facadeview.coverflow+string.equals(#MovingPictures.LocalMedia.videocodec,H264)</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 
@@ -164,7 +164,7 @@
 		  <width>77</width>
 		  <height>52</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
-		  <visible>control.isvisible(50)+!facadeview.filmstrip</visible>
+		  <visible>control.isvisible(50)+!facadeview.filmstrip+!facadeview.coverflow</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 
@@ -177,7 +177,7 @@
 		  <width>77</width>
 		  <height>52</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
-		  <visible>control.isvisible(50)+!facadeview.filmstrip</visible>
+		  <visible>control.isvisible(50)+!facadeview.filmstrip+!facadeview.coverflow</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 
@@ -190,7 +190,7 @@
 		  <width>77</width>
 		  <height>52</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
-		  <visible>control.isvisible(50)+!facadeview.filmstrip</visible>
+		  <visible>control.isvisible(50)+!facadeview.filmstrip+!facadeview.coverflow</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 		<control>
@@ -202,7 +202,7 @@
 		  <width>77</width>
 		  <height>52</height>
 		  <texture>Logos\AAC VERSION 4 LC.png</texture>
-		  <visible>control.isvisible(50)+!facadeview.filmstrip+string.equals(#MovingPictures.LocalMedia.audiocodec,AAC)</visible>
+		  <visible>control.isvisible(50)+!facadeview.filmstrip+!facadeview.coverflow+string.equals(#MovingPictures.LocalMedia.audiocodec,AAC)</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 		<control>
@@ -214,7 +214,7 @@
 		  <width>77</width>
 		  <height>52</height>
 		  <texture>Logos\ac-3 dolby digital.png</texture>
-		  <visible>control.isvisible(50)+!facadeview.filmstrip+string.equals(#MovingPictures.LocalMedia.audiocodec,AC3)</visible>
+		  <visible>control.isvisible(50)+!facadeview.filmstrip+!facadeview.coverflow+string.equals(#MovingPictures.LocalMedia.audiocodec,AC3)</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 		<control>
@@ -226,7 +226,7 @@
 		  <width>77</width>
 		  <height>52</height>
 		  <texture>Logos\MPEG AUDIO VERSION 1 LAYER 3.png</texture>
-		  <visible>control.isvisible(50)+!facadeview.filmstrip+string.equals(#MovingPictures.LocalMedia.audiocodec,MP3)</visible>
+		  <visible>control.isvisible(50)+!facadeview.filmstrip+!facadeview.coverflow+string.equals(#MovingPictures.LocalMedia.audiocodec,MP3)</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 
@@ -239,7 +239,7 @@
 		  <width>77</width>
 		  <height>52</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
-		  <visible>control.isvisible(50)+!facadeview.filmstrip</visible>
+		  <visible>control.isvisible(50)+!facadeview.filmstrip+!facadeview.coverflow</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 
@@ -252,7 +252,7 @@
 		  <width>77</width>
 		  <height>52</height>
 		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
-		  <visible>control.isvisible(50)+!facadeview.filmstrip</visible>
+		  <visible>control.isvisible(50)+!facadeview.filmstrip+!facadeview.coverflow</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 		
