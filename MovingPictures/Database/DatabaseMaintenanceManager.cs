@@ -39,30 +39,30 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 // remove files without an import path
                 if (currFile.ImportPath == null || currFile.ImportPath.ID == null) {
-                    logger.Info("Removing: {0} (no import path)", currFile.FullPath);
-                    currFile.Delete();
+                    logger.Info("Invalid file: {0} (no import path)", currFile.FullPath);
+                    MovingPicturesCore.Importer.MarkMediaForRemoval(currFile);
                     cleaned++;
                     continue;
                 }
 
                 // Remove Orphan Files
                 if (currFile.AttachedMovies.Count == 0 && !currFile.Ignored) {
-                    logger.Info("Removing: {0} (orphan)", currFile.FullPath);
-                    currFile.Delete();
+                    logger.Info("Invalid file: {0} (orphan)", currFile.FullPath);
+                    MovingPicturesCore.Importer.MarkMediaForRemoval(currFile);
                     cleaned++;
                     continue;
                 }
 
                 // Remove entries from the database that have their file removed
                 if (currFile.IsRemoved) {
-                    logger.Info("Removing: {0} (file is removed)", currFile.FullPath);
-                    currFile.Delete();
+                    logger.Info("Invalid file: {0} (does not exist)", currFile.FullPath);
+                    MovingPicturesCore.Importer.MarkMediaForRemoval(currFile);
                     cleaned++;
                 }
 
             }
             
-            logger.Info("Removed {0} file entries.", cleaned.ToString());
+            logger.Info("{0} file entries were marked for removal by the importer.", cleaned.ToString());
             if (MaintenanceProgress != null) MaintenanceProgress("", 100);
         }
         
