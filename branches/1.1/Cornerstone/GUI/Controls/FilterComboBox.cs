@@ -19,10 +19,6 @@ namespace Cornerstone.GUI.Controls {
             set { 
                 _menu = value;
 
-                //if (_menu != null && ((DatabaseTable)_menu).DBManager != null)
-                //    ((DatabaseTable)_menu).DBManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(DBManager_ObjectUpdated);
-
-
                 BuildTreePanel();
             }
         }  IDBMenu _menu;
@@ -66,7 +62,7 @@ namespace Cornerstone.GUI.Controls {
                 BuildTreePanel();
         }
 
-        protected void SelectedNodeChanged(IDBNode node, Type type) {
+        protected void SelectedNodeChanged(IDBNode node) {
             if (stateChanging)
                 return;
 
@@ -125,11 +121,11 @@ namespace Cornerstone.GUI.Controls {
             _treePanel.InitializeComponent();
             _treePanel.DBManager = ((DatabaseTable)_menu).DBManager;
             _treePanel.Menu = _menu;
-            _treePanel.ButtonsVisible = false;
+            _treePanel.IsEditable = false;
             _treePanel.Width = 200;
             _treePanel.Height = 150;
             _treePanel.Visible = false;
-
+            
             stateChanging = false;
         }
 

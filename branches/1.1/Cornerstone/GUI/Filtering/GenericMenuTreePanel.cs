@@ -122,10 +122,13 @@ namespace Cornerstone.GUI.Filtering {
             }
         } TranslationParserDelegate _translationParser = null;
 
-        public bool ButtonsVisible {
-            get { return toolStrip1.Visible; }
-            set { toolStrip1.Visible = value; }
-        }
+        public bool IsEditable {
+            get { return _isEditable; }
+            set {
+                _isEditable = value;
+                toolStrip1.Visible = _isEditable;
+            }
+        } protected bool _isEditable = true;
 
         public IDBMenu Menu {
             get { return _menu; }
@@ -206,10 +209,9 @@ namespace Cornerstone.GUI.Filtering {
                 parent.Children.Add(newNode);
                 parent.Children.Normalize(true);
                 newNode.Parent = parent;
-                
-                parentTreeNode.Nodes.Add(treeNode);
+
+                nodeModified(parent);
                 parentTreeNode.Expand();
-                setVisualProperties(parentTreeNode);
             }
             else {
                 _menu.RootNodes.Add(newNode);
@@ -275,9 +277,9 @@ namespace Cornerstone.GUI.Filtering {
                 parent.Children.Normalize(true);
                 newNode.Parent = parent;
 
-                parentTreeNode.Nodes.Add(treeNode);
                 parentTreeNode.Expand();
                 setVisualProperties(parentTreeNode);
+                updateFilteredItems(parentTreeNode, false);
             }
             else {
                 _menu.RootNodes.Add(newNode);
@@ -310,7 +312,7 @@ namespace Cornerstone.GUI.Filtering {
                 else {
                     ((DBNode<T>)treeView.SelectedNode.Parent.Tag).Children.Remove(selectedNode);
                     setVisualProperties(treeView.SelectedNode.Parent);
-                    treeView.SelectedNode.Parent.Nodes.Remove(treeView.SelectedNode);
+                    updateFilteredItems(treeView.SelectedNode.Parent, false);
                 }
 
 
@@ -401,63 +403,44 @@ namespace Cornerstone.GUI.Filtering {
                 return;
             }
 
-            // if we are populating the node and there is a dummy node in there, get rid of it
-            if (treeNode.Nodes.Count == 1 && treeNode.Nodes[0].Tag == null)
-                treeNode.Nodes.Clear();
+            treeNode.Nodes.Clear();
 
-            // if this is a dynamic node, update the children and remove any that are
-            // no longer needed
-            if (node.DynamicNode) {
-                // using a slightly slower method here to preserve sorted order
-
-                //List<TreeNode> subNodesToRemove = new List<TreeNode>();
-                //foreach (TreeNode currSubNode in treeNode.Nodes)
-                //    if (!node.Children.Contains(currSubNode.Tag as DBNode<T>))
-                //        subNodesToRemove.Add(currSubNode);
-
-                //foreach (TreeNode currSubNode in subNodesToRemove)
-                //    treeNode.Nodes.Remove(currSubNode);
-                treeNode.Nodes.Clear();
-
-                // add any missing children
-                foreach (DBNode<T> currSubNode in node.Children) {
-                    TreeNode child = createTreeNode(currSubNode);
-                    if (!treeNode.Nodes.Contains(child))
-                        treeNode.Nodes.Add(child);
-                }
-            }
-
-            // if this node has children, delegate to sub node processing and exit
+            // if this node has children, add, update those children, then exit
             if (node.Children.Count > 0) {
                 foreach (DBNode<T> currSubNode in node.Children)
-                    if (treeNodeLookup.ContainsKey(currSubNode))
+                    if (treeNodeLookup.ContainsKey(currSubNode)) {
+                        treeNode.Nodes.Add(treeNodeLookup[currSubNode]);
                         updateFilteredItems(treeNodeLookup[currSubNode], false);
+                    }
 
                 updatingNodes.Remove(node);
                 return;
             }
 
-            // get list of existing leaf nodes
-            List<TreeNode> filteredItemsToRemove = new List<TreeNode>();
-            foreach (TreeNode currSubNode in treeNode.Nodes) {
-                if (currSubNode.Tag == null || currSubNode.Tag is T)
-                    filteredItemsToRemove.Add(currSubNode);
+            // if this is a dynamic node, add any missing children
+            if (node.DynamicNode) {
+                foreach (DBNode<T> currSubNode in node.Children) {
+                    TreeNode child = createTreeNode(currSubNode);
+                    if (!treeNode.Nodes.Contains(child))
+                        treeNode.Nodes.Add(child);
+                }
+
+                updatingNodes.Remove(node);
+                return;
             }
 
-            // and get rid of them
-            foreach (TreeNode currSubNode in filteredItemsToRemove)
-                treeNode.Nodes.Remove(currSubNode);
-
-            // then readd add all leaf nodes
+            // add all leaf nodes
             node.DBManager = DBManager;
-            if (node.Children.Count == 0 && node.Filter != null) {
+            if (node.Children.Count == 0) {
                 foreach (T currItem in node.GetFilteredItems().OrderBy((item) => item.ToString())) {
                     TreeNode itemNode = new TreeNode(currItem.ToString());
                     itemNode.Tag = currItem;
                     treeNode.Nodes.Add(itemNode);
                     setVisualProperties(itemNode);
-
                 }
+
+                updatingNodes.Remove(node);
+                return;
             }
 
             updatingNodes.Remove(node);
@@ -537,7 +520,7 @@ namespace Cornerstone.GUI.Filtering {
             }
         }
 
-        void nodeModified(IDBNode node, Type type) {
+        void nodeModified(IDBNode node) {
             if (modificationDetails.ContainsKey((DBNode<T>)node))
                 return;
 
@@ -610,6 +593,8 @@ namespace Cornerstone.GUI.Filtering {
         }
 
         private void treeView_ItemDrag(object sender, ItemDragEventArgs e) {
+            if (!_isEditable) return;
+
             TreeNode node = e.Item as TreeNode;
 
             if (node != null && node.Tag is DBNode<T> && !((DBNode<T>)node.Tag).AutoGenerated) {
@@ -638,6 +623,7 @@ namespace Cornerstone.GUI.Filtering {
             if (oldParent != null) {
                 oldParent.Nodes.Remove(movingNode);
                 ((DBNode<T>)oldParent.Tag).Children.Remove((DBNode<T>)movingNode.Tag);
+                updateFilteredItems(oldParent, false);
                 setVisualProperties(oldParent);
             }
             else {
@@ -691,10 +677,6 @@ namespace Cornerstone.GUI.Filtering {
                 targetDbNode.Children.Normalize(true);
                 targetDbNode.Children.CommitNeeded = true;
             }
-
-            // rebuild visual properties and children of the moved node
-            setVisualProperties(movingNode);
-            updateFilteredItems(movingNode, false);          
         }
 
         private void updateMovedNode_Complete() {
@@ -707,18 +689,28 @@ namespace Cornerstone.GUI.Filtering {
             TreeNodeCollection parentCollection;
             if (targetNode.Parent == null)
                 parentCollection = treeView.Nodes;
-            else
+            else 
                 parentCollection = targetNode.Parent.Nodes;
 
             // place the node back in the tree
             try {
-                if (dropPosition == DropPositionEnum.Before)
+                if (dropPosition == DropPositionEnum.Before) {
                     parentCollection.Insert(parentCollection.IndexOf(targetNode), movingNode);
-                else if (dropPosition == DropPositionEnum.After)
-                    parentCollection.Insert(parentCollection.IndexOf(targetNode) + 1, movingNode);
-                else {
-                    targetNode.Nodes.Add(movingNode);
+                    setVisualProperties(targetNode.Parent);
+                    updateFilteredItems(targetNode.Parent, false);
                 }
+                else if (dropPosition == DropPositionEnum.After) {
+                    parentCollection.Insert(parentCollection.IndexOf(targetNode) + 1, movingNode);
+                    setVisualProperties(targetNode.Parent);
+                    updateFilteredItems(targetNode.Parent, false);
+                }
+                else {
+                    updateFilteredItems(targetNode, false);
+                    setVisualProperties(targetNode);
+                    setVisualProperties(movingNode);
+                }
+
+                
             }
             catch (Exception) { }
         }
@@ -744,6 +736,7 @@ namespace Cornerstone.GUI.Filtering {
             // of the current node is not dynamic, then it's okay for a border drop (before or after a node)
             bool borderDropOk = targetNode != null &&   
                                 targetNode != movingNode &&
+                                targetNode.Tag is DBNode<T> &&
                                 !isChild(movingNode, targetNode) &&  
                                 !((DBNode<T>)targetNode.Tag).AutoGenerated;
 
@@ -753,6 +746,7 @@ namespace Cornerstone.GUI.Filtering {
                                targetNode != movingNode &&
                                targetNode != movingNode.Parent &&
                                !isChild(movingNode, targetNode) &&
+                               targetNode.Tag is DBNode<T> &&
                                !((DBNode<T>)targetNode.Tag).DynamicNode &&
                                !((DBNode<T>)targetNode.Tag).AutoGenerated;
 
@@ -917,7 +911,7 @@ namespace Cornerstone.GUI.Filtering {
 
             if (treeView.SelectedNode.Tag is DBNode<T>) {
                 if (SelectedNodeChanged != null)
-                    SelectedNodeChanged((IDBNode)treeView.SelectedNode.Tag, typeof(T));
+                    SelectedNodeChanged((IDBNode)treeView.SelectedNode.Tag);
             }
 
             updateButtonStates();
@@ -962,7 +956,7 @@ namespace Cornerstone.GUI.Filtering {
         private void treeView_BeforeSelect(object sender, TreeViewCancelEventArgs e) {
             if (e.Node.Tag is T) {
                 if (SelectedNodeChanged != null)
-                    SelectedNodeChanged(null, typeof(T));
+                    SelectedNodeChanged(null);
             }
         }
 
@@ -1067,7 +1061,7 @@ namespace Cornerstone.GUI.Filtering {
             set;
         }
 
-        bool ButtonsVisible {
+        bool IsEditable {
             get;
             set;
         }

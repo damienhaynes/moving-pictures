@@ -48,9 +48,9 @@ namespace Cornerstone.GUI.Filtering {
             set { ((IMenuTreePanel)genericMenuTreePanel).TranslationParser = value; }
         }
 
-        public bool ButtonsVisible {
-            get { return ((IMenuTreePanel)genericMenuTreePanel).ButtonsVisible; }
-            set { ((IMenuTreePanel)genericMenuTreePanel).ButtonsVisible = value; }
+        public bool IsEditable {
+            get { return ((IMenuTreePanel)genericMenuTreePanel).IsEditable; }
+            set { ((IMenuTreePanel)genericMenuTreePanel).IsEditable = value; }
         }
         
         [ReadOnly(true)]
@@ -115,7 +115,7 @@ namespace Cornerstone.GUI.Filtering {
             bool buttonsVisible = true;
             TranslationParserDelegate translationParser = null;
             if (genericMenuTreePanel != null) {
-                buttonsVisible = ((IMenuTreePanel)genericMenuTreePanel).ButtonsVisible;
+                buttonsVisible = ((IMenuTreePanel)genericMenuTreePanel).IsEditable;
                 translationParser = ((IMenuTreePanel)genericMenuTreePanel).TranslationParser; 
             }
 
@@ -131,7 +131,7 @@ namespace Cornerstone.GUI.Filtering {
             ((IMenuTreePanel)genericMenuTreePanel).DBManager = DBManager;
             ((IFieldDisplaySettingsOwner)genericMenuTreePanel).FieldDisplaySettings = FieldDisplaySettings;
             ((IMenuTreePanel)genericMenuTreePanel).TranslationParser = translationParser;
-            ((IMenuTreePanel)genericMenuTreePanel).ButtonsVisible = buttonsVisible;
+            ((IMenuTreePanel)genericMenuTreePanel).IsEditable = buttonsVisible;
 
 
             SuspendLayout();
@@ -144,9 +144,9 @@ namespace Cornerstone.GUI.Filtering {
             ResumeLayout(false);
         }
 
-        void MenuTreePanel_SelectedNodeChanged(IDBNode node, Type type) {
+        void MenuTreePanel_SelectedNodeChanged(IDBNode node) {
             if (SelectedNodeChanged != null)
-                SelectedNodeChanged(node, type);
+                SelectedNodeChanged(node);
         }
 
     }
