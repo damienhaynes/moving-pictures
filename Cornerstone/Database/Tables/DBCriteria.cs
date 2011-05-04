@@ -84,7 +84,13 @@ namespace Cornerstone.Database.Tables {
         private bool isIncluded(object value) {
             switch (Operator) {
                 case OperatorEnum.EQUAL:
-                    if (Field.Type == typeof(StringList)) {
+                    if (value == null) {
+                        if (Value == null || string.IsNullOrEmpty(Value.ToString()))
+                            return true;
+
+                        return false;
+                    }
+                    else if (Field.Type == typeof(StringList)) {
                         if (((StringList)value).Contains(Value.ToString()))
                             return true;
                     }
@@ -282,7 +288,9 @@ namespace Cornerstone.Database.Tables {
             }
 
             set {
-                if (Field == null || value.GetType() == Field.Type)
+                if (value == null && (Field == null || Field.IsNullable))
+                    _value = value;
+                else if (Field == null || value.GetType() == Field.Type)
                     _value = value;
                 else if (Field.Type == typeof(StringList))
                     _value = value.ToString();

@@ -128,6 +128,14 @@ namespace Cornerstone.Database {
             get { return propertyInfo.PropertyType; }
         }
 
+        public bool IsNullable {
+            get {
+                if (!Type.IsValueType) return true;
+                if (Nullable.GetUnderlyingType(Type) != null) return true; // Nullable<T>
+                return false;
+            }
+        }
+
         // Returns the default value for the field. Currently always returns in type string.
         public object Default {
             get {
@@ -250,6 +258,9 @@ namespace Cornerstone.Database {
 
         public object ConvertString(DatabaseManager dbManager, string strVal) {
             try {
+                if (string.IsNullOrEmpty(strVal.Trim()) && IsNullable)
+                    return null;
+
                 switch (DBType) {
                     case DBDataType.INTEGER:
                         string tmp = strVal.ToString();

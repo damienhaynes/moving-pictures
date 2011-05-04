@@ -9,7 +9,7 @@ using NLog;
 using System.Collections;
 
 namespace Cornerstone.Database.Tables {
-    public delegate void DBNodeEventHandler(IDBNode node, Type type);
+    public delegate void DBNodeEventHandler(IDBNode node);
 
     [DBTable("node")]
     public class DBNode<T>: DatabaseTable, IDBNode where T: DatabaseTable {
@@ -160,7 +160,7 @@ namespace Cornerstone.Database.Tables {
 
         public void OnModified() {
             if (Modified != null && !updating)
-                Modified(this, typeof(DBNode<T>));
+                Modified(this);
         }
 
         public override void Delete() {
