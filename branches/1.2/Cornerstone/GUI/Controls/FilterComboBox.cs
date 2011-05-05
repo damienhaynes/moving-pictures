@@ -46,7 +46,13 @@ namespace Cornerstone.GUI.Controls {
 
         public new bool DroppedDown {
             get { return _treePanel.Visible; }
-        } 
+        }
+
+        public bool RestrictSelectionToLeafNodes {
+            get { return _restrictSelectionToLeafNodes;  }
+            set { _restrictSelectionToLeafNodes = value; }
+        } protected bool _restrictSelectionToLeafNodes = false;
+        
 
         public FilterComboBox() : base() {
             // build tree panel
@@ -87,10 +93,7 @@ namespace Cornerstone.GUI.Controls {
             if (stateChanging)
                 return;
 
-            if (_treePanel.SelectedNode != null &&
-                !_treePanel.SelectedNode.HasChildren &&
-                _treePanel.SelectedNode.HasFilter) {
-
+            if (_treePanel.SelectedNode != null && (!_restrictSelectionToLeafNodes || !_treePanel.SelectedNode.HasChildren)) {
                 stateChanging = true;
                 SelectedNode = _treePanel.SelectedNode;
                 stateChanging = false;
