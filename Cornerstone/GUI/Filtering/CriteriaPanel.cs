@@ -148,8 +148,9 @@ namespace Cornerstone.GUI.Filtering {
                 valueInputField.TextBox.Text = "";
             }
             else {
-                valueInputField.ComboBox.Text = Criteria.Value.ToString();
-                valueInputField.TextBox.Text = Criteria.Value.ToString();
+                string val = Criteria.Value.ToString();
+                valueInputField.ComboBox.Text = val;
+                valueInputField.TextBox.Text = val;
             }
         }
 

@@ -99,6 +99,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // Files that have recently been removed from the filesystem.
         ObservableCollection<DBLocalMedia> filesDeleted;
         Timer filesDeletedTimer;
+        int fileRemovalGracePeriod;
 
         // Files that were queued during processing
         ObservableCollection<DBLocalMedia> filesQueue;
@@ -149,6 +150,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             filesDeleted.CollectionChanged += new NotifyCollectionChangedEventHandler(onFileRemoved);
             filesQueue = new ObservableCollection<DBLocalMedia>();
             filesQueue.CollectionChanged += new NotifyCollectionChangedEventHandler(onFileQueued);
+
+            // period to wait before removing the files after the last file has been added to the collection.
+            fileRemovalGracePeriod = 5000;
 
             matchLookup = new Dictionary<DBLocalMedia, MovieMatch>();
             allMatches = ArrayList.Synchronized(new ArrayList());
@@ -497,7 +501,25 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 MovieStatusChanged(newMatch, MovieImporterAction.ADDED);
         }
 
+        /// <summary>
+        /// Marks a local media object for removal by the importer.
+        /// This will ensure the object is securely removed from the system.
+        /// </summary>
+        /// <param name="localMedia">local media object.</param>
+        /// <returns>True if the media was added to the removal queue, false if it was queued previously.</returns>
+        public bool MarkMediaForRemoval(DBLocalMedia localMedia)
+        {
+            lock (filesDeleted)
+            {
+                if (!filesDeleted.Contains(localMedia))
+                {
+                    filesDeleted.Add(localMedia);
+                    return true;
+                }
+            }
 
+            return false;
+        }
 
         #endregion
 
@@ -733,8 +755,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     // We have a new file so add it to the filesAdded list
                     newFile.ImportPath = importPath;
                     newFile.UpdateVolumeInformation();
-                    lock (filesAdded.SyncRoot) filesAdded.Add(newFile);
-                    logger.Info("Watcher queued {0} for processing.", newFile.File.Name);
+                    lock (filesAdded.SyncRoot) {
+                        if (!filesAdded.Contains(newFile))
+                        {
+                            filesAdded.Add(newFile);
+                            logger.Info("Watcher queued {0} for processing.", newFile.File.Name);
+                        }
+                    }
                 }
             }
         }
@@ -763,8 +790,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
 
                 // Mark the file for removal
-                lock (filesDeleted) {
-                    filesDeleted.Add(removedFile);
+                if (MarkMediaForRemoval(removedFile))
+                {
                     logger.Info("Watcher flagged {0} for removal from the database.", removedFile.File.Name);
                 }
             }
@@ -833,21 +860,26 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // only take action when a new item is added to the list
             if (e.Action != NotifyCollectionChangedAction.Add)
                 return;
-
-            // period to wait before removing the files after the last file has been added to the collection.
-            int gracePeriod = 5000;
-
+            
             // start/modify the timer   
             if (filesDeletedTimer == null)
-                filesDeletedTimer = new Timer(processRemovedFiles, null, gracePeriod, Timeout.Infinite);
+                filesDeletedTimer = new Timer(processRemovedFiles, null, fileRemovalGracePeriod, Timeout.Infinite);
             else
-                filesDeletedTimer.Change(gracePeriod, Timeout.Infinite);
+                filesDeletedTimer.Change(fileRemovalGracePeriod, Timeout.Infinite);
         }
 
         // processes files that are flagged for removal
         private void processRemovedFiles(object state) {
-            List<DBLocalMedia> deleteFiles = new List<DBLocalMedia>();
+
+            // if there are still files to be scanned postpone the removal
+            if (filesAdded.Count > 0 || filesQueue.Count > 0) 
+            {
+                filesDeletedTimer.Change(fileRemovalGracePeriod, Timeout.Infinite);
+                return;
+            }
             
+            List<DBLocalMedia> deleteFiles = new List<DBLocalMedia>();
+
             // get a list of files marked for removal
             lock (filesDeleted) {
                 deleteFiles = filesDeleted.ToList();
@@ -856,8 +888,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
             // remove the files from the database
             foreach (DBLocalMedia deletedFile in deleteFiles) {
-                // check if the object was not deleted before and is actually removed
-                if (deletedFile.ID != null && deletedFile.IsRemoved) {
+                // check if the object was not deleted before
+                if (deletedFile.ID != null) {
                     // log and removed the file from the database
                     logger.Info("Removing: {0}", deletedFile.File.Name);
                     deletedFile.Delete();
@@ -997,16 +1029,27 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     // process existing media if applicable
                     if (existingMedia != null && existingMedia.Count > 0) {
                         bool moved = false;
-                        foreach (DBLocalMedia oldMedia in existingMedia) {
-                            if (oldMedia.ImportPath.Replaced || oldMedia.IsRemoved) {
-                                logger.Info("File '{0}' was moved/renamed to '{1}'. Updating existing entry.", oldMedia.FullPath, currFile.FullPath);
-                                // update our old media object with the new information
-                                oldMedia.ImportPath = currFile.ImportPath;
-                                oldMedia.File = currFile.File;
-                                oldMedia.UpdateVolumeInformation();
-                                oldMedia.Commit();
-                                moved = true;
-                                break;
+                        lock (filesDeleted)
+                        {
+                            foreach (DBLocalMedia oldMedia in existingMedia)
+                            {
+                                bool queued = filesDeleted.Contains(oldMedia);
+                                if (queued || oldMedia.ImportPath.Replaced || oldMedia.IsRemoved)
+                                {
+                                    // remove the old media object from the removal queue if it was present.
+                                    if (queued) {
+                                        filesDeleted.Remove(oldMedia);
+                                    }
+                                    
+                                    logger.Info("File '{0}' was moved/renamed to '{1}'. Updating existing entry.", oldMedia.FullPath, currFile.FullPath);
+                                    // update our old media object with the new information
+                                    oldMedia.ImportPath = currFile.ImportPath;
+                                    oldMedia.File = currFile.File;
+                                    oldMedia.UpdateVolumeInformation();
+                                    oldMedia.Commit();
+                                    moved = true;
+                                    break;
+                                }
                             }
                         }
                         // if we updated a moved/renamed file we can discard it from the list
