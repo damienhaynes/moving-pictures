@@ -97,7 +97,7 @@ namespace Cornerstone.GUI.Filtering {
             //initControls();
         }
 
-        private void NodeModified(IDBNode node, Type type) {
+        private void NodeModified(IDBNode node) {
             PopulateControls();
         }
 

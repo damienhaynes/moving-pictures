@@ -7,10 +7,13 @@ using Cornerstone.Database.Tables;
 using Cornerstone.GUI.Filtering;
 using System.ComponentModel;
 using Cornerstone.Database;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Cornerstone.GUI.Controls {
     public class FilterComboBox : ComboBox, IMessageFilter {
 
+        Form treePanelForm;
         private bool stateChanging = false;
 
         [ReadOnly(true)]
@@ -18,10 +21,6 @@ namespace Cornerstone.GUI.Controls {
             get { return _menu; }
             set { 
                 _menu = value;
-
-                //if (_menu != null && ((DatabaseTable)_menu).DBManager != null)
-                //    ((DatabaseTable)_menu).DBManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(DBManager_ObjectUpdated);
-
 
                 BuildTreePanel();
             }
@@ -47,11 +46,31 @@ namespace Cornerstone.GUI.Controls {
 
         public new bool DroppedDown {
             get { return _treePanel.Visible; }
-        } 
+        }
+
+        public bool RestrictSelectionToLeafNodes {
+            get { return _restrictSelectionToLeafNodes;  }
+            set { _restrictSelectionToLeafNodes = value; }
+        } protected bool _restrictSelectionToLeafNodes = false;
+        
 
         public FilterComboBox() : base() {
+            // build tree panel
             _treePanel = new MenuTreePanel();
+            _treePanel.Dock = DockStyle.Fill;
+            _treePanel.Font = this.Font;
+            _treePanel.Location = new System.Drawing.Point(0, 0);
             _treePanel.SelectedNodeChanged += new DBNodeEventHandler(SelectedNodeChanged);
+
+            // build form to hold the treepanel
+            treePanelForm = new Form();
+            treePanelForm.Size = new Size(200, 150);
+            treePanelForm.Controls.Add(_treePanel);
+            treePanelForm.FormBorderStyle = FormBorderStyle.None;
+            treePanelForm.ShowInTaskbar = false;
+            treePanelForm.Visible = false;
+
+            treePanelForm.Deactivate += new System.EventHandler(treePanelForm_Deactivate);
 
             DropDownStyle = ComboBoxStyle.DropDownList;
         }
@@ -66,14 +85,15 @@ namespace Cornerstone.GUI.Controls {
                 BuildTreePanel();
         }
 
-        protected void SelectedNodeChanged(IDBNode node, Type type) {
+        private void treePanelForm_Deactivate(object sender, EventArgs e) {
+            HideTreePanel();
+        }
+
+        protected void SelectedNodeChanged(IDBNode node) {
             if (stateChanging)
                 return;
 
-            if (_treePanel.SelectedNode != null &&
-                !_treePanel.SelectedNode.HasChildren &&
-                _treePanel.SelectedNode.HasFilter) {
-
+            if (_treePanel.SelectedNode != null && (!_restrictSelectionToLeafNodes || !_treePanel.SelectedNode.HasChildren)) {
                 stateChanging = true;
                 SelectedNode = _treePanel.SelectedNode;
                 stateChanging = false;
@@ -125,11 +145,9 @@ namespace Cornerstone.GUI.Controls {
             _treePanel.InitializeComponent();
             _treePanel.DBManager = ((DatabaseTable)_menu).DBManager;
             _treePanel.Menu = _menu;
-            _treePanel.ButtonsVisible = false;
-            _treePanel.Width = 200;
-            _treePanel.Height = 150;
-            _treePanel.Visible = false;
-
+            _treePanel.IsEditable = false;
+            _treePanel.Size = new System.Drawing.Size(200, 150);
+            
             stateChanging = false;
         }
 
@@ -142,15 +160,13 @@ namespace Cornerstone.GUI.Controls {
             _treePanel.RepopulateTree();
             _treePanel.SelectedNode = _selectedNode;
 
-            _treePanel.Anchor = this.Anchor;
-            _treePanel.Font = this.Font;
-            _treePanel.Top = this.Bottom;
-            _treePanel.Left = this.Left;
+            
             _treePanel.Width = Math.Max(_treePanel.Width, this.Width);
 
-            Parent.Controls.Add(_treePanel);
-            _treePanel.Visible = true;
-            _treePanel.BringToFront();
+            Point position = Parent.PointToScreen(new Point(Left, Bottom));
+            treePanelForm.Visible = true;
+            treePanelForm.Top = position.Y;
+            treePanelForm.Left = position.X;
             
             stateChanging = false;
 
@@ -166,12 +182,11 @@ namespace Cornerstone.GUI.Controls {
 
             Application.RemoveMessageFilter(this);
             base.OnDropDownClosed(EventArgs.Empty);
-            _treePanel.Visible = false;
-            Parent.Controls.Remove(_treePanel);
+            treePanelForm.Visible = false;
 
             this.Focus();
 
-            stateChanging = false;
+            stateChanging = false;            
             
         }
     }

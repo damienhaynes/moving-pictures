@@ -433,6 +433,7 @@
             this.defaultFilterCombo.FormattingEnabled = true;
             this.defaultFilterCombo.Location = new System.Drawing.Point(255, 378);
             this.defaultFilterCombo.Name = "defaultFilterCombo";
+            this.defaultFilterCombo.RestrictSelectionToLeafNodes = true;
             this.defaultFilterCombo.Size = new System.Drawing.Size(134, 21);
             this.defaultFilterCombo.TabIndex = 52;
             this.defaultFilterCombo.SelectedIndexChanged += new System.EventHandler(this.defaultFilterCombo_SelectedIndexChanged);

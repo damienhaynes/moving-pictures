@@ -39,7 +39,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             nodeSettingsPanel.TranslationParser = parserDelegate;
         }
 
-        void MenuTree_SelectedNodeChanged(IDBNode node, Type type) {
+        void MenuTree_SelectedNodeChanged(IDBNode node) {
             DBNode<DBMovieInfo> movieNode = (DBNode<DBMovieInfo>)node;
 
             nodeSettingsPanel.Node = movieNode;

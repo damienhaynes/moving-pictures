@@ -25,15 +25,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private DBUser user;
 
-        //[DBFieldAttribute]
-        //public DBMovieInfo Movie {
-        //    get { return movie; }
-        //    set {
-        //        movie = value;
-        //        commitNeeded = true;
-        //    }
-        //} private DBMovieInfo movie;
-
         // Value between 0 and 10
         [DBFieldAttribute(FieldName = "user_rating", Default = null, AllowDynamicFiltering=false)]
         public int? UserRating {
