@@ -144,7 +144,7 @@ multiple view modes.
 		  <width>1280</width>
 		  <height>720</height>
 		  <texture>mainoverlay.png</texture>
-		  <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons|facadeview.coverflow]+[control.isvisible(50)|control.isvisible(51)]</visible>
+		  <visible>[facadeview.list|facadeview.smallicons|facadeview.largeicons]+[control.isvisible(50)|control.isvisible(51)]</visible>
 		</control>
 
 		<control>
@@ -184,6 +184,18 @@ multiple view modes.
 		  <visible>facadeview.filmstrip+control.isvisible(50)</visible>
 		</control>
 
+		<control>
+      <description>background overlay - coverflow</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>1280</width>
+      <height>720</height>
+      <texture>filmstrip_overlay.png</texture>
+      <visible>facadeview.coverflow</visible>
+    </control>
+		
 		<!-- VIEWS -->
 		<import>movingpictures.hiddenmenu.xml</import>
 		<import>movingpictures.listview.xml</import>
