@@ -280,6 +280,7 @@
     <Compile Include="Tools\Translator\LanguageUtility.cs" />
     <Compile Include="Tools\Translator\Translator.cs" />
     <Compile Include="Tools\WebGrabber.cs" />
+    <Compile Include="Tools\WildcardParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\AdvancedSettingsPane.resx">
