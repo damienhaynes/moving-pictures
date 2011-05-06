@@ -130,6 +130,7 @@ namespace Cornerstone.Database {
 
         public bool IsNullable {
             get {
+                if (Type == typeof(StringList)) return false;
                 if (!Type.IsValueType) return true;
                 if (Nullable.GetUnderlyingType(Type) != null) return true; // Nullable<T>
                 return false;
