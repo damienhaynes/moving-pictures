@@ -4,6 +4,7 @@ using System.IO;
 using System.Globalization;
 using System.Threading;
 using Cornerstone.Database.CustomTypes;
+using Cornerstone.Tools;
 using MediaPortal.Dialogs;
 using MediaPortal.GUI.Library;
 using MediaPortal.Player;
@@ -295,6 +296,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // Only play custom intro for we are not resuming
                 if (queuedMovie.UserSettings == null || queuedMovie.UserSettings.Count == 0 || queuedMovie.ActiveUserSettings.ResumeTime < 30) {
                     string custom_intro = MovingPicturesCore.Settings.CustomIntroLocation;
+                    custom_intro = queuedMovie.ParseWildcards(custom_intro);
 
                     // Check if the custom intro is specified by user and exists
                     if (custom_intro.Length > 0 && File.Exists(custom_intro)) {
@@ -308,6 +310,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         // start playback
                         playFile(custom_intro);
                         return true;
+                    }
+                    else if (custom_intro.Length > 0) {
+                        logger.Warn("Unable to find custom intro file: " + custom_intro);
                     }
                 }
             }
