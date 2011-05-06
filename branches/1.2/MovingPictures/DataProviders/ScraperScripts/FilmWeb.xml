@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141516</id>
-    <version major="2" minor="2" point="3"/>
-    <published month="11" day="16" year="2010"/>
+    <version major="2" minor="2" point="4"/>
+    <published month="01" day="22" year="2011"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -35,7 +35,7 @@
 	</set>
 	<set name="rx_title_link">
 	  <![CDATA[
-		searchResultTitle"\shref="(?<pageLink>[^"]+)">(?<Title>.+?)</a>
+		searchResultTitle"?\shref="(?<pageLink>[^"]+)">(?<Title>.+?)</a>
 	  ]]>
 	</set>
 	<set name="rx_alternate_title">
@@ -154,7 +154,7 @@
 		</set>
 		<set name="rx_rating">
 		  <![CDATA[
-			<span\sclass="average">(?<rating>\d*|\d,\d)</span>
+			<span\sclass="?rate"?\stitle="ocena:\s(?<rating>\d*|\d,\d)">
 		  ]]>
 		</set>
 		<set name="rx_genres">
@@ -174,13 +174,13 @@
 		</set>
 		<set name="rx_runtime">
 		  <![CDATA[
-			"time">(\d*)<
+			"?time"?>(\d*)<
 		  ]]>
 		</set>
 		<set name="rx_actor_block">
 		<!-- role\-actors">\n\s*aktor.*[\n\s]*<dd.*>(.*)-->
 		  <![CDATA[
-			role\-actors">\n\s*aktor.+?<dd.+?>(.+?)</dd>
+			role\-actors"?>\n\s*aktor.+?<dd.+?>(.+?)</dd>
 		  ]]>
 		</set>
 		<set name="rx_actor">
@@ -195,7 +195,7 @@
 		</set>
 		<set name="rx_filmwebID">
 		  <![CDATA[
-			<div\sid=\"filmId\"\sstyle=\"display:none;\">([0-9]+)<\/div>
+			<div\sid=\"?filmId\"?\sstyle=\"display:none;\">([0-9]+)<\/div>
 		  ]]>
 		</set>
 		<set name="rx_ad_check">

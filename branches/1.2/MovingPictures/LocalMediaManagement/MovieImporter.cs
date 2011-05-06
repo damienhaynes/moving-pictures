@@ -642,10 +642,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         // if the path is not available
                         if (!importPath.IsAvailable) {
                             if (importPath.IsRemovable) {
-                                // if it's removable just leave a message
-                                logger.Info("Failed watching: '{0}' ({1}) - Path is currently offline.", importPath.FullPath, importPath.GetDriveType().ToString());
                                 if (!rescanQueue.Contains(importPath))
+                                {
+                                    // if it's removable just leave a message once
+                                    logger.Info("Failed watching: '{0}' ({1}) - Path is currently offline.", importPath.FullPath, importPath.GetDriveType().ToString());
                                     rescanQueue.Add(importPath);
+                                }
                             }
                             else {
                                 // if it's not removable do not process it anymore
@@ -942,18 +944,31 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 filesQueue.Clear();
             }
 
-            // put the queued files back into the system
-            lock (filesAdded.SyncRoot) {
-                foreach (DBLocalMedia file in queuedFiles)
+            // evaluate the queued files and put the queued files back into the system
+            foreach (DBLocalMedia file in queuedFiles)
+            {
+                // only put the file back into the system if it still exists
+                if (File.Exists(file.FullPath))
                 {
-                    // only put the file back into the system if it still exists
-                    if (File.Exists(file.FullPath))
+                    if (file.File.IsLocked())
+                    {
+                        // if the file is locked we are putting it back into the files queue
+                        lock (filesQueue)
+                        {
+                            filesQueue.Add(file);
+                        }
+
+                        // continue with the next file
+                        continue;
+                    }
+
+                    // re-enter the file into the importer
+                    lock (filesAdded.SyncRoot)
                     {
                         filesAdded.Add(file);
                     }
                 }
             }
-
         }
 
         // Grabs the files from the DBImportPath and add them to the queue for use
