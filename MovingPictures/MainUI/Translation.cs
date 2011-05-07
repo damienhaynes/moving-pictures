@@ -150,6 +150,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Actors = "Actors";
         public static string AllMovies = "All Movies";
 
+        // B
+        public static string BadCategory = "An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!";
+        public static string BadMovie = "An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!";
+        public static string BadParam = "An external plugin or skin passed\nMoving Pictures an invalid paramater!";
+
+
         // C
         public static string Cancel = "Cancel";
         public static string CannotDeleteOffline = "Not able to delete {0}\n because the file is offline";
