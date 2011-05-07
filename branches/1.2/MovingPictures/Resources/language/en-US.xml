@@ -7,6 +7,10 @@
   <string Field="Actor">Actor</string>
   <string Field="Actors">Actors</string>
   <string Field="AllMovies">All Movies</string>
+  <!-- B -->
+  <string Field="BadCategory">An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!</string>
+  <string Field="BadMovie">An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!</string>
+  <string Field="BadParam">An external plugin or skin passed\nMoving Pictures an invalid paramater!</string>
   <!-- C -->
   <string Field="Cancel">Cancel</string>
   <string Field="CannotDeleteOffline">Not able to delete {0}\n because the file is offline</string>
@@ -18,6 +22,7 @@
   <string Field="CheckForMissingArtwork">Check for Missing Artwork Online</string>
   <string Field="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>
   <string Field="ContinueToNextPartHeader">Continue to next part?</string>
+  <string Field="CoverFlowView">Coverflow View</string>
   <string Field="CycleCoverArt">Cycle Cover-Art</string>
   <string Field="CycleView">Cycle View</string>
   <!-- D -->
