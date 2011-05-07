@@ -2,7 +2,7 @@
   <details>
     <!-- These details are for display purposes only. -->
     <name>mymovies.it</name>
-    <author>LRFalk01</author>
+    <author>Robyf & LRFalk01</author>
     <description>Scraper to pull movie information/cover art from MyMovies.it</description>
 
     <!-- 
@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="1" minor="0" point="7"/>
-    <published month="05" day="26" year="2010"/>
+    <version major="1" minor="0" point="9"/>
+    <published month="04" day="30" year="2011"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -150,12 +150,12 @@
 
       <set name="it_summary">
         <![CDATA[
-     <div\sid="recensione">.*<div\sstyle="text-align:right;">
+      <img style="float:left;\sborder:solid\s1px\sgray;\spadding:3px;\smargin:5px;".*<div\sstyle="text-align:right;">
       ]]>
       </set>
       <set name="score">
         <![CDATA[
-      0px 11px 7px 11px">(?<rating>[^s]+)<
+      valutazione\smedia:\s+(?<rating>[^s]+)stelle
       ]]>
       </set>
       <set name="rx_people">
@@ -171,8 +171,8 @@
 
       <retrieve name="details_page" url="http://www.mymovies.it/dizionario/recensione.asp?id=${movie.site_id}"/>
 
-      <!-- Actors -->
       <retrieve name="people_page" url="http://www.mymovies.it/v7/ajax/cast_veloce.asp?amp;div=cast&amp;idfilm=${movie.site_id}"/>
+      <!-- Actors -->
       <parse name='actors' input='${people_page}' regex='${rx_people}'/>
       <if test='${actors[0][0]}!='>
         <set name='movie.actors' value=''/>
@@ -210,8 +210,7 @@
 
       <!-- Plot Summary -->
       <parse name='summaryit' input ='${details_page}' regex='${it_summary}'/>
-      <set name="movie.summary" value="${summaryit[0]:striptags}" />
-      <set name="movie.summary" value="${movie.summary:htmldecode}" />
+      <set name="movie.summary" value="${summaryit:striptags}" />
      
 	 			<!-- Get IMDb ID via imdb.it to assist in obtaining fanarts -->
 		<set name="rx_details_page">

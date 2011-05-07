@@ -585,12 +585,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <param name="parameterString">String that should be parsed</param>
         private void ParseParameters() {
+            lastParsedParam = UnparsedLoadParameter;
+            MovieLoadParamater = null;
+            CategoryLoadParamater = null;
+
             // if we cant load params or there is no param passed, quit
-            if (string.IsNullOrEmpty(UnparsedLoadParameter)) {
-                MovieLoadParamater = null;
-                CategoryLoadParamater = null;
-                return;
-            }
+            if (string.IsNullOrEmpty(UnparsedLoadParameter)) return;
 
             try {
                 foreach (String currParam in UnparsedLoadParameter.Split('|')) {
@@ -602,17 +602,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         switch (key) {
                             case "categoryid":
                                 CategoryLoadParamater = MovingPicturesCore.DatabaseManager.Get<DBNode<DBMovieInfo>>(Int32.Parse(value));
+                                if (CategoryLoadParamater == null) ShowMessage("Moving Pictures", Translation.BadCategory);
                                 break;
                             case "categoryname":
                                 CategoryLoadParamater = GetCategoryByName(value);
+                                if (CategoryLoadParamater == null) ShowMessage("Moving Pictures", Translation.BadCategory);
                                 break;
                             case "movieid":
                                 MovieLoadParamater = DBMovieInfo.Get(Int32.Parse(value));
+                                if (MovieLoadParamater == null) ShowMessage("Moving Pictures", Translation.BadMovie);
                                 break;
                         }
                     }
                     catch (FormatException) {
                         logger.Warn("Received invalid parameter: " + currParam);
+                        ShowMessage("Moving Pictures", Translation.BadParam);
                     }
                 }
             }
