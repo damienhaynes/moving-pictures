@@ -9,19 +9,24 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
         public event FilterUpdatedDelegate<DBMovieInfo> Updated;
 
         public bool Active {
-            get { return active; }
+            get { return _active; }
             set {
-                if (active != value) {
-                    active = value;
+                if (_active != value) {
+                    _active = value;
                     
                     if (Updated != null)
                         Updated(this);
                 }
             }
         }
-        private bool active;
+        private bool _active;
 
         public HashSet<DBMovieInfo> Filter(ICollection<DBMovieInfo> input) {
+            return Filter(input, false);
+        }
+
+        public HashSet<DBMovieInfo> Filter(ICollection<DBMovieInfo> input, bool forceActive) {
+            bool active = Active || forceActive;
             HashSet<DBMovieInfo> results = new HashSet<DBMovieInfo>();
 
             // if we are not active, just return the inputs.
