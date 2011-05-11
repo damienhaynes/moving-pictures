@@ -1,4 +1,4 @@
-Moving Pictures 1.2.1
+Moving Pictures 1.2.2
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -23,6 +23,23 @@ Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 
 Change Log
+================================================================================
+1.2.2
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #919:     Add ability for external plugins to use the Parental Controls 
+                filter. Could allow plugins like FanartHandler to display only
+                kid friendly backdrops on the home screen. No external plugins
+                utilize this yet.
+
+Issue #1008:    Fixed bug causing blank screen when the default category is 
+                CoverFlow but the skin does not support it.
+                
+Issue #1001:    Made various changes to the category drop down box for integration
+Issue #1002:    into external plugins. This is currently utilized by StreamedMP to
+Issue #1004:    launch Moving Pictures directly to a chosen category.
+                
 ================================================================================
 1.1.4
 --------------------------------------------------------------------------------
