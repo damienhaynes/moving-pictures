@@ -166,14 +166,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             pathLookup = new Dictionary<FileSystemWatcher, DBImportPath>();
 
             rescanInterval = MovingPicturesCore.Settings.RescanNetworkPathsInterval * 60000;
-            if (rescanInterval > 0)
-            {
-                rescanTimer = new Timer(rescanNetworkPaths, null, -1, rescanInterval);
-            }
-            else if (rescanTimer != null)
-            {
+            if (rescanInterval > 0) 
+                rescanTimer = new Timer(RescanNetworkPaths, null, -1, rescanInterval);
+            else if (rescanTimer != null) 
                 rescanTimer.Change(-1, rescanInterval);
-            }
         }
 
         ~MovieImporter() {
@@ -224,8 +220,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     return;
 
                 // disable the rescan timer if enabled
-                if (rescanInterval > 0)
-                {
+                if (rescanInterval > 0) {
                     rescanTimer.Change(-1, rescanInterval);
                 }
 
@@ -600,11 +595,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             MovingPicturesCore.ProcessManager.StartProcess(new FileSyncProcess());
                             
                             // Start the rescan timer if enabled
-                            if (rescanInterval > 0)
-                            {
+                            if (rescanInterval > 0) {
                                 rescanTimer.Change(rescanInterval, rescanInterval);
                                 logger.Info("Rescan network paths is enabled.");
                             }
+
                             initialScan = false;
                         }
 
@@ -1002,13 +997,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         /// Rescans all network paths
         /// </summary>
         /// <param name="state"></param>
-        private void rescanNetworkPaths(object state) {
-            logger.Debug("Initiating rescan of network paths.");
+        private void RescanNetworkPaths(object state) {
+            logger.Info("Initiating rescan of network based import paths.");
             List<DBImportPath> paths = DBImportPath.GetAllUserDefined();
-            foreach (DBImportPath currPath in paths)
-            {
-                if (currPath.Active && currPath.GetDriveType() == DriveType.Network)
-                {
+            foreach (DBImportPath currPath in paths) {
+                if (currPath.Active && currPath.GetDriveType() == DriveType.Network) {
                     ScanPath(currPath);
                 }
             }
