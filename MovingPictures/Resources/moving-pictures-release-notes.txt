@@ -1,4 +1,4 @@
-Moving Pictures 1.1.3
+Moving Pictures 1.1.4
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -24,13 +24,45 @@ Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 Change Log
 ================================================================================
+1.1.4
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #718:     Added advanced setting to force Moving Pictures to perform a full
+                rescan at a fixed interval. Under the Movie Importer section of the
+                Advanced Settings dialog, look for "Automatically Rescan Network 
+                Paths".
+
+Issue #995:     Fixed bug causing a movie on a UNC path to be removed and then 
+                readded when moving it from one location on disk to another.
+                                
+Issue #975:     Fixed bug causing a filter based on no user rating to fail.
+
+Issue #1000:    Corrected some UI updating issues in the Menu Editor.
+
+Issue #984:     Reduce Movie Importer spam in logging when an import path is offline.
+
+--------------------------------------------------------------------------------
+Script and Translation Updates
+--------------------------------------------------------------------------------	                
+Issue #1007:    Added Finnish translation file. Thanks Mikko!
+
+Issue #971:     Updated Italian (mymovies.it) scraper script. Thanks Roby!
+
+Issue #989:     Updated Hebrew (stratim.co.il) scraper script. Thanks Benton!
+
+Issue #1005:    Update Polish (filmweb.pl) scraper script. Thanks Piernik!
+
+Issue #994:     Updated Icelandic (kvikmyndir.is) scraper script. Thanks kajarrig!
+
+================================================================================
 1.1.3
 --------------------------------------------------------------------------------
 Enhancements
 --------------------------------------------------------------------------------
 **********:     Tweaked code to allow skin designers to have varying backdrop 
                 sizes in different views. http://bit.ly/mEyy94
-				
+                                
 **********:     Added ability for a scraper script to use the POST method with 
                 the retrieve node. Still not possible to supply a payload for 
                 the POST. http://bit.ly/jldeyK				
@@ -45,28 +77,28 @@ Issue #858:     Parental Controls will now only reset when the idle timer
 
 Issue #956:     Fixed bug causing GUI to render incorrectly when categories are
                 disabled and the user has selected to "Use Last View" by default 
-				in the GUI Options.
+                                in the GUI Options.
 
 Issue #974:     Fixed bug causing the IMDb preprocessor to fail for made for TV 
                 and strait to video movies. Should improve import of movies using
                 an NFO file for an IMDb hint.
-				
+                                
 Issue #947:     "Now Watching" information will no longer be sent to follw.it 
                 if a movie is on the exclusion list.
-				
+                                
 Issue #949:     If Moving Pictures has trouble connecting to follw.it, this
                 will be notated in the configuration screen along with a link 
                 to retry connecting. 
-				
+                                
 **********:     Fixed bug in follw.it panel causing (harmless) threading 
                 exceptions to sometimes appear in the log.
-				
+                                
 Issue #980:     Fixed bug causing plugin in some cases to incorrectly set the 
                 user's locale on follw.it to english.
 
 Issue #969:     Fixed bug rarely causing some follw.it events to be sent to the 
                 server multiple times.
-				
+                                
 --------------------------------------------------------------------------------
 Script and Translation Updates
 --------------------------------------------------------------------------------				
@@ -144,7 +176,7 @@ Bug Fixes
 
 **********:     Added cancel button to the Moving Pictures Social Synchronization
                 filter and the Parental Controls filter.				
-				
+                                
 **********:     Fixed bug causing movies on a UNC path to be removed from Moving 
                 Pictures when resuming from standby.
 
@@ -187,16 +219,16 @@ Bug Fixes
 --------------------------------------------------------------------------------		
 Issue #796:     Adjusted multipart pattern matching logic to improve multipart 
                 movie detection.
-				
+                                
 Issue #782:     It is now possible to enter the parental control code via the 
                 remote.
-				
+                                
 Issue #819:     Popularity has been added as an available field in the filtering 
                 dialog.
-				
+                                
 Issue #798:     You can now use the up button in the Rating Dialog to increase 
                 star rating.
-				
+                                
 Issue #910:     Updated the Hebrew scraper script (Sratim).
 
 --------------------------------------------------------------------------------
@@ -275,7 +307,7 @@ Data Source Updates
 --------------------------------------------------------------------------------
 Issue #829:     Corrected artwork retrieval logic for impawards.com. Thanks for 
                 the help LRFalk01!
-				
+                                
 Issue #780:     Updated Hebrew scraper script. Thanks erezrokah!
 
 Issue #807:     Updated Filmaffinity scraper script. Thanks LRFalk01!
@@ -290,7 +322,7 @@ Issue #809:     Added Icelandic scraper script for kvikmyndir.is. Thanks kjarrig
 
 Issue #837:     Added Korean movie scraper script for movie.daum.net. Thanks
                 seungjong.lee!
-				
+                                
 Issue #772:     Updated XBMC scraper script to support language & writers. Thanks
                 Rochess!
 
@@ -299,24 +331,24 @@ Translation Updates
 --------------------------------------------------------------------------------			
 Issue #841:     Corrected Blue3 Skin files to work properly with Turkish Regional 
                 settings. Thanks damienh!
-				
+                                
 Issue #845:     Updated Danish translation, thanks Steffansp!
 
 Issue #839:     Updated Italian translation, thanks Chemelli!
-				
+                                
 --------------------------------------------------------------------------------
 Bug Fixes
 --------------------------------------------------------------------------------			
 Issue #793:     When two good matches are found from two seperate data sources, 
                 if all other criteria are equal the match from the higher
-				priority scraper script will always be chosen.
-				
+                                priority scraper script will always be chosen.
+                                
 Issue #828:     The default user agent for web requests can now be modified under
                 Advanced Settings. Thanks for the help LRFalk01!
-				
+                                
 Issue #851:     Scraper scripts can now manually create cookies for web requests.
                 Cookies will now also be automatically preserved between web
-				requests.
+                                requests.
 
 ================================================================================
 1.0.4
@@ -330,14 +362,14 @@ Bug Fixes
 --------------------------------------------------------------------------------
 Issue #699:     Playback of certain Bluray disks will no longer result in a 
                 "Media Not Available" message, even though the disk is actually
-				available.
-				
+                                available.
+                                
 Issue #735:     Scraper script configuration will now default to an English setup
                 with new installs if the user chooses manual data source management.
-				
+                                
 Issue #773:     Dolby TrueHD and DTS-HD Logos codecs will now be properly detected
                 by mediainfo.				
-				
+                                
 Issue #758:     Fixed minor layout issues in small thumbnail view for Blue3 skin.
 
 Issue #760:     Updated Filmtipset.se scraper script.
