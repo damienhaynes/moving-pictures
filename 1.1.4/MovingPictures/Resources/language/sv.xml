@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Moving Pictures translation file -->
+<!-- Svenska (se) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<!-- Updated 20110405 -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">Skådespelare</string>
+  <string Field="Actors">Skådespelare</string>
+  <string Field="AllMovies">Alla filmer</string>
+  <!-- C -->
+  <string Field="Cancel">Avbryt</string>
+  <string Field="CannotDeleteOffline">Kan ej ta bort, {0}\n filen är offline</string>
+  <string Field="CannotDeleteReadOnly">Kan ej ta bort en "read-only"-fil.\nVill du att MP ignorerar filmen?</string>
+  <string Field="CategoryEmptyDescription">Det finns för närvarande inga\nfilmer i den här kategorin.</string>
+  <string Field="CategoryEmptyHeader">Kategorin är tom</string>
+  <string Field="Certification">Åldersgräns</string>
+  <string Field="ChangeView">Ändra vy</string>
+  <string Field="CheckForMissingArtwork">Hitta omslag på internet</string>
+  <string Field="ContinueToNextPartBody">Vill du fortsätta med del {0}?</string>
+  <string Field="ContinueToNextPartHeader">Fortsätt till nästa del?</string>
+  <string Field="CycleCoverArt">Nästa omslag</string>
+  <string Field="CycleView">Nästa Vy</string>
+  <!-- D -->
+  <string Field="DateAdded">Datum tillagd</string>
+  <string Field="DateDay">dag</string>
+  <string Field="DateDays">dagar</string>
+  <string Field="DateMonth">månad</string>
+  <string Field="DateMonths">månader</string>
+  <string Field="DatePartAgo">{0} {1} sedan</string>
+  <string Field="DatePartWithinDays">senaste {0} dagarna</string>
+  <string Field="DatePartWithinMonths">senaste {0} månaderna</string>
+  <string Field="DatePartWithinWeeks">senaste {0} veckorna</string>
+  <string Field="DatePartWithinYears">senaste {0} åren</string>
+  <string Field="DateWeek">vecka</string>
+  <string Field="DateWeeks">veckor</string>
+  <string Field="DateYear">år</string>
+  <string Field="DateYears">år</string>
+  <string Field="DecadeShort">{0}0-talet</string>
+  <string Field="DeleteFailed">Kunde ej ta bort</string>
+  <string Field="DeleteMovie">Ta bort film</string>
+  <string Field="Director">Regissör</string>
+  <string Field="Directors">Regissörer</string>
+  <string Field="DownAbbreviation">(ner)</string>
+  <string Field="DoYouWantToDelete">Vill du ta bort\n{0}\nfilen permanent?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Tidigare i år</string>
+  <string Field="Error">Fel</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">Fel vid "mount" av DVD Image</string>
+  <string Field="FilePath">Sökväg</string>
+  <string Field="FilmstripView">Filmstrip Vy</string>
+  <string Field="FilterBy">Sortera efter</string>
+  <string Field="Friday">Fredag</string>
+  <string Field="Future">Framtid</string>
+  <!-- G -->
+  <string Field="Genre">Genre</string>
+  <string Field="Genres">Genres</string>
+  <!-- I -->
+  <string Field="InvalidPin">Fel PIN-kod!</string>
+  <string Field="InvalidVideoDiscFormat">Fel på image-fil eller\ninställningarna i Daemon Tools.</string>
+  <!-- L -->
+  <string Field="Language">Språk</string>
+  <string Field="LargeThumbnailView">Stor tumnagel-vy</string>
+  <string Field="LastMonth">Senaste månaden</string>
+  <string Field="LastWeek">Senaste veckan</string>
+  <string Field="LastYear">Senaste åretLast Year</string>
+  <string Field="ListView">Lista-vy</string>
+  <string Field="LockRestrictedMovies">Lås skyddade filmer</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Markera som ej sedd</string>
+  <string Field="MarkAsWatched">Markera som sedd</string>
+  <string Field="MediaIsMissing">The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...</string>
+  <string Field="MediaNotAvailableBody">The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}</string>
+  <string Field="MediaNotAvailableHeader">Media Not Available</string>
+  <string Field="MissingExternalPlayerExe">Startfilen för programmet saknas.\nKontrollera sökvägen för exe-filen.</string>
+  <string Field="Monday">Måndag</string>
+  <string Field="Movie">Film</string>
+  <string Field="MovieDetails">Filmdetaljer</string>
+  <string Field="MovieOptions">Filmval</string>
+  <string Field="Movies">Filmer</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">Du har inte valt några\nmappar där du har filmer.\nGå till konfigurations-\nverktyget och gör detta!</string>
+  <string Field="NoImportPathsHeading">Inga sökmappar!</string>
+  <!-- O -->
+  <string Field="Older">Äldre</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Föräldraskydd är på.</string>
+  <string Field="PinCodeHeader">Låser upp skyddat innehåll</string>
+  <string Field="PinCodePrompt">Ange PIN-kod:</string>
+  <string Field="PlaybackFailed">Playback is not possible because the '{0}'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.</string>
+  <string Field="PlaybackFailedHeader">Kan ej spela upp</string>
+  <string Field="ProblemLoadingSkinFile">Fel vid laddning av skin-fil.</string>
+  <!-- R -->
+  <string Field="Rate">Betygsätt</string>
+  <string Field="Rated">Betygsatt</string>
+  <string Field="RateFiveStarFive">Mycket bra</string>
+  <string Field="RateFiveStarFour">Bra</string>
+  <string Field="RateFiveStarOne">Usel</string>
+  <string Field="RateFiveStarThree">Godkänd</string>
+  <string Field="RateFiveStarTwo">Dålig</string>
+  <string Field="RateHeading">Betygsätt film</string>
+  <string Field="RecentlyAddedMovies">Senaste filmerna</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abcåä</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mnoö</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">Återuppta från:</string>
+  <string Field="ResumeFromLast">Återuppta från senast?</string>
+  <string Field="Retry">Försök igen</string>
+  <string Field="Runtime">Speltid</string>
+  <string Field="RuntimeHour">{0} timme</string>
+  <string Field="RuntimeHours">{0} timmar</string>
+  <string Field="RuntimeLong">{0} och {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} och {2}</string>
+  <string Field="RuntimeMinute">{0} minut</string>
+  <string Field="RuntimeMinutes">{0} minuter</string>
+  <string Field="RuntimeSecond">{0} sekund</string>
+  <string Field="RuntimeSeconds">{0} sekunder</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}t{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">Lördag</string>
+  <string Field="Score">Betyg</string>
+  <string Field="SelectYourRating">Välj ditt betyg för {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">Visa endast ej sedda filmer</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Visa filmer oavsett om de är sedda eller ej</string>
+  <string Field="SkinDoesNotSupportCategories">Detta skin stödjer ej kategorier.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Detta skin stödjer ej PIN-kod.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Detta skin stödjer ej betygsättning.</string>
+  <string Field="SortBy">Sortera efter</string>
+  <string Field="SortDirection">Sorteringsriktning</string>
+  <string Field="StarRating">Betyg</string>
+  <string Field="Sunday">Söndag</string>
+  <!-- T -->
+  <string Field="ThisMonth">Denna månad</string>
+  <string Field="ThisWeek">Denna vecka</string>
+  <string Field="ThisYear">Detta år</string>
+  <string Field="ThreeMonthsAgo">Tre månader sedan</string>
+  <string Field="ThreeWeeksAgo">Tre veckor sedan</string>
+  <string Field="ThumbnailView">Tumnagel-vy</string>
+  <string Field="Thursday">Torsdag</string>
+  <string Field="Title">Titel</string>
+  <string Field="Today">Idag</string>
+  <string Field="ToggleParentalLock">Föräldralås PÅ/AV</string>
+  <string Field="Tuesday">Tisdag</string>
+  <string Field="TwoMonthsAgo">Två månader sedan</string>
+  <string Field="TwoWeeksAgo">Två veckor sedan</string>
+  <!-- U -->
+  <string Field="Unknown">Okänd</string>
+  <string Field="UnlockRestrictedMovies">Lås upp skyddade filmer</string>
+  <string Field="UnwatchedMovies">Ej sedda filmer</string>
+  <string Field="UpAbbreviation">(upp)</string>
+  <string Field="UpdateDetailsFromOnline">Updatera detaljer</string>
+  <string Field="UpdateMovieDetailsBody">Du kommer uppdatera all information, \näven det du ändrat själv.\nVill du fortsätta?</string>
+  <string Field="UpdateMovieDetailsHeader">Uppdatera filmens information</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">"Virtual drive" inte redo</string>
+  <string Field="VirtualDriveMessage">"Virtual drive" hann inte bli redo.\nFörsök igen!</string>
+  <!-- W -->
+  <string Field="Wednesday">Onsdagy</string>
+  <string Field="Writer">Manus</string>
+  <string Field="Writers">Manus</string>
+  <!-- Y -->
+  <string Field="Year">År</string>
+  <string Field="Yesterday">Igår</string>
+</strings>
