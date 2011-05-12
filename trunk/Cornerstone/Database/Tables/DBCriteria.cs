@@ -52,10 +52,15 @@ namespace Cornerstone.Database.Tables {
         public event FilterUpdatedDelegate<T> Updated;
 
         public HashSet<T> Filter(ICollection<T> input) {
+            return Filter(input, false);
+        }
+
+        public HashSet<T> Filter(ICollection<T> input, bool forceActive) {
+            bool active = forceActive || _active;
             HashSet<T> results = new HashSet<T>();
 
             // if we are not active, just return the inputs.
-            if (!_active) {
+            if (!active) {
                 if (input is HashSet<T>)
                     return (HashSet<T>)input;
 

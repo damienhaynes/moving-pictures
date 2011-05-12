@@ -290,6 +290,22 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _dateImportOption;
 
+        [CornerstoneSetting(
+            Name = "Automatically rescan network paths",
+            Description = "If set to higher than zero, Moving Pictures will automatically rescan network shares at the specified interval (X minutes). This includes shares mounted as a local drive. Setting this option can be useful if the importer fails to pick up changes on network shares. Keep in mind that this will effectively keep the actual hard drives behind the share from spinning down.",
+            Groups = "|Movie Importer|Matching and Importing|",
+            Identifier = "importer_rescan_interval",
+            Default = 0)]
+        public int RescanNetworkPathsInterval
+        {
+            get { return _rescanNetworkPathsInterval; }
+            set
+            {
+                _rescanNetworkPathsInterval = value;
+                OnSettingChanged("importer_rescan_interval");
+            }
+        }
+        private int _rescanNetworkPathsInterval;
 
         #endregion
 

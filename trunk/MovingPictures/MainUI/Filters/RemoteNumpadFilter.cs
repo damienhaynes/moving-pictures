@@ -44,10 +44,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI.Filters {
         }
 
         public HashSet<DBMovieInfo> Filter(ICollection<DBMovieInfo> input) {
+            return Filter(input, false);
+        }
+
+        public HashSet<DBMovieInfo> Filter(ICollection<DBMovieInfo> input, bool forceActive) {
             HashSet<DBMovieInfo> results = new HashSet<DBMovieInfo>(input);
-            
+            bool active = Active || forceActive;
+
             // if we are not active, just return the input.
-            if (!Active)
+            if (!active)
                 return results;
 
             // Filter
