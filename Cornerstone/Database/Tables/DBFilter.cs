@@ -19,21 +19,26 @@ namespace Cornerstone.Database.Tables {
         public event FilterUpdatedDelegate<T> Updated;
 
         public HashSet<T> Filter(ICollection<T> input) {
+            return Filter(input, false);
+        }
+
+        public HashSet<T> Filter(ICollection<T> input, bool forceActive) {
+            bool active = forceActive || _active;
             HashSet<T> results = new HashSet<T>();
 
             // if we are not active, or the filter has no inclusive rules start
             // with everything and remove the blacklist
-            if (!_active || (Criteria.Count == 0 && WhiteList.Count == 0)) {
-                if (!_active && input is HashSet<T>)
+            if (!active || (Criteria.Count == 0 && WhiteList.Count == 0)) {
+                if (!active && input is HashSet<T>)
                     return input as HashSet<T>;
                 
                 foreach (T currItem in input)
                     results.Add(currItem);
 
-                if (!_active) return results;
+                if (!active) return results;
 
                 // remove blacklist items
-                if (_active)
+                if (active)
                     foreach (T currItem in BlackList) {
                         if (BlackList.Contains(currItem))
                             results.Remove(currItem);
@@ -55,7 +60,7 @@ namespace Cornerstone.Database.Tables {
             bool first = true;
             if (CriteriaGrouping == CriteriaGroupingEnum.ALL)
                 foreach (DBCriteria<T> currCriteria in Criteria) {
-                    results = currCriteria.Filter(first ? input : results);
+                    results = currCriteria.Filter(first ? input : results, active);
                     first = false;
                 }
 
@@ -63,7 +68,7 @@ namespace Cornerstone.Database.Tables {
             if (CriteriaGrouping == CriteriaGroupingEnum.ONE) {
                 HashSet<T> okItems = new HashSet<T>();
                 foreach (DBCriteria<T> currCriteria in Criteria) {
-                    HashSet<T> tmp = currCriteria.Filter(input);
+                    HashSet<T> tmp = currCriteria.Filter(input, active);
                     okItems.UnionWith(tmp);
                 }
 
@@ -80,7 +85,7 @@ namespace Cornerstone.Database.Tables {
                     excludeItems.Add(currItem);
 
                 foreach (DBCriteria<T> currCriteria in Criteria)
-                    excludeItems = currCriteria.Filter(excludeItems);
+                    excludeItems = currCriteria.Filter(excludeItems, active);
 
                 foreach(T item in excludeItems)
                     results.Remove(item);   

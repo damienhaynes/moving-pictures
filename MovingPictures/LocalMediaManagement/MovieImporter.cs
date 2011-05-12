@@ -111,7 +111,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         List<DBImportPath> rescanQueue;        
         Dictionary<FileSystemWatcher, DBImportPath> pathLookup;
         int watcherInterval;
-        
+        Timer rescanTimer;
+        int rescanInterval;
+
         bool importerStarted = false;
         bool importerSuspended = false;
 
@@ -162,6 +164,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             watcherInterval = 30;
             fileSystemWatchers = new List<FileSystemWatcher>();
             pathLookup = new Dictionary<FileSystemWatcher, DBImportPath>();
+
+            rescanInterval = MovingPicturesCore.Settings.RescanNetworkPathsInterval * 60000;
+            if (rescanInterval > 0) 
+                rescanTimer = new Timer(RescanNetworkPaths, null, -1, rescanInterval);
+            else if (rescanTimer != null) 
+                rescanTimer.Change(-1, rescanInterval);
         }
 
         ~MovieImporter() {
@@ -209,7 +217,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             lock (syncRoot) {
 
                 if (!importerStarted)
-                    return;        
+                    return;
+
+                // disable the rescan timer if enabled
+                if (rescanInterval > 0) {
+                    rescanTimer.Change(-1, rescanInterval);
+                }
 
                 if (mediaScannerThreads.Count > 0) {
                     logger.Info("Shutting Down Media Scanner Threads...");
@@ -575,9 +588,18 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             fileList.Clear();
                         }
 
-                        // Launch the FileSyncProcess after the initial scan has completed
+                        // Launch processes after the initial scan has completed
                         if (initialScan) {
+
+                            // Launch the FileSyncProcess 
                             MovingPicturesCore.ProcessManager.StartProcess(new FileSyncProcess());
+                            
+                            // Start the rescan timer if enabled
+                            if (rescanInterval > 0) {
+                                rescanTimer.Change(rescanInterval, rescanInterval);
+                                logger.Info("Rescan network paths is enabled.");
+                            }
+
                             initialScan = false;
                         }
 
@@ -970,6 +992,20 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
             }
         }
+
+        /// <summary>
+        /// Rescans all network paths
+        /// </summary>
+        /// <param name="state"></param>
+        private void RescanNetworkPaths(object state) {
+            logger.Info("Initiating rescan of network based import paths.");
+            List<DBImportPath> paths = DBImportPath.GetAllUserDefined();
+            foreach (DBImportPath currPath in paths) {
+                if (currPath.Active && currPath.GetDriveType() == DriveType.Network) {
+                    ScanPath(currPath);
+                }
+            }
+        }       
 
         // Grabs the files from the DBImportPath and add them to the queue for use
         // by the ScanMedia thread.

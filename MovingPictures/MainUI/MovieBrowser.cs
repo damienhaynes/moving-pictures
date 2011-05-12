@@ -120,6 +120,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (value == BrowserViewMode.CATEGORIES && _categoriesFacade == null)
                     return;
 
+                if (!skinSettings.IsViewAvailable(value))
+                    value = GetNextValidView(value);
+
                 // update the state variables
                 if (currentView != value) {
                     previousView = currentView;
@@ -518,7 +521,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (CurrentView == BrowserViewMode.DETAILS || CurrentView == BrowserViewMode.CATEGORIES)
                 return;
 
-            BrowserViewMode newView = CurrentView;
+            previousView = CurrentView;
+            CurrentView = GetNextValidView(CurrentView);
+        }
+
+        private BrowserViewMode GetNextValidView(BrowserViewMode startView) {
+            BrowserViewMode newView = startView;
 
             do {
                 // rotate view until one is available
@@ -529,8 +537,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             } while (!skinSettings.IsViewAvailable(newView));
 
-            previousView = CurrentView;
-            CurrentView = newView;
+            return newView;
         }
 
         /// <summary>
