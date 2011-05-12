@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Threading;
+using System.Globalization;
 
 namespace Cornerstone.ScraperEngine.Nodes {
 
@@ -81,8 +82,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedValue2 = parseString(variables, value2);
 
             try {
-                float val1 = float.Parse(parsedValue1);
-                float val2 = float.Parse(parsedValue2);
+                float val1 = float.Parse(parsedValue1, new CultureInfo("en-US", false));
+                float val2 = float.Parse(parsedValue2, new CultureInfo("en-US", false));
 
                 if (ResultType == ResultTypeEnum.INT)
                     setVariable(variables, parseString(variables, Name), ((int)val1 + val2).ToString());
@@ -112,8 +113,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedValue2 = parseString(variables, value2);
 
             try {
-                float val1 = float.Parse(parsedValue1);
-                float val2 = float.Parse(parsedValue2);
+                float val1 = float.Parse(parsedValue1, new CultureInfo("en-US", false));
+                float val2 = float.Parse(parsedValue2, new CultureInfo("en-US", false));
 
                 if (ResultType == ResultTypeEnum.INT)
                     setVariable(variables, parseString(variables, Name), ((int)val1 - val2).ToString());
@@ -142,8 +143,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedValue2 = parseString(variables, value2);
 
             try {
-                float val1 = float.Parse(parsedValue1);
-                float val2 = float.Parse(parsedValue2);
+                float val1 = float.Parse(parsedValue1, new CultureInfo("en-US", false));
+                float val2 = float.Parse(parsedValue2, new CultureInfo("en-US", false));
 
                 if (ResultType == ResultTypeEnum.INT)
                     setVariable(variables, parseString(variables, Name), ((int)val1 * val2).ToString());
@@ -172,8 +173,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedValue2 = parseString(variables, value2);
 
             try {
-                float val1 = float.Parse(parsedValue1);
-                float val2 = float.Parse(parsedValue2);
+                float val1 = float.Parse(parsedValue1, new CultureInfo("en-US", false));
+                float val2 = float.Parse(parsedValue2, new CultureInfo("en-US", false));
 
                 if (ResultType == ResultTypeEnum.INT)
                     setVariable(variables, parseString(variables, Name), ((int)(val1 / val2)).ToString());
