@@ -6,12 +6,15 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources {
     public enum ImageLoadResults { SUCCESS, SUCCESS_REDUCED_SIZE, FAILED_TOO_SMALL, FAILED_ALREADY_LOADED, FAILED }
     
     public class ImageResource: FileBasedResource {
 
+        protected static Logger logger = LogManager.GetCurrentClassLogger();
+        
         public class ImageSize {
             public int Width;
             public int Height;
@@ -31,11 +34,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
             if (File.Exists(Filename)) {
                 // if we are redownloading, just delete what we have
                 if (redownload) {
-                    try {
-                        File.Delete(Filename);
-                        File.Delete(ThumbFilename);
-                    }
-                    catch (Exception) { }
+                    DeleteFile(Filename);
+                    DeleteFile(ThumbFilename);
                 }
                 // otherwise return an "already loaded" failure
                 else {
@@ -66,7 +66,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                     if (img.Width < minSize.Width || img.Height < minSize.Height) {
                         img.Dispose();
                         img = null;
-                        if (File.Exists(Filename)) File.Delete(Filename);
+                        DeleteFile(Filename);
                         return ImageLoadResults.FAILED_TOO_SMALL;
                     }
                 }
@@ -129,13 +129,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                     newImage = null;
                 }
 
-                // we put the delete action in try/catch block because it could throw another (but possibly related) exception 
-                try {
-                    if (File.Exists(Filename)) File.Delete(Filename);
-                }
-                catch (Exception) {
-                    logger.Error("File '{0}' could not be deleted: {1}", Filename, e.Message);
-                }
+                DeleteFile(Filename);
 
                 return ImageLoadResults.FAILED;
             }
