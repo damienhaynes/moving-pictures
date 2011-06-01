@@ -874,7 +874,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // add the listitem
             facade.Add(listItems[newMovie]);
-            UpdateListColors(newMovie);
+            //UpdateListColors(newMovie);
         }
 
         /// <summary>

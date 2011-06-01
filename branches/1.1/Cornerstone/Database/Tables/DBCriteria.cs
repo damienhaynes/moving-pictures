@@ -90,6 +90,12 @@ namespace Cornerstone.Database.Tables {
 
                         return false;
                     }
+                    else if (Value == null) {
+                        if (value == null || string.IsNullOrEmpty(value.ToString()))
+                            return true;
+
+                        return false;
+                    }
                     else if (Field.Type == typeof(StringList)) {
                         if (((StringList)value).Contains(Value.ToString()))
                             return true;
