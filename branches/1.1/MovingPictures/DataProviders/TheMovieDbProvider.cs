@@ -261,6 +261,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                             }
                         }
                         break;
+                    case "certification":
+                        movie.Certification = value;
+                        break;
                 }
             }
             return movie;
