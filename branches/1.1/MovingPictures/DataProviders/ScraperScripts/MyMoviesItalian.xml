@@ -2,7 +2,7 @@
   <details>
     <!-- These details are for display purposes only. -->
     <name>mymovies.it</name>
-    <author>Robyf & LRFalk01</author>
+    <author>Robyf and LRFalk01</author>
     <description>Scraper to pull movie information/cover art from MyMovies.it</description>
 
     <!-- 
@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="1" minor="0" point="9"/>
-    <published month="04" day="30" year="2011"/>
+    <version major="1" minor="0" point="10"/>
+    <published month="06" day="17" year="2011"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
