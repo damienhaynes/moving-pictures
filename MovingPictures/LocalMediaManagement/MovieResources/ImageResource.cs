@@ -13,8 +13,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
     
     public class ImageResource: FileBasedResource {
 
-        protected static Logger logger = LogManager.GetCurrentClassLogger();
-        
         public class ImageSize {
             public int Width;
             public int Height;

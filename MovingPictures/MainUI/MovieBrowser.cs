@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Collections;
 using MediaPortal.Plugins.MovingPictures.MainUI.Filters;
+using System.Collections;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class MovieBrowser {
@@ -22,6 +23,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private Dictionary<DatabaseTable, GUIListItem> listItems;
         private Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>> availableMovies;
         private Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>> possibleMovies;
+
+        private Queue<DBMovieInfo> availabilityCheckQueue;
 
         private MovingPicturesSkinSettings skinSettings;
         private FilterUpdatedDelegate<DBMovieInfo> filterUpdatedDelegate;
@@ -421,8 +424,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             listItems = new Dictionary<DatabaseTable, GUIListItem>();
             availableMovies = new Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
             possibleMovies = new Dictionary<DBNode<DBMovieInfo>, HashSet<DBMovieInfo>>();
+            availabilityCheckQueue = new Queue<DBMovieInfo>();
 
             filterUpdatedDelegate = new FilterUpdatedDelegate<DBMovieInfo>(onFilterUpdated);
+
+            // setup thread to work in the background to update gui menu items based on their availability
+            Thread availabilityCheckThread = new Thread(new ThreadStart(delegate() {
+                availabilityCheckProcess();
+            }));
+            availabilityCheckThread.IsBackground = true;
+            availabilityCheckThread.Name = "movie avail. checker";
+            availabilityCheckThread.Start();
 
             initSortingDefaults();
         }
@@ -782,6 +794,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // clear and populate the facade
             facade.ClearAll();
+            lock (availabilityCheckQueue) availabilityCheckQueue.Clear();
 
             lock (syncRefresh) {
                 refreshFacade = false;
@@ -843,8 +856,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 
                 // Try to parse the category name and execute  translations if needed
                 currItem.Label = Translation.ParseString(newNode.Name);
-                //currItem.IconImage = newMovie.CoverThumbFullPath.Trim();
-                //currItem.IconImageBig = newMovie.CoverThumbFullPath.Trim();
                 currItem.TVTag = newNode;
                 currItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(onCategoryNodeSelected);
 
@@ -874,7 +885,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // add the listitem
             facade.Add(listItems[newMovie]);
-            //UpdateListColors(newMovie);
+            UpdateListColors(newMovie);
         }
 
         /// <summary>
@@ -901,14 +912,46 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             currItem.IsRemote = false;
             currItem.IsPlayed = false;
 
-            if (!movie.LocalMedia[0].IsAvailable) {
-                // remoteColor
-                currItem.IsRemote = true;
-            }
-            else if (movie.ActiveUserSettings.WatchedCount > 0) {
-                // playedColor
+            if (movie.ActiveUserSettings.WatchedCount > 0) {
                 currItem.IsPlayed = true;
-            }            
+            }
+
+            availabilityCheckQueue.Enqueue(movie);
+        }
+
+        /// <summary>
+        /// Checks if movies are available and updates the menu item highlighting accordingly. Meant to run as a background process.
+        /// </summary>
+        private void availabilityCheckProcess() {
+            while (true) {
+                while (availabilityCheckQueue.Count == 0)
+                    Thread.Sleep(250);
+
+                // grab the first movie to process
+                DBMovieInfo movie = null;
+                lock (availabilityCheckQueue) {
+                    if (availabilityCheckQueue.Count != 0) movie = availabilityCheckQueue.Dequeue();
+                }
+
+                // loop until all queued movies have been processed
+                while (movie != null) {
+                    if (listItems.ContainsKey(movie)) {   // generally not thread safe but we never empty the listItems dictionary
+                        if (!movie.LocalMedia[0].IsAvailable) {
+                            listItems[movie].IsRemote = true;
+                            listItems[movie].IsPlayed = false;
+                        }
+                    }
+
+                    // briefly sleep to yield to other processes
+                    Thread.Sleep(10);
+
+                    // grab next movie to process
+                    lock (availabilityCheckQueue) {
+                        if (availabilityCheckQueue.Count != 0) movie = availabilityCheckQueue.Dequeue();
+                        else movie = null;
+                    }
+                }
+            }
         }
 
         /// <summary>
