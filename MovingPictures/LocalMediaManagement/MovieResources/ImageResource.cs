@@ -6,6 +6,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources {
     public enum ImageLoadResults { SUCCESS, SUCCESS_REDUCED_SIZE, FAILED_TOO_SMALL, FAILED_ALREADY_LOADED, FAILED }
@@ -31,11 +32,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
             if (File.Exists(Filename)) {
                 // if we are redownloading, just delete what we have
                 if (redownload) {
-                    try {
-                        File.Delete(Filename);
-                        File.Delete(ThumbFilename);
-                    }
-                    catch (Exception) { }
+                    DeleteFile(Filename);
+                    DeleteFile(ThumbFilename);
                 }
                 // otherwise return an "already loaded" failure
                 else {
@@ -52,6 +50,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
 
         protected ImageLoadResults VerifyAndResize(ImageSize minSize, ImageSize maxSize) {
             Image img = null;
+            Image newImage = null;
             try {
                 ImageLoadResults rtn = ImageLoadResults.SUCCESS;
 
@@ -65,7 +64,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                     if (img.Width < minSize.Width || img.Height < minSize.Height) {
                         img.Dispose();
                         img = null;
-                        if (File.Exists(Filename)) File.Delete(Filename);
+                        DeleteFile(Filename);
                         return ImageLoadResults.FAILED_TOO_SMALL;
                     }
                 }
@@ -88,7 +87,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                 }
 
                 // resize / rebuild image
-                Image newImage = (Image)new Bitmap(newWidth, newHeight);
+                newImage = (Image)new Bitmap(newWidth, newHeight);
                 Graphics g = Graphics.FromImage((Image)newImage);
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.DrawImage(img, 0, 0, newWidth, newHeight);
@@ -100,7 +99,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                 int quality = MovingPicturesCore.Settings.JpgCompressionQuality;
                 if (quality > 100) quality = 100;
                 if (quality < 0) quality = 0;
-                
+
                 // save image as a jpg
                 ImageCodecInfo jgpEncoder = GetEncoder(ImageFormat.Jpeg);
                 System.Drawing.Imaging.Encoder qualityParamID = System.Drawing.Imaging.Encoder.Quality;
@@ -109,15 +108,32 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                 encoderParams.Param[0] = qualityParam;
                 newImage.Save(Filename, jgpEncoder, encoderParams);
                 newImage.Dispose();
+                newImage = null;
 
                 return rtn;
             }
-            catch (Exception) {
-                if (File.Exists(Filename)) File.Delete(Filename);
+            catch (Exception e) {
+                logger.Error("An error occured while processing '{0}': {1}", Filename, e.Message);
+                
+                // even though we already have this disposing logic in the finally statement we
+                // make sure the objects are disposed before File.Delete is called. 
+                if (img != null) {
+                    img.Dispose();
+                    img = null;
+                }
+
+                if (newImage != null) {
+                    newImage.Dispose();
+                    newImage = null;
+                }
+
+                DeleteFile(Filename);
+
                 return ImageLoadResults.FAILED;
             }
             finally {
                 if (img != null) img.Dispose();
+                if (newImage != null) newImage.Dispose();
             }
         }
 

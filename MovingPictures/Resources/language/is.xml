@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!-- Moving Pictures translation file -->
-<!-- English (US) -->
+<!-- Icelandic (IS) -->
 <!-- Note: English is the fallback for any strings not found in other languages -->
 <strings>
   <!-- A -->
   <string Field="Actor">Leikari</string>
   <string Field="Actors">Leikarar</string>
   <string Field="AllMovies">Allar kvikmyndir</string>
+  <!-- B -->
+  <string Field="BadCategory">Forrit eða útlit reyndi að\nopna MovingPictures flokk sem er\nekki til!</string>
+  <string Field="BadMovie">Forrit eða útlit reyndi að\nopna kvikmynd sem er ekki til í\nMoving Pictures!</string>
+  <string Field="BadParam">Forrit eða útlit sendi MovingPictures\nröng gögn!</string>
   <!-- C -->
   <string Field="Cancel">Hætta við</string>
   <string Field="CannotDeleteOffline">Ekki hægt að eyða {0}\n vegna þess að skráin er ekki tiltæk</string>
   <string Field="CannotDeleteReadOnly">Get ekki eytt skrifvörðum kvikmyndum.\nViltu að Moving Pictures sleppi þessari kvikmynd?</string>
   <string Field="CategoryEmptyDescription">Engar kvikmyndir eru\ní þessum flokki.</string>
   <string Field="CategoryEmptyHeader">Flokkurinn er tómur</string>
-  <string Field="Certification">Aldurstakmörk</string>
+  <string Field="Certification">Aldurstakmark</string>
   <string Field="ChangeView">Breyta röðun</string>
   <string Field="CheckForMissingArtwork">Athuga með kápumyndir á netinu</string>
   <string Field="ContinueToNextPartBody">Viltu halda áfram með kafla {0}?</string>
   <string Field="ContinueToNextPartHeader">halda áfram að næsta kafla?</string>
+  <string Field="CoverFlowView">Kápumyndaflæði</string>
   <string Field="CycleCoverArt">Fletti kápumyndum</string>
-  <string Field="CycleView">Breyta viðmóti</string>
+  <string Field="CycleView">Breyta útliti</string>
   <!-- D -->
   <string Field="DateAdded">Dags bætt við</string>
   <string Field="DateDay">dagur</string>
@@ -38,8 +43,8 @@
   <string Field="DecadeShort">{0}0s</string>
   <string Field="DeleteFailed">Eyðing mistókst</string>
   <string Field="DeleteMovie">Eyða kvikmynd</string>
-  <string Field="Director">Leikstjóri</string>
-  <string Field="Directors">Leikstjórar</string>
+  <string Field="Director">Leikstjórn</string>
+  <string Field="Directors">Leikstjórn</string>
   <string Field="DownAbbreviation">(niður)</string>
   <string Field="DoYouWantToDelete">Viltu eyða endanlega\n{0}\naf harða diskinum?</string>
   <!-- E -->
@@ -67,8 +72,8 @@
   <string Field="ListView">Listi</string>
   <string Field="LockRestrictedMovies">Læsing á bannaðar myndir</string>
   <!-- M -->
-  <string Field="MarkAsUnwatched">Merkja sem óséða</string>
-  <string Field="MarkAsWatched">Merkja sem séða</string>
+  <string Field="MarkAsUnwatched">Merkja óséða</string>
+  <string Field="MarkAsWatched">Merkja séða</string>
   <string Field="MediaIsMissing">Margmiðlunarsnið viðkomandi kvikmyndar sem þú hefur valið er ekki til!\nAfsakið, en eitthvað hefur farið úrskeiðis...</string>
   <string Field="MediaNotAvailableBody">Margmiðlunarsnið viðkomandi kvikmyndar sem þú hefur valið\n er ekki mögulegt. Vinsamlegast setjið í eða tengja disk\nnefndan: {0}</string>
   <string Field="MediaNotAvailableHeader">Margmiðlunarsniðið er ekki mögulegt</string>
@@ -79,7 +84,7 @@
   <string Field="MovieOptions">Valmöguleikar kvikmyndar</string>
   <string Field="Movies">Kvikmyndir</string>
   <!-- N -->
-  <string Field="NoImportPathsBody">Virðist sem að þú hafir ekki\nskilgreint skráarslóð fyrir innflutning. Þú\nættir að loka MediaPortal og\nræsa MediaPortal\nConfiguration \ntil að stilla Moving Pictures.</string>
+  <string Field="NoImportPathsBody">Virðist sem að þú hafir ekki skilgreint\nskráarslóð fyrir innflutning. Þú ættir að loka MediaPortal og\nræsa MediaPortal Configuration \ntil að stilla Moving Pictures.</string>
   <string Field="NoImportPathsHeading">Engin skráarslóð fyrir innflutning!</string>
   <!-- O -->
   <string Field="Older">Eldri</string>
@@ -99,7 +104,7 @@
   <string Field="RateFiveStarThree">Góð</string>
   <string Field="RateFiveStarTwo">Í lagi</string>
   <string Field="RateHeading">Gefa einkunn</string>
-  <string Field="RecentlyAddedMovies">Nýjustu kvikmyndirnar</string>
+  <string Field="RecentlyAddedMovies">Nýlega bætt við</string>
   <string Field="RemoteNumericAlphabet0">
   </string>
   <string Field="RemoteNumericAlphabet1">
@@ -130,8 +135,8 @@
   <string Field="Saturday">laugadagur</string>
   <string Field="Score">Einkunn</string>
   <string Field="SelectYourRating">Veldu einkunn fyrir {0}</string>
-  <string Field="ShowOnlyUnwatchedMovies">Sýna aðeins óséðar kvikmyndir</string>
-  <string Field="ShowWatchedAndUnwatchedMovies">Sýna séðar og óséðar kvikmyndir</string>
+  <string Field="ShowOnlyUnwatchedMovies">Birta aðeins óséðar kvikmyndir</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Birta séðar og óséðar kvikmyndir</string>
   <string Field="SkinDoesNotSupportCategories">Þetta viðmótsútlit styður ekki flokkanir.</string>
   <string Field="SkinDoesNotSupportPinDialog">Þetta viðmótsútlit styður ekki PIN kóda glugga.</string>
   <string Field="SkinDoesNotSupportRatingDialog">Þetta viðmótsútlit styður ekki Einkunnar glugga.</string>
@@ -164,10 +169,11 @@
   <!-- V -->
   <string Field="VirtualDriveHeader">Sýndardrif er ekki tilbúið</string>
   <string Field="VirtualDriveMessage">Sýndardrifið var ekki tilbúið í tíma.\nReynið aftur eða hættið við spilun.</string>
+  <string Field="Votes">atkvæði</string>
   <!-- W -->
   <string Field="Wednesday">miðvikudagur</string>
-  <string Field="Writer">Handritshöfundur</string>
-  <string Field="Writers">Handritshöfunar</string>
+  <string Field="Writer">Handrit</string>
+  <string Field="Writers">Handrit</string>
   <!-- Y -->
   <string Field="Year">Ár</string>
   <string Field="Yesterday">í gær</string>
