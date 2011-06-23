@@ -76,7 +76,7 @@ namespace Cornerstone.MP.Extensions {
 
                 // no use in syncing when we got no items
                 if (self.Count == 0)
-                    return null;                
+                    return null;
 
                 // Check if the current selected item already is the item we want
                 // if so we don't have to do the routine check
@@ -161,17 +161,14 @@ namespace Cornerstone.MP.Extensions {
         /// <param name="newName">The name of the property in 1.2</param>
         /// <param name="oldName">The name of the property in 1.1</param>
         /// <returns>instance PropertyInfo or null if not found</returns>
-        public static PropertyInfo GetPropertyInfo<T>(string newName, string oldName)
-        {
+        public static PropertyInfo GetPropertyInfo<T>(string newName, string oldName) {
             PropertyInfo property = null;
             Type type = typeof(T);
             string key = type.FullName + "|" + newName;
 
-            if (!propertyCache.TryGetValue(key, out property))
-            {
+            if (!propertyCache.TryGetValue(key, out property)) {
                 property = type.GetProperty(newName);
-                if (property == null)
-                {
+                if (property == null) {
                     property = type.GetProperty(oldName);
                 }
 
@@ -181,14 +178,25 @@ namespace Cornerstone.MP.Extensions {
             return property;
         }
 
+
+        public static List<GUIListItem> Items(this GUIFacadeControl self) {
+            if (self.ListLayout() != null) return self.ListLayout().ListItems;
+            if (self.FilmstripLayout() != null) return self.FilmstripLayout().ListItems;
+            if (self.ThumbnailLayout() != null) return self.ThumbnailLayout().ListItems;
+            if (self.AlbumListLayout() != null) return self.AlbumListLayout.ListItems;
+
+            // if we the skin happens to implements nothing but coverflow then we are fucked. no one bothered to implement
+            // an accessor to the items in the coverflow layout. :(
+            return null;
+        }
+
         /// <summary>
         /// Acts the same as the ListLayout / ListView property.
         /// </summary>
         /// <remarks>this extension method was added to allow backwards compatibility with MediaPortal 1.1</remarks>
         /// <param name="self"></param>
         /// <returns>instance of GUIListControl or null</returns>
-        public static GUIListControl ListLayout(this GUIFacadeControl self)
-        {
+        public static GUIListControl ListLayout(this GUIFacadeControl self) {
             PropertyInfo property = GetPropertyInfo<GUIFacadeControl>("ListLayout", "ListView");
             return (GUIListControl)property.GetValue(self, null);
         }
@@ -199,8 +207,7 @@ namespace Cornerstone.MP.Extensions {
         /// <remarks>this extension method was added to allow backwards compatibility with MediaPortal 1.1</remarks>
         /// <param name="self"></param>
         /// <returns>instance of GUIListControl or null</returns>
-        public static GUIFilmstripControl FilmstripLayout(this GUIFacadeControl self)
-        {
+        public static GUIFilmstripControl FilmstripLayout(this GUIFacadeControl self) {
             PropertyInfo property = GetPropertyInfo<GUIFacadeControl>("FilmstripLayout", "FilmstripView");
             return (GUIFilmstripControl)property.GetValue(self, null);
         }
@@ -211,8 +218,7 @@ namespace Cornerstone.MP.Extensions {
         /// <remarks>this extension method was added to allow backwards compatibility with MediaPortal 1.1</remarks>
         /// <param name="self"></param>
         /// <returns>instance of GUIListControl or null</returns>
-        public static GUIThumbnailPanel ThumbnailLayout(this GUIFacadeControl self)
-        {
+        public static GUIThumbnailPanel ThumbnailLayout(this GUIFacadeControl self) {
             PropertyInfo property = GetPropertyInfo<GUIFacadeControl>("ThumbnailLayout", "ThumbnailView");
             return (GUIThumbnailPanel)property.GetValue(self, null);
         }
@@ -223,8 +229,7 @@ namespace Cornerstone.MP.Extensions {
         /// <remarks>this extension method was added to allow backwards compatibility with MediaPortal 1.1</remarks>
         /// <param name="self"></param>
         /// <returns>instance of GUIListControl or null</returns>
-        public static GUIListControl AlbumListLayout(this GUIFacadeControl self)
-        {
+        public static GUIListControl AlbumListLayout(this GUIFacadeControl self) {
             PropertyInfo property = GetPropertyInfo<GUIFacadeControl>("AlbumListLayout", "AlbumListView");
             return (GUIListControl)property.GetValue(self, null);
         }
@@ -235,8 +240,7 @@ namespace Cornerstone.MP.Extensions {
         /// <remarks>this extension method was added to allow backwards compatibility with MediaPortal 1.1</remarks>
         /// <param name="self"></param>
         /// <returns>instance of GUIListControl or null</returns>
-        public static void SetCurrentLayout(this GUIFacadeControl self, string layout) 
-        {
+        public static void SetCurrentLayout(this GUIFacadeControl self, string layout) {
             PropertyInfo property = GetPropertyInfo<GUIFacadeControl>("CurrentLayout", "View");
             property.SetValue(self, Enum.Parse(property.PropertyType, layout), null);
         }

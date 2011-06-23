@@ -805,6 +805,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // sort it using our basic sorter
                 facade.Sort(new GUIListItemMovieComparer(this.CurrentSortField, this.CurrentSortDirection));
 
+                // update list item coloring based on watched / available / etc stats
+                if (facade.Items() != null)
+                    foreach(GUIListItem listItem in facade.Items()) {
+                        UpdateListColors((DBMovieInfo)listItem.TVTag);
+                    }
+                
                 if (MovingPicturesCore.Settings.AllowGrouping && CurrentView == BrowserViewMode.LIST) {
                     GroupHeaders.AddGroupHeaders(this);
                 }
@@ -885,7 +891,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // add the listitem
             facade.Add(listItems[newMovie]);
-            UpdateListColors(newMovie);
         }
 
         /// <summary>
