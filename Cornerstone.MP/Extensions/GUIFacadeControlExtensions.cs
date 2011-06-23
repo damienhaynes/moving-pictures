@@ -181,12 +181,9 @@ namespace Cornerstone.MP.Extensions {
 
         public static List<GUIListItem> Items(this GUIFacadeControl self) {
             if (self.ListLayout() != null) return self.ListLayout().ListItems;
-            if (self.FilmstripLayout() != null) return self.FilmstripLayout().ListItems;
-            if (self.ThumbnailLayout() != null) return self.ThumbnailLayout().ListItems;
-            if (self.AlbumListLayout() != null) return self.AlbumListLayout.ListItems;
+            if (self.AlbumListLayout() != null) return self.AlbumListLayout().ListItems;
 
-            // if we the skin happens to implements nothing but coverflow then we are fucked. no one bothered to implement
-            // an accessor to the items in the coverflow layout. :(
+            // if the skin does not implement the list control we are out of luck :(
             return null;
         }
 
