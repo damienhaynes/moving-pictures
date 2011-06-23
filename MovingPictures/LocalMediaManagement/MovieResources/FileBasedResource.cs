@@ -164,5 +164,21 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
 
             return rtn;
         }
+
+        /// <summary>
+        /// Deletes the specified file. If an exception occurs this is logged.
+        /// </summary>
+        /// <param name="filepath">the file path.</param>
+        protected void DeleteFile(string filepath)
+        {
+            try
+            {
+                File.Delete(filepath);
+            }
+            catch (Exception e)
+            {
+                logger.Error("File '{0}' could not be deleted: {1}", filepath, e.Message);
+            }
+        }
     }
 }

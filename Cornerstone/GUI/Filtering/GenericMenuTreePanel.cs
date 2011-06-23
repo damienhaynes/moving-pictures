@@ -655,7 +655,7 @@ namespace Cornerstone.GUI.Filtering {
                 }
                 else {
                     parentCollection = targetDbNode.Parent.Children;
-                    parentDbNode = targetDbNode;
+                    parentDbNode = targetDbNode.Parent;
                     ((RelationList<DBNode<T>, DBNode<T>>)parentCollection).CommitNeeded = true;
                 }
             }
