@@ -806,10 +806,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 facade.Sort(new GUIListItemMovieComparer(this.CurrentSortField, this.CurrentSortDirection));
 
                 // update list item coloring based on watched / available / etc stats
-                if (facade.Items() != null)
-                    foreach(GUIListItem listItem in facade.Items()) {
-                        UpdateListColors((DBMovieInfo)listItem.TVTag);
+                if (facade.Items() != null) {
+                    List<GUIListItem> items = new List<GUIListItem>(facade.Items());
+                    foreach (GUIListItem currItem in items) {
+                        UpdateListColors((DBMovieInfo)currItem.TVTag);
                     }
+                }
                 
                 if (MovingPicturesCore.Settings.AllowGrouping && CurrentView == BrowserViewMode.LIST) {
                     GroupHeaders.AddGroupHeaders(this);
