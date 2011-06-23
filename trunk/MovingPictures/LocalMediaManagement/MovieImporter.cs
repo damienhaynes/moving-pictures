@@ -1177,6 +1177,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 // check if the currFile is a part of the same movie as the previous
                 // file(s)
                 bool isAdditionalMatch = true;
+                bool isMultiPartFolderMatch = false;
 
                 foreach (DBLocalMedia otherFile in currFileSet) {
 
@@ -1189,6 +1190,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                         if (!currentDir.Parent.FullName.Equals(otherDir.Parent.FullName)) {
                             isAdditionalMatch = false;
                             break;
+                        }
+                        else {
+                            isMultiPartFolderMatch = true;
                         }
                     }
                     else {
@@ -1213,8 +1217,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     }
 
                     // if the multi-part naming convention doesn't match up
-                    // assume they are not a pair
-                    if (!Utility.isFileMultiPart(currFile.File)) {
+                    // and we didnt match based on multipart folder names assume they are not a pair
+                    if (!isMultiPartFolderMatch && !Utility.isFileMultiPart(currFile.File)) {
                         isAdditionalMatch = false;
                         break;
                     }
