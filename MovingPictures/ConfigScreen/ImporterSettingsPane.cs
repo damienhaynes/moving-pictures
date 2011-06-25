@@ -46,6 +46,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             backdropPatternTextBox.Setting = MovingPicturesCore.Settings["local_moviefolder_backdrop_pattern"];
 
             coverCountTextBox.Setting = MovingPicturesCore.Settings["max_covers_per_movie"];
+            
+            autoRescanCheckBox.Setting = MovingPicturesCore.Settings["importer_rescan_enabled"];
+            rescanIntervalTextBox.Setting = MovingPicturesCore.Settings["importer_rescan_interval"];
 
             MovingPicturesCore.Settings.SettingChanged += new Cornerstone.Database.SettingChangedDelegate(Settings_SettingChanged);
         }
@@ -139,6 +142,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 nfoAutoApproveCheckBox.Enabled = false;
             }
 
+            rescanIntervalTextBox.Enabled = autoRescanCheckBox.Checked;            
+
             if (!DesignMode) {
                 coverPatternTextBox.Enabled = coverFromMovieFolderCheckBox.Checked;
                 backdropPatternTextBox.Enabled = backdropFromMovieFolderCheckBox.Checked;
@@ -155,6 +160,14 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void helpButton1_Click(object sender, EventArgs e) {
             ProcessStartInfo processInfo = new ProcessStartInfo(Resources.ImporterSettingsHelpURL);
             Process.Start(processInfo);
+        }
+
+        private void autoRescanCheckBox_CheckedChanged(object sender, EventArgs e) {
+            updateGUI();
+        }
+
+        private void rescanHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            Help.ShowPopup(this, GUISettingsPane.RescanHelpMessage, Cursor.Position);
         }
 
     }

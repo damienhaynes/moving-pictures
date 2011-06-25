@@ -813,6 +813,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
             GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
             GUIListItem movieOptionsItem = new GUIListItem(Translation.MovieOptions + " ...");
+            GUIListItem rescanItem = new GUIListItem(Translation.ScanForNewMovies);
 
             int currID = 1;
 
@@ -841,6 +842,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 dialog.Add(viewItem);
             }
 
+            // add rescan menu item if needed
+            if (MovingPicturesCore.Settings.ShowRescanMenuItem) {
+                rescanItem.ItemId = currID++;
+                dialog.Add(rescanItem);
+            }
+
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             if (dialog.SelectedId == filterItem.ItemId) {
                 showFilterContext();
@@ -856,6 +863,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (dialog.SelectedId == parentalControlsItem.ItemId) {
                 toggleParentalControls();
+            }
+            else if (dialog.SelectedId == rescanItem.ItemId) {
+                MovingPicturesCore.Importer.RestartScanner();
             }
         }
 

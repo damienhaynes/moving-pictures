@@ -281,6 +281,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // S
         public static string Saturday = "Saturday";
+        public static string ScanForNewMovies = "Scan for New Movies";
         public static string Score = "Score";
         public static string SelectYourRating = "Select your rating for {0}";
         public static string ShowOnlyUnwatchedMovies = "Show Only Unwatched Movies";
