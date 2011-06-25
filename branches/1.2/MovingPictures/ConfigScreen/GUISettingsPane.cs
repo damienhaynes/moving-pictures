@@ -19,6 +19,17 @@ using Cornerstone.GUI.Filtering;
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class GUISettingsPane : UserControl {
 
+        public static readonly string RescanHelpMessage =
+            "If your movies are stored on a local drive this setting is uneeded.\n" +
+            "\n" +
+            "Moving Pictures will generally pick up new movies added to your file system\n" +
+            "in real time. However if your movies are stored on a remote computer newly\n" +
+            "added movies are ocassionally missed. To work around this problem you can\n" +
+            "either set the importer to perform a full rescan at a fixed interval (see\n" +
+            "the Importer Settings tab) or you can enable a menu item in the GUI to\n" +
+            "manually trigger a full rescan as needed (see the GUI Settings tab).";
+
+
         private DBMenu<DBMovieInfo> categoriesMenu;
         private DBMenu<DBMovieInfo> filtersMenu;
         
@@ -39,6 +50,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             watchedPercentTextBox.Setting = MovingPicturesCore.Settings["gui_watch_percentage"];
             remoteControlCheckBox.Setting = MovingPicturesCore.Settings["enable_rc_filter"];
             enableDeleteCheckBox.Setting = MovingPicturesCore.Settings["enable_delete_movie"];
+            allowRescanInGuiCheckBox.Setting = MovingPicturesCore.Settings["gui_show_rescan_menuitem"];
             parentalControlsCheckBox.Setting = MovingPicturesCore.Settings["enable_parental_controls"];
             passwordTextBox.Setting = MovingPicturesCore.Settings["parental_controls_password"];
             categoriesCheckBox.Setting = MovingPicturesCore.Settings["enable_categories"];
@@ -282,6 +294,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         private void defaultFilterCheckBox_CheckedChanged(object sender, EventArgs e) {
             defaultFilterCombo.Enabled = defaultFilterCheckBox.Checked;
+        }
+
+        private void rescanHelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            Help.ShowPopup(this, RescanHelpMessage, Cursor.Position);
         }
     }
 }

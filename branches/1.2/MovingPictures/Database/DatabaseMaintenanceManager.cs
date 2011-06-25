@@ -355,12 +355,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         // All other one time upgrades
         public static void PerformGenericUpgradeChecks() {
-            Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+            Version ver = MovingPicturesCore.GetDBVersionNumber();
             logger.Info("Performing Artwork Upgrade Check...");
 
             #region 1.0.2 Upgrade Tasks
 
-            if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.0.2")) {
+            if (ver < new Version("1.0.2")) {
                 // grab file list
                 List<FileInfo> files = new List<FileInfo>();
                 files.AddRange(new DirectoryInfo(MovingPicturesCore.Settings.BackdropFolder).GetFilesRecursive());
@@ -380,6 +380,20 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                         currFile.MoveTo(currFile.Directory.FullName + "\\" + currFile.Name.Replace(".png", ".jpg"));
                 }
 
+            }
+
+            #endregion
+
+            #region 1.1.5 / 1.2.3 Upgrade Tasks
+
+            if (ver < new Version("1.1.5") || (ver >= new Version("1.2.0") && ver < new Version("1.2.3"))) {
+
+                // reset default rescan interval to 90 minutes. previously 0 = dont scan. this will not
+                // enable rescan, just set a sensible default interval
+                if (MovingPicturesCore.Settings.RescanNetworkPathsInterval == 0)
+                    MovingPicturesCore.Settings.RescanNetworkPathsInterval = 90;
+                else 
+                    MovingPicturesCore.Settings.RescanNetworkPaths = true;
             }
 
             #endregion

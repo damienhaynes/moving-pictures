@@ -291,11 +291,28 @@ namespace MediaPortal.Plugins.MovingPictures {
         private string _dateImportOption;
 
         [CornerstoneSetting(
-            Name = "Automatically rescan network paths",
-            Description = "If set to higher than zero, Moving Pictures will automatically rescan network shares at the specified interval (X minutes). This includes shares mounted as a local drive. Setting this option can be useful if the importer fails to pick up changes on network shares. Keep in mind that this will effectively keep the actual hard drives behind the share from spinning down.",
+            Name = "Automatically Rescan Network Paths",
+            Description = "If set to true Moving Pictures will automatically rescan network import paths at the interval specified.",
+            Groups = "|Movie Importer|Matching and Importing|",
+            Identifier = "importer_rescan_enabled",
+            Default = false,
+            Hidden = true)]
+        public bool RescanNetworkPaths {
+            get { return _rescanNetworkPaths; }
+            set {
+                _rescanNetworkPaths = value;
+                OnSettingChanged("importer_rescan_enabled");
+            }
+        }
+        private bool _rescanNetworkPaths;
+
+        [CornerstoneSetting(
+            Name = "Rescan Interval",
+            Description = "If the feature is enabled Moving Pictures will automatically rescan network shares at this interval (specified in minutes). This includes shares mounted as a local drive. Setting this option can be useful if the importer fails to pick up changes on network shares. Keep in mind that this will effectively keep the actual hard drives behind the share from spinning down.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_rescan_interval",
-            Default = 0)]
+            Default = 90,
+            Hidden = true)]
         public int RescanNetworkPathsInterval
         {
             get { return _rescanNetworkPathsInterval; }
@@ -1147,6 +1164,22 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private bool _allowDelete;
+
+        [CornerstoneSetting(
+            Name = "Display Rescan Menu Item in GUI",
+            Description = "If enabled, a menu item in the GUI will be available to trigger a full rescan of all import paths.",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "gui_show_rescan_menuitem",
+            Default = false,
+            Hidden = true)]
+        public bool ShowRescanMenuItem {
+            get { return _showRescanMenuItem; }
+            set {
+                _showRescanMenuItem = value;
+                OnSettingChanged("gui_show_rescan_menuitem");
+            }
+        }
+        private bool _showRescanMenuItem;
 
         [CornerstoneSetting(
             Name = "Auto-Prompt For User Rating",
