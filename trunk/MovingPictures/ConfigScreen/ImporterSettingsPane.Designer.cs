@@ -25,6 +25,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.Windows.Forms.Label label6;
+            System.Windows.Forms.Label label7;
             this.helpButton1 = new System.Windows.Forms.Button();
             this.detailsButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -52,9 +54,34 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.autoRescanCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.rescanIntervalTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
+            this.rescanHelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.autoDataSourcesPanel1 = new MediaPortal.Plugins.MovingPictures.ConfigScreen.AutoDataSourcesPanel();
+            label6 = new System.Windows.Forms.Label();
+            label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.autoApproveTrackBar)).BeginInit();
             this.SuspendLayout();
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            label6.Location = new System.Drawing.Point(4, 314);
+            label6.Name = "label6";
+            label6.Size = new System.Drawing.Size(51, 13);
+            label6.TabIndex = 29;
+            label6.Text = "Rescan:";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new System.Drawing.Point(427, 318);
+            label7.Name = "label7";
+            label7.Size = new System.Drawing.Size(48, 13);
+            label7.TabIndex = 32;
+            label7.Text = "minutes.";
             // 
             // helpButton1
             // 
@@ -72,7 +99,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // detailsButton
             // 
             this.detailsButton.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.detailsButton.Location = new System.Drawing.Point(127, 383);
+            this.detailsButton.Location = new System.Drawing.Point(127, 417);
             this.detailsButton.Name = "detailsButton";
             this.detailsButton.Size = new System.Drawing.Size(157, 23);
             this.detailsButton.TabIndex = 10;
@@ -126,7 +153,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Location = new System.Drawing.Point(120, 374);
+            this.groupBox2.Location = new System.Drawing.Point(120, 408);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(466, 3);
             this.groupBox2.TabIndex = 13;
@@ -158,13 +185,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.nfoAutoApproveCheckBox.AutoSize = true;
             this.nfoAutoApproveCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nfoAutoApproveCheckBox.IgnoreSettingName = false;
+            this.nfoAutoApproveCheckBox.IgnoreSettingName = true;
             this.nfoAutoApproveCheckBox.Location = new System.Drawing.Point(147, 184);
             this.nfoAutoApproveCheckBox.Name = "nfoAutoApproveCheckBox";
             this.nfoAutoApproveCheckBox.Setting = null;
-            this.nfoAutoApproveCheckBox.Size = new System.Drawing.Size(211, 17);
+            this.nfoAutoApproveCheckBox.Size = new System.Drawing.Size(247, 17);
             this.nfoAutoApproveCheckBox.TabIndex = 9;
-            this.nfoAutoApproveCheckBox.Text = "Auto approve based on info file details";
+            this.nfoAutoApproveCheckBox.Text = "Force auto-approval based on info file details.";
             this.nfoAutoApproveCheckBox.UseVisualStyleBackColor = true;
             // 
             // nfoExtTextBox
@@ -180,7 +207,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.nfoScannerCheckBox.AutoSize = true;
             this.nfoScannerCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nfoScannerCheckBox.IgnoreSettingName = false;
+            this.nfoScannerCheckBox.IgnoreSettingName = true;
             this.nfoScannerCheckBox.Location = new System.Drawing.Point(128, 135);
             this.nfoScannerCheckBox.Name = "nfoScannerCheckBox";
             this.nfoScannerCheckBox.Setting = null;
@@ -242,7 +269,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // coverDataSources
             // 
             this.coverDataSources.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.coverDataSources.Location = new System.Drawing.Point(290, 383);
+            this.coverDataSources.Location = new System.Drawing.Point(290, 417);
             this.coverDataSources.Name = "coverDataSources";
             this.coverDataSources.Size = new System.Drawing.Size(131, 23);
             this.coverDataSources.TabIndex = 25;
@@ -263,7 +290,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // backdropSourcesButton
             // 
             this.backdropSourcesButton.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.backdropSourcesButton.Location = new System.Drawing.Point(427, 383);
+            this.backdropSourcesButton.Location = new System.Drawing.Point(427, 417);
             this.backdropSourcesButton.Name = "backdropSourcesButton";
             this.backdropSourcesButton.Size = new System.Drawing.Size(139, 23);
             this.backdropSourcesButton.TabIndex = 24;
@@ -275,7 +302,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.coverFromMovieFolderCheckBox.AutoSize = true;
             this.coverFromMovieFolderCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.coverFromMovieFolderCheckBox.IgnoreSettingName = false;
+            this.coverFromMovieFolderCheckBox.IgnoreSettingName = true;
             this.coverFromMovieFolderCheckBox.Location = new System.Drawing.Point(127, 257);
             this.coverFromMovieFolderCheckBox.Name = "coverFromMovieFolderCheckBox";
             this.coverFromMovieFolderCheckBox.Setting = null;
@@ -298,7 +325,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.backdropFromMovieFolderCheckBox.AutoSize = true;
             this.backdropFromMovieFolderCheckBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.backdropFromMovieFolderCheckBox.IgnoreSettingName = false;
+            this.backdropFromMovieFolderCheckBox.IgnoreSettingName = true;
             this.backdropFromMovieFolderCheckBox.Location = new System.Drawing.Point(127, 283);
             this.backdropFromMovieFolderCheckBox.Name = "backdropFromMovieFolderCheckBox";
             this.backdropFromMovieFolderCheckBox.Setting = null;
@@ -345,7 +372,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox7.Location = new System.Drawing.Point(8, 308);
+            this.groupBox7.Location = new System.Drawing.Point(8, 342);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(578, 3);
             this.groupBox7.TabIndex = 15;
@@ -356,18 +383,61 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(5, 324);
+            this.label5.Location = new System.Drawing.Point(5, 358);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(85, 13);
             this.label5.TabIndex = 27;
             this.label5.Text = "Data Sources:";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox6.Location = new System.Drawing.Point(8, 308);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(578, 3);
+            this.groupBox6.TabIndex = 16;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "groupBox4";
+            // 
+            // autoRescanCheckBox
+            // 
+            this.autoRescanCheckBox.AutoSize = true;
+            this.autoRescanCheckBox.IgnoreSettingName = true;
+            this.autoRescanCheckBox.Location = new System.Drawing.Point(127, 317);
+            this.autoRescanCheckBox.Name = "autoRescanCheckBox";
+            this.autoRescanCheckBox.Setting = null;
+            this.autoRescanCheckBox.Size = new System.Drawing.Size(256, 17);
+            this.autoRescanCheckBox.TabIndex = 30;
+            this.autoRescanCheckBox.Text = "Automatically rescan remote import paths every";
+            this.autoRescanCheckBox.UseVisualStyleBackColor = true;
+            this.autoRescanCheckBox.CheckedChanged += new System.EventHandler(this.autoRescanCheckBox_CheckedChanged);
+            // 
+            // rescanIntervalTextBox
+            // 
+            this.rescanIntervalTextBox.Location = new System.Drawing.Point(389, 315);
+            this.rescanIntervalTextBox.Name = "rescanIntervalTextBox";
+            this.rescanIntervalTextBox.Setting = null;
+            this.rescanIntervalTextBox.Size = new System.Drawing.Size(32, 21);
+            this.rescanIntervalTextBox.TabIndex = 31;
+            // 
+            // rescanHelpLinkLabel
+            // 
+            this.rescanHelpLinkLabel.AutoSize = true;
+            this.rescanHelpLinkLabel.Location = new System.Drawing.Point(477, 318);
+            this.rescanHelpLinkLabel.Name = "rescanHelpLinkLabel";
+            this.rescanHelpLinkLabel.Size = new System.Drawing.Size(79, 13);
+            this.rescanHelpLinkLabel.TabIndex = 33;
+            this.rescanHelpLinkLabel.TabStop = true;
+            this.rescanHelpLinkLabel.Text = "Do I need this?";
+            this.rescanHelpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.rescanHelpLinkLabel_LinkClicked);
             // 
             // autoDataSourcesPanel1
             // 
             this.autoDataSourcesPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.autoDataSourcesPanel1.AutoCommit = true;
-            this.autoDataSourcesPanel1.Location = new System.Drawing.Point(128, 324);
+            this.autoDataSourcesPanel1.Location = new System.Drawing.Point(128, 358);
             this.autoDataSourcesPanel1.Name = "autoDataSourcesPanel1";
             this.autoDataSourcesPanel1.Size = new System.Drawing.Size(458, 44);
             this.autoDataSourcesPanel1.TabIndex = 28;
@@ -376,6 +446,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.rescanHelpLinkLabel);
+            this.Controls.Add(label7);
+            this.Controls.Add(this.rescanIntervalTextBox);
+            this.Controls.Add(this.autoRescanCheckBox);
+            this.Controls.Add(label6);
+            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.autoDataSourcesPanel1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.groupBox7);
@@ -404,9 +480,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.Controls.Add(this.nfoScannerCheckBox);
             this.Controls.Add(this.folderGroupingCheckBox);
             this.Controls.Add(this.preferFolderCheckBox);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(460, 250);
             this.Name = "ImporterSettingsPane";
-            this.Size = new System.Drawing.Size(598, 537);
+            this.Size = new System.Drawing.Size(598, 449);
             this.Load += new System.EventHandler(this.ImporterSettingsPane_Load);
             ((System.ComponentModel.ISupportInitialize)(this.autoApproveTrackBar)).EndInit();
             this.ResumeLayout(false);
@@ -444,5 +521,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private GroupBox groupBox7;
         private Label label5;
         private AutoDataSourcesPanel autoDataSourcesPanel1;
+        private GroupBox groupBox6;
+        private SettingCheckBox autoRescanCheckBox;
+        private SettingsTextBox rescanIntervalTextBox;
+        private LinkLabel rescanHelpLinkLabel;
     }
 }

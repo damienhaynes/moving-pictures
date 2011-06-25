@@ -111,7 +111,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         List<DBImportPath> rescanQueue;        
         Dictionary<FileSystemWatcher, DBImportPath> pathLookup;
         int watcherInterval;
+        
         Timer rescanTimer;
+        bool autoRescanEnabled;
         int rescanInterval;
 
         bool importerStarted = false;
@@ -165,8 +167,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             fileSystemWatchers = new List<FileSystemWatcher>();
             pathLookup = new Dictionary<FileSystemWatcher, DBImportPath>();
 
+            autoRescanEnabled = MovingPicturesCore.Settings.RescanNetworkPaths;
             rescanInterval = MovingPicturesCore.Settings.RescanNetworkPathsInterval * 60000;
-            if (rescanInterval > 0) 
+            if (autoRescanEnabled && rescanInterval > 0) 
                 rescanTimer = new Timer(RescanNetworkPaths, null, -1, rescanInterval);
             else if (rescanTimer != null) 
                 rescanTimer.Change(-1, rescanInterval);
@@ -220,7 +223,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     return;
 
                 // disable the rescan timer if enabled
-                if (rescanInterval > 0) {
+                if (rescanTimer != null) {
                     rescanTimer.Change(-1, rescanInterval);
                 }
 
@@ -595,9 +598,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             MovingPicturesCore.ProcessManager.StartProcess(new FileSyncProcess());
                             
                             // Start the rescan timer if enabled
-                            if (rescanInterval > 0) {
+                            if (autoRescanEnabled && rescanInterval > 0) {
                                 rescanTimer.Change(rescanInterval, rescanInterval);
-                                logger.Info("Rescan network paths is enabled.");
+                                logger.Info("Remote import paths will be rescaned every {0} minutes.", rescanInterval);
                             }
 
                             initialScan = false;
