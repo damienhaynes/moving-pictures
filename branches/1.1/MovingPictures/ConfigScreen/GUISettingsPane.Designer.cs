@@ -66,6 +66,8 @@
             this.remoteControlCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
             this.watchedPercentTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
             this.homeScreenTextBox = new Cornerstone.GUI.Controls.SettingsTextBox();
+            this.allowRescanInGuiCheckBox = new Cornerstone.GUI.Controls.SettingCheckBox();
+            this.rescanHelpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -130,7 +132,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Location = new System.Drawing.Point(9, 153);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(492, 3);
+            this.groupBox3.Size = new System.Drawing.Size(540, 3);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "groupBox4";
@@ -140,7 +142,7 @@
             this.helpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.helpButton.BackgroundImage = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.help;
             this.helpButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.helpButton.Location = new System.Drawing.Point(489, 0);
+            this.helpButton.Location = new System.Drawing.Point(537, 0);
             this.helpButton.Margin = new System.Windows.Forms.Padding(0);
             this.helpButton.Name = "helpButton";
             this.helpButton.Size = new System.Drawing.Size(23, 23);
@@ -189,7 +191,7 @@
             this.panel1.Controls.Add(this.displayDetailsRadioButton);
             this.panel1.Location = new System.Drawing.Point(258, 162);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(243, 49);
+            this.panel1.Size = new System.Drawing.Size(291, 49);
             this.panel1.TabIndex = 20;
             // 
             // panel2
@@ -201,7 +203,7 @@
             this.panel2.Controls.Add(this.displayDvdDetailsRadioButton);
             this.panel2.Location = new System.Drawing.Point(258, 226);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(243, 73);
+            this.panel2.Size = new System.Drawing.Size(291, 73);
             this.panel2.TabIndex = 21;
             // 
             // doNothingRadioButton
@@ -256,7 +258,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Location = new System.Drawing.Point(119, 217);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(380, 3);
+            this.groupBox4.Size = new System.Drawing.Size(428, 3);
             this.groupBox4.TabIndex = 23;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "groupBox4";
@@ -265,9 +267,9 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Location = new System.Drawing.Point(9, 371);
+            this.groupBox1.Location = new System.Drawing.Point(9, 394);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(492, 3);
+            this.groupBox1.Size = new System.Drawing.Size(540, 3);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox4";
@@ -278,7 +280,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Location = new System.Drawing.Point(119, 305);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(380, 3);
+            this.groupBox2.Size = new System.Drawing.Size(428, 3);
             this.groupBox2.TabIndex = 24;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
@@ -305,7 +307,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(3, 381);
+            this.label9.Location = new System.Drawing.Point(3, 404);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(56, 13);
             this.label9.TabIndex = 28;
@@ -314,7 +316,7 @@
             // remoteFilteringHelpLink
             // 
             this.remoteFilteringHelpLink.AutoSize = true;
-            this.remoteFilteringHelpLink.Location = new System.Drawing.Point(314, 449);
+            this.remoteFilteringHelpLink.Location = new System.Drawing.Point(299, 471);
             this.remoteFilteringHelpLink.Name = "remoteFilteringHelpLink";
             this.remoteFilteringHelpLink.Size = new System.Drawing.Size(68, 13);
             this.remoteFilteringHelpLink.TabIndex = 30;
@@ -328,7 +330,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox6.Location = new System.Drawing.Point(119, 339);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(380, 3);
+            this.groupBox6.Size = new System.Drawing.Size(428, 3);
             this.groupBox6.TabIndex = 24;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "groupBox2";
@@ -337,9 +339,9 @@
             // 
             this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox7.Location = new System.Drawing.Point(9, 470);
+            this.groupBox7.Location = new System.Drawing.Point(9, 493);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(492, 3);
+            this.groupBox7.Size = new System.Drawing.Size(540, 3);
             this.groupBox7.TabIndex = 17;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "groupBox4";
@@ -348,7 +350,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(3, 482);
+            this.label12.Location = new System.Drawing.Point(3, 505);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(108, 13);
             this.label12.TabIndex = 41;
@@ -356,7 +358,7 @@
             // 
             // parentalContolsButton
             // 
-            this.parentalContolsButton.Location = new System.Drawing.Point(127, 505);
+            this.parentalContolsButton.Location = new System.Drawing.Point(127, 528);
             this.parentalContolsButton.Name = "parentalContolsButton";
             this.parentalContolsButton.Size = new System.Drawing.Size(144, 23);
             this.parentalContolsButton.TabIndex = 43;
@@ -378,16 +380,16 @@
             // 
             this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox10.Location = new System.Drawing.Point(119, 438);
+            this.groupBox10.Location = new System.Drawing.Point(119, 461);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(380, 3);
+            this.groupBox10.Size = new System.Drawing.Size(428, 3);
             this.groupBox10.TabIndex = 36;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "groupBox10";
             // 
             // filterMenuButton
             // 
-            this.filterMenuButton.Location = new System.Drawing.Point(127, 408);
+            this.filterMenuButton.Location = new System.Drawing.Point(127, 431);
             this.filterMenuButton.Name = "filterMenuButton";
             this.filterMenuButton.Size = new System.Drawing.Size(111, 23);
             this.filterMenuButton.TabIndex = 47;
@@ -401,7 +403,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox9.Location = new System.Drawing.Point(121, 117);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(380, 3);
+            this.groupBox9.Size = new System.Drawing.Size(428, 3);
             this.groupBox9.TabIndex = 24;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "groupBox9";
@@ -421,7 +423,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Location = new System.Drawing.Point(122, 54);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(380, 3);
+            this.groupBox5.Size = new System.Drawing.Size(428, 3);
             this.groupBox5.TabIndex = 25;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "groupBox5";
@@ -430,7 +432,7 @@
             // 
             this.defaultFilterCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.defaultFilterCombo.FormattingEnabled = true;
-            this.defaultFilterCombo.Location = new System.Drawing.Point(255, 378);
+            this.defaultFilterCombo.Location = new System.Drawing.Point(255, 401);
             this.defaultFilterCombo.Name = "defaultFilterCombo";
             this.defaultFilterCombo.Size = new System.Drawing.Size(134, 21);
             this.defaultFilterCombo.TabIndex = 52;
@@ -440,7 +442,7 @@
             // 
             this.defaultFilterCheckBox.AutoSize = true;
             this.defaultFilterCheckBox.IgnoreSettingName = true;
-            this.defaultFilterCheckBox.Location = new System.Drawing.Point(127, 380);
+            this.defaultFilterCheckBox.Location = new System.Drawing.Point(127, 403);
             this.defaultFilterCheckBox.Name = "defaultFilterCheckBox";
             this.defaultFilterCheckBox.Setting = null;
             this.defaultFilterCheckBox.Size = new System.Drawing.Size(122, 17);
@@ -464,7 +466,7 @@
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(431, 480);
+            this.passwordTextBox.Location = new System.Drawing.Point(431, 503);
             this.passwordTextBox.MaxLength = 4;
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.PasswordChar = '●';
@@ -478,7 +480,7 @@
             // 
             this.parentalControlsCheckBox.AutoSize = true;
             this.parentalControlsCheckBox.IgnoreSettingName = true;
-            this.parentalControlsCheckBox.Location = new System.Drawing.Point(127, 482);
+            this.parentalControlsCheckBox.Location = new System.Drawing.Point(127, 505);
             this.parentalControlsCheckBox.Name = "parentalControlsCheckBox";
             this.parentalControlsCheckBox.Setting = null;
             this.parentalControlsCheckBox.Size = new System.Drawing.Size(284, 17);
@@ -494,9 +496,9 @@
             this.enableDeleteCheckBox.Location = new System.Drawing.Point(127, 348);
             this.enableDeleteCheckBox.Name = "enableDeleteCheckBox";
             this.enableDeleteCheckBox.Setting = null;
-            this.enableDeleteCheckBox.Size = new System.Drawing.Size(277, 17);
+            this.enableDeleteCheckBox.Size = new System.Drawing.Size(281, 17);
             this.enableDeleteCheckBox.TabIndex = 40;
-            this.enableDeleteCheckBox.Text = "Allow user to delete files from the GUI context menu";
+            this.enableDeleteCheckBox.Text = "Allow user to delete files from the GUI context menu.";
             this.enableDeleteCheckBox.UseVisualStyleBackColor = true;
             // 
             // sortFieldComboBox
@@ -514,7 +516,7 @@
             // 
             this.remoteControlCheckBox.AutoSize = true;
             this.remoteControlCheckBox.IgnoreSettingName = false;
-            this.remoteControlCheckBox.Location = new System.Drawing.Point(127, 447);
+            this.remoteControlCheckBox.Location = new System.Drawing.Point(127, 470);
             this.remoteControlCheckBox.Name = "remoteControlCheckBox";
             this.remoteControlCheckBox.Setting = null;
             this.remoteControlCheckBox.Size = new System.Drawing.Size(163, 17);
@@ -537,13 +539,38 @@
             this.homeScreenTextBox.Location = new System.Drawing.Point(294, 126);
             this.homeScreenTextBox.Name = "homeScreenTextBox";
             this.homeScreenTextBox.Setting = null;
-            this.homeScreenTextBox.Size = new System.Drawing.Size(173, 21);
+            this.homeScreenTextBox.Size = new System.Drawing.Size(221, 21);
             this.homeScreenTextBox.TabIndex = 5;
+            // 
+            // allowRescanInGuiCheckBox
+            // 
+            this.allowRescanInGuiCheckBox.AutoSize = true;
+            this.allowRescanInGuiCheckBox.IgnoreSettingName = true;
+            this.allowRescanInGuiCheckBox.Location = new System.Drawing.Point(127, 371);
+            this.allowRescanInGuiCheckBox.Name = "allowRescanInGuiCheckBox";
+            this.allowRescanInGuiCheckBox.Setting = null;
+            this.allowRescanInGuiCheckBox.Size = new System.Drawing.Size(322, 17);
+            this.allowRescanInGuiCheckBox.TabIndex = 53;
+            this.allowRescanInGuiCheckBox.Text = "Allow user to trigger a full rescan from the GUI context menu.";
+            this.allowRescanInGuiCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // rescanHelpLinkLabel
+            // 
+            this.rescanHelpLinkLabel.AutoSize = true;
+            this.rescanHelpLinkLabel.Location = new System.Drawing.Point(458, 372);
+            this.rescanHelpLinkLabel.Name = "rescanHelpLinkLabel";
+            this.rescanHelpLinkLabel.Size = new System.Drawing.Size(79, 13);
+            this.rescanHelpLinkLabel.TabIndex = 54;
+            this.rescanHelpLinkLabel.TabStop = true;
+            this.rescanHelpLinkLabel.Text = "Do I need this?";
+            this.rescanHelpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.rescanHelpLinkLabel_LinkClicked);
             // 
             // GUISettingsPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.rescanHelpLinkLabel);
+            this.Controls.Add(this.allowRescanInGuiCheckBox);
             this.Controls.Add(this.defaultFilterCombo);
             this.Controls.Add(this.defaultFilterCheckBox);
             this.Controls.Add(this.categoriesCheckBox);
@@ -585,7 +612,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(460, 100);
             this.Name = "GUISettingsPane";
-            this.Size = new System.Drawing.Size(512, 533);
+            this.Size = new System.Drawing.Size(560, 556);
             this.Load += new System.EventHandler(this.GUISettingsPane_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -641,5 +668,7 @@
         private Cornerstone.GUI.Controls.SettingCheckBox categoriesCheckBox;
         private Cornerstone.GUI.Controls.SettingCheckBox defaultFilterCheckBox;
         private Cornerstone.GUI.Controls.FilterComboBox defaultFilterCombo;
+        private Cornerstone.GUI.Controls.SettingCheckBox allowRescanInGuiCheckBox;
+        private System.Windows.Forms.LinkLabel rescanHelpLinkLabel;
     }
 }

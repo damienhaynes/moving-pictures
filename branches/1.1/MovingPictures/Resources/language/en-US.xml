@@ -128,6 +128,7 @@
   <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
   <!-- S -->
   <string Field="Saturday">Saturday</string>
+  <string Field="ScanForNewMovies">Scan for New Movies</string>
   <string Field="Score">Score</string>
   <string Field="SelectYourRating">Select your rating for {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Show Only Unwatched Movies</string>
