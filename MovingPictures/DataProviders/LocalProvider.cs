@@ -76,9 +76,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             bool found = false;
             
-            found &= getBackdropsFromBackdropFolder(movie);
-            found &= getBackdropsFromMovieFolder(movie);
-            found &= getOldBackdrops(movie);
+            found |= getBackdropsFromBackdropFolder(movie);
+            found |= getBackdropsFromMovieFolder(movie);
+            found |= getOldBackdrops(movie);
 
             return found;
         }
@@ -120,7 +120,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 foreach (string currFile in movieFolderFilenames) {
                     FileInfo newBackdrop = new FileInfo(Utility.GetMovieBaseDirectory(movie.LocalMedia[0].File.Directory).FullName + "\\" + currFile);
                     if (newBackdrop.Exists)
-                        found &= movie.AddBackdropFromFile(newBackdrop.FullName);
+                        found |= movie.AddBackdropFromFile(newBackdrop.FullName);
                 }
             }
 
@@ -140,7 +140,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             foreach (FileInfo currFile in backdropFolder.GetFiles()) {
                 if (oldBackdropRegex.IsMatch(currFile.Name)) {
-                    found &= movie.AddBackdropFromFile(currFile.FullName);
+                    found |= movie.AddBackdropFromFile(currFile.FullName);
                 }
             }
 
@@ -151,9 +151,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             try {
                 bool found = false;
 
-                found &= getCoversFromCoverFolder(movie);
-                found &= getCoversFromMovieFolder(movie);
-                found &= getOldCovers(movie);
+                found |= getCoversFromCoverFolder(movie);
+                found |= getCoversFromMovieFolder(movie);
+                found |= getOldCovers(movie);
 
                 return found;
             }
@@ -194,7 +194,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 foreach (string currFile in movieFolderFilenames) {
                     FileInfo newCover = new FileInfo(Utility.GetMovieBaseDirectory(movie.LocalMedia[0].File.Directory).FullName + "\\" + currFile);
                     if (newCover.Exists)
-                        found &= movie.AddCoverFromFile(newCover.FullName);
+                        found |= movie.AddCoverFromFile(newCover.FullName);
                 }
             }
 
