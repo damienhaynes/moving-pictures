@@ -18,7 +18,6 @@ namespace Cornerstone.Collections {
 
             cacheLocation = Path.GetTempPath() + @"cornerstone\" + GetHashCode() + @"\";
             Directory.CreateDirectory(cacheLocation);
-            System.Console.WriteLine(cacheLocation);
         }
 
         public void DeInit() {
