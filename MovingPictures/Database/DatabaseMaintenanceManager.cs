@@ -356,7 +356,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         // All other one time upgrades
         public static void PerformGenericUpgradeChecks() {
             Version ver = MovingPicturesCore.GetDBVersionNumber();
-            logger.Info("Performing Artwork Upgrade Check...");
+            if (ver == new Version("0.0.0.0")) return;
+            
+            logger.Info("Performing Miscellaneous Upgrade Checks...");
 
             #region 1.0.2 Upgrade Tasks
 

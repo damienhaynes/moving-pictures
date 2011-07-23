@@ -16,7 +16,7 @@ using Cornerstone.Collections;
 namespace Cornerstone.ScraperEngine {
     public class ScriptableScraper {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private CachedDictionary<string, string> cache = new CachedDictionary<string, string>();
+        private DiskCachedDictionary<string, string> cache = new DiskCachedDictionary<string, string>();
 
         #region Properties
 
@@ -247,7 +247,7 @@ namespace Cornerstone.ScraperEngine {
             set;
         }
 
-        public CachedDictionary<string, string> Cache {
+        public DiskCachedDictionary<string, string> Cache {
             get;
             set;
         }

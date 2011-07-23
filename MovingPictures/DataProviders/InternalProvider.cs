@@ -3,7 +3,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
-    abstract class InternalProvider {
+    public abstract class InternalProvider {
 
         public virtual DBSourceInfo SourceInfo {
             get {
