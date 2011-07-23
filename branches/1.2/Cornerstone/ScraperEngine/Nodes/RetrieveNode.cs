@@ -178,7 +178,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string pageContents = string.Empty;
 
             if (_useCaching && ScriptSettings.Cache.ContainsKey(parsedUrl)) {
-                if (ScriptSettings.DebugMode) logger.Debug("Using Cached Version of URL: {0}", parsedUrl);
+                logger.Debug("Using Cached Version of URL: {0}", parsedUrl);
                 return ScriptSettings.Cache[parsedUrl];
             }
 

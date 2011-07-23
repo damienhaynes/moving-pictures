@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 
 namespace Cornerstone.Collections {
-
+    /// <summary>
+    /// Stores a value for a limited period of time. Once an item in the CachedDictionary has
+    /// been in the collection for a specified Timeout length without access, it will be 
+    /// automatically removed.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     public class CachedDictionary<TKey, TValue> : Dictionary<TKey, TValue> {
 
-        private Dictionary<TKey, DateTime> LastAccessed {
+        protected Dictionary<TKey, DateTime> LastAccessed {
             get {
                 if (_lastAccessed == null)
                     _lastAccessed = new Dictionary<TKey, DateTime>();
@@ -25,7 +31,7 @@ namespace Cornerstone.Collections {
                 else
                     ttl = value;  
                 }
-        } private TimeSpan ttl = new TimeSpan(0, 10, 0);
+        } private TimeSpan ttl = new TimeSpan(0, 60, 0);
 
         /// <summary>
         /// Purge all expired items from memory. Items otherwise will not be removed
@@ -38,26 +44,25 @@ namespace Cornerstone.Collections {
         }
 
         // remove key / value pair if the given key exists and has expired
-        protected void CheckExpiration(TKey key) {
+        private void CheckExpiration(TKey key) {
             if (LastAccessed.ContainsKey(key) && DateTime.Now - LastAccessed[key] > Timeout) {
-                this.Remove(key);
-                LastAccessed.Remove(key);
+                Remove(key);
             }
         }
 
         #region Dictionary methods
 
-        public new void Add(TKey key, TValue value) {
+        public virtual new void Add(TKey key, TValue value) {
             LastAccessed.Add(key, DateTime.Now);
             base.Add(key, value);
         }
 
-        public new bool Remove(TKey key) {
+        public virtual new bool Remove(TKey key) {
             LastAccessed.Remove(key);
             return base.Remove(key);
         }
 
-        public new TValue this[TKey key] {
+        public virtual new TValue this[TKey key] {
             get {
                 CheckExpiration(key);
 
@@ -70,7 +75,7 @@ namespace Cornerstone.Collections {
             }
         }
 
-        public new void Clear() {
+        public virtual new void Clear() {
             LastAccessed.Clear();
             base.Clear();
         }
@@ -82,9 +87,11 @@ namespace Cornerstone.Collections {
             return base.ContainsKey(key);
         }
 
-        public new bool TryGetValue(TKey key, out TValue value) {
+        public virtual new bool TryGetValue(TKey key, out TValue value) {
             CheckExpiration(key);
-            return TryGetValue(key, out value);
+
+            if (LastAccessed.ContainsKey(key)) LastAccessed[key] = DateTime.Now;
+            return base.TryGetValue(key, out value);
         }
 
         #endregion
