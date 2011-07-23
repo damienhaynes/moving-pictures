@@ -13,7 +13,7 @@ using System.Threading;
 
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
-    public class MyVideosProvider: IMovieProvider {
+    public class MyVideosProvider : InternalProvider, IMovieProvider {
         #region IMovieProvider Members
 
         public string Name {
@@ -86,8 +86,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             
             Regex cleaner = new Regex("[\\\\/:*?\"<>|]");
             string cleanTitle = cleaner.Replace(movie.Title, "_");
-
-            string filename = myVideoCoversFolder + "\\" + cleanTitle + "L.jpg";
+            string id = movie.GetSourceMovieInfo(SourceInfo).Identifier;
+            string filename = myVideoCoversFolder + "\\" + cleanTitle + "{" + id + "}L.jpg";
 
             if (System.IO.File.Exists(filename)) 
                 return movie.AddCoverFromFile(filename);
@@ -145,18 +145,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
                 string Certification = sqlResults.GetField(0, int.Parse(columns["mpaa"].ToString()));
                 if (!Certification.Contains("unknown"))
-                {
-                    try {
-                        Regex certParse = new Regex(@"Rated\s(?<cert>.+)\sfor");
-                        Match match = certParse.Match(Certification);
-                        movieRes.Certification = match.Groups["cert"].Value;
-                    }
-                    catch (Exception e) {
-                        // if an error happens in the try we will not set a value for the Certification
-                        if (e is ThreadAbortException)
-                            throw e;
-                    }
-                }
+                    movieRes.Certification = Certification;
 
                 string Tagline = sqlResults.GetField(0, int.Parse(columns["strTagLine"].ToString()));
                 if (!Tagline.Contains("unknown"))
@@ -199,6 +188,17 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     SQLiteResultSet sqlDirector = mp_db.Execute("SELECT strActor FROM actors WHERE idActor LIKE '" + idDirector + "'");
                     movieRes.Directors.Add(sqlDirector.GetField(0, 0));
                 }
+
+                string writers = sqlResults.GetField(0, int.Parse(columns["strCredits"].ToString()));
+                if (!writers.Contains("unknown")) {
+                    string[] writerArray = writers.Split(new string[] {"\n", "   "}, StringSplitOptions.None);
+                    foreach (string writer in writerArray) {
+                        if (!movieRes.Writers.Contains(writer.Trim())) 
+                            movieRes.Writers.Add(writer.Trim());
+                    }
+                }
+
+                movieRes.GetSourceMovieInfo(SourceInfo).Identifier = sqlResults.GetField(0, int.Parse(columns["idMovie"].ToString())).ToString();
 
                 mp_db.Close();
             }
