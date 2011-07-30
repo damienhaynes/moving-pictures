@@ -677,6 +677,21 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
+        [CornerstoneSetting(
+            Name = "Cover Thumbnail Width",
+            Description = "The width that the thumbnail of cover art should be set. For this to affect previously imported movies you must manually delete your existing thumbnails.",
+            Groups = "|Movie Importer|Cover Art|",
+            Identifier = "gui_thumb_width",
+            Default = 175)]
+        public int ThumbnailWidth {
+            get { return _thumbnailWidth; }
+            set {
+                _thumbnailWidth = value;
+                OnSettingChanged("gui_thumb_width");
+            }
+        }
+        private int _thumbnailWidth;
+
         #endregion
 
         #region Backdrops
