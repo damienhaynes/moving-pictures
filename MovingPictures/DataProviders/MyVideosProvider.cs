@@ -20,14 +20,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             get { return "MyVideos (Local)"; }
         }
 
-        public string Version {
-            get { return "Internal"; }
-        }
-
-        public string Author {
-            get { return "Moving Pictures Team"; }
-        }
-
         public string Description {
             get { return "Retrieves movie cover artwork previously downloaded via MyVideos."; }
         }
