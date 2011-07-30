@@ -36,9 +36,12 @@ namespace Cornerstone.Database {
         #region Events
 
         public delegate void ObjectAffectedDelegate(DatabaseTable obj);
+        public delegate void ObjectUpdatedDelegate(DatabaseTable obj, TableUpdateInfo updateInfo); 
+        
         public event ObjectAffectedDelegate ObjectInserted;
         public event ObjectAffectedDelegate ObjectDeleted;
         public event ObjectAffectedDelegate ObjectUpdated;
+        public event ObjectUpdatedDelegate ObjectUpdatedEx;
 
         #endregion
 
@@ -751,8 +754,12 @@ namespace Cornerstone.Database {
                 updateRelationTables(dbObject);
                 
                 // notify any listeners of the status change
-                if (ObjectUpdated != null)
-                    ObjectUpdated(dbObject);
+                TableUpdateInfo ui = new TableUpdateInfo();
+                ui.UpdatedFields = new HashSet<DBField>(dbObject.changedFields);
+                if (ObjectUpdatedEx != null) ObjectUpdatedEx(dbObject, ui);
+                if (ObjectUpdated != null) ObjectUpdated(dbObject);
+
+                dbObject.changedFields.Clear();
             }
             catch (SQLiteException e) {
                 logger.ErrorException("Could not commit to " + GetTableName(dbObject.GetType()) + " table.", e);
@@ -851,6 +858,14 @@ namespace Cornerstone.Database {
         #endregion
 
     }
+
+    public class TableUpdateInfo {
+        public HashSet<DBField> UpdatedFields {
+            get;
+            set;
+        }
+    }
+
 
     #region Criteria Classes
     public interface ICriteria {

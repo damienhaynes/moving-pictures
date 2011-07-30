@@ -108,7 +108,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             if (MovingPicturesCore.Settings.FollwitEnabled) {
                 if (!receivingEvents) {
                     MovingPicturesCore.DatabaseManager.ObjectDeleted += new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
-                    MovingPicturesCore.DatabaseManager.ObjectUpdated += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);
+                    MovingPicturesCore.DatabaseManager.ObjectUpdatedEx += new DatabaseManager.ObjectUpdatedDelegate(DatabaseManager_ObjectUpdated);
                     MovingPicturesCore.DatabaseManager.ObjectInserted += new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectInserted);
                     receivingEvents = true;
                 }
@@ -119,7 +119,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             else {
                 if (taskListTimer != null) taskListTimer.Dispose();
                 MovingPicturesCore.DatabaseManager.ObjectDeleted -= new DatabaseManager.ObjectAffectedDelegate(movieDeletedListener);
-                MovingPicturesCore.DatabaseManager.ObjectUpdated -= new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectUpdated);
+                MovingPicturesCore.DatabaseManager.ObjectUpdatedEx -= new DatabaseManager.ObjectUpdatedDelegate(DatabaseManager_ObjectUpdated);
                 MovingPicturesCore.DatabaseManager.ObjectInserted -= new DatabaseManager.ObjectAffectedDelegate(DatabaseManager_ObjectInserted);
                 receivingEvents = false;
             }
@@ -225,9 +225,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                                 if (fitMovieDTO.Watched && m.ActiveUserSettings.WatchedCount == 0)
                                     m.ActiveUserSettings.WatchedCount = 1;
 
-                                // prevent sending this data back to follw.it
-                                m.ActiveUserSettings.RatingChanged = false;
-                                m.ActiveUserSettings.WatchCountChanged = false;
                                 m.Commit();
                             }
                         }
@@ -522,7 +519,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
 
-        private void DatabaseManager_ObjectUpdated(DatabaseTable obj) {
+        private void DatabaseManager_ObjectUpdated(DatabaseTable obj, TableUpdateInfo updateInfo) {
             if (!MovingPicturesCore.Settings.FollwitEnabled) {
                 logger.Warn("Attempt to call follw.it made when service is disabled.");
                 return;
@@ -534,7 +531,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                     return;
 
                 DBUserMovieSettings settings = (DBUserMovieSettings)obj;
-                if (settings.RatingChanged) {
+                if (updateInfo.RatingChanged()) {
                     if (!IsOnline) {
                         logger.Warn("Can not send rating info to follw.it because service is offline");
                         return;
@@ -549,9 +546,6 @@ namespace MediaPortal.Plugins.MovingPictures {
                     bgProc.Action = FitActions.UpdateUserRating;
                     bgProc.Movies.Add(movie);
                     MovingPicturesCore.ProcessManager.StartProcess(bgProc);
-
-                    // reset the flag
-                    settings.RatingChanged = false;
                 }
 
             }
