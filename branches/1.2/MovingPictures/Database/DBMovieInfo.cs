@@ -484,6 +484,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     foreach (DBLocalMedia item in this.LocalMedia) {
                         File.Delete(item.FullPath);
                     }
+
+                    File.Delete(fInfo.Name.Replace(fInfo.Extension, ".nfo"));
                 }
 
                 this.Delete();
@@ -780,7 +782,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return;
             }
 
-            int width = 175;
+            int width = MovingPicturesCore.Settings.ThumbnailWidth;
+            if (width > 1920) width = 1920;
             int height = (int)(cover.Height * ((float)width / (float)cover.Width));
 
             Image coverThumb = cover.GetThumbnailImage(width, height, null, IntPtr.Zero);

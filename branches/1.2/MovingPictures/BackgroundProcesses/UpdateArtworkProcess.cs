@@ -27,6 +27,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
             logger.Info("Beginging artwork updater background process.");
 
             RemoveOrphanArtwork();
+            CreateMissingThumbnails();
             LookForMissingArtwork();
 
             logger.Info("Background artwork updater process complete.");
@@ -71,6 +72,25 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
             }
 
             //OnProgress(1.0);
+        }
+        
+        // look for any movies with a cover but no thumbnail and regenerate as needed.
+        private void CreateMissingThumbnails() {
+            foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
+                try {
+                    // if this movie is not committed or we have no cover, move on
+                    if (currMovie.ID == null || string.IsNullOrEmpty(currMovie.CoverFullPath.Trim())) continue;
+
+                    // if the thumbnail file is missing or we have no reference to a thumb file
+                    if (!File.Exists(currMovie.CoverThumbFullPath) || string.IsNullOrEmpty(currMovie.CoverThumbFullPath.Trim())) {
+                        currMovie.GenerateThumbnail();
+                        currMovie.Commit();
+                    }
+                }
+                catch (Exception e) {
+                    logger.ErrorException("Error create thumbnail for " + currMovie.Title, e);
+                }
+            }
         }
 
         private void LookForMissingArtwork() {
