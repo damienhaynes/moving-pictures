@@ -66,8 +66,6 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                                     m.ActiveUserSettings.UserRating = fitMovieDTO.UserRating;
                                 if (fitMovieDTO.Watched && m.ActiveUserSettings.WatchedCount == 0)
                                     m.ActiveUserSettings.WatchedCount = 1;
-                                m.ActiveUserSettings.WatchCountChanged = false;
-                                m.ActiveUserSettings.RatingChanged = false;
                                 m.Commit();
                             }
                         }

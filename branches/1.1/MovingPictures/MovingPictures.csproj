@@ -297,6 +297,7 @@
     <Compile Include="Database\DBUserMovieSettings.cs" />
     <Compile Include="Database\DBWatchedHistory.cs" />
     <Compile Include="Database\LocalMediaListExtensions.cs" />
+    <Compile Include="Database\TableUpdateInfoExtensions.cs" />
     <Compile Include="Extensions\MovieTitleStringExtensions.cs" />
     <Compile Include="LocalMediaManagement\MovieRenamer\MovieRenamer.cs" />
     <Compile Include="LocalMediaManagement\MovieRenamer\Renamable.cs" />
