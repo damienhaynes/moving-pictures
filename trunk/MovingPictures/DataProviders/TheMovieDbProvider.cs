@@ -211,6 +211,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         if (DateTime.TryParse(value, out date))
                             movie.Year = date.Year;      
                         break;
+                    case "language":
+                        try {
+                            movie.Language = new CultureInfo(value).DisplayName;
+                        } catch (Exception) { }
+                        break;
+                    case "tagline":
+                        movie.Tagline = value;
+                        break;
                     case "imdb_id":
                         movie.ImdbID = value;
                         break;
@@ -225,8 +233,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                         if (float.TryParse(value, out rating))
                             movie.Score = rating;
                         break;
-                    case "popularity":
-                        int popularity = 0;
+                    case "votes":
+                        int popularity;
                         if (int.TryParse(value, out popularity))
                             movie.Popularity = popularity;
                         break;
@@ -247,6 +255,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                                     movie.Actors.Add(name);
                                     break;
                                 case "Screenplay":
+                                case "Author":
                                     movie.Writers.Add(name);
                                     break;
                             }
@@ -259,6 +268,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                             if (type == "genre") {
                                 movie.Genres.Add(genre);
                             }
+                        }
+                        break;
+                    case "studios":
+                        foreach (XmlNode category in node.ChildNodes) {
+                            movie.Studios.Add(category.Attributes["name"].Value);
                         }
                         break;
                     case "certification":

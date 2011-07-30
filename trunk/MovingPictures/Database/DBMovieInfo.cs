@@ -181,6 +181,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _summary;
 
+        [DBField]
+        public StringList Studios {
+            get { return _studios; }
+
+            set {
+                _studios = value;
+                commitNeeded = true;
+            }
+        } private StringList _studios;
 
         [DBField(AllowDynamicFiltering = false)]
         public float Score {
