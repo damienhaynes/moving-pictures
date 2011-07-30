@@ -484,6 +484,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     foreach (DBLocalMedia item in this.LocalMedia) {
                         File.Delete(item.FullPath);
                     }
+
+                    File.Delete(fInfo.Name.Replace(fInfo.Extension, ".nfo"));
                 }
 
                 this.Delete();
