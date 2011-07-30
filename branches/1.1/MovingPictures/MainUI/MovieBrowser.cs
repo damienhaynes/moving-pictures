@@ -115,6 +115,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (value == BrowserViewMode.CATEGORIES && _categoriesFacade == null)
                     return;
 
+                if (value == BrowserViewMode.LASTUSED)
+                    value = MovingPicturesCore.Settings.LastUsedView;
+
                 // update the state variables
                 if (currentView != value)
                     previousView = currentView;
@@ -221,6 +224,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public DBNode<DBMovieInfo> CurrentNode {
             set {
+                if (!MovingPicturesCore.Settings.CategoriesEnabled) return;
+
                 // disable filter events
                 updatingFiltering = true;
 
