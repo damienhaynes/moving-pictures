@@ -1,4 +1,4 @@
-Moving Pictures 1.2.2
+Moving Pictures 1.2.3
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -24,7 +24,7 @@ Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 Change Log
 ================================================================================
-1.1.5
+1.2.3 / 1.1.5
 --------------------------------------------------------------------------------
 Enhancements
 --------------------------------------------------------------------------------
@@ -114,7 +114,7 @@ Issue #1002:    into external plugins. This is currently utilized by StreamedMP 
 Issue #1004:    launch Moving Pictures directly to a chosen category.
                 
 ================================================================================
-1.1.4
+1.2.2 / 1.1.4
 --------------------------------------------------------------------------------
 Bug Fixes
 --------------------------------------------------------------------------------
