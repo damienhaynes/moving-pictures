@@ -13,6 +13,8 @@ namespace Cornerstone.Database.Tables {
 
         private int hashcode = 0;
 
+        internal protected HashSet<DBField> changedFields = new HashSet<DBField>();
+
         #region Properties
 
         public int? ID {
@@ -208,6 +210,23 @@ namespace Cornerstone.Database.Tables {
 
 
         #endregion
+
+        protected void FieldChanged(DBField field) {
+            if (RetrievalInProcess) return;
+
+            if (field != null && field.OwnerType == GetType()) 
+                changedFields.Add(field);
+        }
+
+        protected void FieldChanged(string fieldName) {
+            if (RetrievalInProcess) return;
+
+            DBField field = DBField.GetField(GetType(), fieldName);
+            if (field == null) field = DBField.GetFieldByDBName(GetType(), fieldName);
+
+            if (field != null) changedFields.Add(field);
+
+        }
 
         public override int GetHashCode() {
             // this logic is to ensure the same hashcode is returned during the lifetime of this object

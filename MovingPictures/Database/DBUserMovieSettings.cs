@@ -8,7 +8,10 @@ using Cornerstone.Database.Tables;
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("user_movie_settings")]
     public class DBUserMovieSettings: MovingPicturesDBTable {
+        [Obsolete]
         public bool RatingChanged = false;
+
+        [Obsolete]
         public bool WatchCountChanged = false;
 
         public override void AfterDelete() {
@@ -22,6 +25,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             set {
                 user = value;
                 commitNeeded = true;
+                FieldChanged("User");
             }
         } private DBUser user;
 
@@ -36,7 +40,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (_userRating != value) {
                     _userRating = value;
                     commitNeeded = true;
-                    if (!RetrievalInProcess) RatingChanged = true;
+                    FieldChanged("UserRating");
                 }
             }
         } private int? _userRating;
@@ -48,50 +52,53 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 if (_watched != value) {
                     _watched = value;
                     commitNeeded = true;
-                    if (!RetrievalInProcess) WatchCountChanged = true;
+                    FieldChanged("WatchedCount");
                 }
             }
         } private int _watched;
 
         [DBFieldAttribute(FieldName = "resume_part", Filterable = false)]
         public int ResumePart {
-          get { return _resumePart; }
+            get { return _resumePart; }
 
-          set {
-            _resumePart = value;
-            commitNeeded = true;
-          }
+            set {
+                _resumePart = value;
+                commitNeeded = true;
+                FieldChanged("ResumePart");
+            }
         } private int _resumePart;
 
 
         [DBFieldAttribute(FieldName = "resume_time")]
         public int ResumeTime {
-          get { return _resumeTime; }
+            get { return _resumeTime; }
 
-          set {
-            _resumeTime = value;
-            commitNeeded = true;
-          }
+            set {
+                _resumeTime = value;
+                commitNeeded = true;
+                FieldChanged("ResumeTime");
+            }
         } private int _resumeTime;
 
         [DBFieldAttribute(FieldName = "resume_data", Default = null, Filterable = false)]
         public ByteArray ResumeData {
-          get { return _resumeData; }
+            get { return _resumeData; }
 
-          set {
-            _resumeData = value;
-            commitNeeded = true;
-          }
+            set {
+                _resumeData = value;
+                commitNeeded = true;
+                FieldChanged("ResumeData");
+            }
         } private ByteArray _resumeData;
 
         [DBRelation(AutoRetrieve = true, Filterable = false)]
         public RelationList<DBUserMovieSettings, DBMovieInfo> AttachedMovies {
-          get {
-            if (_attachedMovies == null) {
-              _attachedMovies = new RelationList<DBUserMovieSettings, DBMovieInfo>(this);
+            get {
+                if (_attachedMovies == null) {
+                    _attachedMovies = new RelationList<DBUserMovieSettings, DBMovieInfo>(this);
+                }
+                return _attachedMovies;
             }
-            return _attachedMovies;
-          }
         } RelationList<DBUserMovieSettings, DBMovieInfo> _attachedMovies;
 
         #endregion

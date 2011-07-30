@@ -1,4 +1,4 @@
-Moving Pictures 1.2.2
+Moving Pictures 1.2.3
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -24,6 +24,79 @@ Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
 Change Log
 ================================================================================
+1.2.3 / 1.1.5
+--------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+Issue #1009:    You can now configure Moving Pictures to automatically rescan external
+                drives at a fixed interval from the configuration screen (previously
+                this was only available via Advanced Settings). 
+                
+                It is also possible to enable a "Rescan Now" button on the GUI 
+                Context Menu (this can be enabled on the GUI Settings tab of the 
+                config).
+                
+Issue #655:     It is now possible to set the size of the thumbnails generated for
+                cover art. May be useful for those using 1080p displays and artwork
+                heavy skins. This is available under the Advanced Settings panel.
+
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #684:     Speed of loading categories in the GUI is now DRAMATICALLY improved,
+                particularly for people with large collections.
+                
+Issue #1017:    The "Last Used" default view now works correctly when categories 
+                are disabled.
+
+Issue #978:     When the user choses to delete a movie from the context menu, NFO
+                files will now also be removed.
+
+***********:    Fixed bug causing new cover art to be downloaded even if local artwork 
+                was already found.
+
+***********:    Importer will now better handle multipart movies that are seperated
+                by folders (for example Inception\CD1\ and Inception\CD2\). 
+                
+Issue #1021     Reworked update notification system so that RatingChanged events will
+                play nice with Trakt even when Follw.it is also installed.
+
+***********:    The importer will now use much less memory. This will prevent out 
+                of memory errors that were occuring when people attempted to import
+                1500+ movies in one sitting.
+                                
+Issue #608:     Fixed a bug with the scraper engine math nodes causing values to be
+                calculated incorrectly when certain locales are in use. May solve some
+                rating retrieval problems in various scripts.
+
+Issue #885:     Fixed bug causing odd filtering behavior when positioning has been 
+                adjusted by drag and drop in the configuration screen.
+
+Issue #973:     Fixed a bug causing the importer to halt when it should only log
+                an error and continue.
+
+--------------------------------------------------------------------------------
+Script and Translation Updates
+--------------------------------------------------------------------------------	
+***********:    Fixed certification retrieval from themoviedb.org.
+
+Issue #1036:    Fixed retrieval of the Score field in the IMDb script.
+
+Issue #1026:    The My Videos importer will again properly load information about 
+                writers and movie certification. It will also again correctly load
+                cover artwork.
+
+Issue #1027:    Updated the allocine script. Thanks Tarkin!
+
+***********:    Fixed bug causing Italian scraper script to not load.
+
+Issue #1023:    The XBMC Import Script will now populate the Sort By field.
+
+Issue #1018:    Added a Slovak translation file. Thanks Adrian!
+
+Issue #1019:    Updated Polish language file. Thanks Milandr!
+
+================================================================================
 1.2.2
 --------------------------------------------------------------------------------
 Bug Fixes
@@ -41,7 +114,7 @@ Issue #1002:    into external plugins. This is currently utilized by StreamedMP 
 Issue #1004:    launch Moving Pictures directly to a chosen category.
                 
 ================================================================================
-1.1.4
+1.2.2 / 1.1.4
 --------------------------------------------------------------------------------
 Bug Fixes
 --------------------------------------------------------------------------------
