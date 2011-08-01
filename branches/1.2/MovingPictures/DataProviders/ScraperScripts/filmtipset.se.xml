@@ -14,8 +14,8 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="5" point="3"/>
-	<published month="11" day="20" year="2010"/>
+	<version major="1" minor="5" point="4"/>
+	<published month="07" day="10" year="2011"/>
 
 	<!--
 	These fields are used for categorization purposes. Seperate multiple 
@@ -221,7 +221,7 @@
 			</set>
 			<set name="rx_imdbscore">
 				<![CDATA[
-				<b>(?<movieScore>\d+.\d+)/10</b>|<span[^<]*>(?<movieScore>\d+.\d+)<span>/10</span>
+				<span[^<]*>(?<movieScore>\d+.\d+)</span><span[^<]*>/</span><span[^<]*>10</span>
 				]]>
 			</set>
 			
