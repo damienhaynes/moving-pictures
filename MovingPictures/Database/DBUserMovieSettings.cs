@@ -41,6 +41,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     _userRating = value;
                     commitNeeded = true;
                     FieldChanged("UserRating");
+                    RatingChanged = true;
                 }
             }
         } private int? _userRating;
@@ -53,6 +54,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     _watched = value;
                     commitNeeded = true;
                     FieldChanged("WatchedCount");
+                    WatchCountChanged = true;
                 }
             }
         } private int _watched;
