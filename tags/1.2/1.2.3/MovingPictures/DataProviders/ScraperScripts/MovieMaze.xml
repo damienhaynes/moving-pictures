@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ScriptableScraper>
+  <details>
+    <!-- These details are for display purposes only. -->
+    <name>moviemaze.de</name>
+    <author>Shukuyen</author>
+    <description>
+      This script pulls cover art from moviemaze.de
+    </description>
+
+    <!-- 
+    These two fields uniquely identify the script. The ID should never 
+    change and should be unique (no other script should use this ID). With
+    new versions of the script the version numbers should change. EVEN FOR 
+    MINOR CHANGES, you should change the version number if you are going to
+    disribute it to anyone but internal testers. The point number 
+    is for minor bug fix releases. Use it.
+    -->
+    <id>874921</id>
+    <version major="1" minor="1" point="0"/>
+    <published month="6" day="3" year="2009"/>
+
+    <!--
+    These fields are used for categorization purposes. Seperate multiple 
+    types with a pipe | character.
+    -->
+    <type>MovieCoverFetcher</type>
+    <language>de</language>
+
+  </details>
+
+  <!-- Covert Art Scraper Only Works with IMDB or OFDB id -->
+  <action name="get_cover_art">
+    <!-- Variables -->
+    <set name="site" value="http://www.moviemaze.de/" />
+    <set name="google_search_url" value="http://ajax.googleapis.com/ajax/services/search/web?v=1.0&amp;q=Poster+site:http%3A%2F%2Fwww.moviemaze.de%2Fmedia%2Fposter%2F+" />
+    <set name="min_distance" value="99" />
+
+    <!-- Regular Expressions -->
+    <!-- Get all links to moviemaze poster pages and the movie title for this page -->
+    <set name="rx_movie_link">
+      <![CDATA[
+      "url":"([^"]+)"[^}]+"titleNoFormatting":"Poster zu ([^"]+)"
+      ]]>
+    </set>
+    
+    <!-- Get the movie and poster IDs to build the large image URL -->
+    <set name="rx_poster">
+      <![CDATA[
+      src="/filme/(\d+)/poster(\d+)\.jpg"
+      ]]>      
+    </set>
+         
+
+    <!-- Retrieve the search results -->
+    <retrieve name="google_results" url="${google_search_url}${movie.title:safe}" />
+    <parse name="poster_links" input="${google_results}" regex="${rx_movie_link}" />
+
+    <!-- Movies with poster(s) found, proceed ... -->
+    <if test="${poster_links[0][0]}!=">
+      
+      <!-- Check the levenshtein distance of the result and the movie title to find the correct link -->
+      <loop name="curMovie" on="poster_links">
+        
+        <distance name="titleDistance" string1="${curMovie[1]:htmldecode}" string2="${movie.title}" />
+        <if test="${titleDistance}&lt;=2">
+          <!-- Check if a title matching better has already been found -->
+          <if test="${titleDistance}&lt;${min_distance}">
+            <set name="min_distance" value="${titleDistance}" />
+            
+            <!-- This is probably our movie, let's get the posters -->
+            <retrieve name="poster_page" url="${curMovie[0]}" encoding="ISO-8859-1" />
+            <parse name="poster" input="${poster_page}" regex="${rx_poster}" />
+
+            <!-- Loop through the posters and add them to Moving Pictures -->
+            <set name="counter" value="0" />
+            <loop name="curPoster" on="poster">
+              <set name="cover_art[${counter}].url" value="${site}filme/${curPoster[0]}/poster_lg${curPoster[1]}.jpg" />
+              <add name="counter" value1="${counter}" value2="1" />
+            </loop>
+          </if>
+        </if>
+      </loop>
+    </if>
+
+  </action>  
+</ScriptableScraper>
