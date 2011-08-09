@@ -11,7 +11,7 @@
 			<height>720</height>
 			<texture>Action_nofocus.png</texture>
 			<colorDiffuse>fffffffff</colorDiffuse>
-			<visible>control.isvisible(50)</visible>
+			<visible>!control.isvisible(51)</visible>
 			<animation effect="fade" time="250">WindowClose</animation>
 		</control>
 		<control>
