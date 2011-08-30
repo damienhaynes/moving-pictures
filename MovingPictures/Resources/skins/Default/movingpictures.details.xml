@@ -55,7 +55,7 @@ This file should contain the details view
 		  <height>720</height>
       <textureFocus>-</textureFocus>
       <textureNoFocus>-</textureNoFocus>
-      <visible>!control.isvisible(50)+!control.isvisible(51)+[control.hasfocus(10000)|control.hasfocus(10001)|control.hasfocus(97259)|control.hasfocus(97260)]</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)+[control.hasfocus(10000)|control.hasfocus(10001)|control.hasfocus(97258)|control.hasfocus(97259)|control.hasfocus(97260)]</visible>
       <animation effect="slide" time="150" start="-300,0" reversible="false">visible</animation>
       <animation effect="slide" time="150" end="-300,0" reversible="false">hidden</animation>
       <control>
@@ -82,6 +82,7 @@ This file should contain the details view
           <type>button</type>
           <id>10000</id>
           <label>IMDb #(L(5900))</label>
+          <width>190</width>
           <ondown>10001</ondown>
           <onup>17</onup>
           <onleft>6</onleft>
@@ -95,6 +96,7 @@ This file should contain the details view
           <type>button</type>
           <id>10001</id>
           <label>287</label>
+          <width>190</width>
           <hyperlink>84623</hyperlink>
           <onup>10000</onup>
           <ondown>97259</ondown>
@@ -108,6 +110,7 @@ This file should contain the details view
           <!-- ID:97259 for Trakt Rate -->
           <id>97259</id>
           <label>Trakt #Trakt.Translation.Rate.Label</label>
+          <width>190</width>
           <onup>10001</onup>
           <ondown>97260</ondown>
           <onleft>6</onleft>
@@ -120,7 +123,21 @@ This file should contain the details view
           <!-- ID:97260 for Trakt Shouts -->
           <id>97260</id>
           <label>Trakt #Trakt.Translation.Shouts.Label</label>
+          <width>190</width>
           <onup>97259</onup>
+          <ondown>97258</ondown>
+          <onleft>6</onleft>
+          <onright>6</onright>
+          <visible>plugin.isenabled(Trakt)</visible>
+        </control>
+        <control>
+          <description>Trakt Add to Watchlist</description>
+          <type>button</type>
+          <!-- ID:97258 for Add to Watchlist -->
+          <id>97258</id>
+          <label>Trakt +#Trakt.Translation.WatchList.Label</label>
+          <width>190</width>
+          <onup>97260</onup>
           <ondown>10000</ondown>
           <onleft>6</onleft>
           <onright>6</onright>
