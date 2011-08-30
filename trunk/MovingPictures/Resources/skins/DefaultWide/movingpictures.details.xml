@@ -57,7 +57,7 @@ This file should contain the details view
       <textureNoFocus>-</textureNoFocus>
 		  <width>568</width>
 		  <height>900</height>
-      <visible>!control.isvisible(50)+!control.isvisible(51)+[control.hasfocus(10000)|control.hasfocus(10001)|control.hasfocus(97259)|control.hasfocus(97260)]</visible>
+      <visible>!control.isvisible(50)+!control.isvisible(51)+[control.hasfocus(10000)|control.hasfocus(10001)|control.hasfocus(97258)|control.hasfocus(97259)|control.hasfocus(97260)]</visible>
       <animation effect="slide" time="70" start="-300,0" reversible="false">visible</animation>
       <animation effect="slide" time="70" end="-300,0" reversible="false">hidden</animation>
       <control>
@@ -123,6 +123,18 @@ This file should contain the details view
           <id>97260</id>
           <label>Trakt #Trakt.Translation.Shouts.Label</label>
           <onup>97259</onup>
+          <ondown>97258</ondown>
+          <onleft>6</onleft>
+          <onright>6</onright>
+          <visible>plugin.isenabled(Trakt)</visible>
+        </control>
+        <control>
+          <description>Trakt Add to Watchlist</description>
+          <type>button</type>
+          <!-- ID:97258 for Add to Watchlist -->
+          <id>97258</id>
+          <label>Trakt +#Trakt.Translation.WatchList.Label</label>
+          <onup>97260</onup>
           <ondown>10000</ondown>
           <onleft>6</onleft>
           <onright>6</onright>
