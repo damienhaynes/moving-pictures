@@ -20,9 +20,11 @@ using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 using System.Threading;
 using MediaPortal.Plugins.MovingPictures.MainUI;
+using Cornerstone.Tools.Search;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public enum BrowserViewMode { PARENT, LIST, SMALLICON, LARGEICON, FILMSTRIP, COVERFLOW, DETAILS, CATEGORIES, LASTUSED }
+    public enum SearchMode { Title, Person, Summary }
     
     public class MovingPicturesCore {
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -105,6 +107,13 @@ namespace MediaPortal.Plugins.MovingPictures {
                 }
             }
         } private static BackgroundProcessManager _processManager = null;
+
+        public static Dictionary<SearchMode, AbstractSearcher<DBMovieInfo>> Searchers {
+            get {
+                if (_searchers == null) _searchers = new Dictionary<SearchMode, AbstractSearcher<DBMovieInfo>>();
+                return _searchers;
+            }
+        } private static Dictionary<SearchMode, AbstractSearcher<DBMovieInfo>> _searchers;
 
         public static MovieBrowser Browser {
             get {
@@ -252,7 +261,6 @@ namespace MediaPortal.Plugins.MovingPictures {
 
             // Launch background tasks
             startBackgroundTasks();
-
         }
 
         static void DatabaseMaintenanceManager_MaintenanceProgress(string actionName, int percentDone) {
@@ -406,10 +414,40 @@ namespace MediaPortal.Plugins.MovingPictures {
                 Directory.CreateDirectory(Settings.BackdropThumbsFolder);
         }
 
+        private static void InitSearchIndexes() {
+            logger.Info("Building search index...");
+            DateTime start = DateTime.Now;
+
+            var titleFields = new List<string> {"title"};
+            //if (altTitleCheckBox.Checked) titleFields.Add("alternate_titles");
+            var peopleFields = new string[] { "directors", "writers", "actors" };
+            var themeFields = new string[] { "summary" };
+            
+            Searchers[SearchMode.Title] = new LevenshteinSubstringSearcher<DBMovieInfo>(MovingPicturesCore.DatabaseManager, titleFields.ToArray());
+            Searchers[SearchMode.Person] = new LevenshteinSubstringSearcher<DBMovieInfo>(MovingPicturesCore.DatabaseManager, peopleFields);
+            Searchers[SearchMode.Summary] = new LuceneSearcher<DBMovieInfo>(MovingPicturesCore.DatabaseManager, themeFields);
+
+            Searchers[SearchMode.Title].BuildDynamicIndex();
+            Searchers[SearchMode.Person].BuildDynamicIndex();
+            Searchers[SearchMode.Summary].BuildDynamicIndex();
+
+            logger.Info("Search index built in: " + (DateTime.Now - start));
+        }
+
         private static void startBackgroundTasks() {
             logger.Info("Starting Background Processes...");
             ProcessManager.StartProcess(new MediaInfoUpdateProcess());
             ProcessManager.StartProcess(new UpdateArtworkProcess());
+
+            // various minor stuff to run in the background in sequence
+            ThreadStart actions = delegate {
+                InitSearchIndexes();
+            };
+
+            var thread = new Thread(actions);
+            thread.Name = "Minor Launch Tasks Thread";
+            thread.IsBackground = true;
+            thread.Start();
         }
 
         private static void stopBackgroundTasks() {

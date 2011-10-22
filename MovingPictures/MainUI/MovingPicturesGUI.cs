@@ -1240,13 +1240,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             dialog.DoModal(GUIWindowManager.ActiveWindow);
 
             if (dialog.SelectedId == titleItem.ItemId) {
-                Search();
+                Search(SearchMode.Title);
             }
             else if (dialog.SelectedId == castItem.ItemId) {
-                Search();
+                Search(SearchMode.Person);
             }
             else if (dialog.SelectedId == themeItem.ItemId) {
-                Search();
+                Search(SearchMode.Summary);
             }
         }
 
@@ -1461,13 +1461,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 parentalControlsFilter.Active = !parentalControlsFilter.Active;
         }
 
-        private void Search() {
+        private void Search(SearchMode mode) {
             string searchStr = getUserInput();
-            Search(searchStr);
+            Search(mode, searchStr);
         }
 
-        private void Search(string searchStr) {
-            ShowMessage("what have you done???", searchStr + "? wtf?!");
+        private void Search(SearchMode mode, string searchStr) {
+            var searchResults = MovingPicturesCore.Searchers[mode].Search(searchStr);
+            var movies = searchResults.Select(result => result.Item);
+            ShowMessage("what have you done???", "Found " + movies.Count() + " movies!");
         }
 
         /// <summary>

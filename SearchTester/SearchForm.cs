@@ -66,6 +66,8 @@ namespace SearchTester {
             string[] peopleFields = new string[] { "directors", "writers", "actors"};
             string[] themeFields = new string[] { "summary"};
 
+            DateTime start = DateTime.Now;
+
             levenshtein[SearchMode.TITLE] = new LevenshteinSubstringSearcher<DBMovieInfo>(MovingPicturesCore.DatabaseManager, titleFields.ToArray());
             levenshtein[SearchMode.TITLE].BuildDynamicIndex();
 
@@ -83,6 +85,8 @@ namespace SearchTester {
 
             lucene[SearchMode.SUMMARY] = new LuceneSearcher<DBMovieInfo>(MovingPicturesCore.DatabaseManager, themeFields);
             lucene[SearchMode.SUMMARY].BuildDynamicIndex();
+
+            MessageBox.Show("Load Time: " + (DateTime.Now - start), "load");
         }
 
         private void PerformSearch() {
