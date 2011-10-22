@@ -73,6 +73,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\External\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External\NLog.dll</HintPath>
@@ -278,6 +281,10 @@
     <Compile Include="Tools\AdvancedStringComparer.cs" />
     <Compile Include="Tools\BackgroundProcessManager.cs" />
     <Compile Include="Tools\DriveInfoHelper.cs" />
+    <Compile Include="Tools\Search\AbstractSearcher.cs" />
+    <Compile Include="Tools\Search\LevenshteinSubstringSearcher.cs" />
+    <Compile Include="Tools\Search\LuceneSearcher.cs" />
+    <Compile Include="Tools\Search\SearchException.cs" />
     <Compile Include="Tools\Translator\LanguageUtility.cs" />
     <Compile Include="Tools\Translator\Translator.cs" />
     <Compile Include="Tools\WebGrabber.cs" />
@@ -394,6 +401,7 @@
   <ItemGroup>
     <Content Include="Properties\AssemblyInfoTemplate.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>"$(ProjectDir)..\External\REVSTAMP.EXE" http://moving-pictures.googlecode.com/svn "$(ProjectDir)\Properties\AssemblyInfoTemplate.txt" "$(ProjectDir)\Properties\AssemblyInfo.cs"</PreBuildEvent>

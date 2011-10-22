@@ -995,11 +995,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             dialog.Reset();
             dialog.SetHeading("Moving Pictures");  // not translated because it's a proper noun
 
+            GUIListItem movieOptionsItem = new GUIListItem(Translation.MovieOptions + " ...");
+            GUIListItem parentalControlsItem = new GUIListItem(parentalControlsFilter.Active ? Translation.UnlockRestrictedMovies : Translation.LockRestrictedMovies);
+            GUIListItem filterItem = new GUIListItem(Translation.FilterBy + " ...");
+            GUIListItem searchItem = new GUIListItem(Translation.SearchBy + "...");
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
             GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
-            GUIListItem movieOptionsItem = new GUIListItem(Translation.MovieOptions + " ...");
             GUIListItem rescanItem = new GUIListItem(Translation.ScanForNewMovies);
-
+            
             int currID = 1;
 
             // if we are not in categories view make Movie Options the primary selection
@@ -1008,15 +1011,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 dialog.Add(movieOptionsItem);
             }
 
-            GUIListItem parentalControlsItem = new GUIListItem(parentalControlsFilter.Active ? Translation.UnlockRestrictedMovies : Translation.LockRestrictedMovies);
+            
             if (MovingPicturesCore.Settings.ParentalControlsEnabled) {
                 parentalControlsItem.ItemId = currID++;
                 dialog.Add(parentalControlsItem);
             }
 
-            GUIListItem filterItem = new GUIListItem(Translation.FilterBy + " ...");
+            
             filterItem.ItemId = currID++;
             dialog.Add(filterItem);
+
+            searchItem.ItemId = currID++;
+            dialog.Add(searchItem);
 
             // show these options only when we are not in the categories view
             if (browser.CurrentView != BrowserViewMode.CATEGORIES) {
@@ -1051,6 +1057,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (dialog.SelectedId == rescanItem.ItemId) {
                 MovingPicturesCore.Importer.RestartScanner();
+            }
+            else if (dialog.SelectedId == searchItem.ItemId) {
+                showSearchContext();
             }
         }
 
@@ -1143,7 +1152,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void showSortContext() {
-
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
             dialog.SetHeading(Translation.SortBy);
@@ -1209,6 +1217,37 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
             SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
 
+        }
+
+        private void showSearchContext() {
+            IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+            dialog.Reset();
+            dialog.SetHeading("Moving Pictures - " + Translation.SearchBy);
+
+            int currID = 1;
+            GUIListItem titleItem = new GUIListItem(Translation.Title);
+            titleItem.ItemId = currID++;
+            dialog.Add(titleItem);
+
+            GUIListItem castItem = new GUIListItem(Translation.CastAndCrew);
+            castItem.ItemId = currID++;
+            dialog.Add(castItem);
+
+            GUIListItem themeItem = new GUIListItem(Translation.Theme);
+            themeItem.ItemId = currID++;
+            dialog.Add(themeItem);
+
+            dialog.DoModal(GUIWindowManager.ActiveWindow);
+
+            if (dialog.SelectedId == titleItem.ItemId) {
+                Search();
+            }
+            else if (dialog.SelectedId == castItem.ItemId) {
+                Search();
+            }
+            else if (dialog.SelectedId == themeItem.ItemId) {
+                Search();
+            }
         }
 
         private void showChangeViewContext() {
@@ -1420,6 +1459,36 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             if (!parentalControlsFilter.Active || ValidatePin())
                 parentalControlsFilter.Active = !parentalControlsFilter.Active;
+        }
+
+        private void Search() {
+            string searchStr = getUserInput();
+            Search(searchStr);
+        }
+
+        private void Search(string searchStr) {
+            ShowMessage("what have you done???", searchStr + "? wtf?!");
+        }
+
+        /// <summary>
+        /// Displays on screen keyboard prompting the user for input.
+        /// </summary>
+        /// <returns>the string entered by the user or null if the user canceled.</returns>
+        private string getUserInput() {
+            VirtualKeyboard keyboard = (VirtualKeyboard)GUIWindowManager.GetWindow((int)Window.WINDOW_VIRTUAL_KEYBOARD);
+            if (keyboard == null) {
+                ShowMessage("Oops", "Internal error launching virtual keyboard.");
+                return null;
+            }
+
+            keyboard.Reset();
+            keyboard.IsSearchKeyboard = true;
+            keyboard.DoModal(GUIWindowManager.ActiveWindow);
+
+            if (keyboard.IsConfirmed) 
+                return keyboard.Text;
+
+            return null;
         }
 
         private bool ValidatePin() {

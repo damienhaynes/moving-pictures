@@ -106,7 +106,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (TranslatedStrings != null && TranslatedStrings.ContainsKey(fi.Name))
                     TransType.InvokeMember(fi.Name, BindingFlags.SetField, null, TransType, new object[] { TranslatedStrings[fi.Name] });
                 else
-                    logger.Info("Translation not found for field: {0}.  Using hard-coded English default.", fi.Name);
+                    logger.Warn("Translation not found for field: {0}.  Using hard-coded English default.", fi.Name);
             }
             return TranslatedStrings.Count;
         }
@@ -160,6 +160,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Cancel = "Cancel";
         public static string CannotDeleteOffline = "Not able to delete {0}\n because the file is offline";
         public static string CannotDeleteReadOnly = "Cannot delete a read-only movie.\nWould you like Moving Pictures to ignore this movie?";
+        public static string CastAndCrew = "Cast and Crew";
         public static string CategoryEmptyDescription = "There are currently no movies\nlisted in this category.";
         public static string CategoryEmptyHeader = "Category is empty";
         public static string Certification = "Certification";
@@ -290,6 +291,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Saturday = "Saturday";
         public static string ScanForNewMovies = "Scan for New Movies";
         public static string Score = "Score";
+        public static string SearchBy = "Search By";
         public static string SelectYourRating = "Select your rating for {0}";
         public static string ShowOnlyUnwatchedMovies = "Show Only Unwatched Movies";
         public static string ShowWatchedAndUnwatchedMovies = "Show Watched and Unwatched Movies";
@@ -302,6 +304,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Sunday = "Sunday";
 
         // T
+        public static string Theme = "Theme";
         public static string ThisMonth = "This Month";
         public static string ThisWeek = "This Week";
         public static string ThisYear = "This Year";
