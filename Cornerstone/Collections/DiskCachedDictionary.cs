@@ -16,7 +16,7 @@ namespace Cornerstone.Collections {
             if (initialized) return;
             initialized = true;
 
-            cacheLocation = Path.GetTempPath() + @"cornerstone\" + GetHashCode() + @"\";
+            cacheLocation = Path.GetTempPath() + @"Cornerstone\DiskCachedDictionary\" + GetHashCode() + @"\";
             Directory.CreateDirectory(cacheLocation);
         }
 

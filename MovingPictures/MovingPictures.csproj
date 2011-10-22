@@ -591,7 +591,9 @@
     <Content Include="Resources\language\sl.xml" />
     <Content Include="Resources\language\sv.xml" />
     <Content Include="Resources\Images\page_gear.png" />
-    <None Include="DataProviders\ScraperScripts\IMDb.xml" />
+    <None Include="DataProviders\ScraperScripts\IMDb.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\External\FollwitApi\FollwitApi.csproj">
