@@ -1062,7 +1062,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 }
 
                 // Locked files are put in the files queue (to be processed later)
-                if (currFile.File.IsLocked()) {
+                if (MovingPicturesCore.Settings.DelayLockedFiles && currFile.File.IsLocked()) {
                     filesQueue.Add(currFile);
                     logger.Info("DELAYED: File='{0}', Reason='File is locked'", fileName);
                     continue;

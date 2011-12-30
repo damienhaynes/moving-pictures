@@ -29,6 +29,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private MovingPicturesSkinSettings skinSettings;
         private FilterUpdatedDelegate<DBMovieInfo> filterUpdatedDelegate;
 
+        private bool filtersRemoved = false;
+
         bool updatingFiltering = false;
         bool refreshFacade = false;
         DateTime refreshToday = DateTime.Today;
@@ -161,31 +163,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private BrowserViewMode previousView;
 
         /// <summary>
-        /// The default view mode to start the plug-in in, as defined by the user.
-        /// </summary>
-        public BrowserViewMode DefaultView {
-            get {
-                string defaultView = MovingPicturesCore.Settings.DefaultView.Trim().ToLower();
-                if (defaultView.Equals("list"))
-                    return BrowserViewMode.LIST;
-                else if (defaultView.Equals("thumbs"))
-                    return BrowserViewMode.SMALLICON;
-                else if (defaultView.Equals("largethumbs"))
-                    return BrowserViewMode.LARGEICON;
-                else if (defaultView.Equals("filmstrip"))
-                    return BrowserViewMode.FILMSTRIP;
-                else if (defaultView.Equals("coverflow"))
-                    return BrowserViewMode.COVERFLOW;
-                else if (defaultView.Equals("lastused"))
-                    return BrowserViewMode.LASTUSED;
-                else {
-                    logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
-                    return BrowserViewMode.LIST;
-                }
-            }
-        }
-
-        /// <summary>
         /// The facade control linked to this movie browser used for movie content.
         /// </summary>
         public GUIFacadeControl Facade {
@@ -214,6 +191,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
+        // TODO: Refactor DBMenu to be a wrapper for DBNode. Should eliminate this property since a CategoryState can just be the root node.
         /// <summary>
         /// Returns the internal Categories Menu database object.
         /// </summary>
@@ -221,13 +199,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             get { return MovingPicturesCore.Settings.CategoriesMenu; }
         }
 
+        // TODO: Refactor to DBNode.
         private BrowserViewMode GetViewFromNode(DBNode<DBMovieInfo> node) {
             DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)node.AdditionalSettings;
             if (nodeSettings.MovieView == BrowserViewMode.PARENT) {
                 if (node.Parent != null)
                     return GetViewFromNode(node.Parent);
                 else
-                    return DefaultView;
+                    return MovingPicturesCore.Settings.DefaultView;
             }
             else
                 return nodeSettings.MovieView;
@@ -324,6 +303,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             get { return _currentNode; }
         } public DBNode<DBMovieInfo> _currentNode;
 
+        // TODO: Rename to EntryNode. Or eliminate and set flag in State object?
         /// <summary>
         /// Returns the node that marks to topmost possible position in the categories-tree. When
         /// this topmost level is reached (if TopLevelNode is null this is the root level) and the
@@ -338,6 +318,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             get { return _topLevelNode; }
         } public DBNode<DBMovieInfo> _topLevelNode = null;
 
+        // TODO: ...?
         /// <summary>
         /// Returns the view that is set as the topmost possible view. When this topmost view 
         /// is reached (if this is the root level TopLevelView is BrowserViewMode.CATEGORIES)
@@ -411,6 +392,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         } public DBNode<DBMovieInfo> _selectedNode;
 
+        // TODO: See refactoring DBMenu comment above. Fuck this noise.
         public List<DBNode<DBMovieInfo>> SubNodes {
             get {
                 if (CurrentNode != null)
@@ -643,6 +625,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     first = false;
                 }
             }
+        }
+
+        public void TemporarilyRemoveCategoryFilters() {
+            filtersRemoved = true;
+            if (CurrentNode != null) removeFilters(CurrentNode);
         }
 
         #endregion

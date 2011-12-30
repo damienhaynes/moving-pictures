@@ -42,6 +42,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         MovieBrowser browser;
         RemoteNumpadFilter remoteFilter;
         DBFilter<DBMovieInfo> parentalControlsFilter;
+        WhiteListFilter searchFilter;
 
         MovingPicturesSkinSettings skinSettings;
 
@@ -529,8 +530,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     browser.CurrentView = BrowserViewMode.CATEGORIES;
                 }
                 else {
-                    browser.TopLevelView = browser.DefaultView;
-                    browser.CurrentView = browser.DefaultView;
+                    browser.TopLevelView = MovingPicturesCore.Settings.DefaultView;
+                    browser.CurrentView = MovingPicturesCore.Settings.DefaultView;
                 }
 
                 loaded = true;
@@ -558,7 +559,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 else {
                     //the skin doesn't support categories
                     browser.CurrentNode = null;
-                    browser.CurrentView = browser.DefaultView;
+                    browser.CurrentView = MovingPicturesCore.Settings.DefaultView;
                 }
             }
 
@@ -764,6 +765,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     else if (remoteFilter.Active) {
                         // if a remote filter is active remove it
                         remoteFilter.Clear();
+                    } else if (searchFilter != null) {
+                        browser.Filters.Remove(searchFilter);
+                        searchFilter = null;
                     }
                     else if (browser.CategoriesAvailable && browser.CurrentNode != null && browser.CurrentNode != browser.TopLevelNode) {
                         // go to the parent category
@@ -1469,7 +1473,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void Search(SearchMode mode, string searchStr) {
             var searchResults = MovingPicturesCore.Searchers[mode].Search(searchStr);
             var movies = searchResults.Select(result => result.Item);
-            ShowMessage("what have you done???", "Found " + movies.Count() + " movies!");
+
+            searchFilter = new WhiteListFilter(movies);
+
+            //browser.TemporarilyRemoveCategoryFilters();
+            browser.Filters.Add(searchFilter);
+
+            browser.CurrentView = BrowserViewMode.LIST;
+            
         }
 
         /// <summary>

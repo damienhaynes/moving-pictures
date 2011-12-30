@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Globalization;
 using NLog;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
+using MediaPortal.Configuration;
 
 namespace MediaPortal.Plugins.MovingPictures.DataProviders {
     public class ScriptableProvider : IScriptableMovieProvider {
@@ -138,8 +139,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movieSignature.Folder != null) paramList["search.foldername"] = movieSignature.Folder;
             if (movieSignature.File != null) paramList["search.filename"] = movieSignature.File;
             
-            //set default useragent for scrapers to use
+            //set higher level settings for script to use
             paramList["settings.defaultuseragent"] = MovingPicturesCore.Settings.UserAgent;
+            paramList["settings.mepo_data"] = Config.GetFolder(Config.Dir.Config);
 
             // this variable is the filename without extension (and a second one without stackmarkers)
             if (!String.IsNullOrEmpty(movieSignature.File)) {
@@ -215,8 +217,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                     paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
             }
 
-            //add useragent to paramlist
+            //set higher level settings for script to use
             paramList["settings.defaultuseragent"] = MovingPicturesCore.Settings.UserAgent;
+            paramList["settings.mepo_data"] = Config.GetFolder(Config.Dir.Config);
 
             // try to retrieve results
             results = scraper.Execute("get_details", paramList);
@@ -277,8 +280,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 if (currField.GetValue(movie) != null)
                     paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
 
-            //add useragent to paramlist
+            //set higher level settings for script to use
             paramList["settings.defaultuseragent"] = MovingPicturesCore.Settings.UserAgent;
+            paramList["settings.mepo_data"] = Config.GetFolder(Config.Dir.Config);
 
             // run the scraper
             results = scraper.Execute("get_cover_art", paramList);
@@ -340,8 +344,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 if (currField.GetValue(movie) != null)
                     paramList["movie." + currField.FieldName] = currField.GetValue(movie).ToString().Trim();
 
-            //add useragent to paramlist
+            //set higher level settings for script to use
             paramList["settings.defaultuseragent"] = MovingPicturesCore.Settings.UserAgent;
+            paramList["settings.mepo_data"] = Config.GetFolder(Config.Dir.Config);
 
             // run the scraper
             results = scraper.Execute("get_backdrop", paramList);

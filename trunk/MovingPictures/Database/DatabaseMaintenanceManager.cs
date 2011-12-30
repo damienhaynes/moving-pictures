@@ -304,6 +304,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 #endregion
 
+                #region Upgrades required for 1.3.0
+
+                if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.3.0")) {
+                    if (movie.Title.StartsWith("IMDb - ")) movie.Title = movie.Title.Replace("IMDb - ", "");
+                }
+
+                #endregion
+
                 // commit movie
                 movie.Commit();
             }
@@ -412,6 +420,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // force a full follw.it synchronization for follw.it ID changes, watched status changes and ratings changes as these are new features
                 if (MovingPicturesCore.Settings.FollwitEnabled)
                     MovingPicturesCore.Follwit.ProcessTasks(DateTime.MinValue);
+            }
+
+            #endregion
+
+            #region Upgrades required for 1.3.0
+
+            if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.3.0")) {
+             
+                if (MovingPicturesCore.Settings.DataProviderRequestLimit == 3) // old default
+                    MovingPicturesCore.Settings.DataProviderRequestLimit = 0;
             }
 
             #endregion

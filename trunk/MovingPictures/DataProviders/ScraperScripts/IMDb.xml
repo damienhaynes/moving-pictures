@@ -14,7 +14,7 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="2" minor="1" point="5" />
+    <version major="2" minor="1" point="7" />
     <published month="12" day="30" year="2011" />
     
     <!--
@@ -40,7 +40,7 @@
 
     <set name="rx_title_year">
 	<![CDATA[
-	<title>(.+?)\((?:TV )?(?:Video )?(\d{4})[\/IVX]*\).*?</title>
+	<title>(?:IMDb[\s-]*)?(.+?)\((?:TV )?(?:Video )?(\d{4})[\/IVX]*\).*?</title>
 	]]>
     </set>
 
@@ -171,7 +171,7 @@
 
       <set name="rx_title_year">
 	<![CDATA[
-	<title>(?<movieTitle>[^\(]+?)\s?\((?:TV )?(?:Video )?(?<movieYear>\d{4})[\/IVX]*\).*?</title>
+	<title>(?:IMDb[\s-]*)?(?<movieTitle>[^\(]+?)\s?\((?:TV )?(?:Video )?(?<movieYear>\d{4})[\/IVX]*\).*?</title>
 	]]>
       </set>
 
@@ -220,6 +220,17 @@
       <set name="rx_genres">
 	<![CDATA[
 	<a href="(?:/Sections)?/[Gg]enre[s]?/[^/]+/?">(?<movieGenres>.+?)</a>
+	]]>
+      </set>
+
+      <set name="rx_studios_block">
+	<![CDATA[
+	<h4 class="inline">Production Co:</h4>(?<movieStudios>(?:[^<]*<a\s*href="[^"]+">[^<]+</a>)*)
+	]]>
+      </set>
+      <set name="rx_studios">
+	<![CDATA[
+	<a\s*href="[^"]+">(?<movieStudios>[^<]+)</a>
 	]]>
       </set>
 
@@ -320,6 +331,14 @@
       <set name='movie.genres' value='' />
       <loop name='currGenre' on='genres'>
         <set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}' />
+      </loop>
+
+      <!-- Studios -->
+      <parse name="studios_block" input="${details_page}" regex="${rx_studios_block}" />
+      <parse name="studios" input="${studios_block}" regex="${rx_studios}" />
+      <set name='movie.studios' value='' />
+      <loop name='currStudio' on='studios'>
+	<set name='movie.studios' value='${movie.studios}|${currStudio[0]:htmldecode}' />
       </loop>
 
       <!-- Certification -->

@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>354001</id>
-    <version major="1" minor="3" point="03"></version>
-    <published month="11" day="08" year="2010"></published>
+    <version major="1" minor="3" point="04"></version>
+    <published month="12" day="30" year="2011"></published>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -34,13 +34,13 @@
     <!-- Regular Expressions -->
     <set name="rx_details_page_block">
       <![CDATA[
-      <title>.+?\(\d{4}[\/IVX]*\).*?</title>.+</body>
+      <title>.+?\((?:TV )?(?:Video )?\d{4}[\/IVX]*\).*?</title>.+</body>
       ]]>
     </set>
 
     <set name="rx_title_year">
       <![CDATA[
-      <title>(.+?)\((\d{4})[\/IVX]*\).*?</title>
+      <title>(?:IMDb[\s-]*)?(.+?)\((?:TV )?(?:Video )?(\d{4})[\/IVX]*\).*?</title>
       ]]>
     </set>
 
@@ -52,7 +52,7 @@
 
     <set name="rx_search_results">
       <![CDATA[
-      ><a href="/title/(tt\d{7})/"[^>]+>(?!&#34;)([^<]+)</a> \((\d{4})[\/IVX]*\)(?! \(VG\))([^<]*<br>&#160;aka(.+?)</td>)?
+      ><a href="/title/(tt\d{7})/"[^>]+>(?!&#34;)([^<]+)</a> \((\d{4})[\/IVX]*\)(?! \(VG\))(?:[^<].*?>(?=aka ")?(.+?)?</td>)?
       ]]>
     </set>
 
@@ -173,6 +173,12 @@
       <set name="site" value="http://akas.imdb.com/title/${movie.site_id}"></set>
       <retrieve name="details_page" url="${site}"></retrieve>
 
+      <set name="rx_title_year">
+	  <![CDATA[
+	  <title>(?:IMDb[\s-]*)?(?<movieTitle>[^\(]+?)\s?\((?:TV )?(?:Video )?(?<movieYear>\d{4})[\/IVX]*\).*?</title>
+	  ]]>
+      </set>
+      
       <set name="rx_aka">
         <![CDATA[
       <tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
@@ -224,7 +230,7 @@
       <set name="movie.imdb_id" value="${movie.site_id}"></set>
 
       <!-- Title and Year -->
-      <parse name="title_year" input="${details_page}" regex="&lt;title&gt;([^\(]+?)\((\d{4})[\/IVX]*\).*?&lt;/title&gt;"></parse>
+      <parse name="title_year" input="${details_page}" regex="${rx_title_year}"></parse>
       <set name="movie.title" value="${title_year[0][0]:htmldecode}"></set>
       <set name="movie.year" value="${title_year[0][1]:htmldecode}"></set>
 

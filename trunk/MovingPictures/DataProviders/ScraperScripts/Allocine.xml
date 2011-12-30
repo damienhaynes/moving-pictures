@@ -3,7 +3,7 @@
     <details>
         <!-- These details are for display purposes only. -->
         <name>allocine.fr</name>
-        <author>Armand Pondman (armandp), John Conrad (fforde), Titof, and Antoine VANDER MEULEN (Tarkin)</author>
+        <author>Armand Pondman (armandp), John Conrad (fforde) and Titof, updated by Antoine VANDER MEULEN (Tarkin)</author>
         <description>This script pulls data from allocine.fr</description>
 
         <!-- 
@@ -15,14 +15,14 @@
     is for minor bug fix releases. Use it.
     -->
         <id>874930</id>
-        <version major="2" minor="0" point="3"/>
-        <published month="12" day="8" year="2010"/>
+        <version major="2" minor="1" point="1"/>
+        <published month="12" day="30" year="2011"/>
 
         <!--
     These fields are used for categorization purposes. Seperate multiple 
     types with a pipe | character.
     -->
-        <type>MovieDetailsFetcher|MovieCoverFetcher</type>
+        <type>MovieDetailsFetcher</type> <!-- temporarily removed "MovieCoverFetcher". was returning screenshots rather than covers-->
         <language>fr</language>
 
     </details>
@@ -79,72 +79,78 @@
 
             <set name="rx_title">
                 <![CDATA[
-        <div class="titlebar">.*?<h1[^>]*?>(.+?)</h1>
+        <h1 itemprop=\"name\">(?<titre>.*?)</h1>
         ]]>
             </set>
 
             <set name="rx_plot">
                 <![CDATA[
-      <span.*?>Synopsis :.*?</span>(.+?)</p>
+        <p itemprop=\"description\">(?<summary>.*?)</p>
       ]]>
             </set>
 
             <set name="rx_year">
                 <![CDATA[
-Année de production.*?(\d\d\d\d)</a>
+        <span itemprop=\"datePublished\" content=\"(?<year>.*?)-
       ]]>
             </set>
 
             <set name="rx_director_block">
                 <![CDATA[
-        Réalisé par(.*?)</span>
+        <span itemprop=\"director\" itemscope itemtype=\"http://schema.org/Person\"><a title=\"[^<]*\" href=\"/personne/fichepersonne_gen_cpersonne=[0-9]*.html\" class=\"underline\" itemprop=\"url\" ><span itemprop=\"name\">(?<director>[^<]*)</span>
       ]]>
             </set>
 
             <set name="rx_actor_block">
                 <![CDATA[
-      personnages</h2>(.*)<h2>
+      Acteurs et actrices(.*?)Haut de page</span>
       ]]>
             </set>
 
             <set name="rx_voice_block">
                 <![CDATA[
-      \(Voix locales\)</h2>(.*)<h2>
+      Acteurs de doublage \(Voix locales\)(.*)Haut de page</span>
       ]]>
             </set>
             <set name="rx_voice2_block">
                 <![CDATA[
-      \(Voix originales\)</h2>(.*)<h2>
+      Acteurs de doublage \(Voix originales\)(.*)Haut de page</span>
       ]]>
             </set>
             
             <set name="rx_get_person_from_anchor_text">
                 <![CDATA[
-      <a[^>]+personne[^>]+>\s*?([^<]+)\s*?</a>
+      <span itemprop=\"name\">(?<nom>.*?)</span>
       ]]>
             </set>
 
             <set name="rx_genre_block">
                 <![CDATA[
-      Genre :(.*?)<br/>
+      <span class=\"film_info lighten fl\">Genre</span>(.*?)</div>
       ]]>
             </set>
 
             <set name="rx_get_genre_from_anchor_text">
                 <![CDATA[
-      <a[^>]+genre[^>]+>\s*?([^<]+)\s*?</a>
+      <span itemprop=\"genre\">(?<genre>.*?)</span>
       ]]>
             </set>
 
             <set name="rx_runtime">
                 <![CDATA[
-      Durée :.*?(\d+)h(\d\d)
+      <span itemprop=\"duration\" content=\".*?\">(?<heure>[0-9]?)h (?<minutes>[0-9]{2})min</span>
+      ]]>
+            </set>
+
+            <set name="rx_score_block">
+                <![CDATA[
+      >Spectateurs</span>(.*?)</div>
       ]]>
             </set>
 
             <set name="rx_score">
                 <![CDATA[
-      Spectateurs.*?\((\d,\d)\)
+      <span class=\"note\">(?<score>.*?)</span>
       ]]>
             </set>
 
@@ -166,8 +172,8 @@ Année de production.*?(\d\d\d\d)</a>
             <set name="movie.year" value="${year[0][0]}"/>
 
             <!-- Directors -->
-            <parse name="director_block" input="${details_page}" regex="${rx_director_block}"/>
-            <parse name="directors" input="${director_block}" regex="${rx_get_person_from_anchor_text}"/>
+            <parse name="directors" input="${details_page}" regex="${rx_director_block}"/>
+            <!--parse name="directors" input="${director_block}" regex="${rx_get_person_from_anchor_text}"/-->
             <set name='movie.directors' value=''/>
             <loop name='currDirector' on='directors'>
                 <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"/>
@@ -215,9 +221,10 @@ Année de production.*?(\d\d\d\d)</a>
             </if>
 
             <!-- Score -->
-            <parse name="score" input="${details_page}" regex="${rx_score}"/>
+            <parse name="score_block" input="${details_page}" regex="${rx_score_block}"/>
+            <parse name="score" input="${score_block}" regex="${rx_score}"/>
             <if test="${score[0][0]}!=">
-                <multiply name="score" value1="${score[0][0]}" value2="25" />
+                <multiply name="score" value1="${score[0][0]}" value2="2" />
                 <divide name="movie.score" value1="${score}" value2="10" />
             </if>
 

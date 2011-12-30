@@ -91,12 +91,19 @@ Section "Moving Pictures Plugin" SEC0000
         SetOutPath $PLUGIN_DIR
         SetOverwrite try
         File ..\MovingPictures\Resources\moving-pictures-release-notes.txt
+        !ifdef RELEASE
         File ..\MovingPictures\bin\Release\MovingPictures.dll
 		File ..\MovingPictures\bin\Release\Cornerstone.dll
 		File ..\MovingPictures\bin\Release\Cornerstone.MP.dll
-		
-		SetOutPath $MEDIAPORTAL_DIR
+        SetOutPath $MEDIAPORTAL_DIR
 		File ..\MovingPictures\bin\Release\NLog.dll
+        !else
+        File ..\MovingPictures\bin\Debug\MovingPictures.dll
+		File ..\MovingPictures\bin\Debug\Cornerstone.dll
+		File ..\MovingPictures\bin\Debug\Cornerstone.MP.dll
+        SetOutPath $MEDIAPORTAL_DIR
+		File ..\MovingPictures\bin\Debug\NLog.dll
+        !endif
  		
 		Delete $MEDIAPORTAL_DIR\Cornerstone.dll
 		Delete $MEDIAPORTAL_DIR\Cornerstone.MP.dll

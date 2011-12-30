@@ -156,7 +156,7 @@
             fieldProperty27.Visible = false;
             fieldProperty28.DisplayName = "Popularity";
             fieldProperty28.FieldName = "Popularity";
-            fieldProperty28.Visible = false;
+            fieldProperty28.Visible = true;
             fieldProperty29.DisplayName = "User Score";
             fieldProperty29.FieldName = "UserScore";
             fieldProperty29.Visible = false;

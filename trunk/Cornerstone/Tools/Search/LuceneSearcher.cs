@@ -58,7 +58,6 @@ namespace Cornerstone.Tools.Search {
             base.BuildDynamicIndex();
             writer.Optimize();
             writer.Flush();
-            writer.Close();
         }
 
         public override void AddRange(ICollection<T> items) {

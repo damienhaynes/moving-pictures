@@ -2,7 +2,7 @@
   <details>
     <!-- These details are for display purposes only. -->
     <name>Kinopoisk.ru</name>
-    <author>LRFalk01</author>
+    <author>LRFalk01, Others</author>
     <description>This script pulls data from Kinopoisk.ru.</description>
     
     <!-- 
@@ -13,9 +13,9 @@
     disribute it to anyone but internal testers. The point number 
     is for minor bug fix releases. Use it.
     -->
-    <id>141521</id>
-    <version major="1" minor="4" point="1"/>
-    <published month="1" day="15" year="2011"/>
+    <id>141522</id>
+    <version major="1" minor="4" point="4"/>
+    <published month="12" day="30" year="2011"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -195,7 +195,7 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
 	
 	<set name="rx_certification">
       <![CDATA[
-	  src='/images/mpaa/(?<movieRating>[^\.]+).gif'
+	  src="http://st\.kinopoisk\.ru/images/mpaa/(?<movieRating>[^\.]+).gif"
       ]]>
     </set>
 	
@@ -214,13 +214,13 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
 
     <set name="rx_score_votes">
       <![CDATA[
-	  93% rep[^>]+>(?<MovieScore>[\d.]+)[^>]+>&nbsp;&nbsp;(?<movieVotes>[\d]+)
+	  93% rep[^>]+>\s*<span>(?<MovieScore>[\d.]+)</span>\s*<span [^>]+>&nbsp;&nbsp;(?<movieVotes>[\d]+)
       ]]>
     </set>
 	
 	<set name="rx_actor">
       <![CDATA[
-      <span><a[^>]+>(?<movieActor>[^<]+)
+      <span itemprop="actors"[^>]+><a[^>]+>(?<movieActor>[^<]+)
       ]]>
     </set>
 	
@@ -236,6 +236,11 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
       ]]>
       </set>	
 
+	<set name="rx_language3">
+      <![CDATA[
+      страна</td>(?<language>.+?)</div>
+      ]]>
+      </set>	
 
 	<set name="rx_aka">
       <![CDATA[
@@ -269,7 +274,7 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
 
 	<set name="rx_description">
       <![CDATA[
-      <tr><td\scolspan=3[^c]+class="news">\n\t{3}(?<summery>[^\n]+)
+      <tr><td\scolspan=3[^c]+class="news">\n\s+<span[^>]+><[^>]+>(?<summery>.+?)</div>
       ]]>
     </set>
 	
@@ -333,6 +338,7 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
       ]]>
     </set>	
 	
+
 	
     <retrieve name="home_page" url="http://www.kinopoisk.ru" retries="10" timeout="10000" timeout_increment="4000" /> 
     <retrieve name="details_page" url="http://www.kinopoisk.ru/level/1/film/${movie.site_id}" retries="10" timeout="10000" timeout_increment="4000" />
@@ -411,13 +417,11 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
 
 
     <!-- Language -->
-    <parse name="language" input="${details_page}" regex='${rx_language1}'/>
-    <if test="${language[0][0]}=">
-	<parse name="language" input="${details_page}" regex="${rx_language2}"/>
-    </if>
-    <if test="${language[0][0]}!=">
-	<set name="movie.language" value="${language[0][0]:htmldecode}" />
-    </if>
+    <parse name="language" input="${details_page}" regex='${rx_language3}'/>
+    <set name='lang1' value="${language[0][0]:striptags}" />
+	<replace name="lang2" input="${lang1}" pattern="${sps}" with=" " />
+	<replace name="lang3" input="${lang2}" pattern=", " with="/" />
+     <set name='movie.language' value='${lang3:htmldecode}'/>
 
     
     <!-- Plot Summary -->
