@@ -96,7 +96,7 @@
   <string Field="PlaybackFailedHeader">Afspilun mistókst</string>
   <string Field="ProblemLoadingSkinFile">Vandræði með viðkomandi viðmótsútlit.</string>
   <!-- R -->
-  <string Field="Rate">Einkunn</string>
+  <string Field="Rate">Aldurst:</string>
   <string Field="Rated">Einkunn</string>
   <string Field="RateFiveStarFive">Frábær</string>
   <string Field="RateFiveStarFour">Mjög góð</string>

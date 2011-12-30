@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!-- Moving Pictures translation file -->
-<!-- Spanish (ES) -->
+<!-- Spanish -->
 <!-- Note: English is the fallback for any strings not found in other languages -->
 <strings>
   <string Field="Actor">Actor</string>
   <string Field="Actors">Actores</string>
   <string Field="AllMovies">Todas las Películas</string>
+  <string Field="BadCategory">¡Un plugin o skin externo\ntrató de abrir una categoría\ninexistente de Moving Pictures!</string>
+  <string Field="BadMovie">¡Un plugin o skin externo\ntrató de abrir una película\ninexistente de Moving Pictures!</string>
+  <string Field="BadParam">¡Un plugin o skin externo\nenvió un parámetro inválido a Moving Pictures!</string>
   <string Field="Cancel">Cancelar</string>
   <string Field="CannotDeleteOffline">No se pudo borrar {0}\n porque el archivo está offline</string>
   <string Field="CannotDeleteReadOnly">No se puede borrar una película de sólo lectura.\n¿Quiere que Moving Pictures ignore esta película?</string>
@@ -16,6 +19,7 @@
   <string Field="CheckForMissingArtwork">Comprobar online fondos (Artwork) ausentes </string>
   <string Field="ContinueToNextPartBody">¿Quiere continuar con la parte {0}?</string>
   <string Field="ContinueToNextPartHeader">¿Continuar en la siguiente parte?</string>
+  <string Field="CoverFlowView">Vista Coverflow</string>
   <string Field="CycleCoverArt">Alternar portada</string>
   <string Field="CycleView">Alternar vista</string>
   <string Field="DateAdded">Añadido</string>
@@ -49,7 +53,7 @@
   <string Field="Future">Futuro</string>
   <string Field="Genre">Género</string>
   <string Field="Genres">Géneros</string>
-  <string Field="InvalidPin">¡Código PIN erróneo!</string>
+  <string Field="InvalidPin">¡Código PIN incorrecto!</string>
   <string Field="InvalidVideoDiscFormat">O el archivo de imagen no contiene\nun formato de disco válido, o su configuración\nde Daemon Tools en MediaPortal es incorrecta.</string>
   <string Field="Language">Idioma</string>
   <string Field="LargeThumbnailView">Vista de Miniaturas Grandes</string>
@@ -76,10 +80,10 @@
   <string Field="PinCodeHeader">Desbloquear contenido restringido</string>
   <string Field="PinCodePrompt">Por favor, introduzca el código PIN para continuar:</string>
   <string Field="PlaybackFailed">No es posible la reproducción porque la extensión '{0}'\nno está listada en la configuración de MediaPortal.\nPor favor, añada la extensión o configure un reproductor externo\ne inténtelo de nuevo.</string>
-  <string Field="PlaybackFailedHeader">Fallo en la reproducción</string>
+  <string Field="PlaybackFailedHeader">Error al Reproducir</string>
   <string Field="ProblemLoadingSkinFile">Lo siento, hubo un problema cargando el archivo del skin...</string>
   <string Field="Rate">Puntuar</string>
-  <string Field="Rated">Puntuado</string>
+  <string Field="Rated">Calificación</string>
   <string Field="RateFiveStarFive">Perfecta</string>
   <string Field="RateFiveStarFour">Magnífica</string>
   <string Field="RateFiveStarOne">Pésima</string>
@@ -87,6 +91,8 @@
   <string Field="RateFiveStarTwo">Mediocre</string>
   <string Field="RateHeading">Puntuar película</string>
   <string Field="RecentlyAddedMovies">Películas añadidas recientemente</string>
+  <string Field="RemoteNumericAlphabet0"> </string>
+  <string Field="RemoteNumericAlphabet1"> </string>
   <string Field="RemoteNumericAlphabet2">abc</string>
   <string Field="RemoteNumericAlphabet3">def</string>
   <string Field="RemoteNumericAlphabet4">ghi</string>
@@ -110,13 +116,14 @@
   <string Field="RuntimeShort">{0}:{1}</string>
   <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
   <string Field="Saturday">Sábado</string>
+  <string Field="ScanForNewMovies">Buscar Nuevas Películas</string>
   <string Field="Score">Puntuación</string>
   <string Field="SelectYourRating">Seleccione su puntuación para {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Mostrar sólo películas no vistas</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Mostrar películas vistas y no vistas</string>
-  <string Field="SkinDoesNotSupportCategories">Este skin no soporta las Categorías.</string>
-  <string Field="SkinDoesNotSupportPinDialog">Este skin no soporta el diálogo de código PIN</string>
-  <string Field="SkinDoesNotSupportRatingDialog">Este skin no soporta el diálogo de puntuaciones</string>
+  <string Field="SkinDoesNotSupportCategories">Este skin no soporta Categorías.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Este skin no soporta el Diálogo de Código PIN.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Este skin no soporta el Diálogo de Puntuaciones.</string>
   <string Field="SortBy">Ordenar por</string>
   <string Field="SortDirection">Dirección de ordenación</string>
   <string Field="StarRating">Valoración</string>
@@ -142,7 +149,8 @@
   <string Field="UpdateMovieDetailsBody">Va a refrescar todos los datos de la película, sobreescribiendo\ncualquier modificación hecha sobre el film.\n¿Quiere continuar?</string>
   <string Field="UpdateMovieDetailsHeader">Actualizar detalles de película</string>
   <string Field="VirtualDriveHeader">Unidad virtual no preparada</string>
-  <string Field="VirtualDriveMessage">La unida virtual no se preparó a tiempo.\nInténtelo de nuevo o cancele la reproducción.</string>
+  <string Field="VirtualDriveMessage">La unidad virtual no se preparó a tiempo.\nInténtelo de nuevo o cancele la reproducción.</string>
+  <string Field="Votes">votos</string>
   <string Field="Wednesday">Miércoles</string>
   <string Field="Writer">Guionista</string>
   <string Field="Writers">Guionistas</string>

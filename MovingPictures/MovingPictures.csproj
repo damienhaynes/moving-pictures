@@ -333,6 +333,7 @@
     <Compile Include="LocalMediaManagement\Utility.cs" />
     <Compile Include="LocalMediaManagement\VideoUtility.cs" />
     <Compile Include="MainUI\ConfigConnector.cs" />
+    <Compile Include="MainUI\Filters\WhiteListFilter.cs" />
     <Compile Include="MainUI\GroupHeaders.cs" />
     <Compile Include="MainUI\MovieBrowser.cs" />
     <Compile Include="MainUI\Filters\RemoteNumpadFilter.cs" />
@@ -340,6 +341,10 @@
     <Compile Include="MainUI\MoviePlayer.cs" />
     <Compile Include="MainUI\MovingPicturesGUI.cs" />
     <Compile Include="MainUI\MovingPicturesSkinSettings.cs" />
+    <Compile Include="MainUI\NewMovieBrowser\IBrowserState.cs" />
+    <Compile Include="MainUI\NewMovieBrowser\CategoryState.cs" />
+    <Compile Include="MainUI\NewMovieBrowser\MovieCollectionState.cs" />
+    <Compile Include="MainUI\NewMovieBrowser\MovieDetailsState.cs" />
     <Compile Include="MainUI\Sort.cs" />
     <Compile Include="MainUI\Translation.cs" />
     <Compile Include="MovingPicturesCore.cs" />

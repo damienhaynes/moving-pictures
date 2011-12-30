@@ -157,6 +157,29 @@ namespace Cornerstone.Database.Tables {
             protectExistingValuesFromCopy = true;
         }
 
+        /// <summary>
+        /// Returns true if all auto-updatable fields for this object are populated.
+        /// </summary>
+        public bool IsFullyPopulated() {
+
+            ReadOnlyCollection<DBField> fieldList = DBField.GetFieldList(this.GetType());
+
+            foreach (DBField currField in fieldList) {
+                object oldValue = currField.GetValue(this);
+                if (currField.Filterable && currField.AutoUpdate) {
+                    // check if the old value is the default value
+                    if (oldValue is string && currField.Default is string) {
+                        if (((string)oldValue).Trim().Equals(((string)currField.Default).Trim()))
+                            return false;
+                    }
+                    else if (oldValue.Equals(currField.Default))
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
         // Updates the current object with all fields in the newData object
         public void Copy(DatabaseTable newData) {
             if (newData == null) return;

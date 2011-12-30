@@ -23,7 +23,13 @@ using MediaPortal.Plugins.MovingPictures.MainUI;
 using Cornerstone.Tools.Search;
 
 namespace MediaPortal.Plugins.MovingPictures {
-    public enum BrowserViewMode { PARENT, LIST, SMALLICON, LARGEICON, FILMSTRIP, COVERFLOW, DETAILS, CATEGORIES, LASTUSED }
+    public enum BrowserViewMode {
+        LIST, SMALLICON, LARGEICON, FILMSTRIP, COVERFLOW, // standard views for looking at a collection of movies
+        PARENT, LASTUSED,                                 // special case view modes for looking at a collection of movies
+        CATEGORIES,                                       // category view
+        DETAILS                                           // movie detials view
+    }
+
     public enum SearchMode { Title, Person, Summary }
     
     public class MovingPicturesCore {

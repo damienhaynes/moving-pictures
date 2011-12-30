@@ -5,9 +5,11 @@ using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Tools.Translate;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesSettings: SettingsManager {
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         public MovingPicturesSettings(DatabaseManager dbManager)
             : base(dbManager) {
@@ -250,7 +252,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The maximum number of data providers to use when updating missing movie details. Enter 0 to use all active data providers.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_dataprovider_request_limit",
-            Default = 3)]
+            Default = 0)]
         public int DataProviderRequestLimit {
             get { return _dataProviderRequestLimit; }
             set {
@@ -265,7 +267,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If set to true, Moving Pictures will automatically scan files for various statistics including video file resolution and audio settings. If this option is turned off, this information will not be available to the skin unless manually retrieved by the user. This can improve the speed of the import process.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_use_mediainfo",
-            Default = true)]
+            Default = false)]
         public bool AutoRetrieveMediaInfo {
             get { return _useMediaInfo; }
             set {
@@ -323,6 +325,21 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private int _rescanNetworkPathsInterval;
+
+        [CornerstoneSetting(
+            Name = "Delay Import of Write-Locked Files",
+            Description = "If a file is locked for writing this generally means it is in the process of being copied to the watch folder. If this setting is true, the import will wait until the lock is released.",
+            Groups = "|Movie Importer|Tweaks|",
+            Identifier = "importer_delay_locked",
+            Default = false)]
+        public bool DelayLockedFiles {
+            get { return _delayLockedFiles; }
+            set {
+                _delayLockedFiles = value;
+                OnSettingChanged("importer_delay_locked");
+            }
+        }
+        private bool _delayLockedFiles;
 
         #endregion
 
@@ -958,7 +975,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Default = false,
             Hidden = true)]
         public bool UseTranslator {
-            get { return _useTranslator; }
+            get { return false; }
             set {
                 _useTranslator = value;
                 OnSettingChanged("use_translator");
@@ -1033,19 +1050,44 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Default View",
-            Description = "The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are \"lastused\", \"list\", \"thumbs\", \"largethumbs\", and \"filmstrip\".",
+            Description = "The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are \"lastused\", \"list\", \"thumbs\", \"largethumbs\", \"coverflow\" and \"filmstrip\".",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "default_view",
             Default = "lastused",
             Hidden = true)]
-        public string DefaultView {
-            get { return _defaultView; }
+        public string DefaultViewStr {
+            get { return _defaultViewStr; }
             set {
-                _defaultView = value;
+                _defaultViewStr = value;
                 OnSettingChanged("default_view");
             }
         }
-        private string _defaultView;
+        private string _defaultViewStr;
+
+        /// <summary>
+        /// The default view mode to start the plug-in in, as defined by the user.
+        /// </summary>
+        public BrowserViewMode DefaultView {
+            get {
+                string defaultView = DefaultViewStr.Trim().ToLower();
+                if (defaultView.Equals("list"))
+                    return BrowserViewMode.LIST;
+                else if (defaultView.Equals("thumbs"))
+                    return BrowserViewMode.SMALLICON;
+                else if (defaultView.Equals("largethumbs"))
+                    return BrowserViewMode.LARGEICON;
+                else if (defaultView.Equals("filmstrip"))
+                    return BrowserViewMode.FILMSTRIP;
+                else if (defaultView.Equals("coverflow"))
+                    return BrowserViewMode.COVERFLOW;
+                else if (defaultView.Equals("lastused"))
+                    return BrowserViewMode.LASTUSED;
+                else {
+                    logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
+                    return BrowserViewMode.LIST;
+                }
+            }
+        }
 
         [CornerstoneSetting(
             Name = "Last Used View",

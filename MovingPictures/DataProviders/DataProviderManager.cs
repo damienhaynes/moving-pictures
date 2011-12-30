@@ -595,6 +595,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
 
             foreach (DBSourceInfo currSource in sources) {
+                if (movie.IsFullyPopulated()) {
+                    logger.Debug("UPDATE: All fields are populated. Done updating '" + movie.Title + "'.");
+                    break;
+                }
+
                 if (currSource.IsDisabled(DataType.DETAILS))
                     continue;
 
