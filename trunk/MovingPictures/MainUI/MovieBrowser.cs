@@ -632,6 +632,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (CurrentNode != null) removeFilters(CurrentNode);
         }
 
+        public void ReAddCategoryFilters() {
+            if (filtersRemoved) {
+                filtersRemoved = false;
+                if (CurrentNode != null) addFilters(CurrentNode);
+            }
+        }
+
         #endregion
 
         #region Core MovieBrowser Methods
