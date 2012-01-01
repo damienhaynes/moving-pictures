@@ -135,6 +135,8 @@
   <string Field="Saturday">Saturday</string>
   <string Field="ScanForNewMovies">Scan for New Movies</string>
   <string Field="Score">Score</string>
+  <string Field="Search">Search</string>
+  <string Field="SearchBy">Search By</string>
   <string Field="SelectYourRating">Select your rating for {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Show Only Unwatched Movies</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Show Watched and Unwatched Movies</string>

@@ -99,6 +99,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         [SkinControl(4)]
         protected GUIButtonControl filterButton = null;
 
+        [SkinControl(19)]
+        protected GUIButtonControl searchButton = null;
+
         [SkinControl(5)]
         protected GUIButtonControl settingsButton = null;
 
@@ -260,7 +263,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             PublishViewDetails();
 
             // publish current node settings if any
-            if (browser.CurrentNode != null) {
+            if (searchFilter != null) {
+                SetProperty("#MovingPictures.CurrentNode.name", Translation.Search);
+            } 
+            else if (browser.CurrentNode != null) {
                 PublishDetails(browser.CurrentNode, "CurrentNode");
                 PublishDetails(browser.CurrentNode.AdditionalSettings, "CurrentNode.Extra.AdditionalSettings");
             }
@@ -735,6 +741,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     toggleParentalControls();
                     browser.Focus();
                     break;
+
+                case 19:
+                    showSearchContext();
+                    browser.Focus();
+                    break;
             }
 
             base.OnClicked(controlId, control, actionType);
@@ -767,7 +778,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         remoteFilter.Clear();
                     } else if (searchFilter != null) {
                         browser.Filters.Remove(searchFilter);
+                        browser.ReAddCategoryFilters();
+                        browser.CurrentView = browser.PreviousView;
                         searchFilter = null;
+                        OnBrowserContentsChanged();
                     }
                     else if (browser.CategoriesAvailable && browser.CurrentNode != null && browser.CurrentNode != browser.TopLevelNode) {
                         // go to the parent category
@@ -1476,7 +1490,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             searchFilter = new WhiteListFilter(movies);
 
-            //browser.TemporarilyRemoveCategoryFilters();
+            browser.TemporarilyRemoveCategoryFilters();
             browser.Filters.Add(searchFilter);
 
             browser.CurrentView = BrowserViewMode.LIST;
