@@ -29,6 +29,7 @@
             this.updateSettingButton = new System.Windows.Forms.Button();
             this.setValueTextBox = new System.Windows.Forms.TextBox();
             this.detailsGroupBox = new System.Windows.Forms.GroupBox();
+            this.moreInfoLinkLabel = new System.Windows.Forms.LinkLabel();
             this.mainGroupBox.SuspendLayout();
             this.detailsGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -102,6 +103,7 @@
             this.detailsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.detailsGroupBox.Controls.Add(this.updateSettingButton);
+            this.detailsGroupBox.Controls.Add(this.moreInfoLinkLabel);
             this.detailsGroupBox.Controls.Add(this.setDescriptionLabel);
             this.detailsGroupBox.Controls.Add(this.setValueTextBox);
             this.detailsGroupBox.Location = new System.Drawing.Point(4, 292);
@@ -110,6 +112,19 @@
             this.detailsGroupBox.TabIndex = 1;
             this.detailsGroupBox.TabStop = false;
             this.detailsGroupBox.Text = "Setting Details";
+            // 
+            // moreInfoLinkLabel
+            // 
+            this.moreInfoLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.moreInfoLinkLabel.AutoSize = true;
+            this.moreInfoLinkLabel.Location = new System.Drawing.Point(359, 54);
+            this.moreInfoLinkLabel.Name = "moreInfoLinkLabel";
+            this.moreInfoLinkLabel.Size = new System.Drawing.Size(52, 13);
+            this.moreInfoLinkLabel.TabIndex = 8;
+            this.moreInfoLinkLabel.TabStop = true;
+            this.moreInfoLinkLabel.Text = "More Info";
+            this.moreInfoLinkLabel.Visible = false;
+            this.moreInfoLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.moreInfoLinkLabel_LinkClicked);
             // 
             // AdvancedSettingsPane
             // 
@@ -135,6 +150,7 @@
         private System.Windows.Forms.Button updateSettingButton;
         private System.Windows.Forms.Label setDescriptionLabel;
         private System.Windows.Forms.GroupBox detailsGroupBox;
+        private System.Windows.Forms.LinkLabel moreInfoLinkLabel;
 
     }
 }

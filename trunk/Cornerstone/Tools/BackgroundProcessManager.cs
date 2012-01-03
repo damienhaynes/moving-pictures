@@ -92,6 +92,21 @@ namespace Cornerstone.Tools {
                 }
         }
 
+        public void CancelProcess(Type processType) {
+            List<AbstractBackgroundProcess> processesToKill = new List<AbstractBackgroundProcess>();
+
+            lock (activeProcesses) {
+                foreach (AbstractBackgroundProcess process in processesToKill) {
+                    if (process.GetType() == processType) processesToKill.Add(process);
+                }
+            }
+
+            foreach (AbstractBackgroundProcess process in activeProcesses) {
+                CancelProcess(process);
+            }
+
+        }
+
         public void CancelAllProcesses() {
             List<AbstractBackgroundProcess> allProcesses = new List<AbstractBackgroundProcess>();
 

@@ -198,6 +198,40 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         } 
         private DBNode<DBMovieInfo> _categoryLoadParamater = null;
+
+        /// <summary>
+        /// The search string passed in to Moving Pictures when the plugin was activated.
+        /// </summary>
+        public string SearchStringLoadParameter {
+            get {
+                if (lastParsedParam != UnparsedLoadParameter)
+                    ParseParameters();
+
+                return _searchStringLoadParameter;
+            }
+
+            internal set {
+                _searchStringLoadParameter = value;
+            }
+        } private string _searchStringLoadParameter = null;
+
+        /// <summary>
+        /// The search string passed in to Moving Pictures when the plugin was activated.
+        /// </summary>
+        public SearchMode? SearchModeLoadParameter {
+            get {
+                if (lastParsedParam != UnparsedLoadParameter)
+                    ParseParameters();
+
+                return _searchModeLoadParameter;
+            }
+
+            internal set {
+                _searchModeLoadParameter = value;
+            }
+        } private SearchMode? _searchModeLoadParameter = null;
+
+
         public void ShowMessage(string heading, string lines) {
             string line1 = null, line2 = null, line3 = null, line4 = null;
             string[] linesArray = lines.Split(new string[] { "\\n", "\n" }, StringSplitOptions.None);
@@ -457,7 +491,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             // if we were passed a parameter we cant parse, exit back
-            if (MovieLoadParamater == null && CategoryLoadParamater == null && !string.IsNullOrEmpty(UnparsedLoadParameter)) {
+            if (MovieLoadParamater == null && CategoryLoadParamater == null && SearchModeLoadParameter == null && !string.IsNullOrEmpty(UnparsedLoadParameter)) {
                 logger.Warn("Moving Pictures can not understand the following paramater: " + UnparsedLoadParameter);
                 GUIWindowManager.ShowPreviousWindow();           
             }
@@ -545,6 +579,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             }
 
+            else if (SearchStringLoadParameter != null && SearchModeLoadParameter != null) {
+                bool success = Search((SearchMode)SearchModeLoadParameter, SearchStringLoadParameter);
+                if (!success) {
+                    GUIWindowManager.ShowPreviousWindow();
+                    return;
+                }
+
+                browser.TopLevelView = browser.CurrentView;
+            }
+
             // standard loading logic
             else {
                 if (browser.CategoriesAvailable || browser.LastView != BrowserViewMode.CATEGORIES) {
@@ -595,6 +639,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             lastParsedParam = UnparsedLoadParameter;
             MovieLoadParamater = null;
             CategoryLoadParamater = null;
+            SearchModeLoadParameter = null;
+            SearchStringLoadParameter = null;
 
             // if we cant load params or there is no param passed, quit
             if (string.IsNullOrEmpty(UnparsedLoadParameter)) return;
@@ -618,6 +664,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                             case "movieid":
                                 MovieLoadParamater = DBMovieInfo.Get(Int32.Parse(value));
                                 if (MovieLoadParamater == null) ShowMessage("Moving Pictures", Translation.BadMovie);
+                                break;
+                            case "searchtitle":
+                                SearchModeLoadParameter = SearchMode.Title;
+                                SearchStringLoadParameter = value;
+                                break;
+                            case "searchcast":
+                                SearchModeLoadParameter = SearchMode.Person;
+                                SearchStringLoadParameter = value;
+                                break;
+                            case "searchtheme":
+                                SearchModeLoadParameter = SearchMode.Summary;
+                                SearchStringLoadParameter = value;
                                 break;
                         }
                     }
@@ -782,6 +840,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         browser.CurrentView = browser.PreviousView;
                         searchFilter = null;
                         OnBrowserContentsChanged();
+
+                        if (SearchStringLoadParameter != null)
+                            GUIWindowManager.ShowPreviousWindow();
                     }
                     else if (browser.CategoriesAvailable && browser.CurrentNode != null && browser.CurrentNode != browser.TopLevelNode) {
                         // go to the parent category
@@ -1484,17 +1545,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             Search(mode, searchStr);
         }
 
-        private void Search(SearchMode mode, string searchStr) {
+        private bool Search(SearchMode mode, string searchStr) {
             var searchResults = MovingPicturesCore.Searchers[mode].Search(searchStr);
             var movies = searchResults.Select(result => result.Item);
 
             searchFilter = new WhiteListFilter(movies);
+            if (movies.Count() == 0) {
+                ShowMessage(Translation.Search, Translation.SearchNoResults);
+                return false;
+            }
 
             browser.TemporarilyRemoveCategoryFilters();
             browser.Filters.Add(searchFilter);
 
             browser.CurrentView = BrowserViewMode.LIST;
-            
+            return true;            
         }
 
         /// <summary>

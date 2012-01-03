@@ -267,7 +267,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If set to true, Moving Pictures will automatically scan files for various statistics including video file resolution and audio settings. If this option is turned off, this information will not be available to the skin unless manually retrieved by the user. This can improve the speed of the import process.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_use_mediainfo",
-            Default = false)]
+            Default = true)]
         public bool AutoRetrieveMediaInfo {
             get { return _useMediaInfo; }
             set {
@@ -1403,10 +1403,11 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Custom Intro Location",
-            Description = "Location of a custom intro that will play before each movie.  This should be the full path including the movie. For example: c:\\custom_intro\\into.mpg",
+            Description = "Location of a custom intro that will play before each movie.  This should either be the full path to a video file or the full path to a directory containing several video files.",
             Groups = "|MediaPortal GUI|Playback Options|",
             Identifier = "custom_intro_location",
-            Default = " ")]
+            Default = " ",
+            MoreInfoLink = "http://moving-pictures.tv/wiki/Custom_Introduction_Videos")]
         public string CustomIntroLocation {
             get { return _customIntroLocation; }
             set {
@@ -1415,6 +1416,23 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private string _customIntroLocation;
+
+        [CornerstoneSetting(
+            Name = "Custom Intro Count",
+            Description = "The number of custom intros to play. This only applies if the Custom Intro Location is set to a directory rather than a file.",
+            Groups = "|MediaPortal GUI|Playback Options|",
+            Identifier = "custom_intro_count",
+            Default = 1,
+            MoreInfoLink = "http://moving-pictures.tv/wiki/Custom_Introduction_Videos")]
+        public int CustomIntroCount {
+            get { return _customIntroCount; }
+            set {
+                _customIntroCount = value;
+                OnSettingChanged("custom_intro_count");
+            }
+        }
+        private int _customIntroCount;
+
 
         #endregion
 

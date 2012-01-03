@@ -68,6 +68,16 @@ namespace Cornerstone.Database.Tables {
             }
         } private string _description;
 
+        // A link to more information about this setting.
+        [DBFieldAttribute]
+        public string MoreInfoLink {
+            get { return _moreInfoLink; }
+
+            set {
+                _moreInfoLink = value;
+                commitNeeded = true;
+            }
+        } private string _moreInfoLink;
 
         [DBFieldAttribute]
         public StringList Grouping

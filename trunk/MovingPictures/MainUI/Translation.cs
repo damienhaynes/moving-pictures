@@ -293,6 +293,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Score = "Score";
         public static string Search = "Search";
         public static string SearchBy = "Search By";
+        public static string SearchNoResults = "There are no search results.";
         public static string SelectYourRating = "Select your rating for {0}";
         public static string ShowOnlyUnwatchedMovies = "Show Only Unwatched Movies";
         public static string ShowWatchedAndUnwatchedMovies = "Show Watched and Unwatched Movies";
