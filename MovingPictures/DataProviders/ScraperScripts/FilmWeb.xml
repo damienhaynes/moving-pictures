@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141516</id>
-    <version major="2" minor="2" point="4"/>
-    <published month="01" day="22" year="2011"/>
+    <version major="2" minor="2" point="10"/>
+    <published month="12" day="30" year="2011"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -30,7 +30,7 @@
   <action name="search">
 	<set name="rx_search_return">
 	  <![CDATA[
-		<li\sclass=.searchResult\sHorListItem.(.+?)</li>
+		<li\sclass=searchResult(.+?)</li>
 	  ]]>
 	</set>
 	<set name="rx_title_link">
@@ -68,15 +68,16 @@
 	<if test='${search.year}!=0'>
 		<set name="filmweb_url" value="${filmweb_url}&amp;startYear=${search.year}&amp;endYear=${search.year}" />
 	</if>
-	<retrieve name="search_page" url="${filmweb_url}" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcomeScreen"/>
+	<retrieve name="search_page" url="${filmweb_url}" allow_unsafe_header="true" use_caching="false" cookies="welcomeScreen=welcome_screen&amp;welcomeScreenNew=welcome_screen"/>
 
 	<!-- if ad page try again -->
 	<parse name="check" input="${search_page}" regex="${rx_ad_check}" />
 	<if test='${check[0][0]}!='>
-		<retrieve name="search_page" url="${filmweb_url}" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcomeScreen"/>
+		<retrieve name="search_page" url="${filmweb_url}" allow_unsafe_header="true" use_caching="false" cookies="welcomeScreenNew=welcome_screen"/>
 	</if>
 	
 	<if test='${search_page}!='>
+		<replace name='search_page' input='${search_page}' pattern='\n' with='' />
 		<parse name="returns" input="${search_page}" regex="${rx_search_return}" />
 		<loop name="return" on="returns">
 			<parse name="title_link" input="${return}" regex="${rx_title_link}" />
@@ -139,7 +140,7 @@
 		</set>
 		<set name="rx_writers">
 		  <![CDATA[
-			scenariusz.+?<td>(.+?)</td>
+			scenariusz:</th><td>(.+?)</td>
 		  ]]>
 		</set>
 		<set name="rx_subItem">
@@ -205,12 +206,12 @@
 		</set>
 	
 		<if test='${movie.site_id}!='>
-			<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcomeScreen"/>
+			<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}" use_caching="false" allow_unsafe_header="true"  cookies="welcomeScreen=welcome_screen&amp;welcomeScreenNew=welcome_screen"/>
 
 			<!-- if ad page try again -->
 			<parse name="check" input="${details_page}" regex="${rx_ad_check}" />
 			<if test='${check[0][0]}!='>
-				<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcomeScreen"/>
+				<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}" allow_unsafe_header="true" use_caching="false" cookies="welcomeScreenNew=welcome_screen"/>
 			</if>
 	
 			<parse name="altTitleYear" input="${details_page}" regex="${rx_year}" />
@@ -241,21 +242,21 @@
 			<parse name="language" input="${details_page}" regex="${rx_prod}" />
 			<set name='movie.language' value='${language[0][1]}' />
 			
+			<parse name="writers" input="${details_page}" regex="${rx_writers}" />
+			<parse name="writers2" input="${writers[0][0]}" regex="${rx_subItem}" />
+			<loop name="writer" on="writers2">
+				<replace name='writer[0]' input='${writer[0]}' pattern=',' with='' />
+				<set name="movie.writers" value="${movie.writers}|${writer[0]:striptags}"/>
+			</loop>
+			
 			<parse name="directors" input="${details_page}" regex="${rx_directors}" />
 			<parse name="directors" input="${directors[0][0]}" regex="${rx_subItem}" />
 			<loop name="director" on="directors">
 				<replace name='director[0]' input='${director[0]}' pattern=',' with='' />
-				<set name="movie.directors" value="${movie.directors}|${director[0]:htmldecode}"/>
+				<set name="movie.directors" value="${movie.directors}|${director[0]:striptags}"/>
 			</loop>
 			
-			<parse name="writers" input="${details_page}" regex="${rx_writers}" />
-			<parse name="writers" input="${writers[0][0]}" regex="${rx_subItem}" />
-			<loop name="writer" on="writers">
-				<if test='${writer[0]}!=(więcej...)'>
-					<replace name='writer[0]' input='${writer[0]}' pattern=',' with='' />
-					<set name="movie.writers" value="${movie.writers}|${writer[0]:htmldecode}"/>
-				</if>
-			</loop>
+			
 			
 			<parse name="genres" input="${details_page}" regex="${rx_genres}" />
 			<parse name="genres" input="${genres[0][0]}" regex="${rx_subItem}" />
@@ -267,7 +268,7 @@
 			<parse name="filmwebID" input="${details_page}" regex="${rx_filmwebID}" />
 			<set name='filmwebID' value='${filmwebID[0][0]}' />
 			
-			<retrieve name="cast_page" url="http://www.filmweb.pl${movie.site_id}/cast" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcomeScreen"/>
+			<retrieve name="cast_page" url="http://www.filmweb.pl${movie.site_id}/cast" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcome_screen"/>
 			
 			<parse name="actors" input="${cast_page}" regex="${rx_actor_block}" />
 			<parse name="actors" input="${actors[0][0]}" regex="${rx_actor}" />
@@ -277,9 +278,10 @@
 		</if>
 		
 		<if test='${movie.imdb_id}='>
+			<!--"external\s">.+?(?<filmID>\d*)</a>\slinkuje[^"]+.(?<wikiURL>[^"]+)-->
 			<set name="rx_wiki_search">
 			  <![CDATA[
-			  "external\s">.+?(?<filmID>\d*)</a>\slinkuje[^"]+.(?<wikiURL>[^"]+)
+				external".*?">.*?([0-9]*)</a>.*?linkuje.*?="(.*?)"
 			  ]]>
 			</set>
 			
@@ -369,18 +371,18 @@
 		</set>
 	
 		<if test='${movie.site_id}!='>
-			<retrieve name="film_page" url="http://www.filmweb.pl${movie.site_id}" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcomeScreen"/>
+			<retrieve name="film_page" url="http://www.filmweb.pl${movie.site_id}" allow_unsafe_header="true" use_caching="false" cookies="welcomeScreen=welcome_screen&amp;welcomeScreenNew=welcome_screen"/>
 			
 			<parse name="main_cover" input="${film_page}" regex="${rx_main_cover}" />
 			<replace name='main_cover[0][0]' input='${main_cover[0][0]}' pattern='\.1\.' with='.3.' />
 			<set name='cover_art[0].url' value='${main_cover[0][0]}' />
 			
-			<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}/posters" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcomeScreen"/>
+			<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}/posters" allow_unsafe_header="true" use_caching="false" cookies="welcomeScreenNew=welcome_screen"/>
 
 			<!-- if ad page try again -->
 			<parse name="check" input="${details_page}" regex="${rx_ad_check}" />
 			<if test='${check[0][0]}!='>
-				<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}/posters" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcomeScreen"/>
+				<retrieve name="details_page" url="http://www.filmweb.pl${movie.site_id}/posters" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcome_screen"/>
 			</if>
 			
 			<parse name="cover_arts" input="${details_page}" regex="${rx_cover_art}" />
@@ -408,12 +410,12 @@
     </set>
 
     <if test='${movie.site_id}!='>
-      <retrieve name="photo_page" url="http://www.filmweb.pl${movie.site_id}/photos" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcomeScreen"/>
+      <retrieve name="photo_page" url="http://www.filmweb.pl${movie.site_id}/photos" allow_unsafe_header="true" use_caching="false" cookies="welcomeScreen=welcome_screen&amp;welcomeScreenNew=welcome_screen"/>
 
       <!-- if ad page try again -->
       <parse name="check" input="${photo_page}" regex="${rx_ad_check}" />
       <if test='${check[0][0]}!='>
-        <retrieve name="photo_page" url="http://www.filmweb.pl${movie.site_id}/photos" allow_unsafe_header="true"  cookies="welcomeScreenNew=welcomeScreen"/>
+        <retrieve name="photo_page" url="http://www.filmweb.pl${movie.site_id}/photos" allow_unsafe_header="true" use_caching="false" cookies="welcomeScreenNew=welcome_screen"/>
       </if>
       
 	  <parse name="check2" input="${photo_page}" regex="${rx_backdrop_item}" />
