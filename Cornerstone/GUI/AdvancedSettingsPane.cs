@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Collections;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using System.Diagnostics;
 
 namespace Cornerstone.GUI {
     public partial class AdvancedSettingsPane : UserControl {
@@ -95,11 +96,13 @@ namespace Cornerstone.GUI {
                 selectedSetting = (DBSetting)selectedNode.Tag;
                 setValueTextBox.Text = selectedSetting.StringValue;
                 setDescriptionLabel.Text = selectedSetting.Description;
+                moreInfoLinkLabel.Visible = (selectedSetting.MoreInfoLink != null);
             } 
             else {
                 setValueTextBox.Enabled = false;
                 setDescriptionLabel.Text = string.Empty;
                 setValueTextBox.Text = String.Empty;
+                moreInfoLinkLabel.Visible = false;
             }
 
             updateSettingButton.Enabled = false;
@@ -136,6 +139,13 @@ namespace Cornerstone.GUI {
             selectedSetting.Value = setValueTextBox.Text;
             selectedSetting.Commit();
             updateSettingButton.Enabled = false;
+        }
+
+        private void moreInfoLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            if (selectedSetting != null && selectedSetting.MoreInfoLink != null) {
+                ProcessStartInfo processInfo = new ProcessStartInfo(selectedSetting.MoreInfoLink);
+                Process.Start(processInfo);
+            }
         }
     }
 }

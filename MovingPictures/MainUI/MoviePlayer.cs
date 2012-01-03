@@ -13,6 +13,8 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Util;
 using MediaPortal.InputDevices;
 using NLog;
+using System.Collections.Generic;
+using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
@@ -26,7 +28,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Private variables
 
         private MovingPicturesGUI _gui;
-        private bool customIntroPlayed = false;
+        private bool donePlayingCustomIntros = false;
+        private int customIntrosPlayed = 0;
         private bool mountedPlayback = false;
         private bool listenToExternalPlayerEvents = false;
         private DBLocalMedia queuedMedia;
@@ -139,6 +142,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         public void Play(DBMovieInfo movie, int part) {
+            // stop the mediainfo background process if it is running
+            MovingPicturesCore.ProcessManager.CancelProcess(typeof(MediaInfoUpdateProcess));
 
             // stop the internal player if it's running
             if (g_Player.Playing)
@@ -291,12 +296,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private bool playCustomIntro() {
             // Check if we have already played a custom intro
-            if (!customIntroPlayed) {
+            if (!donePlayingCustomIntros && MovingPicturesCore.Settings.CustomIntroCount > 0) {
                 DBMovieInfo queuedMovie = queuedMedia.AttachedMovies[0];
                 // Only play custom intro for we are not resuming
                 if (queuedMovie.UserSettings == null || queuedMovie.UserSettings.Count == 0 || queuedMovie.ActiveUserSettings.ResumeTime < 30) {
                     string custom_intro = MovingPicturesCore.Settings.CustomIntroLocation;
                     custom_intro = queuedMovie.ParseWildcards(custom_intro);
+                    custom_intro = getCustomIntroFile(custom_intro);
+                    if (custom_intro == null) return false;
 
                     // Check if the custom intro is specified by user and exists
                     if (custom_intro.Length > 0 && File.Exists(custom_intro)) {
@@ -305,7 +312,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         // we set this variable before we start the actual playback
                         // because playFile to account for the blocking nature of the
                         // mediaportal external player logic
-                        customIntroPlayed = true;
+                        customIntrosPlayed++;
+                        if (customIntrosPlayed >= MovingPicturesCore.Settings.CustomIntroCount)
+                            donePlayingCustomIntros = true;
 
                         // start playback
                         playFile(custom_intro);
@@ -318,6 +327,23 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             return false;
+        }
+
+        private string getCustomIntroFile(string path) {
+            try {
+                if (File.Exists(path)) return path;
+                if (Directory.Exists(path)) {
+                    Random r = new Random();
+                    List<FileInfo> videos = VideoUtility.GetVideoFilesRecursive(new DirectoryInfo(path));
+                    if (videos.Count == 0) return null;
+                    return videos[r.Next(videos.Count)].FullName;
+                }
+            }
+            catch (Exception e) {
+                logger.Error("Unexpected error searching for custom intro: " + e.Message);
+            }
+
+            return null;
         }
 
         // Start playback of a file (detects format first)
@@ -525,6 +551,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (type != g_Player.MediaType.Video || _playerState != MoviePlayerState.Playing)
                 return;
 
+            if (customIntrosPlayed > 0) return;
+
             logger.Debug("OnPlayBackStoppedOrChanged: File={0}, Movie={1}, Part={2}, TimeStopped={3}", filename, _activeMovie.Title, _activePart, timeMovieStopped);
 
             // Because we can't get duration for DVD's at start like with normal files
@@ -601,13 +629,19 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         #region Player Events
 
         private bool handleCustomIntroEnded() {
-            if (customIntroPlayed) {
+            if (donePlayingCustomIntros) {
 
                 // Set custom intro played back to false
-                customIntroPlayed = false;
+                donePlayingCustomIntros = false;
+                customIntrosPlayed = 0;
 
                 // If a custom intro was just played, we need to play the selected movie
                 playMovie(queuedMedia.AttachedMovies[0], queuedMedia.Part);
+                return true;
+            }
+
+            if (customIntrosPlayed > 0) {
+                playCustomIntro();
                 return true;
             }
 
@@ -711,7 +745,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             _playerState = MoviePlayerState.Idle;
             _resumeActive = false;
             listenToExternalPlayerEvents = false;
-            customIntroPlayed = false;
+            donePlayingCustomIntros = false;
+            customIntrosPlayed = 0;
            
             logger.Debug("Reset.");
         }
