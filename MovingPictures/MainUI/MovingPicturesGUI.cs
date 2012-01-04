@@ -480,20 +480,21 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // if the user hasn't defined any import paths they need to goto the config screen
             if (DBImportPath.GetAllUserDefined().Count == 0) {
+                GUIWindowManager.ShowPreviousWindow();
                 if (!preventDialogOnLoad) {
                     ShowMessage(Translation.NoImportPathsHeading, Translation.NoImportPathsBody);
                 }
                 else {
                     preventDialogOnLoad = false;
                 }
-                GUIWindowManager.ShowPreviousWindow();
                 return;
             }
 
             // if we were passed a parameter we cant parse, exit back
             if (MovieLoadParamater == null && CategoryLoadParamater == null && SearchModeLoadParameter == null && !string.IsNullOrEmpty(UnparsedLoadParameter)) {
                 logger.Warn("Moving Pictures can not understand the following paramater: " + UnparsedLoadParameter);
-                GUIWindowManager.ShowPreviousWindow();           
+                GUIWindowManager.ShowPreviousWindow();
+                ShowMessage(Translation.Error, Translation.BadParam);
             }
 
             if (browser == null) {
@@ -1549,12 +1550,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             var searchResults = MovingPicturesCore.Searchers[mode].Search(searchStr);
             var movies = searchResults.Select(result => result.Item);
 
-            searchFilter = new WhiteListFilter(movies);
             if (movies.Count() == 0) {
                 ShowMessage(Translation.Search, Translation.SearchNoResults);
                 return false;
             }
 
+            if (searchFilter != null) {
+                browser.Filters.Remove(searchFilter);
+                browser.ReAddCategoryFilters();
+            }
+
+            searchFilter = new WhiteListFilter(movies);
             browser.TemporarilyRemoveCategoryFilters();
             browser.Filters.Add(searchFilter);
 
