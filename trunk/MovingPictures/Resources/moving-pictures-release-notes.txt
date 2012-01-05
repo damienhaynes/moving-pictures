@@ -1,4 +1,4 @@
-Moving Pictures 1.2.3
+Moving Pictures 1.3.0
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -13,16 +13,86 @@ aspects of watching movies. You can follow what your friends are watching, share
 with people what you have been seeing lately, get recommendation about movies
 you may enjoy, and more.
 
-follw.it                        http://follw.it
-follw.it Bug Tracker:           http://trac.follw.it
-
 Moving Pictures Wiki:           http://moving-pictures.tv
 Moving Pictures Forum:          http://forum.team-mediaportal.com/moving-pictures-284/
 Moving Pictures Project Page:   http://moving-pictures.googlecode.com
 
+follw.it                        http://follw.it
+follw.it Bug Tracker:           http://trac.follw.it
 
 
 Change Log
+================================================================================
+1.3.0
+--------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+Issue #410:     Added the ability to search for movies based on the title, cast
+                and crew or a general theme.
+
+Issue #996:     It is now possible to use movie based wildcards for the custom 
+                intro filepath. This should allow people to play different intro 
+                videos based on audio codec, aspect ratio, etc. 
+                Documentation: http://bit.ly/kVOGDW
+                
+Issue #749:     Can now point to a directory instead of a file for a custom intro.
+                A random video in the folder will be played.
+                
+Issue #458:     Scripts can now provide the studio a film was produced by.
+
+Issue #1048:    Added new input variable for scraper scripts passing in the 
+                MediaPortal data directory. Mainly for IMDb+.
+               
+--------------------------------------------------------------------------------
+Tweaks
+--------------------------------------------------------------------------------
+**********:     Added error message when an external skin or plugin passes 
+                Moving Pictures an invalid parameter.
+                
+**********:     All background mediainfo scans will now be halted when playback
+                begins.
+
+**********:     By default will no longer wait on file locks when importing 
+                videos. Configurable in advanced settings.
+
+**********:     By default, importer will now update from active scraper scripts
+                until all fields are populated (previously only the first 3 were 
+                called). Configurable in advanced settings.
+
+**********:     Added "popularity" field to movie manager. This is an arbitrary 
+                field provided by a scraper script that the importer uses for 
+                choosing the most likely correct match. Sometimes corresponds to
+                the number of people on the site that have rated the movie.
+                
+--------------------------------------------------------------------------------
+Script and Translation Updates
+--------------------------------------------------------------------------------	                
+Issue #1040:    Updated IMDb script to get rid of the annoying "IMDb - " prefix. 
+                Also added code to automatically clean up existing movie titles. 
+                Thanks to RoChess for the script changes.
+                
+                Additional changes to fix IMDb language retrieval.
+
+***********:    Expanded the importer for themoviedb.org to support a few newer 
+                fields (language, tagline, writer, and studio).
+                
+Issue #1064:    Updated French import script (allocine). Thanks mbb!
+
+Issue #1045:    Updated Swedish import script (filmtipset). Thanks hexago!
+
+Issue #1058:    Updated Russian import script (kinopoisk). Thanks JourneyM and 
+                leonid.kabanov!
+
+Issue #1061.    Updated the Icelandic translation and the Icelandic import 
+                script (kvikmyndir). Thanks kjarrig1712!
+
+Issue #1049:    Updated the Spanish translation. Thanks joarreba!
+
+Issue #1065:    Added cover retrieval support to the MyMovies importer. 
+                Thanks RoChess!
+
+Issue #1066:    Added simplified Chinese translation. Thanks meedios!
+
 ================================================================================
 1.2.3 / 1.1.5
 --------------------------------------------------------------------------------
