@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- English (US) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">Actor</string>
+  <string Field="Actors">Actors</string>
+  <string Field="AllMovies">All Movies</string>
+  <!-- B -->
+  <string Field="BadCategory">An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!</string>
+  <string Field="BadMovie">An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!</string>
+  <string Field="BadParam">An external plugin or skin passed\nMoving Pictures an invalid paramater!</string>
+  <!-- C -->
+  <string Field="Cancel">Cancel</string>
+  <string Field="CannotDeleteOffline">Not able to delete {0}\n because the file is offline</string>
+  <string Field="CannotDeleteReadOnly">Cannot delete a read-only movie.\nWould you like Moving Pictures to ignore this movie?</string>
+  <string Field="CategoryEmptyDescription">There are currently no movies\nlisted in this category.</string>
+  <string Field="CategoryEmptyHeader">Category is empty</string>
+  <string Field="Certification">Certification</string>
+  <string Field="ChangeView">Change View</string>
+  <string Field="CheckForMissingArtwork">Check for Missing Artwork Online</string>
+  <string Field="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>
+  <string Field="ContinueToNextPartHeader">Continue to next part?</string>
+  <string Field="CoverFlowView">Coverflow View</string>
+  <string Field="CycleCoverArt">Cycle Cover-Art</string>
+  <string Field="CycleView">Cycle View</string>
+  <!-- D -->
+  <string Field="DateAdded">Date Added</string>
+  <string Field="DateDay">day</string>
+  <string Field="DateDays">days</string>
+  <string Field="DateMonth">month</string>
+  <string Field="DateMonths">months</string>
+  <string Field="DatePartAgo">{0} {1} ago</string>
+  <string Field="DatePartWithinDays">Last {0} days</string>
+  <string Field="DatePartWithinMonths">Last {0} months</string>
+  <string Field="DatePartWithinWeeks">Last {0} weeks</string>
+  <string Field="DatePartWithinYears">Last {0} years</string>
+  <string Field="DateWeek">week</string>
+  <string Field="DateWeeks">weeks</string>
+  <string Field="DateYear">year</string>
+  <string Field="DateYears">years</string>
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="DeleteFailed">Delete Failed</string>
+  <string Field="DeleteMovie">Delete Movie</string>
+  <string Field="Director">Director</string>
+  <string Field="Directors">Directors</string>
+  <string Field="DownAbbreviation">(dn)</string>
+  <string Field="DoYouWantToDelete">Do you want to permanently delete\n{0}\nfrom your hard drive?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Earlier This Year</string>
+  <string Field="Error">Error</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">Sorry, failed mounting DVD Image</string>
+  <string Field="FilePath">File Path</string>
+  <string Field="FilmstripView">Filmstrip View</string>
+  <string Field="FilterBy">Filter By</string>
+  <string Field="Friday">Friday</string>
+  <string Field="Future">Future</string>
+  <!-- G -->
+  <string Field="Genre">Genre</string>
+  <string Field="Genres">Genres</string>
+  <!-- I -->
+  <string Field="InvalidPin">Invalid PIN code!</string>
+  <string Field="InvalidVideoDiscFormat">Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.</string>
+  <!-- L -->
+  <string Field="Language">Language</string>
+  <string Field="LargeThumbnailView">Large Thumbnail View</string>
+  <string Field="LastMonth">Last Month</string>
+  <string Field="LastWeek">Last Week</string>
+  <string Field="LastYear">Last Year</string>
+  <string Field="ListView">List View</string>
+  <string Field="LockRestrictedMovies">Lock Restricted Movies</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Mark as Unwatched</string>
+  <string Field="MarkAsWatched">Mark as Watched</string>
+  <string Field="MediaIsMissing">The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...</string>
+  <string Field="MediaNotAvailableBody">The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}</string>
+  <string Field="MediaNotAvailableHeader">Media Not Available</string>
+  <string Field="MissingExternalPlayerExe">The executable for HD playback is missing.\nPlease correct the path to the executable.</string>
+  <string Field="Monday">Monday</string>
+  <string Field="Movie">Movie</string>
+  <string Field="MovieDetails">Movie Details</string>
+  <string Field="MovieOptions">Movie Options</string>
+  <string Field="Movies">Movies</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">You do not have any import\npaths defined. Please close\nclose MediaPortal and launch\nlaunch MP Configuration.</string>
+  <string Field="NoImportPathsHeading">No Import Paths!</string>
+  <!-- O -->
+  <string Field="Older">Older</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Parental controls are not enabled.</string>
+  <string Field="PinCodeHeader">Unlocking Restricted Content</string>
+  <string Field="PinCodePrompt">Please enter PIN code to continue:</string>
+  <string Field="PlaybackFailed">Playback is not possible because the '{0}'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.</string>
+  <string Field="PlaybackFailedHeader">Playback Failed</string>
+  <string Field="ProblemLoadingSkinFile">Sorry, there was a problem loading the skin file</string>
+  <!-- R -->
+  <string Field="Rate">Rate</string>
+  <string Field="Rated">Rated</string>
+  <string Field="RateFiveStarFive">Perfect</string>
+  <string Field="RateFiveStarFour">Superb</string>
+  <string Field="RateFiveStarOne">Terrible</string>
+  <string Field="RateFiveStarThree">Good</string>
+  <string Field="RateFiveStarTwo">Mediocre</string>
+  <string Field="RateHeading">Rate Movie</string>
+  <string Field="RecentlyAddedMovies">Recently Added Movies</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">Resume from:</string>
+  <string Field="ResumeFromLast">Resume movie from last time?</string>
+  <string Field="Retry">Retry</string>
+  <string Field="Runtime">Runtime</string>
+  <string Field="RuntimeHour">{0} hour</string>
+  <string Field="RuntimeHours">{0} hours</string>
+  <string Field="RuntimeLong">{0} and {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} and {2}</string>
+  <string Field="RuntimeMinute">{0} minute</string>
+  <string Field="RuntimeMinutes">{0} minutes</string>
+  <string Field="RuntimeSecond">{0} second</string>
+  <string Field="RuntimeSeconds">{0} seconds</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">Saturday</string>
+  <string Field="ScanForNewMovies">Scan for New Movies</string>
+  <string Field="Score">Score</string>
+  <string Field="Search">Search</string>
+  <string Field="SearchBy">Search By</string>
+  <string Field="SearchNoResults">There are no search results.</string>
+  <string Field="SelectYourRating">Select your rating for {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">Show Only Unwatched Movies</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Show Watched and Unwatched Movies</string>
+  <string Field="SkinDoesNotSupportCategories">This skin does not support Categories.</string>
+  <string Field="SkinDoesNotSupportPinDialog">This skin does not support the Pin Code Dialog.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">This skin does not support the Rating Dialog.</string>
+  <string Field="SortBy">Sort By</string>
+  <string Field="SortDirection">Sort Direction</string>
+  <string Field="StarRating">Star Rating</string>
+  <string Field="Sunday">Sunday</string>
+  <!-- T -->
+  <string Field="ThisMonth">This Month</string>
+  <string Field="ThisWeek">This Week</string>
+  <string Field="ThisYear">This Year</string>
+  <string Field="ThreeMonthsAgo">Three Months Ago</string>
+  <string Field="ThreeWeeksAgo">Three Weeks Ago</string>
+  <string Field="ThumbnailView">Thumbnail View</string>
+  <string Field="Thursday">Thursday</string>
+  <string Field="Title">Title</string>
+  <string Field="Today">Today</string>
+  <string Field="ToggleParentalLock">Toggle Parental Lock</string>
+  <string Field="Tuesday">Tuesday</string>
+  <string Field="TwoMonthsAgo">Two Months Ago</string>
+  <string Field="TwoWeeksAgo">Two Weeks Ago</string>
+  <!-- U -->
+  <string Field="Unknown">Unknown</string>
+  <string Field="UnlockRestrictedMovies">Unlock Restricted Movies</string>
+  <string Field="UnwatchedMovies">Unwatched Movies</string>
+  <string Field="UpAbbreviation">(up)</string>
+  <string Field="UpdateDetailsFromOnline">Update Details from Online</string>
+  <string Field="UpdateMovieDetailsBody">You are about to refresh all movie metadata, overwriting\nany custom modifications to this film. Do you want\nto continue?</string>
+  <string Field="UpdateMovieDetailsHeader">Update Movie Details</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Virtual drive not ready</string>
+  <string Field="VirtualDriveMessage">The virtual drive wasn't ready in time.\nPlease try again or cancel playback.</string>
+  <string Field="Votes">votes</string>
+  <!-- W -->
+  <string Field="Wednesday">Wednesday</string>
+  <string Field="Writer">Writer</string>
+  <string Field="Writers">Writers</string>
+  <!-- Y -->
+  <string Field="Year">Year</string>
+  <string Field="Yesterday">Yesterday</string>
+</strings>
