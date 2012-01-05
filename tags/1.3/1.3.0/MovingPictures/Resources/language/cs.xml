@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Moving Pictures translation file -->
+<!-- Czech (CS) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">Herec</string>
+  <string Field="Actors">Herci</string>
+  <string Field="AllMovies">Všechny filmy</string>
+  <!-- C -->
+  <string Field="Cancel">Zrušit</string>
+  <string Field="CannotDeleteOffline">Nelze odstranit {0},\nprotože soubor není dostupný.</string>
+  <string Field="CannotDeleteReadOnly">Nelze odstranit film pouze ke čtení.\nPřejete si ignorovat tento film?</string>
+  <string Field="CategoryEmptyDescription">V této kategorii v současnosti\nnejsou žádné filmy.</string>
+  <string Field="CategoryEmptyHeader">Prázná kategorie</string>
+  <string Field="Certification">Klasifikace</string>
+  <string Field="ChangeView">Změnit zobrazení</string>
+  <string Field="CheckForMissingArtwork">Vyhledat chybějící grafiku online</string>
+  <string Field="ContinueToNextPartBody">Přejete si pokračovat dílem {0}?</string>
+  <string Field="ContinueToNextPartHeader">Přejít na další díl?</string>
+  <string Field="CycleCoverArt">Další grafika</string>
+  <string Field="CycleView">Další zobrazení</string>
+  <!-- D -->
+  <string Field="DateAdded">Datum přidání</string>
+  <string Field="DateDay">dnem</string>
+  <string Field="DateDays">dny</string>
+  <string Field="DateMonth">měsícem</string>
+  <string Field="DateMonths">měsíci</string>
+  <string Field="DatePartAgo">před {0} {1}</string>
+  <string Field="DatePartWithinDays">posledních {0} dnů</string>
+  <string Field="DatePartWithinMonths">posledních {0} měsíců</string>
+  <string Field="DatePartWithinWeeks">posledních {0} týdnů</string>
+  <string Field="DatePartWithinYears">posledních {0} let</string>
+  <string Field="DateWeek">týden</string>
+  <string Field="DateWeeks">týdny</string>
+  <string Field="DateYear">rok</string>
+  <string Field="DateYears">roky</string>
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="DeleteFailed">Odstranění se nezdařilo</string>
+  <string Field="DeleteMovie">Odstranit film</string>
+  <string Field="Director">Režisér</string>
+  <string Field="Directors">Režiséři</string>
+  <string Field="DownAbbreviation">(dolů)</string>
+  <string Field="DoYouWantToDelete">Přejete si trvale odstranit\n{0}\nz vašeho úložiště?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Dříve tohoto roku</string>
+  <string Field="Error">Chyba</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">Připojení obrazu DVD selhalo.</string>
+  <string Field="FilePath">Cesta k souboru</string>
+  <string Field="FilmstripView">Filmový pás</string>
+  <string Field="FilterBy">Změnit pohled</string>
+  <string Field="Friday">pátek</string>
+  <string Field="Future">Budoucnost</string>
+  <!-- G -->
+  <string Field="Genre">Žánr</string>
+  <string Field="Genres">Žánry</string>
+  <!-- I -->
+  <string Field="InvalidPin">Neplatný PIN kód!</string>
+  <string Field="InvalidVideoDiscFormat">Soubor s obrazem neobsahuje platný formát\nobrazového disku, nebo jsou Daemon Tools\nv MediaPortalu chybně nastaveny.</string>
+  <!-- L -->
+  <string Field="Language">Jazyk</string>
+  <string Field="LargeThumbnailView">Velké ikony</string>
+  <string Field="LastMonth">minulý měsíc</string>
+  <string Field="LastWeek">minulý týden</string>
+  <string Field="LastYear">minulý rok</string>
+  <string Field="ListView">Seznam</string>
+  <string Field="LockRestrictedMovies">Zamknout zakázané filmy</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Označit za nezhlédnuté</string>
+  <string Field="MarkAsWatched">Označit za zhlédnuté</string>
+  <string Field="MediaIsMissing">Médium vámi zvoleného filmu nebylo nalezeno.</string>
+  <string Field="MediaNotAvailableBody">Médium vámi zvoleného filmu není v současnosti\nk dispozici. Vložte či připojte prosím médium s popiskem:\n{0}</string>
+  <string Field="MediaNotAvailableHeader">Nedostupné médium</string>
+  <string Field="MissingExternalPlayerExe">Chybí externí přehrávač pro HD obsah.\nOpravte prosím cestu ke spustitelnému souboru.</string>
+  <string Field="Monday">pondělí</string>
+  <string Field="Movie">Film</string>
+  <string Field="MovieDetails">Detaily o filmu</string>
+  <string Field="MovieOptions">Volby filmu</string>
+  <string Field="Movies">filmů</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">Pravděpodobně nemáte nastavenou žádnou\ncestu pro import. Uzavřete MediaPortal a spusťte\nkonfigurátor MediaPortalu pro nastavení\nmodulu Moving Pictures.</string>
+  <string Field="NoImportPathsHeading">Chybí cesty pro import!</string>
+  <!-- O -->
+  <string Field="Older">starší</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Rodičovská kontrola není aktivní.</string>
+  <string Field="PinCodeHeader">Odemknutí zakázaného obsahu</string>
+  <string Field="PinCodePrompt">Zadejte prosím PIN kód pro pokračování:</string>
+  <string Field="PlaybackFailed">Přehrávání není možné, protože přípona '{0}'\nse nenachází v konfiguraci vašeho MediaPortalu.\nPřidejte prosím tuto příponu nebo nastavte\nexterní přehrávač a zkuste to znovu.</string>
+  <string Field="PlaybackFailedHeader">Přehrávání se nezdařilo</string>
+  <string Field="ProblemLoadingSkinFile">Vyskytla se chyba při nahrávání souboru se vzhledem.</string>
+  <!-- R -->
+  <string Field="Rate">Hodnocení</string>
+  <string Field="Rated">Klasifikace</string>
+  <string Field="RateFiveStarFive">Perfektní</string>
+  <string Field="RateFiveStarFour">Skvělé</string>
+  <string Field="RateFiveStarOne">Otřesné</string>
+  <string Field="RateFiveStarThree">Slušné</string>
+  <string Field="RateFiveStarTwo">Slabé</string>
+  <string Field="RateHeading">Hodnocení filmu</string>
+  <string Field="RecentlyAddedMovies">Nedávno přidané filmy</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">Pokračovat od:</string>
+  <string Field="ResumeFromLast">Pokračovat v přehrávání v místě přerušení?</string>
+  <string Field="Retry">Opakovat</string>
+  <string Field="Runtime">Délka</string>
+  <string Field="RuntimeHour">{0} hodina</string>
+  <string Field="RuntimeHours">{0} hodiny</string>
+  <string Field="RuntimeLong">{0} a {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} a {2}</string>
+  <string Field="RuntimeMinute">{0} minuta</string>
+  <string Field="RuntimeMinutes">{0} minut</string>
+  <string Field="RuntimeSecond">{0} sekunda</string>
+  <string Field="RuntimeSeconds">{0} sekund</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">sobota</string>
+  <string Field="Score">Hodnocení</string>
+  <string Field="SelectYourRating">Zvolte hodnocení pro {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">Zobrazit jen nezhlédnuté filmy</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Zobrazit zhlédnuté i nezhlédnuté filmy</string>
+  <string Field="SkinDoesNotSupportCategories">Tento vzhled nepodporuje kategorie.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Tento vzhled nepodporuje dialog pro PIN kód.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Tento vzhled nepodporuje dialog hodnocení.</string>
+  <string Field="SortBy">Řadit podle</string>
+  <string Field="SortDirection">Směr řazení</string>
+  <string Field="StarRating">Hodnocení</string>
+  <string Field="Sunday">neděle</string>
+  <!-- T -->
+  <string Field="ThisMonth">tento měsíc</string>
+  <string Field="ThisWeek">tento týden</string>
+  <string Field="ThisYear">tento rok</string>
+  <string Field="ThreeMonthsAgo">před třemi měsíci</string>
+  <string Field="ThreeWeeksAgo">před třemi týdny</string>
+  <string Field="ThumbnailView">Ikony</string>
+  <string Field="Thursday">čtvrtek</string>
+  <string Field="Title">Titul</string>
+  <string Field="Today">dnes</string>
+  <string Field="ToggleParentalLock">Přepnout rodičovský zámek</string>
+  <string Field="Tuesday">úterý</string>
+  <string Field="TwoMonthsAgo">před dvěma měsíci</string>
+  <string Field="TwoWeeksAgo">před dvěma týdny</string>
+  <!-- U -->
+  <string Field="Unknown">Neznámé</string>
+  <string Field="UnlockRestrictedMovies">Odemknout zakázané filmy</string>
+  <string Field="UnwatchedMovies">Nezhlédnuté filmy</string>
+  <string Field="UpAbbreviation">(nahoru)</string>
+  <string Field="UpdateDetailsFromOnline">Aktualizovat detaily online</string>
+  <string Field="UpdateMovieDetailsBody">Chystáte se obnovit detaily o filmu,\ncož přepíše jakékoliv vlastní úpravy.\nPřejete si pokračovat?</string>
+  <string Field="UpdateMovieDetailsHeader">Aktualizovat detaily filmu</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Virtualní mechanika není připravena</string>
+  <string Field="VirtualDriveMessage">Virtuální mechanika nebyla včas k dispozici.\nZkuste to prosím znovu nebo zrušte přehrávání.</string>
+  <!-- W -->
+  <string Field="Wednesday">středa</string>
+  <string Field="Writer">Scénárista</string>
+  <string Field="Writers">Scénáristé</string>
+  <!-- Y -->
+  <string Field="Year">Rok</string>
+  <string Field="Yesterday">včera</string>
+</strings>

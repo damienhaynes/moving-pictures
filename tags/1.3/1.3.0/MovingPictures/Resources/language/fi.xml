@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- Finnish -->
+<!-- Last Updated: 10th May 2011 -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">Näyttelijä</string>
+  <string Field="Actors">Näyttelijät</string>
+  <string Field="AllMovies">Kaikki elokuvat</string>
+  <!-- B -->
+  <string Field="BadCategory">Ulkopuolinen lisäosa tai ulkoasu yritti\navata olematonta kategoriaa!</string>
+  <string Field="BadMovie">Ulkopuolinen lisäosa ta ulkoasu yritti\navata olematonta elokuvaa!</string>
+  <string Field="BadParam">Ulkopuolinen lisäosa tai ulkoasu välitti\nMoving Picturesille väärän paramatrin!</string>
+  <!-- C -->
+  <string Field="Cancel">Peruuta</string>
+  <string Field="CannotDeleteOffline">Ei voi poistaa {0}\n koska tiedosto ei ole saatavilla</string>
+  <string Field="CannotDeleteReadOnly">Ei voi poistaa vain-luku elokuvaa.\nHaluatko että Moving Pictures ei huomioi tätä elokuvan?</string>
+  <string Field="CategoryEmptyDescription">Tässä kategoriassa ei ole\ntällä hetkellä yhtään elokuvaa.</string>
+  <string Field="CategoryEmptyHeader">Kategoria on tyhjä</string>
+  <string Field="Certification">Sertifiointi</string>
+  <string Field="ChangeView">Vaihda näkymää</string>
+  <string Field="CheckForMissingArtwork">Hae puuttuva taidetta verkosta</string>
+  <string Field="ContinueToNextPartBody">Haluatko jatkaa osalla {0}?</string>
+  <string Field="ContinueToNextPartHeader">Jatketaanko seuraavaan osaan?</string>
+  <string Field="CoverFlowView">Kansivirta näkymä</string>
+  <string Field="CycleCoverArt">Kierrätä kansikuvia</string>
+  <string Field="CycleView">Kierrätä näkymä</string>
+  <!-- D -->
+  <string Field="DateAdded">Lisäyspäivä</string>
+  <string Field="DateDay">päivä</string>
+  <string Field="DateDays">päivää</string>
+  <string Field="DateMonth">kuukausi</string>
+  <string Field="DateMonths">kuukatta</string>
+  <string Field="DatePartAgo">{0} {1} sitten</string>
+  <string Field="DatePartWithinDays">Viimeiset {0} päivää</string>
+  <string Field="DatePartWithinMonths">Viimeiset {0} kuukautta</string>
+  <string Field="DatePartWithinWeeks">Viimeiset {0} viikkoa</string>
+  <string Field="DatePartWithinYears">Viimeiset {0} vuotta</string>
+  <string Field="DateWeek">viikko</string>
+  <string Field="DateWeeks">vikkoa</string>
+  <string Field="DateYear">vuosi</string>
+  <string Field="DateYears">vuotta</string>
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="DeleteFailed">Poisto epäonnistui</string>
+  <string Field="DeleteMovie">Poista elokuva</string>
+  <string Field="Director">Ohjaaja</string>
+  <string Field="Directors">Ohjaajat</string>
+  <string Field="DownAbbreviation">(al)</string>
+  <string Field="DoYouWantToDelete">Haluatko poistaa\n{0}\npysyvästi kiintolevyltäsi?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Aiemmin tänä vuonna</string>
+  <string Field="Error">Virhe</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">DVD-levykuvan liittäminen epäonnistui</string>
+  <string Field="FilePath">Tiedoston polku</string>
+  <string Field="FilmstripView">Filminauha näkymä</string>
+  <string Field="FilterBy">Suodata</string>
+  <string Field="Friday">Perjantai</string>
+  <string Field="Future">Tulevaisuus</string>
+  <!-- G -->
+  <string Field="Genre">Lajityyppi</string>
+  <string Field="Genres">Lajityypit</string>
+  <!-- I -->
+  <string Field="InvalidPin">Väärä PIN-koodi!</string>
+  <string Field="InvalidVideoDiscFormat">Joko levykuva ei ole oikeassa\nvideolevy-muodossa tai MediaPortalin Daemon Tools\nasetukset ovat virheelliset.</string>
+  <!-- L -->
+  <string Field="Language">Kieli</string>
+  <string Field="LargeThumbnailView">Suuri pienoiskuvake-näkymä</string>
+  <string Field="LastMonth">Viime kuukausi</string>
+  <string Field="LastWeek">Viime viikko</string>
+  <string Field="LastYear">Viime vuosi</string>
+  <string Field="ListView">Lista-näkymä</string>
+  <string Field="LockRestrictedMovies">Lukitse K-18 elokuvat</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Merkitse katsomattomaksi</string>
+  <string Field="MarkAsWatched">Merkitse katsotuksi</string>
+  <string Field="MediaIsMissing">Valitsemasi elokuvan tallennusmedia puuttuu!\nValitettavasti jokin on mennyt pieleen...</string>
+  <string Field="MediaNotAvailableBody">Valitsemasi elokuvan tallennusmedia ei\nole saatavilla. Liitä tai yhdistä tallenusmedia\nnimeltään: {0}</string>
+  <string Field="MediaNotAvailableHeader">Tallennusmedia ei saatavilla</string>
+  <string Field="MissingExternalPlayerExe">HD-toiston ajotiedosto puuttuu.\nKorjaa ajotiedoston polku.</string>
+  <string Field="Monday">Maanantai</string>
+  <string Field="Movie">Elokuva</string>
+  <string Field="MovieDetails">Elokuvan tiedot</string>
+  <string Field="MovieOptions">Elokuvan asetukset</string>
+  <string Field="Movies">Elokuvat</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">Sinulla ei ole yhtään tuontikansiota\nmääriteltynä. Sulje MediaPortal\nja suorita\nMP-asetusohjelma.</string>
+  <string Field="NoImportPathsHeading">Ei tuontipolkuja!</string>
+  <!-- O -->
+  <string Field="Older">Vanhempi</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Lapsilukko ei ole käytössä.</string>
+  <string Field="PinCodeHeader">Poistetaan K-18 lukitus</string>
+  <string Field="PinCodePrompt">Anna PIN-koodi jatkaaksesi:</string>
+  <string Field="PlaybackFailed">Toisto ei ole mahdollista, koska '{0}'\nlisäosa ei ole listattuna mediaportalin asetuksissa.\nLisää tämä lisäosa tai määritä ulkoinen soitin\nja yritä uudelleen.</string>
+  <string Field="PlaybackFailedHeader">Toisto epäonnistui</string>
+  <string Field="ProblemLoadingSkinFile">Virhe ladattaessa ulkoasun tiedostoa</string>
+  <!-- R -->
+  <string Field="Rate">Arvostele</string>
+  <string Field="Rated">Arvosteltu</string>
+  <string Field="RateFiveStarFive">Täydellinen</string>
+  <string Field="RateFiveStarFour">Loistava</string>
+  <string Field="RateFiveStarOne">Kamala</string>
+  <string Field="RateFiveStarThree">Hyvä</string>
+  <string Field="RateFiveStarTwo">Keskiverto</string>
+  <string Field="RateHeading">Arvostele elokuva</string>
+  <string Field="RecentlyAddedMovies">Viimeksi lisätyt elokuvat</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">Jatka kohdasta:</string>
+  <string Field="ResumeFromLast">Jatketaan elokuvaa kohdasta mihin viimeksi jäätiin?</string>
+  <string Field="Retry">Yritä uudelleen</string>
+  <string Field="Runtime">Kestoaika</string>
+  <string Field="RuntimeHour">{0} tunti</string>
+  <string Field="RuntimeHours">{0} tuntia</string>
+  <string Field="RuntimeLong">{0} ja {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} ja {2}</string>
+  <string Field="RuntimeMinute">{0} minuutti</string>
+  <string Field="RuntimeMinutes">{0} minuuttia</string>
+  <string Field="RuntimeSecond">{0} sekunti</string>
+  <string Field="RuntimeSeconds">{0} sekuntia</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">Lauantai</string>
+  <string Field="Score">Pistemäärä</string>
+  <string Field="SelectYourRating">Valitse arvosanasi kohteelle {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">Näytä vain katsomattomat elokuvat</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Näytä katsotut ja katsomattomat elokuvat</string>
+  <string Field="SkinDoesNotSupportCategories">Tämä ulkoasu ei tue kategorioita.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Tämä ulkoasu ei tue Pin-koodi-ikkunaa.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Tämä ulkoasu ei tue arvosana ikkunaa.</string>
+  <string Field="SortBy">Lajittele</string>
+  <string Field="SortDirection">Lajittelun suunta</string>
+  <string Field="StarRating">Arvosana</string>
+  <string Field="Sunday">Sunnuntai</string>
+  <!-- T -->
+  <string Field="ThisMonth">Tämä kuukausi</string>
+  <string Field="ThisWeek">Tämä viikko</string>
+  <string Field="ThisYear">Tämä vuosi</string>
+  <string Field="ThreeMonthsAgo">Kolme kuukautta sitten</string>
+  <string Field="ThreeWeeksAgo">Kolme viikkoa sitten</string>
+  <string Field="ThumbnailView">Pienoiskuvake-näkymä</string>
+  <string Field="Thursday">Torstai</string>
+  <string Field="Title">Nimi</string>
+  <string Field="Today">Tänään</string>
+  <string Field="ToggleParentalLock">Käytä lapsilukkoa</string>
+  <string Field="Tuesday">Tiistai</string>
+  <string Field="TwoMonthsAgo">Kaksi kuukautta sitten</string>
+  <string Field="TwoWeeksAgo">Kaksi viikkoa sitten</string>
+  <!-- U -->
+  <string Field="Unknown">Tuntematon</string>
+  <string Field="UnlockRestrictedMovies">Avaa K-18 lukitus</string>
+  <string Field="UnwatchedMovies">Katsomattomat elokuvat</string>
+  <string Field="UpAbbreviation">(yl)</string>
+  <string Field="UpdateDetailsFromOnline">Päivitä yksityiskohdat verkosta</string>
+  <string Field="UpdateMovieDetailsBody">Olet päivittämässä kaikkia elokuvan tietoja, kaikki\n itse tehdyt muokkaukset menetetään. Haluatko varmasti\njatkaa?</string>
+  <string Field="UpdateMovieDetailsHeader">Päivitä elokuvan tiedot</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Virtuaaliasema ei ole valmiina</string>
+  <string Field="VirtualDriveMessage">Virtuaaliasema ei ollut valmis ajoissa.\nYritä uudelleen tai peruuta toisto.</string>
+  <string Field="Votes">ääntä</string>
+  <!-- W -->
+  <string Field="Wednesday">Keskiviikko</string>
+  <string Field="Writer">Käsikirjoittaja</string>
+  <string Field="Writers">Käsikirjoittajat</string>
+  <!-- Y -->
+  <string Field="Year">Vuosi</string>
+  <string Field="Yesterday">Eilen</string>
+</strings>
