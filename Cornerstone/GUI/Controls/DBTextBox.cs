@@ -11,7 +11,9 @@ using System.Threading;
 
 namespace Cornerstone.GUI.Controls {
     public class DBTextBox : TextBox, IDBFieldBackedControl, IDataGridViewEditingControl {
-        #region Properties
+        #region Properties & Events
+
+        public event FieldChangedListener FieldChanged;
 
         // The database object type that this object displays data about.
         [Category("Display Properties")]
@@ -150,6 +152,7 @@ namespace Cornerstone.GUI.Controls {
         public bool SaveText() {
             if (IsValid()) {
                 DatabaseField.SetValue(DatabaseObject, Text);
+                OnFieldChanged();
                 return true;
             }
 
@@ -206,6 +209,10 @@ namespace Cornerstone.GUI.Controls {
                 ForeColor = DefaultForeColor;
             else
                 ForeColor = Color.Red;
+        }
+
+        private void OnFieldChanged() {
+            if (FieldChanged != null) FieldChanged(DatabaseObject, DatabaseField, Text);
         }
 
         #endregion
@@ -313,6 +320,8 @@ namespace Cornerstone.GUI.Controls {
 
         #region DBBackedControl Implementation
 
+        public event FieldChangedListener FieldChanged;
+
         // The database object type that this object displays data about.
         public Type Table {
             get { return _table; }
@@ -352,6 +361,10 @@ namespace Cornerstone.GUI.Controls {
             }
         } private DatabaseTable _databaseObject = null;
 
+        private void OnFieldChanged(DatabaseTable obj, DBField field, object value) {
+            if (FieldChanged != null) FieldChanged(obj, field, value);
+        }
+
         #endregion
 
         #region Public Methods
@@ -365,6 +378,7 @@ namespace Cornerstone.GUI.Controls {
             control.DatabaseFieldName = DatabaseFieldName;
             control.DBTypeOverride = DBTypeOverride;
             control.DatabaseObject = DatabaseObject;
+            control.FieldChanged += new FieldChangedListener(OnFieldChanged);
         }
 
         public override Type EditType {
