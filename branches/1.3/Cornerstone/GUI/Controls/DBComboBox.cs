@@ -16,6 +16,8 @@ namespace Cornerstone.GUI.Controls {
 
         #region IDBBackedControl Implementation
 
+        public event FieldChangedListener FieldChanged;
+
         // The database object type that this object displays data about.
         [Category("Display Properties")]
         [Description("The datatype that this control displays. All classes using the DBTableAttribute attribute will be available in the drop down.")]
@@ -200,6 +202,7 @@ namespace Cornerstone.GUI.Controls {
         public bool Save() {
             if (IsValid()) {
                 DatabaseField.SetValue(DatabaseObject, SelectedItem);
+                OnFieldChanged();
                 return true;
             }
 
@@ -251,6 +254,10 @@ namespace Cornerstone.GUI.Controls {
             if (!reverting)
                 Sync();
         }
+
+        private void OnFieldChanged() {
+            if (FieldChanged != null) FieldChanged(DatabaseObject, DatabaseField, Text);
+        }
         
         #endregion
     }
@@ -262,6 +269,8 @@ namespace Cornerstone.GUI.Controls {
         #endregion
 
         #region DBBackedControl Implementation
+
+        public event FieldChangedListener FieldChanged;
 
         // The database object type that this object displays data about.
         public Type Table {
@@ -302,6 +311,10 @@ namespace Cornerstone.GUI.Controls {
             }
         } private DatabaseTable _databaseObject = null;
 
+        private void OnFieldChanged(DatabaseTable obj, DBField field, object value) {
+            if (FieldChanged != null) FieldChanged(obj, field, value);
+        }
+
         #endregion
 
         #region Public Methods
@@ -315,6 +328,7 @@ namespace Cornerstone.GUI.Controls {
             control.DBTypeOverride = DBTypeOverride;
             control.SetCustomChoices(customChoices);
             control.DatabaseObject = DatabaseObject;
+            control.FieldChanged += new FieldChangedListener(OnFieldChanged);
         }
 
         public override Type EditType {

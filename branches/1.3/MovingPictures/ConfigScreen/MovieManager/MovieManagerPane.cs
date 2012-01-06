@@ -51,6 +51,21 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             
             listItems = new Dictionary<DBMovieInfo, ListViewItem>();
             processingFiles = new List<DBLocalMedia>();
+
+            movieDetailsSubPane.FieldChanged += new FieldChangedListener(movieDetailsSubPane_FieldChanged);
+        }
+
+        void movieDetailsSubPane_FieldChanged(DatabaseTable obj, DBField field, object value) {
+            // reset title field as needed
+            if (field == DBField.GetFieldByDBName(typeof(DBMovieInfo), "title")) 
+                listItems[obj as DBMovieInfo].Text = (obj as DBMovieInfo).Title;
+
+            // resort as needed
+            if (field == DBField.GetFieldByDBName(typeof(DBMovieInfo), "title") ||
+                field == DBField.GetFieldByDBName(typeof(DBMovieInfo), "sortby")) {
+
+                if (movieListBox != null) movieListBox.Sort();
+            }
         }
 
         public void Commit() {
