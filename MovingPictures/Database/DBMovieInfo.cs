@@ -865,7 +865,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 foreach (string currWord in prepositions) {
                     string word = currWord + " ";
                     if (_sortBy.ToLower().IndexOf(word) == 0) {
-                        SortBy = _sortBy.Substring(word.Length) + " " + _sortBy.Substring(0, currWord.Length);
+                        SortBy = _sortBy.Substring(word.Length); 
                         return;
                     }
                 }
