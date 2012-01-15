@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Moving Pictures translation file -->
+<!-- Korean (KO) -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">배우</string>
+  <string Field="Actors">배우</string>
+  <string Field="AllMovies">전체 영화</string>
+  <!-- C -->
+  <string Field="Cancel">취소</string>
+  <string Field="CannotDeleteOffline">파일이 오프라인이기 때문에\n{0}을 삭제할 수 없습니다.</string>
+  <string Field="CannotDeleteReadOnly">읽기전용 파일을 삭제할 수 없습니다.\n이 영화를 무시하도록 하시겠습니까?</string>
+  <string Field="CategoryEmptyDescription">카테고리에 속한 영화가\n없습니다.</string>
+  <string Field="CategoryEmptyHeader">카테고리가 비어있습니다.</string>
+  <string Field="Certification">증명서</string>
+  <string Field="ChangeView">보기변경</string>
+  <string Field="CheckForMissingArtwork">없는 아트웍을 온라인에서 검색</string>
+  <string Field="ContinueToNextPartBody">{0} 부분으로 넘어갈까요?</string>
+  <string Field="ContinueToNextPartHeader">다음 부분으로 넘어갈까요?</string>
+  <string Field="CycleCoverArt">커버아트 순환</string>
+  <string Field="CycleView">순환 보기</string>
+  <!-- D -->
+  <string Field="DateAdded">추가된 날짜</string>
+  <string Field="DateDay">일</string>
+  <string Field="DateDays">일</string>
+  <string Field="DateMonth">달</string>
+  <string Field="DateMonths">달</string>
+  <string Field="DatePartAgo">{0}달 {1}일 전</string>
+  <string Field="DatePartWithinDays">최근 {0} 일</string>
+  <string Field="DatePartWithinMonths">최근 {0} 달</string>
+  <string Field="DatePartWithinWeeks">최근 {0} 주</string>
+  <string Field="DatePartWithinYears">최근 {0} 년</string>
+  <string Field="DateWeek">주</string>
+  <string Field="DateWeeks">주</string>
+  <string Field="DateYear">년</string>
+  <string Field="DateYears">년</string>
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="DeleteFailed">삭제 실패</string>
+  <string Field="DeleteMovie">영화 삭제</string>
+  <string Field="Director">감독</string>
+  <string Field="Directors">감독</string>
+  <string Field="DownAbbreviation">(dn)</string>
+  <string Field="DoYouWantToDelete">하드디스크에서\n{0}\n를 삭제하시겠습니까?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">올해초</string>
+  <string Field="Error">오류</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">DVD 이미지를 마운트 실패</string>
+  <string Field="FilePath">파일경로</string>
+  <string Field="FilmstripView">필름스트립 보기</string>
+  <string Field="FilterBy">필터</string>
+  <string Field="Friday">금요일</string>
+  <string Field="Future">미래</string>
+  <!-- G -->
+  <string Field="Genre">장르</string>
+  <string Field="Genres">장르</string>
+  <!-- I -->
+  <string Field="InvalidPin">잘못된 핀코드!</string>
+  <string Field="InvalidVideoDiscFormat">이미지 파일이 올바른 비디오 디스크\n포맷이 아니거나, MediaPortal 데몬툴\n설정이 잘 못되었습니다.</string>
+  <!-- L -->
+  <string Field="Language">언어</string>
+  <string Field="LargeThumbnailView">큰 미리보기 보기</string>
+  <string Field="LastMonth">지난달</string>
+  <string Field="LastWeek">지난주</string>
+  <string Field="LastYear">지난해</string>
+  <string Field="ListView">최근보기</string>
+  <string Field="LockRestrictedMovies">영화 잠그기</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">미시청으로 표시</string>
+  <string Field="MarkAsWatched">시청으로 표시</string>
+  <string Field="MediaIsMissing">선택한 영화에 대한 미디어가 존재하지 않습니다.\n뭔가 잘못됐군요...</string>
+  <string Field="MediaNotAvailableBody">선택한 영화에 대한 미디오 현재 사용가능하지 않습니다. 다음 미디어를 넣거나 연결해주세요: {0}</string>
+  <string Field="MediaNotAvailableHeader">미디오 사용불가</string>
+  <string Field="MissingExternalPlayerExe">HD 재생을 위한 실행파일이 없습니다.\n실행파일에 대한 경로를 확인해주세요.</string>
+  <string Field="Monday">월요일</string>
+  <string Field="Movie">영화</string>
+  <string Field="MovieDetails">영화 상세정보</string>
+  <string Field="MovieOptions">영화 옵션</string>
+  <string Field="Movies">영화</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">읽어오기 경로가 없는 것 같습니다.\nMediaPortal을 종료하고 설정프로그램을\n띄워 Moving Picture를\n설정해주세요.</string>
+  <string Field="NoImportPathsHeading">읽어오기 경로가 없음!</string>
+  <!-- O -->
+  <string Field="Older">Older</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">자녀보호 기능이 꺼져있음.</string>
+  <string Field="PinCodeHeader">접근금지를 해제</string>
+  <string Field="PinCodePrompt">계속하려면 핀코드를 넣으세요:</string>
+  <string Field="PlaybackFailed">'{0}' 확장이 설정에 없기 때문에\n재생이 불가능합니다. 이 확장을\n추가하거나 외부플레이어를 설정하고\n다시 시도해 주십시요.</string>
+  <string Field="PlaybackFailedHeader">재생실표</string>
+  <string Field="ProblemLoadingSkinFile">스킨파일 로딩에 문제가 발생했습니다</string>
+  <!-- R -->
+  <string Field="Rate">평점</string>
+  <string Field="Rated">등급</string>
+  <string Field="RateFiveStarFive">5점</string>
+  <string Field="RateFiveStarFour">4점</string>
+  <string Field="RateFiveStarOne">1점</string>
+  <string Field="RateFiveStarThree">3점</string>
+  <string Field="RateFiveStarTwo">2점</string>
+  <string Field="RateHeading">영화 평점매김</string>
+  <string Field="RecentlyAddedMovies">최근 추가된 영화</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">연속재생:</string>
+  <string Field="ResumeFromLast">지난지점부터 재생하시겠습니까?</string>
+  <string Field="Retry">재시도</string>
+  <string Field="Runtime">상영시간</string>
+  <string Field="RuntimeHour">{0} 시간</string>
+  <string Field="RuntimeHours">{0} 시간</string>
+  <string Field="RuntimeLong">{0}시간 {1}분</string>
+  <string Field="RuntimeLongExtended">{0} {1} {2}</string>
+  <string Field="RuntimeMinute">{0} 분</string>
+  <string Field="RuntimeMinutes">{0} 분</string>
+  <string Field="RuntimeSecond">{0} 초</string>
+  <string Field="RuntimeSeconds">{0} 초</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">토요일</string>
+  <string Field="Score">점수</string>
+  <string Field="SelectYourRating">{0}에 대한 당신의 평점을 고르세요</string>
+  <string Field="ShowOnlyUnwatchedMovies">미시청 영화만을 표시</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">시청및 미시청 영화 표시</string>
+  <string Field="SkinDoesNotSupportCategories">스킨이 카테고리를 지원하지 않습니다.</string>
+  <string Field="SkinDoesNotSupportPinDialog">스킨이 핀코드 입력창을 지원하지 않습니다.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">스킨이 평점 입력창을 지원하지 않습니다.</string>
+  <string Field="SortBy">정렬</string>
+  <string Field="SortDirection">정렬방향</string>
+  <string Field="StarRating">스타 평점</string>
+  <string Field="Sunday">일요일</string>
+  <!-- T -->
+  <string Field="ThisMonth">이번달</string>
+  <string Field="ThisWeek">이번주</string>
+  <string Field="ThisYear">올해</string>
+  <string Field="ThreeMonthsAgo">3달전</string>
+  <string Field="ThreeWeeksAgo">3주전</string>
+  <string Field="ThumbnailView">미리보기 보기</string>
+  <string Field="Thursday">목요일</string>
+  <string Field="Title">제목</string>
+  <string Field="Today">오늘</string>
+  <string Field="ToggleParentalLock">자녀보호 토글</string>
+  <string Field="Tuesday">화요일</string>
+  <string Field="TwoMonthsAgo">2달전</string>
+  <string Field="TwoWeeksAgo">2주전</string>
+  <!-- U -->
+  <string Field="Unknown">알수없음</string>
+  <string Field="UnlockRestrictedMovies">금지된 영화를 해제</string>
+  <string Field="UnwatchedMovies">미시청 영화</string>
+  <string Field="UpAbbreviation">(up)</string>
+  <string Field="UpdateDetailsFromOnline">온라인에서 상세정보 갱신</string>
+  <string Field="UpdateMovieDetailsBody">모든 영화의 메타정보를 갱신하고, 사용자\n변경사항을 덮어쓰려고 합니다.\n계속하시겠습니까?</string>
+  <string Field="UpdateMovieDetailsHeader">영화 상세정보 갱신</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">가상드라이브가 준비되지 않음</string>
+  <string Field="VirtualDriveMessage">제때 가상드라이브가 준비되지 않았습니다.\n다시 시작하거나 실행을 취소하세요.</string>
+  <string Field="Votes">투표수</string>
+  <!-- W -->
+  <string Field="Wednesday">수요일</string>
+  <string Field="Writer">작가</string>
+  <string Field="Writers">작가</string>
+  <!-- Y -->
+  <string Field="Year">연도</string>
+  <string Field="Yesterday">어제</string>
+</strings>

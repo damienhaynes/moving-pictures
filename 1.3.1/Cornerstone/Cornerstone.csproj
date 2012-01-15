@@ -1,0 +1,416 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{14201B8D-31C3-4FB5-9356-9485676C147B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Cornerstone</RootNamespace>
+    <AssemblyName>Cornerstone</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\External\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collections\CachedDictionary.cs" />
+    <Compile Include="Collections\DiskCachedDictionary.cs" />
+    <Compile Include="Database\CustomTypes\ByteArray.cs" />
+    <Compile Include="Database\CustomTypes\DBObjectList.cs" />
+    <Compile Include="Database\CustomTypes\DynamicList.cs" />
+    <Compile Include="Database\CustomTypes\IDynamic.cs" />
+    <Compile Include="Database\CustomTypes\IStringSourcedObject.cs" />
+    <Compile Include="Database\CustomTypes\RelationList.cs" />
+    <Compile Include="Database\CustomTypes\StringList.cs" />
+    <Compile Include="Database\DatabaseCache.cs" />
+    <Compile Include="Database\DatabaseManager.cs" />
+    <Compile Include="Database\DBField.cs" />
+    <Compile Include="Database\DBRelation.cs" />
+    <Compile Include="Database\IAttributeOwner.cs" />
+    <Compile Include="Database\SettingsManager.cs" />
+    <Compile Include="Database\Tables\DatabaseTable.cs" />
+    <Compile Include="Database\Tables\DBAttribute.cs" />
+    <Compile Include="Database\Tables\DBFilter.cs" />
+    <Compile Include="Database\Tables\DBMenu.cs" />
+    <Compile Include="Database\Tables\DBNode.cs" />
+    <Compile Include="Database\Tables\DBSetting.cs" />
+    <Compile Include="Database\Tables\DBCriteria.cs" />
+    <Compile Include="Database\IDynamicFilterHelper.cs" />
+    <Compile Include="Database\Tables\IFilter.cs" />
+    <Compile Include="Database\Tables\GenericDatabaseTable.cs" />
+    <Compile Include="Database\Tables\NodeListExtensions.cs" />
+    <Compile Include="Extensions\ByteExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\IO\DirectoryInfoExtensions.cs" />
+    <Compile Include="Extensions\IO\DriveInfoExtensions.cs" />
+    <Compile Include="Extensions\IO\FileInfoExtensions.cs" />
+    <Compile Include="Extensions\IO\FileSystemInfoExtensions.cs" />
+    <Compile Include="Extensions\Collections\IListExtensions.cs" />
+    <Compile Include="Extensions\IO\PathStringExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="GUI\AdvancedSettingsPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\AdvancedSettingsPane.Designer.cs">
+      <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Controls\AttributesEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\AttributesEditor.Designer.cs">
+      <DependentUpon>AttributesEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Controls\FieldDisplaySettings.cs">
+    </Compile>
+    <Compile Include="GUI\Controls\DBComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\DBObjectEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\DBObjectListEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\DBTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\FilterComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\SettingCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\SettingsComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Controls\SettingsTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\DesignMode\DatabaseTableTypeConverter.cs" />
+    <Compile Include="GUI\DesignMode\DBFieldTypeConverter.cs" />
+    <Compile Include="GUI\DesignMode\DBObjectFieldEditorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DesignMode\DBObjectFieldEditorDialog.Designer.cs">
+      <DependentUpon>DBObjectFieldEditorDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Controls\IDBBackedControl.cs" />
+    <Compile Include="GUI\Controls\IDBFieldBackedControl.cs" />
+    <Compile Include="GUI\Dialogs\AttributeTypeEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Dialogs\AttributeTypeEditor.Designer.cs">
+      <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Dialogs\ProgressPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Dialogs\ProgressPopup.Designer.cs">
+      <DependentUpon>ProgressPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FilterEditorPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FilterEditorPopup.Designer.cs">
+      <DependentUpon>FilterEditorPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\AddNodePopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\AddNodePopup.Designer.cs">
+      <DependentUpon>AddNodePopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\CategorySettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\CategorySettingsPanel.Designer.cs">
+      <DependentUpon>CategorySettingsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\CriteriaInputField.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\CriteriaListPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericCriteriaListPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericCriteriaListPanel.Designer.cs">
+      <DependentUpon>GenericCriteriaListPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\CriteriaPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\CriteriaPanel.Designer.cs">
+      <DependentUpon>CriteriaPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\FilterEditorPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericFilterEditorPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericFilterEditorPane.Designer.cs">
+      <DependentUpon>GenericFilterEditorPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ItemSelectionPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ItemSelectionPopup.Designer.cs">
+      <DependentUpon>ItemSelectionPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericMenuTreePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericMenuTreePanel.Designer.cs">
+      <DependentUpon>GenericMenuTreePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\MenuTreePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericNodeSettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Filtering\GenericNodeSettingsPanel.Designer.cs">
+      <DependentUpon>GenericNodeSettingsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\Filtering\NodeSettingsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ScraperEngine\Nodes\ActionNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\DistanceNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\IfNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\LogNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\LoopNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\MathNodes.cs" />
+    <Compile Include="ScraperEngine\Nodes\ParseNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\ReplaceNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\RetrieveNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\SleepNode.cs" />
+    <Compile Include="ScraperEngine\ScraperNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\SetNode.cs" />
+    <Compile Include="ScraperEngine\Nodes\SortNode.cs" />
+    <Compile Include="ScraperEngine\ScriptableScraper.cs" />
+    <Compile Include="Tools\AbstractBackgroundProcess.cs" />
+    <Compile Include="Tools\AdvancedStringComparer.cs" />
+    <Compile Include="Tools\BackgroundProcessManager.cs" />
+    <Compile Include="Tools\DriveInfoHelper.cs" />
+    <Compile Include="Tools\Search\AbstractSearcher.cs" />
+    <Compile Include="Tools\Search\LevenshteinSubstringSearcher.cs" />
+    <Compile Include="Tools\Search\LuceneSearcher.cs" />
+    <Compile Include="Tools\Search\SearchException.cs" />
+    <Compile Include="Tools\Translator\LanguageUtility.cs" />
+    <Compile Include="Tools\Translator\Translator.cs" />
+    <Compile Include="Tools\WebGrabber.cs" />
+    <Compile Include="Tools\WildcardParser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GUI\AdvancedSettingsPane.resx">
+      <DependentUpon>AdvancedSettingsPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Controls\AttributesEditor.resx">
+      <DependentUpon>AttributesEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Controls\DBObjectEditor.resx">
+      <DependentUpon>DBObjectEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Controls\DBObjectListEditor.resx">
+      <DependentUpon>DBObjectListEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DesignMode\DBObjectFieldEditorDialog.resx">
+      <DependentUpon>DBObjectFieldEditorDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Dialogs\AttributeTypeEditor.resx">
+      <DependentUpon>AttributeTypeEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Dialogs\ProgressPopup.resx">
+      <DependentUpon>ProgressPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FilterEditorPopup.resx">
+      <DependentUpon>FilterEditorPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\AddNodePopup.resx">
+      <DependentUpon>AddNodePopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\CategorySettingsPanel.resx">
+      <DependentUpon>CategorySettingsPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\GenericCriteriaListPanel.resx">
+      <DependentUpon>GenericCriteriaListPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\CriteriaPanel.resx">
+      <DependentUpon>CriteriaPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\GenericFilterEditorPane.resx">
+      <DependentUpon>GenericFilterEditorPane.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ItemSelectionPopup.resx">
+      <DependentUpon>ItemSelectionPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\GenericMenuTreePanel.resx">
+      <DependentUpon>GenericMenuTreePanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Filtering\GenericNodeSettingsPanel.resx">
+      <DependentUpon>GenericNodeSettingsPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\cog.png" />
+    <None Include="Images\folder.png" />
+    <None Include="Images\folder_explore.png" />
+    <None Include="Images\blank.png" />
+    <None Include="Images\bullet_go.png" />
+    <None Include="Images\bullet_black.png" />
+    <None Include="Images\bullet_error.png" />
+    <None Include="Images\arrow_up.png" />
+    <None Include="Images\arrow_down.png" />
+    <None Include="Images\help.png" />
+    <Content Include="Images\list-add.png" />
+    <Content Include="Images\list-remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\External\MediaPortal\mediaportal\Databases\Databases.csproj">
+      <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
+      <Name>Databases</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\AssemblyInfoTemplate.txt" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>"$(ProjectDir)..\External\REVSTAMP.EXE" http://moving-pictures.googlecode.com/svn "$(ProjectDir)\Properties\AssemblyInfoTemplate.txt" "$(ProjectDir)\Properties\AssemblyInfo.cs"</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

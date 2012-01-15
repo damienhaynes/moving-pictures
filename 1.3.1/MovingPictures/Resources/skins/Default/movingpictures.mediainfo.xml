@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<window>	
+	<controls>
+		<control>
+		  <description>Video Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>235</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Video Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>235</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\AVC.png</texture>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)+string.equals(#MovingPictures.LocalMedia.videocodec,H264)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+
+		<control>
+		  <description>Video Resolution</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>300</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+
+		<control>
+		  <description>Video Aspect Ratio</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>365</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+
+		<control>
+		  <description>Audio Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>430</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Audio Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>430</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\AAC VERSION 4 LC.png</texture>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)+string.equals(#MovingPictures.LocalMedia.audiocodec,AAC)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Audio Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>430</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\ac-3 dolby digital.png</texture>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)+string.equals(#MovingPictures.LocalMedia.audiocodec,AC3)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Audio Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>430</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\MPEG AUDIO VERSION 1 LAYER 3.png</texture>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)+string.equals(#MovingPictures.LocalMedia.audiocodec,MP3)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+
+		<control>
+		  <description>Audio Channels</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>495</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+
+		<control>
+		  <description>Subtitles</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>560</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		
+		<!-- Media logos [List View & Filmstrip] -->
+		<control>
+		  <description>Video Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>30</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videocodec.png</texture>
+		  <visible>[facadeview.list|facadeview.filmstrip]+control.isvisible(50)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Video Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>30</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\AVC.png</texture>
+		  <visible>[facadeview.list|facadeview.filmstrip]+control.isvisible(50)+string.equals(#MovingPictures.LocalMedia.videocodec,H264)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+
+		<control>
+		  <description>Video Resolution</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>95</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videoresolution.png</texture>
+		  <visible>[facadeview.list|facadeview.filmstrip]+control.isvisible(50)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+
+		<control>
+		  <description>Video Aspect Ratio</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>160</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
+		  <visible>[facadeview.list|facadeview.filmstrip]+control.isvisible(50)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+
+		<control>
+		  <description>Audio Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>225</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.audiocodec.png</texture>
+		  <visible>[facadeview.list|facadeview.filmstrip]+control.isvisible(50)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Audio Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>225</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\AAC VERSION 4 LC.png</texture>
+		  <visible>[facadeview.list|facadeview.filmstrip]+control.isvisible(50)+string.equals(#MovingPictures.LocalMedia.audiocodec,AAC)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Audio Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>225</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\ac-3 dolby digital.png</texture>
+		  <visible>[facadeview.list|facadeview.filmstrip]+control.isvisible(50)+string.equals(#MovingPictures.LocalMedia.audiocodec,AC3)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Audio Codec</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>225</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\MPEG AUDIO VERSION 1 LAYER 3.png</texture>
+		  <visible>[facadeview.list|facadeview.filmstrip]+control.isvisible(50)+string.equals(#MovingPictures.LocalMedia.audiocodec,MP3)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+
+		<control>
+		  <description>Audio Channels</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>290</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.audiochannels.png</texture>
+		  <visible>[facadeview.list|facadeview.filmstrip]+control.isvisible(50)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+
+		<control>
+		  <description>Subtitles</description>
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>355</posX>
+		  <posY>528</posY>
+		  <width>66</width>
+		  <height>45</height>
+		  <texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
+		  <visible>[facadeview.list|facadeview.filmstrip]+control.isvisible(50)</visible>
+			<animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		
+	</controls>
+</window>
