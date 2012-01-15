@@ -1,0 +1,133 @@
+<ScriptableScraper>
+  <details>
+	<!-- These details are for display purposes only. -->
+	<name>XBMC (Local)</name>
+	<author>LRFalk01</author>
+	<description>This script pulls data from an XBMC NFO export.</description>
+
+	<!-- 
+	These fields uniquely identify the script. The ID should never 
+	change and should be unique (no other script should use this ID). With
+	new versions of the script the version numbers should change. EVEN FOR 
+	MINOR CHANGES, you should change the version number if you are going to
+	disribute it to anyone but internal testers. The point number 
+	is for minor bug fix releases. Use it.
+	-->
+	<id>141320</id>
+	<version major="1" minor="0" point="4" />
+	<published month="07" day="23" year="2011" />
+
+	<!--
+	These fields are used for categorization purposes. Seperate multiple 
+	types with a pipe | character.
+	-->
+	<type>MovieDetailsFetcher|MovieCoverFetcher|MovieBackdropFetcher</type>
+	<language>various</language>
+  </details>
+
+  <action name="search">
+	<set name="rx_file_check">
+	  <![CDATA[
+	  <movie[^>]*>
+	  ]]>
+	</set>
+
+	<set name="filename" value="${search.basepath}\${search.filename_noext}" />
+
+	<retrieve name="file" file="${filename}.nfo" encoding="UTF-8" />
+	<parse name="fileCheck" input="${file}" regex="${rx_file_check}" />
+	<if test='${fileCheck[0]}!='>
+		<parse name="result" input="${file}" xpath="//movie" />
+
+		<set name="movie[0].title" value="${result[0].title}" />
+
+		<!-- by setting the alternative title to the search title we garantee a match-->
+		<set name="movie[0].alternate_titles" value="|${search.title}|" />
+
+		<set name="movie[0].year" value="${result[0].year}" />
+		<set name="movie[0].popularity" value="100" />
+		<set name='movie[0].imdb_id' value='${result[0].id}' />
+    
+		<!-- we set the filename as the site id -->
+		<set name="movie[0].site_id" value="${filename}" />
+	</if>
+  </action>
+
+  <action name="get_details">
+	<if test='${movie.site_id}!='>
+		<set name="rx_genres">
+		  <![CDATA[
+		  (?<genres>[^/]+)/
+		  ]]>
+		</set>
+			
+		<set name="rx_imdb">
+		  <![CDATA[
+		  (?<imdb>tt\d{7})
+		  ]]>
+		</set>
+			
+		<retrieve name="file" file="${movie.site_id}.nfo" encoding="UTF-8" />
+		<parse name="result" input="${file}" xpath="//movie" />
+			
+		<set name="movie.title" value="${result[0].title}" />
+		<set name="movie.year" value="${result[0].year}" />
+			
+		<set name='movie.score' value='${result[0].rating}' />
+		<set name='movie.votes' value='${result[0].votes}' />
+		<set name='movie.summary' value='${result[0].plot:htmldecode}' />
+		<set name='movie.tagline' value='${result[0].tagline}' />
+		<set name='movie.directors' value='|${result[0].director}|' />
+		<set name='movie.certification' value='${result[0].mpaa}' />
+		<set name='movie.runtime' value='${result[0].runtime}' />
+		<set name='movie.imdb_id' value='${result[0].id}' />
+
+    <set name='movie.sortby' value='${result[0].sorttitle}' />
+
+    <if test="${movie.imdb_id}=">
+			<parse name="imdbid" input="${file}" regex="${rx_imdb}" />
+			<if test='${imdbid[0][0]}!='>
+				<set name='movie.imdb_id' value='${imdbid[0][0]}' />
+			</if>
+		</if>
+
+
+		<!-- Adding support for Language, because MovingPictures uses it -->
+		<set name='movie.language' value='${result[0].language}' />
+
+		<!-- Adding support for Writers, because MovingPictures uses it -->
+		<parse name="writers" input="${file}" xpath="//movie/writer/name" />
+		 <set name="movie.writers" value="" />
+		<loop name="writer" on="writers">
+			<set name="movie.writers" value="${movie.writers}|${writer:htmldecode}" />
+		</loop>
+
+
+		<parse name="genres" input="${file}" xpath="//movie/genre" />
+		<set name="genres" value="${genres[0]}/" />
+		<parse name="genresNew" input="${genres}" regex="${rx_genres}" />
+		<set name="movie.genres" value="" />
+		<loop name="genre" on="genresNew">
+			<set name="movie.genres" value="${movie.genres}|${genre[0]:htmldecode}" />
+		</loop>
+
+		<parse name="actors" input="${file}" xpath="//movie/actor/name" />
+		 <set name="movie.actors" value="" />
+		<loop name="actor" on="actors">
+			<set name="movie.actors" value="${movie.actors}|${actor:htmldecode}" />
+		</loop> 
+	</if>
+  </action>
+
+  <action name="get_cover_art">
+	<if test='${movie.site_id}!='>
+		<set name="cover_art[0].file" value="${movie.site_id}.tbn" />
+	</if>	
+  </action>
+
+  <action name="get_backdrop">
+	<if test='${movie.site_id}!='>
+		<set name="backdrop[0].file" value="${movie.site_id}-fanart.jpg" />
+	</if>	
+  </action>
+</ScriptableScraper>
