@@ -534,9 +534,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // movieListButton
             // 
-            this.movieListButton.Location = new System.Drawing.Point(148, 7);
+            this.movieListButton.Location = new System.Drawing.Point(158, 7);
             this.movieListButton.Name = "movieListButton";
-            this.movieListButton.Size = new System.Drawing.Size(34, 23);
+            this.movieListButton.Size = new System.Drawing.Size(24, 23);
             this.movieListButton.TabIndex = 22;
             this.movieListButton.Text = "...";
             this.movieListButton.UseVisualStyleBackColor = true;
@@ -549,7 +549,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieListFilterBox.Location = new System.Drawing.Point(4, 8);
             this.movieListFilterBox.Name = "movieListFilterBox";
             this.movieListFilterBox.RestrictSelectionToLeafNodes = false;
-            this.movieListFilterBox.Size = new System.Drawing.Size(137, 21);
+            this.movieListFilterBox.Size = new System.Drawing.Size(148, 21);
             this.movieListFilterBox.TabIndex = 21;
             // 
             // movieDetailsSubPane

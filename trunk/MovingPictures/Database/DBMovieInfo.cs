@@ -343,7 +343,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private StringList _covers;
 
 
-        [DBField(AllowAutoUpdate = false, Filterable=false)]
+        [DBField(AllowAutoUpdate = false, Filterable=true)]
         public String CoverFullPath
         {
             get {
@@ -374,7 +374,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private String _coverThumbFullPath;
 
-        [DBField(AllowAutoUpdate = false, Filterable=false)]
+        [DBField(AllowAutoUpdate = false, Filterable=true)]
         public String BackdropFullPath {
             get {
                 return _backdropFullPath;
