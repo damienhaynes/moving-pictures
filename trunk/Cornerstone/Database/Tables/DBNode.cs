@@ -53,6 +53,10 @@ namespace Cornerstone.Database.Tables {
             }
         } private DBNode<T> _parent;
 
+        public IDBNode GenericParent {
+            get { return Parent; }
+        }
+
         [DBField]
         public DBField BasicFilteringField {
             get { return _basicFilteringField; }
@@ -354,6 +358,10 @@ namespace Cornerstone.Database.Tables {
         }
 
         bool HasFilter {
+            get;
+        }
+
+        IDBNode GenericParent {
             get;
         }
     }
