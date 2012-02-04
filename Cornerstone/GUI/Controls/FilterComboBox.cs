@@ -32,8 +32,14 @@ namespace Cornerstone.GUI.Controls {
             set {
                 _selectedNode = value;
                 if (!stateChanging) _treePanel.SelectedNode = value;
-                
-                string name = value == null ? "..." : _treePanel.TranslationParser(_treePanel.SelectedNode.Name);
+
+                string name = "...";
+                if (value != null) {
+                    name = _treePanel.TranslationParser(_treePanel.SelectedNode.Name);
+                    if (value.GenericParent != null)
+                        name = _treePanel.TranslationParser(_treePanel.SelectedNode.GenericParent.Name) + ": " + name;
+                }
+
                 this.Items.Clear();
                 this.Items.Add(name);
                 this.SelectedItem = name;
