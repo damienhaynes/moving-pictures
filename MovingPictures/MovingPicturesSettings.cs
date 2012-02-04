@@ -1771,34 +1771,27 @@ namespace MediaPortal.Plugins.MovingPictures {
             Identifier = "movie_manager_filter_menu_id",
             Default = "null",
             Hidden = true)]
-        public string MovieManagerFilterMenuID
-        {
+        public string MovieManagerFilterMenuID {
             get { return _movieManagerFilterMenuID; }
-            set
-            {
+            set {
                 _movieManagerFilterMenuID = value;
                 OnSettingChanged("movie_manager_filter_menu_id");
             }
         }
         private string _movieManagerFilterMenuID;
 
-        public DBMenu<DBMovieInfo> MovieManagerFilterMenu
-        {
-            get
-            {
-                if (_movieManagerFilterMenu == null)
-                {
+        public DBMenu<DBMovieInfo> MovieManagerFilterMenu {
+            get {
+                if (_movieManagerFilterMenu == null) {
                     // grab or create the menu for the filtering popup
                     string menuID = MovieManagerFilterMenuID;
-                    if (menuID == "null")
-                    {
+                    if (menuID == "null") {
                         _movieManagerFilterMenu = new DBMenu<DBMovieInfo>();
                         _movieManagerFilterMenu.Name = "Movie Manager Filters Menu";
                         MovingPicturesCore.DatabaseManager.Commit(_movieManagerFilterMenu);
                         MovieManagerFilterMenuID = _movieManagerFilterMenu.ID.ToString();
                     }
-                    else
-                    {
+                    else {
                         _movieManagerFilterMenu = MovingPicturesCore.DatabaseManager.Get<DBMenu<DBMovieInfo>>(int.Parse(menuID));
                     }
                 }

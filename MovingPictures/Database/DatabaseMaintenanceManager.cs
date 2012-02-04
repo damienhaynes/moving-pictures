@@ -655,6 +655,44 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 yearNode.SortPosition = position++;
                 yearNode.DBManager = MovingPicturesCore.DatabaseManager;
                 menu.RootNodes.Add(yearNode);
+                
+                // maintenance node
+                DBNode<DBMovieInfo> maintenanceNode = new DBNode<DBMovieInfo>();
+                maintenanceNode.Name = "Maintenance";
+                maintenanceNode.DynamicNode = false;
+                maintenanceNode.SortPosition = position++;
+                maintenanceNode.DBManager = MovingPicturesCore.DatabaseManager;
+                menu.RootNodes.Add(maintenanceNode);
+
+                // missing covers node
+                DBNode<DBMovieInfo> missingCoversNode = new DBNode<DBMovieInfo>();
+                missingCoversNode.Name = "Missing Covers";
+                missingCoversNode.DynamicNode = false;
+                missingCoversNode.Filter = new DBFilter<DBMovieInfo>();
+                missingCoversNode.SortPosition = position++;
+                missingCoversNode.DBManager = MovingPicturesCore.DatabaseManager;
+                maintenanceNode.Children.Add(missingCoversNode);
+
+                DBCriteria<DBMovieInfo> missingCoversCriteria = new DBCriteria<DBMovieInfo>();
+                missingCoversCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "coverfullpath");
+                missingCoversCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL;
+                missingCoversCriteria.Value = "";
+                missingCoversNode.Filter.Criteria.Add(missingCoversCriteria);
+
+                // missing backdrops node
+                DBNode<DBMovieInfo> missingBackdropsNode = new DBNode<DBMovieInfo>();
+                missingBackdropsNode.Name = "Missing Backdrops";
+                missingBackdropsNode.DynamicNode = false;
+                missingBackdropsNode.Filter = new DBFilter<DBMovieInfo>();
+                missingBackdropsNode.SortPosition = position++;
+                missingBackdropsNode.DBManager = MovingPicturesCore.DatabaseManager;
+                maintenanceNode.Children.Add(missingBackdropsNode);
+
+                DBCriteria<DBMovieInfo> missingBackdropsCriteria = new DBCriteria<DBMovieInfo>();
+                missingBackdropsCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "backdropfullpath");
+                missingBackdropsCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL;
+                missingBackdropsCriteria.Value = "";
+                missingBackdropsNode.Filter.Criteria.Add(missingBackdropsCriteria);
 
                 menu.Commit();
             }
