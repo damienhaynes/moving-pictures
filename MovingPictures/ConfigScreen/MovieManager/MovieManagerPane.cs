@@ -139,12 +139,16 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         // loads from scratch all movies in the database into the side panel
         public void ReloadList() {
             // turn off redraws temporarily and clear the list
-            
+
             movieListBox.Items.Clear();
             movieListBox.Enabled = false;
 
             movieListFilterBox.Enabled = false;
             movieListButton.Enabled = false;
+
+            // clear movie detail panels
+            updateMoviePanel();
+            updateFilePanel();
 
             Thread thread = new Thread(new ThreadStart(delegate {
                 Invoke(new InvokeDelegate(delegate { loadingMoviesPanel.Visible = true; }));
