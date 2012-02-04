@@ -44,7 +44,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager {
         #endregion
 
         public void playSelected() {
-            if (fileList.SelectedItem == null)
+            if (fileList.SelectedItem == null || !((DBLocalMedia)fileList.SelectedItem).IsAvailable)
                 return;
 
             ProcessStartInfo processInfo = new ProcessStartInfo(((DBLocalMedia)fileList.SelectedItem).File.FullName);
