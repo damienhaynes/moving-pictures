@@ -70,6 +70,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.loadingListProgressBar = new System.Windows.Forms.ProgressBar();
             this.loadingMoviesPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.movieListButton = new System.Windows.Forms.Button();
+            this.movieListFilterBox = new Cornerstone.GUI.Controls.FilterComboBox();
             this.movieDetailsSubPane = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager.MovieDetailsSubPane();
             this.fileDetailsSubPane = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager.FileDetailsSubPane();
             this.coverPanel.SuspendLayout();
@@ -478,9 +480,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieListBox.FullRowSelect = true;
             this.movieListBox.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.movieListBox.HideSelection = false;
-            this.movieListBox.Location = new System.Drawing.Point(3, 10);
+            this.movieListBox.Location = new System.Drawing.Point(3, 33);
             this.movieListBox.Name = "movieListBox";
-            this.movieListBox.Size = new System.Drawing.Size(178, 281);
+            this.movieListBox.Size = new System.Drawing.Size(178, 258);
             this.movieListBox.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.movieListBox.TabIndex = 2;
             this.movieListBox.UseCompatibleStateImageBehavior = false;
@@ -530,6 +532,26 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.label1.TabIndex = 20;
             this.label1.Text = "Loading Movies...";
             // 
+            // movieListButton
+            // 
+            this.movieListButton.Location = new System.Drawing.Point(148, 7);
+            this.movieListButton.Name = "movieListButton";
+            this.movieListButton.Size = new System.Drawing.Size(34, 23);
+            this.movieListButton.TabIndex = 22;
+            this.movieListButton.Text = "...";
+            this.movieListButton.UseVisualStyleBackColor = true;
+            this.movieListButton.Click += new System.EventHandler(this.movieListButton_Click);
+            // 
+            // movieListFilterBox
+            // 
+            this.movieListFilterBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.movieListFilterBox.FormattingEnabled = true;
+            this.movieListFilterBox.Location = new System.Drawing.Point(4, 8);
+            this.movieListFilterBox.Name = "movieListFilterBox";
+            this.movieListFilterBox.RestrictSelectionToLeafNodes = false;
+            this.movieListFilterBox.Size = new System.Drawing.Size(137, 21);
+            this.movieListFilterBox.TabIndex = 21;
+            // 
             // movieDetailsSubPane
             // 
             this.movieDetailsSubPane.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -558,6 +580,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.movieListButton);
+            this.Controls.Add(this.movieListFilterBox);
             this.Controls.Add(this.loadingMoviesPanel);
             this.Controls.Add(this.movieToolStrip);
             this.Controls.Add(this.titleLabel);
@@ -631,5 +655,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private ProgressBar loadingListProgressBar;
         private Panel loadingMoviesPanel;
         private Label label1;
+        private Cornerstone.GUI.Controls.FilterComboBox movieListFilterBox;
+        private Button movieListButton;
     }
 }

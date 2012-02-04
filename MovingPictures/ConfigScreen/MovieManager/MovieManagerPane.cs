@@ -15,11 +15,13 @@ using Cornerstone.Database.Tables;
 using Cornerstone.Database;
 using Cornerstone.GUI.Controls;
 using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using MediaPortal.Plugins.MovingPictures.MainUI;
 using NLog;
 using System.Collections.ObjectModel;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using System.IO;
 using Cornerstone.GUI.Dialogs;
+using Cornerstone.GUI.Filtering;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieRenamer;
 
@@ -31,6 +33,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private List<DBLocalMedia> processingFiles;
         private List<DBMovieInfo> processingMovies;
         private DBSourceInfo selectedSource;
+        private MenuEditorPopup menuEditorPopup = null;
+        private DBMenu<DBMovieInfo> movieManagerFilterMenu;
         private bool translate;
         private readonly object lockList = new object();
         
@@ -74,6 +78,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             movieListBox.ListViewItemSorter = new DBMovieInfoComparer();
             
             if (!DesignMode) {
+                // load filters
+                movieListFilterBox.TreePanel.TranslationParser = new TranslationParserDelegate(Translation.ParseString);
+                movieListFilterBox.Menu = MovingPicturesCore.Settings.MovieManagerFilterMenu;
+                movieListFilterBox.SelectedNode = ((DBMenu<DBMovieInfo>)movieListFilterBox.Menu).RootNodes.First();
+                movieListFilterBox.SelectedIndexChanged += movieListFilterBox_SelectedIndexChanged;
+
+                // load movie list
                 ReloadList();
 
                 MovingPicturesCore.DatabaseManager.ObjectDeleted +=
@@ -130,28 +141,45 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // turn off redraws temporarily and clear the list
             
             movieListBox.Items.Clear();
+            movieListBox.Enabled = false;
+
+            movieListFilterBox.Enabled = false;
+            movieListButton.Enabled = false;
 
             Thread thread = new Thread(new ThreadStart(delegate {
                 Invoke(new InvokeDelegate(delegate { loadingMoviesPanel.Visible = true; }));
                 Invoke(new InvokeDelegate(delegate { movieListBox.BeginUpdate(); }));
 
-                foreach (DBMovieInfo currMovie in DBMovieInfo.GetAll()) {
+                // get all movies
+                var movies = DBMovieInfo.GetAll();
+
+                // get current filter node and filter movie list
+                var node = movieListFilterBox.SelectedNode;
+                if (node != null) {
+                    var nodeFilter = (node as DBNode<DBMovieInfo>).Filter;
+                    if (nodeFilter != null) movies = nodeFilter.Filter(movies).ToList();
+                }
+
+                foreach (DBMovieInfo currMovie in movies) {
                     ListViewItem listItem = createMovieItem(currMovie);
                     addMovie(currMovie, listItem);
                 }
 
                 Invoke(new InvokeDelegate(delegate { movieListBox.EndUpdate(); }));
                 Invoke(new InvokeDelegate(delegate { loadingMoviesPanel.Visible = false; }));
+                Invoke(new InvokeDelegate(delegate { EnableListControls(); }));
             }));
 
             thread.IsBackground = true;
             thread.Name = "movie manager list populator";
             thread.Start();
+        }
 
-            //movieListBox.EndUpdate();
+        private void EnableListControls() {
+            movieListFilterBox.Enabled = true;
+            movieListButton.Enabled = true;
 
-            
-
+            movieListBox.Enabled = true;
             if (movieListBox.Items.Count > 0)
                 movieListBox.Items[0].Selected = true;
         }
@@ -187,7 +215,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
             }
 
-            movieListBox.Items.Add(item);
+            // only add it to the movie list if exists in current filter
+            if (!IsMovieFiltered(movie)) {
+                movieListBox.Items.Add(item);
+            }
+
             lock (lockList) {
                 listItems[movie] = item;
             }
@@ -215,7 +247,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     updateMoviePanel();
                     updateFilePanel();
 
-                    movieListBox.Items.Remove(listItems[movie]);
+                    if (movieListBox.Items.Contains(listItems[movie]))
+                        movieListBox.Items.Remove(listItems[movie]);
+
                     listItems.Remove(movie);
                 }
             }
@@ -1012,8 +1046,96 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             progress("Done!", 100);
         }
-    }
 
+        private void ValidateSelectedFilterNode() {
+            // check we have not removed all nodes
+            // if we have reset to defaults
+            if (((DBMenu<DBMovieInfo>)movieListFilterBox.Menu).RootNodes.Count == 0) {
+                DatabaseMaintenanceManager.VerifyMovieManagerFilterMenu();
+                movieListFilterBox.Menu = MovingPicturesCore.Settings.MovieManagerFilterMenu;
+            }
+
+            // get the current selected node id
+            int? selectedNodeId = null;
+            if (movieListFilterBox.SelectedNode as DBNode<DBMovieInfo> != null) {
+                selectedNodeId = ((DBNode<DBMovieInfo>)movieListFilterBox.SelectedNode).ID;
+            }
+            
+            // keep the current node selected if it still exists
+            DBNode<DBMovieInfo> selectedNode = null;
+            if (selectedNodeId != null) {
+                selectedNode = MovingPicturesCore.DatabaseManager.Get<DBNode<DBMovieInfo>>((int)selectedNodeId);
+                // the node still exists and is already selected
+                if (selectedNode != null) return;
+            }
+
+            // select the first node if current one no longer exists
+            // also trigger a re-load of the filtered movie list
+            if (selectedNode == null) {
+                movieListFilterBox.SelectedIndexChanged -= movieListFilterBox_SelectedIndexChanged;
+                movieListFilterBox.SelectedNode = ((DBMenu<DBMovieInfo>)movieListFilterBox.Menu).RootNodes.First();
+                movieListFilterBox.SelectedIndexChanged += movieListFilterBox_SelectedIndexChanged;
+                ReloadList();
+            }
+        }
+
+        private void movieListFilterBox_SelectedIndexChanged(object sender, EventArgs e) {
+            // re-load list with new filter
+            ReloadList();
+        }
+
+        private void movieListButton_Click(object sender, EventArgs e) {
+            menuEditorPopup = new MenuEditorPopup();
+            menuEditorPopup.MenuTree.FieldDisplaySettings.Table = typeof(DBMovieInfo);
+
+            movieManagerFilterMenu = null;
+            ProgressPopup loadingPopup = new ProgressPopup(new WorkerDelegate(LoadMovieManagerFiltersMenu));
+            loadingPopup.Owner = FindForm();
+            loadingPopup.Text = "Loading Menu...";
+            loadingPopup.ShowDialog();
+
+            menuEditorPopup.ShowMovieNodeSettings = false;
+            menuEditorPopup.ShowDialog();
+            menuEditorPopup = null;
+
+            MovingPicturesCore.DatabaseManager.BeginTransaction();
+            ProgressPopup savingPopup = new ProgressPopup(new WorkerDelegate(movieManagerFilterMenu.Commit));
+            savingPopup.Owner = FindForm();
+            savingPopup.Text = "Saving Menu...";
+            savingPopup.ShowDialog();
+            MovingPicturesCore.DatabaseManager.EndTransaction();
+
+            // validate current selected filter node
+            ValidateSelectedFilterNode();
+        }
+
+        private void LoadMovieManagerFiltersMenu() {
+            // grab or create the menu object for movie manager filters
+            string menuID = MovingPicturesCore.Settings.MovieManagerFilterMenuID;
+            if (menuID == "null") {
+                movieManagerFilterMenu = new DBMenu<DBMovieInfo>();
+                movieManagerFilterMenu.Name = "Movie Manager Filters Menu";
+                MovingPicturesCore.DatabaseManager.Commit(movieManagerFilterMenu);
+                MovingPicturesCore.Settings.MovieManagerFilterMenuID = movieManagerFilterMenu.ID.ToString();
+            }
+            else {
+                movieManagerFilterMenu = MovingPicturesCore.DatabaseManager.Get<DBMenu<DBMovieInfo>>(int.Parse(menuID));
+            }
+
+            menuEditorPopup.MenuTree.Menu = movieManagerFilterMenu;
+        }
+
+        private bool IsMovieFiltered(DBMovieInfo movie) {
+            var node = movieListFilterBox.SelectedNode;
+            if (node != null) {
+                var nodeFilter = (node as DBNode<DBMovieInfo>).Filter;
+                if (nodeFilter != null) {
+                    return !nodeFilter.Filter(DBMovieInfo.GetAll()).ToList().Exists(m => m.Equals(movie));
+                }
+            }
+            return false;
+        }
+    }
 
     public class DBMovieInfoComparer : IComparer {
         public int Compare(object x, object y) {

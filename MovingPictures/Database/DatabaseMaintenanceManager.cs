@@ -435,6 +435,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             #endregion
         }
 
+        #region Menu Verification
+
+        #region Filters
         public static void VerifyFilterMenu() {
             DBMenu<DBMovieInfo> menu = MovingPicturesCore.Settings.FilterMenu;
 
@@ -495,7 +498,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 currNode.Commit();
             }
         }
+        #endregion
 
+        #region Categories
         public static void VerifyCategoryMenu() {
             DBMenu<DBMovieInfo> menu = MovingPicturesCore.Settings.CategoriesMenu;
 
@@ -524,7 +529,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 unwatchedNode.DBManager = MovingPicturesCore.DatabaseManager;
                 menu.RootNodes.Add(unwatchedNode);
 
-
                 DBNode<DBMovieInfo> recentNode = new DBNode<DBMovieInfo>();
                 recentNode.Name = "${RecentlyAddedMovies}";
                 recentNode.DynamicNode = false;
@@ -543,9 +547,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 additionalSettings.SortField = SortingFields.DateAdded;
                 additionalSettings.SortDirection = SortingDirections.Descending;
                 recentNode.AdditionalSettings = additionalSettings;
-
                 menu.RootNodes.Add(recentNode);
-
 
                 DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
                 genreNode.DynamicNode = true;
@@ -579,5 +581,91 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 currNode.Commit();
             }
         }
+        #endregion
+
+        #region Movie Manager Filters
+        public static void VerifyMovieManagerFilterMenu() {
+            DBMenu<DBMovieInfo> menu = MovingPicturesCore.Settings.MovieManagerFilterMenu;
+
+            if (menu.RootNodes.Count == 0) {
+                int position = 1;
+
+                DBNode<DBMovieInfo> allNode = new DBNode<DBMovieInfo>();
+                allNode.Name = "${AllMovies}";
+                allNode.DynamicNode = false;
+                allNode.Filter = new DBFilter<DBMovieInfo>();
+                allNode.SortPosition = position++;
+                allNode.DBManager = MovingPicturesCore.DatabaseManager;
+                menu.RootNodes.Add(allNode);
+
+                DBNode<DBMovieInfo> unwatchedNode = new DBNode<DBMovieInfo>();
+                unwatchedNode.Name = "${UnwatchedMovies}";
+                unwatchedNode.DynamicNode = false;
+                unwatchedNode.Filter = new DBFilter<DBMovieInfo>();
+                DBCriteria<DBMovieInfo> criteria = new DBCriteria<DBMovieInfo>();
+                criteria.Field = DBField.GetFieldByDBName(typeof(DBUserMovieSettings), "watched");
+                criteria.Relation = DBRelation.GetRelation(typeof(DBMovieInfo), typeof(DBUserMovieSettings), "");
+                criteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL;
+                criteria.Value = "0";
+                unwatchedNode.Filter.Criteria.Add(criteria);
+                unwatchedNode.SortPosition = position++;
+                unwatchedNode.DBManager = MovingPicturesCore.DatabaseManager;
+                menu.RootNodes.Add(unwatchedNode);
+
+                DBNode<DBMovieInfo> recentNode = new DBNode<DBMovieInfo>();
+                recentNode.Name = "${RecentlyAddedMovies}";
+                recentNode.DynamicNode = false;
+                recentNode.Filter = new DBFilter<DBMovieInfo>();
+                recentNode.SortPosition = position++;
+                recentNode.DBManager = MovingPicturesCore.DatabaseManager;
+
+                DBCriteria<DBMovieInfo> recentCriteria = new DBCriteria<DBMovieInfo>();
+                recentCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "date_added");
+                recentCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN;
+                recentCriteria.Value = "-30d";
+                recentNode.Filter.Criteria.Add(recentCriteria);
+
+                DBMovieNodeSettings additionalSettings = new DBMovieNodeSettings();
+                additionalSettings.UseDefaultSorting = false;
+                additionalSettings.SortField = SortingFields.DateAdded;
+                additionalSettings.SortDirection = SortingDirections.Descending;
+                recentNode.AdditionalSettings = additionalSettings;
+                menu.RootNodes.Add(recentNode);
+
+                DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
+                genreNode.DynamicNode = true;
+                genreNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "genres");
+                genreNode.Name = "${Genres}";
+                genreNode.SortPosition = position++;
+                genreNode.DBManager = MovingPicturesCore.DatabaseManager;
+                menu.RootNodes.Add(genreNode);
+
+                DBNode<DBMovieInfo> certNode = new DBNode<DBMovieInfo>();
+                certNode.DynamicNode = true;
+                certNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "certification");
+                certNode.Name = "${" + certNode.BasicFilteringField.Name + "}";
+                certNode.DBManager = MovingPicturesCore.DatabaseManager;
+                certNode.SortPosition = position++;
+                menu.RootNodes.Add(certNode);
+
+                DBNode<DBMovieInfo> yearNode = new DBNode<DBMovieInfo>();
+                yearNode.DynamicNode = true;
+                yearNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "year");
+                yearNode.Name = "${" + yearNode.BasicFilteringField.Name + "}";
+                yearNode.SortPosition = position++;
+                yearNode.DBManager = MovingPicturesCore.DatabaseManager;
+                menu.RootNodes.Add(yearNode);
+
+                menu.Commit();
+            }
+
+            foreach (DBNode<DBMovieInfo> currNode in menu.RootNodes) {
+                currNode.UpdateDynamicNode();
+                currNode.Commit();
+            }
+        }
+        #endregion
+
+        #endregion
     }
 }
