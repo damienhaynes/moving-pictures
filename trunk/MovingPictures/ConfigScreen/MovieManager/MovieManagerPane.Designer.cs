@@ -488,6 +488,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieListBox.UseCompatibleStateImageBehavior = false;
             this.movieListBox.View = System.Windows.Forms.View.Details;
             this.movieListBox.SelectedIndexChanged += new System.EventHandler(this.movieTree_AfterSelect);
+            this.movieListBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.movieListBox_KeyDown);
             // 
             // columnHeader1
             // 
