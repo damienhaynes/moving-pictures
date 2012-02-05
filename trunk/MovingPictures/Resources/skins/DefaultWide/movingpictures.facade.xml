@@ -53,6 +53,7 @@ This file should contain the facade view
 					<posY>310</posY>
 					<height>400</height>
 					<textXOff>-30</textXOff>
+					<textXOff2>470</textXOff2>
 					<textXOff3>10</textXOff3>
 					<IconXOff>1980</IconXOff>        
 					<spinWidth>46</spinWidth>

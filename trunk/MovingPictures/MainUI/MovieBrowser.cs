@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Linq;
 using System.Threading;
@@ -966,11 +967,54 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void addMovieToFacade(DBMovieInfo newMovie) {
             if (newMovie == null || facade == null)
                 return;
-
+            
             // if needed, create a new GUIListItem
             if (!listItems.ContainsKey(newMovie)) {
                 GUIListItem currItem = new GUIListItem();
                 currItem.Label = newMovie.Title;
+
+                // set second label in list
+                string secondLabel = MovingPicturesCore.Settings.SecondLabel.ToLowerInvariant();
+
+                switch (secondLabel) {
+                    case "year":
+                        currItem.Label2 = newMovie.Year.ToString();
+                        break;
+                    case "runtime":
+                        // Check the user preference and display the runtime requested 
+                        if (MovingPicturesCore.Settings.DisplayActualRuntime && newMovie.ActualRuntime > 0) {
+                            // Actual runtime (as calculated by mediainfo in milliseconds)
+                            TimeSpan ts = new TimeSpan(0, 0, 0, 0, newMovie.ActualRuntime);
+                            currItem.Label2 = string.Format("{0:00}:{1:00}", ts.Hours, ts.Minutes);
+                        }
+                        else {
+                            // Runtime (as provided by the dataprovider in minutes)
+                            TimeSpan ts = new TimeSpan(0, newMovie.Runtime, 0);
+                            currItem.Label2 = string.Format("{0:00}:{1:00}", ts.Hours, ts.Minutes);
+                        }
+                        break;
+                    case "score":
+                        NumberFormatInfo localizedScoreFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
+                        localizedScoreFormat.NumberDecimalDigits = 1;
+                        currItem.Label2 = newMovie.Score.ToString("N", localizedScoreFormat);
+                        break;
+                    case "certification":
+                        currItem.Label2 = newMovie.Certification;
+                        break;
+                    case "language":
+                        currItem.Label2 = newMovie.Language;
+                        break;
+                    case "studio":
+                        currItem.Label2 = newMovie.Studios.ToPrettyString(1);
+                        break;
+                    case "genre":
+                        currItem.Label2 = newMovie.Genres.ToPrettyString(1);
+                        break;
+                    default:
+                        currItem.Label2 = string.Empty;
+                        break;
+                }
+
                 currItem.IconImage = newMovie.CoverThumbFullPath.Trim();
                 currItem.IconImageBig = newMovie.CoverThumbFullPath.Trim();
                 currItem.TVTag = newMovie;

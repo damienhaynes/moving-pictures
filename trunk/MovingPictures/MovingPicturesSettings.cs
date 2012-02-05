@@ -1298,6 +1298,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _resetSelectedMovieWhenSwitchingCategories;
 
+        [CornerstoneSetting(
+            Name = "Second Label on List View",
+            Description = "Show a second label on listview. Possible values are none, year, runtime, genre, studio, language, certification or score.",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "gui_listview_label2",
+            Default = "year")]
+        public string SecondLabel {
+            get { return _secondLabel; }
+            set {
+                _secondLabel = value;
+                OnSettingChanged("gui_listview_label2");
+            }
+        }
+        private string _secondLabel;
+
         #endregion
 
         #region Tweaks
