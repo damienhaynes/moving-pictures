@@ -19,7 +19,7 @@ This file should contain the facade view
 				<posY>113</posY>
 				<width>380</width>
 				<height>425</height>
-				<textXOff>0</textXOff>
+				<textXOff>-10</textXOff>
 				<textXOff3>10</textXOff3>
 				<scrollOffset>5</scrollOffset>
 				<IconXOff>1980</IconXOff>        
@@ -48,7 +48,8 @@ This file should contain the facade view
 					<posY>113</posY>
 					<width>380</width>
 					<height>425</height>
-					<textXOff>0</textXOff>
+					<textXOff>-10</textXOff>
+					<textXOff2>370</textXOff2>
 					<textXOff3>10</textXOff3>
 					<scrollOffset>5</scrollOffset>
 					<IconXOff>1980</IconXOff>        
