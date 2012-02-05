@@ -1139,6 +1139,15 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
             return false;
         }
+
+        private void movieListBox_KeyDown(object sender, KeyEventArgs e) {
+            // handle 'ctrl+a' to select all movies in listbox
+            if (e.KeyCode == Keys.A && e.Control) {
+                foreach (ListViewItem item in movieListBox.Items) {
+                    item.Selected = true;
+                }
+            }
+        }
     }
 
     public class DBMovieInfoComparer : IComparer {
