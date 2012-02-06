@@ -386,6 +386,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // set some skin properties
             SetProperty("#MovingPictures.Settings.HomeScreenName", MovingPicturesCore.Settings.HomeScreenName);
+            SetProperty("#MovingPictures.Settings.SecondFacadeLabel", MovingPicturesCore.Settings.SecondLabel);
 
             // start initialization of the moving pictures core services in a seperate thread
             initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
