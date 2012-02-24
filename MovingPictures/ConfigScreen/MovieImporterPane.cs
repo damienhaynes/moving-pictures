@@ -224,7 +224,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void ignoreButton_Click(object sender, EventArgs e) {
             unapprovedGrid.EndEdit();
 
-            DialogResult result = MessageBox.Show("This will permanently ignore the selected file(s). This action is currently IRREVERSABLE on a file by file basis, are you sure?", "Warning!", MessageBoxButtons.YesNo);
+            DialogResult result = MessageBox.Show("This will ignore the selected file(s), are you sure?", "Warning!", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes) {
 
                 foreach (DataGridViewRow currRow in unapprovedGrid.SelectedRows) {
@@ -369,27 +369,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             logger.WarnException("Error from Importer DataGrid.", e.Exception);
         }
 
-        private void unignoreAllFilesToolStripMenuItem_Click(object sender, EventArgs e) {
-            DialogResult result =  MessageBox.Show(
-                "This will unignore ALL previously ignored files, and restart\n" +
-                "the Importer. This means all uncommitted matches from this\n" +
-                "import session will have to be reapproved. Do you want to\n" +
-                "continue?\n", "Warning", MessageBoxButtons.YesNo);
-
-            if (result == DialogResult.Yes) {
-                ProgressPopup popup = new ProgressPopup(new WorkerDelegate(unignoreAllFiles));
-                popup.Owner = this.ParentForm;
-                popup.Show();
+        private void ignoredFileManagerToolStripMenuItem_Click(object sender, EventArgs e) {
+            IgnoredFilesManager popup = new IgnoredFilesManager();
+            if (popup.IgnoredFiles.Count == 0) {
+                MessageBox.Show("There are currently no files being ignored.");
+                return;
             }
-           
-        }
 
-        private void unignoreAllFiles() {
-            foreach (DBLocalMedia currFile in DBLocalMedia.GetAll())
-                if (currFile.Ignored)
-                    currFile.Delete();
-
-            MovingPicturesCore.Importer.RestartScanner();
+            popup.ShowDialog(this);
+            if (popup.DialogResult == DialogResult.OK) {
+                //files were unignored, so restart the importer to process them
+                MovingPicturesCore.Importer.RestartScanner();
+            }
         }
 
         private void restartImporterToolStripMenuItem_Click(object sender, EventArgs e) {
