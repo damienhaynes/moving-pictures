@@ -1548,6 +1548,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private bool Search(SearchMode mode, string searchStr) {
+            if (string.IsNullOrEmpty(searchStr)) {
+                return false;
+            }
+
             var searchResults = MovingPicturesCore.Searchers[mode].Search(searchStr);
             var movies = searchResults.Select(result => result.Item);
 
