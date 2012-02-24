@@ -55,7 +55,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.ignoreButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.unignoreAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ignoredFileManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restartImporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.automaticMediaInfoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpButton = new System.Windows.Forms.ToolStripButton();
@@ -84,9 +84,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // panel2
             // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.Controls.Add(this.unapprovedGrid);
             this.panel2.Controls.Add(this.progressPanel);
             this.panel2.Location = new System.Drawing.Point(3, 45);
@@ -172,8 +172,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // progressBar
             // 
-            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.Location = new System.Drawing.Point(7, 21);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(622, 10);
@@ -339,7 +339,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.settingsButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.settingsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.unignoreAllFilesToolStripMenuItem,
+            this.ignoredFileManagerToolStripMenuItem,
             this.restartImporterToolStripMenuItem,
             this.automaticMediaInfoMenuItem});
             this.settingsButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cog;
@@ -349,12 +349,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.settingsButton.ToolTipText = "Advanced Actions";
             this.settingsButton.ButtonClick += new System.EventHandler(this.settingsButton_ButtonClick);
             // 
-            // unignoreAllFilesToolStripMenuItem
+            // ignoredFileManagerToolStripMenuItem
             // 
-            this.unignoreAllFilesToolStripMenuItem.Name = "unignoreAllFilesToolStripMenuItem";
-            this.unignoreAllFilesToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
-            this.unignoreAllFilesToolStripMenuItem.Text = "Unignore All Files";
-            this.unignoreAllFilesToolStripMenuItem.Click += new System.EventHandler(this.unignoreAllFilesToolStripMenuItem_Click);
+            this.ignoredFileManagerToolStripMenuItem.Name = "ignoredFileManagerToolStripMenuItem";
+            this.ignoredFileManagerToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.ignoredFileManagerToolStripMenuItem.Text = "Manage Ignored Files";
+            this.ignoredFileManagerToolStripMenuItem.Click += new System.EventHandler(this.ignoredFileManagerToolStripMenuItem_Click);
             // 
             // restartImporterToolStripMenuItem
             // 
@@ -449,7 +449,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private ToolStripButton ignoreButton;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripSplitButton settingsButton;
-        private ToolStripMenuItem unignoreAllFilesToolStripMenuItem;
+        private ToolStripMenuItem ignoredFileManagerToolStripMenuItem;
         private ToolStripMenuItem restartImporterToolStripMenuItem;
         private DataGridView unapprovedGrid;
         private DataGridViewImageColumn statusColumn;
