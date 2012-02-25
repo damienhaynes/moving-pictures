@@ -1115,6 +1115,8 @@ namespace MediaPortal.Plugins.MovingPictures {
                     return BrowserViewMode.LARGEICON;
                 if (LastUsedViewStr == "filmstrip")
                     return BrowserViewMode.FILMSTRIP;
+                if (LastUsedViewStr == "coverflow")
+                    return BrowserViewMode.COVERFLOW;
 
                 return BrowserViewMode.LIST;
             }
@@ -1129,6 +1131,9 @@ namespace MediaPortal.Plugins.MovingPictures {
                         break;
                     case BrowserViewMode.FILMSTRIP:
                         LastUsedViewStr = "filmstrip";
+                        break;
+                    case BrowserViewMode.COVERFLOW:
+                        LastUsedViewStr = "coverflow";
                         break;
                     case BrowserViewMode.LIST:
                     default:
