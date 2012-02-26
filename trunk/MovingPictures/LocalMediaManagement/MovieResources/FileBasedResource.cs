@@ -111,15 +111,29 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                     bytesRead = webStream.Read(buffer, 0, buffer.Length);
                 }
 
-                // if the downloaded ended prematurely, close the stream but save the file
-                // for resuming
-                if (fileStream.Length != totalBytes) {
+                // if the downloaded unexpectedly stopped, but we have more left, close the stream but 
+                // save the file for resuming
+                if (fileStream.Length != totalBytes && totalBytes != -1) {
+                    rtn = DownloadStatus.INCOMPLETE;
                     fileStream.Close();
                     fileStream = null;
-
-                    rtn = DownloadStatus.INCOMPLETE;
                 }
 
+                // if the download stopped and we don't know the total size, test if we have a valid image
+                // and return a success or failed message as appropriate.
+                else if (totalBytes == -1) {
+                    try {
+                        fileStream.Close();
+                        using (System.Drawing.Image validImage = System.Drawing.Image.FromFile(Filename)) {
+                            rtn = DownloadStatus.SUCCESS;
+                        }
+                    }
+                    catch {
+                        startPosition = 0;
+                        logger.Warn("Invalid image when downloading file from: " + url);
+                        rtn = DownloadStatus.FAILED;
+                    }
+                }                
             }
             catch (UriFormatException) {
                 // url was invalid
@@ -151,8 +165,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
             }
 
             // if we failed delete the file
-            if (fileStream != null && rtn == DownloadStatus.FAILED) {
-                fileStream.Close();
+            if (rtn == DownloadStatus.FAILED) {
+                if (fileStream != null) fileStream.Close();
                 fileStream = null;
                 if (File.Exists(Filename)) File.Delete(Filename);
             }
