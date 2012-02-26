@@ -250,11 +250,12 @@
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(232, 251);
+            this.label7.Location = new System.Drawing.Point(231, 157);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(43, 13);
+            this.label7.Size = new System.Drawing.Size(108, 13);
             this.label7.TabIndex = 57;
-            this.label7.Text = "cyberfix";
+            this.label7.Text = "Shannon Studebaker";
+            this.toolTip.SetToolTip(this.label7, "cyberfix");
             // 
             // groupBox7
             // 
@@ -328,7 +329,7 @@
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(231, 144);
+            this.label8.Location = new System.Drawing.Point(231, 131);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(82, 13);
             this.label8.TabIndex = 64;
@@ -339,7 +340,7 @@
             // 
             this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(231, 157);
+            this.label19.Location = new System.Drawing.Point(231, 144);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(70, 13);
             this.label19.TabIndex = 65;
@@ -372,7 +373,7 @@
             // 
             this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(231, 118);
+            this.label12.Location = new System.Drawing.Point(232, 251);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(92, 13);
             this.label12.TabIndex = 70;
@@ -383,7 +384,7 @@
             // 
             this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(231, 131);
+            this.label14.Location = new System.Drawing.Point(231, 118);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(78, 13);
             this.label14.TabIndex = 71;
@@ -415,6 +416,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label23);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label14);
@@ -422,14 +425,12 @@
             this.Controls.Add(this.label24);
             this.Controls.Add(this.label29);
             this.Controls.Add(this.label17);
-            this.Controls.Add(this.label23);
             this.Controls.Add(this.label28);
             this.Controls.Add(this.label20);
             this.Controls.Add(this.groupBox8);
             this.Controls.Add(this.label27);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label26);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.label22);
             this.Controls.Add(this.label1);
