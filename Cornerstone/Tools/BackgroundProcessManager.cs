@@ -96,12 +96,12 @@ namespace Cornerstone.Tools {
             List<AbstractBackgroundProcess> processesToKill = new List<AbstractBackgroundProcess>();
 
             lock (activeProcesses) {
-                foreach (AbstractBackgroundProcess process in processesToKill) {
+                foreach (AbstractBackgroundProcess process in activeProcesses) {
                     if (process.GetType() == processType) processesToKill.Add(process);
                 }
             }
 
-            foreach (AbstractBackgroundProcess process in activeProcesses) {
+            foreach (AbstractBackgroundProcess process in processesToKill) {
                 CancelProcess(process);
             }
 
