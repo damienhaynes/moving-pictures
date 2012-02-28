@@ -94,6 +94,8 @@ namespace Cornerstone.GUI.Controls {
 
         #region Methods
 
+        public FieldDisplaySettings() { }
+
         protected void generateFieldProperties() {
             foreach (DBField currField in Fields) {
                 if (getProperties(currField.Name) == null) {
@@ -112,6 +114,10 @@ namespace Cornerstone.GUI.Controls {
             }
 
             return null;
+        }
+
+        public override string ToString() {
+            return Table == null ? "[undefined]" : Table.Name;
         }
 
         #endregion
