@@ -31,7 +31,13 @@ namespace Cornerstone.GUI.DesignMode {
 
         // Returns a StandardValuesCollection of standard value objects.
         public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) {
-            return new StandardValuesCollection(GetAllTables());
+            try {
+                return new StandardValuesCollection(GetAllTables());
+            }
+            catch (Exception e) {
+                MessageBox.Show(e.GetType().Name + ": " + e.Message + "\n" + e.StackTrace);
+                return new StandardValuesCollection(new List<Type>());
+            }
         }
         
 
@@ -54,24 +60,23 @@ namespace Cornerstone.GUI.DesignMode {
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        public List<Type> GetAllTables()
-        {
+        public List<Type> GetAllTables() {
             // loop through all types in all loaded assemblies and see which have
             // been tagged by our custom database attribute
             Assembly[] assemblyList = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (Assembly currAssembly in assemblyList)
-            {
-                if (true) //!currAssembly.GlobalAssemblyCache)
-                    if (!loadedAssemblies.Contains(currAssembly))
-                    {
-                        Type[] typeList = currAssembly.GetTypes();
-                        foreach (Type currType in typeList)
-                        {
-                            object[] customAttrArray = currType.GetCustomAttributes(true);
-                            foreach (object currAttr in customAttrArray)
-                                if (currAttr.GetType() == typeof(DBTableAttribute))
-                                    validTypeList.Add(currType);
+            foreach (Assembly currAssembly in assemblyList) {
+                if (!currAssembly.GlobalAssemblyCache)
+                    if (!loadedAssemblies.Contains(currAssembly)) {
+                        try {
+                            Type[] typeList = currAssembly.GetTypes();
+                            foreach (Type currType in typeList) {
+                                object[] customAttrArray = currType.GetCustomAttributes(true);
+                                foreach (object currAttr in customAttrArray)
+                                    if (currAttr.GetType() == typeof(DBTableAttribute))
+                                        validTypeList.Add(currType);
+                            }
                         }
+                        catch (Exception) {}
                     }
 
                 loadedAssemblies.Add(currAssembly);
@@ -79,6 +84,6 @@ namespace Cornerstone.GUI.DesignMode {
 
             return validTypeList;
         }
-        
+
     }
 }

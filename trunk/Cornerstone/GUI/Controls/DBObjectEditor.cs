@@ -26,7 +26,7 @@ namespace Cornerstone.GUI.Controls {
 
         [Category("Cornerstone Settings")]
         [Description("Manage the type of database table this control connects to and which fields should be displayed.")]
-        [ReadOnly(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public FieldDisplaySettings FieldDisplaySettings {
             get {
                 if (_fieldSettings == null) {
