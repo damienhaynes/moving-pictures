@@ -7,6 +7,7 @@
   <string Field="Actor">Actor</string>
   <string Field="Actors">Actors</string>
   <string Field="AllMovies">All Movies</string>
+  <string Field="Alphas">Titles A-Z</string>
   <!-- B -->
   <string Field="BadCategory">An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!</string>
   <string Field="BadMovie">An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!</string>

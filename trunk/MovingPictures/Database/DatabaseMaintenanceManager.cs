@@ -549,6 +549,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 recentNode.AdditionalSettings = additionalSettings;
                 menu.RootNodes.Add(recentNode);
 
+                DBNode<DBMovieInfo> alphaNode = new DBNode<DBMovieInfo>();
+                alphaNode.DynamicNode = true;
+                alphaNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "sortby");
+                alphaNode.Name = "${Alphas}";
+                alphaNode.DBManager = MovingPicturesCore.DatabaseManager;
+                alphaNode.SortPosition = position++;
+                menu.RootNodes.Add(alphaNode);
+
                 DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
                 genreNode.DynamicNode = true;
                 genreNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "genres");
@@ -631,6 +639,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 additionalSettings.SortDirection = SortingDirections.Descending;
                 recentNode.AdditionalSettings = additionalSettings;
                 menu.RootNodes.Add(recentNode);
+
+                DBNode<DBMovieInfo> alphaNode = new DBNode<DBMovieInfo>();
+                alphaNode.DynamicNode = true;
+                alphaNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "sortby");
+                alphaNode.Name = "${Alphas}";
+                alphaNode.DBManager = MovingPicturesCore.DatabaseManager;
+                alphaNode.SortPosition = position++;
+                menu.RootNodes.Add(alphaNode);
 
                 DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
                 genreNode.DynamicNode = true;
