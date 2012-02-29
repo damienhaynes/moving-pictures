@@ -46,7 +46,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #region Database Fields
 
-        [DBField(AllowDynamicFiltering=false)]
+        [DBField]
         public string Title {
             get { return _title; }
             set { 

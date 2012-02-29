@@ -549,14 +549,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 recentNode.AdditionalSettings = additionalSettings;
                 menu.RootNodes.Add(recentNode);
 
-                DBNode<DBMovieInfo> alphaNode = new DBNode<DBMovieInfo>();
-                alphaNode.DynamicNode = true;
-                alphaNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "sortby");
-                alphaNode.Name = "${Alphas}";
-                alphaNode.DBManager = MovingPicturesCore.DatabaseManager;
-                alphaNode.SortPosition = position++;
-                menu.RootNodes.Add(alphaNode);
-
                 DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
                 genreNode.DynamicNode = true;
                 genreNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "genres");
@@ -580,6 +572,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 yearNode.SortPosition = position++;
                 yearNode.DBManager = MovingPicturesCore.DatabaseManager;
                 menu.RootNodes.Add(yearNode);
+
+                DBNode<DBMovieInfo> alphaNode = new DBNode<DBMovieInfo>();
+                alphaNode.DynamicNode = true;
+                alphaNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "title");
+                alphaNode.Name = "${BeginsWith}";
+                alphaNode.DBManager = MovingPicturesCore.DatabaseManager;
+                alphaNode.SortPosition = position++;
+                menu.RootNodes.Add(alphaNode);
 
                 menu.Commit();
             }
@@ -640,14 +640,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 recentNode.AdditionalSettings = additionalSettings;
                 menu.RootNodes.Add(recentNode);
 
-                DBNode<DBMovieInfo> alphaNode = new DBNode<DBMovieInfo>();
-                alphaNode.DynamicNode = true;
-                alphaNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "sortby");
-                alphaNode.Name = "${Alphas}";
-                alphaNode.DBManager = MovingPicturesCore.DatabaseManager;
-                alphaNode.SortPosition = position++;
-                menu.RootNodes.Add(alphaNode);
-
                 DBNode<DBMovieInfo> genreNode = new DBNode<DBMovieInfo>();
                 genreNode.DynamicNode = true;
                 genreNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "genres");
@@ -671,10 +663,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 yearNode.SortPosition = position++;
                 yearNode.DBManager = MovingPicturesCore.DatabaseManager;
                 menu.RootNodes.Add(yearNode);
-                
+
+                DBNode<DBMovieInfo> alphaNode = new DBNode<DBMovieInfo>();
+                alphaNode.DynamicNode = true;
+                alphaNode.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "title");
+                alphaNode.Name = "${BeginsWith}";
+                alphaNode.DBManager = MovingPicturesCore.DatabaseManager;
+                alphaNode.SortPosition = position++;
+                menu.RootNodes.Add(alphaNode);
+
                 // maintenance node
                 DBNode<DBMovieInfo> maintenanceNode = new DBNode<DBMovieInfo>();
-                maintenanceNode.Name = "Maintenance";
+                maintenanceNode.Name = "${Missing}";
                 maintenanceNode.DynamicNode = false;
                 maintenanceNode.SortPosition = position++;
                 maintenanceNode.DBManager = MovingPicturesCore.DatabaseManager;
@@ -682,7 +682,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 // missing covers node
                 DBNode<DBMovieInfo> missingCoversNode = new DBNode<DBMovieInfo>();
-                missingCoversNode.Name = "Missing Covers";
+                missingCoversNode.Name = "${Cover}";
+                missingCoversNode.Parent = maintenanceNode;
                 missingCoversNode.DynamicNode = false;
                 missingCoversNode.Filter = new DBFilter<DBMovieInfo>();
                 missingCoversNode.SortPosition = position++;
@@ -697,7 +698,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 // missing backdrops node
                 DBNode<DBMovieInfo> missingBackdropsNode = new DBNode<DBMovieInfo>();
-                missingBackdropsNode.Name = "Missing Backdrops";
+                missingBackdropsNode.Name = "${Backdrop}";
+                missingBackdropsNode.Parent = maintenanceNode;
                 missingBackdropsNode.DynamicNode = false;
                 missingBackdropsNode.Filter = new DBFilter<DBMovieInfo>();
                 missingBackdropsNode.SortPosition = position++;
@@ -709,6 +711,28 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 missingBackdropsCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL;
                 missingBackdropsCriteria.Value = "";
                 missingBackdropsNode.Filter.Criteria.Add(missingBackdropsCriteria);
+
+                // invalid years, only 1900 -> next year considered valid
+                DBNode<DBMovieInfo> invalidYearsNode = new DBNode<DBMovieInfo>();
+                invalidYearsNode.Name = "${Year}";
+                invalidYearsNode.Parent = maintenanceNode;
+                invalidYearsNode.DynamicNode = false;                
+                invalidYearsNode.Filter = new DBFilter<DBMovieInfo>();
+                invalidYearsNode.Filter.CriteriaGrouping = DBFilter<DBMovieInfo>.CriteriaGroupingEnum.ONE;
+                invalidYearsNode.SortPosition = position++;
+                invalidYearsNode.DBManager = MovingPicturesCore.DatabaseManager;
+                maintenanceNode.Children.Add(invalidYearsNode);
+
+                DBCriteria<DBMovieInfo> invalidYearsCriteria = new DBCriteria<DBMovieInfo>();
+                invalidYearsCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "year");
+                invalidYearsCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.LESS_THAN;
+                invalidYearsCriteria.Value = 1900;                
+                invalidYearsNode.Filter.Criteria.Add(invalidYearsCriteria);
+                invalidYearsCriteria = new DBCriteria<DBMovieInfo>();
+                invalidYearsCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "year");
+                invalidYearsCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN;
+                invalidYearsCriteria.Value = DateTime.Today.Year + 1;
+                invalidYearsNode.Filter.Criteria.Add(invalidYearsCriteria);
 
                 menu.Commit();
             }

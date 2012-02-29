@@ -149,12 +149,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Actor = "Actor";
         public static string Actors = "Actors";
         public static string AllMovies = "All Movies";
-        public static string Alphas = "Titles A-Z";
 
         // B
         public static string BadCategory = "An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!";
         public static string BadMovie = "An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!";
         public static string BadParam = "An external plugin or skin passed\nMoving Pictures an invalid paramater!";
+        public static string Backdrop = "Backdrop";
+        public static string BeginsWith = "Begins With";
 
 
         // C
@@ -171,6 +172,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string ContinueToNextPartHeader = "Continue to next part?";
         public static string CycleCoverArt = "Cycle Cover-Art";
         public static string CycleView = "Cycle View";
+        public static string Cover = "Cover";
         public static string CoverFlowView = "Coverflow View";
 
         // D
@@ -231,6 +233,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string MediaIsMissing = "The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...";
         public static string MediaNotAvailableBody = "The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}";
         public static string MediaNotAvailableHeader = "Media Not Available";
+        public static string Missing = "Missing";
         public static string MissingExternalPlayerExe = "The executable for HD playback is missing.\nPlease correct the path to the executable.";
         public static string Monday = "Monday";
         public static string Movie = "Movie";

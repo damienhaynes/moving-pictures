@@ -29,7 +29,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return true;
             }
 
-            if (node.BasicFilteringField == DBField.GetFieldByDBName(typeof(DBMovieInfo), "sortby")) {
+            if (node.BasicFilteringField == DBField.GetFieldByDBName(typeof(DBMovieInfo), "title")) {
                 UpdateAlphas(node);
                 return true;
             }
