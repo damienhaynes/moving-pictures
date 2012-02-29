@@ -549,7 +549,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieListFilterBox.FormattingEnabled = true;
             this.movieListFilterBox.Location = new System.Drawing.Point(4, 8);
             this.movieListFilterBox.Name = "movieListFilterBox";
-            this.movieListFilterBox.RestrictSelectionToLeafNodes = false;
+            this.movieListFilterBox.RestrictSelectionToLeafNodes = true;
             this.movieListFilterBox.Size = new System.Drawing.Size(148, 21);
             this.movieListFilterBox.TabIndex = 21;
             // 

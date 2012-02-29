@@ -7,11 +7,12 @@
   <string Field="Actor">Actor</string>
   <string Field="Actors">Actors</string>
   <string Field="AllMovies">All Movies</string>
-  <string Field="Alphas">Titles A-Z</string>
   <!-- B -->
   <string Field="BadCategory">An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!</string>
   <string Field="BadMovie">An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!</string>
   <string Field="BadParam">An external plugin or skin passed\nMoving Pictures an invalid paramater!</string>
+  <string Field="Backdrop">Backdrop</string>
+  <string Field="BeginsWith">Begins With</string>
   <!-- C -->
   <string Field="Cancel">Cancel</string>
   <string Field="CannotDeleteOffline">Not able to delete {0}\n because the file is offline</string>
@@ -23,6 +24,7 @@
   <string Field="CheckForMissingArtwork">Check for Missing Artwork Online</string>
   <string Field="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>
   <string Field="ContinueToNextPartHeader">Continue to next part?</string>
+  <string Field="Cover">Cover</string>
   <string Field="CoverFlowView">Coverflow View</string>
   <string Field="CycleCoverArt">Cycle Cover-Art</string>
   <string Field="CycleView">Cycle View</string>
@@ -78,6 +80,7 @@
   <string Field="MediaIsMissing">The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...</string>
   <string Field="MediaNotAvailableBody">The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}</string>
   <string Field="MediaNotAvailableHeader">Media Not Available</string>
+  <string Field="Missing">Missing</string>
   <string Field="MissingExternalPlayerExe">The executable for HD playback is missing.\nPlease correct the path to the executable.</string>
   <string Field="Monday">Monday</string>
   <string Field="Movie">Movie</string>
