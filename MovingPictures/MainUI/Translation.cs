@@ -149,6 +149,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Actor = "Actor";
         public static string Actors = "Actors";
         public static string AllMovies = "All Movies";
+        public static string Alphas = "Titles A-Z";
 
         // B
         public static string BadCategory = "An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!";
