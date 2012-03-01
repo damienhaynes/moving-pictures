@@ -731,7 +731,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 invalidYearsCriteria = new DBCriteria<DBMovieInfo>();
                 invalidYearsCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "year");
                 invalidYearsCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN;
-                invalidYearsCriteria.Value = DateTime.Today.Year + 1;
+                invalidYearsCriteria.Value = 2030;
                 invalidYearsNode.Filter.Criteria.Add(invalidYearsCriteria);
 
                 menu.Commit();
