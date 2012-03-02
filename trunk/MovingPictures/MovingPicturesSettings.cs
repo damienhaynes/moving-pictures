@@ -1541,10 +1541,10 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Articles for Removal",
-            Description = "The articles that will be removed from a title when found at the beginning of a title for sorting purposes. Seperate articles with a pipe \"|\". See the \"Remove Title Articles\" setting.",
+            Description = "The articles that will be removed from a title when found at the beginning of a title for sorting purposes. Each language has its own set of articles, seperate articles with a pipe \"|\". See the \"Remove Title Articles\" setting.",
             Groups = "|MediaPortal GUI|Sorting|",
             Identifier = "articles_for_removal",
-            Default = "the|a|an|ein|das|die|der|les|la|le|el|une|de|het")]
+            Default = "en(the|a|an),de(ein|eine|das|die),pt-br(a|as|o|os|um|uma|uns|umas),nl(de|het)")]
         public string ArticlesForRemoval {
             get { return _articlesForRemoval; }
             set {
