@@ -202,7 +202,7 @@ namespace MediaPortal.Plugins.MovingPictures {
                 actionDescriptions.Add(newAction, "Performing Movie Information Upgrade Check...");
                 initActions.Add(newAction);
 
-                // artwork
+                // generic
                 newAction = new WorkerDelegate(DatabaseMaintenanceManager.PerformGenericUpgradeChecks);
                 actionDescriptions.Add(newAction, "Performing additional upgrade tasks...");
                 initActions.Add(newAction);

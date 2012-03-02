@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
 using NLog;
+using System.Linq;
 using System.Web;
 using System.Net;
 using System.Threading;
@@ -17,6 +18,7 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using System.Text.RegularExpressions;
 using Cornerstone.Tools.Translate;
 using System.Runtime.InteropServices;
+using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 using Cornerstone.Extensions;
 
@@ -861,7 +863,53 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // loop through and try to remove a preposition
             if (MovingPicturesCore.Settings.RemoveTitleArticles) {
-                string[] prepositions = MovingPicturesCore.Settings.ArticlesForRemoval.Split('|');
+                // split the articles for removal into language groups
+                var articleGroups = new Dictionary<string,string>();
+                foreach (var articleGroup in MovingPicturesCore.Settings.ArticlesForRemoval.Split(',')) {
+                    // language
+                    int start = 0;
+                    int end = articleGroup.IndexOf("(");
+                    if (start < 0 || end < 0) continue;
+                    string key = articleGroup.Substring(start, end);
+                    
+                    // articles
+                    start = end + 1;
+                    end = articleGroup.IndexOf(")");
+                    if (start < 0 || end < 0) continue;
+                    string val = articleGroup.Substring(start, (end - start));
+
+                    if (!articleGroups.ContainsKey(key)) articleGroups.Add(key, val);
+                }
+
+                if (articleGroups.Count == 0) return;
+
+                // get movie scraper language property
+                string langCode = string.Empty;
+                if (PrimarySource != null && PrimarySource.Provider != null) {
+                    langCode = PrimarySource.Provider.Language.ToLowerInvariant();
+                }
+
+                // if unable to get a specific language set to current locale
+                if (string.IsNullOrEmpty(langCode) || langCode.ToLowerInvariant() == "various") {
+                    try {
+                        langCode = GUILocalizeStrings.GetCultureName(GUILocalizeStrings.CurrentLanguage()).ToLowerInvariant();
+                    }
+                    catch {
+                        langCode = MovingPicturesCore.Settings.DataProviderAutoLanguage;
+                    }
+                }
+
+                // get the articles for language
+                // if language not found default to AutoLanguage 'en'
+                string articlesforRemoval = string.Empty;
+                if (!articleGroups.TryGetValue(langCode, out articlesforRemoval)) {
+                    // if language group contains no articles, use default
+                    langCode = MovingPicturesCore.Settings.DataProviderAutoLanguage;
+                    // if still have nothing then something wrong with setting
+                    if (!articleGroups.TryGetValue(langCode, out articlesforRemoval)) return;
+                }
+
+                string[] prepositions = articlesforRemoval.Split('|');
                 foreach (string currWord in prepositions) {
                     string word = currWord + " ";
                     if (_sortBy.ToLower().IndexOf(word) == 0) {
