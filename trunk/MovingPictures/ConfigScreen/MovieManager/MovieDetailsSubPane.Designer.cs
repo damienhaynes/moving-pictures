@@ -62,14 +62,41 @@
             Cornerstone.GUI.Controls.FieldProperty fieldProperty37 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty38 = new Cornerstone.GUI.Controls.FieldProperty();
             Cornerstone.GUI.Controls.FieldProperty fieldProperty39 = new Cornerstone.GUI.Controls.FieldProperty();
+            this.movieMediaFileNames = new System.Windows.Forms.DataGridView();
             this.userMovieDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
             this.movieDetailsList = new Cornerstone.GUI.Controls.DBObjectEditor();
+            this.fieldColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.valueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.movieMediaFileNames)).BeginInit();
             this.SuspendLayout();
+            // 
+            // movieMediaFileNames
+            // 
+            this.movieMediaFileNames.AllowUserToAddRows = false;
+            this.movieMediaFileNames.AllowUserToDeleteRows = false;
+            this.movieMediaFileNames.AllowUserToResizeColumns = false;
+            this.movieMediaFileNames.AllowUserToResizeRows = false;
+            this.movieMediaFileNames.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.movieMediaFileNames.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.movieMediaFileNames.ColumnHeadersVisible = false;
+            this.movieMediaFileNames.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.fieldColumn,
+            this.valueColumn});
+            this.movieMediaFileNames.Location = new System.Drawing.Point(0, 355);
+            this.movieMediaFileNames.MultiSelect = false;
+            this.movieMediaFileNames.Name = "movieMediaFileNames";
+            this.movieMediaFileNames.ReadOnly = true;
+            this.movieMediaFileNames.RowHeadersVisible = false;
+            this.movieMediaFileNames.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.movieMediaFileNames.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.movieMediaFileNames.Size = new System.Drawing.Size(381, 24);
+            this.movieMediaFileNames.TabIndex = 12;
             // 
             // userMovieDetailsList
             // 
-            this.userMovieDetailsList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.userMovieDetailsList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.userMovieDetailsList.DatabaseObject = null;
             fieldProperty1.DisplayName = "User";
             fieldProperty1.FieldName = "User";
@@ -101,9 +128,9 @@
             // 
             // movieDetailsList
             // 
-            this.movieDetailsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.movieDetailsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.movieDetailsList.DatabaseObject = null;
             fieldProperty7.DisplayName = "Movie Title";
             fieldProperty7.FieldName = "Name";
@@ -227,18 +254,36 @@
             this.movieDetailsList.ForeColor = System.Drawing.SystemColors.ControlText;
             this.movieDetailsList.Location = new System.Drawing.Point(0, 0);
             this.movieDetailsList.Name = "movieDetailsList";
-            this.movieDetailsList.Size = new System.Drawing.Size(381, 382);
+            this.movieDetailsList.Size = new System.Drawing.Size(381, 349);
             this.movieDetailsList.TabIndex = 10;
             this.movieDetailsList.FieldDisplaySettings.Table = typeof(MediaPortal.Plugins.MovingPictures.Database.DBMovieInfo);
+            // 
+            // fieldColumn
+            // 
+            this.fieldColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.fieldColumn.HeaderText = "labelColumn";
+            this.fieldColumn.Name = "fieldColumn";
+            this.fieldColumn.ReadOnly = true;
+            this.fieldColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // valueColumn
+            // 
+            this.valueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.valueColumn.HeaderText = "dataColumn";
+            this.valueColumn.Name = "valueColumn";
+            this.valueColumn.ReadOnly = true;
+            this.valueColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // MovieDetailsSubPane
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.movieMediaFileNames);
             this.Controls.Add(this.userMovieDetailsList);
             this.Controls.Add(this.movieDetailsList);
             this.Name = "MovieDetailsSubPane";
             this.Size = new System.Drawing.Size(381, 436);
+            ((System.ComponentModel.ISupportInitialize)(this.movieMediaFileNames)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -247,5 +292,8 @@
 
         private Cornerstone.GUI.Controls.DBObjectEditor userMovieDetailsList;
         private Cornerstone.GUI.Controls.DBObjectEditor movieDetailsList;
+        private System.Windows.Forms.DataGridView movieMediaFileNames;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fieldColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn valueColumn;
     }
 }
