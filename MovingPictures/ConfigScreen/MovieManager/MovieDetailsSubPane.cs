@@ -15,6 +15,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager {
         
         public MovieDetailsSubPane() {
             InitializeComponent();
+
+            //initialize datagrid for movieMediaFileNames
+            movieMediaFileNames.Rows.Add(new object[] { "File(s)", "" });
+            movieMediaFileNames.Columns[0].DefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
         }
 
         #region IDBBackedControl Members
@@ -51,6 +55,11 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager {
                 userMovieDetailsList.DatabaseObject = null;
                 userMovieDetailsList.Enabled = false;
 
+                movieMediaFileNames.Enabled = false;
+                // reset row and tooltip when no movie is selected
+                movieMediaFileNames.Rows[0].Cells[1].Value = "";
+                movieMediaFileNames.Rows[0].Cells[1].ToolTipText = "";
+
                 return;
             }
 
@@ -59,7 +68,30 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager {
 
             userMovieDetailsList.DatabaseObject = movie.UserSettings[0];
             userMovieDetailsList.Enabled = true;
+
+            //populate movieMediaFilename datagrid
+            movieMediaFilesPopulate();
         }
 
+        // populate filenames datagrid with details about the selected movie's files
+        private void movieMediaFilesPopulate() {
+            String mediaFileNames = "";
+            String mediaFileFullNames = "";
+            
+            // populate datagrid with comma delimited list of files with a tooltip with full paths 
+            foreach (DBLocalMedia mediaFile in movie.LocalMedia) {
+                if (mediaFileNames.Length > 0) mediaFileNames += ", ";
+                mediaFileNames += mediaFile.File.Name;
+                if (mediaFileFullNames.Length > 0) mediaFileFullNames += "\n";
+                mediaFileFullNames += mediaFile.File.FullName;
+            }
+            
+            // add values to datagrid
+            movieMediaFileNames.Rows[0].Cells[1].Value = mediaFileNames;
+            movieMediaFileNames.Rows[0].Cells[1].ToolTipText = mediaFileFullNames;
+
+            // enable that sucker
+            movieMediaFileNames.Enabled = true;
+        }
     }
 }
