@@ -11,6 +11,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
     internal class FilterHelperDBMovieInfo: DynamicFilterHelper<DBMovieInfo> {
 
         public override bool UpdateDynamicNode(DBNode<DBMovieInfo> node) {
+            // remap title dynamic filters to the sortby field.
+            if (node.BasicFilteringField == DBField.GetFieldByDBName(typeof(DBMovieInfo), "title"))
+                node.BasicFilteringField = DBField.GetFieldByDBName(typeof(DBMovieInfo), "sortby");
+
+
+
             if (node.BasicFilteringField == DBField.GetFieldByDBName(typeof(DBMovieInfo), "year")) {
                 UpdateYear(node);
                 TranslateName(node);
@@ -29,7 +35,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 return true;
             }
 
-            if (node.BasicFilteringField == DBField.GetFieldByDBName(typeof(DBMovieInfo), "title")) {
+            if (node.BasicFilteringField == DBField.GetFieldByDBName(typeof(DBMovieInfo), "sortby")) {
                 UpdateAlphas(node);
                 return true;
             }

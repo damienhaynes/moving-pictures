@@ -861,32 +861,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             // remove all non-word characters and replace them with spaces
             SortBy = Regex.Replace(_title, @"[^\w\s]", "", RegexOptions.IgnoreCase).ToLower().Trim();
 
-            // loop through and try to remove a preposition
+            // try to remove a possible leading articles
             if (MovingPicturesCore.Settings.RemoveTitleArticles) {
-                // split the articles for removal into language groups
-                var articleGroups = new Dictionary<string,string>();
-                foreach (var articleGroup in MovingPicturesCore.Settings.ArticlesForRemoval.Split(',')) {
-                    // language
-                    int start = 0;
-                    int end = articleGroup.IndexOf("(");
-                    if (start < 0 || end < 0) continue;
-                    string key = articleGroup.Substring(start, end);
-                    
-                    // articles
-                    start = end + 1;
-                    end = articleGroup.IndexOf(")");
-                    if (start < 0 || end < 0) continue;
-                    string val = articleGroup.Substring(start, (end - start));
-
-                    if (!articleGroups.ContainsKey(key)) articleGroups.Add(key, val);
-                }
-
+                
+                // grab the groups of articles by language to remove
+                var articleGroups = MovingPicturesCore.Settings.ArticleGroups;
                 if (articleGroups.Count == 0) return;
 
                 // get movie scraper language property
                 string langCode = string.Empty;
                 if (PrimarySource != null && PrimarySource.Provider != null) {
-                    langCode = PrimarySource.Provider.Language.ToLowerInvariant();
+                    langCode = PrimarySource.Provider.LanguageCode.ToLowerInvariant();
                 }
 
                 // if unable to get a specific language set to current locale
@@ -899,21 +884,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     }
                 }
 
-                // get the articles for language
-                // if language not found default to AutoLanguage 'en'
-                string articlesforRemoval = string.Empty;
-                if (!articleGroups.TryGetValue(langCode, out articlesforRemoval)) {
-                    // if language group contains no articles, use default
-                    langCode = MovingPicturesCore.Settings.DataProviderAutoLanguage;
-                    // if still have nothing then something wrong with setting
-                    if (!articleGroups.TryGetValue(langCode, out articlesforRemoval)) return;
-                }
+                // try to grab the appropriate list of articles, if one does not exit, bail
+                if (!articleGroups.ContainsKey(langCode)) return;
+                string articlesforRemoval = articleGroups[langCode];
 
+                // remove those articles
                 string[] prepositions = articlesforRemoval.Split('|');
                 foreach (string currWord in prepositions) {
                     string word = currWord + " ";
                     if (_sortBy.ToLower().IndexOf(word) == 0) {
-                        SortBy = _sortBy.Substring(word.Length) + " " + _sortBy.Substring(0, currWord.Length);
+                        SortBy = _sortBy.Substring(word.Length);
                         return;
                     }
                 }
