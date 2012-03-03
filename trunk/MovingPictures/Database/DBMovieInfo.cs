@@ -306,12 +306,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
         } RelationList<DBMovieInfo, DBSourceMovieInfo> _sourceIDs;
 
-        [DBField(FieldName = "primary_source", Filterable = false, AllowAutoUpdate = false)]
+        [DBField(FieldName = "primary_source", Filterable = false, AllowAutoUpdate = false, Default=null)]
         public DBSourceInfo PrimarySource {
             get { return _primarySource; }
 
             set {
                 _primarySource = value;
+                PopulateSortBy();
+
                 commitNeeded = true;
             }
         } private DBSourceInfo _primarySource;
@@ -858,6 +860,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public void PopulateSortBy() {
+            if (RetrievalInProcess) return;
+
             // remove all non-word characters and replace them with spaces
             SortBy = Regex.Replace(_title, @"[^\w\s]", "", RegexOptions.IgnoreCase).ToLower().Trim();
 
