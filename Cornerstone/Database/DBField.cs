@@ -153,7 +153,7 @@ namespace Cornerstone.Database {
                         if (attribute.Default == "")
                             return (float)0.0;
                         else
-                            return float.Parse(attribute.Default);
+                            return float.Parse(attribute.Default, new CultureInfo("en-US", false));
                     case DBDataType.BOOL:
                         if (attribute.Default == "")
                             return false;

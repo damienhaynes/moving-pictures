@@ -6,6 +6,7 @@ using NLog;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database.CustomTypes;
 using System.Threading;
+using System.Globalization;
 
 namespace Cornerstone.Database.Tables {
     [DBTableAttribute("settings")]
@@ -129,7 +130,7 @@ namespace Cornerstone.Database.Tables {
                     if (Type == "INT")
                         return int.Parse(StringValue);
                     if (Type == "FLOAT")
-                        return float.Parse(StringValue);
+                        return float.Parse(StringValue, new CultureInfo("en-US", false));
                     if (Type == "BOOL")
                         return bool.Parse(StringValue);
                     if (Type == "STRING")
@@ -163,7 +164,7 @@ namespace Cornerstone.Database.Tables {
                 }
 
                 if (Type == "FLOAT") {
-                    float.Parse(value);
+                    float.Parse(value, new CultureInfo("en-US", false));
                     return true;
                 }
 
