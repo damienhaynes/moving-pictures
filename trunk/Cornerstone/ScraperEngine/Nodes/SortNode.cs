@@ -4,6 +4,7 @@ using System.Text;
 using Cornerstone.Tools;
 using System.Xml;
 using System.Threading;
+using System.Globalization;
 
 namespace Cornerstone.ScraperEngine.Nodes {
     [ScraperNode("sort")]
@@ -143,8 +144,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
             
             // try assuming the values are numeric
             try {
-                float thisFloat = float.Parse(SortValue);
-                float otherFloat = float.Parse(other.SortValue);
+                float thisFloat = float.Parse(SortValue, new CultureInfo("en-US", false));
+                float otherFloat = float.Parse(other.SortValue, new CultureInfo("en-US", false));
 
                 return thisFloat == otherFloat ? 0 : thisFloat < otherFloat ? -1 : 1;
             }

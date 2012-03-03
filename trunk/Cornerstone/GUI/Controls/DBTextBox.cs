@@ -8,6 +8,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using Cornerstone.GUI.DesignMode;
 using System.Threading;
+using System.Globalization;
 
 namespace Cornerstone.GUI.Controls {
     public class DBTextBox : TextBox, IDBFieldBackedControl, IDataGridViewEditingControl {
@@ -125,7 +126,7 @@ namespace Cornerstone.GUI.Controls {
                         int.Parse(Text);
                         break;
                     case DBField.DBDataType.REAL:
-                        float.Parse(Text);
+                        float.Parse(Text, new CultureInfo("en-US", false));
                         break;
                 }
 

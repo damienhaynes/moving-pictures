@@ -89,7 +89,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager {
             // add values to datagrid
             movieMediaFileNames.Rows[0].Cells[1].Value = mediaFileNames;
             movieMediaFileNames.Rows[0].Cells[1].ToolTipText = mediaFileFullNames;
-
+            
             // enable that sucker
             movieMediaFileNames.Enabled = true;
         }
