@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 using Cornerstone.Extensions;
+using System.Globalization;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     [DBTableAttribute("movie_info")]
@@ -881,7 +882,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 // if unable to get a specific language set to current locale
                 if (string.IsNullOrEmpty(langCode) || langCode.ToLowerInvariant() == "various") {
                     try {
-                        langCode = GUILocalizeStrings.GetCultureName(GUILocalizeStrings.CurrentLanguage()).ToLowerInvariant();
+                        langCode = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
                     }
                     catch {
                         langCode = MovingPicturesCore.Settings.DataProviderAutoLanguage;

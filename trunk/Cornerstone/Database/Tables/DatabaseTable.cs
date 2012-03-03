@@ -194,6 +194,7 @@ namespace Cornerstone.Database.Tables {
         public void Clear() {
             id = null;
             commitNeeded = true;
+            RetrievalInProcess = true;
 
             ReadOnlyCollection<DBField> fieldList = DBField.GetFieldList(this.GetType());
             foreach (DBField currField in fieldList) {
@@ -214,6 +215,8 @@ namespace Cornerstone.Database.Tables {
                     throw new System.InvalidOperationException("RelationLists must be initialized in the get{} property method.");
                 }
             }
+
+            RetrievalInProcess = false;
         }
 
         public virtual void Commit() {
