@@ -436,7 +436,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             #region Upgrades required for 1.3.2
 
-            if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.3.2.1369")) {
+            if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.3.2.1370")) {
                 PropertyInfo property = typeof(MovingPicturesSettings).GetProperty("ArticlesForRemoval");
                 CornerstoneSettingAttribute attribute = (CornerstoneSettingAttribute)Attribute.GetCustomAttribute(property, typeof(CornerstoneSettingAttribute));
                 MovingPicturesCore.Settings.ArticlesForRemoval = attribute.Default.ToString();
