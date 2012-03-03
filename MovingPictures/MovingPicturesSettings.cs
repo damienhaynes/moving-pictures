@@ -1554,6 +1554,32 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _articlesForRemoval;
 
+        /// <summary>
+        /// Preposition articles grouped by language.
+        /// </summary>
+        public Dictionary<string, string> ArticleGroups {
+            get {
+                var articleGroups = new Dictionary<string, string>();
+                foreach (string articleGroup in MovingPicturesCore.Settings.ArticlesForRemoval.Split(',')) {
+                    // language
+                    int start = 0;
+                    int end = articleGroup.IndexOf("(");
+                    if (start < 0 || end < 0) continue;
+                    string key = articleGroup.Substring(start, end);
+
+                    // articles
+                    start = end + 1;
+                    end = articleGroup.IndexOf(")");
+                    if (start < 0 || end < 0) continue;
+                    string val = articleGroup.Substring(start, (end - start));
+
+                    if (!articleGroups.ContainsKey(key)) articleGroups.Add(key, val);
+                }
+
+                return articleGroups;
+            }
+        }
+
         #endregion
 
         #region Parental Controls
