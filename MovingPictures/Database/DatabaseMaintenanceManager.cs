@@ -705,12 +705,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 missingCoversCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL;
                 missingCoversCriteria.Value = "";
                 missingCoversNode.Filter.Criteria.Add(missingCoversCriteria);
-                missingCoversCriteria = new DBCriteria<DBMovieInfo>();
-                missingCoversCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "coverfullpath");
-                missingCoversCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL;
-                missingCoversCriteria.Value = " ";
-                missingCoversNode.Filter.CriteriaGrouping = DBFilter<DBMovieInfo>.CriteriaGroupingEnum.ONE;
-                missingCoversNode.Filter.Criteria.Add(missingCoversCriteria);
 
                 // missing backdrops node
                 DBNode<DBMovieInfo> missingBackdropsNode = new DBNode<DBMovieInfo>();
@@ -726,12 +720,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 missingBackdropsCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "backdropfullpath");
                 missingBackdropsCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL;
                 missingBackdropsCriteria.Value = "";
-                missingBackdropsNode.Filter.Criteria.Add(missingBackdropsCriteria);
-                missingBackdropsCriteria = new DBCriteria<DBMovieInfo>();
-                missingBackdropsCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "backdropfullpath");
-                missingBackdropsCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL;
-                missingBackdropsCriteria.Value = " ";
-                missingBackdropsNode.Filter.CriteriaGrouping = DBFilter<DBMovieInfo>.CriteriaGroupingEnum.ONE;
                 missingBackdropsNode.Filter.Criteria.Add(missingBackdropsCriteria);
 
                 // invalid years, only 1900 -> next year considered valid
