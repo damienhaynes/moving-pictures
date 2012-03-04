@@ -1544,7 +1544,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The articles that will be removed from a title when found at the beginning of a title for sorting purposes. Each language has its own set of articles, seperate articles with a pipe \"|\". See the \"Remove Title Articles\" setting.",
             Groups = "|MediaPortal GUI|Sorting|",
             Identifier = "articles_for_removal",
-            Default = "en(the|a|an),de(ein|eine|der|die|das),pt-br(a|as|o|os|um|uma|uns|umas),nl(de|het),fr(le|la|les|un|une|des|l)")]
+            Default = "en(the|a|an),de(ein|eine|der|die|das),pt(a|as|o|os|um|uma|uns|umas),nl(de|het),fr(le|la|les|un|une|des|l)")]
         public string ArticlesForRemoval {
             get { return _articlesForRemoval; }
             set {
