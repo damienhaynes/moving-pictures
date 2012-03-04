@@ -90,23 +90,23 @@ namespace Cornerstone.Database.Tables {
             switch (Operator) {
                 case OperatorEnum.EQUAL:
                     if (value == null) {
-                        if (Value == null || string.IsNullOrEmpty(Value.ToString()))
+                        if (Value == null || string.IsNullOrEmpty(Value.ToString().Trim()))
                             return true;
 
                         return false;
                     }
                     else if (Value == null) {
-                        if (value == null || string.IsNullOrEmpty(value.ToString()))
+                        if (value == null || string.IsNullOrEmpty(value.ToString().Trim()))
                             return true;
 
                         return false;
                     }
                     else if (Field.Type == typeof(StringList)) {
-                        if (((StringList)value).Contains(Value.ToString()))
+                        if (((StringList)value).Contains(Value.ToString().Trim()))
                             return true;
                     }
                     else if (Field.Type == typeof(string)) {
-                        if (value.ToString().ToLower().Equals(Value.ToString().ToLower()))
+                        if (value.ToString().Trim().ToLower().Equals(Value.ToString().Trim().ToLower()))
                             return true;
                     }
                     else if (Field.Type == typeof(DateTime)) {
@@ -130,11 +130,11 @@ namespace Cornerstone.Database.Tables {
 
                 case OperatorEnum.NOT_EQUAL:
                     if (Field.Type == typeof(StringList)) {
-                        if (!((StringList)value).Contains(Value.ToString()))
+                        if (!((StringList)value).Contains(Value.ToString().Trim()))
                             return true;
                     }
                     else if (Field.Type == typeof(string)) {
-                        if (!value.ToString().ToLower().Equals(Value.ToString().ToLower()))
+                        if (!value.ToString().Trim().ToLower().Equals(Value.ToString().Trim().ToLower()))
                             return true;
                     }
                     else if (Field.Type == typeof(DateTime)) {
@@ -148,12 +148,12 @@ namespace Cornerstone.Database.Tables {
                     break;
 
                 case OperatorEnum.CONTAINS:
-                    if (value.ToString().ToLower().Contains(Value.ToString().ToLower()))
+                    if (value.ToString().Trim().ToLower().Contains(Value.ToString().Trim().ToLower()))
                         return true;
                     break;
 
                 case OperatorEnum.NOT_CONTAIN:
-                    if (!value.ToString().ToLower().Contains(Value.ToString().ToLower()))
+                    if (!value.ToString().Trim().ToLower().Contains(Value.ToString().Trim().ToLower()))
                         return true;
                     break;
 
@@ -189,13 +189,13 @@ namespace Cornerstone.Database.Tables {
                 case OperatorEnum.BEGINS_WITH:
                     if (Field.Type == typeof(StringList)) {
                         foreach (string currStr in (StringList)value) {
-                            if (currStr.ToLower().StartsWith(Value.ToString().ToLower())) {
+                            if (currStr.ToLower().StartsWith(Value.ToString().Trim().ToLower())) {
                                 return true;
                             }
                         }
                     }
                     else {
-                        if (value.ToString().ToLower().StartsWith(Value.ToString().ToLower()))
+                        if (value.ToString().Trim().ToLower().StartsWith(Value.ToString().Trim().ToLower()))
                             return true;
                     }
                     break;
@@ -203,13 +203,13 @@ namespace Cornerstone.Database.Tables {
                 case OperatorEnum.NOT_BEGIN_WITH:
                     if (Field.Type == typeof(StringList)) {
                         foreach (string currStr in (StringList)value) {
-                            if (!currStr.ToLower().StartsWith(Value.ToString().ToLower())) {
+                            if (!currStr.Trim().ToLower().StartsWith(Value.ToString().Trim().ToLower())) {
                                 return true;
                             }
                         }
                     }
                     else {
-                        if (!value.ToString().ToLower().StartsWith(Value.ToString().ToLower()))
+                        if (!value.ToString().Trim().ToLower().StartsWith(Value.ToString().Trim().ToLower()))
                             return true;
                     }
                     break;
@@ -217,13 +217,13 @@ namespace Cornerstone.Database.Tables {
                 case OperatorEnum.ENDS_WITH:
                     if (Field.Type == typeof(StringList)) {
                         foreach (string currStr in (StringList)value) {
-                            if (currStr.ToLower().EndsWith(Value.ToString().ToLower())) {
+                            if (currStr.Trim().ToLower().EndsWith(Value.ToString().Trim().ToLower())) {
                                 return true;
                             }
                         }
                     }
                     else {
-                        if (value.ToString().ToLower().EndsWith(Value.ToString().ToLower()))
+                        if (value.ToString().ToLower().Trim().EndsWith(Value.ToString().Trim().ToLower()))
                             return true;
                     }
                     break;
@@ -231,13 +231,13 @@ namespace Cornerstone.Database.Tables {
                 case OperatorEnum.NOT_ENDS_WITH:
                     if (Field.Type == typeof(StringList)) {
                         foreach (string currStr in (StringList)value) {
-                            if (!currStr.ToLower().EndsWith(Value.ToString().ToLower())) {
+                            if (!currStr.Trim().ToLower().EndsWith(Value.ToString().Trim().ToLower())) {
                                 return true;
                             }
                         }
                     }
                     else {
-                        if (!value.ToString().ToLower().EndsWith(Value.ToString().ToLower()))
+                        if (!value.ToString().Trim().ToLower().EndsWith(Value.ToString().Trim().ToLower()))
                             return true;
                     }
                     break;
