@@ -633,7 +633,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         }
 
         public static DBLocalMedia Get(string fullPath) {
-            return Get(fullPath, string.Empty);
+            return Get(fullPath, null);
         }
 
         public static DBLocalMedia GetDisc(string fullPath, string discId) {
