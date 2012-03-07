@@ -1083,7 +1083,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
             GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
             GUIListItem rescanItem = new GUIListItem(Translation.ScanForNewMovies);
-            
+            GUIListItem movieDetailsItem = new GUIListItem(Translation.ViewMovieDetails + "...");
+
             int currID = 1;
 
             // if we are not in categories view make Movie Options the primary selection
@@ -1120,6 +1121,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 dialog.Add(rescanItem);
             }
 
+            // add view movie details menu item if click to play is enabled
+            if (!MovingPicturesCore.Settings.ClickShowsDetails && browser.CurrentView != BrowserViewMode.CATEGORIES) {
+                movieDetailsItem.ItemId = currID++;
+                dialog.Add(movieDetailsItem);
+            }
+
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             if (dialog.SelectedId == filterItem.ItemId) {
                 showFilterContext();
@@ -1141,6 +1148,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (dialog.SelectedId == searchItem.ItemId) {
                 showSearchContext();
+            }
+            else if (dialog.SelectedId == movieDetailsItem.ItemId) {
+                browser.CurrentView = BrowserViewMode.DETAILS;
             }
         }
 
