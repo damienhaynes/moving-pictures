@@ -17,6 +17,7 @@
   <string Field="Cancel">Cancel</string>
   <string Field="CannotDeleteOffline">Not able to delete {0}\n because the file is offline</string>
   <string Field="CannotDeleteReadOnly">Cannot delete a read-only movie.\nWould you like Moving Pictures to ignore this movie?</string>
+  <string Field="CastAndCrew">Cast and Crew</string>
   <string Field="CategoryEmptyDescription">There are currently no movies\nlisted in this category.</string>
   <string Field="CategoryEmptyHeader">Category is empty</string>
   <string Field="Certification">Certification</string>
@@ -153,6 +154,7 @@
   <string Field="StarRating">Star Rating</string>
   <string Field="Sunday">Sunday</string>
   <!-- T -->
+  <string Field="Theme">Theme</string>
   <string Field="ThisMonth">This Month</string>
   <string Field="ThisWeek">This Week</string>
   <string Field="ThisYear">This Year</string>
