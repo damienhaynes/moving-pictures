@@ -189,7 +189,7 @@ namespace Cornerstone.Database.Tables {
                 case OperatorEnum.BEGINS_WITH:
                     if (Field.Type == typeof(StringList)) {
                         foreach (string currStr in (StringList)value) {
-                            if (currStr.ToLower().StartsWith(Value.ToString().Trim().ToLower())) {
+                            if (currStr.Trim().ToLower().StartsWith(Value.ToString().Trim().ToLower())) {
                                 return true;
                             }
                         }
