@@ -168,7 +168,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         public GUIFacadeControl Facade {
             get { return facade; }
-            set { facade = value;}
+            set {
+                facade = value;
+            
+                // override the list scrolling popup
+                facade.ListLayout.GetScrollLabel += new GUIListControl.GetScrollLabelDelegate(onScrollItemChanged);
+            }
         }
         public GUIFacadeControl facade;
 
@@ -811,6 +816,31 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 ContentsChanged();
         }
 
+        private string onScrollItemChanged(GUIListItem item) {
+            var movieInfo = (item.TVTag as DBMovieInfo);
+            if (movieInfo == null) return string.Empty;
+            
+            string popupString = string.Empty;
+
+            switch (CurrentSortField) {
+                case SortingFields.Title:
+                    // set label as first letter of sortby field
+                    char firstChar = movieInfo.SortBy.TrimStart().First();
+                    if (char.IsDigit(firstChar)) {
+                        popupString = "#";
+                    }
+                    else {
+                        popupString = firstChar.ToString().ToUpperInvariant();
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            return popupString;
+        }
+
         #endregion
 
         // these methods should eventually be extracted to a super class allowing
@@ -1019,7 +1049,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currItem.IconImageBig = newMovie.CoverThumbFullPath.Trim();
                 currItem.TVTag = newMovie;
                 currItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(onMovieItemSelected);
-
+                
                 listItems[newMovie] = currItem;
             }
 
