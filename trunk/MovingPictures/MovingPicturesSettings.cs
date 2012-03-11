@@ -1176,7 +1176,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private int _maxElementsToDisplay;
 
-
         [CornerstoneSetting(
             Name = "Name for Home Screen",
             Description = "The name that appears on the home screen for the plugin.",
@@ -1193,7 +1192,6 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _homeScreenName;
 
-
         [CornerstoneSetting(
             Name = "Default Sort Field",
             Description = "The default sort field used in the MediaPortal GUI when the plug-in is first opened. Valid options are \"title\", \"dateadded\", \"year\", \"certification\", \"language\", \"score\", \"userscore\", \"popularity\", \"runtime\", \"filepath\".",
@@ -1209,7 +1207,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private string _defaultSortField;
-
 
         [CornerstoneSetting(
             Name = "Allow user to delete files from the GUI context menu",
@@ -1317,6 +1314,22 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private string _secondLabel;
+
+        [CornerstoneSetting(
+            Name = "Remove Articles From Display Title",
+            Description = "If enabled, articles such as \"the\", \"a\", and \"an\" will be removed from the Display Title in the GUI. This compliments the \"Remove Title Articles\" setting.",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "remove_articles_from_display_title",
+            Default = false,
+            Hidden = false)]
+        public bool RemoveArticlesFromDisplayTitle {
+            get { return _removeArticlesFromDisplayTitle; }
+            set {
+                _removeArticlesFromDisplayTitle = value;
+                OnSettingChanged("remove_articles_from_display_title");
+            }
+        }
+        private bool _removeArticlesFromDisplayTitle;
 
         #endregion
 
