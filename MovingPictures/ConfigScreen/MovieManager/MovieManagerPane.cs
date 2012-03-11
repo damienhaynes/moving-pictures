@@ -190,7 +190,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
         // adds the given movie and it's related files to the tree view
         private ListViewItem createMovieItem(DBMovieInfo movie) {
-            ListViewItem newItem = new ListViewItem(movie.Title);
+            ListViewItem newItem = new ListViewItem(movie.DisplayTitle);
             newItem.Tag = movie;
             
             // if the movie is offline color it red

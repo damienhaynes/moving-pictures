@@ -849,30 +849,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         #endregion
 
-        public override int CompareTo(object obj) {
-            if (obj.GetType() == typeof(DBMovieInfo)) {
-                return SortBy.CompareTo(((DBMovieInfo)obj).SortBy);
-            }
-            return 0;
-        }
-
-        public override string ToString() {
-            return Title;
-        }
-
-        public void PopulateSortBy() {
-            if (RetrievalInProcess) return;
-
-            // remove all non-word characters and replace them with spaces
-            SortBy = Regex.Replace(_title, @"[^\w\s]", "", RegexOptions.IgnoreCase).ToLower().Trim();
-
-            // try to remove a possible leading articles
-            if (MovingPicturesCore.Settings.RemoveTitleArticles) {
-                
-                // grab the groups of articles by language to remove
-                var articleGroups = MovingPicturesCore.Settings.ArticleGroups;
-                if (articleGroups.Count == 0) return;
-
+        #region Public Properties
+        /// <summary>
+        /// Gets the Two Letter Language Code associated with the scraper used for the MovieInfo
+        /// </summary>
+        public string LanguageCode {
+            get {
                 // get movie scraper language property
                 string langCode = string.Empty;
                 if (PrimarySource != null && PrimarySource.Provider != null) {
@@ -889,9 +871,70 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                     }
                 }
 
+                return langCode;
+            }
+        }
+
+        /// <summary>
+        /// Gets the corrected display title for GUI, with or without Title Articles
+        /// </summary>
+        public string DisplayTitle {
+            get {
+                string displayTitle = Title;
+                if (MovingPicturesCore.Settings.RemoveArticlesFromDisplayTitle) {
+                    // grab the groups of articles by language to remove
+                    var articleGroups = MovingPicturesCore.Settings.ArticleGroups;
+                    if (articleGroups.Count == 0) return displayTitle;
+
+                    // try to grab the appropriate list of articles, if one does not exit, bail
+                    if (!articleGroups.ContainsKey(LanguageCode)) return displayTitle;
+                    string articlesforRemoval = articleGroups[LanguageCode];
+
+                    // remove article from the first word in title
+                    var words = Regex.Split(Title.Trim(), @"\s+");
+                    
+                    // if there is only one word, then don't remove anything
+                    if (words.Count() == 1) return displayTitle;
+                    
+                    // otherwise check if first word is an article
+                    if (articlesforRemoval.Split('|').Contains(words.First().ToLowerInvariant())) {
+                        // remove first word and join back the rest
+                        displayTitle = string.Join(" ", words.Skip(1).ToArray());
+                    }
+                }
+
+                return displayTitle;
+            }
+        }
+        #endregion
+
+        public override int CompareTo(object obj) {
+            if (obj.GetType() == typeof(DBMovieInfo)) {
+                return SortBy.CompareTo(((DBMovieInfo)obj).SortBy);
+            }
+            return 0;
+        }
+
+        public override string ToString() {
+            return Title;
+        }
+
+        public void PopulateSortBy() {
+            if (RetrievalInProcess) return;
+            
+            // remove all non-word characters and replace them with spaces
+            SortBy = Regex.Replace(_title, @"[^\w\s]", "", RegexOptions.IgnoreCase).ToLower().Trim();
+
+            // try to remove a possible leading articles
+            if (MovingPicturesCore.Settings.RemoveTitleArticles) {
+                
+                // grab the groups of articles by language to remove
+                var articleGroups = MovingPicturesCore.Settings.ArticleGroups;
+                if (articleGroups.Count == 0) return;
+
                 // try to grab the appropriate list of articles, if one does not exit, bail
-                if (!articleGroups.ContainsKey(langCode)) return;
-                string articlesforRemoval = articleGroups[langCode];
+                if (!articleGroups.ContainsKey(LanguageCode)) return;
+                string articlesforRemoval = articleGroups[LanguageCode];
 
                 // remove those articles
                 string[] prepositions = articlesforRemoval.Split('|');
