@@ -379,7 +379,7 @@ namespace Cornerstone.Database {
             ICollection items = Get(field.OwnerType, null);
 
             // loop through all items in the DB and grab all existing values for this field
-            HashSet<string> uniqueStrings = new HashSet<string>();
+            HashSet<string> uniqueStrings = new HashSet<string>(StringComparer.CurrentCultureIgnoreCase);
             foreach (DatabaseTable currItem in items) {
                 List<string> values = getValues(field.GetValue(currItem));
                 foreach (string currStr in values)
@@ -391,7 +391,7 @@ namespace Cornerstone.Database {
 
         public HashSet<string> GetAllValues<T>(DBField field, DBRelation relation, ICollection<T> items) where T:DatabaseTable {
             // loop through all items in the DB and grab all existing values for this field
-            HashSet<string> uniqueStrings = new HashSet<string>();
+            HashSet<string> uniqueStrings = new HashSet<string>(StringComparer.CurrentCultureIgnoreCase);
             foreach (T currItem in items) {
                 if (relation == null) {
                     List<string> values = getValues(field.GetValue(currItem));
