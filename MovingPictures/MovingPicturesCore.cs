@@ -235,9 +235,12 @@ namespace MediaPortal.Plugins.MovingPictures {
                 initActions.Add(newAction);
             }
 
-            newAction = new WorkerDelegate(DatabaseMaintenanceManager.VerifyMovieManagerFilterMenu);
-            actionDescriptions.Add(newAction, "Updating Movie Manager Filter Menu...");
-            initActions.Add(newAction);
+            // only perform this task if starting in configuration
+            if (!Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location).Equals("mediaportal", StringComparison.InvariantCultureIgnoreCase)) {
+                newAction = new WorkerDelegate(DatabaseMaintenanceManager.VerifyMovieManagerFilterMenu);
+                actionDescriptions.Add(newAction, "Updating Movie Manager Filter Menu...");
+                initActions.Add(newAction);
+            }
 
             newAction = new WorkerDelegate(DeviceManager.StartMonitor);
             actionDescriptions.Add(newAction, "Starting Device Monitor...");
