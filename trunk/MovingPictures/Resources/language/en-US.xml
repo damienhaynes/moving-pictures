@@ -78,6 +78,7 @@
   <!-- M -->
   <string Field="MarkAsUnwatched">Mark as Unwatched</string>
   <string Field="MarkAsWatched">Mark as Watched</string>
+  <string Field="MediaInfo">MediaInfo</string>
   <string Field="MediaIsMissing">The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...</string>
   <string Field="MediaNotAvailableBody">The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}</string>
   <string Field="MediaNotAvailableHeader">Media Not Available</string>

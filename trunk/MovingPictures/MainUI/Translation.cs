@@ -230,6 +230,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // M
         public static string MarkAsUnwatched = "Mark as Unwatched";
         public static string MarkAsWatched = "Mark as Watched";
+        public static string MediaInfo = "MediaInfo";
         public static string MediaIsMissing = "The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...";
         public static string MediaNotAvailableBody = "The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}";
         public static string MediaNotAvailableHeader = "Media Not Available";
