@@ -726,7 +726,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 DBNode<DBMovieInfo> invalidYearsNode = new DBNode<DBMovieInfo>();
                 invalidYearsNode.Name = "${Year}";
                 invalidYearsNode.Parent = maintenanceNode;
-                invalidYearsNode.DynamicNode = false;                
+                invalidYearsNode.DynamicNode = false;
                 invalidYearsNode.Filter = new DBFilter<DBMovieInfo>();
                 invalidYearsNode.Filter.CriteriaGrouping = DBFilter<DBMovieInfo>.CriteriaGroupingEnum.ONE;
                 invalidYearsNode.SortPosition = position++;
@@ -736,13 +736,30 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 DBCriteria<DBMovieInfo> invalidYearsCriteria = new DBCriteria<DBMovieInfo>();
                 invalidYearsCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "year");
                 invalidYearsCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.LESS_THAN;
-                invalidYearsCriteria.Value = 1900;                
+                invalidYearsCriteria.Value = 1900;
                 invalidYearsNode.Filter.Criteria.Add(invalidYearsCriteria);
                 invalidYearsCriteria = new DBCriteria<DBMovieInfo>();
                 invalidYearsCriteria.Field = DBField.GetFieldByDBName(typeof(DBMovieInfo), "year");
                 invalidYearsCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.GREATER_THAN;
                 invalidYearsCriteria.Value = 2030;
                 invalidYearsNode.Filter.Criteria.Add(invalidYearsCriteria);
+
+                // missing mediainfo node
+                DBNode<DBMovieInfo> missingMediaInfoNode = new DBNode<DBMovieInfo>();
+                missingMediaInfoNode.Name = "${MediaInfo}";
+                missingMediaInfoNode.Parent = maintenanceNode;
+                missingMediaInfoNode.DynamicNode = false;
+                missingMediaInfoNode.Filter = new DBFilter<DBMovieInfo>();
+                missingMediaInfoNode.SortPosition = position++;
+                missingMediaInfoNode.DBManager = MovingPicturesCore.DatabaseManager;
+                maintenanceNode.Children.Add(missingMediaInfoNode);
+
+                DBCriteria<DBMovieInfo> missingMediaInfoCriteria = new DBCriteria<DBMovieInfo>();
+                missingMediaInfoCriteria.Field = DBField.GetFieldByDBName(typeof(DBLocalMedia), "videowidth");
+                missingMediaInfoCriteria.Relation = DBRelation.GetRelation(typeof(DBMovieInfo), typeof(DBLocalMedia), "");
+                missingMediaInfoCriteria.Operator = DBCriteria<DBMovieInfo>.OperatorEnum.EQUAL;
+                missingMediaInfoCriteria.Value = 0;
+                missingMediaInfoNode.Filter.Criteria.Add(missingMediaInfoCriteria);
 
                 menu.Commit();
             }
