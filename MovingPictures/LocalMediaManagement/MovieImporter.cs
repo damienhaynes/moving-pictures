@@ -560,26 +560,31 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     List<DBImportPath> paths = DBImportPath.GetAll();
                     foreach (DBImportPath currPath in paths) {
                         if (currPath.Active) {
-                            count++;
                             if (Progress != null)
                                 Progress((int)(count * 100.0 / paths.Count), count, paths.Count, "Scanning local media sources...");
 
                             ScanPath(currPath);
+                            count++;
                         }
                     }
                     if (Progress != null) Progress(100, 0, 0, "Done!");
 
                     // monitor existing paths for change
                     while (true) {
-                        Thread.Sleep(1000);
-
                         // if the filesystem scanner found any files, add them
                         lock (filesAdded.SyncRoot) {
                             if (filesAdded.Count > 0) {
+                                int processed = 0;
+                                int total = filesAdded.Count;
                                 foreach (object currFile in filesAdded) {
                                     DBLocalMedia addedFile = (DBLocalMedia)currFile;
                                     if (!fileList.Contains(addedFile))
                                         fileList.Add((DBLocalMedia)currFile);
+
+                                    if (Progress != null)
+                                        Progress((int)(processed * 100.0 / total), processed, total, "Queueing files..");
+                                    
+                                    processed++;
                                 }
                                 filesAdded.Clear();                           
                             }
@@ -613,6 +618,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             checkWatchers = 0;
                         }
 
+                        Thread.Sleep(1000);
                     }
 
                 }
