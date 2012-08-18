@@ -85,11 +85,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cornerstone\Cornerstone.csproj">
+    <ProjectReference Include="..\..\Cornerstone\Cornerstone.csproj">
       <Project>{14201B8D-31C3-4FB5-9356-9485676C147B}</Project>
       <Name>Cornerstone</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MovingPictures\MovingPictures.csproj">
+    <ProjectReference Include="..\..\MovingPictures\MovingPictures.csproj">
       <Project>{443F8F2C-44D2-47FB-B552-636664C8EC53}</Project>
       <Name>MovingPictures</Name>
     </ProjectReference>
