@@ -101,7 +101,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
 
         // Updates the menu items relating to Moving Pictures Settings.
         private void UpdateConfigControls() {
-            renameFilesMenuItem.Enabled = renameFoldersMenuItem.Checked || renameSecondaryFilesMenuItem.Checked;
+            renameFilesMenuItem.Enabled = (renameFoldersMenuItem.Checked || renameSecondaryFilesMenuItem.Checked) ||
+                                          (!renameFoldersMenuItem.Checked && !renameSecondaryFilesMenuItem.Checked && !renameFilesMenuItem.Checked);
             renameFoldersMenuItem.Enabled = renameFilesMenuItem.Checked || renameSecondaryFilesMenuItem.Checked;
             renameSecondaryFilesMenuItem.Enabled = renameFilesMenuItem.Checked || renameFoldersMenuItem.Checked;
         }
