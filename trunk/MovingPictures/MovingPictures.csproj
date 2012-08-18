@@ -61,13 +61,41 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Utils, Version=1.1.6.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\MediaPortal\Common.Utils.dll</HintPath>
+    </Reference>
     <Reference Include="CookComputing.XmlRpcV2, Version=2.4.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
+    <Reference Include="Core, Version=1.1.6.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\MediaPortal\Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Databases, Version=1.1.6.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\MediaPortal\Databases.dll</HintPath>
+    </Reference>
+    <Reference Include="Dialogs, Version=1.1.6.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\MediaPortal\Dialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="DirectShowLib, Version=2.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\MediaPortal\DirectShowLib.dll</HintPath>
+    </Reference>
+    <Reference Include="MediaPortal.Support, Version=1.1.6.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\MediaPortal\MediaPortal.Support.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="RemotePlugins, Version=1.1.6.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\MediaPortal\RemotePlugins.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -80,6 +108,10 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Utils, Version=1.1.6.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\MediaPortal\Utils.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -613,34 +645,6 @@
     <ProjectReference Include="..\External\FollwitApi\FollwitApi.csproj">
       <Project>{75EBA361-8137-4107-A5B5-753CE959983B}</Project>
       <Name>FollwitApi</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\External\MediaPortal\Common-MP-TVE3\Common.Utils\Common.Utils.csproj">
-      <Project>{F6EDA1F3-3DCD-43F4-8A90-E32DA70C8227}</Project>
-      <Name>Common.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\External\MediaPortal\mediaportal\Core\Core.csproj">
-      <Project>{02FFFC1F-2555-4B99-8B01-3432D0673855}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\External\MediaPortal\mediaportal\Databases\Databases.csproj">
-      <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
-      <Name>Databases</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\External\MediaPortal\mediaportal\Dialogs\Dialogs.csproj">
-      <Project>{396C5208-5D46-4A11-92C1-FD0F2F42D7DD}</Project>
-      <Name>Dialogs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\External\MediaPortal\Common-MP-TVE3\DirectShowLib\DirectShowLib.csproj">
-      <Project>{CE009BFA-5EF6-4153-B2A1-2FA79698A9AE}</Project>
-      <Name>DirectShowLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\External\MediaPortal\mediaportal\RemotePlugins\RemotePlugins.csproj">
-      <Project>{0A234721-1F13-4DF8-9B1E-64D9E3111203}</Project>
-      <Name>RemotePlugins</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\External\MediaPortal\mediaportal\Utils\Utils.csproj">
-      <Project>{6DA0E4DF-6230-4642-98B5-E690BB6942BB}</Project>
-      <Name>Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cornerstone.MP\Cornerstone.MP.csproj">
       <Project>{77C78161-3206-45FD-A419-60218F3354C0}</Project>
