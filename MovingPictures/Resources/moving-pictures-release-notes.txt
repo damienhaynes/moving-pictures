@@ -167,6 +167,10 @@ Issue #1027:    Updated the allocine script. Thanks Tarkin!
 
 ***********:    Fixed bug causing Italian scraper script to not load.
 
+Issue #1033:    Updated kinopoisk scraper to fix summary retrieval. Thanks Leonid!
+
+Issue #1032:    Updated filmtipset.se scraper to fix IMDb score retrieval. Thanks Hexagoan!
+
 Issue #1023:    The XBMC Import Script will now populate the Sort By field.
 
 Issue #1018:    Added a Slovak translation file. Thanks Adrian!

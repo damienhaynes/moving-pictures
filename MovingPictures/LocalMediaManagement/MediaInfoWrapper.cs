@@ -73,6 +73,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
     public MediaInfoWrapper(string strFile)
     {
+        if (strFile == null)
+            return;
 
       bool isTV = Util.Utils.IsLiveTv(strFile);
       bool isRadio = Util.Utils.IsLiveRadio(strFile);
