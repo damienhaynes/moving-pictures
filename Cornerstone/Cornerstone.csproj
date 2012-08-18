@@ -73,6 +73,10 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Databases, Version=1.1.6.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\External\MediaPortal\Databases.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net">
       <HintPath>..\External\Lucene.Net.dll</HintPath>
     </Reference>
@@ -374,12 +378,6 @@
     <None Include="Images\help.png" />
     <Content Include="Images\list-add.png" />
     <Content Include="Images\list-remove.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\External\MediaPortal\mediaportal\Databases\Databases.csproj">
-      <Project>{C1BCEC3E-6074-4328-B5D9-391A457C8FFB}</Project>
-      <Name>Databases</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
