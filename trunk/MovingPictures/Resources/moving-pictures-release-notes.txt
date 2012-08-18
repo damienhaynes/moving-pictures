@@ -1,4 +1,4 @@
-Moving Pictures 1.3.1
+Moving Pictures 1.4.0
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -23,11 +23,113 @@ follw.it Bug Tracker:           http://trac.follw.it
 
 Change Log
 ================================================================================
+1.4.0
+--------------------------------------------------------------------------------
+Enhancements
+--------------------------------------------------------------------------------
+Issue #392:     Added filtering to Movie Manager in configuration screen. This 
+                allows you to drill down to subsections of your collection or find
+                files missing artwork or information. Many thanks to damienh.
+                
+Issue #1022:    Added the ability to display secondary information (in a second 
+                column) when in list view. By default the year can be displayed 
+                but this can be configured via advanced settings. Thanks to 
+                both ncoh and damienh for their efforts on this.
+
+Issue #1077:    Added a new dynamic category to group by the first letter of the
+                title. Currently only used in the Movie Manager filters, but could
+                be added to the GUI Categories via the Define Movie Categories button
+                on the GUI Settings tab of the config.
+                
+***********:    File names are now displayed on the main Movie Manager panel. 
+                This should help make mismatched files more obvious and easier to
+                find.
+                
+Issue #95:      You can now review previously ignored files and unignore them 
+                on a file by file basis (under the gear icon on the Movie Importer
+                in the config). Thanks to CyberFix for this patch!
+
+***********:    Improved performance of Actors (and other large) dynamic nodes.
+                
+Issue #1080:    Added "ctrl-a" key binding to select all movies in the Movie 
+                Mananager.
+                
+Issue #859:     Added "View Movie Details" context menu item if "Click to Play" 
+                is enabled in GUI Options. This is so ALL users can access details 
+                view.
+
+Issue #1088:    Added a new Advanced Setting to remove articles from Display Title 
+                in GUI.                
+                
+
+--------------------------------------------------------------------------------
+Bug Fixes
+--------------------------------------------------------------------------------
+Issue #1073:    Fixed infinite artwork download bug (had to do with downloads with
+                no content-length in the header). Thanks to CyberFix for this patch!
+
+***********:    Progress indicator for the importer will now correctly display as 
+                soon as import begins (previously for large network based collections
+                the indicator would take 20-30 seconds to appear).
+                
+Issue #715:     If article removal logic is enabled it will now only remove articles
+                from the language of the scraper script used. This will prevent 
+                situations like "die" in "Die Hard" from being removed.
+
+***********:    Fixed rare bug causing movie to sometimes fail to play in GUI.                
+
+Issue #1079:    Fix an unhandled exception when pressing 'Play' on unavailable 
+                movie in MovieManager.
+                
+Issue #1084:    Fixed an unhandled exception tossed when stressing the search
+                system.
+
+Issue #1057:    Fixed DBLocalMedia.Get(string fullPath) method ignoring movies with
+                volume serial. Thanks shukuyen.
+                
+***********:    Filtering system will now ignore leading and trailing whitespace
+                when trying to categorize a movie.
+
+Issue #1087:    When quickly scrolling through your collection, the "first letter"
+                popup will now display properly based on the users sort by settings.
+                i.e. "M" will show up instead of "T" for the Matrix if it is sorted
+                in that way.
+                
+Issue #1017:    Fixed issue with the GUI forgetting the last used view when not 
+                using categories.
+
+***********:    It is now possible to set the number of actors to display to 0 in
+                advanced settings (the setting already existed, but was broken when 
+                set to 0).
+                
+***********:    Fixed bug causing the rename dialog to remain empty when trying to 
+                rename.
+                
+***********:    Cleaned up some bugs with how some of our custom controls behave in 
+                the VS GUI editor. Only relevant to other plugin developers.
+                
+***********:    Added all dependencies to SVN so it should now be much easier for 
+                developers to check out and build Moving Pictures.
+
+--------------------------------------------------------------------------------
+Script and Translation Updates
+--------------------------------------------------------------------------------	                
+Issue #1098:    IMDb script will again correctly import PG-13 ratings.
+
+Issue #1074:    Updated Kinopoisk.ru script. Thanks to Vadim!
+                
+================================================================================
 1.3.1
 --------------------------------------------------------------------------------
 Bug Fixes
 --------------------------------------------------------------------------------
 **********:     Updated IMDb script to match site changes.
+
+Issue #979:     Movie Manager will now refresh after a title/sortby edit.
+
+Issue #700:     Changed article removal logic to delete the preceding article 
+                rather than move it to the end. Fixes sorting issues with movies 
+                like "matrix the" and "matrix revolutions the".
 
 ================================================================================
 1.3.0
