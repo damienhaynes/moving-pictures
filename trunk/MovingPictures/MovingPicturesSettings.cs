@@ -1229,7 +1229,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "If enabled, a menu item in the GUI will be available to trigger a full rescan of all import paths.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "gui_show_rescan_menuitem",
-            Default = false,
+            Default = true,
             Hidden = true)]
         public bool ShowRescanMenuItem {
             get { return _showRescanMenuItem; }
