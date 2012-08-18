@@ -2,7 +2,7 @@
   <details>
     <!-- These details are for display purposes only. -->
     <name>Kinopoisk.ru</name>
-    <author>LRFalk01, Others</author>
+    <author>LRFalk01, vnizzz(since 1.4.1)</author>
     <description>This script pulls data from Kinopoisk.ru.</description>
     
     <!-- 
@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141522</id>
-    <version major="1" minor="4" point="4"/>
-    <published month="12" day="30" year="2011"/>
+    <version major="1" minor="4" point="5"/>
+    <published month="1" day="17" year="2012"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -73,25 +73,19 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
       <![CDATA[
       (?<alternateTitle>[^.]*),\s[\d]
       ]]>
-    </set>
-
-	<set name="rx_site_id">
-      <![CDATA[
-      <p class="name"><a href="/level/1/film/(?<site_id>[\d]+)
-      ]]>
     </set>	
 
-	<set name="rx_site_id1">
+	<set name="rx_site_id">
       <![CDATA[
       id_film\s=\s(?<site_id>[^;]+)
       ]]>
     </set>	
 
-
 	
     <!-- Retrieve results using Title, that is main Retrieve to work then -->
      <retrieve name="home_page" url="http://www.kinopoisk.ru" retries="10" timeout="10000" timeout_increment="4000" /> 
-    <retrieve name="search_page" url="http://www.kinopoisk.ru/index.php?kp_query=${search.title:safe(windows-1251)}" retries="10" timeout="10000" timeout_increment="4000" />
+    <retrieve name="search_page" url="http://www.kinopoisk.ru/index.php?level=7&amp;from=forma&amp;result=adv&amp;m_act%5Bfrom%5D=forma&amp;m_act%5Bwhat%5D=content&amp;m_act%5Bfind%5D=${search.title:safe(windows-1251)}&amp;m_act%5Byear%5D=${search.year:safe}" retries="10" timeout="10000" timeout_increment="4000" />
+
 	
 	<!-- Check if it's Details Page  -->
 	<parse name="title" input="${search_page}" regex="${rx_title}"/>
@@ -99,7 +93,7 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
 	<if test="${title[0][0]:htmldecode}!=">
 		<set name="movie[0].title" value="${title[0][0]:htmldecode}" />
 		<!-- search for site_id-->
-		<parse name="site_id" input="${search_page}" regex="${rx_site_id1}"/>
+		<parse name="site_id" input="${search_page}" regex="${rx_site_id}"/>
 		<set name="movie[0].site_id" value="${site_id[0][0]}"/>
 		<set name="movie[0].details_url" value="http://www.kinopoisk.ru/level/1/film/${site_id[0][0]}"/>
 		<parse name="year" input="${search_page}" regex="${rx_year1}"/>
@@ -214,7 +208,7 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
 
     <set name="rx_score_votes">
       <![CDATA[
-	  93% rep[^>]+>\s*<span>(?<MovieScore>[\d.]+)</span>\s*<span [^>]+>&nbsp;&nbsp;(?<movieVotes>[\d]+)
+	  93% rep[^>]+>\s*<span>(?<MovieScore>[\d.]+)[^>]+>[^>]+>&nbsp;&nbsp;(?<movieVotes>[\d]+)
       ]]>
     </set>
 	
@@ -274,7 +268,7 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
 
 	<set name="rx_description">
       <![CDATA[
-      <tr><td\scolspan=3[^c]+class="news">\n\s+<span[^>]+><[^>]+>(?<summery>.+?)</div>
+      <tr><td\scolspan=3[^c]+class="news">\n\s+<span[^>]+>(?:<div[^>]+>)?(?<summery>.+?)(?:</div>)?</span>
       ]]>
     </set>
 	
