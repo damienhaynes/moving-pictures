@@ -52,7 +52,7 @@ namespace Cornerstone.Database.CustomTypes {
         }
 
         public string ToPrettyString(int max) {
-            if (this.Count == 0)
+            if (this.Count == 0 || max <= 0)
                 return "";
 
             StringBuilder prettyStr = new StringBuilder("");
