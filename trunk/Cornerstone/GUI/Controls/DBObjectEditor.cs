@@ -13,6 +13,8 @@ using Cornerstone.GUI.DesignMode;
 namespace Cornerstone.GUI.Controls {
     [Designer(typeof(DBObjectListDesigner))]
     public class DBObjectEditor : UserControl, IFieldDisplaySettingsOwner {
+        
+        public event FieldChangedListener FieldChanged;
 
         #region Private Variables
 
@@ -51,7 +53,7 @@ namespace Cornerstone.GUI.Controls {
             }
             set {
                 _dbObject = value;
-                repopulateValues();
+                RepopulateValues();
             }
         } private DatabaseTable _dbObject = null;
 
@@ -97,22 +99,23 @@ namespace Cornerstone.GUI.Controls {
                 valueCell.Table = FieldDisplaySettings.Table;
                 valueCell.DatabaseFieldName = properties.FieldName;
                 valueCell.DatabaseObject = DatabaseObject;
+                valueCell.FieldChanged += new FieldChangedListener(OnFieldChanged);
                 currRow.Cells["valueColumn"] = (DataGridViewCell)valueCell;
 
                 currRow.Cells["fieldColumn"].Value = properties.DisplayName;
             }
         }
 
-        #region Private Methods
 
-        private void repopulateValues() {
+        public void RepopulateValues() {
             foreach (DataGridViewRow currRow in grid.Rows) {
-                DBField currField = (DBField)currRow.Tag;
                 ((IDBBackedControl)currRow.Cells["valueColumn"]).DatabaseObject = DatabaseObject;
             }
 
             grid.AutoResizeRows();
         }
+
+        #region Private Methods
 
         private void InitializeComponent() {
             this.grid = new System.Windows.Forms.DataGridView();
@@ -156,6 +159,10 @@ namespace Cornerstone.GUI.Controls {
             ((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
             this.ResumeLayout(false);
 
+        }
+
+        private void OnFieldChanged(DatabaseTable obj, DBField field, object value) {
+            if (FieldChanged != null) FieldChanged(obj, field, value);
         }
 
         #endregion

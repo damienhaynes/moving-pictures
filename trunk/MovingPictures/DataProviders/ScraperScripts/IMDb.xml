@@ -14,7 +14,7 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="2" minor="1" point="8" />
+    <version major="2" minor="2" point="1" />
     <published month="8" day="18" year="2012" />
     
     <!--
@@ -177,60 +177,60 @@
 
       <set name="rx_directors_block">
 	<![CDATA[
-	<h5>Director[s]?:</h5>(?<directors_block>.*?)</div>|Director[s]?:\s*</h4>[^<]*(?<directors_block>.*?)</div>
+	<h4 [^>]+>\s+Director[s]?:.*?</div>
 	]]>
       </set>
 
       <set name="rx_directors">
 	<![CDATA[
-	<a\s+href="/name/nm\d{7}/"[^>]*>(?<movieDirectors>[^<]+)</a>
+	<a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
 	]]>
       </set>
 
       <set name="rx_writers_block">
 	<![CDATA[
-	<h5>Writer[s]?.*?<div class="info-content">.*?(?<writers_block>.*?)</div>|Writer[s]?:\s*</h4>[^<]*(?<writers_block>.*?)</div>
+	<h4 [^>]+>\s+Writer[s]?:.*?</div>
 	]]>
       </set>
 
       <set name="rx_writers">
 	<![CDATA[
-	<a\s+href="/name/nm\d{7}/"[^>]*>(?<movieWriters>[^<]+)</a>
+	<a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
 	]]>
       </set>
 
       <set name="rx_actors_block">
 	<![CDATA[
-	<div class="headerinline"><h3>Cast</h3>(?<cast_block>.+?)<h3>Additional Details</h3>|<h2>Cast</h2>(?<cast_block>.+?)<h2>Details</h2>
+	<table\s+class\s*?=\s*?"cast_list">.+?</table>
 	]]>
       </set>
 
       <set name="rx_actors">
 	<![CDATA[
-	<td[^<]*<a\s+href="/name/nm\d{7}/"[^>]*>(?<movieActors>[^<]*)</a>
+	<a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
 	]]>
       </set>
 
       <set name="rx_genres_block">
 	<![CDATA[
-	<h5>Genre:</h5>(?<genres_block>.+?)</div>|Genre[s]?:[^<]*</h4>(?<genres_block>.+?)</div>
+	<h4 [^>]+>\s*?Genre[s]?:.*?</div>
 	]]>
       </set>
 
       <set name="rx_genres">
 	<![CDATA[
-	<a href="(?:/Sections)?/[Gg]enre[s]?/[^/]+/?">(?<movieGenres>.+?)</a>
+	<a[^<]+?href\s*?=\s*?"/[g|G]enre/[^<].+?>([^<]+)</a>
 	]]>
       </set>
 
       <set name="rx_studios_block">
 	<![CDATA[
-	<h4 class="inline">Production Co:</h4>(?<movieStudios>(?:[^<]*<a\s*href="[^"]+">[^<]+</a>)*)
+	<h4 [^>]+>\s*?Production Co:.*?</div>
 	]]>
       </set>
       <set name="rx_studios">
 	<![CDATA[
-	<a\s*href="[^"]+">(?<movieStudios>[^<]+)</a>
+	<a[^<]*?href=./company/[^>]+>([^<]+)</a>
 	]]>
       </set>
 
@@ -272,7 +272,7 @@
 
       <set name="rx_language">
 	<![CDATA[
-	<a\shref=./Sections/Languages/[^/]+/?">\s*(?<movieLanguage>[^<]+)</a>|<a\shref=./language/[^>]+>(?<movieLanguage>[^<]+)</a>
+	<a[^<]*?href=./language/[^>]+>(?<movieLanguage>[^<]+)</a>
 	]]>
       </set>
 
