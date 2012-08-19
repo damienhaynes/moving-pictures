@@ -29,7 +29,8 @@ Enhancements
 --------------------------------------------------------------------------------
 Issue #392:     Added filtering to Movie Manager in configuration screen. This 
                 allows you to drill down to subsections of your collection or find
-                files missing artwork or information. Many thanks to damienh.
+                files that are missing artwork or other information. Many thanks 
+                to damienh.
                 
 Issue #1022:    Added the ability to display secondary information (in a second 
                 column) when in list view. By default the year can be displayed 
@@ -41,7 +42,7 @@ Issue #1077:    Added a new dynamic category to group by the first letter of the
                 be added to the GUI Categories via the Define Movie Categories button
                 on the GUI Settings tab of the config.
                 
-***********:    File names are now displayed on the main Movie Manager panel. 
+***********:    File names are now displayed on the main Movie Manager panel in config. 
                 This should help make mismatched files more obvious and easier to
                 find.
                 
@@ -59,14 +60,13 @@ Issue #859:     Added "View Movie Details" context menu item if "Click to Play"
                 view.
 
 Issue #1088:    Added a new Advanced Setting to remove articles from Display Title 
-                in GUI.                
-                
+                in GUI.                 
 
 --------------------------------------------------------------------------------
 Bug Fixes
 --------------------------------------------------------------------------------
-Issue #1073:    Fixed infinite artwork download bug (had to do with downloads with
-                no content-length in the header). Thanks to CyberFix for this patch!
+Issue #1073:    Fixed infinite artwork download bug (related to downloads missing
+                content-length in the header). Thanks to CyberFix for this patch!
 
 ***********:    Progress indicator for the importer will now correctly display as 
                 soon as import begins (previously for large network based collections
@@ -84,16 +84,13 @@ Issue #1079:    Fix an unhandled exception when pressing 'Play' on unavailable
 Issue #1084:    Fixed an unhandled exception tossed when stressing the search
                 system.
 
-Issue #1057:    Fixed DBLocalMedia.Get(string fullPath) method ignoring movies with
-                volume serial. Thanks shukuyen.
-                
 ***********:    Filtering system will now ignore leading and trailing whitespace
                 when trying to categorize a movie.
 
 Issue #1087:    When quickly scrolling through your collection, the "first letter"
-                popup will now display properly based on the users sort by settings.
-                i.e. "M" will show up instead of "T" for the Matrix if it is sorted
-                in that way.
+                popup will now display properly based on your "sort by" settings.
+                For example "M" will show up instead of "T" for "The Matrix" if it 
+                is sorted in that way.
                 
 Issue #1017:    Fixed issue with the GUI forgetting the last used view when not 
                 using categories.
@@ -103,7 +100,11 @@ Issue #1017:    Fixed issue with the GUI forgetting the last used view when not
                 set to 0).
                 
 ***********:    Fixed bug causing the rename dialog to remain empty when trying to 
-                rename.
+                rename. If you were having this problem check under the gear icon on
+                the popup now.
+
+Issue #1057:    Fixed DBLocalMedia.Get(string fullPath) method ignoring movies with
+                volume serial. Thanks shukuyen.
                 
 ***********:    Cleaned up some bugs with how some of our custom controls behave in 
                 the VS GUI editor. Only relevant to other plugin developers.
