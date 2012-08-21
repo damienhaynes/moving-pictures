@@ -102,6 +102,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         [SkinControl(19)]
         protected GUIButtonControl searchButton = null;
 
+        [SkinControl(20)]
+        protected GUIButtonControl scanNewMoviesButton = null;
+
         [SkinControl(5)]
         protected GUIButtonControl settingsButton = null;
 
@@ -491,6 +494,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
             }
 
+            // if user does not what scan button hide from gui
+            if (!MovingPicturesCore.Settings.ShowRescanMenuItem) {
+                if (scanNewMoviesButton != null) {
+                    scanNewMoviesButton.Visible = false;
+                    // work around for button not hiding from stacklayout
+                    GUIPropertyManager.SetProperty("#MovingPictures.ScanForNewMovies.Visible", "false");
+                }
+            }
+
             // if we were passed a parameter we cant parse, exit back
             if (MovieLoadParamater == null && CategoryLoadParamater == null && SearchModeLoadParameter == null && !string.IsNullOrEmpty(UnparsedLoadParameter)) {
                 logger.Warn("Moving Pictures can not understand the following paramater: " + UnparsedLoadParameter);
@@ -804,6 +816,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 case 19:
                     showSearchContext();
+                    browser.Focus();
+                    break;
+
+                case 20:
+                    MovingPicturesCore.Importer.RestartScanner();
                     browser.Focus();
                     break;
             }
