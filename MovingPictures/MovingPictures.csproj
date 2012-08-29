@@ -105,6 +105,7 @@
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -336,6 +337,8 @@
     <Compile Include="Database\DBWatchedHistory.cs" />
     <Compile Include="Database\LocalMediaListExtensions.cs" />
     <Compile Include="Database\TableUpdateInfoExtensions.cs" />
+    <Compile Include="DataProviders\FanartTV.cs" />
+    <Compile Include="DataProviders\FanartTVProvider.cs" />
     <Compile Include="Extensions\MovieTitleStringExtensions.cs" />
     <Compile Include="LocalMediaManagement\MovieRenamer\MovieRenamer.cs" />
     <Compile Include="LocalMediaManagement\MovieRenamer\Renamable.cs" />
