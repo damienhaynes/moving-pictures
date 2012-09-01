@@ -130,7 +130,7 @@ namespace Cornerstone.Database.Tables {
                         continue;
 
                     // if we have a string try to compare trimmed strings
-                    if (newValue.GetType() == typeof(string) && ((string)newValue).Trim() == ((string)oldValue).Trim())
+                    if (newValue.GetType() == typeof(string) && ((string)newValue ?? string.Empty).Trim() == ((string)oldValue ?? string.Empty).Trim())
                         continue;
 
                     // if the value just hasn't changed, dont update
@@ -140,10 +140,10 @@ namespace Cornerstone.Database.Tables {
                     // check if the old value is the default value
                     bool oldValueIsDefault = false;
                     if (oldValue is string && currField.Default is string) {
-                        if (((string)oldValue).Trim().Equals(((string)currField.Default).Trim()))
+                        if (((string)oldValue ?? string.Empty).Trim().Equals(((string)currField.Default).Trim()))
                             oldValueIsDefault = true;
                     }
-                    else if (oldValue.Equals(currField.Default))
+                    else if (oldValue == null || oldValue.Equals(currField.Default))
                         oldValueIsDefault = true;
                         
                     // if we are protecting non-default values continue
@@ -169,10 +169,10 @@ namespace Cornerstone.Database.Tables {
                 if (currField.Filterable && currField.AutoUpdate) {
                     // check if the old value is the default value
                     if (oldValue is string && currField.Default is string) {
-                        if (((string)oldValue).Trim().Equals(((string)currField.Default).Trim()))
+                        if (((string)oldValue ?? string.Empty).Trim().Equals(((string)currField.Default).Trim()))
                             return false;
                     }
-                    else if (oldValue.Equals(currField.Default))
+                    else if (oldValue == null || oldValue.Equals(currField.Default))
                         return false;
                 }
             }
