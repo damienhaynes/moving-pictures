@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
+using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Tools.Translate;
 using NLog;
@@ -425,21 +427,21 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private bool _enableIMDBLookup;
 
-
-        [CornerstoneSetting(
-            Name = "Enable TheMovieDb.org Hash Lookup",
-            Description = "Enables pre-search lookup for title, year and imdbid by using the hash/movie match.",
-            Groups = "|Movie Importer|Preprocessing|",
-            Identifier = "importer_lookup_hash",
-            Default = false)]
-        public bool EnableHashLookup {
-            get { return _enableHashLookup; }
-            set {
-                _enableHashLookup = value;
-                OnSettingChanged("importer_lookup_hash");
-            }
-        }
-        private bool _enableHashLookup;
+        // TheMovieDb v3 API does not support File Hashes
+        //[CornerstoneSetting(
+        //    Name = "Enable TheMovieDb.org Hash Lookup",
+        //    Description = "Enables pre-search lookup for title, year and imdbid by using the hash/movie match.",
+        //    Groups = "|Movie Importer|Preprocessing|",
+        //    Identifier = "importer_lookup_hash",
+        //    Default = false)]
+        //public bool EnableHashLookup {
+        //    get { return _enableHashLookup; }
+        //    set {
+        //        _enableHashLookup = value;
+        //        OnSettingChanged("importer_lookup_hash");
+        //    }
+        //}
+        //private bool _enableHashLookup;
 
         #endregion
 
@@ -882,7 +884,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
-        #region themoviedb.org
+        #region Timeouts
 
         [CornerstoneSetting(
             Name = "Max Timeouts",
@@ -902,7 +904,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Timeout Length",
-            Description = "The base length of time (in milliseconds) for a timeout when connecting to themoviedb.org data service.",
+            Description = "The base length of time (in milliseconds) for a timeout when connecting to a data service.",
             Groups = "|Movie Importer|Network Timeout Settings|",
             Identifier = "tmdb_timeout_length",
             Default = 5000)]
@@ -966,6 +968,23 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private string _dataProviderAutoLanguage;
+
+        public string DataProviderLanguageCode {
+            get {
+                // if we use auto method, get language code selected
+                if (_dataProviderManagementMethod != "manual") {
+                    return _dataProviderAutoLanguage.ToLowerInvariant();
+                }
+                // if manual, get language chosen in MediaPortal
+                try {
+                    string langCode = GUILocalizeStrings.GetCultureName(GUILocalizeStrings.CurrentLanguage());
+                    return CultureInfo.GetCultureInfo(langCode).TwoLetterISOLanguageName;
+                }
+                catch {
+                    return "en";
+                }
+            }
+        }
 
         [CornerstoneSetting(
             Name = "Use Translator Service",
@@ -1039,6 +1058,58 @@ namespace MediaPortal.Plugins.MovingPictures {
                 TranslationLanguageStr = LanguageUtility.ToString(value);
             }
         } private TranslatorLanguage? _translationLanguage = null;
+
+        #endregion
+
+        #region TheMovieDb
+
+        [CornerstoneSetting(
+            Name = "Date/Time of last check for TheMovieDb configuration",
+            Description = "The MovieDb API v3 configuration object stores the base url of movie images, this should be periodically checked to ensure we have the correct path",
+            Groups = "|Movie Importer|TheMovieDb Settings|",
+            Identifier = "tmdb_config_lastcheck",
+            Default = "2012-01-01",
+            Hidden = true)]
+        public string TMDbConfigLastCheck {
+            get { return _tmdbConfigLastCheck; }
+            set {
+                _tmdbConfigLastCheck = value;
+                OnSettingChanged("tmdb_config_lastcheck");
+            }
+        }
+        private string _tmdbConfigLastCheck;
+
+        [CornerstoneSetting(
+            Name = "Period check of TheMovieDb configuration",
+            Description = "The number of days between each check of TheMovieDb configuration details",
+            Groups = "|Movie Importer|TheMovieDb Settings|",
+            Identifier = "tmdb_config_period",
+            Default = 7,
+            Hidden = true)]
+        public int TMDbConfigPeriod {
+            get { return tmdb_config_period; }
+            set {
+                tmdb_config_period = value;
+                OnSettingChanged("tmdb_config_period");
+            }
+        }
+        private int tmdb_config_period;
+
+        [CornerstoneSetting(
+            Name = "Base Url of TheMovieDb images",
+            Description = "This setting stores the Base Url for Movie images from MovieDb API",
+            Groups = "|Movie Importer|TheMovieDb Settings|",
+            Identifier = "tmdb_base_url",
+            Default = "http://cf2.imgobject.com/t/p/original",
+            Hidden = true)]
+        public string TMDbImageBaseUrl {
+            get { return tmdb_base_url; }
+            set {
+                tmdb_base_url = value;
+                OnSettingChanged("tmdb_base_url");
+            }
+        }
+        private string tmdb_base_url;
 
         #endregion
 

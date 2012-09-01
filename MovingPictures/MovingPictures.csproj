@@ -339,6 +339,7 @@
     <Compile Include="Database\TableUpdateInfoExtensions.cs" />
     <Compile Include="DataProviders\FanartTV.cs" />
     <Compile Include="DataProviders\FanartTVProvider.cs" />
+    <Compile Include="DataProviders\TheMovieDbAPI.cs" />
     <Compile Include="Extensions\MovieTitleStringExtensions.cs" />
     <Compile Include="LocalMediaManagement\MovieRenamer\MovieRenamer.cs" />
     <Compile Include="LocalMediaManagement\MovieRenamer\Renamable.cs" />
