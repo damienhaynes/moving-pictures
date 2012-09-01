@@ -102,6 +102,11 @@ namespace Cornerstone.Tools {
             set { _allowUnsafeHeader = value; }
         } private bool _allowUnsafeHeader = false;
 
+        public string Accept {
+            get { return _accept; }
+            set { _accept = value; }
+        } private string _accept;
+
         #endregion
 
         #region Public methods
@@ -120,6 +125,7 @@ namespace Cornerstone.Tools {
                 request.Proxy.Credentials = CredentialCache.DefaultCredentials;
                 request.UserAgent = userAgent;
                 request.Method = _method;
+                request.Accept = _accept;
                 request.CookieContainer = new CookieContainer();
 
                 while (!completed) {
