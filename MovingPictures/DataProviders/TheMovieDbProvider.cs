@@ -117,7 +117,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 langPosters = langPosters.Union(movieArtwork.Posters.Where(p => p.LanguageCode == null));
             }
             // if no localised posters available use all posters
-            else if (langPosters.Count() == 0 && MovingPicturesCore.Settings.DataProviderLanguageCode != "en") {
+            if (langPosters.Count() == 0) {
                 langPosters = movieArtwork.Posters;
             }
 
