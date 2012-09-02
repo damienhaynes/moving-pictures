@@ -66,6 +66,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movieArtwork == null || movieArtwork.Backdrops == null)
                 return false;
 
+            // sort by highest rated / most popular
+            var backdrops = movieArtwork.Backdrops.OrderByDescending(p => p.Score);
+
             // get the base url for images
             string baseImageUrl = getImageBaseUrl();
             if (string.IsNullOrEmpty(baseImageUrl))
@@ -73,7 +76,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // moving pics currently only supports 1 backdrop per movie
             // the first one is the highest rated / most popular
-            string backdropURL = baseImageUrl + movieArtwork.Backdrops.First().FilePath;
+            string backdropURL = baseImageUrl + backdrops.First().FilePath;
             if (backdropURL.Trim().Length > 0) {
                 if (movie.AddBackdropFromURL(backdropURL) == ImageLoadResults.SUCCESS) {
                     movie.GetSourceMovieInfo(SourceInfo).Identifier = tmdbID;
@@ -121,8 +124,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 langPosters = movieArtwork.Posters;
             }
 
+            // sort by highest rated / most popular
+            langPosters = langPosters.OrderByDescending(p => p.Score);
+
             // download posters
-            // sorted by highest rated / most popular
             foreach (var poster in langPosters) {
                 // if we have hit our limit quit
                 if (movie.AlternateCovers.Count >= maxCovers || coversAdded >= maxCoversInSession)
