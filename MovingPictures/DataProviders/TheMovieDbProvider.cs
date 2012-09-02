@@ -63,7 +63,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // try to get movie artwork
             var movieArtwork = TheMovieDbAPI.GetMovieImages(tmdbID);
-            if (movieArtwork == null || movieArtwork.Backdrops == null)
+            if (movieArtwork == null || movieArtwork.Backdrops == null || movieArtwork.Backdrops.Count == 0)
                 return false;
 
             // sort by highest rated / most popular
@@ -100,7 +100,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             // try to get movie artwork
             var movieArtwork = TheMovieDbAPI.GetMovieImages(tmdbID);
-            if (movieArtwork == null || movieArtwork.Posters == null)
+            if (movieArtwork == null || movieArtwork.Posters == null || movieArtwork.Posters.Count == 0)
                 return false;
 
             // grab coverart loading settings
