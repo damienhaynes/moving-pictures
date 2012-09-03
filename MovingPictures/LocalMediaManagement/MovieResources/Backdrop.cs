@@ -54,13 +54,13 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
                     logger.Info("Added backdrop for \"{0}\" from: {1}", movie.Title, url);
                     break;
                 case ImageLoadResults.SUCCESS_REDUCED_SIZE:
-                    logger.Debug("Added resized backdrop for \"{0}\" from: {1}", movie.Title, url);
+                    logger.Info("Added resized backdrop for \"{0}\" from: {1}", movie.Title, url);
                     break;
                 case ImageLoadResults.FAILED_ALREADY_LOADED:
                     logger.Debug("Backdrop for \"{0}\" from the following URL is already loaded: {1}", movie.Title, url);
                     return null;
                 case ImageLoadResults.FAILED_TOO_SMALL:
-                    logger.Error("Downloaded backdrop for \"{0}\" failed minimum resolution requirements: {1}", movie.Title, url);
+                    logger.Debug("Downloaded backdrop for \"{0}\" failed minimum resolution requirements: {1}", movie.Title, url);
                     return null;
                 case ImageLoadResults.FAILED:
                     logger.Error("Failed downloading backdrop for \"{0}\": {1}", movie.Title, url);
