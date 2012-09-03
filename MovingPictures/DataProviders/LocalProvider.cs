@@ -256,7 +256,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return match.Value;
             }
 
-            return field.GetValue(movie).ToString();
+            return (field.GetValue(movie) ?? string.Empty).ToString();
         }
 
         // based on the filename list, returns the first file in the folder, otherwise null
