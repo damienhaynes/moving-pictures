@@ -39,11 +39,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public string Language {
-            get { return new CultureInfo("en").DisplayName; }
+            get { return string.Empty; }
         }
 
         public string LanguageCode {
-            get { return "en"; }
+            get { return string.Empty; }
         }
 
         public bool ProvidesMoviesDetails {
