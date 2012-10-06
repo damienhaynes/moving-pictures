@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+This file should contain the list view
+-->
+<window>
+  <controls>    
+    <control>
+      <description>Cover Art</description>
+      <type>image</type>
+      <id>60</id>
+      <posX>31</posX>
+      <posY>254</posY>
+      <width>257</width>
+      <height>380</height>
+      <texture>#MovingPictures.Coverart</texture>
+      <visible>facadeview.list+control.isvisible(50)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Cover Art Glass Overlay</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>31</posX>
+      <posY>254</posY>
+      <width>228</width>
+      <height>177</height>
+      <texture>glassoverlay2.png</texture>
+      <visible>facadeview.list+control.isvisible(50)+Control.HasThumb(60)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Watched Icon Background</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>256</posX>
+      <posY>284</posY>
+      <width>32</width>
+      <height>39</height>
+      <texture>overlaywubg.png</texture>
+      <visible>facadeview.list+control.isvisible(50)+Control.HasThumb(60)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Watched Icon</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>263</posX>
+      <posY>287</posY>
+      <width>24</width>
+      <height>24</height>
+      <texture>overlaywatched.png</texture>
+      <visible>facadeview.list+control.isvisible(50)+control.isvisible(9)+Control.HasThumb(60)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Un-Watched Icon</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>263</posX>
+      <posY>287</posY>
+      <width>24</width>
+      <height>24</height>
+      <texture>overlayunwatched.png</texture>
+      <visible>facadeview.list+control.isvisible(50)+!control.isvisible(9)+Control.HasThumb(60)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>    
+    <control>
+      <description>Movie Title</description>
+      <type>label</type>
+      <id>0</id>
+      <posX>308</posX>
+      <posY>247</posY>
+      <width>900</width>
+      <font>font14</font>
+      <label>#MovingPictures.SelectedMovie.title</label>
+      <textcolor>ffFFFFFF</textcolor>
+			<shadowAngle>45</shadowAngle>
+      <shadowDistance>4</shadowDistance>
+      <shadowColor>#shadow.light</shadowColor>
+      <visible>facadeview.list+control.isvisible(50)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Genres</description>
+      <type>label</type>
+      <label>#MovingPictures.SelectedMovie.genres</label>
+      <id>0</id>
+      <posX>309</posX>
+      <posY>277</posY>
+      <width>900</width>
+      <font>font12</font>
+      <textcolor>ffa9d0f7</textcolor>
+      <shadowAngle>45</shadowAngle>
+      <shadowDistance>3</shadowDistance>
+      <shadowColor>#shadow.dark</shadowColor>
+      <visible>facadeview.list+control.isvisible(50)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <id>0</id>
+      <type>label</type>
+      <label>#MovingPictures.SelectedMovie.score.localized / 10</label>
+      <posX>430</posX>
+      <posY>305</posY>
+      <width>200</width>
+      <align>left</align>
+      <font>font10</font>
+			<textcolor>ffFFFFFF</textcolor>
+      <shadowAngle>45</shadowAngle>
+      <shadowDistance>2</shadowDistance>
+      <shadowColor>#shadow.light</shadowColor>
+      <visible>facadeview.list+control.isvisible(50)+!string.equals(#MovingPictures.SelectedMovie.score.rounded,)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <type>image</type>
+      <id>101</id>
+      <width>115</width>
+      <height>22</height>
+      <posX>309</posX>
+      <posY>307</posY>
+      <align>right</align>
+      <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
+      <visible>facadeview.list+control.isvisible(50)+!string.equals(#MovingPictures.SelectedMovie.score.rounded,)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Summary</description>
+      <type>textboxscrollup</type>
+      <id>0</id>
+      <posX>308</posX>
+      <posY>338</posY>
+      <width>475</width>
+      <height>210</height>
+      <textcolor>ffFFFFFF</textcolor>
+      <font>font11</font>
+      <label>#MovingPictures.SelectedMovie.summary</label>
+      <visible>facadeview.list+control.isvisible(50)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>        
+    <control>
+      <description>Certification Label</description>
+      <id>0</id>
+      <type>label</type>
+      <label>#MovingPictures.Translation.Certification.Label</label>
+      <posX>310</posX>
+      <posY>564</posY>
+      <width>140</width>
+			<font>font10</font>
+			<textcolor>ffa9d0f7</textcolor>
+      <visible>facadeview.list+control.isvisible(50)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Certification</description>
+      <id>1001</id>
+      <type>label</type>
+      <label>#(iif(neq(#MovingPictures.SelectedMovie.certification,''),#MovingPictures.SelectedMovie.certification,'N/A'))</label>
+      <posX>470</posX>
+      <posY>564</posY>
+      <width>200</width>
+			<font>font10</font>
+			<textcolor>ffFFFFFF</textcolor>
+      <visible>facadeview.list+control.isvisible(50)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>    
+    <control>
+      <description>Runtime Label</description>
+      <id>0</id>
+      <type>label</type>
+      <label>#MovingPictures.Translation.Runtime.Label</label>
+      <posX>310</posX>
+      <posY>588</posY>
+      <width>140</width>
+			<font>font10</font>
+			<textcolor>ffa9d0f7</textcolor>
+      <visible>facadeview.list+control.isvisible(50)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Runtime</description>
+      <id>1002</id>
+      <type>label</type>
+      <label>#(iif(neq(#MovingPictures.SelectedMovie.extra.runtime.en.pretty,''),#MovingPictures.SelectedMovie.extra.runtime.en.pretty,'N/A'))</label>
+      <posX>470</posX>
+      <posY>588</posY>
+      <width>250</width>
+			<font>font10</font>
+			<textcolor>ffFFFFFF</textcolor>
+      <visible>facadeview.list+control.isvisible(50)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>        
+    <control>
+      <description>Year Label</description>
+      <type>label</type>
+      <label>#MovingPictures.Translation.Year.Label</label>
+      <posX>310</posX>
+      <posY>613</posY>
+      <width>140</width>
+			<font>font10</font>
+			<textcolor>ffa9d0f7</textcolor>
+      <visible>facadeview.list+control.isvisible(50)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Year</description>
+      <id>1003</id>
+      <type>label</type>
+      <label>#(iif(neq(#MovingPictures.SelectedMovie.year,''),#MovingPictures.SelectedMovie.year,'N/A'))</label>
+      <posX>470</posX>
+      <posY>613</posY>
+			<font>font10</font>
+			<textcolor>ffFFFFFF</textcolor>
+      <visible>facadeview.list+control.isvisible(50)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>    
+  </controls>
+</window>
