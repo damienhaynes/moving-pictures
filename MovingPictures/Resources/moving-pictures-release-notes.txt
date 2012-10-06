@@ -55,6 +55,15 @@ Issue #95:      You can now review previously ignored files and unignore them
 Issue #1080:    Added "ctrl-a" key binding to select all movies in the Movie 
                 Mananager.
                 
+***********:    Skin designers can now add a button that triggers a scan for new 
+                movies. Button ID #20. See wiki for more information.
+                http://moving-pictures.tv/wiki/Skin_Designer%27s_Guide
+
+***********:    New backdrop provider from http://fanart.tv.            
+
+***********:    Updated TMDb provider to version 3 of the API. This includes 
+                localized retrieval.                
+                
 Issue #859:     Added "View Movie Details" context menu item if "Click to Play" 
                 is enabled in GUI Options. This is so ALL users can access details 
                 view.
@@ -103,6 +112,8 @@ Issue #1017:    Fixed issue with the GUI forgetting the last used view when not
                 rename. If you were having this problem check under the gear icon on
                 the popup now.
 
+***********:    Hidden menu in default skin can now gain focus from the mouse.
+                
 Issue #1057:    Fixed DBLocalMedia.Get(string fullPath) method ignoring movies with
                 volume serial. Thanks shukuyen.
                 

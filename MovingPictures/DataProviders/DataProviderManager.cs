@@ -346,6 +346,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(LocalProvider));
             AddSource(typeof(ScriptableProvider), Resources.Script_IMDb);
             AddSource(typeof(TheMovieDbProvider));
+            AddSource(typeof(FanartTVProvider));
             AddSource(typeof(MovieMeterProvider));
             AddSource(typeof(ScriptableProvider), Resources.Script_OFDb);
             AddSource(typeof(ScriptableProvider), Resources.Script_MovieMaze);
@@ -366,7 +367,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(ScriptableProvider), Resources.Script_kvikmyndir);
             AddSource(typeof(ScriptableProvider), Resources.Script_EmberMediaManager);            
             AddSource(typeof(MyVideosProvider));
-            AddSource(typeof(FanartTVProvider));
 
             // remove the impawards script (requested by site owner)
             DBSourceInfo impSource = DBSourceInfo.GetFromScriptID(874903);
