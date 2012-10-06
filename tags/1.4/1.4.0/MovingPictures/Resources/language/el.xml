@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Moving Pictures translation file -->
+<!-- Greek (EL) Last Updated: 18th Oct 2010-->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">Ηθοποιός</string>
+  <string Field="Actors">Ηθοποιοί</string>
+  <string Field="AllMovies">Όλες οι ταινίες</string>
+  <!-- C -->
+  <string Field="Cancel">Άκυρο</string>
+  <string Field="CannotDeleteOffline">Αδύνατη η διαγραφή του {0}\n επειδή το αρχείο είναι εκτός σύνδεσης</string>
+  <string Field="CannotDeleteReadOnly">Αδύνατη η διαγραφή μιας "μόνο για ανάγνωση" ταινίας.\nΘέλετε το Moving Pictures να την αγνοήσει;</string>
+  <string Field="CategoryEmptyDescription">Δεν υπάρχουν ταινίες\nσε αυτή την κατηγορία.</string>
+  <string Field="CategoryEmptyHeader">Αυτή η κατηγορία είναι κενή</string>
+  <string Field="Certification">Καταλληλότητα</string>
+  <string Field="ChangeView">Αλλαγή προβολής</string>
+  <string Field="CheckForMissingArtwork">Έλεγχος για ελλιπή Artwork στο διαδίκτυο</string>
+  <string Field="ContinueToNextPartBody">Θέλετε να συνεχίσετε με το μέρος {0};</string>
+  <string Field="ContinueToNextPartHeader">Συνέχεια στο επόμενο μέρος;</string>
+  <string Field="CycleCoverArt">Αλλαγή Cover-Art</string>
+  <string Field="CycleView">Αλλαγή προβολής</string>
+  <!-- D -->
+  <string Field="DateAdded">Ημερομηνία που προστέθηκε</string>
+  <string Field="DateDay">ημέρα</string>
+  <string Field="DateDays">ημέρες</string>
+  <string Field="DateMonth">μήνας</string>
+  <string Field="DateMonths">μήνες</string>
+  <string Field="DatePartAgo">Πριν {0} {1}</string>
+  <string Field="DatePartWithinDays">Τελευταίες {0} ημέρες</string>
+  <string Field="DatePartWithinMonths">Τελευταίοι {0} μήνες</string>
+  <string Field="DatePartWithinWeeks">Τελευταίες {0} εβδομάδες</string>
+  <string Field="DatePartWithinYears">Τελευταία {0} έτη</string>
+  <string Field="DateWeek">εβδομάδα</string>
+  <string Field="DateWeeks">εβδομάδες</string>
+  <string Field="DateYear">έτος</string>
+  <string Field="DateYears">έτη</string>
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="DeleteFailed">Αποτυχία διαγραφής</string>
+  <string Field="DeleteMovie">Διαγραφή ταινίας</string>
+  <string Field="Director">Σκηνοθέτης</string>
+  <string Field="Directors">Σκηνοθέτες</string>
+  <string Field="DownAbbreviation">(κάτω)</string>
+  <string Field="DoYouWantToDelete">Θέλετε να διαγράψετε μόνιμα το \n{0}\nαπό το σκληρό δίσκο;</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Νωρίτερα αυτό το έτος</string>
+  <string Field="Error">Σφάλμα</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">Αποτυχία προσάρτησης εικόνας DVD</string>
+  <string Field="FilePath">Μονοπάτι αρχείου</string>
+  <string Field="FilmstripView">Προβολή Filmstrip</string>
+  <string Field="FilterBy">Φιλτράρισμα κατά</string>
+  <string Field="Friday">Παρασκευή</string>
+  <string Field="Future">Μέλλον</string>
+  <!-- G -->
+  <string Field="Genre">Είδος</string>
+  <string Field="Genres">Είδη</string>
+  <!-- I -->
+  <string Field="InvalidPin">Μη έγκυρος κωδικός PIN!</string>
+  <string Field="InvalidVideoDiscFormat">Είτε η εικόνα δεν περιέχει\nέγκυρο φορμά βίντεο, είτε οι ρυθμίσεις του Daemon\nTools, στις ρυθμίσεις του MediaPortal, δεν είναι σωστές.</string>
+  <!-- L -->
+  <string Field="Language">Γλώσσα</string>
+  <string Field="LargeThumbnailView">Προβολή μεγάλων μικρογραφιών</string>
+  <string Field="LastMonth">Τελευταίο μήνα</string>
+  <string Field="LastWeek">Τελευταία εβδομάδα</string>
+  <string Field="LastYear">Τελευταίο έτος</string>
+  <string Field="ListView">Προβολή λίστας</string>
+  <string Field="LockRestrictedMovies">Κλείδωμα ακατάλληλων ταινιών</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Σημείωση ως μη προβληθείσας</string>
+  <string Field="MarkAsWatched">Σημείωση ως προβληθείσας</string>
+  <string Field="MediaIsMissing">Λείπει το μέσο για την ταινία που επιλέξατε!\nΛυπούμαστε...</string>
+  <string Field="MediaNotAvailableBody">Το μέσο για την ταινία που επιλέξατε \nδεν είναι διαθέσιμο. Εισάγετε ή συνδέστε το μέσο\nμε ετικέτα: {0}</string>
+  <string Field="MediaNotAvailableHeader">Το μέσο δεν είναι διαθέσιμο</string>
+  <string Field="MissingExternalPlayerExe">Η εφαρμογή για την αναπαραγωγή HD λείπει.\nΔιορθώστε το μονοπάτι της εφαρμογής.</string>
+  <string Field="Monday">Δευτέρα</string>
+  <string Field="Movie">Ταινία</string>
+  <string Field="MovieDetails">Λεπτομέρειες ταινίας</string>
+  <string Field="MovieOptions">Επιλογές ταινίας</string>
+  <string Field="Movies">Ταινίες</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">Δεν φαίνεται να έχετε\nορίσει μονοπάτι(α) εισαγωγής. Θα πρέπει\nνα κλείσετε το MediaPortal και να\nτρέξετε τις ρυθμίσεις του MediaPortal\nγια να\nρυθμίσετε το Moving Pictures.</string>
+  <string Field="NoImportPathsHeading">Κανένα μονοπάτι(α) εισαγωγής!</string>
+  <!-- O -->
+  <string Field="Older">Παλαιότερο</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Ο γονικός έλεγχος είναι απενεργοποιημένος.</string>
+  <string Field="PinCodeHeader">Ξεκλείδωμα ακατάλληλου περιεχομένου</string>
+  <string Field="PinCodePrompt">Εισάγετε τον κωδικό PIN για να συνεχίσετε:</string>
+  <string Field="PlaybackFailed">Η αναπαραγωγή δεν είναι δυνατή, επειδή η επέκταση'{0}'\nδεν υπάρχει στις ρυθμίσεις του mediaportal.\nΠροσθέστε την επέκταση\nκαι δοκιμάστε ξανά.</string>
+  <string Field="PlaybackFailedHeader">Αποτυχία αναπαραγωγής</string>
+  <string Field="ProblemLoadingSkinFile">Παρουσιάστηκε κάποιο πρόβλημα στη φόρτωση του θέματος</string>
+  <!-- R -->
+  <string Field="Rate">Αξιολόγηση</string>
+  <string Field="Rated">Αξιολογήθηκε ως</string>
+  <string Field="RateFiveStarFive">Τέλειο</string>
+  <string Field="RateFiveStarFour">Εξαιρετικό</string>
+  <string Field="RateFiveStarOne">Απαίσιο</string>
+  <string Field="RateFiveStarThree">Καλό</string>
+  <string Field="RateFiveStarTwo">Μέτριο</string>
+  <string Field="RateHeading">Βαθμολογία ταινίας</string>
+  <string Field="RecentlyAddedMovies">Πρόσφατες ταινίες</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">Συνέχεια από:</string>
+  <string Field="ResumeFromLast">Συνέχεια ταινίας από το τελευταίο σημείο;</string>
+  <string Field="Retry">Επανάληψη</string>
+  <string Field="Runtime">Διάρκεια</string>
+  <string Field="RuntimeHour">{0} ώρα</string>
+  <string Field="RuntimeHours">{0} ώρες</string>
+  <string Field="RuntimeLong">{0} και {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} και {2}</string>
+  <string Field="RuntimeMinute">{0} λεπτό</string>
+  <string Field="RuntimeMinutes">{0} λεπτά</string>
+  <string Field="RuntimeSecond">{0} δευτερόλεπτο</string>
+  <string Field="RuntimeSeconds">{0} δευτερόλεπτα</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}ω{1:00}λ{2:00}δ</string>
+  <!-- S -->
+  <string Field="Saturday">Σάββατο</string>
+  <string Field="Score">Βαθμολογία</string>
+  <string Field="SelectYourRating">Επιλέξτε την βαθμολογία σας για την {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">Προβολή μη προβληθέντων ταινιών</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Προβολή όλων</string>
+  <string Field="SkinDoesNotSupportCategories">Αυτό το θέμα δεν υποστηρίζει κατηγορίες.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Αυτό το θέμα δεν υποστηρίζει τη χρήση κωδικού Pin.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Αυτό το θέμα δεν υποστηρίζει τη δυνατότητα βαθμολόγησης.</string>
+  <string Field="SortBy">Ταξινόμηση κατά</string>
+  <string Field="SortDirection">Κατεύθυνση ταξινόμησης</string>
+  <string Field="StarRating">Αστέρια</string>
+  <string Field="Sunday">Κυριακή</string>
+  <!-- T -->
+  <string Field="ThisMonth">Αυτό το μήνα</string>
+  <string Field="ThisWeek">Αυτή την εβδομάδα</string>
+  <string Field="ThisYear">Αυτό το έτος</string>
+  <string Field="ThreeMonthsAgo">Πριν τρεις μήνες</string>
+  <string Field="ThreeWeeksAgo">Πριν τρεις εβδομάδες</string>
+  <string Field="ThumbnailView">Προβολή μικρογραφιών</string>
+  <string Field="Thursday">Πέμπτη</string>
+  <string Field="Title">Τίτλο</string>
+  <string Field="Today">Σήμερα</string>
+  <string Field="ToggleParentalLock">Ενεργοποίηση γονικού ελέγχου</string>
+  <string Field="Tuesday">Τρίτη</string>
+  <string Field="TwoMonthsAgo">Πριν δύο μήνες</string>
+  <string Field="TwoWeeksAgo">Πριν δύο εβδομάδες</string>
+  <!-- U -->
+  <string Field="Unknown">Άγνωστο</string>
+  <string Field="UnlockRestrictedMovies">Ξεκλείδωμα ακατάλληλων ταινιών</string>
+  <string Field="UnwatchedMovies">Μη προβληθείσες ταινίες</string>
+  <string Field="UpAbbreviation">(πάνω)</string>
+  <string Field="UpdateDetailsFromOnline">Ενημέρωση λεπτομερειών από το διαδύκτιο</string>
+  <string Field="UpdateMovieDetailsBody">Πρόκειται να ενημερώσετε τις λεπτομέρειες της ταινίας, \nδιαγράφοντας οποιεσδήποτε προσωπικές μεταβολές. Θέλετε\nνα συνεχίσετε;</string>
+  <string Field="UpdateMovieDetailsHeader">Ενημέρωση λεπτομερειών ταινίας</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Ο εικονικός οδηγός δεν είναι έτοιμος.</string>
+  <string Field="VirtualDriveMessage">Ο εικονικός οδηγός δεν είναι έτοιμος.\nΔοκιμάστε ξανά ή ακυρώστε την αναπαραγωγή.</string>
+  <string Field="Votes">ψήφοι</string>
+  <!-- W -->
+  <string Field="Wednesday">Τετάρτη</string>
+  <string Field="Writer">Σεναριογράφος</string>
+  <string Field="Writers">Σεναριογράφοι</string>
+  <!-- Y -->
+  <string Field="Year">Έτος</string>
+  <string Field="Yesterday">Χθες</string>
+</strings>

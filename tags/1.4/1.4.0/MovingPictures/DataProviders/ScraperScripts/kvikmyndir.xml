@@ -1,0 +1,405 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ScriptableScraper>
+  <details>
+    <!-- These details are for display purposes only. -->
+    <name>kvikmyndir.is</name>
+    <author>Kjartan Þór Guðmundsson (kjarrig)</author>
+    <description>This script pulls data from kvikmyndir.is.</description>
+    
+    <!-- 
+    These fields uniquely identify the script. The ID should never 
+    change and should be unique (no other script should use this ID). With
+    new versions of the script the version numbers should change. EVEN FOR 
+    MINOR CHANGES, you should change the version number if you are going to
+    disribute it to anyone but internal testers. The point number 
+    is for minor bug fix releases. Use it.
+    -->
+    <id>354001</id>
+    <version major="1" minor="3" point="04"></version>
+    <published month="12" day="30" year="2011"></published>
+    
+    <!--
+    These fields are used for categorization purposes. Seperate multiple 
+    types with a pipe | character.
+    -->
+    <type>MovieDetailsFetcher|MovieCoverFetcher</type>
+    <language>is</language>
+
+   </details>
+  
+  <action name="search">
+    
+    <set name="offset" value="0"></set>
+    
+    <!-- Regular Expressions -->
+    <set name="rx_details_page_block">
+      <![CDATA[
+      <title>.+?\((?:TV )?(?:Video )?\d{4}[\/IVX]*\).*?</title>.+</body>
+      ]]>
+    </set>
+
+    <set name="rx_title_year">
+      <![CDATA[
+      <title>(?:IMDb[\s-]*)?(.+?)\((?:TV )?(?:Video )?(\d{4})[\/IVX]*\).*?</title>
+      ]]>
+    </set>
+
+    <set name="rx_title_exact_match">
+      <![CDATA[
+      <p><b>Popular Titles</b> \(Displaying \d{2} Results\).*?<p><b>Titles \(Exact Matches\)</b>.*?>\d+\.<.*?><a href="/title/(tt\d{7})/".*?>(.+?)</a> \((\d{4})\)
+      ]]>
+    </set>
+
+    <set name="rx_search_results">
+      <![CDATA[
+      ><a href="/title/(tt\d{7})/"[^>]+>(?!&#34;)([^<]+)</a> \((\d{4})[\/IVX]*\)(?! \(VG\))(?:[^<].*?>(?=aka ")?(.+?)?</td>)?
+      ]]>
+    </set>
+
+    <set name="rx_aka_details">
+      <![CDATA[
+	<tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
+	]]>
+    </set>
+
+    <set name="rx_aka">
+      <![CDATA[
+	aka "(.+?)"
+	]]>
+    </set>
+
+    <!-- Retrieve result using IMDB id (if provided) -->
+    <if test="${search.imdb_id}!=">
+      <retrieve name="imdb_page" url="http://akas.imdb.com/find?s=tt;q=${search.imdb_id}"></retrieve>
+      <parse name="details_page_block" input="${imdb_page}" regex="${rx_details_page_block}"></parse>
+      <loop name="imdb_page" on="details_page_block">
+        <parse name="title_year" input="${imdb_page}" regex="${rx_title_year}"></parse>
+        <set name="movie[0].title" value="${title_year[0][0]:htmldecode}"></set>
+        <set name="movie[0].year" value="${title_year[0][1]:htmldecode}"></set>
+        <parse name="imdb" input="${imdb_page}" regex="(tt\d{7})/fullcredits"></parse>
+        <set name="movie[0].imdb_id" value="${imdb[0][0]}"></set>
+        <set name="movie[0].site_id" value="${imdb[0][0]}"></set>
+        <set name="movie[0].popularity" value="100"></set>
+        <set name="offset" value="1"></set>
+      </loop>
+    </if>
+
+    <!-- Retrieve other results using Title -->
+
+    <set name="query_year" value='' />
+    <if test='${search.year}>1800'>
+      <set name="query_year" value="+(${search.year})" />
+    </if>
+    <retrieve name="search_page" url="http://akas.imdb.com/find?s=tt;q=${search.title:safe(ISO-8859-1)}${query_year}"></retrieve>
+ 
+    <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
+    <parse name="details_page_block" input="${search_page}" regex="${rx_details_page_block}"></parse>
+    <loop name="details_page_verified" on="details_page_block">
+      <add name="counter" value1="${count}" value2="${offset}"></add>
+      <parse name="title_year" input="${details_page_verified}" regex="${rx_title_year}"></parse>
+      <set name="movie[${counter}].title" value="${title_year[0][0]:htmldecode}"></set>
+      <set name="movie[${counter}].year" value="${title_year[0][1]:htmldecode}"></set>
+      <parse name="imdb" input="${details_page_verified}" regex="(tt\d{7})/fullcredits"></parse>
+      <set name="movie[${counter}].imdb_id" value="${imdb[0][0]}"></set>
+      <set name="movie[${counter}].site_id" value="${imdb[0][0]}"></set>
+
+      <!-- AKA page -->
+      <retrieve name="aka_page" url="http://akas.imdb.com/title/${imdb[0][0]}/releaseinfo"></retrieve>
+      <parse name="akas" input="${aka_page}" regex="${rx_aka_details}"></parse>
+      <set name="movie[${counter}].alternate_titles" value=""></set>
+      <loop name="currAka" on="akas" limit="50">
+        <set name="movie[${counter}].alternate_titles" value="${movie[${counter}].alternate_titles}|${currAka[0]:htmldecode}"></set>
+      </loop>
+
+      <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"></subtract>
+    </loop>
+    
+    <!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop. -->
+    <parse name="search_results_block" input="${search_page}" regex='&lt;meta name="title" content="IMDb Title Search"&gt;.+&lt;/body&gt;'></parse>
+
+    <if test="${search_results_block}!=">
+        <!-- to prevent an exact title match from being burried by popular matches, lets grab the first exact title match result -->
+        <parse name="title_exact_match" input="${search_results_block}" regex="${rx_title_exact_match}"></parse>
+        <if test="${title_exact_match}!=">
+          <set name="movie[0].imdb_id" value="${title_exact_match[0][0]:htmldecode}"></set>
+          <set name="movie[0].site_id" value="${title_exact_match[0][0]:htmldecode}"></set>
+          <set name="movie[0].title" value="${title_exact_match[0][1]:htmldecode}"></set>
+          <set name="movie[0].year" value="${title_exact_match[0][2]:htmldecode}"></set>
+          <set name="movie[0].popularity" value="100"></set>
+          <set name="offset" value="1"></set>
+        </if>
+
+        <!-- process the rest of the search page and obtain all the popular results -->
+        <loop name="search_results_verified" on="search_results_block">
+                <parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}"></parse>
+                <loop name="curr_details" on="movie_details">
+                        <add name="counter" value1="${count}" value2="${offset}"></add>
+                        <set name="movie[${counter}].imdb_id" value="${curr_details[0]:htmldecode}"></set>
+                        <set name="movie[${counter}].site_id" value="${curr_details[0]:htmldecode}"></set>
+                        <set name="movie[${counter}].title" value="${curr_details[1]:htmldecode}"></set>
+
+                        <parse name="akas" input="${curr_details[4]:htmldecode}" regex="${rx_aka}"></parse>
+                        <set name="movie[${counter}].alternate_titles" value=""></set>
+                        <loop name="currAka" on="akas">
+                                <set name="movie[${counter}].alternate_titles" value="${movie[${counter}].alternate_titles}|${currAka[0]}"></set>
+                        </loop>
+
+                        <set name="movie[${counter}].year" value="${curr_details[2]:htmldecode}"></set>
+                        <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"></subtract>
+                </loop>
+        </loop>
+    </if>
+  </action>
+
+
+  <action name="get_details">
+
+    <!-- if the site id is not set try to set it using the imdb id -->
+    <if test="${movie.site_id}=">
+      <if test="${movie.imdb_id}!=">
+        <set name="movie.site_id" value="${movie.imdb_id}"></set>
+      </if>
+    </if>
+    
+    <!-- Setja kvikmyndir.is ID í breytu -->
+    <set name="kvikmyndir.movie_id" value="${movie.imdb_id}"></set>
+    <replace name="kvikmyndir.movie_id" input="${movie.imdb_id}" pattern="tt" with="?id="></replace>
+    <set name="kvikmyndir.movie_id" value="${kvikmyndir.movie_id}"></set>
+    <set name="kvikmyndir.site_id" value="${kvikmyndir.movie_id}"></set>
+    
+    <!-- if we have a site id (imdb id) we can continue -->
+    <if test="${movie.site_id}!=">
+
+      <set name="site" value="http://akas.imdb.com/title/${movie.site_id}"></set>
+      <retrieve name="details_page" url="${site}"></retrieve>
+
+      <set name="rx_title_year">
+	  <![CDATA[
+	  <title>(?:IMDb[\s-]*)?(?<movieTitle>[^\(]+?)\s?\((?:TV )?(?:Video )?(?<movieYear>\d{4})[\/IVX]*\).*?</title>
+	  ]]>
+      </set>
+      
+      <set name="rx_aka">
+        <![CDATA[
+      <tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
+       ]]>
+      </set>
+
+      <set name="rx_tagline">
+        <![CDATA[
+      <h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)
+       ]]>
+      </set>
+      
+      <set name="rx_language">
+        <![CDATA[
+      <a\shref=./Sections/Languages/[^/]+/">\s*([^<]+)</a>
+      ]]>
+      </set>
+
+      <set name="rx_certificate">
+        <![CDATA[
+      <certificate>\s*(.+?)</certificate>
+      ]]>
+      </set>
+
+      <set name="rx_plot">
+        <![CDATA[
+      <plot>\s*(.+?)</plot>
+      ]]>
+      </set>
+
+      <set name="rx_plot_imbd">
+        <![CDATA[
+      <p class="plotpar">\s*(.+?)<i>.*?</i>.*?</p>
+      ]]>
+      </set>
+
+      <set name="rx_plot2">
+        <![CDATA[
+      <h5>Plot:</h5>\s+(.+?)(?: \| )?<a
+      ]]>
+      </set>
+
+      <set name="rx_writers_block">
+        <![CDATA[
+        <h5>Writer[s]?.*?<div class="info-content">.*?(.*?)</div>
+        ]]>
+      </set>
+
+      <set name="movie.imdb_id" value="${movie.site_id}"></set>
+
+      <!-- Title and Year -->
+      <parse name="title_year" input="${details_page}" regex="${rx_title_year}"></parse>
+      <set name="movie.title" value="${title_year[0][0]:htmldecode}"></set>
+      <set name="movie.year" value="${title_year[0][1]:htmldecode}"></set>
+
+      <!-- Directors -->
+      <parse name="directors_block" input="${details_page}" regex='&lt;h5&gt;Director[s]?:&lt;/h5&gt;.*?&lt;/div&gt;'></parse>
+      <parse name="directors" input="${directors_block}" regex='&lt;a href="/name/nm\d{7}/"[^&gt;]*&gt;([^&lt;]+)&lt;/a&gt;'></parse>
+      <set name='movie.directors' value=''></set>
+      <loop name="currDirector" on='directors'>
+        <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"></set>
+      </loop>
+
+      <!-- Writers -->
+      <parse name="writers_block" input="${details_page}" regex="${rx_writers_block}"></parse>
+      <parse name="writers" input="${writers_block}" regex='&lt;a href="/name/nm\d+/"[^&gt;]*&gt;([^&lt;]+)&lt;/a&gt;'></parse>
+      <set name='movie.writers' value=''></set>
+      <loop name='currWriter' on='writers'>
+        <set name='movie.writers' value='${movie.writers}|${currWriter[0]:htmldecode}'></set>
+      </loop>
+
+      <!-- Actors -->
+      <parse name="actors_block" input="${details_page}" regex='&lt;div class="headerinline"&gt;&lt;h3&gt;Cast&lt;/h3&gt;.+?&lt;h3&gt;Additional Details&lt;/h3&gt;'></parse>
+      <parse name='actors' input='${actors_block}' regex='&lt;td class="nm"&gt;&lt;a href="/name/nm\d{7}/"[^&gt;]*&gt;(.+?)&lt;/a&gt;'></parse>
+      <set name='movie.actors' value=''></set>
+      <loop name='currActor' on='actors'>
+        <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'></set> 
+      </loop>
+
+      <!-- Genres -->
+      <parse name="genres_block" input="${details_page}" regex="&lt;h5&gt;Genre:&lt;/h5&gt;.+?&lt;/div&gt;"></parse>
+      <parse name='genres' input='"${genres_block}' regex='&lt;a href="/Sections/Genres/[^/]+/"&gt;(.+?)&lt;/a&gt;'></parse>
+      <set name="movie.genres" value=""></set>
+      <loop name="currGenre" on="genres">
+        <set name="movie.genres" value="${movie.genres}|${currGenre[0]:htmldecode}"></set>
+      </loop>
+
+      <!-- Certification -->
+      <set name="site" value="http://akas.imdb.com/title/${movie.site_id}/parentalguide#certification"></set>
+      <retrieve name="details_page" url="${site}"></retrieve>
+      <parse name="certification" input="${details_page}" regex="&gt;\s*Iceland:((?:L)|(?:10)|(?:12)|(?:14)|(?:16)|(?:18)|(?:18))&lt;/a&gt;"></parse>
+      <set name="movie.certification" value="${certification[0][0]:htmldecode}"></set>
+      <if test="${movie.certification}=">
+        <parse name="certification" input="${details_page}" regex='&gt;\s*USA:((?:G)|(?:PG)|(?:PG-13)|(?:R)|(?:X)|(?:NC-17))&lt;/a&gt;'/>
+        <set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
+        <set name="PG13" value="PG-13"></set>
+        <set name="PG" value="PG"></set>
+        <set name="R" value="R"></set>
+        <set name="G" value="G"></set>
+        <if test="${movie.certification}=${PG13}">
+          <set name="movie.certification" value="12"></set>
+        </if>
+        <if test="${movie.certification}=${PG}">
+          <set name="movie.certification" value="L"></set>
+        </if>
+        <if test="${movie.certification}=${G}">
+          <set name="movie.certification" value="L"></set>
+        </if>
+        <if test="${movie.certification}=${R}">
+          <set name="movie.certification" value="16"></set>
+        </if>
+        <if test="${movie.certification}=${NC-17}">
+          <set name="movie.certification" value="16"></set>
+        </if>
+      </if>
+
+      <!-- Runtime -->
+      <parse name="runtime" input="${details_page}" regex='&lt;h5&gt;Runtime:&lt;/h5&gt;.*?(\d+) min\s+'></parse>
+      <set name="movie.runtime" value='${runtime[0][0]:htmldecode}'></set>
+
+      <!-- Tagline -->
+      <parse name="tagline" input="${details_page}" regex='${rx_tagline}'></parse>
+      <set name="movie.tagline" value='${tagline[0][0]:htmldecode}'></set>
+
+      <!-- Score -->
+      <parse name="score" input="${details_page}" regex='&lt;b&gt;(\d+.\d+)/10&lt;/b&gt; '></parse>
+      <set name="movie.score" value='${score[0][0]:htmldecode}'></set>
+
+      <!-- Popularity -->
+      <parse name="votes" input="${details_page}" regex='ratings"&gt;([^\s]+) votes&lt;/a&gt;'></parse>
+      <replace name='votes_clean1' input='${votes[0][0]:htmldecode}' pattern='\,' with=''/>
+      <replace name='votes_clean2' input='${votes_clean1}' pattern='\.' with=''/>
+      <set name='movie.popularity' value='${votes_clean2}'></set>
+
+      <!-- Language -->
+      <parse name="language" input="${details_page}" regex='${rx_language}'/>
+      <set name='movie.language' value='${language[0][0]:htmldecode}'/>
+
+      <!-- Plot Summary -->
+      <retrieve name='summary_page' url='http://kvikmyndir.is/xml/movingpictures/${kvikmyndir.site_id}'></retrieve>
+      <parse name="summary" input="${summary_page}" regex="${rx_plot}"></parse>
+      <set name="summary_clean" value="${summary[0][0]:striptags}"></set>
+      <set name="movie.summary" value="${summary_clean:htmldecode}"></set>
+
+      <!-- Ef það tekst ekki að sækja gögn frá imdb.com -->
+      <if test="${movie.summary}=">
+        <retrieve name="summary_page" url="http://akas.imdb.com/title/${movie.site_id}/plotsummary"></retrieve>
+        <parse name="summary" input="${summary_page}" regex="${rx_plot_imbd}"></parse>
+        <set name="summary_clean" value="${summary[0][0]:striptags}"></set>
+        <set name="movie.summary" value="${summary_clean:htmldecode}"></set>
+      </if>
+      
+      <!-- Plot Summary (if first method fails) -->
+      <if test="${movie.summary}=">
+        <parse name="summary2" input="${details_page}" regex="${rx_plot2}"></parse>
+        <set name="summary_clean" value="${summary2[0][0]:striptags}"></set>
+        <set name="movie.summary" value="${summary_clean:htmldecode}"></set>
+      </if>
+
+      <!-- AKA page -->
+      <retrieve name="aka_page" url="http://akas.imdb.com/title/${movie.site_id}/releaseinfo"></retrieve>
+      <parse name="akas" input="${aka_page}" regex="${rx_aka}"></parse>
+      <set name="movie.alternate_titles" value=""></set>
+      <loop name="currAka" on="akas" limit="50">
+        <set name="movie.alternate_titles" value="${movie.alternate_titles}|${currAka[0]:htmldecode}"></set>
+      </loop>
+      
+      <!-- Details URL -->
+      <set name="movie.details_url" value="${site}"></set>
+
+    </if>
+    
+  </action>
+
+
+  <!-- Covers -->
+  
+  <action name="get_cover_art">
+    
+    <!-- if the site id is not set try to set it using the imdb id -->
+    <if test="${movie.site_id}=">
+      <if test="${movie.imdb_id}!=">
+        <set name="movie.site_id" value="${movie.imdb_id}"></set>
+      </if>
+    </if>
+    
+    <!-- if we have a site id (imdb id) we can continue -->
+    <if test="${movie.site_id}!=">
+
+      <!-- Retrieve details -->
+      <retrieve name="details_page" url="http://akas.imdb.com/title/${movie.site_id}"></retrieve>
+
+      <!-- Regular Expressions-->
+      <set name="rx_cover_url">
+        <![CDATA[
+      <a name="poster" href="([^"]+)"
+      ]]>
+      </set>
+
+      <set name="rx_cover">
+        <![CDATA[
+      principal.+?src="([^"]+)"
+      ]]>
+      </set>
+
+      <!-- Get cover url from details page -->
+      <parse name="cover_url" input="${details_page}" regex="${rx_cover_url}"></parse>
+
+      <if test="${cover_url}!=">
+        <!-- Retrieve the cover page  -->
+        <retrieve name="cover_page" url="http://www.imdb.com${cover_url[0][0]}"></retrieve>
+
+        <!-- Get cover source from the cover page -->
+        <parse name="cover_src" input="${cover_page}" regex="${rx_cover}"></parse>
+
+        <!-- set cover -->
+        <set name="cover_art[0].url" value="${cover_src[0][0]}"></set>        
+      </if>
+      
+    </if>
+   
+  </action>
+  
+</ScriptableScraper>
