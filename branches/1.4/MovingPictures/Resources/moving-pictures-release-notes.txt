@@ -59,11 +59,6 @@ Issue #1080:    Added "ctrl-a" key binding to select all movies in the Movie
                 movies. Button ID #20. See wiki for more information.
                 http://moving-pictures.tv/wiki/Skin_Designer%27s_Guide
 
-***********:    New backdrop provider from http://fanart.tv.            
-
-***********:    Updated TMDb provider to version 3 of the API. This includes 
-                localized retrieval.                
-                
 Issue #859:     Added "View Movie Details" context menu item if "Click to Play" 
                 is enabled in GUI Options. This is so ALL users can access details 
                 view.
@@ -129,7 +124,12 @@ Script and Translation Updates
 Issue #1098:    IMDb script will again correctly import PG-13 ratings.
 
 Issue #1074:    Updated Kinopoisk.ru script. Thanks to Vadim!
-                
+
+***********:    New backdrop provider from http://fanart.tv. Thanks Damien!    
+
+***********:    Updated TMDb provider to version 3 of the API. This includes 
+                localized retrieval. Thanks Damien!
+               
 ================================================================================
 1.3.1
 --------------------------------------------------------------------------------
