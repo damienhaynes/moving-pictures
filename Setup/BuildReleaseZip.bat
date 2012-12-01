@@ -23,3 +23,5 @@ cd tmp
 move *.zip ..
 cd..
 rd tmp /s /q
+
+pause

@@ -51,7 +51,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             left = parseString(variables, left);
             right = parseString(variables, right);
 
-            if (ScriptSettings.DebugMode) logger.Debug("if node left value: " + left + "     right value: " + right);
+            if (ScriptSettings.DebugMode) logger.Debug("if node left value: " + (left.Length < 500 ? left : "[not logged due to size]") + "     right value: " + (right.Length < 500 ? right : "[not logged due to size]"));
 
             float leftNum = 0;
             float rightNum = 0;

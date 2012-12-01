@@ -79,7 +79,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         private void processPattern(Dictionary<string, string> variables, string parsedInput, string parsedName) {
             string parsedPattern = parseString(variables, pattern);
 
-            if (ScriptSettings.DebugMode) logger.Debug("name: " + parsedName + " ||| pattern: " + parsedPattern + " ||| input: " + parsedInput);
+            if (ScriptSettings.DebugMode) logger.Debug("name: " + parsedName + " ||| pattern: " + parsedPattern + " ||| input: " + (parsedInput != null && parsedInput.Length < 500 ? parsedInput : "[not logged due to size]"));
 
             // try to find matches via regex pattern
             MatchCollection matches;

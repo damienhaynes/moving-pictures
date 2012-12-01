@@ -545,6 +545,7 @@
     <Content Include="DataProviders\ScraperScripts\Daum.xml" />
     <Content Include="DataProviders\ScraperScripts\EmberMediaManager.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmAffinity.xml" />
+    <Content Include="Resources\moving-pictures-release-notes.txt" />
     <None Include="DataProviders\ScraperScripts\filmtipset.se.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmWeb.xml" />
     <Content Include="DataProviders\ScraperScripts\Kinopoisk.xml" />
