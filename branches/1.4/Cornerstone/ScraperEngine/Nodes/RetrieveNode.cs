@@ -154,8 +154,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 userAgent = variables["settings.defaultuseragent"];
             }
 
-            if (userAgent == null) 
-                userAgent = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2)";
+            if (userAgent == null)
+                userAgent = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11";
 
             string parsedName = parseString(variables, name);
             string stringData = string.Empty;
@@ -187,7 +187,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             // Try to grab the document
             try {
                 WebGrabber grabber = new WebGrabber(parsedUrl);
-                grabber.Request.Accept = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+                grabber.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
                 grabber.UserAgent = parsedUserAgent;
                 grabber.Encoding = encoding;
                 grabber.Timeout = timeout;
