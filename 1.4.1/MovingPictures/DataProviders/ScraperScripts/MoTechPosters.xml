@@ -1,0 +1,44 @@
+﻿<ScriptableScraper>
+  <details>
+    <!-- These details are for display purposes only. -->
+    <name>posters.motechnet.com</name>
+    <author>Armand Pondman (armandp)</author>
+    <description>This script grabs cover-art from posters.motechnet.com.</description>
+
+    <!-- 
+    These two fields uniquely identify the script. The ID should never 
+    change and should be unique (no other script should use this ID). With
+    new versions of the script the version numbers should change. EVEN FOR 
+    MINOR CHANGES, you should change the version number if you are going to
+    disribute it to anyone but internal testers. The point number 
+    is for minor bug fix releases. Use it.
+    -->
+    <id>874904</id>
+    <version major="1" minor="0" point="2"/>
+    <published month="11" day="22" year="2008"/>
+
+    <!--
+    These fields are used for categorization purposes. Seperate multiple 
+    types with a pipe | character.
+    -->
+    <type>MovieCoverFetcher</type>
+    <language>various</language>
+  </details>
+  <action name="get_cover_art">
+    <set name="rx_coverurl">
+      <![CDATA[
+      IMG SRC="(/covers/(tt\d{7})_largeCover.jpg)"
+      ]]>
+    </set>
+    <set name="index" value="0" />
+
+    <if test='${movie.imdb_id}!='>
+      <retrieve name="direct_result" url="http://posters.motechnet.com/title/${movie.imdb_id}/"/>
+      <parse name="cover_url" input="${direct_result}" regex="${rx_coverurl}" />
+      <if test="${cover_url[0][0]}!=">
+        <set name='cover_art[${index}].url' value="http://posters.motechnet.com${cover_url[0][0]}" />
+      </if>
+    </if>    
+
+  </action>
+</ScriptableScraper>
