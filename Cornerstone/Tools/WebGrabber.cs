@@ -191,7 +191,7 @@ namespace Cornerstone.Tools {
                 cookieHeader = request.CookieContainer.GetCookieHeader(request.RequestUri);
 
                 // Debug
-                if (_debug) logger.Debug("GetResponse: URL={0}, UserAgent={1}, CookieHeader={3}", requestUrl, userAgent, cookieHeader);
+                if (_debug) logger.Debug("GetResponse: URL={0}, UserAgent={1}, CookieHeader={2}, Accept={3}", requestUrl, userAgent, cookieHeader, _accept);
 
                 // disable unsafe header parsing if it was enabled
                 if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(false);
