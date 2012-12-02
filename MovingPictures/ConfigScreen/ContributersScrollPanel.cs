@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Media;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class ContributersScrollPanel : UserControl {
