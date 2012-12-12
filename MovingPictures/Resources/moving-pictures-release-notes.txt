@@ -1,4 +1,4 @@
-Moving Pictures 1.4.1
+Moving Pictures 1.4.2
 ================================================================================
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
@@ -22,6 +22,20 @@ follw.it Bug Tracker:           http://trac.follw.it
 
 
 Change Log
+================================================================================
+1.4.2
+--------------------------------------------------------------------------------
+Script & Language Updates
+--------------------------------------------------------------------------------	                
+***********:    Fixed IMDb script for movies like Anonymous (2011) that share a
+                name with other films.
+
+***********:    Updated Russian kinopoisk.ru script.
+
+***********:    Updated Polish filmweb.pl scraper. Thanks to piernik!
+
+***********:    Updated Swedish language translations for UI. Thanks Emphatic!
+
 ================================================================================
 1.4.1
 --------------------------------------------------------------------------------
@@ -367,7 +381,7 @@ Issue #906:     Added support for the CoverFlow layout. Implemented for Default
 Issue #901:     Other plugins and skins can now jump directly to a movie or 
                 category in Moving Pictures (i.e. parameterized launch). Thanks
                 for the patch bgmeiner!
-				
+                
 --------------------------------------------------------------------------------
 Bug Fixes
 --------------------------------------------------------------------------------
