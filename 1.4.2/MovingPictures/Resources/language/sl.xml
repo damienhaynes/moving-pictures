@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Moving Pictures translation file -->
+<!-- Slovenian (SL) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">Igralec</string>
+  <string Field="Actors">Igralci</string>
+  <string Field="AllMovies">Vsi Filmi</string>
+  <!-- C -->
+  <string Field="Cancel">Preklici</string>
+  <string Field="CannotDeleteOffline">Ne morem zbrisati {0}\n ker je datoteka offline</string> <!-- prevedi offline -->
+  <string Field="CannotDeleteReadOnly">Ne morem zbrisati filma, ker je oznacen kot samo za branje.\nAli želiš, da Moving Pictures prezre ta film?</string>
+  <string Field="CategoryEmptyDescription">Trenutno ni filmov\nki bi spadali v to kategorijo</string>
+  <string Field="CategoryEmptyHeader">Kategorija je prazna</string>
+  <string Field="Certification">Certifikacija</string> <!-- Certification -->
+  <string Field="ChangeView">Spremeni pogled</string>
+  <string Field="CheckForMissingArtwork">Najdi manjkajoce plakate na spletu</string>
+  <string Field="ContinueToNextPartBody">Želite nadaljevati z {0} delom?</string>
+  <string Field="ContinueToNextPartHeader">Nadaljujem na naslednji del?</string>
+  <string Field="CycleCoverArt">Rotiraj ovitke</string>
+  <string Field="CycleView">Rotiraj pogled</string> <!-- Cycle View -->
+  <!-- D -->
+  <string Field="DateAdded">Dodano dne</string>
+  <string Field="DateDay">dan</string>
+  <string Field="DateDays">dnevi</string>
+  <string Field="DateMonth">mesec</string>
+  <string Field="DateMonths">meseci</string>
+  <string Field="DatePartAgo">Pred {0} {1}</string>
+  <string Field="DatePartWithinDays">Zadnjih {0} dni</string>
+  <string Field="DatePartWithinMonths">Zadnjih {0} mesecev</string>
+  <string Field="DatePartWithinWeeks">Zadnjih {0} tednov</string>
+  <string Field="DatePartWithinYears">Zadnjih {0} let</string>
+  <string Field="DateWeek">teden</string>
+  <string Field="DateWeeks">tedni</string>
+  <string Field="DateYear">leto</string>
+  <string Field="DateYears">leti</string> <!-- preveri kontekst -->
+  <string Field="DecadeShort">{0}0ta</string> <!-- preveri kontekst -->
+  <string Field="DeleteFailed">Brisanje je spodletelo</string>
+  <string Field="DeleteMovie">Zbriši film</string>
+  <string Field="Director">Režiser</string>
+  <string Field="Directors">Režiserji</string>
+  <string Field="DownAbbreviation">(dol)</string>
+  <string Field="DoYouWantToDelete">Ali želiš trajno zbrisati\n{0}\niz trdega diska?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Letos</string>
+  <string Field="Error">Napaka</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">Žal nisem uspel naložiti DVD slike</string>
+  <string Field="FilePath">Pot datoteke</string>
+  <string Field="FilmstripView">Filmski trak</string> <!-- preveri kontekst -->
+  <string Field="FilterBy">Filtriraj po</string>
+  <string Field="Friday">Petek</string>
+  <string Field="Future">Prihodnost</string> <!-- preveri kontekst -->
+  <!-- G -->
+  <string Field="Genre">Žanr</string>
+  <string Field="Genres">Žanri</string>
+  <!-- I -->
+  <string Field="InvalidPin">Napacna PIN koda!</string>
+  <string Field="InvalidVideoDiscFormat">Slikovna datoteka ne vsebuje\npravega video disk formata, ali pa je vaša Mediaportal\nDaemon Tools konfiguracija napacna.</string>
+  <!-- L -->
+  <string Field="Language">Jezik</string>
+  <string Field="LargeThumbnailView">Velike ikone</string>
+  <string Field="LastMonth">Prejšnji mesec</string>
+  <string Field="LastWeek">Prejšnji teden</string>
+  <string Field="LastYear">Prejšnje leto</string>
+  <string Field="ListView">Seznam</string>
+  <string Field="LockRestrictedMovies">Zakleni omejene filme</string> <!-- Lock Restricted Movies -->
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Oznaci kot neogledano</string>
+  <string Field="MarkAsWatched">Oznaci kot gledano</string>
+  <string Field="MediaIsMissing">Medij za izbrani film manjka!\nZelo mi je žal ampak nekaj je šlo narobe...</string> <!-- komedianti -->
+  <string Field="MediaNotAvailableBody">Medij izbranega filma trenutno\nni na voljo. Prosim vstavite ali vkljucite medij\noznacen: {0}</string>
+  <string Field="MediaNotAvailableHeader">Medij ni na voljo</string>
+  <string Field="MissingExternalPlayerExe">Izvršljiva datoteka za HD predvajanje manjka.\nProsim popravite pot do izvršljive datoteke.</string>
+  <string Field="Monday">Ponedeljek</string>
+  <string Field="Movie">Film</string>
+  <string Field="MovieDetails">Podrobnosti filma</string>
+  <string Field="MovieOptions">Možnosti filma</string>
+  <string Field="Movies">Filmov</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">Kot kaže nisi nastavil nobene\npoti za uvoz. Zapri MediaPortal\nin zaženi Nastavitev MediaPortala\nin nastavi Moving Pictures.</string>
+  <string Field="NoImportPathsHeading">Ni poti za uvoz!</string>
+  <!-- O -->
+  <string Field="Older">Starejše</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Starševski nadzor ni vkljucen.</string>
+  <string Field="PinCodeHeader">Odklepanje omejene vsebine</string>
+  <string Field="PinCodePrompt">Za nadaljevanje prosim vnesi PIN kodo:</string>
+  <string Field="PlaybackFailed">Predvajanje ni mogoce, ker '{0}'\nkoncnica ni navedena v tvoji MediaPortal konfiguraciji.\nProsim dodaj to koncnico ali nastavi zunanji predvajalnik\nin poskusi znova.</string>
+  <string Field="PlaybackFailedHeader">Predvajanje spodletelo</string>
+  <string Field="ProblemLoadingSkinFile">Oprosti, nastal je problem pri nalaganju datoteke preobleke</string>
+  <!-- R -->
+  <string Field="Rate">Oceni</string>
+  <string Field="Rated">Ocenjeno</string>
+  <string Field="RateFiveStarFive">Popolno</string>
+  <string Field="RateFiveStarFour">Krasno</string>
+  <string Field="RateFiveStarOne">Strašno</string>
+  <string Field="RateFiveStarThree">Dobro</string>
+  <string Field="RateFiveStarTwo">Povprecno</string>
+  <string Field="RateHeading">Oceni film</string>
+  <string Field="RecentlyAddedMovies">Zadnje dodani filmi</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">Nadaljuj od:</string>
+  <string Field="ResumeFromLast">Nadaljujem od zadnjic?</string>
+  <string Field="Retry">Ponovno poskusi</string>
+  <string Field="Runtime">Dolžina</string>
+  <string Field="RuntimeHour">{0} ura</string>
+  <string Field="RuntimeHours">{0} ur</string> <!-- najveckrat bo 2 ur-i -->
+  <string Field="RuntimeLong">{0} in {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} in {2}</string>
+  <string Field="RuntimeMinute">{0} minuta</string>
+  <string Field="RuntimeMinutes">{0} minut</string> <!-- spet problem s slovenskimi števniki -->
+  <string Field="RuntimeSecond">{0} sekunda</string>
+  <string Field="RuntimeSeconds">{0} sekund</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}u{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">Sobota</string>
+  <string Field="Score">Tocke</string> <!-- preveri kontekst -->
+  <string Field="SelectYourRating">Izberi svojo oceno za {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">Prikaži samo neogledane filme</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Prikaži ogledane in neogledane filme</string>
+  <string Field="SkinDoesNotSupportCategories">Ta preobleka ne podpira kategorij.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Ta preobleka ne podpira dialoga PIN kode.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Ta preobleka ne podpira dialoga za ocenjevanje.</string>
+  <string Field="SortBy">Sortiraj po</string>
+  <string Field="SortDirection">Smer sortiranja</string>
+  <string Field="StarRating">Ocena</string> <!-- Star rating -->
+  <string Field="Sunday">Nedelja</string>
+  <!-- T -->
+  <string Field="ThisMonth">Ta mesec</string>
+  <string Field="ThisWeek">Ta teden</string>
+  <string Field="ThisYear">Letos</string>
+  <string Field="ThreeMonthsAgo">Pred tremi meseci</string>
+  <string Field="ThreeWeeksAgo">Pred tremi tedni</string>
+  <string Field="ThumbnailView">Ikone</string>
+  <string Field="Thursday">Cetrtek</string>
+  <string Field="Title">Naslov</string>
+  <string Field="Today">Danes</string>
+  <string Field="ToggleParentalLock">Spremeni starševski nadzor</string>
+  <string Field="Tuesday">Torek</string>
+  <string Field="TwoMonthsAgo">Pred dvemi meseci</string>
+  <string Field="TwoWeeksAgo">Pred dvemi tedni</string>
+  <!-- U -->
+  <string Field="Unknown">Neznano</string>
+  <string Field="UnlockRestrictedMovies">Odkleni omejene filme</string>
+  <string Field="UnwatchedMovies">Neogledani filmi</string>
+  <string Field="UpAbbreviation">(gor)</string>
+  <string Field="UpdateDetailsFromOnline">Osveži podatke s spleta</string>
+  <string Field="UpdateMovieDetailsBody">Osvežil boš vse metapodatke filma in s tem\npresnel vse rocne spremembe.\Ali želiš nadaljevati?</string>
+  <string Field="UpdateMovieDetailsHeader">Osveži podatke filma</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Virtualni pogon ni pripravljen</string>
+  <string Field="VirtualDriveMessage">Virtualni pogon ni bil pravocasno pripravljen.\nProsim poskusi ponovno ali preklici predvajanje.</string>
+  <!-- W -->
+  <string Field="Wednesday">Sreda</string>
+  <string Field="Writer">Pisec</string>
+  <string Field="Writers">Pisci</string>
+  <!-- Y -->
+  <string Field="Year">Leto</string>
+  <string Field="Yesterday">Vceraj</string>
+</strings>
