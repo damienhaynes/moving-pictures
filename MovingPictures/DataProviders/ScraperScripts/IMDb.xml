@@ -84,7 +84,7 @@
     <if test='${search.year}>1800'>
       <set name="query_year" value="+(${search.year})" />
     </if>
-    <retrieve name="search_page" url="http://akas.imdb.com/find?s=all&amp;q=${search.title:safe(ISO-8859-1)}${query_year}" />
+    <retrieve name="search_page" url="http://akas.imdb.com/find?s=all&amp;q=${search.title:safe(ISO-8859-1)}" />
  
     <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
     <parse name="details_page_block" input="${search_page}" regex="${rx_details_page_block}" />
