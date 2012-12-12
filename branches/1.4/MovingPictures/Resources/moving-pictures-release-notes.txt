@@ -30,6 +30,9 @@ Script & Language Updates
 ***********:    Fixed IMDb script for movies like Anonymous (2011) that share a
                 name with other films.
 
+***********:    Fixed bug that caused backdrops to sometimes fail to retrieve with 
+                TheMovieDB.
+
 ***********:    Updated Russian kinopoisk.ru script.
 
 ***********:    Updated Polish filmweb.pl scraper. Thanks to piernik!

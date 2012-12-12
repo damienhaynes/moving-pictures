@@ -276,7 +276,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             movie.Popularity = movieDetails.Votes;
 
             // get runtime (mins)
-            movie.Runtime = movieDetails.Runtime;
+            movie.Runtime = movieDetails.Runtime == null ? 0 : (int)movieDetails.Runtime;
 
             // get movie cast
             var castInfo = TheMovieDbAPI.GetCastInfo(movieDetails.Id.ToString());
