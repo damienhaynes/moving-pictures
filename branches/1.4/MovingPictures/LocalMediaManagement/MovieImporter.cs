@@ -581,12 +581,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                                     if (!fileList.Contains(addedFile))
                                         fileList.Add((DBLocalMedia)currFile);
 
+                                    processed++;
                                     if (Progress != null)
                                         Progress((int)(processed * 100.0 / total), processed, total, "Queueing files..");
                                     
-                                    processed++;
                                 }
-                                filesAdded.Clear();                           
+
+                                filesAdded.Clear();
+                                //Progress(100, processed, total, "Queueing files..");
                             }
                         }
                         
