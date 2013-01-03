@@ -186,6 +186,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 updateButtons();
 
                 automaticMediaInfoMenuItem.Checked = MovingPicturesCore.Settings.AutoRetrieveMediaInfo;
+                displayDataProviderTagsMenuItem.Checked = MovingPicturesCore.Settings.AlwaysDisplayProviderTags;
             }
 
             this.unapprovedGrid.AutoGenerateColumns = false;
@@ -377,10 +378,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             }
 
             popup.ShowDialog(this);
-            if (popup.DialogResult == DialogResult.OK) {
-                //files were unignored, so restart the importer to process them
-                MovingPicturesCore.Importer.RestartScanner();
-            }
         }
 
         private void restartImporterToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -452,6 +449,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void automaticMediaInfoMenuItem_Click(object sender, EventArgs e) {
             automaticMediaInfoMenuItem.Checked = !automaticMediaInfoMenuItem.Checked;
             MovingPicturesCore.Settings.AutoRetrieveMediaInfo = automaticMediaInfoMenuItem.Checked;
+        }
+
+        private void alwaysDisplayDataProviderTagsToolStripMenuItem_Click(object sender, EventArgs e) {
+            displayDataProviderTagsMenuItem.Checked = !displayDataProviderTagsMenuItem.Checked;
+            MovingPicturesCore.Settings.AlwaysDisplayProviderTags = displayDataProviderTagsMenuItem.Checked;
+            unapprovedGrid.Invalidate();
         }
 
     }

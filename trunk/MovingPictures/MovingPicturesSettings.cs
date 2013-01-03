@@ -23,7 +23,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Thread Count",
-            Description = "The number of threads retrieving move details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.",
+            Description = "The number of threads retrieving movie details for local media. A higher number uses more system resources, but can help with slow data providers. Do not set this value higher than 10 threads.",
             Groups = "|Movie Importer|Tweaks|",
             Identifier = "importer_thread_count",
             Default = 5)]
@@ -96,6 +96,21 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private int _jpgCompressionQuality;
+
+        [CornerstoneSetting(
+            Name = "Always Display Data Provider Tags",
+            Description = "By default data provider tags are only displayed in the importer when they are relevant. If this setting is set to true, data provider tags will always be displayed.",
+            Groups = "|Movie Importer|Tweaks|",
+            Identifier = "importer_display_provider_tags",
+            Default = false)]
+        public bool AlwaysDisplayProviderTags {
+            get { return _alwaysDisplayProviderTags; }
+            set {
+                _alwaysDisplayProviderTags = value;
+                OnSettingChanged("importer_display_provider_tags");
+            }
+        }
+        private bool _alwaysDisplayProviderTags;
 
         #endregion
 
@@ -239,7 +254,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "The minimum number of possible matches that must be found before Moving Pictures will stop searching via additional data providers. Enter 0 to retrieve search results from all active data providers.",
             Groups = "|Movie Importer|Matching and Importing|",
             Identifier = "importer_dataprovider_movie_limit",
-            Default = 3)]
+            Default = 4)]
         public int MinimumMatches {
             get { return _minimumMatches; }
             set {
