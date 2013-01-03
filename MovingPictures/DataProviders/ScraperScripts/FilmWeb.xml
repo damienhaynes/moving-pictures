@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>141516</id>
-    <version major="2" minor="2" point="10"/>
-    <published month="12" day="30" year="2011"/>
+    <version major="2" minor="2" point="11"/>
+    <published month="11" day="01" year="2012"/>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -155,7 +155,7 @@
 		</set>
 		<set name="rx_rating">
 		  <![CDATA[
-			<span\sclass="?rate"?\stitle="ocena:\s(?<rating>\d*|\d,\d)">
+			<strong\srel=\"v\:rating\"\sproperty=\"v\:average\">(.+?)<
 		  ]]>
 		</set>
 		<set name="rx_genres">
@@ -165,7 +165,7 @@
 		</set>
 		<set name="rx_summary">
 		  <![CDATA[
-			property=\"v\:summary\">(.+?)</span
+			property=\"v\:summary\">(.+?)</p
 		  ]]>
 		</set>
 		<set name="rx_altTitle">
@@ -178,15 +178,22 @@
 			"?time"?>(\d*)<
 		  ]]>
 		</set>
-		<set name="rx_actor_block">
-		<!-- role\-actors">\n\s*aktor.*[\n\s]*<dd.*>(.*)-->
+		<set name="rx_runtime2">
 		  <![CDATA[
-			role\-actors"?>\n\s*aktor.+?<dd.+?>(.+?)</dd>
+			filmTime><i\sclass=icon-small-clock><\/i>(?<godzin>.+?)godz\.(?<minut>.+?)min.
+		  ]]>
+		</set>
+		<set name="rx_actor_block">
+		<!-- role\-actors">\n\s*aktor.*[\n\s]*<dd.*>(.*)
+		role\-actors"?>\n\s*aktor.+?<dd.+?>(.+?)</dd>
+		filmCastBox">(.+?)<script-->
+		  <![CDATA[
+			dt\sid=\"role-actors\">(.+?)<\/dd
 		  ]]>
 		</set>
 		<set name="rx_actor">
 		  <![CDATA[
-			<li.+?<span>([^<]+)
+			v\:starring\">(.+?)<
 		  ]]>
 		</set>
 		<set name="rx_prod">
@@ -196,7 +203,7 @@
 		</set>
 		<set name="rx_filmwebID">
 		  <![CDATA[
-			<div\sid=\"?filmId\"?\sstyle=\"display:none;\">([0-9]+)<\/div>
+			<div\sid=filmId>([0-9]+)<\/div>
 		  ]]>
 		</set>
 		<set name="rx_ad_check">
@@ -236,8 +243,10 @@
 			<set name='movie.summary' value='${summary[0][0]:striptags}' />
 			<set name='movie.summary' value='${movie.summary:htmldecode}' />
 			
-			<parse name="runtime" input="${details_page}" regex="${rx_runtime}" />
-			<set name='movie.runtime' value='${runtime[0][0]}' />
+			<parse name="runtime2" input="${details_page}" regex="${rx_runtime2}" />
+			<multiply name="godz_min" value1="${runtime2[0][0]}" value2="60" result_type="float" />
+			<add name="min" value1="${godz_min}" value2="${runtime2[0][1]}" result_type="float" />
+			<set name='movie.runtime' value='${min}' />
 			
 			<parse name="language" input="${details_page}" regex="${rx_prod}" />
 			<set name='movie.language' value='${language[0][1]}' />
