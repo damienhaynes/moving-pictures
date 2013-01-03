@@ -2,16 +2,23 @@
 <!-- Moving Pictures translation file -->
 <!-- Svenska (se) -->
 <!-- Note: English is the fallback for any strings not found in other languages -->
-<!-- Updated 20110405 -->
+<!-- Updated 20121202 -->
 <strings>
   <!-- A -->
   <string Field="Actor">Skådespelare</string>
   <string Field="Actors">Skådespelare</string>
   <string Field="AllMovies">Alla filmer</string>
-  <!-- C -->
+  <!-- B -->
+  <string Field="BadCategory">En annan plugin eller ett skin försökte\nöppna en kategori i Moving Pictures\nsom inte existerar!</string>
+  <string Field="BadMovie">En annan plugin eller ett skin försökte\nöppna en film som inte existerar i\nMoving Pictures!</string>
+  <string Field="BadParam">En annan plugin eller ett skin skickade\nen ogiltig parameter till Moving Pictures!</string>
+  <string Field="Backdrop">Bakgrundsbild</string>
+  <string Field="BeginsWith">Börjar på</string>
+    <!-- C -->
   <string Field="Cancel">Avbryt</string>
   <string Field="CannotDeleteOffline">Kan ej ta bort, {0}\n filen är offline</string>
   <string Field="CannotDeleteReadOnly">Kan ej ta bort en "read-only"-fil.\nVill du att MP ignorerar filmen?</string>
+  <string Field="CastAndCrew">Rollbesättning och filmcrew</string>
   <string Field="CategoryEmptyDescription">Det finns för närvarande inga\nfilmer i den här kategorin.</string>
   <string Field="CategoryEmptyHeader">Kategorin är tom</string>
   <string Field="Certification">Åldersgräns</string>
@@ -19,6 +26,8 @@
   <string Field="CheckForMissingArtwork">Hitta omslag på internet</string>
   <string Field="ContinueToNextPartBody">Vill du fortsätta med del {0}?</string>
   <string Field="ContinueToNextPartHeader">Fortsätt till nästa del?</string>
+  <string Field="Cover">Omslag</string>
+  <string Field="CoverFlowView">Coverflow-fy</string>
   <string Field="CycleCoverArt">Nästa omslag</string>
   <string Field="CycleView">Nästa Vy</string>
   <!-- D -->
@@ -70,9 +79,11 @@
   <!-- M -->
   <string Field="MarkAsUnwatched">Markera som ej sedd</string>
   <string Field="MarkAsWatched">Markera som sedd</string>
-  <string Field="MediaIsMissing">The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...</string>
-  <string Field="MediaNotAvailableBody">The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}</string>
-  <string Field="MediaNotAvailableHeader">Media Not Available</string>
+  <string Field="MediaInfo">MediaInfo</string>
+  <string Field="MediaIsMissing">Platsen eller skivan där filmen du valt saknas!\nTyvärr har något gått fel...</string>
+  <string Field="MediaNotAvailableBody">Platsen eller skivan där filmen du valt är\nför närvarande inte tillgänglig. Anslut enheten eller stoppa i skivan \nmärkt: {0}</string>
+  <string Field="MediaNotAvailableHeader">Lagringsmedia saknas!</string>
+  <string Field="Missing">Saknas</string>
   <string Field="MissingExternalPlayerExe">Startfilen för programmet saknas.\nKontrollera sökvägen för exe-filen.</string>
   <string Field="Monday">Måndag</string>
   <string Field="Movie">Film</string>
@@ -88,7 +99,7 @@
   <string Field="ParentalControlsDisabled">Föräldraskydd är på.</string>
   <string Field="PinCodeHeader">Låser upp skyddat innehåll</string>
   <string Field="PinCodePrompt">Ange PIN-kod:</string>
-  <string Field="PlaybackFailed">Playback is not possible because the '{0}'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.</string>
+  <string Field="PlaybackFailed">Uppspelning är inte möjligt eftersom '{0}'\nfiländelsen inte är med i listan över kompatibla format i MediaPortals inställningar.\nLägg till denna filändelse eller välj en extern uppspelare\noch försök igen.</string>
   <string Field="PlaybackFailedHeader">Kan ej spela upp</string>
   <string Field="ProblemLoadingSkinFile">Fel vid laddning av skin-fil.</string>
   <!-- R -->
@@ -129,7 +140,11 @@
   <string Field="RuntimeShortExtended">{0}t{1:00}m{2:00}s</string>
   <!-- S -->
   <string Field="Saturday">Lördag</string>
+  <string Field="ScanForNewMovies">Starta sökning efter nya filmer</string>
   <string Field="Score">Betyg</string>
+  <string Field="Search">Sök</string>
+  <string Field="SearchBy">Sök efter</string>
+  <string Field="SearchNoResults">Inga träffar funna.</string>
   <string Field="SelectYourRating">Välj ditt betyg för {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Visa endast ej sedda filmer</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Visa filmer oavsett om de är sedda eller ej</string>
@@ -141,6 +156,7 @@
   <string Field="StarRating">Betyg</string>
   <string Field="Sunday">Söndag</string>
   <!-- T -->
+  <string Field="Theme">Tema</string>
   <string Field="ThisMonth">Denna månad</string>
   <string Field="ThisWeek">Denna vecka</string>
   <string Field="ThisYear">Detta år</string>
@@ -165,6 +181,8 @@
   <!-- V -->
   <string Field="VirtualDriveHeader">"Virtual drive" inte redo</string>
   <string Field="VirtualDriveMessage">"Virtual drive" hann inte bli redo.\nFörsök igen!</string>
+  <string Field="Votes">röster</string>
+  <string Field="ViewMovieDetails">Se filmdetaljer</string>
   <!-- W -->
   <string Field="Wednesday">Onsdagy</string>
   <string Field="Writer">Manus</string>

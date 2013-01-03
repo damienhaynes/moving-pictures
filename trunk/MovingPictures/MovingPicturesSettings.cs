@@ -57,7 +57,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             Description = "Default user agent Moving-Pictures uses for its web requests.",
             Groups = "|Movie Importer|Tweaks|",
             Identifier = "useragent",
-            Default = @"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2)")]
+            Default = @"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11")]
         public string UserAgent {
             get { return _useragent; }
             set {

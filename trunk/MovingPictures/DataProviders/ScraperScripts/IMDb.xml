@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="2" minor="3" point="0" />
-    <published month="12" day="1" year="2012" />
+    <version major="2" minor="3" point="1" />
+    <published month="12" day="12" year="2012" />
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -29,19 +29,19 @@
   
   <action name="search">
     
-	<set name="offset" value="0" />
+    <set name="offset" value="0" />
     
     <!-- Regular Expressions -->
     <set name="rx_details_page_block">
-	<![CDATA[
-	<title>.+?\((?:TV )?(?:Video )?\d{4}[\/IVX]*\).*?</title>.+</body>
-	]]>
+    <![CDATA[
+    <title>.+?\((?:TV )?(?:Video )?\d{4}[\/IVX]*\).*?</title>.+</body>
+    ]]>
     </set>
 
     <set name="rx_title_year">
-	<![CDATA[
-	<title>(?:IMDb[\s-]*)?(.+?)\((?:TV )?(?:Video )?(\d{4})[\/IVX]*\).*?</title>
-	]]>
+    <![CDATA[
+    <title>(?:IMDb[\s-]*)?(.+?)\((?:TV )?(?:Video )?(\d{4})[\/IVX]*\).*?</title>
+    ]]>
     </set>
 
     <set name="rx_search_results_block">
@@ -51,15 +51,15 @@
     </set>
     
     <set name="rx_search_results">
-	<![CDATA[
-	<td class="result_text">\s*<a href="/title/(tt\d{7})/[^"]*"\s*>([^<]+)</a>\s*\((\d{4})\)(?! \(TV)(?! \(VG)(?:\s*<br/>\s*aka\s*<i>"([^"]+)"</i>)*
-	]]>
+    <![CDATA[
+    <td class="result_text">\s*<a href="/title/(tt\d{7})/[^"]*"\s*>([^<]+)</a>\s*[\/IV\(\)]*\s*\((\d{4})\)(?! \(TV)(?! \(VG)(?:\s*<br/>\s*aka\s*<i>"([^"]+)"</i>)*
+    ]]>
     </set>
 
     <set name="rx_aka_details">
-	<![CDATA[
-	<tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
-	]]>
+    <![CDATA[
+    <tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
+    ]]>
     </set>
 
     <!-- Retrieve result using IMDB id (if provided) -->
@@ -84,7 +84,7 @@
     <if test='${search.year}>1800'>
       <set name="query_year" value="+(${search.year})" />
     </if>
-    <retrieve name="search_page" url="http://akas.imdb.com/find?s=all&amp;q=${search.title:safe(ISO-8859-1)}${query_year}" />
+    <retrieve name="search_page" url="http://akas.imdb.com/find?s=all&amp;q=${search.title:safe(ISO-8859-1)}" />
  
     <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
     <parse name="details_page_block" input="${search_page}" regex="${rx_details_page_block}" />
@@ -113,21 +113,21 @@
     <parse name="search_results_block" input="${search_page}" regex='${rx_search_results_block}' />
     <if test="${search_results_block}!=">
 
-	    <loop name="search_results_verified" on="search_results_block">
-		    <parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
-		    <loop name='curr_details' on='movie_details'>
-			    <add name="counter" value1="${count}" value2="${offset}" />
-			    <set name="movie[${counter}].imdb_id" value="${curr_details[0]:htmldecode}" />
-			    <set name="movie[${counter}].site_id" value="${curr_details[0]:htmldecode}" />
-			    <set name="movie[${counter}].title" value="${curr_details[1]:htmldecode}" />
+        <loop name="search_results_verified" on="search_results_block">
+            <parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
+            <loop name='curr_details' on='movie_details'>
+                <add name="counter" value1="${count}" value2="${offset}" />
+                <set name="movie[${counter}].imdb_id" value="${curr_details[0]:htmldecode}" />
+                <set name="movie[${counter}].site_id" value="${curr_details[0]:htmldecode}" />
+                <set name="movie[${counter}].title" value="${curr_details[1]:htmldecode}" />
           <set name="movie[${counter}].year" value="${curr_details[2]:htmldecode}" />
           <if test="${curr_details[3]!=">
             <set name="movie[${counter}].alternate_titles" value="${curr_details[3]:htmldecode}" />
           </if>
           
-			    <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}" />
-		    </loop>
-	    </loop>
+                <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}" />
+            </loop>
+        </loop>
       
     </if>
   </action>
@@ -150,68 +150,68 @@
       <retrieve name="details_page" url="${site}" />
 
       <set name="rx_title_year">
-	<![CDATA[
-	<title>(?:IMDb[\s-]*)?(?<movieTitle>[^\(]+?)\s?\((?:TV )?(?:Video )?(?<movieYear>\d{4})[\/IVX]*\).*?</title>
-	]]>
+    <![CDATA[
+    <title>(?:IMDb[\s-]*)?(?<movieTitle>[^\(]+?)\s?\((?:TV )?(?:Video )?(?<movieYear>\d{4})[\/IVX]*\).*?</title>
+    ]]>
       </set>
 
       <set name="rx_directors_block">
-	<![CDATA[
-	<h4 [^>]+>\s+Director[s]?:.*?</div>
-	]]>
+    <![CDATA[
+    <h4 [^>]+>\s+Director[s]?:.*?</div>
+    ]]>
       </set>
 
       <set name="rx_directors">
-	<![CDATA[
-	<a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
-	]]>
+    <![CDATA[
+    <a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
+    ]]>
       </set>
 
       <set name="rx_writers_block">
-	<![CDATA[
-	<h4 [^>]+>\s+Writer[s]?:.*?</div>
-	]]>
+    <![CDATA[
+    <h4 [^>]+>\s+Writer[s]?:.*?</div>
+    ]]>
       </set>
 
       <set name="rx_writers">
-	<![CDATA[
-	<a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
-	]]>
+    <![CDATA[
+    <a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
+    ]]>
       </set>
 
       <set name="rx_actors_block">
-	<![CDATA[
-	<table\s+class\s*?=\s*?"cast_list">.+?</table>
-	]]>
+    <![CDATA[
+    <table\s+class\s*?=\s*?"cast_list">.+?</table>
+    ]]>
       </set>
 
       <set name="rx_actors">
-	<![CDATA[
-	<a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
-	]]>
+    <![CDATA[
+    <a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
+    ]]>
       </set>
 
       <set name="rx_genres_block">
-	<![CDATA[
-	<h4 [^>]+>\s*?Genre[s]?:.*?</div>
-	]]>
+    <![CDATA[
+    <h4 [^>]+>\s*?Genre[s]?:.*?</div>
+    ]]>
       </set>
 
       <set name="rx_genres">
-	<![CDATA[
-	<a[^<]+?href\s*?=\s*?"/[g|G]enre/[^<].+?>([^<]+)</a>
-	]]>
+    <![CDATA[
+    <a[^<]+?href\s*?=\s*?"/[g|G]enre/[^<].+?>([^<]+)</a>
+    ]]>
       </set>
 
       <set name="rx_studios_block">
-	<![CDATA[
-	<h4 [^>]+>\s*?Production Co:.*?</div>
-	]]>
+    <![CDATA[
+    <h4 [^>]+>\s*?Production Co:.*?</div>
+    ]]>
       </set>
       <set name="rx_studios">
-	<![CDATA[
-	<a[^<]*?href=./company/[^>]+>([^<]+)</a>
-	]]>
+    <![CDATA[
+    <a[^<]*?href=./company/[^>]+>([^<]+)</a>
+    ]]>
       </set>
 
       <set name="rx_certification_details">
@@ -221,57 +221,57 @@
       </set>
         
       <set name="rx_certification">
-	<![CDATA[
-	(?:>\s*USA:|Rated\s*?)(?<movieCertification>(?:G)|(?:PG)|(?:PG-13)|(?:PG_13)|(?:R)|(?:X)|(?:NC-17))(?:</a>|\s*?for)
-	]]>
+    <![CDATA[
+    (?:>\s*USA:|Rated\s*?)(?<movieCertification>(?:G)|(?:PG)|(?:PG-13)|(?:PG_13)|(?:R)|(?:X)|(?:NC-17))(?:</a>|\s*?for)
+    ]]>
       </set>
 
       <set name="rx_runtime">
-	<![CDATA[
-	<h5>Runtime:</h5>.*?(?<movieRuntime>\d+) min\s+|(?<movieRuntime>\d+) min&nbsp;&nbsp;-&nbsp;&nbsp;
-	]]>
+    <![CDATA[
+    <h5>Runtime:</h5>.*?(?<movieRuntime>\d+) min\s+|(?<movieRuntime>\d+) min&nbsp;&nbsp;-&nbsp;&nbsp;
+    ]]>
       </set>
 
       <set name="rx_tagline">
-	<![CDATA[
-	<h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)|Tagline[s]?:</h4>[\s\f\r]*(?<movieTagline>[^<]+)
-	]]>
+    <![CDATA[
+    <h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)|Tagline[s]?:</h4>[\s\f\r]*(?<movieTagline>[^<]+)
+    ]]>
       </set>
 
       <set name="rx_score">
-	<![CDATA[
-	<span[^>]*itemprop="ratingValue"[^>]*>(\d\.\d)</span>
-	]]>
+    <![CDATA[
+    <span[^>]*itemprop="ratingValue"[^>]*>(\d\.\d)</span>
+    ]]>
       </set>
 
       <set name="rx_popularity">
-	<![CDATA[
-	"ratings"[^>]+>(?<moviePopularity>[^\s]+) votes</a>
-	]]>
+    <![CDATA[
+    "ratings"[^>]+>(?<moviePopularity>[^\s]+) votes</a>
+    ]]>
       </set>
 
       <set name="rx_language">
-	<![CDATA[
-	<a[^<]*?href=./language/[^>]+>(?<movieLanguage>[^<]+)</a>
-	]]>
+    <![CDATA[
+    <a[^<]*?href=./language/[^>]+>(?<movieLanguage>[^<]+)</a>
+    ]]>
       </set>
 
       <set name="rx_plot">
-	<![CDATA[
-	<p class="plotpar">\s*(?<moviePlotLong>.*?)<i>.*?</i>.*?</p>|<h5>Plot Synopsis:</h5>[^>]+>\s*(?<moviePlotLong>.*?)\s*<a
-	]]>
+    <![CDATA[
+    <p class="plotpar">\s*(?<moviePlotLong>.*?)<i>.*?</i>.*?</p>|<h5>Plot Synopsis:</h5>[^>]+>\s*(?<moviePlotLong>.*?)\s*<a
+    ]]>
       </set>
 
       <set name="rx_plot2">
-	<![CDATA[
-	<h5>Plot:</h5>[^>]+>\s+?(?<moviePlotShort>.*?)(?: \|)?\s+?<a|Users:.*?<p>(?<moviePlotShort>.*?)</p>
-	]]>
+    <![CDATA[
+    <h5>Plot:</h5>[^>]+>\s+?(?<moviePlotShort>.*?)(?: \|)?\s+?<a|Users:.*?<p>(?<moviePlotShort>.*?)</p>
+    ]]>
       </set>
 
       <set name="rx_aka">
-	<![CDATA[
-	<tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
-	]]>
+    <![CDATA[
+    <tr>\s+?<td>(.+?)</td>\s+?<td>(.+?)</td>.*?</tr>
+    ]]>
       </set>
 
       <set name="movie.imdb_id" value="${movie.site_id}" />
@@ -318,7 +318,7 @@
       <parse name="studios" input="${studios_block}" regex="${rx_studios}" />
       <set name='movie.studios' value='' />
       <loop name='currStudio' on='studios'>
-	<set name='movie.studios' value='${movie.studios}|${currStudio[0]:htmldecode}' />
+    <set name='movie.studios' value='${movie.studios}|${currStudio[0]:htmldecode}' />
       </loop>
 
       <!-- Certification -->
@@ -402,9 +402,9 @@
 
       <!-- Regular Expressions-->
       <set name="rx_cover_url">
-	    <![CDATA[
-	    <meta property='og:image' content='([^']+)'>
-	    ]]>
+        <![CDATA[
+        <meta property='og:image' content='([^']+)'>
+        ]]>
       </set>
 
       <!-- Get cover url using the Opengraph tag -->

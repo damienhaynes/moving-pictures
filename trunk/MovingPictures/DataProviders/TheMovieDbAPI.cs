@@ -236,7 +236,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.TMDbAPI {
         public long Revenue { get; set; }
 
         [DataMember(Name = "runtime")]
-        public int Runtime { get; set; }
+        public int? Runtime { get; set; }
 
         [DataMember(Name = "spoken_languages")]
         public List<Language> SpokenLanguages { get; set; }
