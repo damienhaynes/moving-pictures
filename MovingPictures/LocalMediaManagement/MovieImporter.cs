@@ -1745,7 +1745,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             // match is coming from
             if (multipleSources)
                 foreach (PossibleMatch currMatch in rankedMovieList) 
-                    currMatch.DisplaySourceInfo = true;
+                    currMatch.HasMultipleSources = true;
 
             mediaMatch.PossibleMatches = rankedMovieList;
         }
@@ -1873,7 +1873,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
     public class PossibleMatch : IComparable {
         private DBMovieInfo movie;
         private MatchResult matchValue;
-        private bool _displaySourceInfo = false;
+        private bool _hasMultipleSources = false;
 
         public DBMovieInfo Movie {
             get { return movie; }
@@ -1885,9 +1885,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             set { matchValue = value; }
         }
 
-        public bool DisplaySourceInfo {
-            get { return _displaySourceInfo; }
-            set { _displaySourceInfo = value; }
+        public bool HasMultipleSources {
+            get { return _hasMultipleSources; }
+            set { _hasMultipleSources = value; }
         }
 
         // This is silly, but required for how the DataGridView ComboBox Cell handles data.
@@ -1900,14 +1900,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             get {
                 string displayTitle = ToString();
                 if (this.Result.AlternateTitleUsed())
-                    displayTitle += " (as \"" + this.Result.AlternateTitle + "\")";
+                    displayTitle += " (as " + this.Result.AlternateTitle + ")";
 
                 if (this.movie.Year > 0) {
                     // if we have a year value for the possible match include it in the display member
                     displayTitle += " (" + this.movie.Year.ToString() + ")";
                 }
 
-                if (DisplaySourceInfo && movie.PrimarySource != null && this.movie.PrimarySource.Provider != null)
+                if (HasMultipleSources && movie.PrimarySource != null && this.movie.PrimarySource.Provider != null)
                     displayTitle += " [" + this.movie.PrimarySource.Provider.Name + "]";
 
                 return displayTitle;

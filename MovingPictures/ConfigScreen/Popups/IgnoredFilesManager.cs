@@ -65,6 +65,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
                     currFile.Delete();
                 }
             }
+
+            MovingPicturesCore.Importer.RestartScanner();
         }
 
         //remove selected movies from the ignore list.
@@ -72,7 +74,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
             //prevent extra clicks by disabling buttons            
             unignoreSelectedButton.Enabled = false;
 
-            DialogResult result = MessageBox.Show(
+            DialogResult result = MessageBox.Show(this,
                 "This will remove the selected files from the ignored list, and restart\n" +
                 "the Importer. This means all uncommitted matches from this\n" +
                 "import session will have to be reapproved. Do you want to\n" +
@@ -87,7 +89,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups {
                 this.DialogResult = DialogResult.OK;
             }
             else {
-                if (ignoredMovieGrid.SelectedRows.Count == 0) MessageBox.Show("No moviess were selected to unignore.");
+                if (ignoredMovieGrid.SelectedRows.Count == 0) MessageBox.Show(this, "No movies were selected.");
                 //enable the unignore buttons in case user wants to unignore again                
                 unignoreSelectedButton.Enabled = true;
             }

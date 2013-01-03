@@ -35,7 +35,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.unapprovedGrid = new System.Windows.Forms.DataGridView();
             this.statusColumn = new System.Windows.Forms.DataGridViewImageColumn();
             this.unapprovedLocalMediaColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.unapprovedPossibleMatchesColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.unapprovedPossibleMatchesColumn = new MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls.PotentialMatchColumn();
             this.progressPanel = new System.Windows.Forms.Panel();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.currentTaskDesc = new System.Windows.Forms.Label();
@@ -62,6 +62,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.unapprovedMatchesBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.displayDataProviderTagsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.importerGroupBox.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.unapprovedGrid)).BeginInit();
@@ -158,6 +160,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.unapprovedPossibleMatchesColumn.DataPropertyName = "Selected";
             this.unapprovedPossibleMatchesColumn.HeaderText = "Possible Matches";
             this.unapprovedPossibleMatchesColumn.Name = "unapprovedPossibleMatchesColumn";
+            this.unapprovedPossibleMatchesColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // progressPanel
             // 
@@ -236,7 +239,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.filterSplitButton.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.filterSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.filterSplitButton.Name = "filterSplitButton";
-            this.filterSplitButton.Size = new System.Drawing.Size(119, 23);
+            this.filterSplitButton.Size = new System.Drawing.Size(118, 23);
             this.filterSplitButton.Text = "All Matches";
             this.filterSplitButton.ToolTipText = "Filter Match List";
             this.filterSplitButton.Visible = false;
@@ -244,25 +247,25 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // allMatchesToolStripMenuItem
             // 
             this.allMatchesToolStripMenuItem.Name = "allMatchesToolStripMenuItem";
-            this.allMatchesToolStripMenuItem.Size = new System.Drawing.Size(320, 24);
+            this.allMatchesToolStripMenuItem.Size = new System.Drawing.Size(319, 24);
             this.allMatchesToolStripMenuItem.Text = "All Matches";
             // 
             // processingMatchesToolStripMenuItem
             // 
             this.processingMatchesToolStripMenuItem.Name = "processingMatchesToolStripMenuItem";
-            this.processingMatchesToolStripMenuItem.Size = new System.Drawing.Size(320, 24);
+            this.processingMatchesToolStripMenuItem.Size = new System.Drawing.Size(319, 24);
             this.processingMatchesToolStripMenuItem.Text = "Processing Matches";
             // 
             // unapprovedMatchesToolStripMenuItem
             // 
             this.unapprovedMatchesToolStripMenuItem.Name = "unapprovedMatchesToolStripMenuItem";
-            this.unapprovedMatchesToolStripMenuItem.Size = new System.Drawing.Size(320, 24);
+            this.unapprovedMatchesToolStripMenuItem.Size = new System.Drawing.Size(319, 24);
             this.unapprovedMatchesToolStripMenuItem.Text = "Unapproved Matches";
             // 
             // approvedCommitedMatchesToolStripMenuItem
             // 
             this.approvedCommitedMatchesToolStripMenuItem.Name = "approvedCommitedMatchesToolStripMenuItem";
-            this.approvedCommitedMatchesToolStripMenuItem.Size = new System.Drawing.Size(320, 24);
+            this.approvedCommitedMatchesToolStripMenuItem.Size = new System.Drawing.Size(319, 24);
             this.approvedCommitedMatchesToolStripMenuItem.Text = "Approved/Commited Matches";
             // 
             // approveButton
@@ -341,7 +344,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.settingsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ignoredFileManagerToolStripMenuItem,
             this.restartImporterToolStripMenuItem,
-            this.automaticMediaInfoMenuItem});
+            this.toolStripSeparator4,
+            this.automaticMediaInfoMenuItem,
+            this.displayDataProviderTagsMenuItem});
             this.settingsButton.Image = global::MediaPortal.Plugins.MovingPictures.Properties.Resources.cog;
             this.settingsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.settingsButton.Name = "settingsButton";
@@ -352,21 +357,21 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // ignoredFileManagerToolStripMenuItem
             // 
             this.ignoredFileManagerToolStripMenuItem.Name = "ignoredFileManagerToolStripMenuItem";
-            this.ignoredFileManagerToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.ignoredFileManagerToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
             this.ignoredFileManagerToolStripMenuItem.Text = "Manage Ignored Files";
             this.ignoredFileManagerToolStripMenuItem.Click += new System.EventHandler(this.ignoredFileManagerToolStripMenuItem_Click);
             // 
             // restartImporterToolStripMenuItem
             // 
             this.restartImporterToolStripMenuItem.Name = "restartImporterToolStripMenuItem";
-            this.restartImporterToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.restartImporterToolStripMenuItem.Size = new System.Drawing.Size(254, 22);
             this.restartImporterToolStripMenuItem.Text = "Restart Importer";
             this.restartImporterToolStripMenuItem.Click += new System.EventHandler(this.restartImporterToolStripMenuItem_Click);
             // 
             // automaticMediaInfoMenuItem
             // 
             this.automaticMediaInfoMenuItem.Name = "automaticMediaInfoMenuItem";
-            this.automaticMediaInfoMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.automaticMediaInfoMenuItem.Size = new System.Drawing.Size(254, 22);
             this.automaticMediaInfoMenuItem.Text = "Automatically Retrieve MediaInfo";
             this.automaticMediaInfoMenuItem.Click += new System.EventHandler(this.automaticMediaInfoMenuItem_Click);
             // 
@@ -400,6 +405,18 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.unapprovedMatchesBindingSource.DataSource = typeof(MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieMatch);
             this.unapprovedMatchesBindingSource.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.unapprovedMatchesBindingSource_ListChanged);
+            // 
+            // alwaysDisplayDataProviderTagsToolStripMenuItem
+            // 
+            this.displayDataProviderTagsMenuItem.Name = "alwaysDisplayDataProviderTagsToolStripMenuItem";
+            this.displayDataProviderTagsMenuItem.Size = new System.Drawing.Size(254, 22);
+            this.displayDataProviderTagsMenuItem.Text = "Always Display Data Provider Tags";
+            this.displayDataProviderTagsMenuItem.Click += new System.EventHandler(this.alwaysDisplayDataProviderTagsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(251, 6);
             // 
             // MovieImporterPane
             // 
@@ -452,11 +469,13 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private ToolStripMenuItem ignoredFileManagerToolStripMenuItem;
         private ToolStripMenuItem restartImporterToolStripMenuItem;
         private DataGridView unapprovedGrid;
-        private DataGridViewImageColumn statusColumn;
-        private DataGridViewTextBoxColumn unapprovedLocalMediaColumn;
-        private DataGridViewComboBoxColumn unapprovedPossibleMatchesColumn;
         private Panel panel2;
         private ToolStripButton helpButton;
         private ToolStripMenuItem automaticMediaInfoMenuItem;
+        private DataGridViewImageColumn statusColumn;
+        private DataGridViewTextBoxColumn unapprovedLocalMediaColumn;
+        private Controls.PotentialMatchColumn unapprovedPossibleMatchesColumn;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripMenuItem displayDataProviderTagsMenuItem;
     }
 }

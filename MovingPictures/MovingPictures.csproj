@@ -146,6 +146,11 @@
     <Compile Include="ConfigScreen\ContributersScrollPanel.Designer.cs">
       <DependentUpon>ContributersScrollPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfigScreen\Controls\PotentialMatchCell.cs" />
+    <Compile Include="ConfigScreen\Controls\PotentialMatchColumn.cs" />
+    <Compile Include="ConfigScreen\Controls\PotentialMatchEditingControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ConfigScreen\DataSourcePane.cs">
       <SubType>UserControl</SubType>
     </Compile>
