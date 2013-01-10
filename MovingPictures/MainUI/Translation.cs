@@ -215,6 +215,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Genres = "Genres";
 
         // I
+        public static string Importer = "Movie Importer";
+        public static string ImporterPending = "Importer ({0} Pending)";
         public static string InvalidPin = "Invalid PIN code!";
         public static string InvalidVideoDiscFormat = "Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.";
 

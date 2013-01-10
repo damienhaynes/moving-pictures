@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<window>
+  <id>96743</id>
+  <defaultcontrol>310</defaultcontrol>
+  <allowoverlay>yes</allowoverlay>
+  <disabletopbar>no</disabletopbar>
+  <define>#header.label:#MovingPictures.Translation.Importer.Label</define>
+  <controls>
+    <control>
+      <description>DEFAULT BACKGROUND</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>1920</width>
+      <height>1080</height>
+      <texture>background.png</texture>
+      <shouldCache>true</shouldCache>
+    </control>
+    <control>
+      <description>background listview</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>1920</width>
+      <height>219</height>
+      <texture>fanart_overlay_top.png</texture>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+    <import tag="Background">movingpictures.background.xml</import>
+    <control>
+      <id>0</id>
+      <type>image</type>
+      <posX>60</posX>
+      <posY>34</posY>
+      <width>68</width>
+      <height>60</height>
+      <texture>icon_movies.png</texture>
+      <visible>control.isvisible(51) | control.isvisible(50)</visible>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+    <control>
+      <type>image</type>
+      <id>0</id>
+      <posX>10</posX>
+      <posY>252</posY>
+      <width>1903</width>
+      <height>790</height>
+      <texture>panel_thumbs_noinfo.png</texture>
+    </control>
+    <control>
+      <description>List Lines</description>
+      <type>image</type>
+      <id>1</id>
+      <posX>250</posX>
+      <posY>385</posY>
+      <width>1429</width>
+      <height>506</height>
+      <texture>list_lines_wide.png</texture>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+    <control>
+      <description>File List</description>
+      <type>listcontrol</type>
+      <id>310</id>
+      <scrollOffset>1</scrollOffset>
+      <posX>195</posX>
+      <posY>331</posY>
+      <height>700</height>
+      <width>1798</width>
+      <textXOff>50</textXOff>
+      <textXOff2>1500</textXOff2>
+      <textXOff3>2500</textXOff3>
+      <PinIconXOff>5</PinIconXOff>
+      <PinIconYOff>3</PinIconYOff>
+      <IconYOff>5000</IconYOff>
+      <dimColor>ffffffff</dimColor>
+      <textureFocus>listcontrol_item_selected_wide.png</textureFocus>
+      <textureNoFocus>-</textureNoFocus>
+      <spinPosX>1828</spinPosX>
+      <spinPosY>1000</spinPosY>
+    </control>
+    <control>
+    <description>status label</description>
+    <type>label</type>
+    <id>0</id>
+    <posX>140</posX>
+    <posY>994</posY>
+    <label>#MovingPictures.Importer.Status</label>
+    <align>left</align>
+    </control>
+    <import>common.time.xml</import>
+    <!--import>common.time.xml</import>
+    <import>movingpictures.views.xml</import>
+    <import>movingpictures.facade.xml</import-->
+    <import>common.overlay.xml</import>
+  </controls>
+</window>
+<!--Checksum:5e07f09b7dd8095e1d56dd227d3fd170-->

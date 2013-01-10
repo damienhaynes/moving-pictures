@@ -65,6 +65,8 @@
   <string Field="Genre">Genre</string>
   <string Field="Genres">Genres</string>
   <!-- I -->
+  <string Field="Importer">Movie Importer</string>
+  <string Field="ImporterPending">Importer ({0} Pending)</string>
   <string Field="InvalidPin">Invalid PIN code!</string>
   <string Field="InvalidVideoDiscFormat">Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.</string>
   <!-- L -->

@@ -264,6 +264,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <returns>True if yes was clicked, False if no was clicked</returns>
         public bool ShowCustomYesNo(string heading, string lines, string yesLabel, string noLabel, bool defaultYes) {
+            return ShowCustomYesNo(heading, lines, yesLabel, noLabel, defaultYes, GetID);
+        }
+
+        /// <summary>
+        /// Displays a yes/no dialog with custom labels for the buttons
+        /// This method may become obsolete in the future if media portal adds more dialogs
+        /// </summary>
+        /// <returns>True if yes was clicked, False if no was clicked</returns>
+        public static bool ShowCustomYesNo(string heading, string lines, string yesLabel, string noLabel, bool defaultYes, int ownerId) {
             GUIDialogYesNo dialog = (GUIDialogYesNo)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_YES_NO);
             try {
                 dialog.Reset();
@@ -284,7 +293,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                             btn.Label = noLabel;
                     }
                 }
-                dialog.DoModal(GetID);
+                dialog.DoModal(ownerId);
                 return dialog.IsConfirmed;
             }
             finally {
@@ -390,6 +399,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // set some skin properties
             SetProperty("#MovingPictures.Settings.HomeScreenName", MovingPicturesCore.Settings.HomeScreenName);
             SetProperty("#MovingPictures.Settings.SecondFacadeLabel", MovingPicturesCore.Settings.SecondLabel);
+            SetProperty("#MovingPictures.Importer.Unapproved.Count", "0");
 
             // start initialization of the moving pictures core services in a seperate thread
             initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
@@ -996,8 +1006,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // Start the background importer
                 if (MovingPicturesCore.Settings.EnableImporterInGUI) {
                     MovingPicturesCore.Importer.Start();
-                    MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(Importer_Progress);
                 }
+                
+                // we listen even if importer is disabled in case it gets turned on at some point
+                MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(Importer_Progress);
 
                 // Load skin based settings from skin file
                 skinSettings = new MovingPicturesSkinSettings(_windowXmlFileName);
@@ -1099,6 +1111,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIListItem searchItem = new GUIListItem(Translation.SearchBy + "...");
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
             GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
+            GUIListItem importerItem = new GUIListItem(String.Format(Translation.ImporterPending, MovingPicturesCore.Importer.MatchesNeedingInput.Count));
             GUIListItem rescanItem = new GUIListItem(Translation.ScanForNewMovies);
             GUIListItem movieDetailsItem = new GUIListItem(Translation.ViewMovieDetails + "...");
 
@@ -1132,6 +1145,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 dialog.Add(viewItem);
             }
 
+            importerItem.ItemId = currID++;
+            dialog.Add(importerItem);
+
             // add rescan menu item if needed
             if (MovingPicturesCore.Settings.ShowRescanMenuItem) {
                 rescanItem.ItemId = currID++;
@@ -1159,6 +1175,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (dialog.SelectedId == parentalControlsItem.ItemId) {
                 toggleParentalControls();
+            }
+            else if (dialog.SelectedId == importerItem.ItemId) {
+                GUIWindowManager.ActivateWindow(96743);
             }
             else if (dialog.SelectedId == rescanItem.ItemId) {
                 MovingPicturesCore.Importer.RestartScanner();
@@ -1882,6 +1901,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void Importer_Progress(int percentDone, int taskCount, int taskTotal, string taskDescription) {
             setWorkingAnimationStatus(percentDone < 100);
+            GUIPropertyManager.SetProperty("#MovingPictures.Importer.Unapproved.Count", MovingPicturesCore.Importer.MatchesNeedingInput.Count.ToString());
         }
 
         #endregion

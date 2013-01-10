@@ -9,13 +9,10 @@ using System.Threading;
 using Cornerstone.Database;
 using Cornerstone.Database.Tables;
 using Cornerstone.Tools;
-using Cornerstone.Extensions;
 using Cornerstone.Extensions.IO;
 using MediaPortal.Plugins.MovingPictures.Database;
-using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
 using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
-using MediaPortal.Profile;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
@@ -55,7 +52,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         private Dictionary<DBLocalMedia, MovieMatch> matchLookup;
         private ArrayList allMatches;
 
-        // Matches that have not yet been scanned.
+        /// <summary>
+        /// Matches that have not yet been scanned.
+        /// </summary>
         public ArrayList PendingMatches {
             get { return ArrayList.ReadOnly(pendingMatches); }
         } private ArrayList pendingMatches;
@@ -588,7 +587,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                                 }
 
                                 filesAdded.Clear();
-                                //Progress(100, processed, total, "Queueing files..");
+                                Progress(100, processed, total, "Done!");
                             }
                         }
                         
@@ -1286,7 +1285,6 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 if (highPriority)
                     Reprocess(newMatch);
             }
-
         }
 
         // When a process has removed a local file from the database, we should remove it from the matching system

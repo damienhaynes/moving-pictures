@@ -1,5 +1,10 @@
-Moving Pictures 1.5.0
+Moving Pictures 1.5.0 Alpha
 ================================================================================
+NOTICE: This is an alpha build intended to assist skin designers with development.
+        There are bugs here, the skins packaged in are incomplete and 
+        
+        
+
 
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
 plug-in itself along with DefaultWide (16x9) and Default (4x3) skin support.
@@ -27,9 +32,13 @@ Change Log
 --------------------------------------------------------------------------------
 Enhancements
 --------------------------------------------------------------------------------	                
-***********:    Improved look of potential match list in importer.
+***********:    Added GUI Importer. Thanks to Edalex for submitting the initial
+                patch!
 
-***********:    Added option to always display data provider tags in importer.
+***********:    Improved look of potential match list in config importer.
+
+***********:    Added option to always display data provider tags in config 
+                importer.
 
 --------------------------------------------------------------------------------
 Bug Fixes
