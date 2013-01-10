@@ -382,6 +382,7 @@
     <Compile Include="MainUI\ConfigConnector.cs" />
     <Compile Include="MainUI\Filters\WhiteListFilter.cs" />
     <Compile Include="MainUI\GroupHeaders.cs" />
+    <Compile Include="MainUI\ImporterGUI.cs" />
     <Compile Include="MainUI\MovieBrowser.cs" />
     <Compile Include="MainUI\Filters\RemoteNumpadFilter.cs" />
     <Compile Include="MainUI\Filters\WatchedFlagFilter.cs" />
