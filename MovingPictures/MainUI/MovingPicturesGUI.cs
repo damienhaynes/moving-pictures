@@ -399,7 +399,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // set some skin properties
             SetProperty("#MovingPictures.Settings.HomeScreenName", MovingPicturesCore.Settings.HomeScreenName);
             SetProperty("#MovingPictures.Settings.SecondFacadeLabel", MovingPicturesCore.Settings.SecondLabel);
-            SetProperty("#MovingPictures.Importer.Unapproved.Count", "0");
+            SetProperty("#MovingPictures.Importer.NeedInput.Count", "0");
 
             // start initialization of the moving pictures core services in a seperate thread
             initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
@@ -637,6 +637,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
             }
 
+            SetProperty("#MovingPictures.Importer.IsActive", MovingPicturesCore.Importer.IsScanning.ToString());
             MediaPortal.GUI.Library.GUIPropertyManager.SetProperty("#currentmodule", MovingPicturesCore.Settings.HomeScreenName);
             browser.AutoRefresh = true;
 
@@ -1901,7 +1902,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void Importer_Progress(int percentDone, int taskCount, int taskTotal, string taskDescription) {
             setWorkingAnimationStatus(percentDone < 100);
-            GUIPropertyManager.SetProperty("#MovingPictures.Importer.Unapproved.Count", MovingPicturesCore.Importer.MatchesNeedingInput.Count.ToString());
+            GUIPropertyManager.SetProperty("#MovingPictures.Importer.NeedInput.Count", MovingPicturesCore.Importer.MatchesNeedingInput.Count.ToString());
         }
 
         #endregion

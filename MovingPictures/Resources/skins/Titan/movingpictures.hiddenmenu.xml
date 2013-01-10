@@ -356,7 +356,7 @@
         <textYOff>16</textYOff>
         <textureFocus>hiddenmenu_item_selected.png</textureFocus>
         <textureNoFocus>-</textureNoFocus>
-        <label>Importer (#MovingPictures.Importer.Unapproved.Count Pending)</label>
+        <label>Importer (#MovingPictures.Importer.NeedInput.Count Pending)</label>
         <hyperlink>96743</hyperlink>
         <onup>66661</onup>
         <ondown>3</ondown>
