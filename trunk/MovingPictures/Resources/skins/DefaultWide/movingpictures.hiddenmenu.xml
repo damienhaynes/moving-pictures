@@ -123,7 +123,7 @@
             <description>Importer</description>
             <type>button</type>
             <id>999</id>
-            <label>Importer (#MovingPictures.Importer.Unapproved.Count Pending)</label>
+            <label>Importer (#MovingPictures.Importer.NeedInput.Count Pending)</label>
             <hyperlink>96743</hyperlink>
             <onup>66610</onup>
             <ondown>4</ondown>
