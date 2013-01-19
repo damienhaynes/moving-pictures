@@ -1,19 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using MediaPortal.Plugins.MovingPictures.Database;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using Cornerstone.GUI.Dialogs;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
-    public partial class MovingPicturesConfig : Form {      
-    
+    public partial class MovingPicturesConfig : Form
+    {
+        #region MediaPortal XML Constants
+        const string cMovingPicturesSection = "MovingPictures";
+        const string cConfigScreenWidth = "ConfigScreenWidth";
+        const string cConfigScreenHeight = "ConfigScreenHeight";
+        const string cConfigPositionX = "ConfigPositionX";
+        const string cConfigPositionY = "ConfigPositionY";
+        #endregion
+
         public MovingPicturesConfig() {
             InitializeComponent();
 
@@ -27,6 +28,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         }
 
         private void MoviesPluginConfig_Load(object sender, EventArgs e) {
+
+            // load previous saved screen dimmensions and position
+            if (MovingPicturesCore.Settings.ConfigScreenWidth != 0) this.Width = MovingPicturesCore.Settings.ConfigScreenWidth;
+            if (MovingPicturesCore.Settings.ConfigScreenHeight != 0) this.Height = MovingPicturesCore.Settings.ConfigScreenHeight;
+            if (MovingPicturesCore.Settings.ConfigScreenPositionX != 0) this.Left = MovingPicturesCore.Settings.ConfigScreenPositionX;
+            if (MovingPicturesCore.Settings.ConfigScreenPositionX != 0) this.Top = MovingPicturesCore.Settings.ConfigScreenPositionY;
 
             // if we start on the first tab, we need to
             // manually flip to the second tab (media importer) very quickly 
@@ -44,6 +51,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 popup.Owner = this;
                 popup.ShowDialog();
             }
+
+
+            MovingPicturesCore.Settings.ConfigScreenWidth = this.Width;
+            MovingPicturesCore.Settings.ConfigScreenHeight = this.Height;
+            MovingPicturesCore.Settings.ConfigScreenPositionX = this.Left;
+            MovingPicturesCore.Settings.ConfigScreenPositionY = this.Top;
         }
 
         private void MovingPicturesConfig_Shown(object sender, EventArgs e) {

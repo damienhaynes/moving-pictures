@@ -40,6 +40,9 @@ Enhancements
 ***********:    Added option to always display data provider tags in config 
                 importer.
 
+***********:    Config Screen will now remember size and position. Thanks to 
+                DamienH.
+
 --------------------------------------------------------------------------------
 Bug Fixes
 --------------------------------------------------------------------------------	                
