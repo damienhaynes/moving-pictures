@@ -5,16 +5,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
-    public partial class MovingPicturesConfig : Form
-    {
-        #region MediaPortal XML Constants
-        const string cMovingPicturesSection = "MovingPictures";
-        const string cConfigScreenWidth = "ConfigScreenWidth";
-        const string cConfigScreenHeight = "ConfigScreenHeight";
-        const string cConfigPositionX = "ConfigPositionX";
-        const string cConfigPositionY = "ConfigPositionY";
-        #endregion
-
+    public partial class MovingPicturesConfig : Form {
         public MovingPicturesConfig() {
             InitializeComponent();
 
