@@ -2116,6 +2116,91 @@ namespace MediaPortal.Plugins.MovingPictures {
         #endregion
         #endregion
 
+        #region Config Settings
+
+        [CornerstoneSetting(
+            Name = "Show Advanced Settings Warning",
+            Description = "If set to false, the Advanced Settings warning screen will no longer be displayed when first clicking on the Advanced Settings tab.",
+            Groups = "|Config Screen|",
+            Identifier = "config_advanced_nag",
+            Default = true)]
+        public bool ShowAdvancedSettingsWarning {
+            get { return _showAdvancedSettingsWarning; }
+            set {
+                _showAdvancedSettingsWarning = value;
+                OnSettingChanged("config_advanced_nag");
+            }
+        }
+        private bool _showAdvancedSettingsWarning;
+
+
+        [CornerstoneSetting(
+            Name = "Width",
+            Description = "The width of the config screen at launch.",
+            Groups = "|Config Screen|Size|",
+            Identifier = "config_screen_width",
+            Default = 0,
+            Hidden = true)]
+        public int ConfigScreenWidth {
+            get { return _configScreenWidth; }
+            set {
+                _configScreenWidth = value;
+                OnSettingChanged("config_screen_width");
+            }
+        }
+        private int _configScreenWidth;
+
+        [CornerstoneSetting(
+            Name = "Height",
+            Description = "The height of the config screen at launch.",
+            Groups = "|Config Screen|Size|",
+            Identifier = "config_screen_height",
+            Default = 0,
+            Hidden = true)]
+        public int ConfigScreenHeight {
+            get { return _configScreenHeight; }
+            set {
+                _configScreenHeight = value;
+                OnSettingChanged("config_screen_height");
+            }
+        }
+        private int _configScreenHeight;
+
+
+        [CornerstoneSetting(
+            Name = "X",
+            Description = "The X component of the position of the config screen at launch.",
+            Groups = "|Config Screen|Position|",
+            Identifier = "config_screen_position_x",
+            Default = 0,
+            Hidden = true)]
+        public int ConfigScreenPositionX {
+            get { return _configScreenPositionX; }
+            set {
+                _configScreenPositionX = value;
+                OnSettingChanged("config_screen_position_x");
+            }
+        }
+        private int _configScreenPositionX;
+
+        [CornerstoneSetting(
+            Name = "Y",
+            Description = "The Y component of the position of the config screen at launch.",
+            Groups = "|Config Screen|Position|",
+            Identifier = "config_screen_position_y",
+            Default = 0,
+            Hidden = true)]
+        public int ConfigScreenPositionY {
+            get { return _configScreenPositionY; }
+            set {
+                _configScreenPositionY = value;
+                OnSettingChanged("config_screen_position_y");
+            }
+        }
+        private int _configScreenPositionY;
+
+        #endregion
+
         #region Internal Settings
 
         [CornerstoneSetting(
@@ -2150,22 +2235,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
         private bool _dataProviderManagerInitialized;
-
-
-        [CornerstoneSetting(
-            Name = "Show Advanced Settings Warning",
-            Description = "If set to false, the Advanced Settings warning screen will no longer be displayed when first clicking on the Advanced Settings tab.",
-            Groups = "|Internal|",
-            Identifier = "config_advanced_nag",
-            Default = true)]
-        public bool ShowAdvancedSettingsWarning {
-            get { return _showAdvancedSettingsWarning; }
-            set {
-                _showAdvancedSettingsWarning = value;
-                OnSettingChanged("config_advanced_nag");
-            }
-        }
-        private bool _showAdvancedSettingsWarning;
 
 
         [CornerstoneSetting(
