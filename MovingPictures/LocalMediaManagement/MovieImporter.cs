@@ -48,9 +48,14 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
         private int percentDone;
 
-        // a list of all files currently in the system
         private Dictionary<DBLocalMedia, MovieMatch> matchLookup;
-        private ArrayList allMatches;
+        
+        /// <summary>
+        /// All files currently in the importer.
+        /// </summary>
+        public ArrayList AllMatches {
+            get { return ArrayList.ReadOnly(allMatches); }
+        } private ArrayList allMatches;
 
         /// <summary>
         /// Matches that have not yet been scanned.
