@@ -1311,12 +1311,28 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _allowDelete;
 
         [CornerstoneSetting(
-            Name = "Display Rescan Menu Item in GUI",
+            Name = "Allow Movie Rescan in GUI",
+            Description = "If enabled the user can send movies back to the importer directly from the GUI context menu.",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "allow_rescan_movie",
+            Default = true,
+            Hidden = false)]
+        public bool AllowRescan {
+            get { return _allowRescanMovie; }
+            set {
+                _allowRescanMovie = value;
+                OnSettingChanged("allow_rescan_movie");
+            }
+        }
+        private bool _allowRescanMovie;
+
+        [CornerstoneSetting(
+            Name = "Display Rescan Menu Item in GUI [mostly obsolete; use in GUI Importer]",
             Description = "If enabled, a menu item in the GUI will be available to trigger a full rescan of all import paths.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "gui_show_rescan_menuitem",
-            Default = true,
-            Hidden = true)]
+            Default = false,
+            Hidden = false)]
         public bool ShowRescanMenuItem {
             get { return _showRescanMenuItem; }
             set {

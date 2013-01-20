@@ -7,6 +7,7 @@
   <string Field="Actor">Actor</string>
   <string Field="Actors">Actors</string>
   <string Field="AllMovies">All Movies</string>
+  <string Field="AllFiles">All Files</string>
   <!-- B -->
   <string Field="BadCategory">An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!</string>
   <string Field="BadMovie">An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!</string>
@@ -23,6 +24,8 @@
   <string Field="Certification">Certification</string>
   <string Field="ChangeView">Change View</string>
   <string Field="CheckForMissingArtwork">Check for Missing Artwork Online</string>
+  <string Field="Completed">Completed</string>
+  <string Field="CompletedFiles">Completed Files</string>
   <string Field="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>
   <string Field="ContinueToNextPartHeader">Continue to next part?</string>
   <string Field="Cover">Cover</string>
@@ -65,7 +68,11 @@
   <string Field="Genre">Genre</string>
   <string Field="Genres">Genres</string>
   <!-- I -->
+  <string Field="IgnoreMovie">Ignore Movie</string>
+  <string Field="ImdbId">IMDb Id</string>
   <string Field="Importer">Movie Importer</string>
+  <string Field="ImporterDisabled">Importer Disabled</string>
+  <string Field="ImporterDisabledMessage">The importer has been disabled in the\nMediaPortal GUI. Would you like to\nreenable it?</string>
   <string Field="ImporterPending">Importer ({0} Pending)</string>
   <string Field="InvalidPin">Invalid PIN code!</string>
   <string Field="InvalidVideoDiscFormat">Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.</string>
@@ -98,10 +105,13 @@
   <string Field="Older">Older</string>
   <!-- P -->
   <string Field="ParentalControlsDisabled">Parental controls are not enabled.</string>
+  <string Field="PendingFiles">Pending Files</string>
   <string Field="PinCodeHeader">Unlocking Restricted Content</string>
   <string Field="PinCodePrompt">Please enter PIN code to continue:</string>
   <string Field="PlaybackFailed">Playback is not possible because the '{0}'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.</string>
   <string Field="PlaybackFailedHeader">Playback Failed</string>
+  <string Field="PlayMovie">Play Movie</string>
+  <string Field="PossibleMatches">Possible Matches</string>
   <string Field="ProblemLoadingSkinFile">Sorry, there was a problem loading the skin file</string>
   <!-- R -->
   <string Field="Rate">Rate</string>
@@ -125,6 +135,7 @@
   <string Field="RemoteNumericAlphabet7">pqrs</string>
   <string Field="RemoteNumericAlphabet8">tuv</string>
   <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="RestoreIgnoredFiles">Restore Ignored Files</string>
   <string Field="ResumeFrom">Resume from:</string>
   <string Field="ResumeFromLast">Resume movie from last time?</string>
   <string Field="Retry">Retry</string>
@@ -141,15 +152,18 @@
   <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
   <!-- S -->
   <string Field="Saturday">Saturday</string>
+  <string Field="SendToImporter">Send to Importer</string>
   <string Field="ScanForNewMovies">Scan for New Movies</string>
   <string Field="Score">Score</string>
   <string Field="Search">Search</string>
   <string Field="SearchBy">Search By</string>
+  <string Field="SearchForMore">Search for More Matches</string>
   <string Field="SearchNoResults">There are no search results.</string>
   <string Field="SelectYourRating">Select your rating for {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Show Only Unwatched Movies</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Show Watched and Unwatched Movies</string>
   <string Field="SkinDoesNotSupportCategories">This skin does not support Categories.</string>
+  <string Field="SkinDoesNotSupportImporter">This skin does not support the Importer.</string>
   <string Field="SkinDoesNotSupportPinDialog">This skin does not support the Pin Code Dialog.</string>
   <string Field="SkinDoesNotSupportRatingDialog">This skin does not support the Rating Dialog.</string>
   <string Field="SortBy">Sort By</string>

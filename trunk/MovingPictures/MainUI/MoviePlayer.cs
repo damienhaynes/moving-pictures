@@ -347,7 +347,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         // Start playback of a file (detects format first)
-        private void playFile(string media) {
+        public void playFile(string media) {
             VideoFormat videoFormat = VideoUtility.GetVideoFormat(media);
             if (videoFormat != VideoFormat.NotSupported) {
                 playFile(media, videoFormat);

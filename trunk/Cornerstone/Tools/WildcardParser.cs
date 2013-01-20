@@ -55,11 +55,13 @@ namespace Cornerstone.Tools {
                 if (!currRelation.Filterable)
                     continue;
 
-                DatabaseTable subObj = (DatabaseTable)currRelation.GetRelationList(obj)[0];
+                if (currRelation.GetRelationList(obj).Count > 0) {
+                    DatabaseTable subObj = (DatabaseTable)currRelation.GetRelationList(obj)[0];
 
-                foreach (DBField currField in DBField.GetFieldList(currRelation.SecondaryType)) {
-                    if (currField.Filterable && currField.GetValue(subObj) != null)                         
-                        replacementStrings[currField.FieldName] = currField.GetValue(subObj).ToString().Trim();
+                    foreach (DBField currField in DBField.GetFieldList(currRelation.SecondaryType)) {
+                        if (currField.Filterable && currField.GetValue(subObj) != null)
+                            replacementStrings[currField.FieldName] = currField.GetValue(subObj).ToString().Trim();
+                    }
                 }
             }
 

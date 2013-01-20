@@ -236,6 +236,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
 
         public void ShowMessage(string heading, string lines) {
+            ShowMessage(heading, lines, GetID);
+        }
+
+        public static void ShowMessage(string heading, string lines, int id) {
             string line1 = null, line2 = null, line3 = null, line4 = null;
             string[] linesArray = lines.Split(new string[] { "\\n", "\n" }, StringSplitOptions.None);
 
@@ -244,10 +248,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (linesArray.Length >= 3) line3 = linesArray[2];
             if (linesArray.Length >= 4) line4 = linesArray[3];
 
-            ShowMessage(heading, line1, line2, line3, line4);
+            ShowMessage(heading, line1, line2, line3, line4, id);
         }
 
         public void ShowMessage(string heading, string line1, string line2, string line3, string line4) {
+            ShowMessage(heading, line1, line2, line3, line4, GetID);
+        }
+
+        public static void ShowMessage(string heading, string line1, string line2, string line3, string line4, int id) {
             GUIDialogOK dialog = (GUIDialogOK)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_OK);
             dialog.Reset();
             dialog.SetHeading(heading);
@@ -255,7 +263,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (line2 != null) dialog.SetLine(2, line2);
             if (line3 != null) dialog.SetLine(3, line3);
             if (line4 != null) dialog.SetLine(4, line4);
-            dialog.DoModal(GetID);
+            dialog.DoModal(id);
         }
 
         /// <summary>
@@ -1046,6 +1054,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 moviePlayer = new MoviePlayer(this);
                 moviePlayer.MovieEnded += new MoviePlayerEvent(onMovieEnded);
                 moviePlayer.MovieStopped += new MoviePlayerEvent(onMovieStopped);
+                MovingPicturesCore.Player = moviePlayer;
 
                 // Listen to the DeviceManager for external media activity (i.e. disks inserted)
                 logger.Debug("Listening for device changes.");
@@ -1112,8 +1121,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIListItem searchItem = new GUIListItem(Translation.SearchBy + "...");
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
             GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
-            GUIListItem importerItem = new GUIListItem(String.Format(Translation.ImporterPending, MovingPicturesCore.Importer.MatchesNeedingInput.Count));
-            GUIListItem rescanItem = new GUIListItem(Translation.ScanForNewMovies);
+            GUIListItem importerItem = new GUIListItem(String.Format(Translation.ImporterPending, MovingPicturesCore.Importer.MatchesNeedingInput.Count) + " ...");
             GUIListItem movieDetailsItem = new GUIListItem(Translation.ViewMovieDetails + "...");
 
             int currID = 1;
@@ -1149,12 +1157,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             importerItem.ItemId = currID++;
             dialog.Add(importerItem);
 
-            // add rescan menu item if needed
-            if (MovingPicturesCore.Settings.ShowRescanMenuItem) {
-                rescanItem.ItemId = currID++;
-                dialog.Add(rescanItem);
-            }
-
             // add view movie details menu item if click to play is enabled
             if (!MovingPicturesCore.Settings.ClickShowsDetails && browser.CurrentView != BrowserViewMode.CATEGORIES) {
                 movieDetailsItem.ItemId = currID++;
@@ -1179,9 +1181,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else if (dialog.SelectedId == importerItem.ItemId) {
                 GUIWindowManager.ActivateWindow(96743);
-            }
-            else if (dialog.SelectedId == rescanItem.ItemId) {
-                MovingPicturesCore.Importer.RestartScanner();
             }
             else if (dialog.SelectedId == searchItem.ItemId) {
                 showSearchContext();
@@ -1446,16 +1445,30 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIListItem retrieveArtItem = new GUIListItem();
             GUIListItem unwatchedItem = new GUIListItem();
             GUIListItem watchedItem = new GUIListItem();
-            GUIListItem deleteItem = new GUIListItem();
             GUIListItem rateItem = new GUIListItem();
+            GUIListItem deleteItem = new GUIListItem();
+            GUIListItem rescanItem = new GUIListItem();
 
             int currID = 1;
             int selectedIndex = browser.SelectedIndex;
             DBMovieInfo selectedMovie = browser.SelectedMovie;
 
-            detailsItem = new GUIListItem(Translation.UpdateDetailsFromOnline);
-            detailsItem.ItemId = currID;
-            dialog.Add(detailsItem);
+            if (selectedMovie.ActiveUserSettings.WatchedCount > 0) {
+                unwatchedItem = new GUIListItem(Translation.MarkAsUnwatched);
+                unwatchedItem.ItemId = currID;
+                dialog.Add(unwatchedItem);
+                currID++;
+            }
+            else {
+                watchedItem = new GUIListItem(Translation.MarkAsWatched);
+                watchedItem.ItemId = currID;
+                dialog.Add(watchedItem);
+                currID++;
+            }
+
+            rateItem = new GUIListItem(Translation.RateHeading);
+            rateItem.ItemId = currID;
+            dialog.Add(rateItem);
             currID++;
 
             if (selectedMovie.AlternateCovers.Count > 1) {
@@ -1474,30 +1487,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currID++;
             }
 
-            if (selectedMovie.ActiveUserSettings.WatchedCount > 0) {
-                unwatchedItem = new GUIListItem(Translation.MarkAsUnwatched);
-                unwatchedItem.ItemId = currID;
-                dialog.Add(unwatchedItem);
-                currID++;
-            }
-            else {
-                watchedItem = new GUIListItem(Translation.MarkAsWatched);
-                watchedItem.ItemId = currID;
-                dialog.Add(watchedItem);
-                currID++;
-            }
-
-            if (MovingPicturesCore.Settings.AllowDelete) {
-                deleteItem = new GUIListItem(Translation.DeleteMovie);
-                deleteItem.ItemId = currID;
-                dialog.Add(deleteItem);
-                currID++;
-            }
-
-            rateItem = new GUIListItem(Translation.RateHeading);
-            rateItem.ItemId = currID;
-            dialog.Add(rateItem);
+            detailsItem = new GUIListItem(Translation.UpdateDetailsFromOnline);
+            detailsItem.ItemId = currID;
+            dialog.Add(detailsItem);
             currID++;
+
+            if (MovingPicturesCore.Settings.AllowRescan) {
+                rescanItem = new GUIListItem(Translation.SendToImporter + " ...");
+                rescanItem.ItemId = currID;
+                dialog.Add(rescanItem);
+                currID++;
+            }
+
+
+
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             if (dialog.SelectedId == detailsItem.ItemId) {
@@ -1543,6 +1546,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (GetUserRating(selectedMovie)) {
                     PublishMovieDetails(selectedMovie);
                 }
+            }
+            else if (dialog.SelectedId == rescanItem.ItemId) {
+                MovingPicturesCore.Importer.Reprocess(selectedMovie);
+                GUIWindowManager.ActivateWindow(96743);
             }
         }
 
