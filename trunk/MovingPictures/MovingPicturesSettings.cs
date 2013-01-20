@@ -8,6 +8,7 @@ using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.Database;
 using Cornerstone.Tools.Translate;
 using NLog;
+using MediaPortal.Plugins.MovingPictures.MainUI;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public class MovingPicturesSettings: SettingsManager {
@@ -1133,6 +1134,38 @@ namespace MediaPortal.Plugins.MovingPictures {
         #region GUI Settings
 
         #region Interface Options
+
+        [CornerstoneSetting(
+            Name = "Last Importer Mode",
+            Description = "The last used view in the in GUI Importer.",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "last_gui_importer_mode",
+            Default = "ALL",
+            Hidden = true)]
+        public string LastGuiImporterModeStr {
+            get { return _lastGuiImporterModeStr; }
+            set {
+                _lastGuiImporterModeStr = value;
+                OnSettingChanged("last_gui_importer_mode");
+            }
+        }
+        private string _lastGuiImporterModeStr;
+
+        public ImporterGUI.FilterMode LastGuiImporterMode {
+            get {
+                try {
+                    return (ImporterGUI.FilterMode) Enum.Parse(typeof(ImporterGUI.FilterMode), LastGuiImporterModeStr);
+                }
+                catch {
+                    return ImporterGUI.FilterMode.ALL;
+                }
+            }
+
+            set {
+                LastGuiImporterModeStr = value.ToString();
+            }
+        }
+
 
         [CornerstoneSetting(
             Name = "Default View",

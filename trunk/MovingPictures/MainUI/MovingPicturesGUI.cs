@@ -1649,6 +1649,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private bool ValidatePin() {
+            return ValidatePin(GetID);
+        }
+
+        public static bool ValidatePin(int id) {
             GUIPinCodeDialog pinCodeDialog = (GUIPinCodeDialog)GUIWindowManager.GetWindow(GUIPinCodeDialog.ID);
             pinCodeDialog.Reset();
             pinCodeDialog.MasterCode = MovingPicturesCore.Settings.ParentalContolsPassword;
@@ -1657,10 +1661,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             pinCodeDialog.InvalidPinMessage = Translation.InvalidPin;
 
             try {
-                pinCodeDialog.DoModal(GetID);
+                pinCodeDialog.DoModal(id);
             }
             catch (ArgumentNullException) {
-                ShowMessage(Translation.Error, Translation.SkinDoesNotSupportPinDialog);
+                ShowMessage(Translation.Error, Translation.SkinDoesNotSupportPinDialog, id);
                 return false;
             }
 
