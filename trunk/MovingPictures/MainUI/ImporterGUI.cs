@@ -6,10 +6,11 @@ using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using Action = MediaPortal.GUI.Library.Action;
 using NLog;
 using MediaPortal.Plugins.MovingPictures.Database;
+using System.Collections;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class ImporterGUI : GUIWindow {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
+        #region Skin Controls
 
         [SkinControlAttribute(310)]
         private GUIListControl allFilesListControl = null;
@@ -29,17 +30,86 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         [SkinControl(20)]
         protected GUIButtonControl restoreIgnoredButton = null;
 
-        private bool skinSupported = false;
-        private bool initialPageLoad = true;
+        #endregion
+
+        public enum FilterMode {
+            ALL,
+            PENDING,
+            COMPLETED
+        }
+
+        private const string IdleIcon = "";
+        private const string IgnoredIcon = "";
+        private const string ProcessingIcon = "movingpictures_processing.png";
+        private const string NeedInputIcon = "movingpictures_needinput.png";
+        private const string DoneIcon = "movingpictures_done.png";
+
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
+        // used to prevent us from manipulating the UI from multiple threads at the same time
         private object statusChangedSyncToken = new object();
         private object progressSyncToken = new object();
-        private Dictionary<MovieMatch, GUIListItem> listItemLookup = new Dictionary<MovieMatch, GUIListItem>();
 
+        // keeps track of what we are displaying and stores our GUIListItems for reuse
+        private Dictionary<MovieMatch, GUIListItem> listItemLookup = new Dictionary<MovieMatch, GUIListItem>();
         private List<GUIListItem> allItems = new List<GUIListItem>();
         private List<GUIListItem> pendingItems = new List<GUIListItem>();
         private List<GUIListItem> completedItems = new List<GUIListItem>();
         
-        private GUIListControl activeList;
+        private bool connected = false;
+
+        /// <summary>
+        /// The current list the user is viewing. Can be set to change the view.
+        /// </summary>
+        public FilterMode Mode {
+            set {
+                _mode = value;
+
+                string label = "";
+                switch (_mode) {
+                    case FilterMode.ALL:
+                        label = Translation.AllFiles;
+                        break;
+                    case FilterMode.PENDING:
+                        label = Translation.PendingFiles;
+                        break;
+                    case FilterMode.COMPLETED:
+                        label = Translation.CompletedFiles;
+                        break;
+                }
+
+                GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Flag", _mode.ToString());
+                GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Label", label);
+                
+                allFilesListControl.Visible = _mode == FilterMode.ALL;
+                pendingFilesListControl.Visible = _mode == FilterMode.PENDING;
+                completedFileListControl.Visible = _mode == FilterMode.COMPLETED;
+            }
+
+            get {
+                return _mode;
+            }
+        } private FilterMode _mode;
+
+        /// <summary>
+        /// The GUIListControl currently being used by the user.
+        /// </summary>
+        private GUIListControl ActiveListControl {
+            get {
+                switch (_mode) {
+                    case FilterMode.ALL:
+                        return allFilesListControl;
+                    case FilterMode.PENDING:
+                        return pendingFilesListControl;
+                    case FilterMode.COMPLETED:
+                        return completedFileListControl;
+                    default:
+                        return null;
+                } 
+            }
+        }
+
+        #region MediaPortal Logic
 
         public override int GetID {
             get { return 96743; }
@@ -53,63 +123,25 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         protected override void OnPageLoad() {
             logger.Debug("Launching Importer Screen");
 
-            skinSupported = allFilesListControl != null && pendingFilesListControl != null && completedFileListControl != null;
+            // make sure we have what we need to proceed
+            if (!VerifySkinSupport() || !VerifyImporterEnabled()) return;
 
-            if (!skinSupported) {
-                GUIWindowManager.ShowPreviousWindow();
-                MovingPicturesGUI.ShowMessage("Moving Pictures", Translation.SkinDoesNotSupportImporter, GetID);
-                return;
-            }
-
-            bool enabled = VerifyImporterEnabled();
-            if (!enabled) {
-                GUIWindowManager.ShowPreviousWindow();
-                return;
-            }
-            
-            if (_loadParameter != null) {
-                // possible future parameters?
-            }
-
-            if (movieStartIndicator != null) movieStartIndicator.Visible = false;
-            GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Flag", "ALL");
-            GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Label", Translation.AllFiles);
-            activeList = allFilesListControl;
-
-            if (initialPageLoad) {
-                MovingPicturesCore.Importer.Stop();
-                MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(ImporterProgress);
-                MovingPicturesCore.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(MovieStatusChangedListener);
-                MovingPicturesCore.Importer.RestartScanner();
-                initialPageLoad = false;
-
-                allFilesListControl.Visible = true;
-                pendingFilesListControl.Visible = false;
-                completedFileListControl.Visible = false;
-            }
-            else {
-                allFilesListControl.ListItems.AddRange(allItems);
-                pendingFilesListControl.ListItems.AddRange(pendingItems);
-                completedFileListControl.ListItems.AddRange(completedItems);
-            }
+            ConnectToImporter();
+            InitializeControls();
 
             base.OnPageLoad();
         }
 
         protected override void OnClicked(int controlId, GUIControl control, MediaPortal.GUI.Library.Action.ActionType actionType) {
+            // clicked on one of the lists
             if ((control == allFilesListControl || control == pendingFilesListControl || control == completedFileListControl) && actionType == Action.ActionType.ACTION_SELECT_ITEM) {
                 DisplayMatchesDialog();
                 return;
             }
 
-            switch (controlId) {
-                case 19: // scan for new files
-                    MovingPicturesCore.Importer.RestartScanner();
-                    break;
-                case 20: // restore ignored files
-                    MovingPicturesCore.Importer.RestoreAllIgnoredFiles();
-                    break;
-            }
+            // button clicks
+            if (control == scanButton) MovingPicturesCore.Importer.RestartScanner();
+            if (control == restoreIgnoredButton) MovingPicturesCore.Importer.RestoreAllIgnoredFiles();
         }
 
         public override void OnAction(Action action) {
@@ -121,31 +153,119 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case Action.ActionType.ACTION_MOVE_UP:
                 case Action.ActionType.ACTION_MOVE_DOWN:
                     int focusedControlId = GetFocusControlId();
-                    if (focusedControlId == allFilesListControl.GetID) {
-                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Flag", "ALL");
-                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Label", Translation.AllFiles);
-                        activeList = allFilesListControl;
-                    }
-                    if (focusedControlId == pendingFilesListControl.GetID) {
-                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Flag", "PENDING");
-                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Label", Translation.PendingFiles);
-                        activeList = pendingFilesListControl;
-                    }
-                    if (focusedControlId == completedFileListControl.GetID) {
-                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Flag", "COMPLETED");
-                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Label", Translation.CompletedFiles);
-                        activeList = completedFileListControl;
-                    }
+                    if (focusedControlId == allFilesListControl.GetID) Mode = FilterMode.ALL;
+                    if (focusedControlId == pendingFilesListControl.GetID) Mode = FilterMode.PENDING;
+                    if (focusedControlId == completedFileListControl.GetID) Mode = FilterMode.COMPLETED;
                     break;
             }
         }
 
         protected override void OnShowContextMenu() {
             base.OnShowContextMenu();
-            showMainContext();
+            DisplayContextMenu();
         }
 
+        #endregion
 
+        #region Startup Logic
+
+        /// <summary>
+        /// Check if the importer is meant to run in the GUI, if not let the user know. Backs out if the user keeps the importer off.
+        /// </summary>
+        private bool VerifyImporterEnabled() {
+            if (MovingPicturesCore.Settings.EnableImporterInGUI) return true;
+
+            GUIPropertyManager.SetProperty("#MovingPictures.Importer.Status", " ");
+            bool enable = MovingPicturesGUI.ShowCustomYesNo(Translation.ImporterDisabled, Translation.ImporterDisabledMessage, null, null, false, GetID);
+
+            MovingPicturesCore.Settings.EnableImporterInGUI = enable;
+
+            if (enable) MovingPicturesCore.Importer.Start();
+            else GUIWindowManager.ShowPreviousWindow();
+
+            return enable;
+        }
+
+        /// <summary>
+        /// Checks that the current skin supports the importer. Backs out if it does not.
+        /// </summary>
+        private bool VerifySkinSupport() {
+            bool skinSupported = allFilesListControl != null && pendingFilesListControl != null && completedFileListControl != null;
+            if (!skinSupported) {
+                GUIWindowManager.ShowPreviousWindow();
+                MovingPicturesGUI.ShowMessage("Moving Pictures", Translation.SkinDoesNotSupportImporter, GetID);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Grab current importer information and begin listening for updates.
+        /// </summary>
+        private void ConnectToImporter() {
+            if (connected) return;
+
+            lock (progressSyncToken) {
+                lock (statusChangedSyncToken) {
+                    MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(ImporterProgress);
+                    MovingPicturesCore.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(MovieStatusChangedListener);
+
+                    ArrayList importerAll = MovingPicturesCore.Importer.AllMatches;
+                    ArrayList importerNeedInput = MovingPicturesCore.Importer.MatchesNeedingInput;
+                    ArrayList importerRetrieving = MovingPicturesCore.Importer.RetrievingDetailsMatches;
+                    ArrayList importerApproved = MovingPicturesCore.Importer.ApprovedMatches;
+                    ArrayList importerPriorityApproved = MovingPicturesCore.Importer.PriorityApprovedMatches;
+                    ArrayList importerCommitted = MovingPicturesCore.Importer.CommitedMatches;
+
+                    foreach (MovieMatch match in importerAll) {
+                        GUIListItem listItem = GetListItem(match);
+                        AddToList(listItem, FilterMode.ALL);
+
+                        if (importerNeedInput.Contains(match)) {
+                            listItem.PinImage = NeedInputIcon;
+                            AddToList(listItem, FilterMode.PENDING);
+                        }
+
+                        if (importerRetrieving.Contains(match) || importerApproved.Contains(match) || importerPriorityApproved.Contains(match)) {
+                            listItem.PinImage = ProcessingIcon;
+                        }
+
+                        if (importerCommitted.Contains(match)) {
+                            listItem.PinImage = DoneIcon;
+                            AddToList(listItem, FilterMode.COMPLETED);
+                        }
+                    }
+                }
+            }
+
+            connected = true;
+        }
+
+        /// <summary>
+        /// Initializes and populates controls on the screen. 
+        /// </summary>
+        private void InitializeControls() {
+            Mode = FilterMode.ALL;
+
+            allFilesListControl.ListItems.Clear();
+            pendingFilesListControl.ListItems.Clear();
+            completedFileListControl.ListItems.Clear();
+            
+            allFilesListControl.ListItems.AddRange(allItems);
+            pendingFilesListControl.ListItems.AddRange(pendingItems);
+            completedFileListControl.ListItems.AddRange(completedItems);
+
+            if (movieStartIndicator != null) movieStartIndicator.Visible = false;
+        }
+
+        #endregion
+
+        #region Update Logic
+
+        /// <summary>
+        /// Publish progress updates to the skin as they are received.
+        /// </summary>
         private void ImporterProgress(int percentDone, int taskCount, int taskTotal, string taskDescription) {
             lock (progressSyncToken) {
                 if (GUIPropertyManager.GetProperty("#MovingPictures.Importer.Status") != taskDescription) {
@@ -165,29 +285,43 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 int retrieving = MovingPicturesCore.Importer.RetrievingDetailsMatches.Count;
                 int done = MovingPicturesCore.Importer.CommitedMatches.Count;
 
-                GUIPropertyManager.SetProperty("#MovingPictures.Importer.Waiting.Count", unprocessed.ToString());
+                GUIPropertyManager.SetProperty("#MovingPictures.Importer.All.Count", (unprocessed + needInput + approved + retrieving + done).ToString());
                 GUIPropertyManager.SetProperty("#MovingPictures.Importer.NeedInput.Count", needInput.ToString());
-                GUIPropertyManager.SetProperty("#MovingPictures.Importer.Processing.Count", (approved + retrieving).ToString());
                 GUIPropertyManager.SetProperty("#MovingPictures.Importer.Done.Count", done.ToString());
+
+                GUIPropertyManager.SetProperty("#MovingPictures.Importer.Waiting.Count", unprocessed.ToString());
+                GUIPropertyManager.SetProperty("#MovingPictures.Importer.Processing.Count", (approved + retrieving).ToString()); 
             }
         }
 
+        /// <summary>
+        /// Receives updates about specific items in the importer and updates the UI accordingly.
+        /// </summary>
         private void MovieStatusChangedListener(MovieMatch match, MovieImporterAction action) {
             lock (statusChangedSyncToken) {
-                string icon = "";
-                bool ignored = false;
-                
-                bool inAllList = true;
-                bool inPendingList = false;
-                bool inCompletedList = false;
+                // if the importer fired up or shut down clear out our display
+                if (action == MovieImporterAction.STARTED || action == MovieImporterAction.STOPPED) {
+                    allItems.Clear();
+                    pendingItems.Clear();
+                    completedItems.Clear();
 
+                    listItemLookup.Clear();
+                    allFilesListControl.ListItems.Clear();
+                    pendingFilesListControl.ListItems.Clear();
+                    completedFileListControl.ListItems.Clear();
+                    return;
+                }
+
+                // our message is about a specific match
+                GUIListItem listItem = GetListItem(match);
+                AddToList(listItem, FilterMode.ALL);
 
                 switch (action) {
                     // file is queued but not yet processed have no icon
                     case MovieImporterAction.ADDED:
                     case MovieImporterAction.ADDED_FROM_SPLIT:
                     case MovieImporterAction.ADDED_FROM_JOIN:
-                        icon = "";
+                        listItem.PinImage = IdleIcon;    
                         break;
 
                     // files that are currently being scanned are blue
@@ -195,95 +329,108 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     case MovieImporterAction.GETTING_MATCHES:
                     case MovieImporterAction.APPROVED:
                     case MovieImporterAction.GETTING_DETAILS:
-                        icon = "movingpictures_processing.png";
+                        listItem.PinImage = ProcessingIcon;
                         break;
 
                     // files that need help from the user are yellow
                     case MovieImporterAction.NEED_INPUT:
-                        icon = "movingpictures_needinput.png";
-                        inPendingList = true;
+                        listItem.PinImage = NeedInputIcon;
+                        AddToList(listItem, FilterMode.PENDING);
                         break;
                     
                     // files that have successfully imported are green
                     case MovieImporterAction.COMMITED:
-                        icon = "movingpictures_done.png";
-                        inCompletedList = true;
+                        listItem.PinImage = DoneIcon;
+                        AddToList(listItem, FilterMode.COMPLETED);
+                        RemoveFromList(listItem, FilterMode.PENDING);
                         break;
 
                     case MovieImporterAction.IGNORED:
-                        icon = "";
-                        ignored = true;
-                        inPendingList = true;
+                        listItem.PinImage = IgnoredIcon;
+                        AddToList(listItem, FilterMode.PENDING);
+                        RemoveFromList(listItem, FilterMode.COMPLETED);
                         break;
-
-                    // importer started or stopped. do nothing for now...
-                    case MovieImporterAction.STARTED:
-                    case MovieImporterAction.STOPPED:
-                        allItems.Clear();
-                        pendingItems.Clear();
-                        completedItems.Clear();
-                    
-                        listItemLookup.Clear();
-                        allFilesListControl.ListItems.Clear();
-                        pendingFilesListControl.ListItems.Clear();
-                        completedFileListControl.ListItems.Clear();
-                        return;
                 }
-
-                // create or grab our list item
-                GUIListItem listItem = null;
-                if (listItemLookup.ContainsKey(match)) {
-                    listItem = listItemLookup[match];
-                }
-                else {
-                    listItem = new GUIListItem();
-                    listItemLookup[match] = listItem;
-                }
-
-                if (inAllList && !allFilesListControl.ListItems.Contains(listItem)) {
-                    allFilesListControl.ListItems.Add(listItem);
-                    allItems.Add(listItem);
-                }
-
-                if (inPendingList && !pendingFilesListControl.ListItems.Contains(listItem)) {
-                    pendingFilesListControl.ListItems.Add(listItem);
-                    pendingItems.Add(listItem);
-                }
-
-                if (inCompletedList && !completedFileListControl.ListItems.Contains(listItem)) {
-                    completedFileListControl.ListItems.Add(listItem);
-                    completedItems.Add(listItem);
-                }
-
-                if (!inPendingList && inCompletedList) {
-                    pendingItems.Remove(listItem);
-                    pendingFilesListControl.ListItems.Remove(listItem);
-                }
-                
-                if (!inCompletedList) completedItems.Remove(listItem);
-
-                // populate it with most recent info
-                listItem.Label = match.LocalMediaString;
-                listItem.Label2 = (match.Selected != null ? match.Selected.DisplayMember : "");
-                listItem.Label3 = action.ToString();
-                listItem.PinImage = icon;
-                listItem.IsPlayed = ignored;
-                listItem.AlbumInfoTag = match;
-
             }
         }
 
-        private bool VerifyImporterEnabled() {
-            if (MovingPicturesCore.Settings.EnableImporterInGUI) return true;
+        private void AddToList(GUIListItem listItem, FilterMode mode) {
+            GUIListControl listControl = allFilesListControl;
+            List<GUIListItem> internalList = allItems;
 
-            bool enable = MovingPicturesGUI.ShowCustomYesNo(Translation.ImporterDisabled, Translation.ImporterDisabledMessage, null, null, false, GetID);
-            if (enable) MovingPicturesCore.Settings.EnableImporterInGUI = true;
+            switch (mode) {
+                case FilterMode.ALL:
+                    listControl = allFilesListControl;
+                    internalList = allItems;
+                    break;
+                case FilterMode.PENDING:
+                    listControl = pendingFilesListControl;
+                    internalList = pendingItems;
+                    break;
+                case FilterMode.COMPLETED:
+                    listControl = completedFileListControl;
+                    internalList = completedItems;
+                    break;
+            }
 
-            return enable;
+            if (!internalList.Contains(listItem)) {
+                internalList.Add(listItem);
+                listControl.ListItems.Add(listItem);
+            }
         }
 
-        private void showMainContext() {
-            if (activeList == null) return;
+        private void RemoveFromList(GUIListItem listItem, FilterMode mode) {
+            GUIListControl listControl = allFilesListControl;
+            List<GUIListItem> internalList = allItems;
+
+            switch (mode) {
+                case FilterMode.ALL:
+                    listControl = allFilesListControl;
+                    internalList = allItems;
+                    break;
+                case FilterMode.PENDING:
+                    listControl = pendingFilesListControl;
+                    internalList = pendingItems;
+                    break;
+                case FilterMode.COMPLETED:
+                    listControl = completedFileListControl;
+                    internalList = completedItems;
+                    break;
+            }
+
+            if (internalList.Contains(listItem)) {
+                internalList.Remove(listItem);
+                listControl.ListItems.Remove(listItem);
+            }
+        }
+
+        private GUIListItem GetListItem(MovieMatch match) {
+            // create or grab our list item
+            GUIListItem listItem = null;
+            if (listItemLookup.ContainsKey(match)) {
+                listItem = listItemLookup[match];
+            }
+            else {
+                listItem = new GUIListItem();
+                listItemLookup[match] = listItem;
+            }
+
+            // populate it with most recent info
+            listItem.Label = match.LocalMediaString;
+            listItem.Label2 = (match.Selected != null ? match.Selected.DisplayMember : "");
+            listItem.Label3 = match.LongLocalMediaString;
+            listItem.IsPlayed = match.LocalMedia.Count == 0 ? false : match.LocalMedia[0].Ignored;
+            listItem.AlbumInfoTag = match;
+
+            return listItem;
+        }
+
+        #endregion
+
+        #region Popup Menus
+
+        private void DisplayContextMenu() {
+            if (ActiveListControl == null) return;
             
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
@@ -311,7 +458,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void DisplayMatchesDialog() {
-            MovieMatch selectedFile = activeList.SelectedListItem == null ? null : activeList.SelectedListItem.AlbumInfoTag as MovieMatch;
+            MovieMatch selectedFile = ActiveListControl.SelectedListItem == null ? null : ActiveListControl.SelectedListItem.AlbumInfoTag as MovieMatch;
 
             // create our dialog
             GUIDialogMenu matchDialog = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
@@ -424,5 +571,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             return true;
         }
 
+        #endregion
     }
 }
