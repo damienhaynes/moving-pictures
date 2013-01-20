@@ -7,6 +7,7 @@ using Action = MediaPortal.GUI.Library.Action;
 using NLog;
 using MediaPortal.Plugins.MovingPictures.Database;
 using System.Collections;
+using Cornerstone.MP;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class ImporterGUI : GUIWindow {
@@ -20,6 +21,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         [SkinControlAttribute(312)]
         private GUIListControl completedFileListControl = null;
+
+        [SkinControl(400)]
+        protected GUIImage movieBackdropControl = null;
+
+        [SkinControl(401)]
+        protected GUIImage movieBackdropControl2 = null;
         
         [SkinControl(18)]
         protected GUIImage movieStartIndicator = null;
@@ -37,6 +44,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             PENDING,
             COMPLETED
         }
+
+        private ImageSwapper backdrop;
 
         private const string IdleIcon = "";
         private const string IgnoredIcon = "";
@@ -69,12 +78,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 switch (_mode) {
                     case FilterMode.ALL:
                         label = Translation.AllFiles;
+                        if (!allFilesListControl.IsFocused) GUIControl.FocusControl(GetID, allFilesListControl.GetID);
                         break;
                     case FilterMode.PENDING:
                         label = Translation.PendingFiles;
+                        if (!pendingFilesListControl.IsFocused) GUIControl.FocusControl(GetID, pendingFilesListControl.GetID);
                         break;
                     case FilterMode.COMPLETED:
                         label = Translation.CompletedFiles;
+                        if (!completedFileListControl.IsFocused) GUIControl.FocusControl(GetID, completedFileListControl.GetID);
                         break;
                 }
 
@@ -84,6 +96,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 allFilesListControl.Visible = _mode == FilterMode.ALL;
                 pendingFilesListControl.Visible = _mode == FilterMode.PENDING;
                 completedFileListControl.Visible = _mode == FilterMode.COMPLETED;
+
+                MovingPicturesCore.Settings.LastGuiImporterMode = _mode; 
+
+                UpdateArtwork();
             }
 
             get {
@@ -117,6 +133,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         public override bool Init() {
             logger.Debug("Initializing Importer Screen");
+
+            // create backdrop image swapper
+            backdrop = new ImageSwapper();
+            backdrop.ImageResource.Delay = MovingPicturesCore.Settings.ArtworkLoadingDelay;
+            backdrop.PropertyOne = "#MovingPictures.Importer.Backdrop1";
+            backdrop.PropertyTwo = "#MovingPictures.Importer.Backdrop2";
+
             return Load(GUIGraphicsContext.Skin + @"\movingpictures.importer.xml");
         }
 
@@ -124,7 +147,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             logger.Debug("Launching Importer Screen");
 
             // make sure we have what we need to proceed
-            if (!VerifySkinSupport() || !VerifyImporterEnabled()) return;
+            GUIPropertyManager.SetProperty("#MovingPictures.Importer.Status", " ");
+            if (!VerifySkinSupport() || !VerifyImporterEnabled() || !VerifyParentalControls()) return;
 
             ConnectToImporter();
             InitializeControls();
@@ -135,7 +159,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         protected override void OnClicked(int controlId, GUIControl control, MediaPortal.GUI.Library.Action.ActionType actionType) {
             // clicked on one of the lists
             if ((control == allFilesListControl || control == pendingFilesListControl || control == completedFileListControl) && actionType == Action.ActionType.ACTION_SELECT_ITEM) {
-                DisplayMatchesDialog();
+                DisplayMovieOptionsDialog();
                 return;
             }
 
@@ -165,6 +189,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             DisplayContextMenu();
         }
 
+        private void ListItemSelected(GUIListItem item, GUIControl parent) {
+            UpdateArtwork();
+        }
+
         #endregion
 
         #region Startup Logic
@@ -175,7 +203,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private bool VerifyImporterEnabled() {
             if (MovingPicturesCore.Settings.EnableImporterInGUI) return true;
 
-            GUIPropertyManager.SetProperty("#MovingPictures.Importer.Status", " ");
             bool enable = MovingPicturesGUI.ShowCustomYesNo(Translation.ImporterDisabled, Translation.ImporterDisabledMessage, null, null, false, GetID);
 
             MovingPicturesCore.Settings.EnableImporterInGUI = enable;
@@ -194,6 +221,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (!skinSupported) {
                 GUIWindowManager.ShowPreviousWindow();
                 MovingPicturesGUI.ShowMessage("Moving Pictures", Translation.SkinDoesNotSupportImporter, GetID);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// If parental controls are enabled make sure the user is not up to no good.
+        /// </summary>
+        private bool VerifyParentalControls() {
+            if (MovingPicturesCore.Settings.ParentalControlsEnabled && !MovingPicturesGUI.ValidatePin(GetID)) {
+                GUIWindowManager.ShowPreviousWindow();
                 return false;
             }
 
@@ -246,7 +285,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// Initializes and populates controls on the screen. 
         /// </summary>
         private void InitializeControls() {
-            Mode = FilterMode.ALL;
+            Mode = MovingPicturesCore.Settings.LastGuiImporterMode;
 
             allFilesListControl.ListItems.Clear();
             pendingFilesListControl.ListItems.Clear();
@@ -256,7 +295,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             pendingFilesListControl.ListItems.AddRange(pendingItems);
             completedFileListControl.ListItems.AddRange(completedItems);
 
+            backdrop.GUIImageOne = movieBackdropControl;
+            backdrop.GUIImageTwo = movieBackdropControl2;
+
             if (movieStartIndicator != null) movieStartIndicator.Visible = false;
+            UpdateArtwork();
         }
 
         #endregion
@@ -351,6 +394,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         RemoveFromList(listItem, FilterMode.COMPLETED);
                         break;
                 }
+
+                UpdateArtwork();
             }
         }
 
@@ -412,6 +457,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
             else {
                 listItem = new GUIListItem();
+                listItem.OnItemSelected += new GUIListItem.ItemSelectedHandler(ListItemSelected);
                 listItemLookup[match] = listItem;
             }
 
@@ -423,6 +469,19 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             listItem.AlbumInfoTag = match;
 
             return listItem;
+        }
+
+        private void UpdateArtwork() {
+            GUIListItem item = ActiveListControl.SelectedListItem;
+            if (item == null) return;
+
+            MovieMatch match = item.AlbumInfoTag as MovieMatch;
+            if (MovingPicturesCore.Importer.CommitedMatches.Contains(match)) {
+                backdrop.Filename = match.Selected.Movie.BackdropFullPath;
+            }
+            else {
+                backdrop.Filename = string.Empty;
+            }
         }
 
         #endregion
@@ -457,7 +516,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
-        private void DisplayMatchesDialog() {
+        private void DisplayMovieOptionsDialog() {
             MovieMatch selectedFile = ActiveListControl.SelectedListItem == null ? null : ActiveListControl.SelectedListItem.AlbumInfoTag as MovieMatch;
 
             // create our dialog
@@ -471,20 +530,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             matchDialog.Reset();
             matchDialog.SetHeading(Translation.PossibleMatches);
 
-            // add our possible matches to it (list of movies)
-            foreach (var match in selectedFile.PossibleMatches) {
-                matchDialog.Add(match.DisplayMember);
-                maxid++;
-            }
-
-            int searchId = ++maxid;
-            matchDialog.Add(Translation.SearchForMore + " ...");
-            
-            int ignoreId = ++maxid;
-            matchDialog.Add(Translation.IgnoreMovie);
+            int selectId = ++maxid;
+            matchDialog.Add(Translation.SelectCorrectMovie + " ...");
 
             int playId = ++maxid;
             matchDialog.Add(Translation.PlayMovie);
+
+            int ignoreId = ++maxid;
+            matchDialog.Add(Translation.IgnoreMovie);
 
             // launch dialog and let user make choice
             matchDialog.DoModal(GUIWindowManager.ActiveWindow);
@@ -493,10 +546,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (matchDialog.SelectedId == -1)
                 return;
 
-            // get new search criteria
-            if (matchDialog.SelectedId == searchId) {
-                bool searched = DisplaySearchDialog(selectedFile);
-                if (!searched) DisplayMatchesDialog();
+            // open selection dialog
+            if (matchDialog.SelectedId == selectId) {
+                bool success = DisplayMovieSelectionDialog();
+                if (!success) DisplayMovieOptionsDialog();
                 return;
             }
 
@@ -516,10 +569,50 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (movieStartIndicator != null)
                     movieStartIndicator.Visible = false;
             }
+        }
 
-            // user picked a movie, assign it
+        private bool DisplayMovieSelectionDialog() {
+            MovieMatch selectedFile = ActiveListControl.SelectedListItem == null ? null : ActiveListControl.SelectedListItem.AlbumInfoTag as MovieMatch;
+
+            // create our dialog
+            GUIDialogMenu matchDialog = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+            if (matchDialog == null) {
+                logger.Error("Could not create matches dialog.");
+                return false;
+            }
+
+            int maxid = 0;
+            matchDialog.Reset();
+            matchDialog.SetHeading(Translation.PossibleMatches);
+
+            // add our possible matches to it (list of movies)
+            foreach (var match in selectedFile.PossibleMatches) {
+                matchDialog.Add(match.DisplayMember);
+                maxid++;
+            }
+
+            int searchId = ++maxid;
+            matchDialog.Add(Translation.SearchForMore + " ...");
+
+            // launch dialog and let user make choice
+            matchDialog.DoModal(GUIWindowManager.ActiveWindow);
+
+            // if the user canceled bail
+            if (matchDialog.SelectedId == -1)
+                return false;
+
+            // get new search criteria
+            if (matchDialog.SelectedId == searchId) {
+                bool searched = DisplaySearchDialog(selectedFile);
+                if (!searched) return DisplayMovieSelectionDialog();
+                return true;
+            }
+
+                        // user picked a movie, assign it
             selectedFile.Selected = selectedFile.PossibleMatches[matchDialog.SelectedId - 1];
             MovingPicturesCore.Importer.Approve(selectedFile);
+
+            return true;
         }
 
         private bool DisplaySearchDialog(MovieMatch selectedFile) {

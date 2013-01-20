@@ -159,6 +159,7 @@
   <string Field="SearchBy">Search By</string>
   <string Field="SearchForMore">Search for More Matches</string>
   <string Field="SearchNoResults">There are no search results.</string>
+  <string Field="SelectCorrectMovie">Select Correct Movie</string>
   <string Field="SelectYourRating">Select your rating for {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Show Only Unwatched Movies</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Show Watched and Unwatched Movies</string>
