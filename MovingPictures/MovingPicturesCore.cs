@@ -131,6 +131,16 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         } private static MovieBrowser _browser = null;
 
+        public static MoviePlayer Player {
+            get {
+                return _player;
+            }
+
+            internal set {
+                _player = value;
+            }
+        } private static MoviePlayer _player = null;
+
         // Settings from Media Portal
         // Instead of calling this line whenever we need some MP setting we only define it once
         // There isn't really a central MePo settings manager (or is there?)

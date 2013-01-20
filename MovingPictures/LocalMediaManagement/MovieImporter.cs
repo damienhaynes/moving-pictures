@@ -294,6 +294,26 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             this.Start();
         }
 
+        public void RestoreAllIgnoredFiles() {
+            foreach (DBLocalMedia currFile in DBLocalMedia.GetAll())
+                if (currFile.Ignored)
+                    currFile.Delete();
+
+            RestartScanner();
+        }
+
+        public bool Reprocess(DBMovieInfo movie) {
+            foreach (DBLocalMedia file in movie.LocalMedia) {
+                if (!file.IsAvailable) return false;
+            }
+
+            List<DBLocalMedia> localMedia = new List<DBLocalMedia>(movie.LocalMedia);
+            movie.Delete();
+            Reprocess(localMedia);
+            
+            return true;
+        }
+
         // This method is written weird and needs to be clarified. But I think it works, 
         // reloading specified files.
         public void Reprocess(List<DBLocalMedia> fileList) {

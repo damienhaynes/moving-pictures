@@ -721,10 +721,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     "Reassign Movie", MessageBoxButtons.YesNo);
 
             if (result == System.Windows.Forms.DialogResult.Yes) {
-                List<DBLocalMedia> localMedia = new List<DBLocalMedia>(CurrentMovie.LocalMedia);
-                CurrentMovie.Delete();
-                MovingPicturesCore.Importer.Start();
-                MovingPicturesCore.Importer.Reprocess(localMedia);
+                MovingPicturesCore.Importer.Reprocess(CurrentMovie);
                 switchToImporter();
             }
         }

@@ -5,18 +5,41 @@ using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using Action = MediaPortal.GUI.Library.Action;
 using NLog;
+using MediaPortal.Plugins.MovingPictures.Database;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class ImporterGUI : GUIWindow {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         [SkinControlAttribute(310)]
-        private GUIListControl fileListControl = null;
+        private GUIListControl allFilesListControl = null;
+        
+        [SkinControlAttribute(311)]
+        private GUIListControl pendingFilesListControl = null;
 
+        [SkinControlAttribute(312)]
+        private GUIListControl completedFileListControl = null;
+        
+        [SkinControl(18)]
+        protected GUIImage movieStartIndicator = null;
+
+        [SkinControl(19)]
+        protected GUIButtonControl scanButton = null;
+
+        [SkinControl(20)]
+        protected GUIButtonControl restoreIgnoredButton = null;
+
+        private bool skinSupported = false;
         private bool initialPageLoad = true;
         private object statusChangedSyncToken = new object();
         private object progressSyncToken = new object();
         private Dictionary<MovieMatch, GUIListItem> listItemLookup = new Dictionary<MovieMatch, GUIListItem>();
+
+        private List<GUIListItem> allItems = new List<GUIListItem>();
+        private List<GUIListItem> pendingItems = new List<GUIListItem>();
+        private List<GUIListItem> completedItems = new List<GUIListItem>();
+        
+        private GUIListControl activeList;
 
         public override int GetID {
             get { return 96743; }
@@ -30,6 +53,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         protected override void OnPageLoad() {
             logger.Debug("Launching Importer Screen");
 
+            skinSupported = allFilesListControl != null && pendingFilesListControl != null && completedFileListControl != null;
+
+            if (!skinSupported) {
+                GUIWindowManager.ShowPreviousWindow();
+                MovingPicturesGUI.ShowMessage("Moving Pictures", Translation.SkinDoesNotSupportImporter, GetID);
+                return;
+            }
+
             bool enabled = VerifyImporterEnabled();
             if (!enabled) {
                 GUIWindowManager.ShowPreviousWindow();
@@ -40,32 +71,84 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // possible future parameters?
             }
 
+            if (movieStartIndicator != null) movieStartIndicator.Visible = false;
+            GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Flag", "ALL");
+            GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Label", Translation.AllFiles);
+            activeList = allFilesListControl;
+
             if (initialPageLoad) {
                 MovingPicturesCore.Importer.Stop();
                 MovingPicturesCore.Importer.Progress += new MovieImporter.ImportProgressHandler(ImporterProgress);
                 MovingPicturesCore.Importer.MovieStatusChanged += new MovieImporter.MovieStatusChangedHandler(MovieStatusChangedListener);
                 MovingPicturesCore.Importer.RestartScanner();
                 initialPageLoad = false;
+
+                allFilesListControl.Visible = true;
+                pendingFilesListControl.Visible = false;
+                completedFileListControl.Visible = false;
             }
             else {
-                foreach (GUIListItem currItem in listItemLookup.Values)
-                    fileListControl.ListItems.Add(currItem);
+                allFilesListControl.ListItems.AddRange(allItems);
+                pendingFilesListControl.ListItems.AddRange(pendingItems);
+                completedFileListControl.ListItems.AddRange(completedItems);
             }
 
             base.OnPageLoad();
         }
 
-        protected override void OnClicked(int controlId, GUIControl control, Action.ActionType actionType) {
-            if (control == fileListControl && actionType == Action.ActionType.ACTION_SELECT_ITEM) {
+        protected override void OnClicked(int controlId, GUIControl control, MediaPortal.GUI.Library.Action.ActionType actionType) {
+            if ((control == allFilesListControl || control == pendingFilesListControl || control == completedFileListControl) && actionType == Action.ActionType.ACTION_SELECT_ITEM) {
                 DisplayMatchesDialog();
+                return;
             }
-            base.OnClicked(controlId, control, actionType);
+
+            switch (controlId) {
+                case 19: // scan for new files
+                    MovingPicturesCore.Importer.RestartScanner();
+                    break;
+                case 20: // restore ignored files
+                    MovingPicturesCore.Importer.RestoreAllIgnoredFiles();
+                    break;
+            }
         }
+
+        public override void OnAction(Action action) {
+            base.OnAction(action);
+
+            switch (action.wID) {
+                case Action.ActionType.ACTION_MOVE_RIGHT:
+                case Action.ActionType.ACTION_MOVE_LEFT:
+                case Action.ActionType.ACTION_MOVE_UP:
+                case Action.ActionType.ACTION_MOVE_DOWN:
+                    int focusedControlId = GetFocusControlId();
+                    if (focusedControlId == allFilesListControl.GetID) {
+                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Flag", "ALL");
+                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Label", Translation.AllFiles);
+                        activeList = allFilesListControl;
+                    }
+                    if (focusedControlId == pendingFilesListControl.GetID) {
+                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Flag", "PENDING");
+                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Label", Translation.PendingFiles);
+                        activeList = pendingFilesListControl;
+                    }
+                    if (focusedControlId == completedFileListControl.GetID) {
+                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Flag", "COMPLETED");
+                        GUIPropertyManager.SetProperty("#MovingPictures.Importer.ListMode.Label", Translation.CompletedFiles);
+                        activeList = completedFileListControl;
+                    }
+                    break;
+            }
+        }
+
+        protected override void OnShowContextMenu() {
+            base.OnShowContextMenu();
+            showMainContext();
+        }
+
 
         private void ImporterProgress(int percentDone, int taskCount, int taskTotal, string taskDescription) {
             lock (progressSyncToken) {
                 if (GUIPropertyManager.GetProperty("#MovingPictures.Importer.Status") != taskDescription) {
-                    logger.Debug("IMPORTER TASK: " + taskDescription);
                     GUIPropertyManager.SetProperty("#MovingPictures.Importer.Status", taskDescription);
                 }
 
@@ -92,6 +175,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void MovieStatusChangedListener(MovieMatch match, MovieImporterAction action) {
             lock (statusChangedSyncToken) {
                 string icon = "";
+                bool ignored = false;
+                
+                bool inAllList = true;
+                bool inPendingList = false;
+                bool inCompletedList = false;
+
 
                 switch (action) {
                     // file is queued but not yet processed have no icon
@@ -106,24 +195,38 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     case MovieImporterAction.GETTING_MATCHES:
                     case MovieImporterAction.APPROVED:
                     case MovieImporterAction.GETTING_DETAILS:
-                        icon = "led_blue.png";
+                        icon = "movingpictures_processing.png";
                         break;
 
                     // files that need help from the user are yellow
                     case MovieImporterAction.NEED_INPUT:
-                        icon = "led_yellow.png";
+                        icon = "movingpictures_needinput.png";
+                        inPendingList = true;
                         break;
                     
                     // files that have successfully imported are green
                     case MovieImporterAction.COMMITED:
-                        icon = "led_green.png";
+                        icon = "movingpictures_done.png";
+                        inCompletedList = true;
                         break;
-                    
+
+                    case MovieImporterAction.IGNORED:
+                        icon = "";
+                        ignored = true;
+                        inPendingList = true;
+                        break;
+
                     // importer started or stopped. do nothing for now...
                     case MovieImporterAction.STARTED:
                     case MovieImporterAction.STOPPED:
-                        //listItemLookup.Clear();
-                        //fileListControl.ListItems.Clear();
+                        allItems.Clear();
+                        pendingItems.Clear();
+                        completedItems.Clear();
+                    
+                        listItemLookup.Clear();
+                        allFilesListControl.ListItems.Clear();
+                        pendingFilesListControl.ListItems.Clear();
+                        completedFileListControl.ListItems.Clear();
                         return;
                 }
 
@@ -134,15 +237,37 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
                 else {
                     listItem = new GUIListItem();
-                    fileListControl.ListItems.Add(listItem);
                     listItemLookup[match] = listItem;
                 }
+
+                if (inAllList && !allFilesListControl.ListItems.Contains(listItem)) {
+                    allFilesListControl.ListItems.Add(listItem);
+                    allItems.Add(listItem);
+                }
+
+                if (inPendingList && !pendingFilesListControl.ListItems.Contains(listItem)) {
+                    pendingFilesListControl.ListItems.Add(listItem);
+                    pendingItems.Add(listItem);
+                }
+
+                if (inCompletedList && !completedFileListControl.ListItems.Contains(listItem)) {
+                    completedFileListControl.ListItems.Add(listItem);
+                    completedItems.Add(listItem);
+                }
+
+                if (!inPendingList && inCompletedList) {
+                    pendingItems.Remove(listItem);
+                    pendingFilesListControl.ListItems.Remove(listItem);
+                }
+                
+                if (!inCompletedList) completedItems.Remove(listItem);
 
                 // populate it with most recent info
                 listItem.Label = match.LocalMediaString;
                 listItem.Label2 = (match.Selected != null ? match.Selected.DisplayMember : "");
                 listItem.Label3 = action.ToString();
                 listItem.PinImage = icon;
+                listItem.IsPlayed = ignored;
                 listItem.AlbumInfoTag = match;
 
             }
@@ -151,17 +276,42 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private bool VerifyImporterEnabled() {
             if (MovingPicturesCore.Settings.EnableImporterInGUI) return true;
 
-            bool enable = MovingPicturesGUI.ShowCustomYesNo("Importer Disabled", "The importer has been disabled in the\n" +
-                                                                                 "MediaPortal GUI. Would you like to\n" +
-                                                                                 "reenable it?", "Yes", "No", false, GetID);
-
+            bool enable = MovingPicturesGUI.ShowCustomYesNo(Translation.ImporterDisabled, Translation.ImporterDisabledMessage, null, null, false, GetID);
             if (enable) MovingPicturesCore.Settings.EnableImporterInGUI = true;
 
             return enable;
         }
 
+        private void showMainContext() {
+            if (activeList == null) return;
+            
+            IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+            dialog.Reset();
+            dialog.SetHeading("Moving Pictures");  // not translated because it's a proper noun
+
+            GUIListItem rescanItem = new GUIListItem(Translation.ScanForNewMovies);
+            GUIListItem unignoreItem = new GUIListItem(Translation.RestoreIgnoredFiles);
+
+            int currID = 1;
+
+            rescanItem.ItemId = currID++;
+            dialog.Add(rescanItem);
+
+            unignoreItem.ItemId = currID++;
+            dialog.Add(unignoreItem);
+
+            dialog.DoModal(GUIWindowManager.ActiveWindow);
+            if (dialog.SelectedId == rescanItem.ItemId) {
+                MovingPicturesCore.Importer.RestartScanner();
+            }
+
+            else if (dialog.SelectedId == unignoreItem.ItemId) {
+                MovingPicturesCore.Importer.RestoreAllIgnoredFiles();
+            }
+        }
+
         private void DisplayMatchesDialog() {
-            MovieMatch selectedFile = fileListControl.SelectedListItem.AlbumInfoTag as MovieMatch;
+            MovieMatch selectedFile = activeList.SelectedListItem == null ? null : activeList.SelectedListItem.AlbumInfoTag as MovieMatch;
 
             // create our dialog
             GUIDialogMenu matchDialog = (GUIDialogMenu)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
@@ -172,7 +322,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             int maxid = 0; 
             matchDialog.Reset();
-            matchDialog.SetHeading("Possible Matches");
+            matchDialog.SetHeading(Translation.PossibleMatches);
 
             // add our possible matches to it (list of movies)
             foreach (var match in selectedFile.PossibleMatches) {
@@ -181,10 +331,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             int searchId = ++maxid;
-            matchDialog.Add("Search for More...");
+            matchDialog.Add(Translation.SearchForMore + " ...");
             
             int ignoreId = ++maxid;
-            matchDialog.Add("Ignore File");
+            matchDialog.Add(Translation.IgnoreMovie);
+
+            int playId = ++maxid;
+            matchDialog.Add(Translation.PlayMovie);
 
             // launch dialog and let user make choice
             matchDialog.DoModal(GUIWindowManager.ActiveWindow);
@@ -205,6 +358,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 MovingPicturesCore.Importer.Ignore(selectedFile);
             }
 
+            if (matchDialog.SelectedId == playId) {
+                if (movieStartIndicator != null) {
+                    movieStartIndicator.Visible = true;
+                    GUIWindowManager.Process();
+                }
+
+                // Play movie
+                MovingPicturesCore.Player.playFile(selectedFile.LocalMedia[0].FullPath);
+                if (movieStartIndicator != null)
+                    movieStartIndicator.Visible = false;
+            }
+
             // user picked a movie, assign it
             selectedFile.Selected = selectedFile.PossibleMatches[matchDialog.SelectedId - 1];
             MovingPicturesCore.Importer.Approve(selectedFile);
@@ -222,13 +387,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             dialog.SetHeading("Search");
             
             int titleId = ++maxid;
-            dialog.Add(string.Format("Title: {0}", selectedFile.Signature.Title));
+            dialog.Add(string.Format("{0}: {1}", Translation.Title, selectedFile.Signature.Title));
 
             int yearId = ++maxid;
-            dialog.Add(string.Format("Year: {0}", selectedFile.Signature.Year));
+            dialog.Add(string.Format("{0}: {1}", Translation.Year, selectedFile.Signature.Year));
 
             int imdbId = ++maxid;
-            dialog.Add(string.Format("IMDb Id: {0}", selectedFile.Signature.ImdbId));
+            dialog.Add(string.Format("{0}: {1}", Translation.ImdbId, selectedFile.Signature.ImdbId));
 
             dialog.DoModal(GUIWindowManager.ActiveWindow);
 
@@ -240,6 +405,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // build and display our virtual keyboard
             VirtualKeyboard keyboard = (VirtualKeyboard)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_VIRTUAL_KEYBOARD);
             keyboard.Reset();
+            keyboard.IsSearchKeyboard = true;
+
             if (dialog.SelectedId == titleId) keyboard.Text = selectedFile.Signature.Title;
             if (dialog.SelectedId == yearId) keyboard.Text = (selectedFile.Signature.Year == null) ? "" : selectedFile.Signature.Year.ToString();
             if (dialog.SelectedId == imdbId) keyboard.Text = (selectedFile.Signature.ImdbId == null) ? "" : selectedFile.Signature.ImdbId;
