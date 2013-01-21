@@ -81,7 +81,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         if (!allFilesListControl.IsFocused) GUIControl.FocusControl(GetID, allFilesListControl.GetID);
                         break;
                     case FilterMode.PENDING:
-                        label = Translation.PendingFiles;
+                        label = Translation.FilesNeedingAttention;
                         if (!pendingFilesListControl.IsFocused) GUIControl.FocusControl(GetID, pendingFilesListControl.GetID);
                         break;
                     case FilterMode.COMPLETED:
@@ -565,7 +565,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
 
                 // Play movie
-                MovingPicturesCore.Player.playFile(selectedFile.LocalMedia[0].FullPath);
+                if (MovingPicturesCore.Importer.CommitedMatches.Contains(selectedFile))
+                    MovingPicturesCore.Player.Play(selectedFile.Selected.Movie);
+                else 
+                    MovingPicturesCore.Player.playFile(selectedFile.LocalMedia[0].FullPath);
+
                 if (movieStartIndicator != null)
                     movieStartIndicator.Visible = false;
             }

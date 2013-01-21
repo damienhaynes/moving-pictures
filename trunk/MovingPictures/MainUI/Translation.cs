@@ -208,6 +208,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // F
         public static string FailedMountingImage = "Sorry, failed mounting DVD Image";
         public static string FilePath = "File Path";
+        public static string FilesNeedingAttention = "Files Needing Attention";
         public static string FilmstripView = "Filmstrip View";
         public static string FilterBy = "Filter By";
         public static string Friday = "Friday";
@@ -223,7 +224,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Importer = "Movie Importer";
         public static string ImporterDisabled = "Importer Disabled";
         public static string ImporterDisabledMessage = "The importer has been disabled in the\nMediaPortal GUI. Would you like to\nreenable it?";
-        public static string ImporterPending = "Importer ({0} Pending)";
+        public static string ImporterPending = "Importer ({0} Need Attention)";
         public static string InvalidPin = "Invalid PIN code!";
         public static string InvalidVideoDiscFormat = "Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.";
 
@@ -260,7 +261,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // P
         public static string ParentalControlsDisabled = "Parental controls are not enabled.";
-        public static string PendingFiles = "Pending Files";
         public static string PinCodeHeader = "Unlocking Restricted Content";
         public static string PinCodePrompt = "Please enter PIN code to continue:";
         public static string PlaybackFailed = "Playback is not possible because the '{0}'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.";

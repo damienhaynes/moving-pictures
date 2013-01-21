@@ -10,22 +10,11 @@
 		<width>64</width>
 		<height>199</height>
 		<texture>hiddenmenu_tab.png</texture>
-		<visible>[facadeview.list | facadeview.smallicons | facadeview.largeicons]+Control.HasFocus(50) + !string.contains(#Titan.HiddenMenu, false)</visible>
+		<visible>[Control.HasFocus(310) |Control.HasFocus(311) | Control.HasFocus(312)] + !string.contains(#Titan.HiddenMenu, false)</visible>
 		<animation effect="slide" start="-60,0" end="0,0" tween="quadratic" easing="in" time="250" delay="400">WindowOpen</animation>
 		<animation effect="slide" start="0,0" end="-60,0" tween="quadratic" easing="in" time="250" delay="100">WindowClose</animation>
 	</control>
-    
-	<control>
-		<id>1</id>
-		<type>image</type>
-		<posX>858</posX>
-		<posY>0</posY>
-		<texture>hiddenmenu_tab_up.png</texture>
-		<visible>[facadeview.filmstrip | facadeview.coverflow] + Control.HasFocus(50) + !string.contains(#Titan.HiddenMenu, false)</visible>
-		<animation effect="slide" start="0,-60" end="0,0" tween="quadratic" easing="in" time="250" delay="400">WindowOpen</animation>
-		<animation effect="slide" start="0,0" end="0,-60" tween="quadratic" easing="in" time="250" delay="100">WindowClose</animation>
-	</control>	
-	
+
 	<control>
 		<type>actiongroup</type>
 		<description>action menu</description>
@@ -43,7 +32,7 @@
 			<width>1920</width>
 			<height>1080</height>
 			<texture>semi_trans_back_hidden_menu.png</texture>
-			<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>
+			<visible>!Control.HasFocus(310)+!Control.HasFocus(311)+!Control.HasFocus(312)</visible>
 			<animation effect="fade" time="450">visible</animation>
 			<animation effect="fade" time="400">hidden</animation>
 		</control>
@@ -56,7 +45,7 @@
 			<width>612</width>
 			<height>1074</height>
 			<texture>menu_bg.png</texture>
-			<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>
+			<visible>!Control.HasFocus(310)+!Control.HasFocus(311)+!Control.HasFocus(312)</visible>
     		<animation effect="fade" time="0">WindowClose</animation>
     		<animation effect="slide" start="-150,0" time="100">visible</animation>
     		<animation effect="fade" time="50">visible</animation>
@@ -66,12 +55,12 @@
 		<control>
 			<type>image</type>
 			<id>0</id>
-			<posY>582</posY>
+			<posY>306</posY>
 			<posX>116</posX>
 			<width>369</width>
 			<height>1</height>
 			<texture>hiddenmenu_separator.png</texture>
-			<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>
+			<visible>!Control.HasFocus(310)+!Control.HasFocus(311)+!Control.HasFocus(312)</visible>
     		<animation effect="fade" time="0">WindowClose</animation>
     		<animation effect="slide" start="-150,0" time="100">visible</animation>
     		<animation effect="fade" time="50">visible</animation>
@@ -80,12 +69,12 @@
 		<control>
 			<type>image</type>
 			<id>0</id>
-			<posY>791</posY>
+			<posY>515</posY>
 			<posX>116</posX>
 			<width>376</width>
 			<height>1</height>
 			<texture>hiddenmenu_separator.png</texture>
-			<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>
+			<visible>!Control.HasFocus(310)+!Control.HasFocus(311)+!Control.HasFocus(312)</visible>
     		<animation effect="fade" time="0">WindowClose</animation>
     		<animation effect="slide" start="-150,0" time="100">visible</animation>
     		<animation effect="fade" time="50">visible</animation>
@@ -100,7 +89,7 @@
 			<label>924</label>
 			<font>fontB16</font>
 			<textcolor>393939</textcolor>
-			<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>
+			<visible>!Control.HasFocus(310)+!Control.HasFocus(311)+!Control.HasFocus(312)</visible>
     	<animation effect="fade" time="0">WindowClose</animation>
     	<animation effect="slide" start="-150,0" time="100">visible</animation>
     	<animation effect="fade" time="50">visible</animation>
@@ -111,11 +100,11 @@
 			<type>label</type>
 			<id>1</id>
 			<posX>116</posX>
-			<posY>592</posY>
+			<posY>316</posY>
 			<label>100004</label>
 			<font>fontB12</font>
 			<textcolor>393939</textcolor>
- 			<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>
+ 			<visible>!Control.HasFocus(310)+!Control.HasFocus(311)+!Control.HasFocus(312)</visible>
     	<animation effect="fade" time="0">WindowClose</animation>
     	<animation effect="slide" start="-150,0" time="100">visible</animation>
     	<animation effect="fade" time="50">visible</animation>
@@ -126,11 +115,11 @@
 			<type>label</type>
 			<id>1</id>
 			<posX>116</posX>
-			<posY>801</posY>
+			<posY>525</posY>
 			<label>1065</label>
 			<font>fontB12</font>
 			<textcolor>393939</textcolor>
- 			<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>
+ 			<visible>!Control.HasFocus(310)+!Control.HasFocus(311)+!Control.HasFocus(312)</visible>
     	<animation effect="fade" time="0">WindowClose</animation>
     	<animation effect="slide" start="-150,0" time="100">visible</animation>
     	<animation effect="fade" time="50">visible</animation>
@@ -139,7 +128,7 @@
     <control>
       <type>group</type>
       <description>group element</description>
- 			<visible>!Control.HasFocus(50)+control.isvisible(50)</visible>
+		<visible>!Control.HasFocus(310)+!Control.HasFocus(311)+!Control.HasFocus(312)</visible>
     	<animation effect="fade" time="0">WindowClose</animation>
     	<animation effect="slide" start="-150,0" time="100">visible</animation>
     	<animation effect="fade" time="50">visible</animation>
@@ -149,118 +138,49 @@
       <layout>StackLayout(0, Vertical, true)</layout>	
 			
       <control>
-				<description>Toggle View</description>
+				<description>scan for more movies</description>
 				<type>button</type>
-				<id>3</id>
+				<id>19</id>
 				<textureFocus>hiddenmenu_item_selected.png</textureFocus>
 				<textureNoFocus>-</textureNoFocus>
 				<width>499</width>
 				<height>69</height>
 				<textXOff>62</textXOff>
 				<textYOff>16</textYOff>
-				<label>#MovingPictures.Translation.ChangeView.Label</label>
-				<onleft>50</onleft>
-        <onright>50</onright>
-        <ondown>14</ondown>
-        <onup>66661</onup>
+				<label>#MovingPictures.Translation.ScanForNewMovies.Label</label>
+				<onright>310</onright>
+				<ondown>20</ondown>
+				<onup>66661</onup>
 			</control>
 
 			<control>
-				<description>Sort</description>
+				<description>restore ignored movies</description>
 				<type>button</type>
-				<id>14</id>
-				<label>#MovingPictures.Translation.SortBy.Label: #MovingPictures.Sort.Field</label>
+				<id>20</id>
+				<label>#MovingPictures.Translation.RestoreIgnoredFiles.Label</label>
 				<textureFocus>hiddenmenu_item_selected.png</textureFocus>
 				<textureNoFocus>-</textureNoFocus>
 				<width>499</width>
 				<height>69</height>
 				<textXOff>62</textXOff>
 				<textYOff>16</textYOff>
-				<onleft>50</onleft>
-        <onright>50</onright>
-        <ondown>4</ondown>
+                <onright>310</onright>
+                <ondown>66610</ondown>
+				<onup>19</onup>
 			</control>
 				
-			<control>
-				<description>Filter Menu</description>
-				<type>button</type>
-				<id>4</id>
-				<label>#MovingPictures.Translation.FilterBy.Label ...</label>
-				<textureFocus>hiddenmenu_item_selected.png</textureFocus>
-				<textureNoFocus>-</textureNoFocus>
-				<width>499</width>
-				<height>69</height>
-				<textXOff>62</textXOff>
-				<textYOff>16</textYOff>
-				<onleft>50</onleft>
-        <onright>50</onright>
-        <ondown>19</ondown>
-			</control>
-        
-      <control>
-      	<description>Search</description>
-        <type>button</type>
-        <id>19</id>
-        <label>#MovingPictures.Translation.Search.Label ...</label>
-				<textureFocus>hiddenmenu_item_selected.png</textureFocus>
-				<textureNoFocus>-</textureNoFocus>
-				<width>499</width>
-				<height>69</height>
-				<textXOff>62</textXOff>
-				<textYOff>16</textYOff>
-        <onleft>50</onleft>
-        <onright>50</onright>
-        <ondown>999</ondown>
-        <onup>4</onup>
-     	</control>
-		
-		      <control>
-        <description>Importer</description>
-        <type>button</type>
-        <id>999</id>
-        <width>499</width>
-        <height>69</height>
-        <textXOff>62</textXOff>
-        <textYOff>16</textYOff>
-        <textureFocus>hiddenmenu_item_selected.png</textureFocus>
-        <textureNoFocus>-</textureNoFocus>
-        <label>#MovingPictures.Importer.Menu.Label ...</label>
-        <hyperlink>96743</hyperlink>
-        <onup>19</onup>
-        <ondown>15</ondown>
-        <onleft>50</onleft>
-        <onright>50</onright>
-      </control>
-				        
-			<control>
-				<description>Parental controls</description>
-				<type>button</type>
-				<id>15</id>
-				<textureFocus>hiddenmenu_item_selected.png</textureFocus>
-				<textureNoFocus>-</textureNoFocus>
-				<width>499</width>
-				<height>69</height>
-				<textXOff>62</textXOff>
-				<textYOff>16</textYOff>
-				<label>#MovingPictures.Translation.ToggleParentalLock.Label</label>
-				<onleft>50</onleft>
-        <onright>50</onright>
-				<ondown>66610</ondown>
-				<onup>999</onup>
-			</control>
-            
-      <control>
-      	<description>Empty button</description>
-        <type>button</type>
-        <id>0</id>
+            <control>
+      	      <description>Empty button</description>
+              <type>button</type>
+              <id>0</id>
 			  <textureFocus>-</textureFocus>
 			  <textureNoFocus>-</textureNoFocus>
 			  <width>499</width>
 			  <height>69</height>
-        <label>-</label>
-        <visible>true</visible>
-      </control>
-            
+              <label>-</label>
+              <visible>true</visible>
+            </control>
+                    
 			<control>
 				<description>Video Settings</description>
 				<type>button</type>
@@ -274,8 +194,8 @@
 				<label>6022</label>
 				<hyperlink>703</hyperlink>
 				<onleft>50</onleft>
-        <onright>50</onright>
-				<onup>15</onup>
+                <onright>50</onright>
+				<onup>20</onup>
 				<ondown>66612</ondown>
 			</control>
 			
@@ -359,7 +279,7 @@
 				<textureNoFocus>-</textureNoFocus>
         <label>Trakt</label>
         <onup>66611</onup>
-        <ondown>3</ondown>
+        <ondown>19</ondown>
 				<onleft>50</onleft>
         <onright>50</onright>
         <visible>plugin.isenabled(Trakt)</visible>

@@ -11,6 +11,7 @@ md tmp\MediaPortal\plugins\Windows
 :: copy all needed files
 xcopy ..\MovingPictures\Resources\skins\DefaultWide tmp\skin\DefaultWide\ /E
 xcopy ..\MovingPictures\Resources\skins\Default tmp\skin\Default\ /E
+xcopy ..\MovingPictures\Resources\skins\Titan tmp\skin\Titan\ /E
 copy ..\MovingPictures\Resources\moving-pictures-release-notes.txt tmp
 copy ..\MovingPictures\bin\Release\movingpictures.dll tmp\MediaPortal\plugins\Windows
 copy ..\MovingPictures\bin\Release\Cornerstone.dll tmp\MediaPortal\plugins\Windows
