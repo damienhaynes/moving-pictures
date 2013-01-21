@@ -404,9 +404,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             int lastActiveModule = MovingPicturesCore.MediaPortalSettings.GetValueAsInt("general", "lastactivemodule", -1);
             preventDialogOnLoad = (lastActiveModuleSetting && (lastActiveModule == GetID));
 
-            // set some skin properties
+            // set some initial skin properties
             SetProperty("#MovingPictures.Settings.HomeScreenName", MovingPicturesCore.Settings.HomeScreenName);
             SetProperty("#MovingPictures.Settings.SecondFacadeLabel", MovingPicturesCore.Settings.SecondLabel);
+            string importerStr = String.Format(Translation.ImporterPending, MovingPicturesCore.Importer.MatchesNeedingInput.Count);
+            GUIPropertyManager.SetProperty("#MovingPictures.Importer.Menu.Label", importerStr);
             SetProperty("#MovingPictures.Importer.NeedInput.Count", "0");
 
             // start initialization of the moving pictures core services in a seperate thread
@@ -1913,7 +1915,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void Importer_Progress(int percentDone, int taskCount, int taskTotal, string taskDescription) {
             setWorkingAnimationStatus(percentDone < 100);
+            string importerStr = String.Format(Translation.ImporterPending, MovingPicturesCore.Importer.MatchesNeedingInput.Count);
             GUIPropertyManager.SetProperty("#MovingPictures.Importer.NeedInput.Count", MovingPicturesCore.Importer.MatchesNeedingInput.Count.ToString());
+            GUIPropertyManager.SetProperty("#MovingPictures.Importer.Menu.Label", importerStr);
         }
 
         #endregion

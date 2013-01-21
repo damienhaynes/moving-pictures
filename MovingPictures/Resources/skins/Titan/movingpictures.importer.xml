@@ -87,8 +87,64 @@
       <animation effect="fade" time="250">WindowOpen</animation>
       <animation effect="fade" time="250">WindowClose</animation>
     </control>
+	<control>
+      <type>group</type>
+      <description>group element</description>
+      <posX>940</posX>
+      <posY>275</posY>
+      <layout>StackLayout(0, Horizontal, true)</layout>	
+	  	<control>
+			<type>image</type>
+			<id>0</id>
+			<width>13</width>
+			<height>13</height>
+			<visible>string.equals(#MovingPictures.Importer.ListMode.Flag,ALL)</visible>
+			<texture>circle-full.png</texture>
+		</control>
+		<control>
+			<type>image</type>
+			<id>0</id>
+			<width>13</width>
+			<height>13</height>
+			<visible>!string.equals(#MovingPictures.Importer.ListMode.Flag,ALL)</visible>
+			<texture>circle-empty.png</texture>
+		</control>
+	  	<control>
+			<type>image</type>
+			<id>0</id>
+			<width>13</width>
+			<height>13</height>
+			<visible>string.equals(#MovingPictures.Importer.ListMode.Flag,PENDING)</visible>
+			<texture>circle-full.png</texture>
+		</control>
+		<control>
+			<type>image</type>
+			<id>0</id>
+			<width>13</width>
+			<height>13</height>
+			<visible>!string.equals(#MovingPictures.Importer.ListMode.Flag,PENDING)</visible>
+			<texture>circle-empty.png</texture>			
+		</control>
+		<control>
+			<type>image</type>
+			<id>0</id>
+			<width>13</width>
+			<height>13</height>
+			<keepaspectratio>true</keepaspectratio>
+			<visible>string.equals(#MovingPictures.Importer.ListMode.Flag,COMPLETED)</visible>
+			<texture>circle-full.png</texture>
+		</control>
+	  	<control>
+			<type>image</type>
+			<id>0</id>
+			<width>13</width>
+			<height>13</height>
+			<visible>!string.equals(#MovingPictures.Importer.ListMode.Flag,COMPLETED)</visible>
+			<texture>circle-empty.png</texture>
+		</control>
+    </control>
     <control>
-      <description>processing list</description>
+      <description>all files list</description>
       <type>listcontrol</type>
       <id>310</id>
       <scrollOffset>1</scrollOffset>
@@ -108,7 +164,7 @@
       <spinPosX>1828</spinPosX>
       <spinPosY>1000</spinPosY>
 	  <onright>311</onright>
-	  <onleft>312</onleft>
+	  <onleft>19</onleft>
 	  <visible allowhiddenfocus="true">string.equals(#MovingPictures.Importer.ListMode.Flag,ALL)</visible>
 	  <animation effect="fade" time="100">Hidden</animation>
 	  <animation effect="fade" delay="100" time="100">Visible</animation>
@@ -159,8 +215,8 @@
       <textureNoFocus>-</textureNoFocus>
       <spinPosX>1828</spinPosX>
       <spinPosY>1000</spinPosY>
-	  <onright>310</onright>
 	  <onleft>311</onleft>
+	  <onright>312</onright>
 	  <visible allowhiddenfocus="true">string.equals(#MovingPictures.Importer.ListMode.Flag,COMPLETED)</visible>
 	  <animation effect="fade" time="100">Hidden</animation>
 	  <animation effect="fade" delay="100" time="100">Visible</animation>
@@ -174,6 +230,16 @@
       <label>#MovingPictures.Importer.Status</label>
       <align>left</align>
     </control>
+    <!--control>
+      <description>single file label - can be used instead of the below three. simpler but no animation</description>
+      <type>label</type>
+      <id>0</id>
+      <label>#MovingPictures.Importer.ListMode.Label</label>
+      <align>left</align>
+  	  <posX>145</posX>
+      <posY>100</posY>
+      <font>TitanLight20</font>
+    </control-->
 	<control>
       <description>all files label</description>
       <type>label</type>
@@ -191,7 +257,7 @@
       <description>pending files label</description>
       <type>label</type>
       <id>0</id>
-      <label>#MovingPictures.Translation.PendingFiles.Label</label>
+      <label>#MovingPictures.Translation.FilesNeedingAttention.Label</label>
       <align>left</align>
   	  <posX>145</posX>
       <posY>100</posY>
@@ -265,6 +331,7 @@
 	
     <import>common.time.xml</import>
     <import>common.overlay.xml</import>
+	<import>movingpictures.importer.hiddenmenu.xml</import>
 	
 	<control>
       <description>Playback Indicator</description>

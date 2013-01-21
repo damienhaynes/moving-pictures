@@ -60,6 +60,7 @@
   <!-- F -->
   <string Field="FailedMountingImage">Sorry, failed mounting DVD Image</string>
   <string Field="FilePath">File Path</string>
+  <string Field="FilesNeedingAttention">Files Needing Attention</string>
   <string Field="FilmstripView">Filmstrip View</string>
   <string Field="FilterBy">Filter By</string>
   <string Field="Friday">Friday</string>
@@ -73,7 +74,7 @@
   <string Field="Importer">Movie Importer</string>
   <string Field="ImporterDisabled">Importer Disabled</string>
   <string Field="ImporterDisabledMessage">The importer has been disabled in the\nMediaPortal GUI. Would you like to\nreenable it?</string>
-  <string Field="ImporterPending">Importer ({0} Pending)</string>
+  <string Field="ImporterPending">Importer ({0} Need Attention)</string>
   <string Field="InvalidPin">Invalid PIN code!</string>
   <string Field="InvalidVideoDiscFormat">Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.</string>
   <!-- L -->
@@ -105,7 +106,6 @@
   <string Field="Older">Older</string>
   <!-- P -->
   <string Field="ParentalControlsDisabled">Parental controls are not enabled.</string>
-  <string Field="PendingFiles">Pending Files</string>
   <string Field="PinCodeHeader">Unlocking Restricted Content</string>
   <string Field="PinCodePrompt">Please enter PIN code to continue:</string>
   <string Field="PlaybackFailed">Playback is not possible because the '{0}'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.</string>

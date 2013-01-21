@@ -152,12 +152,26 @@ Section "Default Skin Support" SEC0003
     ${EndIf}
 SectionEnd
 
+Section "Titan Skin Support (Alpha)" SEC0004
+    ${If} ${FileExists} $SKIN_DIR\Titan\*.*
+        SetOverwrite ifnewer
+
+        SetOutPath $SKIN_DIR\Titan
+        File "..\MovingPictures\Resources\skins\Titan\*.*"
+
+        SetOutPath $SKIN_DIR\Titan\Media
+        File "..\MovingPictures\Resources\skins\Titan\Media\*.*"  
+
+    ${EndIf}
+SectionEnd
+
 # set description text for install components
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0000} $(DLL_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0001} $(GENERIC_SKIN_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0002} $(DEFAULTWIDE_SKIN_DESCRIPTION)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0003} $(DEFAULT_SKIN_DESCRIPTION)  
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC0004} $(TITAN_SKIN_DESCRIPTION)  
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 # startup tasks
