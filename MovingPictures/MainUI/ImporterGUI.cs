@@ -628,7 +628,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             int maxid = 0;
             dialog.Reset();
-            dialog.SetHeading("Search");
+            dialog.SetHeading(Translation.Search);
             
             int titleId = ++maxid;
             dialog.Add(string.Format("{0}: {1}", Translation.Title, selectedFile.Signature.Title));
