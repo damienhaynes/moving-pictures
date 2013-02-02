@@ -476,7 +476,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (item == null) return;
 
             MovieMatch match = item.AlbumInfoTag as MovieMatch;
-            if (MovingPicturesCore.Importer.CommitedMatches.Contains(match)) {
+            if (match == null) return;
+
+            if (MovingPicturesCore.Importer.CommitedMatches.Contains(match) && match.Selected != null) {
                 backdrop.Filename = match.Selected.Movie.BackdropFullPath;
             }
             else {
