@@ -317,7 +317,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 GUIPropertyManager.SetProperty("#MovingPictures.Importer.CurrentTask.Count", taskCount.ToString());
                 GUIPropertyManager.SetProperty("#MovingPictures.Importer.CurrentTask.Total", taskTotal.ToString());
-                GUIPropertyManager.SetProperty("#MovingPictures.Importer.CurrentTask.Percentage", taskTotal.ToString());
+                GUIPropertyManager.SetProperty("#MovingPictures.Importer.CurrentTask.Percentage", (Convert.ToInt16(((decimal)taskCount / taskTotal) * 100)).ToString());
                 GUIPropertyManager.SetProperty("#MovingPictures.Importer.TotalProgressPercent", percentDone.ToString());
 
                 GUIPropertyManager.SetProperty("#MovingPictures.Importer.IsActive", MovingPicturesCore.Importer.IsScanning.ToString());
