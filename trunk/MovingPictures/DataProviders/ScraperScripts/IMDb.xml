@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="2" minor="3" point="1" />
-    <published month="12" day="12" year="2012" />
+    <version major="2" minor="3" point="2" />
+    <published month="2" day="2" year="2013" />
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -163,7 +163,7 @@
 
       <set name="rx_directors">
     <![CDATA[
-    <a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
+    <a[^>]*href="/name/nm\d{7}[^"]*"[^>]*>([^<]+)</a>
     ]]>
       </set>
 
@@ -175,7 +175,7 @@
 
       <set name="rx_writers">
     <![CDATA[
-    <a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
+    <a[^>]*href="/name/nm\d{7}[^"]*"[^>]*>([^<]+)</a>
     ]]>
       </set>
 
@@ -187,7 +187,7 @@
 
       <set name="rx_actors">
     <![CDATA[
-    <a[^>]*href="/name/nm\d{7}/"[^>]*>([^<]+)</a>
+    <a[^>]*href="/name/nm\d{7}[^"]*"[^>]*>([^<]+)</a>
     ]]>
       </set>
 
