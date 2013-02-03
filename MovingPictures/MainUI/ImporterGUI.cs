@@ -159,7 +159,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         protected override void OnClicked(int controlId, GUIControl control, MediaPortal.GUI.Library.Action.ActionType actionType) {
             // clicked on one of the lists
             if ((control == allFilesListControl || control == pendingFilesListControl || control == completedFileListControl) && actionType == Action.ActionType.ACTION_SELECT_ITEM) {
-                DisplayMovieOptionsDialog();
+                DisplayContextDialog();
                 return;
             }
 
@@ -186,7 +186,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         protected override void OnShowContextMenu() {
             base.OnShowContextMenu();
-            DisplayContextMenu();
+            DisplayContextDialog();
         }
 
         private void ListItemSelected(GUIListItem item, GUIControl parent) {
@@ -494,35 +494,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region Popup Menus
 
-        private void DisplayContextMenu() {
-            if (ActiveListControl == null) return;
-            
-            IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
-            dialog.Reset();
-            dialog.SetHeading("Moving Pictures");  // not translated because it's a proper noun
-
-            GUIListItem rescanItem = new GUIListItem(Translation.ScanForNewMovies);
-            GUIListItem unignoreItem = new GUIListItem(Translation.RestoreIgnoredFiles);
-
-            int currID = 1;
-
-            rescanItem.ItemId = currID++;
-            dialog.Add(rescanItem);
-
-            unignoreItem.ItemId = currID++;
-            dialog.Add(unignoreItem);
-
-            dialog.DoModal(GUIWindowManager.ActiveWindow);
-            if (dialog.SelectedId == rescanItem.ItemId) {
-                MovingPicturesCore.Importer.RestartScanner();
+        private void DisplayContextDialog() {
+            if (ActiveListControl.SelectedListItem == null) {
+                DisplayGlobalActionsMenu();
+                return;
             }
 
-            else if (dialog.SelectedId == unignoreItem.ItemId) {
-                MovingPicturesCore.Importer.RestoreAllIgnoredFiles();
-            }
-        }
-
-        private void DisplayMovieOptionsDialog() {
             MovieMatch selectedFile = ActiveListControl.SelectedListItem == null ? null : ActiveListControl.SelectedListItem.AlbumInfoTag as MovieMatch;
 
             // create our dialog
@@ -536,14 +513,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             matchDialog.Reset();
             matchDialog.SetHeading(Translation.PossibleMatches);
 
-            int selectId = ++maxid;
+            int selectId = -100;
+            int playId = -100;
+            int ignoreId = -100;
+            int globalId = -100;
+
+            selectId = ++maxid;
             matchDialog.Add(Translation.SelectCorrectMovie + " ...");
 
-            int playId = ++maxid;
+            playId = ++maxid;
             matchDialog.Add(Translation.PlayMovie);
 
-            int ignoreId = ++maxid;
+            ignoreId = ++maxid;
             matchDialog.Add(Translation.IgnoreMovie);
+
+            globalId = ++maxid;
+            matchDialog.Add(Translation.GlobalActions + " ...");
 
             // launch dialog and let user make choice
             matchDialog.DoModal(GUIWindowManager.ActiveWindow);
@@ -555,13 +540,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // open selection dialog
             if (matchDialog.SelectedId == selectId) {
                 bool success = DisplayMovieSelectionDialog();
-                if (!success) DisplayMovieOptionsDialog();
+                if (!success) DisplayContextDialog();
                 return;
             }
 
             // ignore file
             if (matchDialog.SelectedId == ignoreId) {
                 MovingPicturesCore.Importer.Ignore(selectedFile);
+            }
+
+            // global actions dialog
+            if (matchDialog.SelectedId == globalId) {
+                bool success = DisplayGlobalActionsMenu();
+                if (!success) DisplayContextDialog();
+                return;
             }
 
             if (matchDialog.SelectedId == playId) {
@@ -579,6 +571,41 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (movieStartIndicator != null)
                     movieStartIndicator.Visible = false;
             }
+        }
+
+        private bool DisplayGlobalActionsMenu() {
+            if (ActiveListControl == null) return false;
+
+            IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
+            dialog.Reset();
+            dialog.SetHeading("Moving Pictures");  // not translated because it's a proper noun
+
+            GUIListItem rescanItem = new GUIListItem(Translation.ScanForNewMovies);
+            GUIListItem unignoreItem = new GUIListItem(Translation.RestoreIgnoredFiles);
+
+            int currID = 1;
+
+            rescanItem.ItemId = currID++;
+            dialog.Add(rescanItem);
+
+            unignoreItem.ItemId = currID++;
+            dialog.Add(unignoreItem);
+
+            dialog.DoModal(GUIWindowManager.ActiveWindow);
+
+            if (dialog.SelectedId == -1) {
+                return false;
+            }
+
+            else if (dialog.SelectedId == rescanItem.ItemId) {
+                MovingPicturesCore.Importer.RestartScanner();
+            }
+
+            else if (dialog.SelectedId == unignoreItem.ItemId) {
+                MovingPicturesCore.Importer.RestoreAllIgnoredFiles();
+            }
+
+            return true;
         }
 
         private bool DisplayMovieSelectionDialog() {

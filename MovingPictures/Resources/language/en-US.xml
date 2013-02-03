@@ -66,6 +66,7 @@
   <string Field="Friday">Friday</string>
   <string Field="Future">Future</string>
   <!-- G -->
+  <string Field="GlobalActions">Global Actions</string>
   <string Field="Genre">Genre</string>
   <string Field="Genres">Genres</string>
   <!-- I -->
