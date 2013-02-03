@@ -420,7 +420,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             if (!internalList.Contains(listItem)) {
                 internalList.Add(listItem);
-                listControl.ListItems.Add(listItem);
+                listControl.Add(listItem);
             }
         }
 
