@@ -287,13 +287,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void InitializeControls() {
             Mode = MovingPicturesCore.Settings.LastGuiImporterMode;
 
-            allFilesListControl.ListItems.Clear();
-            pendingFilesListControl.ListItems.Clear();
-            completedFileListControl.ListItems.Clear();
-            
-            allFilesListControl.ListItems.AddRange(allItems);
-            pendingFilesListControl.ListItems.AddRange(pendingItems);
-            completedFileListControl.ListItems.AddRange(completedItems);
+            AddRangeToList(allFilesListControl, allItems);
+            AddRangeToList(pendingFilesListControl, pendingItems);
+            AddRangeToList(completedFileListControl, completedItems);
 
             backdrop.GUIImageOne = movieBackdropControl;
             backdrop.GUIImageTwo = movieBackdropControl2;
@@ -396,6 +392,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
 
                 UpdateArtwork();
+            }
+        }
+
+        private void AddRangeToList(GUIListControl listControl, List<GUIListItem> listItems) {
+            listControl.Clear();
+
+            foreach (var item in listItems) {
+                listControl.Add(item);
             }
         }
 
