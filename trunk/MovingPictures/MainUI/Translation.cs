@@ -217,6 +217,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // G
         public static string Genre = "Genre";
         public static string Genres = "Genres";
+        public static string GlobalActions = "Global Actions";
 
         // I
         public static string IgnoreMovie = "Ignore Movie";
