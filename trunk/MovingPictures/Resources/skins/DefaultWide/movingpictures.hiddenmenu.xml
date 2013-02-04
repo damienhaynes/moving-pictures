@@ -127,8 +127,7 @@
             <hyperlink>96743</hyperlink>
             <onup>66610</onup>
             <ondown>4</ondown>
-            <onleft>50</onleft>
-            <width>310</width>
+            <onright>50</onright>
           </control>
         </control>
         
