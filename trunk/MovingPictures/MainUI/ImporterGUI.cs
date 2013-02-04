@@ -275,6 +275,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                             AddToList(listItem, FilterMode.COMPLETED);
                         }
                     }
+
+                    // force skin property init
+                    ImporterProgress(100, 0, 0, "");
                 }
             }
 
