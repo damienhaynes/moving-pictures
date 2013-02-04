@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="iso-8859-1"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- Moving Pictures translation file -->
-<!-- Finnish -->
-<!-- Last Updated: 10th May 2011 -->
+<!-- Finnish (Moving Pictures V.1.4.2)-->
+<!-- Last Updated: 29th January 2013 -->
 <strings>
   <!-- A -->
   <string Field="Actor">Näyttelijä</string>
@@ -11,10 +11,13 @@
   <string Field="BadCategory">Ulkopuolinen lisäosa tai ulkoasu yritti\navata olematonta kategoriaa!</string>
   <string Field="BadMovie">Ulkopuolinen lisäosa ta ulkoasu yritti\navata olematonta elokuvaa!</string>
   <string Field="BadParam">Ulkopuolinen lisäosa tai ulkoasu välitti\nMoving Picturesille väärän paramatrin!</string>
+  <string Field="Backdrop">Sijoitus</string>
+  <string Field="BeginsWith">Alkaa kirjaimella...</string>
   <!-- C -->
   <string Field="Cancel">Peruuta</string>
   <string Field="CannotDeleteOffline">Ei voi poistaa {0}\n koska tiedosto ei ole saatavilla</string>
   <string Field="CannotDeleteReadOnly">Ei voi poistaa vain-luku elokuvaa.\nHaluatko että Moving Pictures ei huomioi tätä elokuvan?</string>
+  <string Field="CastAndCrew">Näyttelijät ja Avustajat</string>
   <string Field="CategoryEmptyDescription">Tässä kategoriassa ei ole\ntällä hetkellä yhtään elokuvaa.</string>
   <string Field="CategoryEmptyHeader">Kategoria on tyhjä</string>
   <string Field="Certification">Sertifiointi</string>
@@ -22,7 +25,8 @@
   <string Field="CheckForMissingArtwork">Hae puuttuva taidetta verkosta</string>
   <string Field="ContinueToNextPartBody">Haluatko jatkaa osalla {0}?</string>
   <string Field="ContinueToNextPartHeader">Jatketaanko seuraavaan osaan?</string>
-  <string Field="CoverFlowView">Kansivirta näkymä</string>
+  <string Field="Cover">Kansi</string>
+  <string Field="CoverFlowView">Kansivirta</string>
   <string Field="CycleCoverArt">Kierrätä kansikuvia</string>
   <string Field="CycleView">Kierrätä näkymä</string>
   <!-- D -->
@@ -53,7 +57,7 @@
   <!-- F -->
   <string Field="FailedMountingImage">DVD-levykuvan liittäminen epäonnistui</string>
   <string Field="FilePath">Tiedoston polku</string>
-  <string Field="FilmstripView">Filminauha näkymä</string>
+  <string Field="FilmstripView">Filminauha</string>
   <string Field="FilterBy">Suodata</string>
   <string Field="Friday">Perjantai</string>
   <string Field="Future">Tulevaisuus</string>
@@ -65,18 +69,20 @@
   <string Field="InvalidVideoDiscFormat">Joko levykuva ei ole oikeassa\nvideolevy-muodossa tai MediaPortalin Daemon Tools\nasetukset ovat virheelliset.</string>
   <!-- L -->
   <string Field="Language">Kieli</string>
-  <string Field="LargeThumbnailView">Suuri pienoiskuvake-näkymä</string>
+  <string Field="LargeThumbnailView">Suurikuvake</string>
   <string Field="LastMonth">Viime kuukausi</string>
   <string Field="LastWeek">Viime viikko</string>
   <string Field="LastYear">Viime vuosi</string>
-  <string Field="ListView">Lista-näkymä</string>
+  <string Field="ListView">Lista</string>
   <string Field="LockRestrictedMovies">Lukitse K-18 elokuvat</string>
   <!-- M -->
   <string Field="MarkAsUnwatched">Merkitse katsomattomaksi</string>
   <string Field="MarkAsWatched">Merkitse katsotuksi</string>
+  <string Field="MediaInfo">Median tiedot</string>
   <string Field="MediaIsMissing">Valitsemasi elokuvan tallennusmedia puuttuu!\nValitettavasti jokin on mennyt pieleen...</string>
   <string Field="MediaNotAvailableBody">Valitsemasi elokuvan tallennusmedia ei\nole saatavilla. Liitä tai yhdistä tallenusmedia\nnimeltään: {0}</string>
   <string Field="MediaNotAvailableHeader">Tallennusmedia ei saatavilla</string>
+  <string Field="Missing">Kateissa</string>
   <string Field="MissingExternalPlayerExe">HD-toiston ajotiedosto puuttuu.\nKorjaa ajotiedoston polku.</string>
   <string Field="Monday">Maanantai</string>
   <string Field="Movie">Elokuva</string>
@@ -133,7 +139,11 @@
   <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
   <!-- S -->
   <string Field="Saturday">Lauantai</string>
+  <string Field="ScanForNewMovies">Etsi uusia elokuvia</string>
   <string Field="Score">Pistemäärä</string>
+  <string Field="Search">Etsi</string>
+  <string Field="SearchBy">Etsi käyttäen</string>
+  <string Field="SearchNoResults">Ei haku osumia.</string>
   <string Field="SelectYourRating">Valitse arvosanasi kohteelle {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Näytä vain katsomattomat elokuvat</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Näytä katsotut ja katsomattomat elokuvat</string>
@@ -145,12 +155,13 @@
   <string Field="StarRating">Arvosana</string>
   <string Field="Sunday">Sunnuntai</string>
   <!-- T -->
+  <string Field="Theme">Teema</string>
   <string Field="ThisMonth">Tämä kuukausi</string>
   <string Field="ThisWeek">Tämä viikko</string>
   <string Field="ThisYear">Tämä vuosi</string>
   <string Field="ThreeMonthsAgo">Kolme kuukautta sitten</string>
   <string Field="ThreeWeeksAgo">Kolme viikkoa sitten</string>
-  <string Field="ThumbnailView">Pienoiskuvake-näkymä</string>
+  <string Field="ThumbnailView">Pienoiskuvake</string>
   <string Field="Thursday">Torstai</string>
   <string Field="Title">Nimi</string>
   <string Field="Today">Tänään</string>
@@ -167,9 +178,10 @@
   <string Field="UpdateMovieDetailsBody">Olet päivittämässä kaikkia elokuvan tietoja, kaikki\n itse tehdyt muokkaukset menetetään. Haluatko varmasti\njatkaa?</string>
   <string Field="UpdateMovieDetailsHeader">Päivitä elokuvan tiedot</string>
   <!-- V -->
-  <string Field="VirtualDriveHeader">Virtuaaliasema ei ole valmiina</string>
+  <string Field="VirtualDriveHeader">Virtuaaliasema ei ole valmis</string>
   <string Field="VirtualDriveMessage">Virtuaaliasema ei ollut valmis ajoissa.\nYritä uudelleen tai peruuta toisto.</string>
   <string Field="Votes">ääntä</string>
+  <string Field="ViewMovieDetails">Näytä elokuvan tiedot</string>
   <!-- W -->
   <string Field="Wednesday">Keskiviikko</string>
   <string Field="Writer">Käsikirjoittaja</string>
