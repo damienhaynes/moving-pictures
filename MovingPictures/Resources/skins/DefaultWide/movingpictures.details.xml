@@ -1,450 +1,344 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!--
-This file should contain the details view
--->
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file should contain the details view -->
 <window>
   <controls>
-
+    <!-- Details View Buttons  -->
     <control>
-      <description>background overlay</description>
-      <type>image</type>
-      <id>0</id>
-      <posX>0</posX>
-      <posY>0</posY>
-      <width>1280</width>
-      <height>720</height>
-      <texture>filmstrip_overlay.png</texture>
-      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-    </control>
-
-    <control>
-      <description>Play Movie</description>
-      <type>button</type>
-      <id>6</id>
-      <label>2553</label>
-      <onup>10000</onup>
-      <ondown>6</ondown>
-      <onright>10000</onright>
-      <onleft>10000</onleft>
-      <posX>1075</posX>
-      <posY>678</posY>
-      <width>150</width>
-      <height>32</height>
-      <textcolor>ffffffff</textcolor>
-      <font>font11</font>
-      <textYOff>0</textYOff>
-      <textXOff>0</textXOff>
-      <textalign>center</textalign>
-      <textcolorNoFocus>5fffffff</textcolorNoFocus>
-			<textureFocus>tvguide_button_middle.png</textureFocus>
-			<textureNoFocus>tvguide_button_light_middle.png</textureNoFocus>
-      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
-    </control>
-    
-    <!-- Details View Hidden Menu  -->
-    <control>
-      <type>actiongroup</type>
-      <description>action menu</description>
-      <defaultcontrol>10000</defaultcontrol>
-      <onexit>6</onexit>
-      <dimColor>00ffffff</dimColor>
-      <buttonX>0</buttonX>
-		  <buttonY>0</buttonY>
-		  <buttonwidth>106</buttonwidth>
-      <buttonheight>720</buttonheight>
-      <textureFocus>-</textureFocus>
-      <textureNoFocus>-</textureNoFocus>
-		  <width>568</width>
-		  <height>900</height>
-      <visible>!control.isvisible(50)+!control.isvisible(51)+[control.hasfocus(10000)|control.hasfocus(10001)|control.hasfocus(97258)|control.hasfocus(97259)|control.hasfocus(97260)]</visible>
+      <type>group</type>
+      <description>group element</description>
       <animation effect="slide" time="70" start="-300,0" reversible="false">visible</animation>
       <animation effect="slide" time="70" end="-300,0" reversible="false">hidden</animation>
+      <posX>71</posX>
+      <posY>180</posY>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+      <layout>StackLayout(0, Vertical, true)</layout>
       <control>
-        <type>image</type>
-        <posX>26</posX>
-				<posY>78</posY>
-				<width>355</width>
-				<height>591</height>
-				<texture>Backslide.png</texture>
-				<colorDiffuse>fffffffff</colorDiffuse>
+        <description>Play Button</description>
+        <type>button</type>
+        <id>6</id>
+        <onright>6</onright>
+        <onleft>6</onleft>
+        <onup>17</onup>
+        <ondown>7</ondown>
+        <label>208</label>
+        <visible>!Control.IsVisible(50)+!control.isvisible(51)</visible>
       </control>
       <control>
-        <type>group</type>
-        <description>group element</description>
-        <animation effect="slide" time="70" start="-300,0" reversible="false">visible</animation>
-				<animation effect="slide" time="70" end="-300,0" reversible="false">hidden</animation>
-        <posX>71</posX>
-				<posY>121</posY>
-        <width>220</width>
-        <height>720</height>
-        <layout>StackLayout(0, Vertical, true)</layout>
-        <control>
-          <description>Trailer Search (IMDB)</description>
-          <type>button</type>
-          <id>10000</id>
-          <label>IMDb #(L(5900))</label>
-          <ondown>10001</ondown>
-          <onup>17</onup>
-          <onleft>6</onleft>
-          <onright>6</onright>
-          <hyperlink>4755</hyperlink>
-          <hyperlinkParameter>site:IMDb Movie Trailers|search:#(iif(neq(#MovingPictures.SelectedMovie.imdb_id,''),#MovingPictures.SelectedMovie.imdb_id,#MovingPictures.SelectedMovie.title))|return:Locked</hyperlinkParameter>
-          <visible allowhiddenfocus="true">plugin.isenabled(OnlineVideos)</visible>
-        </control>
-        <control>
-          <description>Subtitles</description>
-          <type>button</type>
-          <id>10001</id>
-          <label>287</label>
-          <hyperlink>84623</hyperlink>
-          <onup>10000</onup>
-          <ondown>97259</ondown>
-          <onleft>6</onleft>
-          <onright>6</onright>
-          <visible>plugin.isenabled(SubCentral)</visible>
-        </control>
-        <control>
-          <description>Trakt Rate Movie</description>
-          <type>button</type>
-          <!-- ID:97259 for Trakt Rate -->
-          <id>97259</id>
-          <label>Trakt #Trakt.Translation.Rate.Label</label>
-          <onup>10001</onup>
-          <ondown>97260</ondown>
-          <onleft>6</onleft>
-          <onright>6</onright>
-          <visible>plugin.isenabled(Trakt)</visible>
-        </control>
-        <control>
-          <description>Trakt Shouts</description>
-          <type>button</type>
-          <!-- ID:97260 for Trakt Shouts -->
-          <id>97260</id>
-          <label>Trakt #Trakt.Translation.Shouts.Label</label>
-          <onup>97259</onup>
-          <ondown>97258</ondown>
-          <onleft>6</onleft>
-          <onright>6</onright>
-          <visible>plugin.isenabled(Trakt)</visible>
-        </control>
-        <control>
-          <description>Trakt Add to Watchlist</description>
-          <type>button</type>
-          <!-- ID:97258 for Add to Watchlist -->
-          <id>97258</id>
-          <label>Trakt +#Trakt.Translation.WatchList.Label</label>
-          <onup>97260</onup>
-          <ondown>10000</ondown>
-          <onleft>6</onleft>
-          <onright>6</onright>
-          <visible>plugin.isenabled(Trakt)</visible>
-        </control>
+        <description>SubCentral Button</description>
+        <id>7</id>
+        <type>button</type>
+        <label>287</label>
+        <hyperlink>84623</hyperlink>
+        <onright>7</onright>
+        <onleft>7</onleft>
+        <onup>6</onup>
+        <ondown>9876</ondown>
+        <visible>plugin.isenabled(SubCentral)+!control.isvisible(50)+!control.isvisible(51)</visible>
+      </control>
+      <control>
+        <description>IMDb Trailer</description>
+        <type>button</type>
+        <id>9876</id>
+        <onup>7</onup>
+        <ondown>97270</ondown>
+        <onright>9876</onright>
+        <onleft>9876</onleft>
+        <hyperlink>4755</hyperlink>
+        <hyperlinkParameter>site:IMDb Movie Trailers|search:#(iif(neq(#MovingPictures.SelectedMovie.imdb_id,''),#MovingPictures.SelectedMovie.imdb_id,#MovingPictures.SelectedMovie.title))|return:Locked</hyperlinkParameter>
+        <label>IMDb #(L(5900))</label>
+        <visible>plugin.isenabled(OnlineVideos)+!control.isvisible(50)+!control.isvisible(51)</visible>
+      </control>
+      <control>
+        <description>Add to Trakt Movie/Show Watch List</description>
+        <type>button</type>
+        <id>97270</id>
+        <label>Trakt</label>
+        <onup>9876</onup>
+        <ondown>6</ondown>
+        <onright>97270</onright>
+        <onleft>97270</onleft>
+        <visible>!control.isvisible(50)+!control.isvisible(51)+plugin.isenabled(Trakt)</visible>
       </control>
     </control>
-
-    <!--            :: MAIN DETAILS ::            -->    
+    <!--            :: MAIN DETAILS ::            -->
     <control>
       <description>Cover Art</description>
       <type>image</type>
       <id>60</id>
-      <posX>47</posX>
-      <posY>309</posY>
-      <width>257</width>
-      <height>380</height>
-      <texture flipY="true" diffuse="diffusemirrorwide.png">#MovingPictures.Coverart</texture>
+      <posX>390</posX>
+      <posY>180</posY>
+      <width>277</width>
+      <height>400</height>
+      <texture mask="videothumbmask.png">#MovingPictures.Coverart</texture>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Cover Art Glass Overlay</description>
       <type>image</type>
       <id>0</id>
-      <posX>47</posX>
-      <posY>309</posY>
-      <width>228</width>
-      <height>177</height>
-      <texture>glassoverlay2.png</texture>
+      <posX>390</posX>
+      <posY>180</posY>
+      <width>277</width>
+      <height>400</height>
+      <texture>Videothumbframe.png</texture>
       <visible>!control.isvisible(50)+!control.isvisible(51)+Control.HasThumb(60)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
-    </control>
-
-    <control>
-      <description>Watched Icon Background</description>
-      <type>image</type>
-      <id>0</id>
-      <posX>272</posX>
-      <posY>339</posY>
-      <width>32</width>
-      <height>39</height>
-      <texture>overlaywubg.png</texture>
-      <visible>!control.isvisible(50)+!control.isvisible(51)+Control.HasThumb(60)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Watched Icon</description>
       <type>image</type>
       <id>0</id>
-      <posX>279</posX>
-      <posY>343</posY>
+      <posX>680</posX>
+      <posY>190</posY>
       <width>23</width>
       <height>23</height>
       <texture>overlaywatched.png</texture>
       <visible>!control.isvisible(50)+!control.isvisible(51)+control.isvisible(9)+Control.HasThumb(60)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Un-Watched Icon</description>
       <type>image</type>
       <id>0</id>
-      <posX>279</posX>
-      <posY>343</posY>
+      <posX>680</posX>
+      <posY>190</posY>
       <width>23</width>
       <height>23</height>
       <texture>overlayunwatched.png</texture>
       <visible>!control.isvisible(50)+!control.isvisible(51)+!control.isvisible(9)+Control.HasThumb(60)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
-
     <!-- Details Box -->
     <control>
-      <description>details background</description>
-      <type>image</type>
-      <id>0</id>
-      <posX>340</posX>
-      <posY>380</posY>
-      <width>896</width>
-      <height>337</height>
-      <texture>detailsbg.png</texture>
-      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-    </control>
-
-    <control>
-      <description>Movie Title</description>
+      <description>Genre txt</description>
       <type>label</type>
-      <id>0</id>
-      <posX>362</posX>
-      <posY>380</posY>
-      <width>840</width>
-      <font>font16</font>
-      <label>#MovingPictures.SelectedMovie.title</label>
-      <textcolor>ffFFFFFF</textcolor>
-			<shadowAngle>45</shadowAngle>
-      <shadowDistance>4</shadowDistance>
-      <shadowColor>ff000000</shadowColor>
+      <id>1</id>
+      <posX>730</posX>
+      <posY>187</posY>
+      <label>174</label>
+      <font>font10</font>
+      <align>left</align>
+      <textcolor>ff6FAFE1</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
-
     <control>
       <description>Genres</description>
       <type>label</type>
       <label>#MovingPictures.SelectedMovie.genres</label>
       <id>0</id>
-      <posX>363</posX>
-      <posY>410</posY>
-      <width>840</width>
+      <posX>730</posX>
+      <posY>206</posY>
+      <width>520</width>
       <font>font12</font>
-      <textcolor>ffa9d0f7</textcolor>
-			<shadowAngle>45</shadowAngle>
-      <shadowDistance>4</shadowDistance>
-      <shadowColor>#shadow.dark</shadowColor>
+      <textcolor>ivory</textcolor>
+      <shadowAngle>45</shadowAngle>
+      <shadowDistance>3</shadowDistance>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
-
     <control>
-      <description>Star Rating Image</description>
+      <id>0</id>
+      <type>label</type>
+      <label>#MovingPictures.SelectedMovie.score.localized / 10</label>
+      <posX>920</posX>
+      <posY>160</posY>
+      <width>200</width>
+      <align>left</align>
+      <font>font11</font>
+      <textcolor>ffFFFFFF</textcolor>
+      <shadowAngle>45</shadowAngle>
+      <shadowDistance>2</shadowDistance>
+      <visible>!control.isvisible(50)+!control.isvisible(51)+!string.equals(#MovingPictures.SelectedMovie.score.rounded,)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>10 star rating</description>
+      <type>imagelist</type>
+      <id>0</id>
+      <posX>730</posX>
+      <posY>165</posY>
+      <width>302</width>
+      <height>37</height>
+      <textureWidth>17</textureWidth>
+      <textureHeight>17</textureHeight>
+      <subitems>
+        <subitem>starbad.png</subitem>
+        <subitem>star.png</subitem>
+      </subitems>
+      <orientation>horizontal</orientation>
+      <align>left</align>
+      <imagesToDraw>10</imagesToDraw>
+      <percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
+      <visible>!control.isvisible(50)+!control.isvisible(51)+!string.equals(#MovingPictures.SelectedMovie.score.rounded,)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Separator Line</description>
       <type>image</type>
-      <id>101</id>
-      <width>115</width>
-      <height>22</height>
-      <posX>363</posX>
-      <posY>440</posY>
-      <align>left</align>
-			<textcolor>ffFFFFFF</textcolor>
-      <texture>star#MovingPictures.SelectedMovie.score.rounded.png</texture>
+      <id>1</id>
+      <posX>730</posX>
+      <posY>460</posY>
+      <width>500</width>
+      <height>1</height>
+      <texture>hbar1white.png</texture>
+      <colordiffuse>60ffffff</colordiffuse>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
-    <control>
-      <description>Star Rating Value</description>
-      <id>0</id>
-      <type>label</type>
-      <label>#MovingPictures.SelectedMovie.score.localized / 10 (#MovingPictures.SelectedMovie.popularity.localized #MovingPictures.Translation.Votes.Label)</label>
-      <posX>490</posX>
-      <posY>440</posY>
-      <width>600</width>
-      <align>left</align>
-      <font>font10</font>
-			<textcolor>ffFFFFFF</textcolor>
-      <visible>!control.isvisible(50)+!control.isvisible(51)+string.equals(#MovingPictures.UserMovieSettings.user_rating,)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
-    </control>
-		<control>
-      <description>Star Rating Value (normalize userrating to 10star rating)</description>
-      <id>0</id>
-      <type>label</type>
-      <label>#MovingPictures.SelectedMovie.score.localized (#MovingPictures.Translation.Rated.Label: #(mul(cint(#MovingPictures.UserMovieSettings.user_rating),2))) (#MovingPictures.SelectedMovie.popularity.localized #MovingPictures.Translation.Votes.Label)</label>
-      <posX>490</posX>
-      <posY>440</posY>
-      <width>600</width>
-      <align>left</align>
-      <font>font10</font>
-      <visible>!control.isvisible(50)+!control.isvisible(51)+!string.equals(#MovingPictures.UserMovieSettings.user_rating,)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
-    </control>
-	
     <control>
       <description>Summary</description>
       <type>textboxscrollup</type>
       <id>0</id>
-      <posX>363</posX>
-      <posY>475</posY>
-      <width>860</width>
-      <height>118</height>
-      <textcolor>ffFFFFFF</textcolor>      
+      <posX>730</posX>
+      <posY>470</posY>
+      <width>520</width>
+      <height>105</height>
+      <textcolor>ivory</textcolor>
       <font>font11</font>
-			<scrollStartDelaySec>#textboxscrolldelay.details</scrollStartDelaySec>
       <label>#MovingPictures.SelectedMovie.summary</label>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
-    </control>
-
-    <control>
-      <description>Directors Label</description>
-      <type>label</type>
-      <label>#MovingPictures.Translation.Directors.Label</label>
-      <id>0</id>
-      <posX>363</posX>
-      <posY>598</posY>
-      <width>115</width>
-      <font>font10</font>
-      <textcolor>ffa9d0f7</textcolor>
-      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
-      <description>Directors</description>
-      <type>label</type>
-      <label>#MovingPictures.SelectedMovie.directors</label>
-      <id>0</id>
-      <posX>485</posX>
-      <posY>598</posY>
-      <width>388</width>
-      <font>font10</font>
-      <textcolor>ffFFFFFF</textcolor>
+      <description>Separator Line</description>
+      <type>image</type>
+      <id>1</id>
+      <posX>730</posX>
+      <posY>580</posY>
+      <width>500</width>
+      <height>1</height>
+      <texture>hbar1white.png</texture>
+      <colordiffuse>60ffffff</colordiffuse>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
-    </control>
-
-    <control>
-      <description>Writers</description>
-      <type>label</type>
-      <label>#MovingPictures.Translation.Writers.Label</label>
-      <id>0</id>
-      <posX>363</posX>
-      <posY>622</posY>
-      <width>115</width>
-      <font>font10</font>
-      <textcolor>ffa9d0f7</textcolor>
-      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
-      <description>Writer</description>
-      <type>label</type>
-      <label>#MovingPictures.SelectedMovie.writers</label>
+      <description>Runtime Label</description>
       <id>0</id>
-      <posX>485</posX>
-      <posY>622</posY>
-      <width>388</width>
-      <font>font10</font>
-      <textcolor>ffFFFFFF</textcolor>
-      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
-    </control>
-
-    <control>
-      <description>actors</description>
       <type>label</type>
-      <label>#MovingPictures.Translation.Actors.Label</label>
-      <id>0</id>
-      <posX>363</posX>
-      <posY>646</posY>
-      <width>115</width>
+      <label>#MovingPictures.Translation.Runtime.Label</label>
+      <posX>730</posX>
+      <posY>231</posY>
       <font>font10</font>
-      <textcolor>ffa9d0f7</textcolor>
+      <align>left</align>
+      <textcolor>ff6FAFE1</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
-      <description>actors</description>
+      <description>Runtime</description>
+      <id>1002</id>
       <type>label</type>
-      <label>#MovingPictures.SelectedMovie.actors</label>
-      <id>0</id>
-      <posX>485</posX>
-      <posY>646</posY>
-      <width>728</width>
-      <font>font10</font>
-      <textcolor>ffFFFFFF</textcolor>
+      <label>#(iif(neq(#MovingPictures.SelectedMovie.runtime.localized.short,''),#MovingPictures.SelectedMovie.runtime.localized.short,'N/A'))</label>
+      <posX>730</posX>
+      <posY>250</posY>
+      <width>520</width>
+      <font>font12</font>
+      <textcolor>ivory</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
-
     <control>
       <description>year</description>
       <type>label</type>
       <label>#MovingPictures.Translation.Year.Label</label>
       <id>0</id>
-      <posX>885</posX>
-      <posY>622</posY>
+      <posX>930</posX>
+      <posY>231</posY>
       <width>840</width>
       <font>font10</font>
       <textcolor>ffa9d0f7</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>year</description>
       <type>label</type>
       <label>#MovingPictures.SelectedMovie.year</label>
       <id>0</id>
-      <posX>985</posX>
-      <posY>622</posY>
+      <posX>930</posX>
+      <posY>250</posY>
       <width>840</width>
       <font>font10</font>
       <textcolor>ffFFFFFF</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
-    </control>
-
-    <control>
-      <description>runtime</description>
-      <type>label</type>
-      <label>#MovingPictures.Translation.Runtime.Label</label>
-      <id>0</id>
-      <posX>885</posX>
-      <posY>598</posY>
-      <width>840</width>
-      <font>font10</font>
-      <textcolor>ffa9d0f7</textcolor>
-      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
-      <description>runtime</description>
-      <type>label</type>
-      <label>#MovingPictures.SelectedMovie.runtime.localized.long</label>
+      <description>Director Label</description>
       <id>0</id>
-      <posX>985</posX>
-      <posY>598</posY>
-      <width>840</width>
+      <type>label</type>
+      <label>#MovingPictures.Translation.Director.Label</label>
+      <posX>730</posX>
+      <posY>278</posY>
       <font>font10</font>
-      <textcolor>ffFFFFFF</textcolor>
+      <align>left</align>
+      <textcolor>ff6FAFE1</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-			<animation effect="fade" time="250" delay="0">WindowClose</animation>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
-
+    <control>
+      <description>Director</description>
+      <id>1001</id>
+      <type>label</type>
+      <label>#MovingPictures.SelectedMovie.directors</label>
+      <posX>730</posX>
+      <posY>297</posY>
+      <font>font12</font>
+      <width>520</width>
+      <textcolor>ivory</textcolor>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Writer Label</description>
+      <id>0</id>
+      <type>label</type>
+      <label>#MovingPictures.Translation.Writer.Label</label>
+      <posX>730</posX>
+      <posY>319</posY>
+      <font>font10</font>
+      <align>left</align>
+      <textcolor>ff6FAFE1</textcolor>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Writer</description>
+      <id>1002</id>
+      <type>fadelabel</type>
+      <label>#MovingPictures.SelectedMovie.writers</label>
+      <posX>730</posX>
+      <posY>338</posY>
+      <width>520</width>
+      <font>font12</font>
+      <textcolor>ivory</textcolor>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Actors Label</description>
+      <type>label</type>
+      <label>#MovingPictures.Translation.Actors.Label</label>
+      <posX>730</posX>
+      <posY>367</posY>
+      <font>font10</font>
+      <align>left</align>
+      <textcolor>ff6FAFE1</textcolor>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
+    <control>
+      <description>Actors</description>
+      <id>1003</id>
+      <type>textboxscrollup</type>
+      <label>#MovingPictures.SelectedMovie.actors</label>
+      <posX>730</posX>
+      <posY>388</posY>
+      <width>520</width>
+      <height>70</height>
+      <font>font11</font>
+      <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
+      <animation effect="fade" time="250" delay="0">WindowClose</animation>
+    </control>
   </controls>
 </window>
