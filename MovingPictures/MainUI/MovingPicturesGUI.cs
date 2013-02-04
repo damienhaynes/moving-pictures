@@ -696,6 +696,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                                 CategoryLoadParamater = GetCategoryByName(value);
                                 if (CategoryLoadParamater == null) ShowMessage("Moving Pictures", Translation.BadCategory);
                                 break;
+                            case "categorytranslatedname":
+                                CategoryLoadParamater = GetCategoryByTranslatedName(value);
+                                if (CategoryLoadParamater == null) ShowMessage("Moving Pictures", Translation.BadCategory);
+                                break;
                             case "movieid":
                                 MovieLoadParamater = DBMovieInfo.Get(Int32.Parse(value));
                                 if (MovieLoadParamater == null) ShowMessage("Moving Pictures", Translation.BadMovie);
@@ -750,6 +754,35 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 if (nodeList[i].HasChildren) {
                     DBNode<DBMovieInfo> result = GetCategoryByName(nodeList[i].Children, categoryName);
+                    if (result != null) return result;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Finds a menu level by it's translated name.
+        /// </summary>
+        /// <param name="categoryName">raw untranslated unescaped name of the category</param>
+        /// <returns>The first match found or null if nothing is found</returns>
+        private DBNode<DBMovieInfo> GetCategoryByTranslatedName(string categoryName) {
+            return GetCategoryByTranslatedName(MovingPicturesCore.Settings.CategoriesMenu.RootNodes, categoryName);
+        }
+
+        /// <summary>
+        /// Finds a menu level by it's name
+        /// </summary>
+        /// <param name="nodeList">List of the root nodes where the search is started</param>
+        /// <param name="categoryName">Name of the category</param>
+        /// <returns>The first match found or null if nothing is found</returns>
+        private DBNode<DBMovieInfo> GetCategoryByTranslatedName(List<DBNode<DBMovieInfo>> nodeList, string categoryName) {
+            for (int i = 0; i < nodeList.Count; i++) {
+                if (MediaPortal.Plugins.MovingPictures.MainUI.Translation.ParseString(nodeList[i].Name).Equals(categoryName)) {
+                    return nodeList[i];
+                }
+
+                if (nodeList[i].HasChildren) {
+                    DBNode<DBMovieInfo> result = GetCategoryByTranslatedName(nodeList[i].Children, categoryName);
                     if (result != null) return result;
                 }
             }
