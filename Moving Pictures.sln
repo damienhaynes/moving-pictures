@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cornerstone", "Cornerstone\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cornerstone.MP", "Cornerstone.MP\Cornerstone.MP.csproj", "{77C78161-3206-45FD-A419-60218F3354C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovingPicturesConfigLauncher", "Testing\MovingPicturesConfigLauncher\MovingPicturesConfigLauncher.csproj", "{5D751473-DCC5-4044-A6E3-403D97C5B9F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigLauncher", "Testing\MovingPicturesConfigLauncher\ConfigLauncher.csproj", "{5D751473-DCC5-4044-A6E3-403D97C5B9F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FollwitApi", "External\FollwitApi\FollwitApi.csproj", "{75EBA361-8137-4107-A5B5-753CE959983B}"
 EndProject
@@ -261,7 +261,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1B3CB474-9C7B-459F-9927-A882D3457950} = {61546B9B-F2A3-4931-AC2A-963AFDAC67A5}
-		{5D751473-DCC5-4044-A6E3-403D97C5B9F9} = {61546B9B-F2A3-4931-AC2A-963AFDAC67A5}
 		{759B8D4C-415E-4F71-8B86-82B497B5499B} = {61546B9B-F2A3-4931-AC2A-963AFDAC67A5}
 		{75EBA361-8137-4107-A5B5-753CE959983B} = {1A6450EB-C026-4C84-AE11-2A6389049734}
 	EndGlobalSection
