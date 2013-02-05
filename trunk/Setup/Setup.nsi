@@ -1,3 +1,17 @@
+# This script is designed to create a release of Moving Pictures.
+
+# To run this script you need the latest version of NSIS installed as well as the 
+# the XML plug-in for NSIS.
+
+# http://nsis.sourceforge.net
+# http://nsis.sourceforge.net/XML_plug-in
+
+# This script also assumes that movingpictures.dll has been built and merged. 
+# If this is not true, the script will fail or the DLL installed will not run
+# properly! Automatic building of the movingpictures.dll may be implemented 
+# in an upcoming version of this script.
+
+
 # build version info
 !execute "makensis GetVersion.nsi"
 
@@ -8,9 +22,9 @@
 
 # Required MediaPortal Version
 !define MP_MAJOR 1
-!define MP_MINOR 2
-!define MP_POINT 3
-!define MP_VER_NAME "1.2.3"
+!define MP_MINOR 1
+!define MP_POINT 6
+!define MP_VER_NAME "1.1.6"
 
 # Required MediaPortal Version for New DefaultWide
 !define MP_13B_MAJOR 1
@@ -65,11 +79,12 @@ Var DEFAULT_SKIN_VERSION
 !insertmacro LANG_LOAD "Italian"
 
 # set the build filename based on environment variables
-!ifdef RELEASE
-    OutFile moving-pictures-${VersionShort}-setup.exe
-!else
-    OutFile moving-pictures-${VersionLong}-alpha.exe
-!endif
+#!ifdef RELEASE
+#    OutFile moving-pictures-${VersionShort}-setup.exe
+#!else
+#    OutFile moving-pictures-${VersionLong}-alpha.exe
+#!endif
+OutFile moving-pictures-setup.exe
 
 # Installer attributes
 CRCCheck on
@@ -177,19 +192,6 @@ Section "Default Skin Support" SEC0003
     ${EndIf}
 SectionEnd
 
-Section "Titan Skin Support (Alpha)" SEC0004
-    ${If} ${FileExists} $SKIN_DIR\Titan\*.*
-        SetOverwrite ifnewer
-
-        SetOutPath $SKIN_DIR\Titan
-        File "..\MovingPictures\Resources\skins\Titan\*.*"
-
-        SetOutPath $SKIN_DIR\Titan\Media
-        File "..\MovingPictures\Resources\skins\Titan\Media\*.*"  
-
-    ${EndIf}
-SectionEnd
-
 # set description text for install components
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC0000} $(DLL_DESCRIPTION)
@@ -209,6 +211,12 @@ Function .onInit
     IntOp $0 ${SF_SELECTED} | ${SF_RO}
     SectionSetFlags ${SEC0000} $0
     
+	# disable default skin if on 1.3 Beta+
+	#${If} $DEFAULT_SKIN_VERSION == "OLD"
+	!insertmacro SetSectionFlag ${SEC0003} ${SF_RO}
+	!insertmacro UnSelectSection ${SEC0003}
+	#${EndIf}
+	
     # grab various fields from registry
     SetShellVarContext all
     Call getMediaPortalDir
