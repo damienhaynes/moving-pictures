@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace MovingPicturesConfigTester {
+namespace ConfigTester {
     /// <summary>
     /// This class can be extended to easily create an EXE that will launch a specific 
     /// MediaPortal plugin by helping .NET automatically find MediaPortal and MediaPortal 

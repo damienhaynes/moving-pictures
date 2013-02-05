@@ -1,7 +1,7 @@
 using MediaPortal.Plugins.MovingPictures.MainUI;
 using System;
 
-namespace MovingPicturesConfigTester {
+namespace ConfigTester {
     public class MovingPicturesLauncher : PluginConfigLauncher {
 
         public override string FriendlyPluginName {
