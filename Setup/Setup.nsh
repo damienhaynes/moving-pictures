@@ -8,8 +8,15 @@
 
 # Required MediaPortal Version
 !define MP_MAJOR 1
-!define MP_MINOR 1
-!define MP_POINT 6
+!define MP_MINOR 2
+!define MP_POINT 3
+!define MP_VER_NAME "1.2.3"
+
+# Required MediaPortal Version for New DefaultWide
+!define MP_13B_MAJOR 1
+!define MP_13B_MINOR 2
+!define MP_13B_POINT 200
+!define MP_13B_VER_NAME "1.3 Beta"
 
 # grab version from DLL
 !system "GetVersion.exe"
@@ -27,6 +34,7 @@ Var CURR_SKIN_ASPECT_RATIO
 Var GENERIC_SKIN_TAG_VALUE
 Var INSTALL_NUMBER
 Var CURR_DATE
+Var DEFAULT_SKIN_VERSION
 
 # MUI Symbol Definitions
 !define MUI_FINISHPAGE_NOAUTOCLOSE
@@ -124,6 +132,19 @@ Section "DefaultWide Skin Support" SEC0002
     ${If} ${FileExists} $SKIN_DIR\DefaultWide\*.*
         SetOverwrite ifnewer
 
+		${If} $DEFAULT_SKIN_VERSION == "OLD"
+
+        SetOutPath $SKIN_DIR\DefaultWide
+        File "..\MovingPictures\Resources\skins\DefaultWide-1.2\*.*"
+
+        SetOutPath $SKIN_DIR\DefaultWide\Media
+        File "..\MovingPictures\Resources\skins\DefaultWide-1.2\Media\*.*"  
+        
+        SetOutPath $SKIN_DIR\DefaultWide\Media\Categories
+        File "..\MovingPictures\Resources\skins\DefaultWide-1.2\Media\Categories\*.*"  
+		
+		${Else}
+
         SetOutPath $SKIN_DIR\DefaultWide
         File "..\MovingPictures\Resources\skins\DefaultWide\*.*"
 
@@ -133,6 +154,10 @@ Section "DefaultWide Skin Support" SEC0002
         SetOutPath $SKIN_DIR\DefaultWide\Media\Categories
         File "..\MovingPictures\Resources\skins\DefaultWide\Media\Categories\*.*"  
 
+		
+		${EndIf}
+		
+
     ${EndIf}
 SectionEnd
 
@@ -141,13 +166,13 @@ Section "Default Skin Support" SEC0003
         SetOverwrite ifnewer
 
         SetOutPath $SKIN_DIR\Default
-        File "..\MovingPictures\Resources\skins\Default\*.*"
+        File "..\MovingPictures\Resources\skins\Default-1.2\*.*"
 
         SetOutPath $SKIN_DIR\Default\Media
-        File "..\MovingPictures\Resources\skins\Default\Media\*.*"  
+        File "..\MovingPictures\Resources\skins\Default-1.2\Media\*.*"  
         
         SetOutPath $SKIN_DIR\Default\Media\Categories
-        File "..\MovingPictures\Resources\skins\Default\Media\Categories\*.*"  
+        File "..\MovingPictures\Resources\skins\Default-1.2\Media\Categories\*.*"  
 
     ${EndIf}
 SectionEnd
@@ -189,6 +214,7 @@ Function .onInit
     Call getMediaPortalDir
     Call getPluginDir
     Call verifyMediaPortalVer
+	Call determineDefaultSkinVer
 	Call getSkinDir
 	Call getDatabaseDir
     Call getPreviousInstallInfo
@@ -415,15 +441,38 @@ Function verifyMediaPortalVer
     # verify we meet the minimum version requirement
     IntCmp $R2 ${MP_MAJOR} check_minor_ver fail success 
     check_minor_ver:
-        IntCmp $R3 ${MP_MINOR} check_point_ver fail success 
+        IntCmp $R3 ${MP_MINOR} check_point_ver fail success    
     check_point_ver:
-        IntCmp $R4 ${MP_POINT} success fail success 
+	    IntCmp $R4 ${MP_POINT} success fail success 
     fail:
-        MessageBox MB_OK|MB_ICONEXCLAMATION "$(OLD_VER1)${MP_MAJOR}.${MP_MINOR}.${MP_POINT}$(OLD_VER2)"
+        MessageBox MB_OK|MB_ICONEXCLAMATION "$(OLD_VER1)${MP_VER_NAME}$(OLD_VER2)"
         Abort
     success:
 	
 FunctionEnd
+
+
+Function determineDefaultSkinVer
+    GetDllVersion "$MEDIAPORTAL_DIR\MediaPortal.exe" $R0 $R1
+    IntOp $R2 $R0 / 0x00010000
+    IntOp $R3 $R0 & 0x0000FFFF
+    IntOp $R4 $R1 / 0x00010000
+    IntOp $R5 $R1 & 0x0000FFFF
+    
+    # verify we meet the minimum version requirement
+    IntCmp $R2 ${MP_13B_MAJOR} check_minor_ver fail success 
+    check_minor_ver:
+        IntCmp $R3 ${MP_13B_MINOR} check_point_ver fail success    
+    check_point_ver:
+	    IntCmp $R4 ${MP_13B_POINT} success fail success 
+    fail:
+        strcpy $DEFAULT_SKIN_VERSION "OLD"
+        Goto done
+    success:
+	    strcpy $DEFAULT_SKIN_VERSION "NEW"
+	done:
+FunctionEnd
+
 
 # grabs the install number counter from the registry and increments
 # mostly used for ensuring unique backup directories
