@@ -12,20 +12,24 @@ using System.IO;
 
 namespace MovingPicturesConfigTester {
     class Program {
+        private const String errorDialogTitle = "Something Went Wrong";
+        private const String missingDLL = "Moving Pictures must be installed to use this configuration launcher. The following component could not be found:\n\n{0}";
+        private const string unexpectedError = "There is a problem and the Moving Pictures doesn't know how to recover:\n\n{0}";
+        private const string noMepo = "MediaPortal must be installed to use this configuration launcher. A reference to the MediaPortal installation directory could not be found in the registry.";
+
         private static string mepoDir = null;
         private static string pluginDir = null;
 
         private static bool InitAssemblyFinder() {
-            mepoDir = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal", "InstallPath", null);
+            mepoDir = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MediaPortal", "InstallPath", null) as string;
             if (mepoDir == null) {
-                MessageBox.Show("MediaPortal must be installed to use this program.");
+                MessageBox.Show(noMepo, errorDialogTitle);
                 return false;
             }
 
             pluginDir = Path.Combine(mepoDir, @"plugins\Windows\");
 
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromMepoFolders);
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromMepoFolders);
             
             return true;
         }
@@ -49,8 +53,14 @@ namespace MovingPicturesConfigTester {
         static void Main(string[] args) {
             System.Windows.Forms.Application.EnableVisualStyles();
 
-            bool good = InitAssemblyFinder();
-            if (good) Launch();
+            try {
+                bool pathsExists = InitAssemblyFinder();
+                if (pathsExists) Launch();
+            }
+
+            catch (Exception e) {
+                MessageBox.Show(String.Format(unexpectedError, e.Message), errorDialogTitle);
+            }
         }
     }
 }
