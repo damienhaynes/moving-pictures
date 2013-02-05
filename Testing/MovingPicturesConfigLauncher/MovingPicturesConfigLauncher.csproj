@@ -6,8 +6,8 @@
     <ProjectGuid>{5D751473-DCC5-4044-A6E3-403D97C5B9F9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
-    <AssemblyName>MovingPicturesConfigTester</AssemblyName>
-    <RootNamespace>MovingPicturesConfigTester</RootNamespace>
+    <AssemblyName>Moving Pictures Config</AssemblyName>
+    <RootNamespace>MovingPicturesConfig</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -55,6 +55,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Core, Version=1.1.6.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -74,6 +77,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Cornerstone\Cornerstone.csproj">
+      <Project>{14201b8d-31c3-4fb5-9356-9485676c147b}</Project>
+      <Name>Cornerstone</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MovingPictures\MovingPictures.csproj">
       <Project>{443F8F2C-44D2-47FB-B552-636664C8EC53}</Project>
       <Name>MovingPictures</Name>
@@ -95,6 +102,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
