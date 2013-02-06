@@ -181,7 +181,7 @@ public class Script
       <Major>1</Major>
       <Minor>5</Minor>
       <Build>0</Build>
-      <Revision>1462</Revision>
+      <Revision>1465</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
     <VersionDescription>This release introduces access to the movie importer inside the MediaPortal GUI. Please be patient as skin designers work on adding support for this feature!</VersionDescription>
@@ -203,7 +203,7 @@ public class Script
           <Description>The icon file of the package stored online (jpg,png,bmp)</Description>
         </SectionParam>
         <SectionParam Name="Configuration file">
-          <Value>%Plugins%\movingpictures.dll</Value>
+          <Value>%Base%\Moving Pictures Config.exe</Value>
           <ValueType>Template</ValueType>
           <Description>The file used to configure the extension.
  If it has .exe extension the will be executed.
@@ -235,7 +235,7 @@ public class Script
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\MovingPictures\Resources\Images\icon_large.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{214be598-2255-4990-a498-b475313ab98f}-icon_large.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{925af32b-e7da-48c7-a652-cdaa632a99c5}-icon_large.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>

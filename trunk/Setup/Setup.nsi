@@ -20,6 +20,8 @@
 !define URL www.moving-pictures.tv
 !define REGKEY "SOFTWARE\${Name}"
 
+!define RELEASE
+
 # Required MediaPortal Version
 !define MP_MAJOR 1
 !define MP_MINOR 1
@@ -120,12 +122,14 @@ Section "Moving Pictures Plugin" SEC0000
 		File ..\MovingPictures\bin\Release\Cornerstone.MP.dll
         SetOutPath $MEDIAPORTAL_DIR
 		File ..\MovingPictures\bin\Release\NLog.dll
+		File "..\Testing\MovingPicturesConfigLauncher\bin\Release\Moving Pictures Config.exe"
         !else
         File ..\MovingPictures\bin\Debug\MovingPictures.dll
 		File ..\MovingPictures\bin\Debug\Cornerstone.dll
 		File ..\MovingPictures\bin\Debug\Cornerstone.MP.dll
         SetOutPath $MEDIAPORTAL_DIR
 		File ..\MovingPictures\bin\Debug\NLog.dll
+		File "..\Testing\MovingPicturesConfigLauncher\bin\Debug\Moving Pictures Config.exe"
         !endif
  		
 		Delete $MEDIAPORTAL_DIR\Cornerstone.dll
