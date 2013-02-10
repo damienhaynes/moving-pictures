@@ -72,6 +72,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.label1 = new System.Windows.Forms.Label();
             this.movieListButton = new System.Windows.Forms.Button();
             this.movieListFilterBox = new Cornerstone.GUI.Controls.FilterComboBox();
+            this.movieCountField = new System.Windows.Forms.Label();
             this.movieDetailsSubPane = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager.MovieDetailsSubPane();
             this.fileDetailsSubPane = new MediaPortal.Plugins.MovingPictures.ConfigScreen.MovieManager.FileDetailsSubPane();
             this.coverPanel.SuspendLayout();
@@ -262,8 +263,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // movieToolStrip
             // 
-            this.movieToolStrip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.movieToolStrip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.movieToolStrip.AutoSize = false;
             this.movieToolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.movieToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -470,8 +471,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // movieListBox
             // 
-            this.movieListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.movieListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.movieListBox.BackColor = System.Drawing.SystemColors.Window;
             this.movieListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.movieListBox.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -482,7 +483,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieListBox.HideSelection = false;
             this.movieListBox.Location = new System.Drawing.Point(3, 33);
             this.movieListBox.Name = "movieListBox";
-            this.movieListBox.Size = new System.Drawing.Size(178, 258);
+            this.movieListBox.Size = new System.Drawing.Size(178, 244);
             this.movieListBox.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.movieListBox.TabIndex = 2;
             this.movieListBox.UseCompatibleStateImageBehavior = false;
@@ -553,11 +554,22 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.movieListFilterBox.Size = new System.Drawing.Size(148, 21);
             this.movieListFilterBox.TabIndex = 21;
             // 
+            // movieCountField
+            // 
+            this.movieCountField.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.movieCountField.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.movieCountField.Location = new System.Drawing.Point(94, 280);
+            this.movieCountField.Name = "movieCountField";
+            this.movieCountField.Size = new System.Drawing.Size(87, 11);
+            this.movieCountField.TabIndex = 6;
+            this.movieCountField.Text = "300 Movies";
+            this.movieCountField.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // movieDetailsSubPane
             // 
-            this.movieDetailsSubPane.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.movieDetailsSubPane.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.movieDetailsSubPane.DatabaseObject = null;
             this.movieDetailsSubPane.Location = new System.Drawing.Point(192, 62);
             this.movieDetailsSubPane.Name = "movieDetailsSubPane";
@@ -567,9 +579,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             // fileDetailsSubPane
             // 
-            this.fileDetailsSubPane.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.fileDetailsSubPane.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fileDetailsSubPane.DatabaseObject = null;
             this.fileDetailsSubPane.Location = new System.Drawing.Point(192, 62);
             this.fileDetailsSubPane.Name = "fileDetailsSubPane";
@@ -581,6 +593,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.movieCountField);
             this.Controls.Add(this.movieListButton);
             this.Controls.Add(this.movieListFilterBox);
             this.Controls.Add(this.loadingMoviesPanel);
@@ -658,5 +671,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private Label label1;
         private Cornerstone.GUI.Controls.FilterComboBox movieListFilterBox;
         private Button movieListButton;
+        private Label movieCountField;
     }
 }

@@ -239,6 +239,8 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 movieListBox.Items.Add(item);
             }
 
+            this.movieCountField.Text = "" + movieListBox.Items.Count + " movies";
+
             lock (lockList) {
                 listItems[movie] = item;
             }
