@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- Icelandic (IS) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">Leikari</string>
+  <string Field="Actors">Leikarar</string>
+  <string Field="AllMovies">Allar kvikmyndir</string>
+  <!-- B -->
+  <string Field="BadCategory">Forrit eða útlit reyndi að\nopna MovingPictures flokk sem er\nekki til!</string>
+  <string Field="BadMovie">Forrit eða útlit reyndi að\nopna kvikmynd sem er ekki til í\nMoving Pictures!</string>
+  <string Field="BadParam">Forrit eða útlit sendi MovingPictures\nröng gögn!</string>
+  <!-- C -->
+  <string Field="Cancel">Hætta við</string>
+  <string Field="CannotDeleteOffline">Ekki hægt að eyða {0}\n vegna þess að skráin er ekki tiltæk</string>
+  <string Field="CannotDeleteReadOnly">Get ekki eytt skrifvörðum kvikmyndum.\nViltu að Moving Pictures sleppi þessari kvikmynd?</string>
+  <string Field="CategoryEmptyDescription">Engar kvikmyndir eru\ní þessum flokki.</string>
+  <string Field="CategoryEmptyHeader">Flokkurinn er tómur</string>
+  <string Field="Certification">Aldurstakmark</string>
+  <string Field="ChangeView">Breyta röðun</string>
+  <string Field="CheckForMissingArtwork">Athuga með kápumyndir á netinu</string>
+  <string Field="ContinueToNextPartBody">Viltu halda áfram með kafla {0}?</string>
+  <string Field="ContinueToNextPartHeader">halda áfram að næsta kafla?</string>
+  <string Field="CoverFlowView">Kápumyndaflæði</string>
+  <string Field="CycleCoverArt">Fletti kápumyndum</string>
+  <string Field="CycleView">Breyta útliti</string>
+  <!-- D -->
+  <string Field="DateAdded">Dags bætt við</string>
+  <string Field="DateDay">dagur</string>
+  <string Field="DateDays">dagar</string>
+  <string Field="DateMonth">mánuður</string>
+  <string Field="DateMonths">mánuðir</string>
+  <string Field="DatePartAgo">{0} {1} síðan</string>
+  <string Field="DatePartWithinDays">Síðustu {0} dagar</string>
+  <string Field="DatePartWithinMonths">Síðustu {0} mánuðir</string>
+  <string Field="DatePartWithinWeeks">Síðustu {0} vikur</string>
+  <string Field="DatePartWithinYears">Síðustu {0} ár</string>
+  <string Field="DateWeek">vika</string>
+  <string Field="DateWeeks">vikur</string>
+  <string Field="DateYear">ár</string>
+  <string Field="DateYears">ár</string>
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="DeleteFailed">Eyðing mistókst</string>
+  <string Field="DeleteMovie">Eyða kvikmynd</string>
+  <string Field="Director">Leikstjórn</string>
+  <string Field="Directors">Leikstjórn</string>
+  <string Field="DownAbbreviation">(niður)</string>
+  <string Field="DoYouWantToDelete">Viltu eyða endanlega\n{0}\naf harða diskinum?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Fyrr á þessu ári</string>
+  <string Field="Error">Villa</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">Afsakið, tókst ekki að gera DVD mynd</string>
+  <string Field="FilePath">Skráarslóð</string>
+  <string Field="FilmstripView">Rammar</string>
+  <string Field="FilterBy">Síun á</string>
+  <string Field="Friday">föstudagur</string>
+  <string Field="Future">Framtíð</string>
+  <!-- G -->
+  <string Field="Genre">Flokkur</string>
+  <string Field="Genres">Flokkar</string>
+  <!-- I -->
+  <string Field="InvalidPin">Rangur PIN kódi!</string>
+  <string Field="InvalidVideoDiscFormat">Annaðhvort inniheldur skráin ekki rétta skráarlýsingu\neða Daemon Tools í MediaPortal configuration ekki rétt.</string>
+  <!-- L -->
+  <string Field="Language">Tungumál</string>
+  <string Field="LargeThumbnailView">Smámynd</string>
+  <string Field="LastMonth">Síðasta mánuð</string>
+  <string Field="LastWeek">Síðustu viku</string>
+  <string Field="LastYear">Síðasta ár</string>
+  <string Field="ListView">Listi</string>
+  <string Field="LockRestrictedMovies">Læsing á bannaðar myndir</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Merkja óséða</string>
+  <string Field="MarkAsWatched">Merkja séða</string>
+  <string Field="MediaIsMissing">Margmiðlunarsnið viðkomandi kvikmyndar sem þú hefur valið er ekki til!\nAfsakið, en eitthvað hefur farið úrskeiðis...</string>
+  <string Field="MediaNotAvailableBody">Margmiðlunarsnið viðkomandi kvikmyndar sem þú hefur valið\n er ekki mögulegt. Vinsamlegast setjið í eða tengja disk\nnefndan: {0}</string>
+  <string Field="MediaNotAvailableHeader">Margmiðlunarsniðið er ekki mögulegt</string>
+  <string Field="MissingExternalPlayerExe">Keyrsluskráin fyrir HD spilun finnst ekki.\nVinsamlegast breyttu skráarslóðinni fyrir keyrsluskránna.</string>
+  <string Field="Monday">mánudagur</string>
+  <string Field="Movie">Kvikmynd</string>
+  <string Field="MovieDetails">Lýsing kvikmyndar</string>
+  <string Field="MovieOptions">Valmöguleikar kvikmyndar</string>
+  <string Field="Movies">Kvikmyndir</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">Virðist sem að þú hafir ekki skilgreint\nskráarslóð fyrir innflutning. Þú ættir að loka MediaPortal og\nræsa MediaPortal Configuration \ntil að stilla Moving Pictures.</string>
+  <string Field="NoImportPathsHeading">Engin skráarslóð fyrir innflutning!</string>
+  <!-- O -->
+  <string Field="Older">Eldri</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Læsing á efni er ekki virkjuð.</string>
+  <string Field="PinCodeHeader">Aflæsi bannað efni</string>
+  <string Field="PinCodePrompt">Sláðu inn PIN kóda til að halda áfram:</string>
+  <string Field="PlaybackFailed">Spilun ekki möguleg vegna þess '{0}'\nviðkomandi margmiðlunarsnið er ekki skráð í Mediaportal configuration.\nVinsamlegast bættu þessu margmiðlunarsniði við eða settu upp útværan spilara\nog reyndu aftur.</string>
+  <string Field="PlaybackFailedHeader">Afspilun mistókst</string>
+  <string Field="ProblemLoadingSkinFile">Vandræði með viðkomandi viðmótsútlit.</string>
+  <!-- R -->
+  <string Field="Rate">Aldurst:</string>
+  <string Field="Rated">Einkunn</string>
+  <string Field="RateFiveStarFive">Frábær</string>
+  <string Field="RateFiveStarFour">Mjög góð</string>
+  <string Field="RateFiveStarOne">Léleg</string>
+  <string Field="RateFiveStarThree">Góð</string>
+  <string Field="RateFiveStarTwo">Í lagi</string>
+  <string Field="RateHeading">Gefa einkunn</string>
+  <string Field="RecentlyAddedMovies">Nýlega bætt við</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">Halda áfram frá:</string>
+  <string Field="ResumeFromLast">Halda áfram frá því síðast?</string>
+  <string Field="Retry">Reyna aftur</string>
+  <string Field="Runtime">Sýningart:</string>
+  <string Field="RuntimeHour">{0} klst.</string>
+  <string Field="RuntimeHours">{0} klst.</string>
+  <string Field="RuntimeLong">{0} og {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} and {2}</string>
+  <string Field="RuntimeMinute">{0} mínúta</string>
+  <string Field="RuntimeMinutes">{0} mínútur</string>
+  <string Field="RuntimeSecond">{0} sekúnda</string>
+  <string Field="RuntimeSeconds">{0} sekúndur</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}k{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">laugadagur</string>
+  <string Field="Score">Einkunn</string>
+  <string Field="SelectYourRating">Veldu einkunn fyrir {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">Birta aðeins óséðar kvikmyndir</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Birta séðar og óséðar kvikmyndir</string>
+  <string Field="SkinDoesNotSupportCategories">Þetta viðmótsútlit styður ekki flokkanir.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Þetta viðmótsútlit styður ekki PIN kóda glugga.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Þetta viðmótsútlit styður ekki Einkunnar glugga.</string>
+  <string Field="SortBy">Röðun</string>
+  <string Field="SortDirection">Röðun á hækkandi/lækkandi</string>
+  <string Field="StarRating">Stjörnugjöf</string>
+  <string Field="Sunday">sunnudagur</string>
+  <!-- T -->
+  <string Field="ThisMonth">Þessi mánuður</string>
+  <string Field="ThisWeek">Þessi vika</string>
+  <string Field="ThisYear">Þetta ár</string>
+  <string Field="ThreeMonthsAgo">Fyrir þremur mánuðum</string>
+  <string Field="ThreeWeeksAgo">Fyrir þremur vikum</string>
+  <string Field="ThumbnailView">Smámynd</string>
+  <string Field="Thursday">fimmtudagur</string>
+  <string Field="Title">Heiti</string>
+  <string Field="Today">Í dag</string>
+  <string Field="ToggleParentalLock">Víxla foreldralæsingu</string>
+  <string Field="Tuesday">þriðjudagur</string>
+  <string Field="TwoMonthsAgo">Fyrir tveimur mánuðum</string>
+  <string Field="TwoWeeksAgo">Fyrir tveimur vikum</string>
+  <!-- U -->
+  <string Field="Unknown">óþekkt</string>
+  <string Field="UnlockRestrictedMovies">Aflæsa bannaðar kvikmyndir</string>
+  <string Field="UnwatchedMovies">Óséðar kvikmyndir</string>
+  <string Field="UpAbbreviation">(upp)</string>
+  <string Field="UpdateDetailsFromOnline">Uppfæri upplýsingar af netinu</string>
+  <string Field="UpdateMovieDetailsBody">Þú ert við það að uppfæra allar upplýsingar um kvikmyndirnar, yfirskrifa\nallar eigin breytingar við þessa kvikmynd. Viltu halda\náfram?</string>
+  <string Field="UpdateMovieDetailsHeader">Uppfæri upplýsingar kvikmyndar</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Sýndardrif er ekki tilbúið</string>
+  <string Field="VirtualDriveMessage">Sýndardrifið var ekki tilbúið í tíma.\nReynið aftur eða hættið við spilun.</string>
+  <string Field="Votes">atkvæði</string>
+  <!-- W -->
+  <string Field="Wednesday">miðvikudagur</string>
+  <string Field="Writer">Handrit</string>
+  <string Field="Writers">Handrit</string>
+  <!-- Y -->
+  <string Field="Year">Ár</string>
+  <string Field="Yesterday">í gær</string>
+</strings>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Moving Pictures translation file -->
+<!-- Danish (DA) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<!-- Contributed by Steffansp 12/05/10 -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">Skuespiller</string>
+  <string Field="Actors">Skuespillere</string>
+  <string Field="AllMovies">Alle film</string>
+  <!-- C -->
+  <string Field="Cancel">Annuller</string>
+  <string Field="CannotDeleteOffline">Det er ikke muligt at slette {0}\n fordi filen er offline</string>
+  <string Field="CannotDeleteReadOnly">Kan ikke slette en skrivebeskyttet film.\nVil du have Moving Pictures til ignorere denne film?</string>
+  <string Field="CategoryEmptyDescription">Der er ingen film i denne\nkategori.</string>
+  <string Field="CategoryEmptyHeader">Kategorien er tom</string>
+  <string Field="Certification">Censur</string>
+  <string Field="ChangeView">Skift syn</string>
+  <string Field="CheckForMissingArtwork">Check for manglende illustrationer på nettet</string>
+  <string Field="ContinueToNextPartBody">Ønsker du at fortsætte med del {0}?</string>
+  <string Field="ContinueToNextPartHeader">Forsæt til næste del?</string>
+  <string Field="CycleCoverArt">Roter Cover-billedet</string>
+  <string Field="CycleView">Roter synet</string>
+  <!-- D -->
+  <string Field="DateAdded">Dato tilføjet</string>
+  <string Field="DateDay">dag</string>
+  <string Field="DateDays">dage</string>
+  <string Field="DateMonth">måned</string>
+  <string Field="DateMonths">måneder</string>
+  <string Field="DatePartAgo">{0} {1} siden</string>
+  <string Field="DatePartWithinDays">Sidste {0} dage</string>
+  <string Field="DatePartWithinWeeks">Sidste {0} uger</string>
+  <string Field="DatePartWithinMonths">Sidste {0} måneder</string>
+  <string Field="DatePartWithinYears">Sidste {0} år</string>
+  <string Field="DateWeek">uge</string>
+  <string Field="DateWeeks">uger</string>
+  <string Field="DateYear">år</string>
+  <string Field="DateYears">år</string>
+  <string Field="DecadeShort">{0}0erne</string>
+  <string Field="DeleteFailed">Sletningen mislykkedes</string>
+  <string Field="DeleteMovie">Slet film</string>
+  <string Field="Director">Instruktør</string>
+  <string Field="Directors">Instruktører</string>
+  <string Field="DownAbbreviation">(ned)</string>
+  <string Field="DoYouWantToDelete">Ønsker du at slette \n{0}\npermanent fra din harddisk?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Tidligere i år</string>
+  <string Field="Error">Fejl</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">Mountningen af DVD imaget fejlede desværre.</string>
+  <string Field="FilePath">File sti</string>
+  <string Field="FilmstripView">Filmrulle overblik</string>
+  <string Field="FilterBy">Filtrer efter</string>
+  <string Field="Friday">Fredag</string>
+  <string Field="Future">Fremtid</string>
+  <!-- G -->
+  <string Field="Genre">Genre</string>
+  <string Field="Genres">Genre</string>
+  <!-- I -->
+  <string Field="InvalidPin">Forkert kode!</string>
+  <string Field="InvalidVideoDiscFormat">Enten indeholdet image-filen ikke et\n korrekt videoformat, ellers er din opsæning i\nTools MediaPortal konfiguration forkert.</string>
+  <!-- L -->
+  <string Field="Language">Sprog</string>
+  <string Field="LargeThumbnailView">Stor miniatureportræt overblik</string>
+  <string Field="LastMonth">Sidste måned</string>
+  <string Field="LastWeek">Sidste uge</string>
+  <string Field="LastYear">Sidste år</string>
+  <string Field="ListView">Liste overblik</string>
+  <string Field="LockRestrictedMovies">Lås klassificerede film</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Marker som uset</string>
+  <string Field="MarkAsWatched">Marker som set</string>
+  <string Field="MediaIsMissing">Mediet for den film du har valgt mangler!\nDesværre noget er gået galt...</string>
+  <string Field="MediaNotAvailableBody">Mediet for den valgte film er ikke tilgængelig\nIndsæt eller forbind til medie: {0}</string>
+  <string Field="MediaNotAvailableHeader">Mediet er ikke tilgængelig</string>
+  <string Field="MissingExternalPlayerExe">Den eksekverbare fil til HD afspilning mangler.\nVælg en korrekt sti til den eksekverbare fil.</string>
+  <string Field="Monday">Mandag</string>
+  <string Field="Movie">Film</string>
+  <string Field="MovieDetails">Film fakta</string>
+  <string Field="MovieOptions">Film muligheder</string>
+  <string Field="Movies">Film</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">Det ser ud som, at du ikke har defineret\ndefined nogle import stier. Du\nskal lukke MediaPortal og\nstarte MediaPortal\nKonfiguration vinduet for\nat konfigurere Moving Pictures.</string>
+  <string Field="NoImportPathsHeading">Ingen import stier!</string>
+  <!-- O -->
+  <string Field="Older">Ældre</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Forælder kontrol er ikke slået til.</string>
+  <string Field="PinCodeHeader">Åbner klassificeret indhold</string>
+  <string Field="PinCodePrompt">Indtast venligst en adgangskode for at fortsætte:</string>
+  <string Field="PlaybackFailed">Afspilning var ikke mulig på grund af, at '{0}'\nfiletypenavn ikke er listet i mediaportal konfigurationen.\nTilføj dette filetypenavn eller sæt en ekstern afspiller op\nog prøv igen.</string>
+  <string Field="PlaybackFailedHeader">Afspilningen mislykkedes</string>
+  <string Field="ProblemLoadingSkinFile">Der var desværre et problem med at indlæse skinfilen</string>
+  <!-- R -->
+  <string Field="Rate">Vurder</string>
+  <string Field="Rated">Vurderet</string>
+  <string Field="RateFiveStarFive">Perfekt</string>
+  <string Field="RateFiveStarFour">Fortrinlig</string>
+  <string Field="RateFiveStarOne">Forfærdelig</string>
+  <string Field="RateFiveStarThree">God</string>
+  <string Field="RateFiveStarTwo">Middelmådig</string>
+  <string Field="RateHeading">Vurder film</string>
+  <string Field="RecentlyAddedMovies">Nylig tilføjet</string>
+  <string Field="RemoteNumericAlphabet0"></string>
+  <string Field="RemoteNumericAlphabet1"></string>
+  <string Field="RemoteNumericAlphabet2">abcæåä</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mnoøö</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuvü</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">Forsæt fra:</string>
+  <string Field="ResumeFromLast">Forsæt film fra sidste afspilning?</string>
+  <string Field="Retry">Prøv igen</string>
+  <string Field="Runtime">Spilletid</string>
+  <string Field="RuntimeHour">{0} time</string>
+  <string Field="RuntimeHours">{0} timer</string>
+  <string Field="RuntimeLong">{0} og {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} og {2}</string>
+  <string Field="RuntimeMinute">{0} minut</string>
+  <string Field="RuntimeMinutes">{0} minutter</string>
+  <string Field="RuntimeSecond">{0} sekund</string>
+  <string Field="RuntimeSeconds">{0} sekunder</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}t{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">Lørdag</string>
+  <string Field="Score">Score</string>
+  <string Field="SelectYourRating">Vælg din vurdering for {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">Vis kun usete film</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Vis sete og usete film</string>
+  <string Field="SkinDoesNotSupportCategories">Dette skin understøtter ikke kategorier</string>
+  <string Field="SkinDoesNotSupportPinDialog">Dette skin understøtter ikke adgangskodedialogen.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Dette skin understøtter ikke klassificerings dialogen</string>
+  <string Field="SortBy">Sorter efter</string>
+  <string Field="SortDirection">Sorterings retning</string>
+  <string Field="StarRating">Stjerne vurdering</string>
+  <string Field="Sunday">Søndag</string>
+  <!-- T -->
+  <string Field="ThisMonth">Denne månede</string>
+  <string Field="ThisWeek">Denne uge</string>
+  <string Field="ThisYear">I år</string>
+  <string Field="ThreeMonthsAgo">3 måneder siden</string>
+  <string Field="ThreeWeeksAgo">3 uger siden</string>
+  <string Field="ThumbnailView">Miniatureportræt overblik</string>
+  <string Field="Thursday">Torsdag</string>
+  <string Field="Title">Title</string>
+  <string Field="Today">I dag</string>
+  <string Field="ToggleParentalLock">Slå forælder lås fra</string>
+  <string Field="Tuesday">Tirsdag</string>
+  <string Field="TwoMonthsAgo">For 2 måneder siden</string>
+  <string Field="TwoWeeksAgo">For 2 uger siden</string>
+  <!-- U -->
+  <string Field="Unknown">Ukendt</string>
+  <string Field="UnlockRestrictedMovies">Åben for klassificerede film</string>
+  <string Field="UnwatchedMovies">Usete film</string>
+  <string Field="UpAbbreviation">(op)</string>
+  <string Field="UpdateDetailsFromOnline">Opdater oplysninger fra nettet</string>
+  <string Field="UpdateMovieDetailsBody">Du er ved at opdatere alle film opslyninger\n overskrivning vil fjerne dine egne ændringer af denne film.\nVil du fortsætte?</string>
+  <string Field="UpdateMovieDetailsHeader">Opdater film oplysningerne</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Det virtuelle drev er ikke klar</string>
+  <string Field="VirtualDriveMessage">Det virtuelle drev blev ikke klar i tide. \nPrøv igen eller annuller afspilningen.</string>
+  <string Field="Votes">Vurdering</string>
+  <!-- W -->
+  <string Field="Wednesday">Onsdag</string>
+  <string Field="Writer">Manuskript</string>
+  <string Field="Writers">Forfattere</string>
+  <!-- Y -->
+  <string Field="Year">År</string>
+  <string Field="Yesterday">I går</string>
+</strings>

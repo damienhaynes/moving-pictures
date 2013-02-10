@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ScriptableScraper>
+	<details>
+		<!-- These details are for display purposes only. -->
+		<name>mymovies.xml (Local)</name>
+		<author>Armand Pondman, Ron (RoChess)</author>
+		<description>This script pulls data from a local mymovies.xml file if available</description>
+
+		<!-- 
+		These two fields uniquely identify the script. The ID should never 
+		change and should be unique (no other script should use this ID). With
+		new versions of the script the version numbers should change. EVEN FOR 
+		MINOR CHANGES, you should change the version number if you are going to
+		disribute it to anyone but internal testers. The point number 
+		is for minor bug fix releases. Use it.
+		-->
+		<id>891001</id>
+		<version major="1" minor="0" point="0" />
+		<published month="11" day="16" year="2011" />
+
+		<!--
+		These fields are used for categorization purposes. Seperate multiple 
+		types with a pipe | character.
+		-->
+		<type>MovieDetailsFetcher|MovieCoverFetcher</type>
+		<language>various</language>
+
+	</details>
+
+
+	<!-- Search -->
+	<action name="search">
+		<!-- try to read the mymovies.xml from the movie folder -->
+		<set name="filename" value="${search.basepath}\mymovies.xml" />
+		<retrieve name="file" file="${filename}" encoding="UTF-8" />
+
+		<!-- Prevent a non-existing file from causing parsing errors -->
+		<if test="${file}!=">
+			<parse name="results" input="${file}" xpath="//Title" />
+
+			<loop name="result" on="results">
+				<if test="${results[${count}].LocalTitle}!=">
+					<set name="movie[${count}].title" value="${results[${count}].LocalTitle}" />
+
+					<!-- by setting the alternative title to the search title we garantee a match-->
+					<set name="movie[${count}].alternate_titles" value="|${search.title}|" />
+
+					<set name="movie[${count}].year" value="${results[${count}].ProductionYear}" />
+					<set name="movie[${count}].imdb_id" value="${results[${count}].IMDB}" />
+					<set name="movie[${count}].popularity" value="100" />
+
+					<!-- we set the filename as the site id -->
+					<set name="movie[${count}].site_id" value="${filename}" />
+				</if>
+			</loop>
+		</if>
+	</action>
+
+
+	<action name="get_details">
+		<if test="${movie.site_id}!=">
+			<retrieve name="file" file="${movie.site_id}" encoding="UTF-8" />
+			<parse name="result" input="${file}" xpath="//Title" />
+
+			<if test="${result.count}>0">
+				<set name="movie.title" value="${result[0].LocalTitle}" />
+				<set name="movie.alternate_titles" value="|${result[0].OriginalTitle}|" />
+				<set name="movie.sortby" value="${result[0].SortTitle}" />
+				<set name="movie.year" value="${result[0].ProductionYear}" />
+				<set name="movie.imdb_id" value="${result[0].IMDB}" />
+				<set name="movie.summary" value="${result[0].Description}" />
+				<set name='movie.tagline' value='${result[0].TagLine}'/>
+
+				<set name="movie.score" value="${result[0].Rating}" />
+				<set name="movie.runtime" value="${result[0].RunningTime}" />
+
+				<!-- Certification / Parental Rating -->
+				<parse name="certification" input="${file}" xpath="//Title/ParentalRating" />
+				<set name="movie.certification" value="${result[0].Value}" />
+
+				<!-- Genres -->
+				<parse name="genres" input="${result[0].Genres}" xpath="//Genre" />
+				<set name="movie.genres" value="" />
+				<loop name="genre" on="genres">
+					<set name="movie.genres" value="${movie.genres}|${genre:htmldecode}" />
+				</loop>
+
+				<!-- Directors -->
+				<parse name="directors" input="${file}" xpath="//Title/Persons/Person[Type='Director']/Name" />
+				<set name="movie.directors" value="" />
+				<loop name="director" on="directors">
+					<set name="movie.directors" value="${movie.directors}|${director:htmldecode}" />
+				</loop>
+
+				<!-- Actors -->
+				<parse name="actors" input="${file}" xpath="//Title/Persons/Person[Type='Actor']/Name" />
+				<set name="movie.actors" value="" />
+				<loop name="actor" on="actors">
+					<set name="movie.actors" value="${movie.actors}|${actor:htmldecode}" />
+				</loop>
+			</if>
+		</if>
+	</action>
+
+
+	<action name="get_cover_art">
+		<if test="${movie.site_id}!=">
+			<retrieve name="file" file="${movie.site_id}" encoding="UTF-8" />
+			<parse name="result" input="${file}" xpath="//Title/Covers" />
+
+			<if test="${result.count}>0">
+				<if test="${result[0].Front}!=">
+					<parse name="base_folder" input="${movie.site_id}" regex="^(.+)\\.+$" />
+					<set name="cover_art[0].file" value="${base_folder[0][0]}\${result[0].Front}" />
+					<if test="${result[0].Back}!=">
+						<set name="cover_art[1].file" value="${base_folder[0][0]}\${result[0].Back}" />
+					</if>
+				</if>
+			</if>
+		</if>
+	</action>
+</ScriptableScraper>
