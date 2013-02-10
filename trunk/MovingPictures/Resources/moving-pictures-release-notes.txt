@@ -1,11 +1,5 @@
-Moving Pictures 1.5.0 Alpha
+Moving Pictures 1.5.0 
 ================================================================================
-NOTICE: This is an alpha build intended to assist skin designers with development.
-        There are bugs here, the skins packaged in are incomplete and 
-        
-        
-
-
 Thanks for downloading Moving Pictures. This package contains the Moving Pictures
 plug-in itself along with DefaultWide (16x9) and Default (4x3) skin support.
 If you have any problems or questions about the plug-in you can visit the 
@@ -32,22 +26,30 @@ Change Log
 --------------------------------------------------------------------------------
 Enhancements
 --------------------------------------------------------------------------------	                
-***********:    Added GUI Importer. Thanks to Edalex for submitting the initial
-                patch!
+* Added GUI Importer. Thanks to Edalex for submitting the initial patch. Thanks 
+  to everyone who participated on the forums with testing and skin design. If
+  your favorite skin does not support the importer yet ask in your skin's 
+  subforum, but please be patient with skin designers. :)
 
-***********:    Improved look of potential match list in config importer.
+* Added basic MPEI support.
+  
+* Improved look of Importer (in config).
 
-***********:    Added option to always display data provider tags in config 
-                importer.
+* Added option to always display data source info in Importer (in config).
 
-***********:    Config Screen will now remember size and position. Thanks to 
-                DamienH.
+* Config Screen will now remember size and position. 
+				
+* Added executable config launcher to MediaPortal base directory.
+
+* Added MediaPortal 1.3 DefaultWide skin courtesy of Catavolt.
 
 --------------------------------------------------------------------------------
-Bug Fixes
+Bug Fixes / Updates
 --------------------------------------------------------------------------------	                
-***********:    Fixed bug causing some files to be temporarily skipped when 
-                unignoring several files at once.
+* Fixed bug causing some files to be temporarily skipped when unignoring several 
+  files at once.
+
+* Updated finish translation courtesy of Kui. many thanks!
 
 ================================================================================
 1.4.3
