@@ -2206,9 +2206,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <param name="node"></param>
         private void PublishCategoryDetails(DBNode<DBMovieInfo> node) {
+            SetProperty("#MovingPictures.SelectedNode.Parent.name", " ");
+
             if (node == null) {
                 // Clear the category related skin properties
                 ResetProperties("#MovingPictures.SelectedNode");
+                ResetProperties("#MovingPictures.SelectedNode.Parent");
             }
             else {
                 // Publish category details
