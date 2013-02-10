@@ -184,6 +184,8 @@ Section "Default Skin Support" SEC0003
     ${If} ${FileExists} $SKIN_DIR\Default\*.*
         SetOverwrite ifnewer
 
+		${If} $DEFAULT_SKIN_VERSION == "OLD"
+		
         SetOutPath $SKIN_DIR\Default
         File "..\MovingPictures\Resources\skins\Default-1.2\*.*"
 
@@ -192,6 +194,19 @@ Section "Default Skin Support" SEC0003
         
         SetOutPath $SKIN_DIR\Default\Media\Categories
         File "..\MovingPictures\Resources\skins\Default-1.2\Media\Categories\*.*"  
+		
+		${Else}
+		
+		SetOutPath $SKIN_DIR\Default
+        File "..\MovingPictures\Resources\skins\Default\*.*"
+
+        SetOutPath $SKIN_DIR\Default\Media
+        File "..\MovingPictures\Resources\skins\Default\Media\*.*"  
+        
+        SetOutPath $SKIN_DIR\Default\Media\Categories
+        File "..\MovingPictures\Resources\skins\Default\Media\Categories\*.*"  
+		
+		${EndIf}
 
     ${EndIf}
 SectionEnd
@@ -214,12 +229,6 @@ Function .onInit
     # set the main plugin as selected and read only in selection list
     IntOp $0 ${SF_SELECTED} | ${SF_RO}
     SectionSetFlags ${SEC0000} $0
-    
-	# disable default skin if on 1.3 Beta+
-	#${If} $DEFAULT_SKIN_VERSION == "OLD"
-	!insertmacro SetSectionFlag ${SEC0003} ${SF_RO}
-	!insertmacro UnSelectSection ${SEC0003}
-	#${EndIf}
 	
     # grab various fields from registry
     SetShellVarContext all

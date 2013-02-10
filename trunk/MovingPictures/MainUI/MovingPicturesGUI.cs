@@ -2115,10 +2115,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <param name="startsWith">the prefix to reset</param>
         public void ResetProperties(string startsWith) {
-            logger.Debug("Resetting properties: {0}", startsWith);
-            foreach (string key in loggedProperties.Keys) {
-                if (key.StartsWith(startsWith))
+            lock (propertySync) {
+                List<string> keysToRemove = new List<string>();
+                logger.Debug("Resetting properties: {0}", startsWith);
+                foreach (string key in loggedProperties.Keys) {
+                    if (key.StartsWith(startsWith))
+                        keysToRemove.Add(key);
+                }
+
+                foreach (string key in keysToRemove) {
                     SetProperty(key, "");
+                }
             }
         }
 
@@ -2216,7 +2223,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else {
                 // Publish category details
                 PublishDetails(node, "SelectedNode");
-                PublishDetails(node.Parent, "SelectedNode.Parent");
+                
+                if (node.Parent == null) ResetProperties("#MovingPictures.SelectedNode.Parent");
+                else PublishDetails(node.Parent, "SelectedNode.Parent");
+                
                 PublishDetails(node.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
 
                 // publish category node name in a format that can always be used as a filename.

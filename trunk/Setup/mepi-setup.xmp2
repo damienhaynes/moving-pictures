@@ -185,11 +185,11 @@ public class Script
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
     <VersionDescription>This release introduces access to the movie importer inside the MediaPortal GUI. Please be patient as skin designers work on adding support for this feature!</VersionDescription>
-    <DevelopmentStatus />
+    <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://moving-pictures.googlecode.com/files/moving-pictures-1.5.0.mpei</OnlineLocation>
     <ReleaseDate>2013-02-05T15:05:53.8775182-06:00</ReleaseDate>
     <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
-    <Location>moving-pictures-setup.mpei</Location>
+    <Location>moving-pictures-setup.mpe1</Location>
     <Params>
       <Items>
         <SectionParam Name="Icon">
@@ -210,7 +210,7 @@ public class Script
  If it has .dll extension it's started like MP plugin configuration.</Description>
         </SectionParam>
         <SectionParam Name="Online Screenshots">
-          <Value />
+          <Value>http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-01.png;http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-02.png;http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-03.png;http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-04.png;http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-05-thumb.jpg;http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-06-thumb.jpg</Value>
           <ValueType>String</ValueType>
           <Description>Online stored screenshot urls separated by ; </Description>
         </SectionParam>
@@ -235,7 +235,7 @@ public class Script
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\MovingPictures\Resources\Images\icon_large.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{925af32b-e7da-48c7-a652-cdaa632a99c5}-icon_large.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{c99fee12-618d-41a2-9e3e-082727929ba4}-icon_large.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
