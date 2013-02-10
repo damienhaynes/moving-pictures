@@ -13,5 +13,5 @@
 !insertmacro LANG_STRING DLL_DESCRIPTION "The Moving Pictures plug-in."
 !insertmacro LANG_STRING GENERIC_SKIN_DESCRIPTION "If selected, this will install the Generic Skin files for skins that do not currently support Moving Pictures. All existing files will be backed up." 
 !insertmacro LANG_STRING DEFAULTWIDE_SKIN_DESCRIPTION "If selected, this will install skin files for the DefaultWide skin. This will not overwrite newer files." 
-!insertmacro LANG_STRING DEFAULT_SKIN_DESCRIPTION "If selected, this will install skin files for the Default skin. This will not overwrite newer files.$\n$\nCurrently not available for the redesigned Default skin in MediaPortal 1.3." 
+!insertmacro LANG_STRING DEFAULT_SKIN_DESCRIPTION "If selected, this will install skin files for the Default skin. This will not overwrite newer files." 
 !insertmacro LANG_STRING TITAN_SKIN_DESCRIPTION "If selected, this will install ALPHA skin files for the Titan skin. These are unofficial and will not overwrite newer files." 

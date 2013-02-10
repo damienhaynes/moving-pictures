@@ -10,13 +10,15 @@ md tmp\MediaPortal\plugins\Windows
 
 :: copy all needed files
 xcopy ..\MovingPictures\Resources\skins\DefaultWide tmp\skin\DefaultWide\ /E
+xcopy ..\MovingPictures\Resources\skins\DefaultWide-1.2 tmp\skin\DefaultWide-1.2\ /E
 xcopy ..\MovingPictures\Resources\skins\Default tmp\skin\Default\ /E
-xcopy ..\MovingPictures\Resources\skins\Titan tmp\skin\Titan\ /E
+xcopy ..\MovingPictures\Resources\skins\Default-1.2 tmp\skin\Default-1.2\ /E
 copy ..\MovingPictures\Resources\moving-pictures-release-notes.txt tmp
 copy ..\MovingPictures\bin\Release\movingpictures.dll tmp\MediaPortal\plugins\Windows
 copy ..\MovingPictures\bin\Release\Cornerstone.dll tmp\MediaPortal\plugins\Windows
 copy ..\MovingPictures\bin\Release\Cornerstone.MP.dll tmp\MediaPortal\plugins\Windows
 copy ..\MovingPictures\bin\Release\NLog.dll tmp\MediaPortal
+copy "..\Testing\MovingPicturesConfigLauncher\bin\Release\Moving Pictures Config.exe" tmp\MediaPortal
 xcopy ..\MovingPictures\Resources\language tmp\language\MovingPictures\ /E
 
 cd tmp
