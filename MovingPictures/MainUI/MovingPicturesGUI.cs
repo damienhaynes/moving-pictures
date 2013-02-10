@@ -2213,6 +2213,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else {
                 // Publish category details
                 PublishDetails(node, "SelectedNode");
+                PublishDetails(node.Parent, "SelectedNode.Parent");
                 PublishDetails(node.AdditionalSettings, "SelectedNode.Extra.AdditionalSettings");
 
                 // publish category node name in a format that can always be used as a filename.
