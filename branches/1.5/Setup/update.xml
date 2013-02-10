@@ -60,7 +60,7 @@
         <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
         <VersionDescription>This release introduces access to the movie importer inside the MediaPortal GUI. Please be patient as skin designers work on adding support for this feature!</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
-        <OnlineLocation>http://moving-pictures.googlecode.com/files/moving-pictures-1.5.0-setup.mpei</OnlineLocation>
+        <OnlineLocation>http://moving-pictures.googlecode.com/files/moving-pictures-1.5.0-setup.mpe1</OnlineLocation>
         <ReleaseDate>2013-02-05T15:05:53.8775182-06:00</ReleaseDate>
         <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
         <Location>moving-pictures-setup.mpe1</Location>
