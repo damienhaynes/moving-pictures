@@ -1966,19 +1966,19 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (this.Result.TitleScore > otherResult.TitleScore)
                 return 1;
 
-            // Alternate title score will rank lower
-            if (!this.Result.AlternateTitleUsed() && otherResult.AlternateTitleUsed())
-                return -1;
-
-            if (this.Result.AlternateTitleUsed() && !otherResult.AlternateTitleUsed())
-                return 1;            
-
             // Year score (less distance between the actual year will rank higher)
             if (this.Result.YearScore < otherResult.YearScore)
                 return -1;
 
             if (this.Result.YearScore > otherResult.YearScore)
                 return 1;
+
+            // Alternate title score will rank lower
+            if (!this.Result.AlternateTitleUsed() && otherResult.AlternateTitleUsed())
+                return -1;
+
+            if (this.Result.AlternateTitleUsed() && !otherResult.AlternateTitleUsed())
+                return 1;            
             
             DBSourceInfo thisSource = this.Movie.PrimarySource;
             DBSourceInfo otherSource = ((PossibleMatch)o).Movie.PrimarySource;
