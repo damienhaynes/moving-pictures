@@ -1533,6 +1533,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 dialog.Add(rescanItem);
                 currID++;
             }
+            
+            if (MovingPicturesCore.Settings.AllowDelete) {
+                deleteItem = new GUIListItem(Translation.DeleteMovie);
+                deleteItem.ItemId = currID;
+                dialog.Add(deleteItem);
+                currID++;
+            }
 
 
 
