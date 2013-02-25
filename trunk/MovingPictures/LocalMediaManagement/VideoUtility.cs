@@ -39,7 +39,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 case VideoFormat.DVD:
                     return @"\video_ts\video_ts.ifo";
                 case VideoFormat.Bluray:
-                    return @"\bdmv\index.bdmv";
+                    return @"\BDMV\index.bdmv";
                 case VideoFormat.HDDVD:
                     return @"\adv_obj\discid.dat"; // or adv_obj\vplst000.xpl ?
                 case VideoFormat.SVCD:
