@@ -291,7 +291,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // start playback
             logger.Info("Playing: Movie='{0}' FullPath='{1}', VideoPath='{2}', Mounted={3})", movie.Title, mediaToPlay.FullPath, videoPath, mountedPlayback.ToString());
-            playFile(videoPath, mediaToPlay.VideoFormat);            
+            playFile(videoPath, mediaToPlay.VideoFormat);
         }
 
         private bool playCustomIntro() {
@@ -371,27 +371,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // Launch external player if user has configured it for HD playback.
                 if (hdExternal) {
                     LaunchHDPlayer(media);
+                    logger.Info("HD Playback: Internal, Media={0}", media);
                     return;
                 }
-
-                // Alternate playback HD content (without menu)
-                string newMedia = videoFormat.GetMainFeatureFilePath(media);
-                 if (newMedia != null) {
-                    // Check if the stream extension is in the mediaportal extension list.
-                    if (Utility.IsMediaPortalVideoFile(newMedia)) {
-                        media = newMedia;
-                    }
-                    else {
-                        // Show a dialog to the user that explains how to configure the alternate playback
-                        string ext = (videoFormat == VideoFormat.Bluray) ? ".M2TS" : ".EVO";
-                        logger.Info("HD Playback: extension '{0}' is missing from the mediaportal configuration.", ext);
-                        _gui.ShowMessage(Translation.PlaybackFailedHeader, String.Format(Translation.PlaybackFailed, ext));
-                        resetPlayer();
-                        return;
-                    }
-                }
-
-                logger.Info("HD Playback: Internal, Media={0}", media);
             }
             
             // We start listening to external player events
@@ -528,7 +510,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // and jump to our resume position if necessary
                 if (_resumeActive) {
-                    if (g_Player.IsDVD) {
+                  if (g_Player.IsDVD && !movie.LocalMedia[0].IsBluray) {
                         logger.Debug("Resume: DVD state.");
                         g_Player.Player.SetResumeState(movie.ActiveUserSettings.ResumeData.Data);
                     }
