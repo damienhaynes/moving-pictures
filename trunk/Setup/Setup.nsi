@@ -132,9 +132,6 @@ Section "Moving Pictures Plugin" SEC0000
 		File "..\Testing\MovingPicturesConfigLauncher\bin\Debug\Moving Pictures Config.exe"
         !endif
  		
-		Delete $MEDIAPORTAL_DIR\Cornerstone.dll
-		Delete $MEDIAPORTAL_DIR\Cornerstone.MP.dll
-		
         # if the files failed to copy, MediaPortal is probably running
         # prompt to close MediaPortal and retry.
         IfErrors mediaportal_running everything_is_fine
@@ -229,6 +226,10 @@ Function .onInit
     # set the main plugin as selected and read only in selection list
     IntOp $0 ${SF_SELECTED} | ${SF_RO}
     SectionSetFlags ${SEC0000} $0
+	
+	# move to temp folder so we dont get false positives on directory 
+	# matching if running from mepo directory
+	SetOutPath "$TEMP"
 	
     # grab various fields from registry
     SetShellVarContext all
@@ -341,6 +342,7 @@ Function getPluginDir
 	${xml::LoadFile} "$DOCUMENTS\Team MediaPortal\MediaPortalDirs.xml" $1
 	IntCmp $1 0 specialdir
 	${xml::LoadFile} "$MEDIAPORTAL_DIR\MediaPortalDirs.xml" $1
+	
 	specialdir:
 	SetShellVarContext all
     IntCmp $1 -1 fail
