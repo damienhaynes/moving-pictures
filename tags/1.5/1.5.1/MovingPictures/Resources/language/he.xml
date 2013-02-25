@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Moving Pictures translation file -->
+<!-- English (US) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">שחקן</string>
+  <string Field="Actors">שחקנים</string>
+  <string Field="AllMovies">כל הסרטים</string>
+  <!-- C -->
+  <string Field="Cancel">ביטול</string>
+  <string Field="CannotDeleteOffline">לא ניתן למחוק {0}\n כיוון שהקובץ לא זמין</string>
+  <string Field="CannotDeleteReadOnly">לא ניתן למחוק קובץ המוגדר לקריאה בלבד\nהאם אתה מעוניין להתעלם מסרט זה?</string>
+  <string Field="CategoryEmptyDescription">אין סרטים השייכים\nלקטגוריה זו.</string>
+  <string Field="CategoryEmptyHeader">הקטגוריה ריקה</string>
+  <string Field="Certification">אישור צפייה</string>
+  <string Field="ChangeView">שנה תצוגה</string>
+  <string Field="CheckForMissingArtwork">בדוק עבור תמונות רקע ברשת</string>
+  <string Field="ContinueToNextPartBody">האם ברצונך להמשיך לחלק {0}?</string>
+  <string Field="ContinueToNextPartHeader">להמשיך לחלק הבא?</string>
+  <string Field="CycleCoverArt">החלף תמונת רקע</string>
+  <string Field="CycleView">החלף תצוגה</string>
+  <!-- D -->
+  <string Field="DateAdded">תאריך הוספה</string>
+  <string Field="DateDay">יום</string>
+  <string Field="DateDays">ימים</string>
+  <string Field="DateMonth">חודש</string>
+  <string Field="DateMonths">חודשים</string>
+  <string Field="DatePartAgo">{1} {0} לפני</string>
+  <string Field="DatePartWithinDays">{0} ימים אחרונים</string>
+  <string Field="DatePartWithinMonths">{0} חודשים אחרונים</string>
+  <string Field="DatePartWithinWeeks">{0} שבועות אחרונים</string>
+  <string Field="DatePartWithinYears">{0} שנים אחרונות</string>
+  <string Field="DateWeek">שבוע</string>
+  <string Field="DateWeeks">שבועות</string>
+  <string Field="DateYear">שנה</string>
+  <string Field="DateYears">שנים</string>
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="DeleteFailed">מחיקה נכשלה</string>
+  <string Field="DeleteMovie">מחק סרט</string>
+  <string Field="Director">במאי</string>
+  <string Field="Directors">במאים</string>
+  <string Field="DownAbbreviation">(dn)</string>
+  <string Field="DoYouWantToDelete">האם אתה מעוניין למחוק לצמיתות את\n{0}?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">בשנה הנוכחית</string>
+  <string Field="Error">שגיאה</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">כשל בניגון DVD מקובץ תמונה</string>
+  <string Field="FilePath">מיקום ושם קובץ</string>
+  <string Field="FilmstripView">שקופיות</string>
+  <string Field="FilterBy">סנן לפי</string>
+  <string Field="Friday">יום שישי</string>
+  <string Field="Future">עתיד</string>
+  <!-- G -->
+  <string Field="Genre">ז'אנר</string>
+  <string Field="Genres">ז'אנרים</string>
+  <!-- I -->
+  <string Field="InvalidPin">קוד לא חוקי!</string>
+  <string Field="InvalidVideoDiscFormat">קובץ תמונה אינו תקין או שהגדרות\nDaemon Tools אינן נכונות.</string>
+  <!-- L -->
+  <string Field="Language">שפה</string>
+  <string Field="LargeThumbnailView">תמונות גדולות</string>
+  <string Field="LastMonth">חודש שעבר</string>
+  <string Field="LastWeek">שבוע שעבר</string>
+  <string Field="LastYear">שנה שעברה</string>
+  <string Field="ListView">רשימה</string>
+  <string Field="LockRestrictedMovies">חסום סרטים למבוגרים</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">סמן כלא נצפה</string>
+  <string Field="MarkAsWatched">סמן כנצפה</string>
+  <string Field="MediaIsMissing">ההתקן עבור הסרט שבחרת אינו קיים!\nככל הנראה חלה שגיאה...</string>
+  <string Field="MediaNotAvailableBody">ההתקן עבור הסרט שבחרת אינו זמין כעת.\nאנא הכנס או חבר את ההתקן המתאים:\n {0}</string>
+  <string Field="MediaNotAvailableHeader">מדיה אינה זמינה</string>
+  <string Field="MissingExternalPlayerExe">קובץ הרצה עבור ניגון HD חסר.\nאנא עדכן את מיקום קובץ ההרצה.</string>
+  <string Field="Monday">יום שני</string>
+  <string Field="Movie">סרט</string>
+  <string Field="MovieDetails">פרטי סרט</string>
+  <string Field="MovieOptions">אפשרויות סרט</string>
+  <string Field="Movies">סרטים</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">לא הוגדרו תיקיות ייבוא\nיש לסגור את מדיה פורטל\nולהגדיר תיקיות ייבוא עבור סרטים</string>
+  <string Field="NoImportPathsHeading">אין תיקיות ייבוא!</string>
+  <!-- O -->
+  <string Field="Older">ישן יותר</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">בקרת הורים אינה פעילה</string>
+  <string Field="PinCodeHeader">מאפשר תוכן חסום</string>
+  <string Field="PinCodePrompt">אנא הכנס את קוד על מנת להמשיך:</string>
+  <string Field="PlaybackFailed">ניגון לא אפשרי בגלל '{0}'\nשסיומת הקובץ לא הוגדרה\nהוסף סיומת זו או הגדר נגן חיצוני</string>
+  <string Field="PlaybackFailedHeader">ניגון נכשל</string>
+  <string Field="ProblemLoadingSkinFile">התרחשה שגיאה בעת טעינת הסקין...</string>
+  <!-- R -->
+  <string Field="Rate">דרג</string>
+  <string Field="Rated">מדורג</string>
+  <string Field="RateFiveStarFive">מושלם</string>
+  <string Field="RateFiveStarFour">מעולה</string>
+  <string Field="RateFiveStarOne">גרוע</string>
+  <string Field="RateFiveStarThree">טוב</string>
+  <string Field="RateFiveStarTwo">בינוני</string>
+  <string Field="RateHeading">דרג סרט</string>
+  <string Field="RecentlyAddedMovies">סרטים שנוספו לאחרונה</string>
+  <string Field="RemoteNumericAlphabet0"></string>
+  <string Field="RemoteNumericAlphabet1"></string>
+  <string Field="RemoteNumericAlphabet2">abcדהו</string>
+  <string Field="RemoteNumericAlphabet3">defאבג</string>
+  <string Field="RemoteNumericAlphabet4">ghiמנםן</string>
+  <string Field="RemoteNumericAlphabet5">jklיכלך</string>
+  <string Field="RemoteNumericAlphabet6">mnoזחט</string>
+  <string Field="RemoteNumericAlphabet7">pqrsרשת</string>
+  <string Field="RemoteNumericAlphabet8">tuvצקץ</string>
+  <string Field="RemoteNumericAlphabet9">wxyzסעפף</string>
+  <string Field="ResumeFrom">המשך מ:</string>
+  <string Field="ResumeFromLast">המשך סרט מפעם קודמת?</string>
+  <string Field="Retry">נסה שנית</string>
+  <string Field="Runtime">זמן ריצה</string>
+  <string Field="RuntimeHour">{0} שעה</string>
+  <string Field="RuntimeHours">{0} שעות</string>
+  <string Field="RuntimeLong">{0} ו {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} ו {2}</string>
+  <string Field="RuntimeMinute">{0} דקה</string>
+  <string Field="RuntimeMinutes">{0} דקות</string>
+  <string Field="RuntimeSecond">{0} שנייה</string>
+  <string Field="RuntimeSeconds">{0} שניות</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">יום שבת</string>
+  <string Field="Score">דירוג</string>
+  <string Field="SelectYourRating">בחר דירוג עבור {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">הצג סרטים שלא נצפו</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">הצג גם סרטים שנצפו וגם שלא נצפו</string>
+  <string Field="SkinDoesNotSupportCategories">הסקין הנוכחי לא תומך בתצוגת קטגוריות.</string>
+  <string Field="SkinDoesNotSupportPinDialog">הסקין הנוכחי לא תומך בקוד נעילה.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">הסקין הנוכחי לא תומך בדירוג אישי.</string>
+  <string Field="SortBy">מיין לפי</string>
+  <string Field="SortDirection">סדר מיון</string>
+  <string Field="StarRating">דירוג בכוכבים</string>
+  <string Field="Sunday">יום ראשון</string>
+  <!-- T -->
+  <string Field="ThisMonth">החודש</string>
+  <string Field="ThisWeek">השבוע</string>
+  <string Field="ThisYear">השנה</string>
+  <string Field="ThreeMonthsAgo">לפני שלושה חודשים</string>
+  <string Field="ThreeWeeksAgo">לפני שלושה שבועות</string>
+  <string Field="ThumbnailView">תמונות</string>
+  <string Field="Thursday">יום חמישי</string>
+  <string Field="Title">שם סרט</string>
+  <string Field="Today">היום</string>
+  <string Field="ToggleParentalLock">הפעל/בטל חסימת הורים</string>
+  <string Field="Tuesday">יום שלישי</string>
+  <string Field="TwoMonthsAgo">לפני חודשיים</string>
+  <string Field="TwoWeeksAgo">לפני שבועיים</string>
+  <!-- U -->
+  <string Field="Unknown">לא ידוע</string>
+  <string Field="UnlockRestrictedMovies">אפשר סרטים למבוגרים</string>
+  <string Field="UnwatchedMovies">סרטים שלא נצפו</string>
+  <string Field="UpAbbreviation">(up)</string>
+  <string Field="UpdateDetailsFromOnline">עדכן פרטים מהרשת</string>
+  <string Field="UpdateMovieDetailsBody">אתה עומד לעדכן את המידע עבור כל הסרטים.\nפעולה זו תמחק כל שינויים ידניים שבוצעו.\nto האם ברצונך להמשיך?</string>
+  <string Field="UpdateMovieDetailsHeader">עדכן פרטי סרט</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">כונן וירטואלי אינו זמין</string>
+  <string Field="VirtualDriveMessage">הכונן הוירטואלי לא היה זמין.\nנסה שני או בטל את הפעולה.</string>
+  <string Field="Votes">הצבעות</string>
+  <!-- W -->
+  <string Field="Wednesday">יום רביעי</string>
+  <string Field="Writer">כותב</string>
+  <string Field="Writers">כותבים</string>
+  <!-- Y -->
+  <string Field="Year">שנה</string>
+  <string Field="Yesterday">אתמול</string>
+</strings>

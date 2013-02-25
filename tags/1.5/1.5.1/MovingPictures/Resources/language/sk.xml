@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Moving Pictures translation file -->
+<!-- Slovak (SK) -->
+<!-- Note: English is the fallback for any strings not found in other languages -->
+<strings>
+  <!-- A -->
+  <string Field="Actor">Herec</string>
+  <string Field="Actors">Herci</string>
+  <string Field="AllMovies">Všetky filmy</string>
+  <!-- B -->
+  <string Field="BadCategory">Externý plugin alebo skin sa pokúsil\nneexistujúcu kategóriu Moving\nPictures!</string>
+  <string Field="BadMovie">Externý plugin alebo skin sa pokúsil\notvoriť neexistujúci film v\nMoving Pictures!</string>
+  <string Field="BadParam">Externý plugin alebo skin sa odovzdal\nMoving Pictures neplatný parameter!</string>
+  <!-- C -->
+  <string Field="Cancel">Zrušiť</string>
+  <string Field="CannotDeleteOffline">Nie je možné odstrániť {0},\npretože súbor nie je dostupný.</string>
+  <string Field="CannotDeleteReadOnly">Nie je možné odstrániť film, lebo je len na čítanie.\nPrajete si ignorovať tento film?</string>
+  <string Field="CategoryEmptyDescription">V tejto kategórii v súčasnosti\nniesú žiadne filmy.</string>
+  <string Field="CategoryEmptyHeader">Prázná kategória</string>
+  <string Field="Certification">Klasifikácia</string>
+  <string Field="ChangeView">Zmeniť zobrazenie</string>
+  <string Field="CheckForMissingArtwork">Vyhľadať chýbajúcu grafiku online</string>
+  <string Field="ContinueToNextPartBody">Prajete si pokračovat dielom {0}?</string>
+  <string Field="ContinueToNextPartHeader">Prejsť na ďalši dieľ?</string>
+  <string Field="CycleCoverArt">Dalšia grafika</string>
+  <string Field="CycleView">Dalšie zobrazenie</string>
+  <string Field="CycleView">Cyklický náhľad</string>
+  <!-- D -->
+  <string Field="DateAdded">Dátum pridania</string>
+  <string Field="DateDay">dňom</string>
+  <string Field="DateDays">dni</string>
+  <string Field="DateMonth">mesiacom</string>
+  <string Field="DateMonths">mesiaci</string>
+  <string Field="DatePartAgo">pred {0} {1}</string>
+  <string Field="DatePartWithinDays">posledných {0} dní</string>
+  <string Field="DatePartWithinMonths">posledných {0} mesiacov</string>
+  <string Field="DatePartWithinWeeks">posledných {0} týždňov</string>
+  <string Field="DatePartWithinYears">posledných {0} rokov</string>
+  <string Field="DateWeek">týždeň</string>
+  <string Field="DateWeeks">týždne</string>
+  <string Field="DateYear">rok</string>
+  <string Field="DateYears">roky</string>
+  <string Field="DecadeShort">{0}0s</string>
+  <string Field="DeleteFailed">Odstránenie sa nepodarilo</string>
+  <string Field="DeleteMovie">Odstrániť film</string>
+  <string Field="Director">Režisér</string>
+  <string Field="Directors">Režiséri</string>
+  <string Field="DownAbbreviation">(dole)</string>
+  <string Field="DoYouWantToDelete">Prajete si trvale odstrániť\n{0}\nz vášho úložiska?</string>
+  <!-- E -->
+  <string Field="EarlierThisYear">Skôr tohto roku</string>
+  <string Field="Error">Chyba</string>
+  <!-- F -->
+  <string Field="FailedMountingImage">Pripojenie obrazu DVD zlyhalo.</string>
+  <string Field="FilePath">Cesta k súboru</string>
+  <string Field="FilmstripView">Filmový pás</string>
+  <string Field="FilterBy">Zmeniť pohľad</string>
+  <string Field="Friday">priatok</string>
+  <string Field="Future">Budúcnosť</string>
+  <!-- G -->
+  <string Field="Genre">Žáner</string>
+  <string Field="Genres">Žánry</string>
+  <!-- I -->
+  <string Field="InvalidPin">Neplatný PIN kód!</string>
+  <string Field="InvalidVideoDiscFormat">Súbor s obrazom neobsahuje platný formát\nobrazového disku, alebo Daemon Tools\nv MediaPortaly je chybne nastavený.</string>
+  <!-- L -->
+  <string Field="Language">Jazyk</string>
+  <string Field="LargeThumbnailView">Veľké ikony</string>
+  <string Field="LastMonth">minulý mesiac</string>
+  <string Field="LastWeek">minulý týždeň</string>
+  <string Field="LastYear">minulý rok</string>
+  <string Field="ListView">Zoznam</string>
+  <string Field="LockRestrictedMovies">Zamknúť zakázané filmy</string>
+  <!-- M -->
+  <string Field="MarkAsUnwatched">Označiť za nezhliadnuté</string>
+  <string Field="MarkAsWatched">Označiť za zhliadnuté</string>
+  <string Field="MediaIsMissing">Médium vámi zvoleného filmu nebolo nájdené.</string>
+  <string Field="MediaNotAvailableBody">Médium vami zvoleného filmu nie je v súčasnosti\nk dispozícii. Vložte či pripojte prosím médium s názvom:\n{0}</string>
+  <string Field="MediaNotAvailableHeader">Nedostupné médium</string>
+  <string Field="MissingExternalPlayerExe">Chýba externý prehrávač pre HD obsah.\nOpravte prosím cestu ke spustiteľnému súboru.</string>
+  <string Field="Monday">pondelok</string>
+  <string Field="Movie">Film</string>
+  <string Field="MovieDetails">Detaily o filmu</string>
+  <string Field="MovieOptions">Voľby filmu</string>
+  <string Field="Movies">filmov</string>
+  <!-- N -->
+  <string Field="NoImportPathsBody">Pravdepodobne nemáte nastavenú žiadnu\ncestu pre import. Ukončite MediaPortal a spusťte\nkonfigurátor MediaPortalu pre nastavenie\nmodulu Moving Pictures.</string>
+  <string Field="NoImportPathsHeading">Chýbajú cesty pre import!</string>
+  <!-- O -->
+  <string Field="Older">staršie</string>
+  <!-- P -->
+  <string Field="ParentalControlsDisabled">Rodičovská kontrola nie je aktívna.</string>
+  <string Field="PinCodeHeader">Odomknutie zakázaného obsahu</string>
+  <string Field="PinCodePrompt">Zadajte prosím PIN kód pre pokračovanie:</string>
+  <string Field="PlaybackFailed">Prehrávánie nie je možné, pretože prípona '{0}'\nsa nenachádza v konfigurácii vášho MediaPortalu.\nPridajte prosím túto príponu alebo nastavte\nexterný přehrávač a skúste to znova.</string>
+  <string Field="PlaybackFailedHeader">Prehrávánie sa nepodarilo</string>
+  <string Field="ProblemLoadingSkinFile">Vyskytla se chyba pri nahrávání súboru zo skinom.</string>
+  <!-- R -->
+  <string Field="Rate">Hodnotenie</string>
+  <string Field="Rated">Klasifikácia</string>
+  <string Field="RateFiveStarFive">Perfektné</string>
+  <string Field="RateFiveStarFour">Skvelé</string>
+  <string Field="RateFiveStarOne">Otrasné</string>
+  <string Field="RateFiveStarThree">Slušné</string>
+  <string Field="RateFiveStarTwo">Slabé</string>
+  <string Field="RateHeading">Hodnotenie filmu</string>
+  <string Field="RecentlyAddedMovies">Nedávno pridané filmy</string>
+  <string Field="RemoteNumericAlphabet0">
+  </string>
+  <string Field="RemoteNumericAlphabet1">
+  </string>
+  <string Field="RemoteNumericAlphabet2">abc</string>
+  <string Field="RemoteNumericAlphabet3">def</string>
+  <string Field="RemoteNumericAlphabet4">ghi</string>
+  <string Field="RemoteNumericAlphabet5">jkl</string>
+  <string Field="RemoteNumericAlphabet6">mno</string>
+  <string Field="RemoteNumericAlphabet7">pqrs</string>
+  <string Field="RemoteNumericAlphabet8">tuv</string>
+  <string Field="RemoteNumericAlphabet9">wxyz</string>
+  <string Field="ResumeFrom">Pokračovať od:</string>
+  <string Field="ResumeFromLast">Pokračovať v prehrávání v mieste prerušenia?</string>
+  <string Field="Retry">Opakovať</string>
+  <string Field="Runtime">Dĺžka</string>
+  <string Field="RuntimeHour">{0} hodina</string>
+  <string Field="RuntimeHours">{0} hodín</string>
+  <string Field="RuntimeLong">{0} a {1}</string>
+  <string Field="RuntimeLongExtended">{0}, {1} a {2}</string>
+  <string Field="RuntimeMinute">{0} minúta</string>
+  <string Field="RuntimeMinutes">{0} minút</string>
+  <string Field="RuntimeSecond">{0} sekunda</string>
+  <string Field="RuntimeSeconds">{0} sekúnd</string>
+  <string Field="RuntimeShort">{0}:{1:00}</string>
+  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
+  <!-- S -->
+  <string Field="Saturday">sobota</string>
+  <string Field="Score">Hodnotenie</string>
+  <string Field="SelectYourRating">Zvoľte hodnotenie pre {0}</string>
+  <string Field="ShowOnlyUnwatchedMovies">Zobraziť len nezhliadnuté filmy</string>
+  <string Field="ShowWatchedAndUnwatchedMovies">Zobraziť zhliadnuté a aj nezhliadnuté filmy</string>
+  <string Field="SkinDoesNotSupportCategories">Tento skin nepodporuje kategórie.</string>
+  <string Field="SkinDoesNotSupportPinDialog">Tento skin nepodporuje dialóg pre PIN kód.</string>
+  <string Field="SkinDoesNotSupportRatingDialog">Tento skin nepodporuje dialóg hodnotenie.</string>
+  <string Field="SortBy">Zoradiť podľa</string>
+  <string Field="SortDirection">Smer zoradenia</string>
+  <string Field="StarRating">Hodnotenie</string>
+  <string Field="Sunday">nedeľa</string>
+  <!-- T -->
+  <string Field="ThisMonth">tento mesiac</string>
+  <string Field="ThisWeek">tento týždeň</string>
+  <string Field="ThisYear">tento rok</string>
+  <string Field="ThreeMonthsAgo">pred troma mesiacmi</string>
+  <string Field="ThreeWeeksAgo">pred troma týždňami</string>
+  <string Field="ThumbnailView">Ikony</string>
+  <string Field="Thursday">štvrtok</string>
+  <string Field="Title">Titul</string>
+  <string Field="Today">dnes</string>
+  <string Field="ToggleParentalLock">Prepnúť rodičovský zámek</string>
+  <string Field="Tuesday">utorok</string>
+  <string Field="TwoMonthsAgo">pred dvoma mesiacmi</string>
+  <string Field="TwoWeeksAgo">pred dvoma týždňami</string>
+  <!-- U -->
+  <string Field="Unknown">Neznáme</string>
+  <string Field="UnlockRestrictedMovies">Odomknúť zakázané filmy</string>
+  <string Field="UnwatchedMovies">Nezvhliadnuté filmy</string>
+  <string Field="UpAbbreviation">(nahor)</string>
+  <string Field="UpdateDetailsFromOnline">Aktualizovať detaily online</string>
+  <string Field="UpdateMovieDetailsBody">Chystáte sa obnoviť detaily o filmu,\npričom sa prepíšu všetky vlastné úpravy.\nPrajete si pokračovať?</string>
+  <string Field="UpdateMovieDetailsHeader">Aktualizovať detaily filmu</string>
+  <!-- V -->
+  <string Field="VirtualDriveHeader">Virtualna mechanika nie je pripravená</string>
+  <string Field="VirtualDriveMessage">Virtuálna mechanika nebola včas k dispozícii.\nSkúste to prosím znovu alebo zrušte prehrávanie.</string>
+  <string Field="Votes">Hlasov</string>
+  <!-- W -->
+  <string Field="Wednesday">streda</string>
+  <string Field="Writer">Scénárista</string>
+  <string Field="Writers">Scénáristi</string>
+  <!-- Y -->
+  <string Field="Year">Rok</string>
+  <string Field="Yesterday">včera</string>
+</strings>
