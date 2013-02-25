@@ -158,7 +158,7 @@
         <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
         <VersionDescription>This release improves bluray support, fixes the missing delete buttons, fixes installer issues, and updates Dutch language support.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
-        <OnlineLocation>http://moving-pictures.googlecode.com/files/moving-pictures-1.5.1-setup.mpei</OnlineLocation>
+        <OnlineLocation>http://moving-pictures.googlecode.com/files/moving-pictures-1.5.1-setup.mpe1</OnlineLocation>
         <ReleaseDate>2013-02-25T15:05:53</ReleaseDate>
         <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
         <Location>moving-pictures-setup.mpe1</Location>
