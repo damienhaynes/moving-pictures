@@ -15,7 +15,7 @@
               <UpdateOption>AlwaysOverwrite</UpdateOption>
               <LocalFileName>moving-pictures-setup.exe</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{ee27a0da-0ad6-470e-9f85-beb6fe2a1ee0}-moving-pictures-setup.exe</ZipFileName>
-              <DestinationFilename>%Base%\moving-pictures-setup.exe</DestinationFilename>
+              <DestinationFilename>%Temp%\moving-pictures-setup.exe</DestinationFilename>
             </FileItem>
           </Items>
         </Files>
@@ -46,7 +46,7 @@
               <Params>
                 <Items>
                   <SectionParam Name="Path to application">
-                    <Value>%Base%\moving-pictures-setup.exe</Value>
+                    <Value>%Temp%\moving-pictures-setup.exe</Value>
                     <ValueType>Template</ValueType>
                     <Description>Path to the application like 
  %Base%\MediaPortal.exe</Description>
@@ -229,13 +229,13 @@ public class Script
         <UpdateOption>AlwaysOverwrite</UpdateOption>
         <LocalFileName>moving-pictures-setup.exe</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{ee27a0da-0ad6-470e-9f85-beb6fe2a1ee0}-moving-pictures-setup.exe</ZipFileName>
-        <DestinationFilename>%Base%\moving-pictures-setup.exe</DestinationFilename>
+        <DestinationFilename>%Temp%\moving-pictures-setup.exe</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\MovingPictures\Resources\Images\icon_large.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{c99fee12-618d-41a2-9e3e-082727929ba4}-icon_large.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{b9596a81-f5c9-4fe6-9ae3-15113e8d4640}-icon_large.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
