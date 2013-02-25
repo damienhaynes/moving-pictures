@@ -7,18 +7,30 @@
   <string Field="Actor">Acteur</string>
   <string Field="Actors">Acteurs</string>
   <string Field="AllMovies">Alle films</string>
+  <string Field="AllFiles">Alle bestanden</string>
+  <!-- B -->
+  <string Field="BadCategory">Een externe plugin of skin probeerde een niet bestaande categorie te openen!</string>
+  <string Field="BadMovie">Een externe plugin of skin probeerde een niet bestaande film te openen!</string>
+  <string Field="BadParam">Een externe plugin of skin probeerde een niet bestaande parameter te openen!</string>
+  <string Field="Backdrop">Achtergrond</string>
+  <string Field="BeginsWith">Begint met</string>
   <!-- C -->
   <string Field="Cancel">Annuleren</string>
   <string Field="CannotDeleteOffline">Kan {0}\n niet verwijderen omdat het bestand offline is.</string>
   <string Field="CannotDeleteReadOnly">Kan deze alleen-lezen film niet verwijderen.\nWilt u dat Moving Pictures deze film negeert?</string>
+  <string Field="CastAndCrew">Cast en Crew</string>
   <string Field="CategoryEmptyDescription">Er zijn momenteel geen films\nbeschikbaar in deze categorie.</string>
   <string Field="CategoryEmptyHeader">Categorie is leeg.</string>
   <string Field="Certification">Classificatie</string>
   <string Field="ChangeView">Wijzig weergave</string>
   <string Field="CheckForMissingArtwork">Online zoeken naar missend artwork</string>
+  <string Field="Completed">Compleet</string>
+  <string Field="CompletedFiles">Complete bestanden</string>
   <string Field="ContinueToNextPartBody">Wilt u verdergaan met deel {0}?</string>
   <string Field="ContinueToNextPartHeader">Verder gaan met het volgende deel?</string>
-  <string Field="CycleCoverArt">Wissel coverart</string>
+  <string Field="Cover">Filmhoes</string>
+  <string Field="CoverFlowView">Coverflow weergave</string>
+  <string Field="CycleCoverArt">Wissel filmhoes</string>
   <string Field="CycleView">Wissel weergave</string>
   <!-- D -->
   <string Field="DateAdded">Datum toegevoegd</string>
@@ -48,14 +60,22 @@
   <!-- F -->
   <string Field="FailedMountingImage">Het mounten van DVD-image is mislukt.</string>
   <string Field="FilePath">Bestandspad</string>
+  <string Field="FilesNeedingAttention">Bestanden die aandacht nodig hebben</string>
   <string Field="FilmstripView">Filmstripweergave</string>
   <string Field="FilterBy">Filter volgens</string>
   <string Field="Friday">Vrijdag</string>
   <string Field="Future">Toekomst</string>
   <!-- G -->
+  <string Field="GlobalActions">Algemene instellingen</string>
   <string Field="Genre">Genre</string>
   <string Field="Genres">Genres</string>
   <!-- I -->
+  <string Field="IgnoreMovie">Negeer film</string>
+  <string Field="ImdbId">IMDb Id</string>
+  <string Field="Importer">Film importeerder</string>
+  <string Field="ImporterDisabled">Importeerder uitgeschakeld</string>
+  <string Field="ImporterDisabledMessage">De importeerder is uitgeschakeld in de Mediaportal GUI. Wil je hem weer inschakelen?</string>
+  <string Field="ImporterPending">Importeerder ({0} heeft aandacht nodig)</string>
   <string Field="InvalidPin">Ongeldige PIN-code!</string>
   <string Field="InvalidVideoDiscFormat">Het imagebestand bevat geen\ngeldig videodisc-formaat, of uw Daemon\nTools MediaPortalconfiguratie is foutief.</string>
   <!-- L -->
@@ -69,9 +89,11 @@
   <!-- M -->
   <string Field="MarkAsUnwatched">Markeer als onbekeken</string>
   <string Field="MarkAsWatched">Markeer als bekeken</string>
+  <string Field="MediaInfo">MediaInfo</string>
   <string Field="MediaIsMissing">Het filmbestand van de film die u heeft geselecteerd kan niet worden gevonden!</string>
   <string Field="MediaNotAvailableBody">Het filmbestand van de film die u heeft geselecteerd kan niet worden gevonden! Plaats de verwijderbare media met\nlabel: {0}</string>
   <string Field="MediaNotAvailableHeader">Filmbestand niet gevonden.</string>
+  <string Field="Missing">Mist</string>
   <string Field="MissingExternalPlayerExe">Het uitvoerbaar bestand van de externe speler kan niet worden gevonden.\nGelieve het pad naar het bestand te corrigeren.</string>
   <string Field="Monday">Maandag</string>
   <string Field="Movie">Film</string>
@@ -89,6 +111,8 @@
   <string Field="PinCodePrompt">Voer PIN-code in om verder te gaan:</string>
   <string Field="PlaybackFailed">Afspelen is niet mogelijk omdat de extensie '{0}'\nniet is toegevoegd in uw MediaPortalconfiguratie.\nVoeg deze extensie toe of configureer een externe speler\nen probeer opnieuw.</string>
   <string Field="PlaybackFailedHeader">Afspelen mislukt</string>
+  <string Field="PlayMovie">Film afspelen</string>
+  <string Field="PossibleMatches">Mogelijke overeenkomsten</string>
   <string Field="ProblemLoadingSkinFile">Er was een probleem tijdens het laden van het skin bestand</string>
   <!-- R -->
   <string Field="Rate">Waardeer</string>
@@ -126,11 +150,19 @@
   <string Field="RuntimeShortExtended">{0}u{1:00}m{2:00}s</string>
   <!-- S -->
   <string Field="Saturday">Zaterdag</string>
+  <string Field="SendToImporter">Zend naar importeerder</string>
+  <string Field="ScanForNewMovies">Scan naar nieuwe films</string>
   <string Field="Score">Score</string>
+  <string Field="Search">Zoek</string>
+  <string Field="SearchBy">Zoek op</string>
+  <string Field="SearchForMore">Zoek naar meer mogelijkheden</string>
+  <string Field="SearchNoResults">Er zijn geen zoekresultaten.</string>
+ <string Field="SelectCorrectMovie">Selecteer de juiste film</string>
   <string Field="SelectYourRating">Selecteer uw waardering voor {0}</string>
   <string Field="ShowOnlyUnwatchedMovies">Toon alleen onbekeken films</string>
   <string Field="ShowWatchedAndUnwatchedMovies">Toon bekeken en onbekeken films</string>
   <string Field="SkinDoesNotSupportCategories">Deze skin ondersteunt het weergeven van categorieën niet.</string>
+  <string Field="SkinDoesNotSupportImporter">De skin ondersteund de importeerder niet.</string>
   <string Field="SkinDoesNotSupportPinDialog">Deze skin ondersteunt de PIN-codedialoog niet.</string>
   <string Field="SkinDoesNotSupportRatingDialog">Deze skin ondersteunt de waarderingsdialoog niet.</string>
   <string Field="SortBy">Sorteer op</string>
@@ -138,6 +170,7 @@
   <string Field="StarRating">Sterwaardering</string>
   <string Field="Sunday">Zondag</string>
   <!-- T -->
+  <string Field="Theme">Thema</string>
   <string Field="ThisMonth">Deze maand</string>
   <string Field="ThisWeek">Deze week</string>
   <string Field="ThisYear">Dit jaar</string>
@@ -162,6 +195,8 @@
   <!-- V -->
   <string Field="VirtualDriveHeader">Virtuele schijf is niet gereed</string>
   <string Field="VirtualDriveMessage">De virtuele schijf was niet op tijd gereed.\nGelieve opnieuw te proberen of annuleer afspelen.</string>
+  <string Field="Votes">stemmen</string>
+  <string Field="ViewMovieDetails">Bekijk film details</string>
   <!-- W -->
   <string Field="Wednesday">Woensdag</string>
   <string Field="Writer">Schrijver</string>
