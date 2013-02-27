@@ -732,7 +732,9 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                 return;
             }
 
-            MovingPicturesConfig configWindow = ((MovingPicturesConfig)this.TopLevelControl);
+            MovingPicturesConfig configWindow = this.TopLevelControl as MovingPicturesConfig;
+            if (configWindow == null) return;
+
             TabControl mainTabControl = (TabControl)configWindow.Controls["mainTabControl"];
             mainTabControl.SelectedTab = (TabPage)mainTabControl.Controls["importSettingsTab"];
         }
