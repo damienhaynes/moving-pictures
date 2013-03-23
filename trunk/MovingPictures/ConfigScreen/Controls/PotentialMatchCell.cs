@@ -29,9 +29,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
             
             string yearText = "(" + match.Movie.Year + ")";
             string altTitleText = "as " + match.Result.AlternateTitle;
+            string providerName = match.Movie.PrimarySource == null ? string.Empty : match.Movie.PrimarySource.Provider.Name;
 
             // figure basic positioning
-            SizeF providerSize = graphics.MeasureString(match.Movie.PrimarySource.Provider.Name, DataGridView.Font);
+            SizeF providerSize = graphics.MeasureString(providerName, DataGridView.Font);
             SizeF titleSize = graphics.MeasureString(match.Movie.Title, DataGridView.Font);
             SizeF yearSize = graphics.MeasureString(yearText, DataGridView.Font);
             
@@ -49,10 +50,12 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen.Controls {
             }
 
             // draw data provider if needed
-            bool uncertainMatch =  match.Result.TitleScore > 0 || match.Result.YearScore > 0;
-            if (MovingPicturesCore.Settings.AlwaysDisplayProviderTags || !match.Result.FromTopSource || (uncertainMatch && match.HasMultipleSources)) {
-                graphics.FillRectangle(SystemBrushes.ControlLight, providerPosition + 1, cellBounds.Y + 4, providerSize.Width + 1, cellBounds.Height - 10);
-                graphics.DrawString(match.Movie.PrimarySource.Provider.Name, DataGridView.Font, SystemBrushes.ControlDark, providerPosition + 1, cellBounds.Y + 4);
+            if (!string.IsNullOrEmpty(providerName)) {
+                bool uncertainMatch = match.Result.TitleScore > 0 || match.Result.YearScore > 0;
+                if (MovingPicturesCore.Settings.AlwaysDisplayProviderTags || !match.Result.FromTopSource || (uncertainMatch && match.HasMultipleSources)) {
+                    graphics.FillRectangle(SystemBrushes.ControlLight, providerPosition + 1, cellBounds.Y + 4, providerSize.Width + 1, cellBounds.Height - 10);
+                    graphics.DrawString(providerName, DataGridView.Font, SystemBrushes.ControlDark, providerPosition + 1, cellBounds.Y + 4);
+                }
             }
         }
     }
