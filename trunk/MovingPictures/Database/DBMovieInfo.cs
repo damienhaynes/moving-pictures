@@ -194,6 +194,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private StringList _studios;
 
+        [DBField]
+        public StringList PlotKeywords
+        {
+            get { return _plotKeywords; }
+
+            set
+            {
+                _plotKeywords = value;
+                commitNeeded = true;
+            }
+        } private StringList _plotKeywords;
+
         [DBField(AllowDynamicFiltering = false)]
         public float Score {
             get { return _score; }
@@ -418,18 +430,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private int? _fitId;
-
-        [DBField]
-        public StringList PlotKeywords
-        {
-            get { return _plotKeywords; }
-
-            set
-            {
-                _plotKeywords = value;
-                commitNeeded = true;
-            }
-        } private StringList _plotKeywords;
 
         #endregion
 
