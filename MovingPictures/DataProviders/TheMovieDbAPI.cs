@@ -28,6 +28,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.TMDbAPI {
         private static string apiMovieGetReleaseInfo = string.Concat(apiMovieUrl, "movie/{0}/releases?api_key=", apiKey);
         private static string apiMovieGetCastInfo = string.Concat(apiMovieUrl, "movie/{0}/casts?api_key=", apiKey);
         private static string apiMovieGetAlternativeTitles = string.Concat(apiMovieUrl, "movie/{0}/alternative_titles?api_key=", apiKey);
+        private static string apiMovieGetPlotKeywords = string.Concat(apiMovieUrl, "movie/{0}/keywords?api_key=", apiKey);
 
         #endregion
 
@@ -66,6 +67,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.TMDbAPI {
         public static AlternativeTitle GetAlternativeTitles(string movieId) {
             string response = getJson(string.Format(apiMovieGetAlternativeTitles, movieId));
             return response.FromJson<AlternativeTitle>();
+        }
+
+        public static PlotKeywords GetPlotKeywords(string movieId)
+        {
+            string response = getJson(string.Format(apiMovieGetPlotKeywords, movieId));
+            return response.FromJson<PlotKeywords>();
         }
 
         #endregion
@@ -384,6 +391,26 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.TMDbAPI {
 
         [DataMember(Name = "id")]
         public int Id { get; set; }
+    }
+
+    [DataContract]
+    public class PlotKeywords
+    {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
+
+        [DataMember(Name = "keywords")]
+        public List<Keyword> Keywords { get; set; }
+
+        [DataContract]
+        public class Keyword
+        {
+            [DataMember(Name = "id")]
+            public int Id { get; set; }
+
+            [DataMember(Name = "name")]
+            public string Name { get; set; }
+        }
     }
 
     #endregion
