@@ -419,6 +419,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int? _fitId;
 
+        [DBField]
+        public StringList PlotKeywords
+        {
+            get { return _plotKeywords; }
+
+            set
+            {
+                _plotKeywords = value;
+                commitNeeded = true;
+            }
+        } private StringList _plotKeywords;
 
         #endregion
 
