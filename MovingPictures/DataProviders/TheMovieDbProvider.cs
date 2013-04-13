@@ -321,6 +321,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (DateTime.TryParse(movieDetails.ReleaseDate, out date))
                 movie.Year = date.Year;
 
+            // get plot keywords
+            var plotKeywords = TheMovieDbAPI.GetPlotKeywords(movieDetails.Id.ToString());
+            if (plotKeywords != null) {
+                movie.PlotKeywords.AddRange(plotKeywords.Keywords.Select(k => k.Name).ToArray());
+            }
+
             return movie;
         }
 
