@@ -444,7 +444,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             var titleFields = new List<string> {"title"};
             //if (altTitleCheckBox.Checked) titleFields.Add("alternate_titles");
             var peopleFields = new string[] { "directors", "writers", "actors" };
-            var themeFields = new string[] { "summary" };
+            var themeFields = new string[] { "summary", "plotkeywords" };
             
             Searchers[SearchMode.Title] = new LevenshteinSubstringSearcher<DBMovieInfo>(MovingPicturesCore.DatabaseManager, titleFields.ToArray());
             Searchers[SearchMode.Person] = new LevenshteinSubstringSearcher<DBMovieInfo>(MovingPicturesCore.DatabaseManager, peopleFields);

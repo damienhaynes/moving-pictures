@@ -64,7 +64,7 @@ namespace SearchTester {
             if (altTitleCheckBox.Checked) titleFields.Add("alternate_titles");
 
             string[] peopleFields = new string[] { "directors", "writers", "actors"};
-            string[] themeFields = new string[] { "summary"};
+            string[] themeFields = new string[] { "summary", "plotkeywords" };
 
             DateTime start = DateTime.Now;
 
