@@ -358,7 +358,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private void OnBrowserViewChanged(BrowserViewMode previousView, BrowserViewMode currentView) {
             if (currentView == BrowserViewMode.DETAILS) {
-                GUIWindowManager.Process();
                 GUIControl.FocusControl(GUIWindowManager.ActiveWindow, playButton.GetID);
             }
 
