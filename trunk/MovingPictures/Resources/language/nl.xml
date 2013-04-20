@@ -1,207 +1,206 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Moving Pictures translation file -->
-<!-- Nederlands-->
-<!-- Note: English is the fallback for any strings not found in other languages -->
-<strings>
-  <!-- A -->
-  <string Field="Actor">Acteur</string>
-  <string Field="Actors">Acteurs</string>
-  <string Field="AllMovies">Alle films</string>
-  <string Field="AllFiles">Alle bestanden</string>
-  <!-- B -->
-  <string Field="BadCategory">Een externe plugin of skin probeerde een niet bestaande categorie te openen!</string>
-  <string Field="BadMovie">Een externe plugin of skin probeerde een niet bestaande film te openen!</string>
-  <string Field="BadParam">Een externe plugin of skin probeerde een niet bestaande parameter te openen!</string>
-  <string Field="Backdrop">Achtergrond</string>
-  <string Field="BeginsWith">Begint met</string>
-  <!-- C -->
-  <string Field="Cancel">Annuleren</string>
-  <string Field="CannotDeleteOffline">Kan {0}\n niet verwijderen omdat het bestand offline is.</string>
-  <string Field="CannotDeleteReadOnly">Kan deze alleen-lezen film niet verwijderen.\nWilt u dat Moving Pictures deze film negeert?</string>
-  <string Field="CastAndCrew">Cast en Crew</string>
-  <string Field="CategoryEmptyDescription">Er zijn momenteel geen films\nbeschikbaar in deze categorie.</string>
-  <string Field="CategoryEmptyHeader">Categorie is leeg.</string>
-  <string Field="Certification">Classificatie</string>
-  <string Field="ChangeView">Wijzig weergave</string>
-  <string Field="CheckForMissingArtwork">Online zoeken naar missend artwork</string>
-  <string Field="Completed">Compleet</string>
-  <string Field="CompletedFiles">Complete bestanden</string>
-  <string Field="ContinueToNextPartBody">Wilt u verdergaan met deel {0}?</string>
-  <string Field="ContinueToNextPartHeader">Verder gaan met het volgende deel?</string>
-  <string Field="Cover">Filmhoes</string>
-  <string Field="CoverFlowView">Coverflow weergave</string>
-  <string Field="CycleCoverArt">Wissel filmhoes</string>
-  <string Field="CycleView">Wissel weergave</string>
-  <!-- D -->
-  <string Field="DateAdded">Datum toegevoegd</string>
-  <string Field="DateDay">dag</string>
-  <string Field="DateDays">dagen</string>
-  <string Field="DateMonth">maand</string>
-  <string Field="DateMonths">maanden</string>
-  <string Field="DatePartAgo">{0} {1} geleden</string>
-  <string Field="DatePartWithinDays">Laatste {0} dagen</string>
-  <string Field="DatePartWithinMonths">Laatste {0} maanden</string>
-  <string Field="DatePartWithinWeeks">Laatste {0} weken</string>
-  <string Field="DatePartWithinYears">Laatste {0} jaren</string>
-  <string Field="DateWeek">week</string>
-  <string Field="DateWeeks">weken</string>
-  <string Field="DateYear">jaar</string>
-  <string Field="DateYears">jaren</string>
-  <string Field="DecadeShort">{0}0s</string>
-  <string Field="DeleteFailed">Verwijderen mislukt</string>
-  <string Field="DeleteMovie">Verwijder film</string>
-  <string Field="Director">Regisseur</string>
-  <string Field="Directors">Regisseurs</string>
-  <string Field="DownAbbreviation">(ond)</string>
-  <string Field="DoYouWantToDelete">Wilt u\n{0}\npermanent van uw hardeschijf verwijderen?</string>
-  <!-- E -->
-  <string Field="EarlierThisYear">Eerder dit jaar</string>
-  <string Field="Error">Fout</string>
-  <!-- F -->
-  <string Field="FailedMountingImage">Het mounten van DVD-image is mislukt.</string>
-  <string Field="FilePath">Bestandspad</string>
-  <string Field="FilesNeedingAttention">Bestanden die aandacht nodig hebben</string>
-  <string Field="FilmstripView">Filmstripweergave</string>
-  <string Field="FilterBy">Filter volgens</string>
-  <string Field="Friday">Vrijdag</string>
-  <string Field="Future">Toekomst</string>
-  <!-- G -->
-  <string Field="GlobalActions">Algemene instellingen</string>
-  <string Field="Genre">Genre</string>
-  <string Field="Genres">Genres</string>
-  <!-- I -->
-  <string Field="IgnoreMovie">Negeer film</string>
-  <string Field="ImdbId">IMDb Id</string>
-  <string Field="Importer">Film importeerder</string>
-  <string Field="ImporterDisabled">Importeerder uitgeschakeld</string>
-  <string Field="ImporterDisabledMessage">De importeerder is uitgeschakeld in de Mediaportal GUI. Wil je hem weer inschakelen?</string>
-  <string Field="ImporterPending">Importeerder ({0} heeft aandacht nodig)</string>
-  <string Field="InvalidPin">Ongeldige PIN-code!</string>
-  <string Field="InvalidVideoDiscFormat">Het imagebestand bevat geen\ngeldig videodisc-formaat, of uw Daemon\nTools MediaPortalconfiguratie is foutief.</string>
-  <!-- L -->
-  <string Field="Language">Taal</string>
-  <string Field="LargeThumbnailView">Grote pictogrammenweergave</string>
-  <string Field="LastMonth">Afgelopen maand</string>
-  <string Field="LastWeek">Afgelopen week</string>
-  <string Field="LastYear">Afgelopen jaar</string>
-  <string Field="ListView">Lijstweergave</string>
-  <string Field="LockRestrictedMovies">Vergrendel afgeschermde films</string>
-  <!-- M -->
-  <string Field="MarkAsUnwatched">Markeer als onbekeken</string>
-  <string Field="MarkAsWatched">Markeer als bekeken</string>
-  <string Field="MediaInfo">MediaInfo</string>
-  <string Field="MediaIsMissing">Het filmbestand van de film die u heeft geselecteerd kan niet worden gevonden!</string>
-  <string Field="MediaNotAvailableBody">Het filmbestand van de film die u heeft geselecteerd kan niet worden gevonden! Plaats de verwijderbare media met\nlabel: {0}</string>
-  <string Field="MediaNotAvailableHeader">Filmbestand niet gevonden.</string>
-  <string Field="Missing">Mist</string>
-  <string Field="MissingExternalPlayerExe">Het uitvoerbaar bestand van de externe speler kan niet worden gevonden.\nGelieve het pad naar het bestand te corrigeren.</string>
-  <string Field="Monday">Maandag</string>
-  <string Field="Movie">Film</string>
-  <string Field="MovieDetails">Filminformatie</string>
-  <string Field="MovieOptions">Filmopties</string>
-  <string Field="Movies">Films</string>
-  <!-- N -->
-  <string Field="NoImportPathsBody">Het blijkt dat u geen import\nlocaties heeft gedefinieerd. U\nmoet MediaPortal sluiten\nen het MediaPortal\nConfiguratiescherm openen\nzodat u Moving Pictures kunt configureren.</string>
-  <string Field="NoImportPathsHeading">Geen importlocaties!</string>
-  <!-- O -->
-  <string Field="Older">Ouder</string>
-  <!-- P -->
-  <string Field="ParentalControlsDisabled">Ouderlijke controle is niet ingeschakeld.</string>
-  <string Field="PinCodeHeader">Ontgrendel afgeschermde inhoud</string>
-  <string Field="PinCodePrompt">Voer PIN-code in om verder te gaan:</string>
-  <string Field="PlaybackFailed">Afspelen is niet mogelijk omdat de extensie '{0}'\nniet is toegevoegd in uw MediaPortalconfiguratie.\nVoeg deze extensie toe of configureer een externe speler\nen probeer opnieuw.</string>
-  <string Field="PlaybackFailedHeader">Afspelen mislukt</string>
-  <string Field="PlayMovie">Film afspelen</string>
-  <string Field="PossibleMatches">Mogelijke overeenkomsten</string>
-  <string Field="ProblemLoadingSkinFile">Er was een probleem tijdens het laden van het skin bestand</string>
-  <!-- R -->
-  <string Field="Rate">Waardeer</string>
-  <string Field="Rated">Waardering</string>
-  <string Field="RateFiveStarFive">Uitstekend</string>
-  <string Field="RateFiveStarFour">Heel Goed</string>
-  <string Field="RateFiveStarThree">Goed</string>
-  <string Field="RateFiveStarTwo">Matig</string>
-  <string Field="RateFiveStarOne">Slecht</string>
-  <string Field="RateHeading">Waardeer film</string>
-  <string Field="RecentlyAddedMovies">Recent toegevoegde films</string>
-  <string Field="RemoteNumericAlphabet0"></string>
-  <string Field="RemoteNumericAlphabet1"></string>
-  <string Field="RemoteNumericAlphabet2">abc</string>
-  <string Field="RemoteNumericAlphabet3">def</string>
-  <string Field="RemoteNumericAlphabet4">ghi</string>
-  <string Field="RemoteNumericAlphabet5">jkl</string>
-  <string Field="RemoteNumericAlphabet6">mno</string>
-  <string Field="RemoteNumericAlphabet7">pqrs</string>
-  <string Field="RemoteNumericAlphabet8">tuv</string>
-  <string Field="RemoteNumericAlphabet9">wxyz</string>
-  <string Field="ResumeFrom">Hervatten vanaf:</string>
-  <string Field="ResumeFromLast">Film hervatten vanaf laatste positie?</string>
-  <string Field="Retry">Opnieuw proberen</string>
-  <string Field="Runtime">Speeltijd</string>
-  <string Field="RuntimeHour">{0} uur</string>
-  <string Field="RuntimeHours">{0} uren</string>
-  <string Field="RuntimeLong">{0} en {1}</string>
-  <string Field="RuntimeLongExtended">{0}, {1} en {2}</string>
-  <string Field="RuntimeMinute">{0} minuut</string>
-  <string Field="RuntimeMinutes">{0} minuten</string>
-  <string Field="RuntimeSecond">{0} seconde</string>
-  <string Field="RuntimeSeconds">{0} seconden</string>
-  <string Field="RuntimeShort">{0}:{1:00}</string>
-  <string Field="RuntimeShortExtended">{0}u{1:00}m{2:00}s</string>
-  <!-- S -->
-  <string Field="Saturday">Zaterdag</string>
-  <string Field="SendToImporter">Zend naar importeerder</string>
-  <string Field="ScanForNewMovies">Scan naar nieuwe films</string>
-  <string Field="Score">Score</string>
-  <string Field="Search">Zoek</string>
-  <string Field="SearchBy">Zoek op</string>
-  <string Field="SearchForMore">Zoek naar meer mogelijkheden</string>
-  <string Field="SearchNoResults">Er zijn geen zoekresultaten.</string>
- <string Field="SelectCorrectMovie">Selecteer de juiste film</string>
-  <string Field="SelectYourRating">Selecteer uw waardering voor {0}</string>
-  <string Field="ShowOnlyUnwatchedMovies">Toon alleen onbekeken films</string>
-  <string Field="ShowWatchedAndUnwatchedMovies">Toon bekeken en onbekeken films</string>
-  <string Field="SkinDoesNotSupportCategories">Deze skin ondersteunt het weergeven van categorieën niet.</string>
-  <string Field="SkinDoesNotSupportImporter">De skin ondersteund de importeerder niet.</string>
-  <string Field="SkinDoesNotSupportPinDialog">Deze skin ondersteunt de PIN-codedialoog niet.</string>
-  <string Field="SkinDoesNotSupportRatingDialog">Deze skin ondersteunt de waarderingsdialoog niet.</string>
-  <string Field="SortBy">Sorteer op</string>
-  <string Field="SortDirection">Sorteervolgorde</string>
-  <string Field="StarRating">Sterwaardering</string>
-  <string Field="Sunday">Zondag</string>
-  <!-- T -->
-  <string Field="Theme">Thema</string>
-  <string Field="ThisMonth">Deze maand</string>
-  <string Field="ThisWeek">Deze week</string>
-  <string Field="ThisYear">Dit jaar</string>
-  <string Field="ThreeMonthsAgo">Drie maanden deleden</string>
-  <string Field="ThreeWeeksAgo">Drie weken geleden</string>
-  <string Field="ThumbnailView">Pictogramweergave</string>
-  <string Field="Thursday">Donderdag</string>
-  <string Field="Title">Titel</string>
-  <string Field="Today">Vandaag</string>
-  <string Field="ToggleParentalLock">Ouderlijke vergrendeling aan / uit</string>
-  <string Field="Tuesday">Dinsdag</string>
-  <string Field="TwoMonthsAgo">Twee maanden geleden</string>
-  <string Field="TwoWeeksAgo">Twee weken geleden</string>
-  <!-- U -->
-  <string Field="Unknown">Onbekend</string>
-  <string Field="UnlockRestrictedMovies">Ontgrendel afgegrensde films</string>
-  <string Field="UnwatchedMovies">Onbekeken films</string>
-  <string Field="UpAbbreviation">(omhg)</string>
-  <string Field="UpdateDetailsFromOnline">Informatie online bijwerken</string>
-  <string Field="UpdateMovieDetailsBody">U staat op het punt de filminformatie te verversen\nwaarbij elke eerdere handmatige aanpassing\naan deze informatie verloren zal gaan.\nWilt u doorgaan?</string>
-  <string Field="UpdateMovieDetailsHeader">Filminformatie bijwerken</string>
-  <!-- V -->
-  <string Field="VirtualDriveHeader">Virtuele schijf is niet gereed</string>
-  <string Field="VirtualDriveMessage">De virtuele schijf was niet op tijd gereed.\nGelieve opnieuw te proberen of annuleer afspelen.</string>
-  <string Field="Votes">stemmen</string>
-  <string Field="ViewMovieDetails">Bekijk film details</string>
-  <!-- W -->
-  <string Field="Wednesday">Woensdag</string>
-  <string Field="Writer">Schrijver</string>
-  <string Field="Writers">Schrijvers</string>
-  <!-- Y -->
-  <string Field="Year">Jaar</string>
-  <string Field="Yesterday">Gisteren</string>
-</strings>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--A-->
+  <string name="Actor">Acteur</string>
+  <string name="Actors">Acteurs</string>
+  <string name="AllMovies">Alle films</string>
+  <string name="AllFiles">Alle bestanden</string>
+  <!--B-->
+  <string name="BadCategory">Een externe plugin of skin probeerde een niet bestaande categorie te openen!</string>
+  <string name="BadMovie">Een externe plugin of skin probeerde een niet bestaande film te openen!</string>
+  <string name="BadParam">Een externe plugin of skin probeerde een niet bestaande parameter te openen!</string>
+  <string name="Backdrop">Achtergrond</string>
+  <string name="BeginsWith">Begint met</string>
+  <!--C-->
+  <string name="Cancel">Annuleren</string>
+  <string name="CannotDeleteOffline">Kan {0}\n niet verwijderen omdat het bestand offline is.</string>
+  <string name="CannotDeleteReadOnly">Kan deze alleen-lezen film niet verwijderen.\nWilt u dat Moving Pictures deze film negeert?</string>
+  <string name="CastAndCrew">Cast en Crew</string>
+  <string name="CategoryEmptyDescription">Er zijn momenteel geen films\nbeschikbaar in deze categorie.</string>
+  <string name="CategoryEmptyHeader">Categorie is leeg.</string>
+  <string name="Certification">Classificatie</string>
+  <string name="ChangeView">Wijzig weergave</string>
+  <string name="CheckForMissingArtwork">Online zoeken naar missend artwork</string>
+  <string name="Completed">Compleet</string>
+  <string name="CompletedFiles">Complete bestanden</string>
+  <string name="ContinueToNextPartBody">Wilt u verdergaan met deel {0}?</string>
+  <string name="ContinueToNextPartHeader">Verder gaan met het volgende deel?</string>
+  <string name="Cover">Filmhoes</string>
+  <string name="CoverFlowView">Coverflow weergave</string>
+  <string name="CycleCoverArt">Wissel filmhoes</string>
+  <string name="CycleView">Wissel weergave</string>
+  <!--D-->
+  <string name="DateAdded">Datum toegevoegd</string>
+  <string name="DateDay">dag</string>
+  <string name="DateDays">dagen</string>
+  <string name="DateMonth">maand</string>
+  <string name="DateMonths">maanden</string>
+  <string name="DatePartAgo">{0} {1} geleden</string>
+  <string name="DatePartWithinDays">Laatste {0} dagen</string>
+  <string name="DatePartWithinMonths">Laatste {0} maanden</string>
+  <string name="DatePartWithinWeeks">Laatste {0} weken</string>
+  <string name="DatePartWithinYears">Laatste {0} jaren</string>
+  <string name="DateWeek">week</string>
+  <string name="DateWeeks">weken</string>
+  <string name="DateYear">jaar</string>
+  <string name="DateYears">jaren</string>
+  <string name="DecadeShort">{0}0s</string>
+  <string name="DeleteFailed">Verwijderen mislukt</string>
+  <string name="DeleteMovie">Verwijder film</string>
+  <string name="Director">Regisseur</string>
+  <string name="Directors">Regisseurs</string>
+  <string name="DownAbbreviation">(ond)</string>
+  <string name="DoYouWantToDelete">Wilt u\n{0}\npermanent van uw hardeschijf verwijderen?</string>
+  <!--E-->
+  <string name="EarlierThisYear">Eerder dit jaar</string>
+  <string name="Error">Fout</string>
+  <!--F-->
+  <string name="FailedMountingImage">Het mounten van DVD-image is mislukt.</string>
+  <string name="FilePath">Bestandspad</string>
+  <string name="FilesNeedingAttention">Bestanden die aandacht nodig hebben</string>
+  <string name="FilmstripView">Filmstripweergave</string>
+  <string name="FilterBy">Filter volgens</string>
+  <string name="Friday">Vrijdag</string>
+  <string name="Future">Toekomst</string>
+  <!--G-->
+  <string name="GlobalActions">Algemene instellingen</string>
+  <string name="Genre">Genre</string>
+  <string name="Genres">Genres</string>
+  <!--I-->
+  <string name="IgnoreMovie">Negeer film</string>
+  <string name="ImdbId">IMDb Id</string>
+  <string name="Importer">Film importeerder</string>
+  <string name="ImporterDisabled">Importeerder uitgeschakeld</string>
+  <string name="ImporterDisabledMessage">De importeerder is uitgeschakeld in de Mediaportal GUI. Wil je hem weer inschakelen?</string>
+  <string name="ImporterPending">Importeerder ({0} heeft aandacht nodig)</string>
+  <string name="InvalidPin">Ongeldige PIN-code!</string>
+  <string name="InvalidVideoDiscFormat">Het imagebestand bevat geen\ngeldig videodisc-formaat, of uw Daemon\nTools MediaPortalconfiguratie is foutief.</string>
+  <!--L-->
+  <string name="Language">Taal</string>
+  <string name="LargeThumbnailView">Grote pictogrammenweergave</string>
+  <string name="LastMonth">Afgelopen maand</string>
+  <string name="LastWeek">Afgelopen week</string>
+  <string name="LastYear">Afgelopen jaar</string>
+  <string name="ListView">Lijstweergave</string>
+  <string name="LockRestrictedMovies">Vergrendel afgeschermde films</string>
+  <!--M-->
+  <string name="MarkAsUnwatched">Markeer als onbekeken</string>
+  <string name="MarkAsWatched">Markeer als bekeken</string>
+  <string name="MediaInfo">MediaInfo</string>
+  <string name="MediaIsMissing">Het filmbestand van de film die u heeft geselecteerd kan niet worden gevonden!</string>
+  <string name="MediaNotAvailableBody">Het filmbestand van de film die u heeft geselecteerd kan niet worden gevonden! Plaats de verwijderbare media met\nlabel: {0}</string>
+  <string name="MediaNotAvailableHeader">Filmbestand niet gevonden.</string>
+  <string name="Missing">Mist</string>
+  <string name="MissingExternalPlayerExe">Het uitvoerbaar bestand van de externe speler kan niet worden gevonden.\nGelieve het pad naar het bestand te corrigeren.</string>
+  <string name="Monday">Maandag</string>
+  <string name="Movie">Film</string>
+  <string name="MovieDetails">Filminformatie</string>
+  <string name="MovieOptions">Filmopties</string>
+  <string name="Movies">Films</string>
+  <!--N-->
+  <string name="NoImportPathsBody">Het blijkt dat u geen import\nlocaties heeft gedefinieerd. U\nmoet MediaPortal sluiten\nen het MediaPortal\nConfiguratiescherm openen\nzodat u Moving Pictures kunt configureren.</string>
+  <string name="NoImportPathsHeading">Geen importlocaties!</string>
+  <!--O-->
+  <string name="Older">Ouder</string>
+  <!--P-->
+  <string name="ParentalControlsDisabled">Ouderlijke controle is niet ingeschakeld.</string>
+  <string name="PinCodeHeader">Ontgrendel afgeschermde inhoud</string>
+  <string name="PinCodePrompt">Voer PIN-code in om verder te gaan:</string>
+  <string name="PlaybackFailed">Afspelen is niet mogelijk omdat de extensie \'{0}\'\nniet is toegevoegd in uw MediaPortalconfiguratie.\nVoeg deze extensie toe of configureer een externe speler\nen probeer opnieuw.</string>
+  <string name="PlaybackFailedHeader">Afspelen mislukt</string>
+  <string name="PlayMovie">Film afspelen</string>
+  <string name="PossibleMatches">Mogelijke overeenkomsten</string>
+  <string name="ProblemLoadingSkinFile">Er was een probleem tijdens het laden van het skin bestand</string>
+  <!--R-->
+  <string name="Rate">Waardeer</string>
+  <string name="Rated">Waardering</string>
+  <string name="RateFiveStarFive">Uitstekend</string>
+  <string name="RateFiveStarFour">Heel Goed</string>
+  <string name="RateFiveStarOne">Slecht</string>
+  <string name="RateFiveStarThree">Goed</string>
+  <string name="RateFiveStarTwo">Matig</string>
+  <string name="RateHeading">Waardeer film</string>
+  <string name="RecentlyAddedMovies">Recent toegevoegde films</string>
+  <string name="RemoteNumericAlphabet0">
+  </string>
+  <string name="RemoteNumericAlphabet1">
+  </string>
+  <string name="RemoteNumericAlphabet2">abc</string>
+  <string name="RemoteNumericAlphabet3">def</string>
+  <string name="RemoteNumericAlphabet4">ghi</string>
+  <string name="RemoteNumericAlphabet5">jkl</string>
+  <string name="RemoteNumericAlphabet6">mno</string>
+  <string name="RemoteNumericAlphabet7">pqrs</string>
+  <string name="RemoteNumericAlphabet8">tuv</string>
+  <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="ResumeFrom">Hervatten vanaf:</string>
+  <string name="ResumeFromLast">Film hervatten vanaf laatste positie?</string>
+  <string name="Retry">Opnieuw proberen</string>
+  <string name="Runtime">Speeltijd</string>
+  <string name="RuntimeHour">{0} uur</string>
+  <string name="RuntimeHours">{0} uren</string>
+  <string name="RuntimeLong">{0} en {1}</string>
+  <string name="RuntimeLongExtended">{0}, {1} en {2}</string>
+  <string name="RuntimeMinute">{0} minuut</string>
+  <string name="RuntimeMinutes">{0} minuten</string>
+  <string name="RuntimeSecond">{0} seconde</string>
+  <string name="RuntimeSeconds">{0} seconden</string>
+  <string name="RuntimeShort">{0}:{1:00}</string>
+  <string name="RuntimeShortExtended">{0}u{1:00}m{2:00}s</string>
+  <!--S-->
+  <string name="Saturday">Zaterdag</string>
+  <string name="SendToImporter">Zend naar importeerder</string>
+  <string name="ScanForNewMovies">Scan naar nieuwe films</string>
+  <string name="Score">Score</string>
+  <string name="Search">Zoek</string>
+  <string name="SearchBy">Zoek op</string>
+  <string name="SearchForMore">Zoek naar meer mogelijkheden</string>
+  <string name="SearchNoResults">Er zijn geen zoekresultaten.</string>
+  <string name="SelectCorrectMovie">Selecteer de juiste film</string>
+  <string name="SelectYourRating">Selecteer uw waardering voor {0}</string>
+  <string name="ShowOnlyUnwatchedMovies">Toon alleen onbekeken films</string>
+  <string name="ShowWatchedAndUnwatchedMovies">Toon bekeken en onbekeken films</string>
+  <string name="SkinDoesNotSupportCategories">Deze skin ondersteunt het weergeven van categorieÃ«n niet.</string>
+  <string name="SkinDoesNotSupportImporter">De skin ondersteund de importeerder niet.</string>
+  <string name="SkinDoesNotSupportPinDialog">Deze skin ondersteunt de PIN-codedialoog niet.</string>
+  <string name="SkinDoesNotSupportRatingDialog">Deze skin ondersteunt de waarderingsdialoog niet.</string>
+  <string name="SortBy">Sorteer op</string>
+  <string name="SortDirection">Sorteervolgorde</string>
+  <string name="StarRating">Sterwaardering</string>
+  <string name="Sunday">Zondag</string>
+  <!--T-->
+  <string name="Theme">Thema</string>
+  <string name="ThisMonth">Deze maand</string>
+  <string name="ThisWeek">Deze week</string>
+  <string name="ThisYear">Dit jaar</string>
+  <string name="ThreeMonthsAgo">Drie maanden deleden</string>
+  <string name="ThreeWeeksAgo">Drie weken geleden</string>
+  <string name="ThumbnailView">Pictogramweergave</string>
+  <string name="Thursday">Donderdag</string>
+  <string name="Title">Titel</string>
+  <string name="Today">Vandaag</string>
+  <string name="ToggleParentalLock">Ouderlijke vergrendeling aan / uit</string>
+  <string name="Tuesday">Dinsdag</string>
+  <string name="TwoMonthsAgo">Twee maanden geleden</string>
+  <string name="TwoWeeksAgo">Twee weken geleden</string>
+  <!--U-->
+  <string name="Unknown">Onbekend</string>
+  <string name="UnlockRestrictedMovies">Ontgrendel afgegrensde films</string>
+  <string name="UnwatchedMovies">Onbekeken films</string>
+  <string name="UpAbbreviation">(omhg)</string>
+  <string name="UpdateDetailsFromOnline">Informatie online bijwerken</string>
+  <string name="UpdateMovieDetailsBody">U staat op het punt de filminformatie te verversen\nwaarbij elke eerdere handmatige aanpassing\naan deze informatie verloren zal gaan.\nWilt u doorgaan?</string>
+  <string name="UpdateMovieDetailsHeader">Filminformatie bijwerken</string>
+  <!--V-->
+  <string name="VirtualDriveHeader">Virtuele schijf is niet gereed</string>
+  <string name="VirtualDriveMessage">De virtuele schijf was niet op tijd gereed.\nGelieve opnieuw te proberen of annuleer afspelen.</string>
+  <string name="Votes">stemmen</string>
+  <string name="ViewMovieDetails">Bekijk film details</string>
+  <!--W-->
+  <string name="Wednesday">Woensdag</string>
+  <string name="Writer">Schrijver</string>
+  <string name="Writers">Schrijvers</string>
+  <!--Y-->
+  <string name="Year">Jaar</string>
+  <string name="Yesterday">Gisteren</string>
+</resources>

@@ -1,0 +1,8 @@
+[main]
+host=https://www.transifex.com
+[MP1_CommunityPlugins.movingpictures]
+file_filter=MovingPictures\Resources\language\<lang>.xml
+source_file=MovingPictures\Resources\language\en-US.xml
+source_lang=en
+lang_map = en: en-US
+type=ANDROID

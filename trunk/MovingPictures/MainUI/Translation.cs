@@ -93,7 +93,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             foreach (XmlNode stringEntry in doc.DocumentElement.ChildNodes) {
                 if (stringEntry.NodeType == XmlNodeType.Element)
                     try {
-                        TranslatedStrings.Add(stringEntry.Attributes.GetNamedItem("Field").Value, stringEntry.InnerText);
+                        TranslatedStrings.Add(stringEntry.Attributes.GetNamedItem("name").Value, stringEntry.InnerText);
                     }
                     catch (Exception ex) {
                         logger.ErrorException("Error in Translation Engine", ex);
@@ -106,7 +106,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (TranslatedStrings != null && TranslatedStrings.ContainsKey(fi.Name))
                     TransType.InvokeMember(fi.Name, BindingFlags.SetField, null, TransType, new object[] { TranslatedStrings[fi.Name] });
                 else
-                    logger.Warn("Translation not found for field: {0}.  Using hard-coded English default.", fi.Name);
+                    logger.Warn("Translation not found for name: {0}.  Using hard-coded English default.", fi.Name);
             }
             return TranslatedStrings.Count;
         }

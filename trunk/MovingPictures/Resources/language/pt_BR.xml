@@ -1,174 +1,173 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Moving Pictures translation file -->
-<!-- Brazilian (Portuguese) -->
-<!-- Note: English is the fallback for any strings not found in other languages -->
-<strings>
-  <!-- A -->
-  <string Field="Actor">Ator</string>
-  <string Field="Actors">Atores</string>
-  <string Field="AllMovies">Tods os filmes</string>
-  <!-- C -->
-  <string Field="Cancel">Cancelar</string>
-  <string Field="CannotDeleteOffline">Não foi possível remover {0}\n porque o arquivo está indisponível</string>
-  <string Field="CannotDeleteReadOnly">Não é possível remover um filme\nem modo somente-leitura.\nGostaria que Moving Pictures ignorasse o filme?</string>
-  <string Field="CategoryEmptyDescription">Não há filmes listados\nnesta categoria no momento.</string>
-  <string Field="CategoryEmptyHeader">A categoria está vazia</string>
-  <string Field="Certification">Classificação indicativa</string>
-  <string Field="ChangeView">Mudar visualização</string>
-  <string Field="CheckForMissingArtwork">Recuperar imagens perdidas on-line</string>
-  <string Field="ContinueToNextPartBody">Deseja continuar com a próxima parte {0}?</string>
-  <string Field="ContinueToNextPartHeader">Passar para a próxima parte?</string>
-  <string Field="CycleCoverArt">Mudar arte da capa</string>
-  <string Field="CycleView">Mudar visualização</string>
-  <!-- D -->
-  <string Field="DateAdded">Adicionado em</string>
-  <string Field="DateDay">dia</string>
-  <string Field="DateDays">dias</string>
-  <string Field="DateMonth">mês</string>
-  <string Field="DateMonths">meses</string>
-  <string Field="DatePartAgo">{0} {1} atrás</string>
-  <string Field="DatePartWithinDays">Nos últimos {0} dias</string>
-  <string Field="DatePartWithinMonths">Nos últimos {0} meses</string>
-  <string Field="DatePartWithinWeeks">Nas últimas {0} semanas</string>
-  <string Field="DatePartWithinYears">Nos últimos {0} anos</string>
-  <string Field="DateWeek">semana</string>
-  <string Field="DateWeeks">semanas</string>
-  <string Field="DateYear">ano</string>
-  <string Field="DateYears">anos</string>
-  <string Field="DecadeShort">{0}0s</string>
-  <string Field="DeleteFailed">Falha na remoção</string>
-  <string Field="DeleteMovie">Remover filme</string>
-  <string Field="Director">Dirigido por</string>
-  <string Field="Directors">Diretores</string>
-  <string Field="DownAbbreviation">(dn)</string>
-  <string Field="DoYouWantToDelete">Deseja remover de forma permanente\n{0}\ndo seu disco rígido?</string>
-  <!-- E -->
-  <string Field="EarlierThisYear">No começo deste ano</string>
-  <string Field="Error">Erro</string>
-  <!-- F -->
-  <string Field="FailedMountingImage">Desculpe, falha ao montar a imagem do DVD</string>
-  <string Field="FilePath">Caminho do arquivo</string>
-  <string Field="FilmstripView">Visualização em tiras de filme</string>
-  <string Field="FilterBy">Filtrar por</string>
-  <string Field="Friday">Sexta-feira</string>
-  <string Field="Future">Futuro</string>
-  <!-- G -->
-  <string Field="Genre">Gênero</string>
-  <string Field="Genres">Gêneros</string>
-  <!-- I -->
-  <string Field="InvalidPin">Código PIN inválido!</string>
-  <string Field="InvalidVideoDiscFormat">Ou o arquivo de imagem não contêm\num formato de disco de vídeo válido\nou seu Daemon\nTools não está configurado corretamente\nno MediaPortal.</string>
-  <!-- L -->
-  <string Field="Language">Idioma</string>
-  <string Field="LargeThumbnailView">Visualização em miniatura grande</string>
-  <string Field="LastMonth">Mês passado</string>
-  <string Field="LastWeek">Semana passada</string>
-  <string Field="LastYear">Ano passado</string>
-  <string Field="ListView">Visualização em lista</string>
-  <string Field="LockRestrictedMovies">Travar filmes restritos</string>
-  <!-- M -->
-  <string Field="MarkAsUnwatched">Marcar como não-assistido</string>
-  <string Field="MarkAsWatched">Marcar como assistido</string>
-  <string Field="MediaIsMissing">A mídia para o arquivo que você selecionou não foi encontrada!\nSentimos muito mas algo deu errado...</string>
-  <string Field="MediaNotAvailableBody">A mídia para o filme que você selecionou não\nestá disponível. Insira ou conecte a mídia com\na etiqueta: {0}</string>
-  <string Field="MediaNotAvailableHeader">Mídia indisponível</string>
-  <string Field="MissingExternalPlayerExe">O executável para reprodução\nem alta definição não foi encontrado!\nSelecione o caminho correto do executável.</string>
-  <string Field="Monday">Segunda-feira</string>
-  <string Field="Movie">Filme</string>
-  <string Field="MovieDetails">Detalhes do filme</string>
-  <string Field="MovieOptions">Opções do filme</string>
-  <string Field="Movies">Filmes</string>
-  <!-- N -->
-  <string Field="NoImportPathsBody">Parece que você não definiu nenhum\ncaminho para importação.\nFeche o MediaPortal e\nabra tela de configuração\ndo MediaPortal para\nconfigurar o Moving Pictures.</string>
-  <string Field="NoImportPathsHeading">Não há caminhos para importação!</string>
-  <!-- O -->
-  <string Field="Older">Mais antigo</string>
-  <!-- P -->
-  <string Field="ParentalControlsDisabled">Controle de acesso indefinido.</string>
-  <string Field="PinCodeHeader">Desbloqueando conteúdo restrito</string>
-  <string Field="PinCodePrompt">Por favor insira o código PIN para continuar:</string>
-  <string Field="PlaybackFailed">Reprodução impossível devido a extensão\n'{0}'\nnão estar listada na configuração do seu mediaportal.\nPor favor adicione essa extensão ou\nconfigure um player externo e tente de novo.</string>
-  <string Field="PlaybackFailedHeader">Falha na reprodução</string>
-  <string Field="ProblemLoadingSkinFile">Desculpe, houve um problema ao carregar o arquivo da skin</string>
-  <!-- R -->
-  <string Field="Rate">Classificar</string>
-  <string Field="Rated">Classificado como</string>
-  <string Field="RateFiveStarFive">Perfeito</string>
-  <string Field="RateFiveStarFour">Excelente</string>
-  <string Field="RateFiveStarOne">Péssimo</string>
-  <string Field="RateFiveStarThree">Bom</string>
-  <string Field="RateFiveStarTwo">Ruim</string>
-  <string Field="RateHeading">Classificar filme</string>
-  <string Field="RecentlyAddedMovies">Filmes adicionados recentemente</string>
-  <string Field="RemoteNumericAlphabet0">
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--A-->
+  <string name="Actor">Ator</string>
+  <string name="Actors">Atores</string>
+  <string name="AllMovies">Tods os filmes</string>
+  <!--B-->
+  <!--C-->
+  <string name="Cancel">Cancelar</string>
+  <string name="CannotDeleteOffline">NÃ£o foi possÃ­vel remover {0}\n porque o arquivo estÃ¡ indisponÃ­vel</string>
+  <string name="CannotDeleteReadOnly">NÃ£o Ã© possÃ­vel remover um filme\nem modo somente-leitura.\nGostaria que Moving Pictures ignorasse o filme?</string>
+  <string name="CategoryEmptyDescription">NÃ£o hÃ¡ filmes listados\nnesta categoria no momento.</string>
+  <string name="CategoryEmptyHeader">A categoria estÃ¡ vazia</string>
+  <string name="Certification">ClassificaÃ§Ã£o indicativa</string>
+  <string name="ChangeView">Mudar visualizaÃ§Ã£o</string>
+  <string name="CheckForMissingArtwork">Recuperar imagens perdidas on-line</string>
+  <string name="Completed">ConcluÃ­do</string>
+  <string name="ContinueToNextPartBody">Deseja continuar com a prÃ³xima parte {0}?</string>
+  <string name="ContinueToNextPartHeader">Passar para a prÃ³xima parte?</string>
+  <string name="CycleCoverArt">Mudar arte da capa</string>
+  <string name="CycleView">Mudar visualizaÃ§Ã£o</string>
+  <!--D-->
+  <string name="DateAdded">Adicionado em</string>
+  <string name="DateDay">dia</string>
+  <string name="DateDays">dias</string>
+  <string name="DateMonth">mÃªs</string>
+  <string name="DateMonths">meses</string>
+  <string name="DatePartAgo">{0} {1} atrÃ¡s</string>
+  <string name="DatePartWithinDays">Nos Ãºltimos {0} dias</string>
+  <string name="DatePartWithinMonths">Nos Ãºltimos {0} meses</string>
+  <string name="DatePartWithinWeeks">Nas Ãºltimas {0} semanas</string>
+  <string name="DatePartWithinYears">Nos Ãºltimos {0} anos</string>
+  <string name="DateWeek">semana</string>
+  <string name="DateWeeks">semanas</string>
+  <string name="DateYear">ano</string>
+  <string name="DateYears">anos</string>
+  <string name="DecadeShort">{0}0s</string>
+  <string name="DeleteFailed">Falha na remoÃ§Ã£o</string>
+  <string name="DeleteMovie">Remover filme</string>
+  <string name="Director">Dirigido por</string>
+  <string name="Directors">Diretores</string>
+  <string name="DownAbbreviation">(dn)</string>
+  <string name="DoYouWantToDelete">Deseja remover de forma permanente\n{0}\ndo seu disco rÃ­gido?</string>
+  <!--E-->
+  <string name="EarlierThisYear">No comeÃ§o deste ano</string>
+  <string name="Error">Erro</string>
+  <!--F-->
+  <string name="FailedMountingImage">Desculpe, falha ao montar a imagem do DVD</string>
+  <string name="FilePath">Caminho do arquivo</string>
+  <string name="FilmstripView">VisualizaÃ§Ã£o em tiras de filme</string>
+  <string name="FilterBy">Filtrar por</string>
+  <string name="Friday">Sexta-feira</string>
+  <string name="Future">Futuro</string>
+  <!--G-->
+  <string name="Genre">GÃªnero</string>
+  <string name="Genres">GÃªneros</string>
+  <!--I-->
+  <string name="InvalidPin">CÃ³digo PIN invÃ¡lido!</string>
+  <string name="InvalidVideoDiscFormat">Ou o arquivo de imagem nÃ£o contÃªm\num formato de disco de vÃ­deo vÃ¡lido\nou seu Daemon\nTools nÃ£o estÃ¡ configurado corretamente\nno MediaPortal.</string>
+  <!--L-->
+  <string name="Language">Idioma</string>
+  <string name="LargeThumbnailView">VisualizaÃ§Ã£o em miniatura grande</string>
+  <string name="LastMonth">MÃªs passado</string>
+  <string name="LastWeek">Semana passada</string>
+  <string name="LastYear">Ano passado</string>
+  <string name="ListView">VisualizaÃ§Ã£o em lista</string>
+  <string name="LockRestrictedMovies">Travar filmes restritos</string>
+  <!--M-->
+  <string name="MarkAsUnwatched">Marcar como nÃ£o-assistido</string>
+  <string name="MarkAsWatched">Marcar como assistido</string>
+  <string name="MediaIsMissing">A mÃ­dia para o arquivo que vocÃª selecionou nÃ£o foi encontrada!\nSentimos muito mas algo deu errado...</string>
+  <string name="MediaNotAvailableBody">A mÃ­dia para o filme que vocÃª selecionou nÃ£o\nestÃ¡ disponÃ­vel. Insira ou conecte a mÃ­dia com\na etiqueta: {0}</string>
+  <string name="MediaNotAvailableHeader">MÃ­dia indisponÃ­vel</string>
+  <string name="MissingExternalPlayerExe">O executÃ¡vel para reproduÃ§Ã£o\nem alta definiÃ§Ã£o nÃ£o foi encontrado!\nSelecione o caminho correto do executÃ¡vel.</string>
+  <string name="Monday">Segunda-feira</string>
+  <string name="Movie">Filme</string>
+  <string name="MovieDetails">Detalhes do filme</string>
+  <string name="MovieOptions">OpÃ§Ãµes do filme</string>
+  <string name="Movies">Filmes</string>
+  <!--N-->
+  <string name="NoImportPathsBody">Parece que vocÃª nÃ£o definiu nenhum\ncaminho para importaÃ§Ã£o.\nFeche o MediaPortal e\nabra tela de configuraÃ§Ã£o\ndo MediaPortal para\nconfigurar o Moving Pictures.</string>
+  <string name="NoImportPathsHeading">NÃ£o hÃ¡ caminhos para importaÃ§Ã£o!</string>
+  <!--O-->
+  <string name="Older">Mais antigo</string>
+  <!--P-->
+  <string name="ParentalControlsDisabled">Controle de acesso indefinido.</string>
+  <string name="PinCodeHeader">Desbloqueando conteÃºdo restrito</string>
+  <string name="PinCodePrompt">Por favor insira o cÃ³digo PIN para continuar:</string>
+  <string name="PlaybackFailed">ReproduÃ§Ã£o impossÃ­vel devido a extensÃ£o\n\'{0}\'\nnÃ£o estar listada na configuraÃ§Ã£o do seu mediaportal.\nPor favor adicione essa extensÃ£o ou\nconfigure um player externo e tente de novo.</string>
+  <string name="PlaybackFailedHeader">Falha na reproduÃ§Ã£o</string>
+  <string name="ProblemLoadingSkinFile">Desculpe, houve um problema ao carregar o arquivo da skin</string>
+  <!--R-->
+  <string name="Rate">Classificar</string>
+  <string name="Rated">Classificado como</string>
+  <string name="RateFiveStarFive">Perfeito</string>
+  <string name="RateFiveStarFour">Excelente</string>
+  <string name="RateFiveStarOne">PÃ©ssimo</string>
+  <string name="RateFiveStarThree">Bom</string>
+  <string name="RateFiveStarTwo">Ruim</string>
+  <string name="RateHeading">Classificar filme</string>
+  <string name="RecentlyAddedMovies">Filmes adicionados recentemente</string>
+  <string name="RemoteNumericAlphabet0">
   </string>
-  <string Field="RemoteNumericAlphabet1">
+  <string name="RemoteNumericAlphabet1">
   </string>
-  <string Field="RemoteNumericAlphabet2">abc</string>
-  <string Field="RemoteNumericAlphabet3">def</string>
-  <string Field="RemoteNumericAlphabet4">ghi</string>
-  <string Field="RemoteNumericAlphabet5">jkl</string>
-  <string Field="RemoteNumericAlphabet6">mno</string>
-  <string Field="RemoteNumericAlphabet7">pqrs</string>
-  <string Field="RemoteNumericAlphabet8">tuv</string>
-  <string Field="RemoteNumericAlphabet9">wxyz</string>
-  <string Field="ResumeFrom">Continuar a partir de:</string>
-  <string Field="ResumeFromLast">Deseja continuar o filme de onde você parou?</string>
-  <string Field="Retry">Tentar de novo</string>
-  <string Field="Runtime">Duração</string>
-  <string Field="RuntimeHour">{0} hora</string>
-  <string Field="RuntimeHours">{0} horas</string>
-  <string Field="RuntimeLong">{0} e {1}</string>
-  <string Field="RuntimeLongExtended">{0}, {1} e {2}</string>
-  <string Field="RuntimeMinute">{0} minuto</string>
-  <string Field="RuntimeMinutes">{0} minutos</string>
-  <string Field="RuntimeSecond">{0} segundo</string>
-  <string Field="RuntimeSeconds">{0} segundos</string>
-  <string Field="RuntimeShort">{0}:{1:00}</string>
-  <string Field="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
-  <!-- S -->
-  <string Field="Saturday">Sábado</string>
-  <string Field="Score">Score</string>
-  <string Field="SelectYourRating">Como você classifica o filme {0}?</string>
-  <string Field="ShowOnlyUnwatchedMovies">Exibir somente os filmes não assistidos</string>
-  <string Field="ShowWatchedAndUnwatchedMovies">Exibir os filmes assistidos e os não-assistidos</string>
-  <string Field="SkinDoesNotSupportCategories">Esta skin não suporta categorias.</string>
-  <string Field="SkinDoesNotSupportPinDialog">Esta skin não suporta a tela de Código PIN.</string>
-  <string Field="SkinDoesNotSupportRatingDialog">Esta skin não suporta a tela de Classificação.</string>
-  <string Field="SortBy">Classificar por</string>
-  <string Field="SortDirection">Classificar por direção</string>
-  <string Field="StarRating">Classificação em estrelas</string>
-  <string Field="Sunday">Domingo</string>
-  <!-- T -->
-  <string Field="ThisMonth">Neste mês</string>
-  <string Field="ThisWeek">Nesta semana</string>
-  <string Field="ThisYear">Neste ano</string>
-  <string Field="ThreeMonthsAgo">Três meses atrás</string>
-  <string Field="ThreeWeeksAgo">Três semanas atrás</string>
-  <string Field="ThumbnailView">Visualização em miniaturas</string>
-  <string Field="Thursday">Quinta-feira</string>
-  <string Field="Title">Título</string>
-  <string Field="Today">Hoje</string>
-  <string Field="ToggleParentalLock">Habilitar/desabilitar Controle de acesso</string>
-  <string Field="Tuesday">Terça-feira</string>
-  <string Field="TwoMonthsAgo">Dois meses atrás</string>
-  <string Field="TwoWeeksAgo">Duas semanas atrás</string>
-  <!-- U -->
-  <string Field="Unknown">Desconhecido</string>
-  <string Field="UnlockRestrictedMovies">Desbloquear filmes restritos</string>
-  <string Field="UnwatchedMovies">Filmes não-assistidos</string>
-  <string Field="UpAbbreviation">(up)</string>
-  <string Field="UpdateDetailsFromOnline">Atualizar detalhes on-line</string>
-  <string Field="UpdateMovieDetailsBody">Você está prestes a atualizar os meta-dados do filme\nsobrescrevendo rwriting\nany custom modifications to this film. Do you want\nto continue?</string>
-  <string Field="UpdateMovieDetailsHeader">Atualizar detalhes do filme</string>
-  <!-- V -->
-  <string Field="VirtualDriveHeader">O drive virtual não está preparado</string>
-  <string Field="VirtualDriveMessage">O drive virtual não estava preparado.\nPor favor, tente novamente ou cancele\na reprodução.</string>
-  <!-- W -->
-  <string Field="Wednesday">Quarta-feira</string>
-  <string Field="Writer">Roteirista</string>
-  <string Field="Writers">Roteiristas</string>
-  <!-- Y -->
-  <string Field="Year">Ano</string>
-  <string Field="Yesterday">Ontem</string>
-</strings>
+  <string name="RemoteNumericAlphabet2">abc</string>
+  <string name="RemoteNumericAlphabet3">def</string>
+  <string name="RemoteNumericAlphabet4">ghi</string>
+  <string name="RemoteNumericAlphabet5">jkl</string>
+  <string name="RemoteNumericAlphabet6">mno</string>
+  <string name="RemoteNumericAlphabet7">pqrs</string>
+  <string name="RemoteNumericAlphabet8">tuv</string>
+  <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="ResumeFrom">Continuar a partir de:</string>
+  <string name="ResumeFromLast">Deseja continuar o filme de onde vocÃª parou?</string>
+  <string name="Retry">Tentar de novo</string>
+  <string name="Runtime">DuraÃ§Ã£o</string>
+  <string name="RuntimeHour">{0} hora</string>
+  <string name="RuntimeHours">{0} horas</string>
+  <string name="RuntimeLong">{0} e {1}</string>
+  <string name="RuntimeLongExtended">{0}, {1} e {2}</string>
+  <string name="RuntimeMinute">{0} minuto</string>
+  <string name="RuntimeMinutes">{0} minutos</string>
+  <string name="RuntimeSecond">{0} segundo</string>
+  <string name="RuntimeSeconds">{0} segundos</string>
+  <string name="RuntimeShort">{0}:{1:00}</string>
+  <string name="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
+  <!--S-->
+  <string name="Saturday">SÃ¡bado</string>
+  <string name="Score">Score</string>
+  <string name="SelectYourRating">Como vocÃª classifica o filme {0}?</string>
+  <string name="ShowOnlyUnwatchedMovies">Exibir somente os filmes nÃ£o assistidos</string>
+  <string name="ShowWatchedAndUnwatchedMovies">Exibir os filmes assistidos e os nÃ£o-assistidos</string>
+  <string name="SkinDoesNotSupportCategories">Esta skin nÃ£o suporta categorias.</string>
+  <string name="SkinDoesNotSupportPinDialog">Esta skin nÃ£o suporta a tela de CÃ³digo PIN.</string>
+  <string name="SkinDoesNotSupportRatingDialog">Esta skin nÃ£o suporta a tela de ClassificaÃ§Ã£o.</string>
+  <string name="SortBy">Classificar por</string>
+  <string name="SortDirection">Classificar por direÃ§Ã£o</string>
+  <string name="StarRating">ClassificaÃ§Ã£o em estrelas</string>
+  <string name="Sunday">Domingo</string>
+  <!--T-->
+  <string name="ThisMonth">Neste mÃªs</string>
+  <string name="ThisWeek">Nesta semana</string>
+  <string name="ThisYear">Neste ano</string>
+  <string name="ThreeMonthsAgo">TrÃªs meses atrÃ¡s</string>
+  <string name="ThreeWeeksAgo">TrÃªs semanas atrÃ¡s</string>
+  <string name="ThumbnailView">VisualizaÃ§Ã£o em miniaturas</string>
+  <string name="Thursday">Quinta-feira</string>
+  <string name="Title">TÃ­tulo</string>
+  <string name="Today">Hoje</string>
+  <string name="ToggleParentalLock">Habilitar/desabilitar Controle de acesso</string>
+  <string name="Tuesday">TerÃ§a-feira</string>
+  <string name="TwoMonthsAgo">Dois meses atrÃ¡s</string>
+  <string name="TwoWeeksAgo">Duas semanas atrÃ¡s</string>
+  <!--U-->
+  <string name="Unknown">Desconhecido</string>
+  <string name="UnlockRestrictedMovies">Desbloquear filmes restritos</string>
+  <string name="UnwatchedMovies">Filmes nÃ£o-assistidos</string>
+  <string name="UpAbbreviation">(up)</string>
+  <string name="UpdateDetailsFromOnline">Atualizar detalhes on-line</string>
+  <string name="UpdateMovieDetailsBody">VocÃª estÃ¡ prestes a atualizar os meta-dados do filme\nsobrescrevendo rwriting\nany custom modifications to this film. Do you want\nto continue?</string>
+  <string name="UpdateMovieDetailsHeader">Atualizar detalhes do filme</string>
+  <!--V-->
+  <string name="VirtualDriveHeader">O drive virtual nÃ£o estÃ¡ preparado</string>
+  <string name="VirtualDriveMessage">O drive virtual nÃ£o estava preparado.\nPor favor, tente novamente ou cancele\na reproduÃ§Ã£o.</string>
+  <!--W-->
+  <string name="Wednesday">Quarta-feira</string>
+  <string name="Writer">Roteirista</string>
+  <string name="Writers">Roteiristas</string>
+  <!--Y-->
+  <string name="Year">Ano</string>
+  <string name="Yesterday">Ontem</string>
+</resources>
