@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--A-->
+  <string name="Actors">Aktoriai</string>
+  <!--B-->
+  <!--C-->
+  <string name="Cancel">Atšaukti</string>
+  <string name="Certification">Serifikacija</string>
+  <string name="ChangeView">Keisti išvaizdą</string>
+  <string name="Completed">Baigta</string>
+  <string name="ContinueToNextPartBody">Ar norite tęsti {0} dalimi?</string>
+  <string name="ContinueToNextPartHeader">Tęsti kita dalimi?</string>
+  <!--D-->
+  <string name="DateAdded">Pridėjimo data</string>
+  <string name="Director">Režisierius</string>
+  <string name="Directors">Režisieriai</string>
+  <!--E-->
+  <string name="Error">Klaida</string>
+  <!--F-->
+  <string name="FailedMountingImage">Atsiprašome, nepavyko prijungti DVD atvaizdo</string>
+  <!--G-->
+  <string name="Genre">Žanras</string>
+  <string name="Genres">Žanrai</string>
+  <!--I-->
+  <!--L-->
+  <!--M-->
+  <string name="MarkAsWatched">Žymėti žiūrėtu</string>
+  <string name="MediaNotAvailableHeader">Nerandama media</string>
+  <string name="MissingExternalPlayerExe">HD grojimo leidžiamas failas nerastas.⏎ Prašome pataisyti kelią iki leidžiamo failo.</string>
+  <string name="Movie">Filmas</string>
+  <string name="Movies">Filmai</string>
+  <!--N-->
+  <!--O-->
+  <!--P-->
+  <string name="PlaybackFailed">Nepavyko groti kadangi \'{0}\'⏎ išplėtimas neįtrauktas MediaPortal konfigūracijoje.⏎ Prašome įtraukti šį plėtinį arba nustatyti išorinį grotuvą⏎ bei bandykite dar kartą.</string>
+  <string name="PlaybackFailedHeader">Nepavyko groti</string>
+  <!--R-->
+  <string name="Rate">Įvertinti</string>
+  <string name="Rated">Vertinimas</string>
+  <string name="RateFiveStarFive">Puikus</string>
+  <string name="RateFiveStarFour">Super</string>
+  <string name="RateFiveStarOne">Baisus</string>
+  <string name="RateFiveStarThree">Geras</string>
+  <string name="RateFiveStarTwo">Vidutiniškas</string>
+  <string name="RemoteNumericAlphabet0">
+  </string>
+  <string name="RemoteNumericAlphabet1">
+  </string>
+  <string name="ResumeFrom">Atnaujinti nuo:</string>
+  <string name="Retry">Pakartoti</string>
+  <string name="Runtime">Trukmė</string>
+  <!--S-->
+  <string name="Score">Įvertinimas</string>
+  <string name="SortBy">Rūšiuoti pagal</string>
+  <!--T-->
+  <string name="Title">Antraštė</string>
+  <string name="Today">Šiandien</string>
+  <!--U-->
+  <string name="Unknown">Nežinomas</string>
+  <!--V-->
+  <string name="VirtualDriveHeader">Neparuoštas virtualus diskas </string>
+  <string name="VirtualDriveMessage">Virtualus diskas nebuvo paruoštas laiku.⏎ Prašome bandyti iš naujo arba atšaukti grojimą.</string>
+  <string name="Votes">Balsai</string>
+  <!--W-->
+  <string name="Writer">Rašytojas</string>
+  <string name="Writers">Rašytojai</string>
+  <!--Y-->
+  <string name="Year">Metai</string>
+  <string name="Yesterday">Vakar</string>
+</resources>
