@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--A-->
+  <!--B-->
+  <!--C-->
+  <!--D-->
+  <string name="Director">Director</string>
+  <!--E-->
+  <!--F-->
+  <!--G-->
+  <!--I-->
+  <!--L-->
+  <!--M-->
+  <!--N-->
+  <!--O-->
+  <!--P-->
+  <!--R-->
+  <string name="Rated">Valorat</string>
+  <string name="RemoteNumericAlphabet0">
+  </string>
+  <string name="RemoteNumericAlphabet1">
+  </string>
+  <string name="Runtime">Durada</string>
+  <!--S-->
+  <!--T-->
+  <!--U-->
+  <!--V-->
+  <string name="Votes">vots</string>
+  <!--W-->
+  <!--Y-->
+</resources>

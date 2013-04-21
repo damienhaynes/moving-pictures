@@ -19,6 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{6154
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptEngineTester", "Testing\ScriptEngineTester\ScriptEngineTester.csproj", "{759B8D4C-415E-4F71-8B86-82B497B5499B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transifex", "Transifex", "{1C637437-D8E8-447B-8C00-1274FB140EEC}"
+	ProjectSection(SolutionItems) = preProject
+		.tx\config = .tx\config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -260,8 +265,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{75EBA361-8137-4107-A5B5-753CE959983B} = {1A6450EB-C026-4C84-AE11-2A6389049734}
 		{1B3CB474-9C7B-459F-9927-A882D3457950} = {61546B9B-F2A3-4931-AC2A-963AFDAC67A5}
 		{759B8D4C-415E-4F71-8B86-82B497B5499B} = {61546B9B-F2A3-4931-AC2A-963AFDAC67A5}
-		{75EBA361-8137-4107-A5B5-753CE959983B} = {1A6450EB-C026-4C84-AE11-2A6389049734}
 	EndGlobalSection
 EndGlobal
