@@ -24,7 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             bool imdbLookup = MovingPicturesCore.Settings.EnableImdbPreSearch;
 
             // If there's no ImdbId in the signature return the signature immediatly
-            if (!imdbLookup | String.IsNullOrEmpty(signature.ImdbId))
+            if (!imdbLookup || String.IsNullOrEmpty(signature.ImdbId))
                 return SignatureBuilderResult.INCONCLUSIVE;
 
             // Try to retrieve the IMDB details page
@@ -35,7 +35,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 return SignatureBuilderResult.INCONCLUSIVE;
 
             // See if we get a Title and Year from the title node
-            Regex expr = new Regex(@"<title>([^\(]+?)\((?:TV )?(?:Video )?(\d{4})[\/IVX]*\).*?</title>", RegexOptions.IgnoreCase);
+            Regex expr = new Regex(@"<meta property=""og:title"" content=""([^\(]+?)\((?:TV )?(?:Video )?(\d{4})[\/IVX]*\).*?/>", RegexOptions.IgnoreCase);
             Match details = expr.Match(detailsPage);
             if (details.Success) {
                 try {
@@ -69,7 +69,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         /// <param name="ImdbId"></param>
         /// <returns></returns>
         private static string getImdbDetailsPage(string ImdbId) {
-            WebGrabber grabber = new WebGrabber("http://www.imdb.com/title/" + ImdbId);
+            WebGrabber grabber = new WebGrabber("http://m.imdb.com/title/" + ImdbId);
             if (grabber.GetResponse())
                 return HttpUtility.HtmlDecode(grabber.GetString());
             else
