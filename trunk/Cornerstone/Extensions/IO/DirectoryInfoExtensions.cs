@@ -19,10 +19,10 @@ namespace Cornerstone.Extensions.IO {
                 return false;
 
             // unless this is a special case path, trust the DirectoryInfo.Exists call
-            if (!self.IsReparsePoint() && !self.IsUncPath()) 
-                return true;
+            // if (!self.IsReparsePoint() && !self.IsUncPath()) 
+            // return true;
 
-            // for special cases, attempt to get a directory listing, if this succeeds the path is online
+            // turns out we can't trust the Exists call so attempt to get a directory listing, if this succeeds the path is online
             try {
                 self.GetDirectories();
                 return true;
