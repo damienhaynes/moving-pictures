@@ -300,6 +300,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (movieDetails.Genres != null) {
                 movie.Genres.AddRange(movieDetails.Genres.Select(g => g.Name).ToArray());
             }
+            
+            // add collection
+            if (movieDetails.BelongsToCollection != null) {
+                string _collection = movieDetails.BelongsToCollection.Name;
+                //remove 'Collection' from name
+                movie.Collection = _collection.Replace("Collection", "").Trim();
+            }
 
             // add production companies (studios)
             if (movieDetails.ProductionCompanies != null)  {

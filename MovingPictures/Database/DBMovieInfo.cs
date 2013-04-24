@@ -195,6 +195,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private StringList _studios;
 
         [DBField]
+        public string Collection {
+          get { return _collection; }
+
+          set {
+            _collection = value;
+            commitNeeded = true;
+          }
+        } private string _collection;
+
+
+        [DBField]
         public StringList PlotKeywords
         {
             get { return _plotKeywords; }
