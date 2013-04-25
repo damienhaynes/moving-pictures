@@ -195,14 +195,14 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private StringList _studios;
 
         [DBField]
-        public string Collection {
-          get { return _collection; }
+        public StringList Collections {
+          get { return _collections; }
 
           set {
-            _collection = value;
+              _collections = value;
             commitNeeded = true;
           }
-        } private string _collection;
+        } private StringList _collections;
 
 
         [DBField]
