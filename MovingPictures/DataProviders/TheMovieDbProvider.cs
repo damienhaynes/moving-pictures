@@ -301,11 +301,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 movie.Genres.AddRange(movieDetails.Genres.Select(g => g.Name).ToArray());
             }
             
-            // add collection
+            // add collection - only one supported by TMDb
             if (movieDetails.BelongsToCollection != null) {
-                string _collection = movieDetails.BelongsToCollection.Name;
-                //remove 'Collection' from name
-                movie.Collection = _collection.Replace("Collection", "").Trim();
+                // remove 'Collection' from name
+                string collection = movieDetails.BelongsToCollection.Name.Replace("Collection", "").Trim();
+                movie.Collections.Add(collection);
             }
 
             // add production companies (studios)

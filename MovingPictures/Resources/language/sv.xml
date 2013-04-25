@@ -4,6 +4,7 @@
   <string name="Actor">Skådespelare</string>
   <string name="Actors">Skådespelare</string>
   <string name="AllMovies">Alla filmer</string>
+  <string name="AllFiles">Alla filer</string>
   <!--B-->
   <string name="BadCategory">En annan plugin eller ett skin försökte\nöppna en kategori i Moving Pictures\nsom inte existerar!</string>
   <string name="BadMovie">En annan plugin eller ett skin försökte\nöppna en film som inte existerar i\nMoving Pictures!</string>
@@ -21,6 +22,7 @@
   <string name="ChangeView">Ändra vy</string>
   <string name="CheckForMissingArtwork">Hitta omslag på internet</string>
   <string name="Completed">Färdig</string>
+  <string name="CompletedFiles">Klara filer</string>
   <string name="ContinueToNextPartBody">Vill du fortsätta med del {0}?</string>
   <string name="ContinueToNextPartHeader">Fortsätt till nästa del?</string>
   <string name="Cover">Omslag</string>
@@ -55,14 +57,22 @@
   <!--F-->
   <string name="FailedMountingImage">Fel vid \"mount\" av DVD Image</string>
   <string name="FilePath">Sökväg</string>
+  <string name="FilesNeedingAttention">Filer som kräver åtgärd</string>
   <string name="FilmstripView">Filmstrip Vy</string>
   <string name="FilterBy">Sortera efter</string>
   <string name="Friday">Fredag</string>
   <string name="Future">Framtid</string>
   <!--G-->
+  <string name="GlobalActions">Globala åtgärder</string>
   <string name="Genre">Genre</string>
   <string name="Genres">Genres</string>
   <!--I-->
+  <string name="IgnoreMovie">Hoppa över film</string>
+  <string name="ImdbId">IMDb Id</string>
+  <string name="Importer">Filmimportör</string>
+  <string name="ImporterDisabled">Importören är inaktiverad</string>
+  <string name="ImporterDisabledMessage">Importören har inaktiverats i\nMediaPortal GUI. \nVill du aktivera den?</string>
+  <string name="ImporterPending">Importören ({0} kräver åtgärd)</string>
   <string name="InvalidPin">Fel PIN-kod!</string>
   <string name="InvalidVideoDiscFormat">Fel på image-fil eller\ninställningarna i Daemon Tools.</string>
   <!--L-->
@@ -98,6 +108,8 @@
   <string name="PinCodePrompt">Ange PIN-kod:</string>
   <string name="PlaybackFailed">Uppspelning är inte möjligt eftersom \'{0}\'\nfiländelsen inte är med i listan över kompatibla format i MediaPortals inställningar.\nLägg till denna filändelse eller välj en extern uppspelare\noch försök igen.</string>
   <string name="PlaybackFailedHeader">Kan ej spela upp</string>
+  <string name="PlayMovie">Spela film</string>
+  <string name="PossibleMatches">Möjliga träffar</string>
   <string name="ProblemLoadingSkinFile">Fel vid laddning av skin-fil.</string>
   <!--R-->
   <string name="Rate">Betygsätt</string>
@@ -121,6 +133,7 @@
   <string name="RemoteNumericAlphabet7">pqrs</string>
   <string name="RemoteNumericAlphabet8">tuv</string>
   <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Återställ överhoppade filer </string>
   <string name="ResumeFrom">Återuppta från:</string>
   <string name="ResumeFromLast">Återuppta från senast?</string>
   <string name="Retry">Försök igen</string>
@@ -137,15 +150,19 @@
   <string name="RuntimeShortExtended">{0}t{1:00}m{2:00}s</string>
   <!--S-->
   <string name="Saturday">Lördag</string>
+  <string name="SendToImporter">Skicka till importören</string>
   <string name="ScanForNewMovies">Starta sökning efter nya filmer</string>
   <string name="Score">Betyg</string>
   <string name="Search">Sök</string>
   <string name="SearchBy">Sök efter</string>
+  <string name="SearchForMore">Sök efter fler träffar</string>
   <string name="SearchNoResults">Inga träffar funna.</string>
+  <string name="SelectCorrectMovie">Välj rätt film</string>
   <string name="SelectYourRating">Välj ditt betyg för {0}</string>
   <string name="ShowOnlyUnwatchedMovies">Visa endast ej sedda filmer</string>
   <string name="ShowWatchedAndUnwatchedMovies">Visa filmer oavsett om de är sedda eller ej</string>
   <string name="SkinDoesNotSupportCategories">Detta skin stödjer ej kategorier.</string>
+  <string name="SkinDoesNotSupportImporter">Detta skin stödjer inte importören.</string>
   <string name="SkinDoesNotSupportPinDialog">Detta skin stödjer ej PIN-kod.</string>
   <string name="SkinDoesNotSupportRatingDialog">Detta skin stödjer ej betygsättning.</string>
   <string name="SortBy">Sortera efter</string>
