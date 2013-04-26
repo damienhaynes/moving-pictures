@@ -552,7 +552,6 @@
     <Content Include="DataProviders\ScraperScripts\EmberMediaManager.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmAffinity.xml" />
     <Content Include="Resources\language\ca.xml" />
-    <Content Include="Resources\language\en.xml" />
     <Content Include="Resources\language\et.xml" />
     <Content Include="Resources\language\fi.xml" />
     <Content Include="Resources\language\hi.xml" />

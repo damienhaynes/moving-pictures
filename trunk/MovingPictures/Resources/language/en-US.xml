@@ -93,6 +93,18 @@
   <string name="Missing">Missing</string>
   <string name="MissingExternalPlayerExe">The executable for HD playback is missing.\nPlease correct the path to the executable.</string>
   <string name="Monday">Monday</string>
+  <string name="MonthName1">January</string>
+  <string name="MonthName2">February</string>
+  <string name="MonthName3">March</string>
+  <string name="MonthName4">April</string>
+  <string name="MonthName5">May</string>
+  <string name="MonthName6">June</string>
+  <string name="MonthName7">July</string>
+  <string name="MonthName8">August</string>
+  <string name="MonthName9">September</string>
+  <string name="MonthName10">October</string>
+  <string name="MonthName11">November</string>
+  <string name="MonthName12">December</string>
   <string name="Movie">Movie</string>
   <string name="MovieDetails">Movie Details</string>
   <string name="MovieOptions">Movie Options</string>
@@ -121,6 +133,7 @@
   <string name="RateFiveStarTwo">Mediocre</string>
   <string name="RateHeading">Rate Movie</string>
   <string name="RecentlyAddedMovies">Recently Added Movies</string>
+  <string name="ReleaseDate">Release Date</string>
   <string name="RemoteNumericAlphabet0">
   </string>
   <string name="RemoteNumericAlphabet1">
