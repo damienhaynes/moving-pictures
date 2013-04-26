@@ -248,6 +248,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Missing = "Missing";
         public static string MissingExternalPlayerExe = "The executable for HD playback is missing.\nPlease correct the path to the executable.";
         public static string Monday = "Monday";
+        public static string MonthName1 = "January";
+        public static string MonthName2 = "February";
+        public static string MonthName3 = "March";
+        public static string MonthName4 = "April";
+        public static string MonthName5 = "May";
+        public static string MonthName6 = "June";
+        public static string MonthName7 = "July";
+        public static string MonthName8 = "August";
+        public static string MonthName9 = "September";
+        public static string MonthName10 = "October";
+        public static string MonthName11 = "November";
+        public static string MonthName12 = "December";
         public static string Movie = "Movie";
         public static string MovieDetails = "Movie Details";
         public static string MovieOptions = "Movie Options";
@@ -280,6 +292,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string RateFiveStarTwo = "Mediocre";
         public static string RateHeading = "Rate Movie";
         public static string RecentlyAddedMovies = "Recently Added Movies";
+        public static string ReleaseDate = "Release Date";
         public static string RemoteNumericAlphabet0 = "";
         public static string RemoteNumericAlphabet1 = "";
         public static string RemoteNumericAlphabet2 = "abc";

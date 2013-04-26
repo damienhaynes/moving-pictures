@@ -62,6 +62,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 case SortingFields.DateAdded:
                     return GetDateGroupName(movie.DateAdded.Date);
+                case SortingFields.ReleaseDate:
+                    return Translation.GetByName("MonthName" + movie.ReleaseDate.Month.ToString()) + ", " + movie.ReleaseDate.Year.ToString();
                 case SortingFields.Year:
                     return movie.Year.ToString();
                 case SortingFields.Certification:

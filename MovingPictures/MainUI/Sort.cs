@@ -19,7 +19,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         Language = 5,
         Score = 6,
         Runtime = 7,
-        FilePath = 8
+        FilePath = 8,
+        ReleaseDate = 9,
     }
 
     public enum SortingDirections {
@@ -46,6 +47,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return Translation.Runtime;
                 case SortingFields.FilePath:
                     return Translation.FilePath;
+                case SortingFields.ReleaseDate:
+                    return Translation.ReleaseDate;
                 default:
                     return "";
             }
@@ -60,6 +63,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     break;
                 case SortingFields.DateAdded:
                     ascending = DBSortPreferences.Instance.SortDateAddedAscending;
+                    break;
+                case SortingFields.ReleaseDate:
+                    ascending = DBSortPreferences.Instance.SortReleaseDateAscending;
                     break;
                 case SortingFields.Year:
                     ascending = DBSortPreferences.Instance.SortYearAscending;
@@ -101,6 +107,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     DBSortPreferences.Instance.SortDateAddedAscending = isAscending;
                     break;
 
+                case SortingFields.ReleaseDate:
+                    DBSortPreferences.Instance.SortReleaseDateAscending = isAscending;
+                    break;
+
                 case SortingFields.Year:
                     DBSortPreferences.Instance.SortYearAscending = isAscending;
                     break;
@@ -124,6 +134,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case SortingFields.FilePath:
                     DBSortPreferences.Instance.SortFilePathAscending = isAscending;
                     break;
+                
 
                 default:
                     break;
@@ -165,6 +176,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 switch (_sortField) {
                     case SortingFields.DateAdded:
                         rtn = movieX.DateAdded.CompareTo(movieY.DateAdded);
+                        break;
+
+                    case SortingFields.ReleaseDate:
+                        rtn = movieX.ReleaseDate.CompareTo(movieY.ReleaseDate);
                         break;
 
                     case SortingFields.Year:
