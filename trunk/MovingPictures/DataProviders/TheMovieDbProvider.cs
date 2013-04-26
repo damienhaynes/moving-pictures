@@ -313,6 +313,14 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 movie.Studios.AddRange(movieDetails.ProductionCompanies.Select(p => p.Name));
             }
 
+            // add release date and year
+            DateTime date;
+            if (DateTime.TryParse(movieDetails.ReleaseDate, out date))
+            {
+                movie.Year = date.Year;
+                movie.ReleaseDate = date;
+            }
+
             // add certification (US MPAA rating)
             var movieCertifications = TheMovieDbAPI.GetReleaseInfo(movieDetails.Id.ToString());
             if (movieCertifications != null && movieCertifications.Countries != null) {
@@ -320,13 +328,13 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 var releaseInfo = movieCertifications.Countries.Find(c => c.CountryCode == "US");
                 if (releaseInfo != null) {
                     movie.Certification = releaseInfo.Certification;
+                    // todo: uncomment this later if we have a setting for preferred country, it will override the release date that was previously set
+                    //if (DateTime.TryParse(releaseInfo.ReleaseDate, out date))
+                    //{
+                    //    movie.ReleaseDate = date;
+                    //}
                 }
             }
-
-            // get release year
-            DateTime date;
-            if (DateTime.TryParse(movieDetails.ReleaseDate, out date))
-                movie.Year = date.Year;
 
             // get plot keywords
             var plotKeywords = TheMovieDbAPI.GetPlotKeywords(movieDetails.Id.ToString());
