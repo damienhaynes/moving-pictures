@@ -312,6 +312,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 #endregion
 
+                #region Upgrades required for 1.5.2
+
+                if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.5.2"))
+                {
+                    // populate initial release date as first day of the year
+                    movie.ReleaseDate = new DateTime(movie.Year, 1, 1);
+                }
+
+                #endregion
+
                 // commit movie
                 movie.Commit();
             }

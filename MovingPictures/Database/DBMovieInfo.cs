@@ -118,6 +118,19 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private StringList _actors;
 
+        [DBField(FieldName = "release_date")]
+        public DateTime ReleaseDate
+        {
+            get 
+            { 
+                return _releaseDate; 
+            }
+            set
+            {
+                _releaseDate = value;
+                commitNeeded = true;
+            }
+        } private DateTime _releaseDate;
 
         [DBField]
         public int Year {
