@@ -134,7 +134,12 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         [DBField]
         public int Year {
-            get { return _year; }
+            get {
+                if (_year == 0 && _releaseDate != null)
+                    return _releaseDate.Year;
+
+                return _year; 
+            }
 
             set {
                 _year = value;
