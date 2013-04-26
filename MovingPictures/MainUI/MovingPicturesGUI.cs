@@ -2266,23 +2266,52 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             Type tableType = obj.GetType();
             foreach (DBField currField in DBField.GetFieldList(tableType)) {
-                string propertyStr;
+                // format the label for the property
+                string propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                 string valueStr;
 
-                // for string lists, lets do some nice formating
+                // Store the field value
                 object value = currField.GetValue(obj);
+
+                // Handle null values
                 if (value == null) {
-                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     SetProperty(propertyStr, "", forceLogging);
                 }
+                // Handle user field
                 else if (currField.FieldName == "user" && tableType == typeof(DBUserMovieSettings)) {
                     // rename the "user" field to "username" to prevent overlapping variable names
                     propertyStr = "#MovingPictures." + prefix + ".username";
-                    valueStr = currField.GetValue(obj).ToString().Trim();
+                    valueStr = value.ToString().Trim();
                     SetProperty(propertyStr, valueStr, forceLogging);
                 }
-                else if (value.GetType() == typeof(StringList)) {
+                // Handle date time formatting
+                else if (value.GetType() == typeof(DateTime)) {
+                    DateTime dt = (DateTime)value;
 
+                    // todo: more patterns? (overkill?) / configurable custom date format through settings?
+                    // reference: http://msdn.microsoft.com/en-us/library/8kb3ddd4.aspx
+                    SetProperty(propertyStr + ".localized.short", dt.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern), forceLogging);
+                    SetProperty(propertyStr + ".invariant.short", dt.ToString(CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern), forceLogging);
+                    SetProperty(propertyStr + ".localized.long", dt.ToString(CultureInfo.CurrentCulture.DateTimeFormat.LongDatePattern), forceLogging);
+                    SetProperty(propertyStr + ".invariant.long", dt.ToString(CultureInfo.InvariantCulture.DateTimeFormat.LongDatePattern), forceLogging);
+
+                    string sortable = dt.ToString("yyyyMMddHHmmss");
+                    SetProperty(propertyStr + ".sortable.long", sortable, forceLogging);
+                    SetProperty(propertyStr + ".sortable.date", sortable.Substring(0,8), forceLogging);
+                    SetProperty(propertyStr + ".sortable.time", sortable.Substring(8,6), forceLogging);
+
+                    SetProperty(propertyStr + ".year", dt.Year.ToString(), forceLogging);
+                    SetProperty(propertyStr + ".month", dt.ToString("MM"), forceLogging);
+                    SetProperty(propertyStr + ".monthname", Translation.GetByName("MonthName" + dt.Month.ToString()), forceLogging); 
+                    SetProperty(propertyStr + ".day", dt.ToString("dd"), forceLogging);
+                    SetProperty(propertyStr + ".dayoftheweek", Translation.GetByName(dt.DayOfWeek.ToString()), forceLogging);   
+                    SetProperty(propertyStr + ".hour", dt.ToString("HH"), forceLogging);
+                    SetProperty(propertyStr + ".minute", dt.ToString("mm"), forceLogging); 
+                    SetProperty(propertyStr + ".second", dt.ToString("ss"), forceLogging);
+                }
+                // Handle string list formatting
+                else if (value.GetType() == typeof(StringList))
+                {
                     // make sure we dont go overboard with listing elements :P
                     StringList valueStrList = (StringList)value;
                     int max = maxStringListElements;
@@ -2290,26 +2319,28 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         max = valueStrList.Count;
 
                     // add the coma seperated string
-                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
                     valueStr = valueStrList.ToPrettyString(max);
                     SetProperty(propertyStr, valueStr, forceLogging);
 
                     // add each value individually
-                    for (int i = 0; i < maxStringListElements; i++) {
+                    for (int i = 0; i < maxStringListElements; i++)
+                    {
                         // note, the "extra" in the middle is needed due to a bug in skin parser
                         propertyStr = "#MovingPictures." + prefix + ".extra." + currField.FieldName + "." + (i + 1);
-                        if (i < max) {
+                        if (i < max)
+                        {
                             valueStr = valueStrList[i];
-                        } else {
+                        }
+                        else
+                        {
                             valueStr = null;
                         }
                         SetProperty(propertyStr, valueStr, forceLogging);
                     }
                 }
                 // for the movie score we add some special properties to give skinners more options
-                else if (currField.FieldName == "score" && tableType == typeof(DBMovieInfo)) {
-                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
-
+                else if (currField.FieldName == "score" && tableType == typeof(DBMovieInfo))
+                {
                     float score = (float)currField.GetValue(obj);
                     int percentage = (int)Math.Floor((score * 10));
                     int major = (int)Math.Floor(score);
@@ -2331,8 +2362,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 }
                 // for the movie runtime we also add some special properties
-                else if (currField.FieldName == "runtime" && tableType == typeof(DBMovieInfo)) {
-                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
+                else if (currField.FieldName == "runtime" && tableType == typeof(DBMovieInfo))
+                {
                     DBMovieInfo movie = (DBMovieInfo)obj;
 
                     int seconds = 0;
@@ -2341,13 +2372,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     // Check the user preference and display the runtime requested
                     // If the user choose actual runtime and it is not available default
                     // to the imported runtime
-                    if (MovingPicturesCore.Settings.DisplayActualRuntime && movie.ActualRuntime > 0) {
+                    if (MovingPicturesCore.Settings.DisplayActualRuntime && movie.ActualRuntime > 0)
+                    {
                         // Actual runtime (as calculated by mediainfo)
                         // convert duration from milliseconds to seconds
                         seconds = (movie.ActualRuntime / 1000);
                         actualRuntime = true;
                     }
-                    else {
+                    else
+                    {
                         // Runtime (as provided by the dataprovider)
                         // convert from minutes to seconds
                         seconds = (movie.Runtime * 60);
@@ -2358,9 +2391,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 }
                 // for the popularity we add a localized property to make it easier to read in skins
-                else if (currField.FieldName == "popularity" && tableType == typeof(DBMovieInfo)) {
-                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
-
+                else if (currField.FieldName == "popularity" && tableType == typeof(DBMovieInfo))
+                {
                     int popularity = (int)currField.GetValue(obj);
 
                     NumberFormatInfo localizedScoreFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
@@ -2373,15 +2405,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 }
                 // for floats we need to make sure we use english style printing or imagelist controls
                 // will break. 
-                else if (value.GetType() == typeof(float)) {
-                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
+                else if (value.GetType() == typeof(float))
+                {
                     valueStr = ((float)currField.GetValue(obj)).ToString(CultureInfo.CreateSpecificCulture("en-US"));
                     SetProperty(propertyStr, valueStr, forceLogging);
 
                     // vanilla publication
                 }
-                else {
-                    propertyStr = "#MovingPictures." + prefix + "." + currField.FieldName;
+                else
+                {
                     valueStr = currField.GetValue(obj).ToString().Trim();
 
                     // Category names have an extra translation check
