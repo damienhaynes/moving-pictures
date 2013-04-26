@@ -60,8 +60,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         #region Methods
 
-        public RetrieveNode(XmlNode xmlNode, InternalScriptSettings settings)
-            : base(xmlNode, settings) {
+        public RetrieveNode(XmlNode xmlNode,  ScriptableScraper context)
+            : base(xmlNode, context) {
 
             // Set default attribute valuess
             _useCaching = true;
@@ -147,7 +147,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            if (ScriptSettings.DebugMode) logger.Debug("executing retrieve: " + xmlNode.OuterXml);
+            if (Context.DebugMode) logger.Debug("executing retrieve: " + xmlNode.OuterXml);
 
             // Check for calling class provided useragent
             if (userAgent == null && variables.ContainsKey("settings.defaultuseragent")) {
@@ -177,12 +177,12 @@ namespace Cornerstone.ScraperEngine.Nodes {
             string parsedUserAgent = parseString(variables, userAgent);
             string pageContents = string.Empty;
 
-            if (_useCaching && ScriptSettings.Cache.ContainsKey(parsedUrl)) {
+            if (_useCaching && Context.Cache.ContainsKey(parsedUrl)) {
                 logger.Debug("Using Cached Version of URL: {0}", parsedUrl);
-                return ScriptSettings.Cache[parsedUrl];
+                return Context.Cache[parsedUrl];
             }
 
-            if (ScriptSettings.DebugMode) logger.Debug("Retrieving URL: {0}", parsedUrl);
+            if (Context.DebugMode) logger.Debug("Retrieving URL: {0}", parsedUrl);
 
             // Try to grab the document
             try {
@@ -196,7 +196,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 grabber.AllowUnsafeHeader = allowUnsafeHeader;
                 grabber.CookieHeader = cookies;
                 
-                grabber.Debug = ScriptSettings.DebugMode;
+                grabber.Debug = Context.DebugMode;
 
 
                 // Keep session / chaining
@@ -216,7 +216,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
                     
                     // grab the request results and store in our cache for later retrievals
                     pageContents = grabber.GetString();
-                    if (_useCaching) ScriptSettings.Cache[parsedUrl] = pageContents;
+                    if (_useCaching) Context.Cache[parsedUrl] = pageContents;
                 }
             }
             catch (Exception e) {
@@ -236,7 +236,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             if (System.IO.File.Exists(parsedFile)) {
 
-                if (ScriptSettings.DebugMode) logger.Debug("Reading file: {0}", parsedFile);
+                if (Context.DebugMode) logger.Debug("Reading file: {0}", parsedFile);
 
                 try {
                     StreamReader streamReader;
@@ -254,7 +254,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 }
             }
             else {
-                if (ScriptSettings.DebugMode) logger.Debug("File does not exist: {0}", parsedFile);
+                if (Context.DebugMode) logger.Debug("File does not exist: {0}", parsedFile);
             }
 
             return fileContents;

@@ -4,15 +4,18 @@ using System.Text;
 using System.Xml;
 using NLog;
 using System.Reflection;
+using System.Linq;
 using System.Web;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Globalization;
+using Cornerstone.ScraperEngine.Modifiers;
+using Cornerstone.Extensions;
 
 namespace Cornerstone.ScraperEngine {
     public abstract class ScraperNode {
         protected static Logger logger = LogManager.GetCurrentClassLogger();
-        private static Dictionary<string, Type> nodeTypes;
+        private static Dictionary<string, Type> typeCache;
 
         protected XmlNode xmlNode;
         protected List<ScraperNode> children;
@@ -38,7 +41,8 @@ namespace Cornerstone.ScraperEngine {
         }
         protected bool loadSuccess;
 
-        public InternalScriptSettings ScriptSettings {
+        public ScriptableScraper Context
+        {
             get;
             private set;
         } 
@@ -47,10 +51,10 @@ namespace Cornerstone.ScraperEngine {
 
         #region Methods
 
-        public ScraperNode(XmlNode xmlNode, InternalScriptSettings settings) {
+        public ScraperNode(XmlNode xmlNode, ScriptableScraper context) {
             this.xmlNode = xmlNode;
             children = new List<ScraperNode>();
-            this.ScriptSettings = settings;
+            this.Context = context;
             loadSuccess = loadChildren();
 
             // try to load our node attrbute
@@ -91,13 +95,13 @@ namespace Cornerstone.ScraperEngine {
         
         protected virtual void setVariable(Dictionary<string, string> variables, string key, string value) {
             variables[key] = value;
-            if (value.Length < 500 && ScriptSettings.DebugMode) logger.Debug("Assigned variable: " + key + " = " + value);
+            if (value.Length < 500 && Context.DebugMode) logger.Debug("Assigned variable: " + key + " = " + value);
         }
 
         protected virtual void removeVariable(Dictionary<string, string> variables, string key) {
             variables.Remove(key);
             removeArrayValues(variables, key);
-            if (ScriptSettings.DebugMode) logger.Debug("Removed variable: " + key);
+            if (Context.DebugMode) logger.Debug("Removed variable: " + key);
         }
 
         private void removeArrayValues(Dictionary<string, string> variables, string key) {
@@ -113,7 +117,7 @@ namespace Cornerstone.ScraperEngine {
 
             children.Clear();
             foreach (XmlNode currXmlNode in xmlNode.ChildNodes) {
-                ScraperNode newScraperNode = ScraperNode.Load(currXmlNode, ScriptSettings);
+                ScraperNode newScraperNode = ScraperNode.Load(currXmlNode, Context);
                 if (newScraperNode != null && newScraperNode.loadSuccess) 
                     children.Add(newScraperNode);
                 
@@ -160,50 +164,11 @@ namespace Cornerstone.ScraperEngine {
                 }
 
                 // handle any modifiers
-                if (modifier.Equals("safe")) {
-                    // if we have an encoding string try to build an encoding object
-                    Encoding encoding = null;
-                    if (options != string.Empty) {
-                        try { encoding = Encoding.GetEncoding(options.ToLower()); }
-                        catch (ArgumentException) {
-                            encoding = null;
-                            logger.Error("Scraper script tried to use an invalid encoding for \"safe\" modifier");
-                        }
+                if (!modifier.IsNullOrWhiteSpace()) {
+                    IValueModifier handler = Load(modifier);
+                    if (handler != null) {
+                        handler.Parse(this.Context, value, options);
                     }
-
-                    if (encoding != null)
-                        value = HttpUtility.UrlEncode(value, encoding).Replace("+", "%20");
-                    else
-                        value = HttpUtility.UrlEncode(value).Replace("+", "%20");
-
-                }
-                // will try to read the value as a date using format specified in options.
-                if (modifier.Equals("date") && options != string.Empty)
-                {
-                    // also see:   http://msdn.microsoft.com/en-us/library/w2sa9yss.aspx
-                    // format specifiers:   http://msdn.microsoft.com/en-us/library/8kb3ddd4.aspx 
-                    
-                    DateTime dt;
-                    if (DateTime.TryParseExact(value, new string[] { options }, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out dt))
-                    {
-                        // store the value as the invariant datetime format
-                        value = dt.ToString(CultureInfo.InvariantCulture.DateTimeFormat);
-                    }
-                    else
-                    {
-                        logger.Error("Scraper script could not parse \"date\" modifier using options \"" + options + "\"");
-                    }
-                }
-                else if (modifier.Equals("htmldecode"))
-                    value = HttpUtility.HtmlDecode(value);
-                else if (modifier.Equals("striptags"))
-                {
-                    value = Regex.Replace(value, @"\n", string.Empty); // Remove all linebreaks
-                    value = Regex.Replace(value, @"<br\s*/?>", "\n", RegexOptions.IgnoreCase); // Replace HTML breaks with \n
-                    value = Regex.Replace(value, @"</p>", "\n\n", RegexOptions.IgnoreCase); // Replace paragraph tags with \n\n
-                    value = Regex.Replace(value, @"<.+?>", string.Empty); // Remove all other tags
-                    value = Regex.Replace(value, @"\n{3,}", "\n\n"); // Trim newlines
-                    value = Regex.Replace(value, @"\t{2,}", " ").Trim(); // Trim whitespace
                 }
 
                 output.Insert(currMatch.Index + offset, value);
@@ -221,20 +186,76 @@ namespace Cornerstone.ScraperEngine {
         #region Static Methods
 
         static ScraperNode() {
-            nodeTypes = new Dictionary<string, Type>();
+            typeCache = new Dictionary<string, Type>();
         }
 
-        public static ScraperNode Load(XmlNode xmlNode, InternalScriptSettings settings) {
+        /// <summary>
+        /// Loads the specified modifier by name.
+        /// </summary>
+        /// <param name="modifier">The modifier.</param>
+        /// <returns>the modifier instance</returns>
+        public static IValueModifier Load(string modifier)
+        {
+            // todo: cache one instance for every modifier (no need to recreate instance)
+            
+            Type modifierType = null;
+            string modifierTypeName = modifier.ToLower();
+            string modifierTypeKey = "modifier:" + modifierTypeName;
+
+            // try to grab the type from our dictionary
+            if (typeCache.ContainsKey(modifierTypeKey))
+                modifierType = typeCache[modifierTypeKey];
+
+            // if it's not there, search the assembly for the type
+            else
+            {
+                modifierType = (Type) Assembly.GetExecutingAssembly().GetTypes()
+                                .Where(t => typeof(IValueModifier).IsAssignableFrom(t)
+                                    && t.GetCustomAttributes(true).Any(a => a.GetType() == typeof(ValueModifierAttribute) 
+                                        && modifierTypeName.Equals(((ValueModifierAttribute)a).Name)))
+                                .SingleOrDefault();
+
+                // store our type and put it in our dictionary so we dont have to
+                // look it up again
+                if (modifierType != null)
+                {
+                    typeCache[modifierTypeKey] = modifierType;
+                }
+            }
+
+
+            if (modifierType == null)
+            {
+                logger.Error("Unsupported modifier type: " + modifierTypeName);
+                return null;
+            }
+
+            try
+            {
+                // create new ValueModifier
+                return (IValueModifier) Activator.CreateInstance(modifierType);
+            }
+            catch (Exception e)
+            {
+                if (e.GetType() == typeof(ThreadAbortException))
+                    throw e;
+
+                logger.Error("Error instantiating Modifier based on: " + modifier, e);
+                return null;
+            }
+        }
+        
+        public static ScraperNode Load(XmlNode xmlNode, ScriptableScraper context) {
           if (xmlNode == null || xmlNode.NodeType == XmlNodeType.Comment || xmlNode.NodeType == XmlNodeType.CDATA)
                 return null;
             
             Type nodeType = null;
             string nodeTypeName = xmlNode.Name;
-
+            string nodeTypeKey = "node:" + nodeTypeName;
 
             // try to grab the type from our dictionary
-            if (nodeTypes.ContainsKey(nodeTypeName))
-                nodeType = nodeTypes[nodeTypeName];
+            if (typeCache.ContainsKey(nodeTypeKey))
+                nodeType = typeCache[nodeTypeKey];
 
             // if it's not there, search the assembly for the type
             else {
@@ -246,7 +267,7 @@ namespace Cornerstone.ScraperEngine {
 
                             // store our type and put it in our dictionary so we dont have to
                             // look it up again
-                            nodeTypes[nodeTypeName] = currType;
+                            typeCache[nodeTypeKey] = currType;
                             nodeType = currType;
                             break;
                         }
@@ -261,8 +282,8 @@ namespace Cornerstone.ScraperEngine {
             
             // try to create a new scraper node object
             try {
-                ConstructorInfo constructor = nodeType.GetConstructor(new Type[] { typeof(XmlNode), typeof(InternalScriptSettings) });
-                ScraperNode newNode = (ScraperNode)constructor.Invoke(new object[] { xmlNode, settings });
+                ConstructorInfo constructor = nodeType.GetConstructor(new Type[] { typeof(XmlNode), typeof(ScriptableScraper) });
+                ScraperNode newNode = (ScraperNode)constructor.Invoke(new object[] { xmlNode, context });
                 return newNode;
             }
             catch (Exception e) {

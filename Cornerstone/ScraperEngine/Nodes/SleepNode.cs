@@ -18,10 +18,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         #region Methods
 
-        public SleepNode(XmlNode xmlNode, InternalScriptSettings settings)
-            : base(xmlNode, settings) {
+        public SleepNode(XmlNode xmlNode,  ScriptableScraper context)
+            : base(xmlNode, context) {
 
-            if (settings.DebugMode) logger.Debug("executing set: " + xmlNode.OuterXml);
+            if (context.DebugMode) logger.Debug("executing set: " + xmlNode.OuterXml);
 
             // Load attributes
             foreach (XmlAttribute attr in xmlNode.Attributes) {

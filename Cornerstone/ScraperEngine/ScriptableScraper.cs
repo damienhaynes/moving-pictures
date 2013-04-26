@@ -116,6 +116,19 @@ namespace Cornerstone.ScraperEngine {
             }
         } protected bool debug;
 
+        /// <summary>
+        /// Gets the cache dictionary.
+        /// </summary>
+        /// <value>
+        /// The cache dictionary.
+        /// </value>
+        public DiskCachedDictionary<string, string> Cache
+        {
+            get {
+                return cache; 
+            }
+        } 
+
         // Returns true if the script loaded successfully.
         public bool LoadSuccessful {
             get { return loadSuccessful; }
@@ -210,13 +223,9 @@ namespace Cornerstone.ScraperEngine {
         }
 
         private void loadActionNodes() {
-            InternalScriptSettings settings = new InternalScriptSettings();
-            settings.DebugMode = DebugMode;
-            settings.Cache = cache;
-
             actionNodes = new Dictionary<string, ScraperNode>();
             foreach (XmlNode currAction in xml.DocumentElement.SelectNodes("child::action")) {
-                ActionNode newNode = (ActionNode)ScraperNode.Load(currAction, settings);
+                ActionNode newNode = (ActionNode)ScraperNode.Load(currAction, this);
                 if (newNode != null && newNode.LoadSuccess)
                     actionNodes[newNode.Name] = newNode;
                 else {
@@ -239,17 +248,5 @@ namespace Cornerstone.ScraperEngine {
             return null;
         }
         
-    }
-
-    public class InternalScriptSettings {
-        public bool DebugMode {
-            get;
-            set;
-        }
-
-        public DiskCachedDictionary<string, string> Cache {
-            get;
-            set;
-        }
     }
 }

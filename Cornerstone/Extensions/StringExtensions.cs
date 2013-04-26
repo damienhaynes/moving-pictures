@@ -8,6 +8,18 @@ namespace Cornerstone.Extensions {
     public static class StringExtensions {
 
         /// <summary>
+        /// Indicates whether a specified string is null, empty, or consists only of white-space characters.
+        /// </summary>
+        /// <param name="self">a string</param>
+        /// <returns>
+        ///   <c>true</c> if the value parameter is null or String.Empty, or if value consists exclusively of white-space characters.
+        /// </returns>
+        public static bool IsNullOrWhiteSpace(this string self)
+        {
+            return String.IsNullOrEmpty(self) || self.Trim().Length == 0;
+        }
+        
+        /// <summary>
         /// Replaces multiple white-spaces with one space
         /// </summary>
         /// <param name="self"></param>
