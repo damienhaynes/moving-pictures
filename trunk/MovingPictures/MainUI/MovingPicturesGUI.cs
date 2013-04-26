@@ -2152,7 +2152,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 // publish using the threadpool (experimental tweak!)
                 MoviePublishWorker publisher = new MoviePublishWorker(PublishMovieDetails);
-                publisher.BeginInvoke(movie, null, null);
+                publisher.BeginInvoke(movie, publisher.EndInvoke, null); // using publisher.EndInvoke will throw back exceptions if they occur
                 return;
             }
 
