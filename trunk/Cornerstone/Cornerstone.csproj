@@ -271,6 +271,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ScraperEngine\Modifiers\ValueModifierAttribute.cs" />
+    <Compile Include="ScraperEngine\Modifiers\StripTagsModifier.cs" />
+    <Compile Include="ScraperEngine\Modifiers\HtmlDecodeModifier.cs" />
+    <Compile Include="ScraperEngine\Modifiers\DateModifier.cs" />
+    <Compile Include="ScraperEngine\Modifiers\IValueModifier.cs" />
+    <Compile Include="ScraperEngine\Modifiers\SafeModifier.cs" />
     <Compile Include="ScraperEngine\Nodes\ActionNode.cs" />
     <Compile Include="ScraperEngine\Nodes\DistanceNode.cs" />
     <Compile Include="ScraperEngine\Nodes\IfNode.cs" />

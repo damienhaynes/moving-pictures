@@ -13,8 +13,9 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return test; }
         } protected string test;
 
-        public IfNode(XmlNode xmlNode, InternalScriptSettings settings)
-            : base(xmlNode, settings) {
+        public IfNode(XmlNode xmlNode, ScriptableScraper context)
+            : base(xmlNode, context)
+        {
 
             // Load attributes
             foreach (XmlAttribute attr in xmlNode.Attributes) {
@@ -34,7 +35,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
         }
 
         public override void Execute(Dictionary<string, string> variables) {
-            if (ScriptSettings.DebugMode) logger.Debug("executing if: " + xmlNode.OuterXml);
+            if (Context.DebugMode) logger.Debug("executing if: " + xmlNode.OuterXml);
 
             // try to split the test on the operator, quit if we fail
             Regex splitter = new Regex("\\s*(.*?)\\s*(>=|<=|!=|=|<|>)\\s*(.*)$");
@@ -51,7 +52,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             left = parseString(variables, left);
             right = parseString(variables, right);
 
-            if (ScriptSettings.DebugMode) logger.Debug("if node left value: " + (left.Length < 500 ? left : "[not logged due to size]") + "     right value: " + (right.Length < 500 ? right : "[not logged due to size]"));
+            if (Context.DebugMode) logger.Debug("if node left value: " + (left.Length < 500 ? left : "[not logged due to size]") + "     right value: " + (right.Length < 500 ? right : "[not logged due to size]"));
 
             float leftNum = 0;
             float rightNum = 0;

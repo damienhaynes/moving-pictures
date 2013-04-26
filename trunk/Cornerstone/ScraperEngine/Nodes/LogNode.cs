@@ -20,8 +20,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
         #endregion
 
-        public LogNode(XmlNode xmlNode, InternalScriptSettings settings)
-            : base(xmlNode, settings) {
+        public LogNode(XmlNode xmlNode,  ScriptableScraper context)
+            : base(xmlNode, context) {
 
             try { logLevel = LogLevel.FromString(xmlNode.Attributes["LogLevel"].Value); }
             catch (Exception e) {

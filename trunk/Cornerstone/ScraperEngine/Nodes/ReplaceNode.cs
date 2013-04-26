@@ -25,8 +25,8 @@ namespace Cornerstone.ScraperEngine.Nodes {
     #endregion
 
     #region Methods
-    public ReplaceNode(XmlNode xmlNode, InternalScriptSettings settings)
-      : base(xmlNode, settings) {
+    public ReplaceNode(XmlNode xmlNode,  ScriptableScraper context)
+      : base(xmlNode, context) {
 
         // Load attributes
         foreach (XmlAttribute attr in xmlNode.Attributes) {
@@ -67,7 +67,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
     }
 
     public override void Execute(Dictionary<string, string> variables) {
-      if (ScriptSettings.DebugMode) logger.Debug("executing replace: " + xmlNode.OuterXml);
+      if (Context.DebugMode) logger.Debug("executing replace: " + xmlNode.OuterXml);
       string output = string.Empty;
       try { 
         output = Regex.Replace(parseString(variables, input), parseString(variables, pattern), parseString(variables, replacement));
