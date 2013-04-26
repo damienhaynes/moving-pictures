@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Web;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Globalization;
 
 namespace Cornerstone.ScraperEngine {
     public abstract class ScraperNode {
@@ -139,7 +140,7 @@ namespace Cornerstone.ScraperEngine {
                 string varName = "";
                 string modifier = string.Empty;
                 string value = string.Empty;
-                string encodingStr = string.Empty;
+                string options = string.Empty;
 
                 // get rid of the escaped variable string
                 output.Remove(currMatch.Index + offset, currMatch.Length);
@@ -150,7 +151,7 @@ namespace Cornerstone.ScraperEngine {
                 if (currMatch.Groups.Count >= 3)
                     modifier = currMatch.Groups[2].Value.ToLower();
                 if (currMatch.Groups.Count >= 4)
-                    encodingStr = currMatch.Groups[3].Value.ToLower();
+                    options = currMatch.Groups[3].Value;
 
                 // if there is no variable for what was passed in we are done
                 if (value == string.Empty || value == null) {
@@ -162,8 +163,8 @@ namespace Cornerstone.ScraperEngine {
                 if (modifier.Equals("safe")) {
                     // if we have an encoding string try to build an encoding object
                     Encoding encoding = null;
-                    if (encodingStr != string.Empty) {
-                        try { encoding = Encoding.GetEncoding(encodingStr); }
+                    if (options != string.Empty) {
+                        try { encoding = Encoding.GetEncoding(options.ToLower()); }
                         catch (ArgumentException) {
                             encoding = null;
                             logger.Error("Scraper script tried to use an invalid encoding for \"safe\" modifier");
@@ -176,9 +177,27 @@ namespace Cornerstone.ScraperEngine {
                         value = HttpUtility.UrlEncode(value).Replace("+", "%20");
 
                 }
+                // will try to read the value as a date using format specified in options.
+                if (modifier.Equals("date") && options != string.Empty)
+                {
+                    // also see:   http://msdn.microsoft.com/en-us/library/w2sa9yss.aspx
+                    // format specifiers:   http://msdn.microsoft.com/en-us/library/8kb3ddd4.aspx 
+                    
+                    DateTime dt;
+                    if (DateTime.TryParseExact(value, new string[] { options }, CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.None, out dt))
+                    {
+                        // store the value as the invariant datetime format
+                        value = dt.ToString(CultureInfo.InvariantCulture.DateTimeFormat);
+                    }
+                    else
+                    {
+                        logger.Error("Scraper script could not parse \"date\" modifier using options \"" + options + "\"");
+                    }
+                }
                 else if (modifier.Equals("htmldecode"))
                     value = HttpUtility.HtmlDecode(value);
-                else if (modifier.Equals("striptags")) {
+                else if (modifier.Equals("striptags"))
+                {
                     value = Regex.Replace(value, @"\n", string.Empty); // Remove all linebreaks
                     value = Regex.Replace(value, @"<br\s*/?>", "\n", RegexOptions.IgnoreCase); // Replace HTML breaks with \n
                     value = Regex.Replace(value, @"</p>", "\n\n", RegexOptions.IgnoreCase); // Replace paragraph tags with \n\n
