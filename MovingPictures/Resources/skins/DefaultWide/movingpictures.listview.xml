@@ -47,12 +47,12 @@
       <visible>facadeview.list+control.isvisible(50)+!control.isvisible(9)+Control.HasThumb(60)</visible>
     </control>
     <control>
-      <description>Genre txt</description>
+      <description>Genres Label</description>
       <type>label</type>
       <id>1</id>
       <posX>730</posX>
       <posY>187</posY>
-      <label>174</label>
+      <label>#(iif(eq(#MovingPictures.SelectedMovie.genres.count,'1'),'#MovingPictures.Translation.Genre.Label','#MovingPictures.Translation.Genres.Label'))</label>
       <font>font10</font>
       <align>left</align>
       <textcolor>ff6FAFE1</textcolor>
@@ -168,7 +168,7 @@
       <visible>facadeview.list+control.isvisible(50)</visible>
     </control>
     <control>
-      <description>Director Label</description>
+      <description>Directors Label</description>
       <id>0</id>
       <type>label</type>
       <label>#MovingPictures.Translation.Director.Label</label>
@@ -180,7 +180,7 @@
       <visible>facadeview.list+control.isvisible(50)</visible>
     </control>
     <control>
-      <description>Director</description>
+      <description>Directors</description>
       <id>1001</id>
       <type>label</type>
       <label>#MovingPictures.SelectedMovie.extra.directors.1</label>
@@ -192,7 +192,7 @@
       <visible>facadeview.list+control.isvisible(50)</visible>
     </control>
     <control>
-      <description>Writer Label</description>
+      <description>Writers Label</description>
       <id>0</id>
       <type>label</type>
       <label>#MovingPictures.Translation.Writer.Label</label>
@@ -204,7 +204,7 @@
       <visible>facadeview.list+control.isvisible(50)</visible>
     </control>
     <control>
-      <description>Writer</description>
+      <description>Writers</description>
       <id>1002</id>
       <type>fadelabel</type>
       <label>#MovingPictures.SelectedMovie.extra.writers.1</label>
@@ -218,7 +218,7 @@
     <control>
       <description>Actors Label</description>
       <type>label</type>
-      <label>#MovingPictures.Translation.Actors.Label</label>
+			<label>#(iif(eq(#MovingPictures.SelectedMovie.actors.count,'1'),'#MovingPictures.Translation.Actor.Label','#MovingPictures.Translation.Actors.Label'))</label>
       <posX>730</posX>
       <posY>367</posY>
       <font>font10</font>

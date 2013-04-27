@@ -105,12 +105,12 @@
     </control>
     <!-- Details Box -->
     <control>
-      <description>Genre txt</description>
+      <description>Genres Label</description>
       <type>label</type>
       <id>1</id>
       <posX>730</posX>
       <posY>187</posY>
-      <label>174</label>
+      <label>#(iif(eq(#MovingPictures.SelectedMovie.genres.count,'1'),'#MovingPictures.Translation.Genre.Label','#MovingPictures.Translation.Genres.Label'))</label>
       <font>font10</font>
       <align>left</align>
       <textcolor>ff6FAFE1</textcolor>
@@ -250,10 +250,10 @@
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
-      <description>Director Label</description>
+      <description>Directors Label</description>
       <id>0</id>
       <type>label</type>
-      <label>#MovingPictures.Translation.Director.Label</label>
+      <label>#(iif(eq(#MovingPictures.SelectedMovie.directors.count,'1'), '#MovingPictures.Translation.Director.Label', '#MovingPictures.Translation.Directors.Label'))</label>
       <posX>730</posX>
       <posY>278</posY>
       <font>font10</font>
@@ -262,7 +262,7 @@
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
-      <description>Director</description>
+      <description>Directors</description>
       <id>1001</id>
       <type>label</type>
       <label>#MovingPictures.SelectedMovie.directors</label>
@@ -274,10 +274,10 @@
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
-      <description>Writer Label</description>
+      <description>Writers Label</description>
       <id>0</id>
       <type>label</type>
-      <label>#MovingPictures.Translation.Writer.Label</label>
+      <label>#(iif(eq(#MovingPictures.SelectedMovie.writers.count,'1'), '#MovingPictures.Translation.Writer.Label', '#MovingPictures.Translation.Writers.Label'))</label>
       <posX>730</posX>
       <posY>319</posY>
       <font>font10</font>
@@ -286,7 +286,7 @@
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
-      <description>Writer</description>
+      <description>Writers</description>
       <id>1002</id>
       <type>fadelabel</type>
       <label>#MovingPictures.SelectedMovie.writers</label>
@@ -300,7 +300,7 @@
     <control>
       <description>Actors Label</description>
       <type>label</type>
-      <label>#MovingPictures.Translation.Actors.Label</label>
+      <label>#(iif(eq(#MovingPictures.SelectedMovie.actors.count,'1'),'#MovingPictures.Translation.Actor.Label','#MovingPictures.Translation.Actors.Label'))</label>
       <posX>730</posX>
       <posY>367</posY>
       <font>font10</font>
