@@ -6,12 +6,10 @@
     <control>
       <type>group</type>
       <description>group element</description>
-      <animation effect="slide" time="70" start="-300,0" reversible="false">visible</animation>
-      <animation effect="slide" time="70" end="-300,0" reversible="false">hidden</animation>
       <posX>71</posX>
       <posY>180</posY>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <layout>StackLayout(0, Vertical, true)</layout>
+      <layout>StackLayout(0,Vertical,true)</layout>
       <control>
         <description>Play Button</description>
         <type>button</type>
@@ -21,7 +19,7 @@
         <onup>17</onup>
         <ondown>7</ondown>
         <label>208</label>
-        <visible>!Control.IsVisible(50)+!control.isvisible(51)</visible>
+        <visible allowhiddenfocus="true">!control.isvisible(50)+!control.isvisible(51)</visible>
       </control>
       <control>
         <description>SubCentral Button</description>
@@ -49,7 +47,7 @@
         <visible>plugin.isenabled(OnlineVideos)+!control.isvisible(50)+!control.isvisible(51)</visible>
       </control>
       <control>
-        <description>Add to Trakt Movie/Show Watch List</description>
+        <description>Trakt Menu</description>
         <type>button</type>
         <id>97270</id>
         <label>Trakt</label>
@@ -71,7 +69,6 @@
       <height>400</height>
       <texture mask="videothumbmask.png">#MovingPictures.Coverart</texture>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Cover Art Glass Overlay</description>
@@ -83,7 +80,6 @@
       <height>400</height>
       <texture>Videothumbframe.png</texture>
       <visible>!control.isvisible(50)+!control.isvisible(51)+Control.HasThumb(60)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Watched Icon</description>
@@ -95,7 +91,6 @@
       <height>23</height>
       <texture>overlaywatched.png</texture>
       <visible>!control.isvisible(50)+!control.isvisible(51)+control.isvisible(9)+Control.HasThumb(60)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Un-Watched Icon</description>
@@ -107,7 +102,6 @@
       <height>23</height>
       <texture>overlayunwatched.png</texture>
       <visible>!control.isvisible(50)+!control.isvisible(51)+!control.isvisible(9)+Control.HasThumb(60)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <!-- Details Box -->
     <control>
@@ -135,22 +129,20 @@
       <shadowAngle>45</shadowAngle>
       <shadowDistance>3</shadowDistance>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <id>0</id>
       <type>label</type>
-      <label>#MovingPictures.SelectedMovie.score.localized / 10</label>
+      <label>#MovingPictures.SelectedMovie.score.localized / 10 (#MovingPictures.SelectedMovie.popularity.localized #MovingPictures.Translation.Votes.Label)</label>
       <posX>920</posX>
       <posY>160</posY>
-      <width>200</width>
+      <width>300</width>
       <align>left</align>
       <font>font11</font>
       <textcolor>ffFFFFFF</textcolor>
       <shadowAngle>45</shadowAngle>
       <shadowDistance>2</shadowDistance>
       <visible>!control.isvisible(50)+!control.isvisible(51)+!string.equals(#MovingPictures.SelectedMovie.score.rounded,)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>10 star rating</description>
@@ -171,7 +163,6 @@
       <imagesToDraw>10</imagesToDraw>
       <percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
       <visible>!control.isvisible(50)+!control.isvisible(51)+!string.equals(#MovingPictures.SelectedMovie.score.rounded,)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Separator Line</description>
@@ -197,7 +188,6 @@
       <font>font11</font>
       <label>#MovingPictures.SelectedMovie.summary</label>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Separator Line</description>
@@ -222,7 +212,6 @@
       <align>left</align>
       <textcolor>ff6FAFE1</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Runtime</description>
@@ -235,25 +224,23 @@
       <font>font12</font>
       <textcolor>ivory</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
-      <description>year</description>
+      <description>Release Date</description>
       <type>label</type>
-      <label>#MovingPictures.Translation.Year.Label</label>
+      <label>#MovingPictures.Translation.ReleaseDate.Label</label>
       <id>0</id>
       <posX>930</posX>
       <posY>231</posY>
       <width>840</width>
       <font>font10</font>
-      <textcolor>ffa9d0f7</textcolor>
+      <textcolor>ff6FAFE1</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>year</description>
       <type>label</type>
-      <label>#MovingPictures.SelectedMovie.year</label>
+      <label>#MovingPictures.SelectedMovie.release_date.localized.short</label>
       <id>0</id>
       <posX>930</posX>
       <posY>250</posY>
@@ -261,7 +248,6 @@
       <font>font10</font>
       <textcolor>ffFFFFFF</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Director Label</description>
@@ -274,7 +260,6 @@
       <align>left</align>
       <textcolor>ff6FAFE1</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Director</description>
@@ -287,7 +272,6 @@
       <width>520</width>
       <textcolor>ivory</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Writer Label</description>
@@ -300,7 +284,6 @@
       <align>left</align>
       <textcolor>ff6FAFE1</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Writer</description>
@@ -313,7 +296,6 @@
       <font>font12</font>
       <textcolor>ivory</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Actors Label</description>
@@ -325,7 +307,6 @@
       <align>left</align>
       <textcolor>ff6FAFE1</textcolor>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
     <control>
       <description>Actors</description>
@@ -335,10 +316,9 @@
       <posX>730</posX>
       <posY>388</posY>
       <width>520</width>
-      <height>70</height>
+      <height>50</height>
       <font>font11</font>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <animation effect="fade" time="250" delay="0">WindowClose</animation>
     </control>
   </controls>
 </window>
