@@ -11,6 +11,7 @@
   <string name="BadParam">An external plugin or skin passed\nMoving Pictures an invalid paramater!</string>
   <string name="Backdrop">Backdrop</string>
   <string name="BeginsWith">Begins With</string>
+  <string name="BelongsToCollection">Belongs To Collection</string>
   <!--C-->
   <string name="Cancel">Cancel</string>
   <string name="CannotDeleteOffline">Not able to delete {0}\n because the file is offline</string>
@@ -21,6 +22,8 @@
   <string name="Certification">Certification</string>
   <string name="ChangeView">Change View</string>
   <string name="CheckForMissingArtwork">Check for Missing Artwork Online</string>
+  <string name="Collection">Collection</string>
+  <string name="Collections">Collections</string>
   <string name="Completed">Completed</string>
   <string name="CompletedFiles">Completed Files</string>
   <string name="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>

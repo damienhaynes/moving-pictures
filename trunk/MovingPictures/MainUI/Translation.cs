@@ -157,6 +157,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string BadParam = "An external plugin or skin passed\nMoving Pictures an invalid paramater!";
         public static string Backdrop = "Backdrop";
         public static string BeginsWith = "Begins With";
+        public static string BelongsToCollection = "Belongs To Collection";
 
 
         // C
@@ -169,6 +170,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Certification = "Certification";
         public static string ChangeView = "Change View";
         public static string CheckForMissingArtwork = "Check for Missing Artwork Online";
+        public static string Collection = "Collection";
+        public static string Collections = "Collections";
         public static string Completed = "Completed";
         public static string CompletedFiles = "Completed Files";
         public static string ContinueToNextPartBody = "Do you wish to continue with part {0}?";
