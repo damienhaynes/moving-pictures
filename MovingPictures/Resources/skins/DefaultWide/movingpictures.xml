@@ -29,15 +29,6 @@
   <!-- true if backdrop (fanart) should be displayed in this view -->
   <define>#details.backdrop.used:true</define>
   <!-- true if backdrop (fanart) should be displayed in this view -->
-  <!-- Change the values below to adjust the delay  in (seconds) that text scrolls in movie overviews -->
-  <define>#textboxscrolldelay.list:12</define>
-  <define>#textboxscrolldelay.thumbs:12</define>
-  <define>#textboxscrolldelay.filmstrip:16</define>
-  <define>#textboxscrolldelay.details:16</define>
-  <!-- Shadows under blue/grey text -->
-  <define>#shadow.dark:ff111111</define>
-  <!-- Shadows under white text -->
-  <define>#shadow.light:ff222222</define>
   <controls>
     <!--            :: DUMMY CONTROLS ::             -->
     <control>
@@ -72,14 +63,6 @@
       <posY>-50</posY>
       <width>0</width>
     </control>
-    <control>
-      <description>Visibile when movie playback has started</description>
-      <type>image</type>
-      <id>18</id>
-      <posX>-50</posX>
-      <posY>-50</posY>
-      <width>0</width>
-    </control>
     <!--            :: BACKGROUNDS :: MOVIE BACKDROP :: OVERLAYS ::            -->
     <control>
       <description>Default Background</description>
@@ -103,7 +86,7 @@
       <animation effect="fade" start="0" end="100" time="3000">WindowOpen</animation>
       <animation effect="fade" start="0" end="100" time="200">Visible</animation>
       <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
-      <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above  			   defines for conditional visibility if you dont want to use fan-art only specific views. --></control>
+			</control>
     <control>
       <description>Alternate Movie Backdrop - Toggles Load with Component 1 for animations on visibiltiy</description>
       <type>image</type>
@@ -115,7 +98,7 @@
       <texture>#MovingPictures.Backdrop2</texture>
       <animation effect="fade" start="0" end="100" time="200">Visible</animation>
       <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>
-      <!-- Do not modify the visibility for this component. It is handled by the plug-in. Use the above  			   defines for conditional visibility if you dont want to use fan-art only specific views. --></control>
+			</control>
     <import>common.window.xml</import>
     <import>common.time.xml</import>
     <control>
@@ -156,21 +139,17 @@
       <align>right</align>
       <font>font11</font>
       <textcolor>ffFFFFFF</textcolor>
-      <animation effect="fade" time="250">WindowOpen</animation>
-      <animation effect="fade" time="250">WindowClose</animation>
       <visible>control.isvisible(50)</visible>
     </control>
     <control>
       <description>Parental Controls Lock Indicator</description>
       <type>image</type>
       <id>16</id>
-      <posX>3</posX>
-      <posY>1</posY>
+      <posX>20</posX>
+      <posY>70</posY>
       <width>48</width>
       <height>48</height>
       <texture>lock.png</texture>
-      <animation effect="fade" time="250">WindowOpen</animation>
-      <animation effect="fade" time="250">WindowClose</animation>
     </control>
     <control>
       <description>Current Category</description>
@@ -182,8 +161,6 @@
       <font>font11</font>
       <label>#MovingPictures.Translation.MovieDetails.Label</label>
       <textcolor>ffa9d0f7</textcolor>
-      <animation effect="fade" time="250">WindowOpen</animation>
-      <animation effect="fade" time="250">WindowClose</animation>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
     </control>
     <control>
@@ -196,8 +173,6 @@
       <font>font11</font>
       <label>#MovingPictures.CurrentNode.name</label>
       <textcolor>ffa9d0f7</textcolor>
-      <animation effect="fade" time="250">WindowOpen</animation>
-      <animation effect="fade" time="250">WindowClose</animation>
       <visible>[control.isvisible(50)|control.isvisible(51)]+!control.isvisible(17)</visible>
     </control>
     <control>
@@ -210,13 +185,21 @@
       <font>font11</font>
       <label>#MovingPictures.CurrentNode.name / #MovingPictures.Filter.Name</label>
       <textcolor>ffa9d0f7</textcolor>
-      <animation effect="fade" time="250">WindowOpen</animation>
-      <animation effect="fade" time="250">WindowClose</animation>
       <visible>[control.isvisible(50)|control.isvisible(51)]+control.isvisible(17)</visible>
     </control>
     <!-- Dim background when movie starts -->
     <!-- This is to provide feedback to the user something is happening when there are long pauses before playback -->
-    
+    <control>
+      <description>Visibile when movie playback has started</description>
+      <type>image</type>
+      <id>18</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>1280</width>
+			<height>720</height>
+			<texture>black.png</texture>
+			<colordiffuse>50fefaff</colordiffuse>
+    </control>
     <control>
       <description>Working Animation</description>
       <type>animation</type>

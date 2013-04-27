@@ -123,14 +123,15 @@
             <description>Importer</description>
             <type>button</type>
             <id>999</id>
-            <label>Importer (#MovingPictures.Importer.NeedInput.Count Pending)</label>
+            <label>#MovingPictures.Translation.Importer.Label</label>
             <hyperlink>96743</hyperlink>
             <onup>66610</onup>
             <ondown>4</ondown>
             <onright>50</onright>
+            <scrollStartDelaySec>1</scrollStartDelaySec>
+            <scrollWrapString>|</scrollWrapString>
           </control>
         </control>
-        
       </control>
     </control>
   </controls>
