@@ -524,7 +524,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // if we were passed a parameter we cant parse, exit back
             if (MovieLoadParamater == null && CategoryLoadParamater == null && SearchModeLoadParameter == null && !string.IsNullOrEmpty(UnparsedLoadParameter)) {
-                logger.Warn("Moving Pictures can not understand the following paramater: " + UnparsedLoadParameter);
+                logger.Warn("Moving Pictures can not understand the following parameter: " + UnparsedLoadParameter);
                 GUIWindowManager.ShowPreviousWindow();
                 ShowMessage(Translation.Error, Translation.BadParam);
             }
@@ -2318,9 +2318,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     if (max > valueStrList.Count)
                         max = valueStrList.Count;
 
-                    // add the coma seperated string
+                    // add the comma seperated string
                     valueStr = valueStrList.ToPrettyString(max);
                     SetProperty(propertyStr, valueStr, forceLogging);
+
+                    // allow skinners to control plurality of labels
+                    // based on number of items displayed
+                    SetProperty(propertyStr + ".count", valueStrList.Count.ToString(), forceLogging);
 
                     // add each value individually
                     for (int i = 0; i < maxStringListElements; i++)
