@@ -19,12 +19,6 @@
         <textXOff>-30</textXOff>
         <textXOff3>10</textXOff3>
         <IconXOff>1980</IconXOff>
-        <spinWidth>46</spinWidth>
-        <spinHeight>33</spinHeight>
-        <spinPosX>1170</spinPosX>
-        <spinPosY>670</spinPosY>
-        <spinAlign>Right</spinAlign>
-        <spinColor>ffffffff</spinColor>
         <spinCanFocus>no</spinCanFocus>
       </control>
     </control>
@@ -40,23 +34,14 @@
           <type>listcontrol</type>
           <id>50</id>
           <width>550</width>
-          <playedColor>ffffffff</playedColor>
-          <playedColor2>ffffffff</playedColor2>
-          <textcolor>ff99f9ff</textcolor>
-          <textcolorNoFocus>ff99f9ff</textcolorNoFocus>
           <textXOff2>550</textXOff2>
           <textYOff2>2</textYOff2>
-          <textXOff3>2545</textXOff3>
-          <textYOff3>8</textYOff3>
-          <textalign3>right</textalign3>
-          <font3>font9</font3>
-          <scrollOffset>2</scrollOffset>
+          <font3>font12</font3>
           <spinCanFocus>no</spinCanFocus>
-          <unfocusedAlpha>160</unfocusedAlpha>
-          <folderPrefix />
-          <folderSuffix />
           <!-- group headers -->
-          <textcolor3>ff3E99D7</textcolor3>
+					<textXOff3>0</textXOff3>
+          <textYOff3>8</textYOff3>
+          <textcolor3>ff6FAFE1</textcolor3>
           <onleft>4</onleft>
           <onright>4</onright>
         </control>
