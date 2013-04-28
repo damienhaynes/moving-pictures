@@ -167,7 +167,7 @@ namespace Cornerstone.ScraperEngine {
                 if (!modifier.IsNullOrWhiteSpace()) {
                     IValueModifier handler = Load(modifier);
                     if (handler != null) {
-                        handler.Parse(this.Context, value, options);
+                        value = handler.Parse(this.Context, value, options);
                     }
                 }
 
