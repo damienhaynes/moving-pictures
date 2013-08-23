@@ -24,7 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         #region API variables
 
-        private const string apiMovieBackdrops = "http://fanart.tv/webservice/movie/4f26c36ab3d97e3a4a0c1e081710e3a6/{0}/JSON/moviebackground/";
+        private const string apiMovieArtwork = "http://fanart.tv/webservice/movie/4f26c36ab3d97e3a4a0c1e081710e3a6/{0}/JSON/all/";
 
         #endregion
 
@@ -35,7 +35,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public string Description {
-            get { return "Returns backdrops from fanart.tv."; }
+            get { return "Returns localised covers and backdrops from fanart.tv."; }
         }
 
         public string Language {
@@ -51,7 +51,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool ProvidesCoverArt {
-            get { return false; }
+            get { return true; }
         }
 
         public bool ProvidesBackdrops {
@@ -71,12 +71,12 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (string.IsNullOrEmpty(movieId))
                 return false;
 
-            string response = getJson(string.Format(apiMovieBackdrops, movieId));
+            string response = getJson(string.Format(apiMovieArtwork, movieId));
             if (response == null)
                 return false;
 
             // de-serialize json response
-            var movies = response.FromJsonDictionary<Dictionary<string, MovieImages>>();
+            var movies = response.FromJsonDictionary<Dictionary<string, Artwork>>();
             if (movies == null || movies.Count == 0)
                 return false;
 
@@ -111,6 +111,65 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         }
 
         public bool GetArtwork(DBMovieInfo movie) {
+            if (movie == null)
+                return false;
+
+            // do we have an id?
+            string movieId = getMovieId(movie);
+            if (string.IsNullOrEmpty(movieId))
+                return false;
+
+            // try to get movie artwork
+            string response = getJson(string.Format(apiMovieArtwork, movieId));
+            if (response == null)
+                return false;
+
+            // de-serialize json response
+            var movies = response.FromJsonDictionary<Dictionary<string, Artwork>>();
+            if (movies == null || movies.Count == 0)
+                return false;
+
+            // we are only getting back 1 movie in dictionary so lets get it
+            var movieImages = movies.First().Value;
+            if (movieImages.movieposter == null || movieImages.movieposter.Count == 0)
+                return false;
+
+            // filter posters by language
+            var langPosters = movieImages.movieposter.Where(p => p.lang == MovingPicturesCore.Settings.DataProviderLanguageCode);
+
+            // if no localised posters available use all posters
+            if (langPosters.Count() == 0) {
+                langPosters = movieImages.movieposter;
+            }
+
+            // sort by highest rated / most popular
+            langPosters = langPosters.OrderByDescending(p => p.likes);
+
+            // grab coverart loading settings
+            int maxCovers = MovingPicturesCore.Settings.MaxCoversPerMovie;
+            int maxCoversInSession = MovingPicturesCore.Settings.MaxCoversPerSession;
+            int coversAdded = 0;
+
+            // download posters
+            foreach (var poster in langPosters) {
+                // if we have hit our limit quit
+                if (movie.AlternateCovers.Count >= maxCovers || coversAdded >= maxCoversInSession)
+                    return true;
+
+                // get url for cover and load it via the movie object
+                string coverPath = poster.url;
+                if (coverPath.Trim() != string.Empty) {
+                    if (movie.AddCoverFromURL(coverPath) == ImageLoadResults.SUCCESS)
+                        coversAdded++;
+                }
+            }
+
+            if (coversAdded > 0) {
+                // Update source info
+                movie.GetSourceMovieInfo(SourceInfo).Identifier = movieId;
+                return true;
+            }
+
             return false;
         }
 
