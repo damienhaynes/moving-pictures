@@ -4,19 +4,32 @@
   <string name="Actor">Schauspieler</string>
   <string name="Actors">Schauspieler</string>
   <string name="AllMovies">Alle Filme</string>
+  <string name="AllFiles">Alle Dateien</string>
   <!--B-->
+  <string name="BadCategory">Ein externes Plugin oder Skin \nhat versucht, eine nicht vorhandene\nMoving Pictures Kategorie zu öffnen!</string>
+  <string name="BadMovie">Ein externes Plugin oder Skin \nhat versucht, einen\nfehlenden Film zu öffnen!</string>
+  <string name="BadParam">Ein externes Plugin oder Skin hat\neinen ungültigen Parameter\nübergeben.</string>
+  <string name="Backdrop">Hintergrundbild</string>
+  <string name="BeginsWith">Beginnt mit</string>
+  <string name="BelongsToCollection">Gehört zu der Sammlung</string>
   <!--C-->
   <string name="Cancel">Abbrechen</string>
   <string name="CannotDeleteOffline">Kann {0}\n nicht löschen, da die Datei offline ist</string>
   <string name="CannotDeleteReadOnly">Kann keine schreibgeschützen Dateien löschen.\nSoll Moving Pictures diesen Film ignorieren?</string>
+  <string name="CastAndCrew">Cast und Crew</string>
   <string name="CategoryEmptyDescription">Momentan sind keine Filme\nin dieser Kategorie vorhanden.</string>
   <string name="CategoryEmptyHeader">Kategorie ist leer</string>
   <string name="Certification">Altersfreigaben</string>
   <string name="ChangeView">Ansicht ändern</string>
   <string name="CheckForMissingArtwork">Suche online nach fehlenden Postern</string>
+  <string name="Collection">Sammlung</string>
+  <string name="Collections">Sammlungen</string>
   <string name="Completed">Fertig</string>
+  <string name="CompletedFiles">Fertiggestellte Dateien</string>
   <string name="ContinueToNextPartBody">Mit dem Teil {0} fortsetzen?</string>
   <string name="ContinueToNextPartHeader">Mit dem nächsten Teil fortsetzen?</string>
+  <string name="Cover">Cover</string>
+  <string name="CoverFlowView">Coverflow Ansicht</string>
   <string name="CycleCoverArt">Wechsle Poster</string>
   <string name="CycleView">Ansicht wechseln</string>
   <!--D-->
@@ -47,14 +60,22 @@
   <!--F-->
   <string name="FailedMountingImage">Leider konnte das DVD-Image nicht eingebunden werden.</string>
   <string name="FilePath">Dateipfad</string>
+  <string name="FilesNeedingAttention">Dateien die Aufmerksamkeit benötigen</string>
   <string name="FilmstripView">Filmstrip</string>
   <string name="FilterBy">Filtere nach</string>
   <string name="Friday">Freitag</string>
   <string name="Future">Zukunft</string>
   <!--G-->
+  <string name="GlobalActions">Globale Aktionen</string>
   <string name="Genre">Genre</string>
   <string name="Genres">Genres</string>
   <!--I-->
+  <string name="IgnoreMovie">Film ignorieren</string>
+  <string name="ImdbId">IMDb ID</string>
+  <string name="Importer">Film Importer</string>
+  <string name="ImporterDisabled">Importer deaktiviert</string>
+  <string name="ImporterDisabledMessage">Der Importer wurde in der Gui von\nMediaPortal deaktiviert. \nWillst du ihn reaktivieren?</string>
+  <string name="ImporterPending">Importer ({0} kontrollieren)</string>
   <string name="InvalidPin">Falscher PIN Code!</string>
   <string name="InvalidVideoDiscFormat">Entweder das Image-File enthält kein\ngültiges Videodiscformat oder die Daemon Tools\nMediaportal Konfiguration ist nicht korrekt.</string>
   <!--L-->
@@ -68,11 +89,25 @@
   <!--M-->
   <string name="MarkAsUnwatched">Als ungesehen markieren</string>
   <string name="MarkAsWatched">Als gesehen markieren</string>
+  <string name="MediaInfo">Medium Informationen</string>
   <string name="MediaIsMissing">Das Medium für den gewählten Film ist nicht vorhanden!\nLeider ging irgendetwas schief...</string>
   <string name="MediaNotAvailableBody">Das Medium für den gewählten Film ist zur Zeit\nnicht verfügbar. Bitte verbinden oder folgenden\nDatenträger einlegen: {0}</string>
   <string name="MediaNotAvailableHeader">Medium nicht verfügbar</string>
+  <string name="Missing">Fehlend</string>
   <string name="MissingExternalPlayerExe">Die Anwendung für HD-Wiedergabe ist nicht vorhanden.\nBitte den Pfad zu der Anwendung angeben/korrigieren.</string>
   <string name="Monday">Montag</string>
+  <string name="MonthName1">Januar</string>
+  <string name="MonthName2">Februar</string>
+  <string name="MonthName3">März</string>
+  <string name="MonthName4">April</string>
+  <string name="MonthName5">Mai</string>
+  <string name="MonthName6">Juni</string>
+  <string name="MonthName7">Juli</string>
+  <string name="MonthName8">August</string>
+  <string name="MonthName9">September</string>
+  <string name="MonthName10">Oktober</string>
+  <string name="MonthName11">November</string>
+  <string name="MonthName12">Dezember</string>
   <string name="Movie">Film</string>
   <string name="MovieDetails">Film Details</string>
   <string name="MovieOptions">Film Optionen</string>
@@ -88,6 +123,8 @@
   <string name="PinCodePrompt">Bitte PIN Code eingeben um fortzufahren:</string>
   <string name="PlaybackFailed">Wiedergabe nicht möglich, weil die Erweiterung \'{0}\' nicht in der Mediaportalkonfiguration aufgeführt ist.\nBitte diese Dateierweiterung hinzufügen oder einen externen Player\neinrichten und noch einmal versuchen.</string>
   <string name="PlaybackFailedHeader">Wiedergabe fehlgeschlagen</string>
+  <string name="PlayMovie">Spiele Film</string>
+  <string name="PossibleMatches">Mögliche Übereinstimmungen</string>
   <string name="ProblemLoadingSkinFile">Leider gab es ein Problem beim Laden der Skin-Datei ...</string>
   <!--R-->
   <string name="Rate">Bewerten</string>
@@ -99,6 +136,7 @@
   <string name="RateFiveStarTwo">Mittelmäßig</string>
   <string name="RateHeading">Film bewerten</string>
   <string name="RecentlyAddedMovies">Neu hinzugefügte Filme</string>
+  <string name="ReleaseDate">Veröffentlicht</string>
   <string name="RemoteNumericAlphabet0">
   </string>
   <string name="RemoteNumericAlphabet1">
@@ -111,6 +149,7 @@
   <string name="RemoteNumericAlphabet7">pqrs</string>
   <string name="RemoteNumericAlphabet8">tuv</string>
   <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Ignorierte Dateien wiederherstellen</string>
   <string name="ResumeFrom">Fortsetzen bei</string>
   <string name="ResumeFromLast">Wiedergabe an letzter Position fortsetzen?</string>
   <string name="Retry">Wiederholen</string>
@@ -127,12 +166,19 @@
   <string name="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
   <!--S-->
   <string name="Saturday">Samstag</string>
+  <string name="SendToImporter">Zum Importer senden</string>
+  <string name="ScanForNewMovies">Nach neuen Filmen suchen</string>
   <string name="Score">Punktzahl</string>
   <string name="Search">Suche</string>
+  <string name="SearchBy">Suche nach</string>
+  <string name="SearchForMore">Suche nach mehr Übereinstimmungen</string>
+  <string name="SearchNoResults">Keine Übereinstimmungen</string>
+  <string name="SelectCorrectMovie">Richtigen Film auswählen</string>
   <string name="SelectYourRating">Wähle deine Bewertung für {0}</string>
   <string name="ShowOnlyUnwatchedMovies">Zeige nur ungesehene Filme</string>
   <string name="ShowWatchedAndUnwatchedMovies">Zeige gesehene und ungesehene Filme</string>
   <string name="SkinDoesNotSupportCategories">Dieser Skin unterstützt die Anzeige von Kategorien nicht.</string>
+  <string name="SkinDoesNotSupportImporter">Dieser Skin unterstützt den Importer nicht.</string>
   <string name="SkinDoesNotSupportPinDialog">Dieser Skin unterstützt den PIN Code Dialog nicht.</string>
   <string name="SkinDoesNotSupportRatingDialog">Dieser Skin unterstützt den Bewertungsdialog nicht.</string>
   <string name="SortBy">Sortiere nach</string>
@@ -140,6 +186,7 @@
   <string name="StarRating">Bewertung</string>
   <string name="Sunday">Sonntag</string>
   <!--T-->
+  <string name="Theme">Theme</string>
   <string name="ThisMonth">Diesen Monat</string>
   <string name="ThisWeek">Diese Woche</string>
   <string name="ThisYear">Dieses Jahr</string>
@@ -165,6 +212,7 @@
   <string name="VirtualDriveHeader">Virtuelles Laufwerk ist nicht verfügbar</string>
   <string name="VirtualDriveMessage">Das virtuelle Laufwerk stand nicht rechtzeitig zur Verfügung.\nBitte erneut versuchen oder die Wiedergabe abbrechen.</string>
   <string name="Votes">Abstimmungen</string>
+  <string name="ViewMovieDetails">Film Details ansehen</string>
   <!--W-->
   <string name="Wednesday">Mittwoch</string>
   <string name="Writer">Autor</string>

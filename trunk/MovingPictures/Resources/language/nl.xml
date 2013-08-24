@@ -11,6 +11,7 @@
   <string name="BadParam">Een externe plugin of skin probeerde een niet bestaande parameter te openen!</string>
   <string name="Backdrop">Achtergrond</string>
   <string name="BeginsWith">Begint met</string>
+  <string name="BelongsToCollection">Behoort tot collectie</string>
   <!--C-->
   <string name="Cancel">Annuleren</string>
   <string name="CannotDeleteOffline">Kan {0}\n niet verwijderen omdat het bestand offline is.</string>
@@ -20,9 +21,11 @@
   <string name="CategoryEmptyHeader">Categorie is leeg.</string>
   <string name="Certification">Classificatie</string>
   <string name="ChangeView">Wijzig weergave</string>
-  <string name="CheckForMissingArtwork">Online zoeken naar missend artwork</string>
-  <string name="Completed">Compleet</string>
-  <string name="CompletedFiles">Complete bestanden</string>
+  <string name="CheckForMissingArtwork">Online zoeken naar ontbrekend artwork</string>
+  <string name="Collection">Collectie</string>
+  <string name="Collections">Collecties</string>
+  <string name="Completed">Voltooid</string>
+  <string name="CompletedFiles">Voltooide bestanden</string>
   <string name="ContinueToNextPartBody">Wilt u verdergaan met deel {0}?</string>
   <string name="ContinueToNextPartHeader">Verder gaan met het volgende deel?</string>
   <string name="Cover">Filmhoes</string>
@@ -59,7 +62,7 @@
   <string name="FilePath">Bestandspad</string>
   <string name="FilesNeedingAttention">Bestanden die aandacht nodig hebben</string>
   <string name="FilmstripView">Filmstripweergave</string>
-  <string name="FilterBy">Filter volgens</string>
+  <string name="FilterBy">Filter op</string>
   <string name="Friday">Vrijdag</string>
   <string name="Future">Toekomst</string>
   <!--G-->
@@ -93,6 +96,18 @@
   <string name="Missing">Mist</string>
   <string name="MissingExternalPlayerExe">Het uitvoerbaar bestand van de externe speler kan niet worden gevonden.\nGelieve het pad naar het bestand te corrigeren.</string>
   <string name="Monday">Maandag</string>
+  <string name="MonthName1">januari</string>
+  <string name="MonthName2">februari</string>
+  <string name="MonthName3">maart</string>
+  <string name="MonthName4">april</string>
+  <string name="MonthName5">mei</string>
+  <string name="MonthName6">juni</string>
+  <string name="MonthName7">juli</string>
+  <string name="MonthName8">augustus</string>
+  <string name="MonthName9">september</string>
+  <string name="MonthName10">oktober</string>
+  <string name="MonthName11">november</string>
+  <string name="MonthName12">december</string>
   <string name="Movie">Film</string>
   <string name="MovieDetails">Filminformatie</string>
   <string name="MovieOptions">Filmopties</string>
@@ -121,6 +136,7 @@
   <string name="RateFiveStarTwo">Matig</string>
   <string name="RateHeading">Waardeer film</string>
   <string name="RecentlyAddedMovies">Recent toegevoegde films</string>
+  <string name="ReleaseDate">Release datum</string>
   <string name="RemoteNumericAlphabet0">
   </string>
   <string name="RemoteNumericAlphabet1">
@@ -133,6 +149,7 @@
   <string name="RemoteNumericAlphabet7">pqrs</string>
   <string name="RemoteNumericAlphabet8">tuv</string>
   <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Herstel genegeerde bestanden</string>
   <string name="ResumeFrom">Hervatten vanaf:</string>
   <string name="ResumeFromLast">Film hervatten vanaf laatste positie?</string>
   <string name="Retry">Opnieuw proberen</string>

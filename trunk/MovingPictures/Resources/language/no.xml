@@ -4,7 +4,10 @@
   <string name="Actor">Skuespiller</string>
   <string name="Actors">Skuespillere</string>
   <string name="AllMovies">Alle filmer</string>
+  <string name="AllFiles">Alle filer</string>
   <!--B-->
+  <string name="BeginsWith">Begynner med</string>
+  <string name="BelongsToCollection">Hører til samling</string>
   <!--C-->
   <string name="Cancel">Avbryt</string>
   <string name="CannotDeleteOffline">Ikke mulig å slette {0}\n siden filen er offline</string>
@@ -14,6 +17,8 @@
   <string name="Certification">Aldersgrense</string>
   <string name="ChangeView">Endre visning</string>
   <string name="CheckForMissingArtwork">Se etter manglende Artwork på nettet</string>
+  <string name="Collection">Samling</string>
+  <string name="Collections">Samlinger</string>
   <string name="Completed">Ferdig</string>
   <string name="ContinueToNextPartBody">Vil du fortsette med del {0}?</string>
   <string name="ContinueToNextPartHeader">Fortsette til neste del?</string>
@@ -71,8 +76,21 @@
   <string name="MediaIsMissing">Media for valgte film mangler!\nEn feil har oppstått</string>
   <string name="MediaNotAvailableBody">Mediet for filmen du har valgt er ikke\ntilgjengelig. Vennligst sett inn er koble til\nmediet med navn: {0}</string>
   <string name="MediaNotAvailableHeader">Mediet ikke tilgjengelig</string>
+  <string name="Missing">Mangler</string>
   <string name="MissingExternalPlayerExe">Programmet for HD avspilling mangler.\nVennligst korriger filbanen til programmet.</string>
   <string name="Monday">Mandag</string>
+  <string name="MonthName1">Januar</string>
+  <string name="MonthName2">Februar</string>
+  <string name="MonthName3">Mars</string>
+  <string name="MonthName4">April</string>
+  <string name="MonthName5">Mai</string>
+  <string name="MonthName6">Juni</string>
+  <string name="MonthName7">Juli</string>
+  <string name="MonthName8">August</string>
+  <string name="MonthName9">September</string>
+  <string name="MonthName10">Oktober</string>
+  <string name="MonthName11">November</string>
+  <string name="MonthName12">Desember</string>
   <string name="Movie">Film</string>
   <string name="MovieDetails">Film detaljer</string>
   <string name="MovieOptions">Film innstillinger</string>
@@ -88,6 +106,8 @@
   <string name="PinCodePrompt">Vennligst skriv PIN-kode for å fortsette:</string>
   <string name="PlaybackFailed">Avspilling er ikke mulig siden \'{0}\' filtype\nikke er listet i din MediaPortal konfig.\nVennligst legg til denne filtypen eller legg\ntil en ekstern spiller og prøv på nytt.</string>
   <string name="PlaybackFailedHeader">Avspilling feilet</string>
+  <string name="PlayMovie">Spill av film</string>
+  <string name="PossibleMatches">Mulige samsvar</string>
   <string name="ProblemLoadingSkinFile">Problem oppsto ved lasting av skallfilen</string>
   <!--R-->
   <string name="Rate">Vurder</string>
@@ -99,6 +119,7 @@
   <string name="RateFiveStarTwo">Middels</string>
   <string name="RateHeading">Vurder film</string>
   <string name="RecentlyAddedMovies">Nylig lagt til</string>
+  <string name="ReleaseDate">Utgivelsesdato</string>
   <string name="RemoteNumericAlphabet0">
   </string>
   <string name="RemoteNumericAlphabet1">
@@ -128,6 +149,8 @@
   <!--S-->
   <string name="Saturday">Lørdag</string>
   <string name="Score">Vurdering</string>
+  <string name="Search">Søk</string>
+  <string name="SelectCorrectMovie">Velg riktig film</string>
   <string name="SelectYourRating">Velg din vurdering for {0}</string>
   <string name="ShowOnlyUnwatchedMovies">Vis kun usette filmer</string>
   <string name="ShowWatchedAndUnwatchedMovies">Vis både sette og usette filmer</string>
@@ -164,6 +187,7 @@
   <string name="VirtualDriveHeader">Virtuell disk ikke klar</string>
   <string name="VirtualDriveMessage">Den virtuelle disken var ikke klar.\nVennligst prøv igjen eller avbryt avspilling.</string>
   <string name="Votes">votes</string>
+  <string name="ViewMovieDetails">Se filmdetaljer</string>
   <!--W-->
   <string name="Wednesday">Onsdag</string>
   <string name="Writer">Manus</string>

@@ -1,10 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--A-->
+  <string name="Actor">Skuespiller</string>
   <string name="Actors">Skuespillere</string>
+  <string name="AllMovies">Alle episodene</string>
+  <string name="AllFiles">Alle filene</string>
   <!--B-->
+  <string name="BeginsWith">Begynner med</string>
   <!--C-->
   <string name="Cancel">Avbryt</string>
+  <string name="CategoryEmptyDescription">Det er for øyeblikket ingen filmer\n listet i denne kategorien.</string>
   <string name="Certification">Aldersgrense</string>
   <string name="ChangeView">Endre visning</string>
   <string name="Completed">Fullført</string>

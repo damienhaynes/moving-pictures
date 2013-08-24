@@ -567,6 +567,7 @@
     <Content Include="Resources\language\sr.xml" />
     <Content Include="Resources\language\tr.xml" />
     <Content Include="Resources\language\uk.xml" />
+    <Content Include="Resources\language\vi.xml" />
     <Content Include="Resources\language\zh-CN.xml" />
     <Content Include="Resources\language\zh.xml" />
     <Content Include="Resources\moving-pictures-release-notes.txt" />
