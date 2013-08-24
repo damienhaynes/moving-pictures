@@ -4,19 +4,24 @@
   <string name="Actor">Leikari</string>
   <string name="Actors">Leikarar</string>
   <string name="AllMovies">Allar kvikmyndir</string>
+  <string name="AllFiles">Allar skrár</string>
   <!--B-->
   <string name="BadCategory">Forrit eða útlit reyndi að\nopna MovingPictures flokk sem er\nekki til!</string>
   <string name="BadMovie">Forrit eða útlit reyndi að\nopna kvikmynd sem er ekki til í\nMoving Pictures!</string>
   <string name="BadParam">Forrit eða útlit sendi MovingPictures\nröng gögn!</string>
+  <string name="BeginsWith">Byrjar á</string>
   <!--C-->
   <string name="Cancel">Hætta við</string>
   <string name="CannotDeleteOffline">Ekki hægt að eyða {0}\n vegna þess að skráin er ekki tiltæk</string>
   <string name="CannotDeleteReadOnly">Get ekki eytt skrifvörðum kvikmyndum.\nViltu að Moving Pictures sleppi þessari kvikmynd?</string>
+  <string name="CastAndCrew">Leikarar og starfsmenn</string>
   <string name="CategoryEmptyDescription">Engar kvikmyndir eru\ní þessum flokki.</string>
   <string name="CategoryEmptyHeader">Flokkurinn er tómur</string>
   <string name="Certification">Aldurstakmark</string>
   <string name="ChangeView">Breyta röðun</string>
   <string name="CheckForMissingArtwork">Athuga með kápumyndir á netinu</string>
+  <string name="Collection">Safn</string>
+  <string name="Collections">Söfn</string>
   <string name="Completed">Búið</string>
   <string name="ContinueToNextPartBody">Viltu halda áfram með kafla {0}?</string>
   <string name="ContinueToNextPartHeader">halda áfram að næsta kafla?</string>
@@ -59,6 +64,10 @@
   <string name="Genre">Flokkur</string>
   <string name="Genres">Flokkar</string>
   <!--I-->
+  <string name="IgnoreMovie">Sleppa kvikmynd</string>
+  <string name="ImdbId">IMDB einkenni</string>
+  <string name="ImporterDisabled">Innflutningur óvirkur</string>
+  <string name="ImporterDisabledMessage">Innflutningur er óvirkur í MediaPortal GUI.\nViltu virkja hann?</string>
   <string name="InvalidPin">Rangur PIN kódi!</string>
   <string name="InvalidVideoDiscFormat">Annaðhvort inniheldur skráin ekki rétta skráarlýsingu\neða Daemon Tools í MediaPortal configuration ekki rétt.</string>
   <!--L-->
@@ -72,11 +81,25 @@
   <!--M-->
   <string name="MarkAsUnwatched">Merkja óséða</string>
   <string name="MarkAsWatched">Merkja séða</string>
+  <string name="MediaInfo">Skráarupplýsingar</string>
   <string name="MediaIsMissing">Margmiðlunarsnið viðkomandi kvikmyndar sem þú hefur valið er ekki til!\nAfsakið, en eitthvað hefur farið úrskeiðis...</string>
   <string name="MediaNotAvailableBody">Margmiðlunarsnið viðkomandi kvikmyndar sem þú hefur valið\n er ekki mögulegt. Vinsamlegast setjið í eða tengja disk\nnefndan: {0}</string>
   <string name="MediaNotAvailableHeader">Margmiðlunarsniðið er ekki mögulegt</string>
+  <string name="Missing">Vantar</string>
   <string name="MissingExternalPlayerExe">Keyrsluskráin fyrir HD spilun finnst ekki.\nVinsamlegast breyttu skráarslóðinni fyrir keyrsluskránna.</string>
   <string name="Monday">mánudagur</string>
+  <string name="MonthName1">janúar</string>
+  <string name="MonthName2">febrúar</string>
+  <string name="MonthName3">mars</string>
+  <string name="MonthName4">apríl</string>
+  <string name="MonthName5">maí</string>
+  <string name="MonthName6">júní</string>
+  <string name="MonthName7">júlí</string>
+  <string name="MonthName8">ágúst</string>
+  <string name="MonthName9">september</string>
+  <string name="MonthName10">október</string>
+  <string name="MonthName11">nóvember</string>
+  <string name="MonthName12">desember</string>
   <string name="Movie">Kvikmynd</string>
   <string name="MovieDetails">Lýsing kvikmyndar</string>
   <string name="MovieOptions">Valmöguleikar kvikmyndar</string>
@@ -92,6 +115,8 @@
   <string name="PinCodePrompt">Sláðu inn PIN kóda til að halda áfram:</string>
   <string name="PlaybackFailed">Spilun ekki möguleg vegna þess \'{0}\'\nviðkomandi margmiðlunarsnið er ekki skráð í Mediaportal configuration.\nVinsamlegast bættu þessu margmiðlunarsniði við eða settu upp útværan spilara\nog reyndu aftur.</string>
   <string name="PlaybackFailedHeader">Afspilun mistókst</string>
+  <string name="PlayMovie">Spila kvikmynd</string>
+  <string name="PossibleMatches">Möguleg samsvörun</string>
   <string name="ProblemLoadingSkinFile">Vandræði með viðkomandi viðmótsútlit.</string>
   <!--R-->
   <string name="Rate">Aldurst:</string>
@@ -103,6 +128,7 @@
   <string name="RateFiveStarTwo">Í lagi</string>
   <string name="RateHeading">Gefa einkunn</string>
   <string name="RecentlyAddedMovies">Nýlega bætt við</string>
+  <string name="ReleaseDate">Útgáfudagsetning</string>
   <string name="RemoteNumericAlphabet0">
   </string>
   <string name="RemoteNumericAlphabet1">
@@ -131,12 +157,19 @@
   <string name="RuntimeShortExtended">{0}k{1:00}m{2:00}s</string>
   <!--S-->
   <string name="Saturday">laugadagur</string>
+  <string name="SendToImporter">Senda í innflutning</string>
+  <string name="ScanForNewMovies">Athuga með nýjar kvikmyndir</string>
   <string name="Score">Einkunn</string>
   <string name="Search">Leita</string>
+  <string name="SearchBy">Leita eftir</string>
+  <string name="SearchForMore">Leita eftir fleiri samsvörunum</string>
+  <string name="SearchNoResults">Engin leitarniðurstaða</string>
+  <string name="SelectCorrectMovie">Veljið rétta kvikmyndi</string>
   <string name="SelectYourRating">Veldu einkunn fyrir {0}</string>
   <string name="ShowOnlyUnwatchedMovies">Birta aðeins óséðar kvikmyndir</string>
   <string name="ShowWatchedAndUnwatchedMovies">Birta séðar og óséðar kvikmyndir</string>
   <string name="SkinDoesNotSupportCategories">Þetta viðmótsútlit styður ekki flokkanir.</string>
+  <string name="SkinDoesNotSupportImporter">Þetta viðmótsútlit styður ekki innflutning.</string>
   <string name="SkinDoesNotSupportPinDialog">Þetta viðmótsútlit styður ekki PIN kóda glugga.</string>
   <string name="SkinDoesNotSupportRatingDialog">Þetta viðmótsútlit styður ekki Einkunnar glugga.</string>
   <string name="SortBy">Röðun</string>
@@ -144,6 +177,7 @@
   <string name="StarRating">Stjörnugjöf</string>
   <string name="Sunday">sunnudagur</string>
   <!--T-->
+  <string name="Theme">Þema</string>
   <string name="ThisMonth">Þessi mánuður</string>
   <string name="ThisWeek">Þessi vika</string>
   <string name="ThisYear">Þetta ár</string>
@@ -169,6 +203,7 @@
   <string name="VirtualDriveHeader">Sýndardrif er ekki tilbúið</string>
   <string name="VirtualDriveMessage">Sýndardrifið var ekki tilbúið í tíma.\nReynið aftur eða hættið við spilun.</string>
   <string name="Votes">atkvæði</string>
+  <string name="ViewMovieDetails">Ítarupplýsingar fyrir kvikmyndina</string>
   <!--W-->
   <string name="Wednesday">miðvikudagur</string>
   <string name="Writer">Handrit</string>

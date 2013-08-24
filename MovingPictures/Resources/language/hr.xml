@@ -4,19 +4,32 @@
   <string name="Actor">Glumac</string>
   <string name="Actors">Glumci</string>
   <string name="AllMovies">Svi filmovi</string>
+  <string name="AllFiles">Sve datoteke</string>
   <!--B-->
+  <string name="BadCategory">Vanjski dodatak ili skin pokušava\notvoriti nepostojeću Moving\nPictures kategoriju!</string>
+  <string name="BadMovie">Vanjski dodatak ili skin pokušava\notvoriti nepostojeći film u Moving\nPicturesu!</string>
+  <string name="BadParam">Vanjski dodatak ili skin dao\nje Moving Picturesu pogrešan parametar!</string>
+  <string name="Backdrop">Pozadina</string>
+  <string name="BeginsWith">Počinje sa</string>
+  <string name="BelongsToCollection">Pripada kolekciji</string>
   <!--C-->
   <string name="Cancel">Odustani</string>
-  <string name="CannotDeleteOffline">Ne mogu obrisati {0}\n datoteka je offline</string>
-  <string name="CannotDeleteReadOnly">Ne mogu obrisati, film je oznacen samo za citanje.\nDa li zelite da Moving Pictures ignorira ovaj film?</string>
+  <string name="CannotDeleteOffline">Ne mogu obrisati {0}\nDatoteka je offline.</string>
+  <string name="CannotDeleteReadOnly">Ne mogu obrisati, film je označen samo za čitanje.\nŽelite li da Moving Pictures ignorira ovaj film?</string>
+  <string name="CastAndCrew">Uloge i ekipa</string>
   <string name="CategoryEmptyDescription">Trenutno nema filmova\nu ovoj kategoriji.</string>
   <string name="CategoryEmptyHeader">Kategorija je prazna</string>
-  <string name="Certification">Certifikat</string>
+  <string name="Certification">Potvrda</string>
   <string name="ChangeView">Promjeni pogled</string>
-  <string name="CheckForMissingArtwork">Trazi ilustracije koje nedostaju na internetu</string>
+  <string name="CheckForMissingArtwork">Traži ilustracije koje nedostaju na internetu</string>
+  <string name="Collection">Kolekcija</string>
+  <string name="Collections">Kolekcija</string>
   <string name="Completed">Završeno</string>
-  <string name="ContinueToNextPartBody">Da li zelite nastaviti sa dijelom {0}?</string>
-  <string name="ContinueToNextPartHeader">Nastavite sa slijedecim dijelom?</string>
+  <string name="CompletedFiles">Obrađene datoteke</string>
+  <string name="ContinueToNextPartBody">Želite nastaviti s dijelom {0}?</string>
+  <string name="ContinueToNextPartHeader">Nastaviti sa slijedećim dijelom?</string>
+  <string name="Cover">Omot</string>
+  <string name="CoverFlowView">Prikaz s omotima</string>
   <string name="CycleCoverArt">Promjeni ilustraciju naslovnice</string>
   <string name="CycleView">Promjeni pogled</string>
   <!--D-->
@@ -47,14 +60,22 @@
   <!--F-->
   <string name="FailedMountingImage">Zao mi je, montiranje DVD preslike nije uspjelo</string>
   <string name="FilePath">Putanja datoteke</string>
+  <string name="FilesNeedingAttention">Datoteke koje zahtijevaju pozornost</string>
   <string name="FilmstripView">Pogled: Filmska vrpca</string>
   <string name="FilterBy">Filtriraj po</string>
   <string name="Friday">Petak</string>
   <string name="Future">Buduci</string>
   <!--G-->
+  <string name="GlobalActions">Globalne radnje</string>
   <string name="Genre">Zanr</string>
   <string name="Genres">Zanrovi</string>
   <!--I-->
+  <string name="IgnoreMovie">Zanemari Film</string>
+  <string name="ImdbId">IMDb Id</string>
+  <string name="Importer">Uvoznik filmova</string>
+  <string name="ImporterDisabled">Uvoznik je onemogućen</string>
+  <string name="ImporterDisabledMessage">Uvoznik je onemogućen u MediaPortal\nsučelju. Želite li ga ponovno\nuključiti?</string>
+  <string name="ImporterPending">Uvoznik ({0} Traži pozornost)</string>
   <string name="InvalidPin">Pogresan PIN!</string>
   <string name="InvalidVideoDiscFormat">Ili datoteka preslike ne sadrzava\nispravan video disk format, ili je Vasa Daemon\nTools MediaPortal konfiguracija netocna.</string>
   <!--L-->
@@ -68,11 +89,25 @@
   <!--M-->
   <string name="MarkAsUnwatched">Oznaci kao nepogledano</string>
   <string name="MarkAsWatched">Oznaci kao pogledano</string>
+  <string name="MediaInfo">MediaInfo</string>
   <string name="MediaIsMissing">Medij za film koji ste izabrali nedostaje!\nZao nam je, ali nesto nije u redu...</string>
   <string name="MediaNotAvailableBody">Medij za film koji ste odabrali trenutno\nnije dostupan. Molimo umetnite ili prikljucite medij\nnaziva: {0}</string>
   <string name="MediaNotAvailableHeader">Medij nije dostupan</string>
+  <string name="Missing">Nedostaje</string>
   <string name="MissingExternalPlayerExe">Izvrsna datoteka za HD reprodukciju nedostaje.\nMolimo ispravite put do izvrsne datoteke.</string>
   <string name="Monday">Ponedjeljak</string>
+  <string name="MonthName1">Siječanj</string>
+  <string name="MonthName2">Veljača</string>
+  <string name="MonthName3">Ožujak</string>
+  <string name="MonthName4">Travanj</string>
+  <string name="MonthName5">Svibanj</string>
+  <string name="MonthName6">Lipanj</string>
+  <string name="MonthName7">Srpanj</string>
+  <string name="MonthName8">Kolovoz</string>
+  <string name="MonthName9">Rujan</string>
+  <string name="MonthName10">Listopad</string>
+  <string name="MonthName11">Studeni</string>
+  <string name="MonthName12">Prosinac</string>
   <string name="Movie">Film</string>
   <string name="MovieDetails">Film: Detalji</string>
   <string name="MovieOptions">Film: Opcije</string>
@@ -88,6 +123,8 @@
   <string name="PinCodePrompt">Molimo unesite PIN kod kako bi nastavili:</string>
   <string name="PlaybackFailed">Reprodukcija nije moguca zato sto \'{0}\'\nekstenzija nije izlistana u Vaoj Mediaportal konfiguraciji.\nMolimo dodajte ekstenziju ili upogonite vanjsku reprodukciju\ni pokusajte ponovo.</string>
   <string name="PlaybackFailedHeader">Reprodukcija nije uspjela</string>
+  <string name="PlayMovie">Pokrenite film</string>
+  <string name="PossibleMatches">Mogući rezultati</string>
   <string name="ProblemLoadingSkinFile">Zao nam je, dogodio se problem pri ucitavanju skin datoteke</string>
   <!--R-->
   <string name="Rate">Ocijeni</string>
@@ -99,6 +136,7 @@
   <string name="RateFiveStarTwo">Osrednje</string>
   <string name="RateHeading">Ocijeni film</string>
   <string name="RecentlyAddedMovies">Nedavno dodani filmovi</string>
+  <string name="ReleaseDate">Datum izdanja</string>
   <string name="RemoteNumericAlphabet0">
   </string>
   <string name="RemoteNumericAlphabet1">
@@ -111,6 +149,7 @@
   <string name="RemoteNumericAlphabet7">pqrs</string>
   <string name="RemoteNumericAlphabet8">tuv</string>
   <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Vrati zanemarene datoteke</string>
   <string name="ResumeFrom">Nastavi od:</string>
   <string name="ResumeFromLast">Nastavi film od zadnji puta?</string>
   <string name="Retry">Ponovi</string>
@@ -127,11 +166,19 @@
   <string name="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
   <!--S-->
   <string name="Saturday">Subota</string>
+  <string name="SendToImporter">Pošaljite u uvoznik</string>
+  <string name="ScanForNewMovies">Skenirajte za novim filmovima</string>
   <string name="Score">Ocjena</string>
+  <string name="Search">Pretražite</string>
+  <string name="SearchBy">Pretražite po</string>
+  <string name="SearchForMore">Tražite više mogućih rezultata</string>
+  <string name="SearchNoResults">Pretraživanje nema rezultata.</string>
+  <string name="SelectCorrectMovie">Odaberite točan film</string>
   <string name="SelectYourRating">Dajte svoju ocjenu za {0}</string>
   <string name="ShowOnlyUnwatchedMovies">Prikazi samo \"Nepogledane filmove\"</string>
   <string name="ShowWatchedAndUnwatchedMovies">Prikazi pogledane i nepogledane filmove</string>
   <string name="SkinDoesNotSupportCategories">Ovaj skin ne podrzava kategorije.</string>
+  <string name="SkinDoesNotSupportImporter">Ovaj skin ne podržava Uvoznik.</string>
   <string name="SkinDoesNotSupportPinDialog">Ovaj skin ne podrzava PIN kod dijalog.</string>
   <string name="SkinDoesNotSupportRatingDialog">Ovaj skin ne podrzava dijalog za ocjenjivanje.</string>
   <string name="SortBy">Slozi po</string>
@@ -139,6 +186,7 @@
   <string name="StarRating">Ocjena sa zvjezdicama</string>
   <string name="Sunday">Nedjelja</string>
   <!--T-->
+  <string name="Theme">Tema</string>
   <string name="ThisMonth">Ovaj mjesec</string>
   <string name="ThisWeek">Ovaj tjedan</string>
   <string name="ThisYear">Ova godina</string>
@@ -164,6 +212,7 @@
   <string name="VirtualDriveHeader">Virtualni uredaj nije spreman</string>
   <string name="VirtualDriveMessage">Virtualni uredaj nije bio spreman na vrijeme.\nMolimo pokusajte ponovo ili odustanite od reprodukcije.</string>
   <string name="Votes">Glasovi</string>
+  <string name="ViewMovieDetails">Pogledaj detalje o filmu</string>
   <!--W-->
   <string name="Wednesday">Srijeda</string>
   <string name="Writer">Pisac</string>
