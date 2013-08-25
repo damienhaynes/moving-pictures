@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <window>
   <id>28380</id>
   <defaultcontrol>10</defaultcontrol>
@@ -11,9 +11,9 @@
       <description>1 Star</description>
       <type>checkmark</type>
       <id>100</id>
-      <posX>488</posX>
+      <posX>366</posX>
       <posY>362</posY>
-      <width>32</width>
+      <width>24</width>
       <height>32</height>
       <onup>101</onup>
       <textureCheckmark>UserRatingStarOn.png</textureCheckmark>
@@ -23,9 +23,9 @@
       <description>2 Star</description>
       <type>checkmark</type>
       <id>101</id>
-      <posX>560</posX>
+      <posX>420</posX>
       <posY>362</posY>
-      <width>32</width>
+      <width>24</width>
       <height>32</height>
       <onup>102</onup>
       <textureCheckmark>UserRatingStarOn.png</textureCheckmark>
@@ -35,9 +35,9 @@
       <description>3 Star</description>
       <type>checkmark</type>
       <id>102</id>
-      <posX>631</posX>
+      <posX>473</posX>
       <posY>362</posY>
-      <width>32</width>
+      <width>24</width>
       <height>32</height>
       <onup>103</onup>
       <textureCheckmark>UserRatingStarOn.png</textureCheckmark>
@@ -47,9 +47,9 @@
       <description>4 Star</description>
       <type>checkmark</type>
       <id>103</id>
-      <posX>702</posX>
+      <posX>526</posX>
       <posY>362</posY>
-      <width>32</width>
+      <width>24</width>
       <height>32</height>
       <onup>104</onup>
       <textureCheckmark>UserRatingStarOn.png</textureCheckmark>
@@ -59,9 +59,9 @@
       <description>5 Star</description>
       <type>checkmark</type>
       <id>104</id>
-      <posX>773</posX>
+      <posX>579</posX>
       <posY>362</posY>
-      <width>32</width>
+      <width>24</width>
       <height>32</height>
       <textureCheckmark>UserRatingStarOn.png</textureCheckmark>
       <textureCheckmarkNoFocus>UserRatingStarOff.png</textureCheckmarkNoFocus>
@@ -70,11 +70,11 @@
       <description>dialog text</description>
       <type>label</type>
       <id>7</id>
-      <posX>800</posX>
+      <posX>600</posX>
       <posY>400</posY>
       <font>font13</font>
       <align>right</align>
-      <width>300</width>
+      <width>225</width>
       <textcolor>ffffffff</textcolor>
     </control>
   </controls>
