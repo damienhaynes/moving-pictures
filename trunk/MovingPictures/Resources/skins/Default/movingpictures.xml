@@ -168,9 +168,9 @@
       <type>image</type>
       <id>16</id>
       <posX>2</posX>
-      <posY>1</posY>
+      <posY>75</posY>
       <width>36</width>
-      <height>48</height>
+      <height>36</height>
       <texture>lock.png</texture>
       <animation effect="fade" time="250">WindowOpen</animation>
       <animation effect="fade" time="250">WindowClose</animation>

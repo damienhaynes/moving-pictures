@@ -39,7 +39,7 @@
           <font3>font12</font3>
           <spinCanFocus>no</spinCanFocus>
           <!-- group headers -->
-					<textXOff3>0</textXOff3>
+		  <textXOff3>0</textXOff3>
           <textYOff3>8</textYOff3>
           <textcolor3>ff6FAFE1</textcolor3>
           <onleft>4</onleft>
@@ -56,6 +56,7 @@
           <height>500</height>
           <spinPosX>-800</spinPosX>
           <spinPosY>555</spinPosY>
+          <onleft>50</onleft>
           <onup>4</onup>
           <ondown>4</ondown>
           <frame>videothumbframe.png</frame>
@@ -76,8 +77,6 @@
           <scrollOffset>5</scrollOffset>
           <keepaspectratio>no</keepaspectratio>
           <suffix>|</suffix>
-          <folderPrefix />
-          <folderSuffix />
           <spinCanFocus>no</spinCanFocus>
           <scrollbarBackground>bar_hor.png</scrollbarBackground>
           <scrollbarLeft>mouse_left_horizontal.png</scrollbarLeft>
@@ -128,8 +127,7 @@
           <imageFolder>-</imageFolder>
           <imageFolderFocus>-</imageFolderFocus>
           <dimColor>ffffffff</dimColor>
-          <folderPrefix />
-          <folderSuffix />
+          <spinCanFocus>no</spinCanFocus>
         </control>
         <control>
           <description>Cover Flow view</description>
