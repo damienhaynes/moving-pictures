@@ -729,7 +729,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             listenToExternalPlayerEvents = false;
             donePlayingCustomIntros = false;
             customIntrosPlayed = 0;
-           
+            ClearPlayProperties();
+
             logger.Debug("Reset.");
         }
 
@@ -790,22 +791,59 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         #region GUI/OSD
 
+        /// <summary>
+        /// Publish all video specific properties to skin
+        /// http://wiki.team-mediaportal.com/1_MEDIAPORTAL_1/18_Contribute/7_Skins/Skin_Architecture/Current_File_Tags
+        /// </summary>
+        private void SetPlayProperties() {
+            _gui.SetProperty("#Play.Current.Title", CurrentMovie.Title);
+            _gui.SetProperty("#Play.Current.Plot", CurrentMovie.Summary);
+            _gui.SetProperty("#Play.Current.PlotOutline", CurrentMovie.Summary);
+            _gui.SetProperty("#Play.Current.Thumb", CurrentMovie.CoverThumbFullPath);
+            _gui.SetProperty("#Play.Current.Year", CurrentMovie.Year.ToString());
+            _gui.SetProperty("#Play.Current.File", CurrentMovie.LocalMedia[0].File.FullName);
+            _gui.SetProperty("#Play.Current.DVDLabel", CurrentMovie.LocalMedia[0].MediaLabel);
+            _gui.SetProperty("#Play.Current.IMDBNumber", CurrentMovie.ImdbID);
+            _gui.SetProperty("#Play.Current.Rating", CurrentMovie.Score.ToString());
+            _gui.SetProperty("#Play.Current.Votes", CurrentMovie.Popularity.ToString());
+            _gui.SetProperty("#Play.Current.Runtime", CurrentMovie.ActualRuntime != 0 ? CurrentMovie.ActualRuntime.ToString() : CurrentMovie.Runtime.ToString());
+            _gui.SetProperty("#Play.Current.MPAARating", CurrentMovie.Certification);
+            _gui.SetProperty("#Play.Current.IsWatched", (CurrentMovie.UserSettings[0].WatchedCount > 0).ToString().ToLowerInvariant());
+            _gui.SetProperty("#Play.Current.TagLine", CurrentMovie.Tagline);
+            _gui.SetProperty("#Play.Current.Director", CurrentMovie.Directors.ToPrettyString(1));
+            _gui.SetProperty("#Play.Current.Genre", CurrentMovie.Genres.ToPrettyString(1));
+            _gui.SetProperty("#Play.Current.Credits", CurrentMovie.Writers.ToPrettyString(MovingPicturesCore.Settings.MaxElementsToDisplay));
+            _gui.SetProperty("#Play.Current.Cast", CurrentMovie.Actors.ToPrettyString(MovingPicturesCore.Settings.MaxElementsToDisplay));
+        }
+
+        private void ClearPlayProperties() {
+            _gui.SetProperty("#Play.Current.Title", string.Empty);
+            _gui.SetProperty("#Play.Current.Plot", string.Empty);
+            _gui.SetProperty("#Play.Current.PlotOutline", string.Empty);
+            _gui.SetProperty("#Play.Current.Thumb", string.Empty);
+            _gui.SetProperty("#Play.Current.Year", string.Empty);
+            _gui.SetProperty("#Play.Current.File", string.Empty);
+            _gui.SetProperty("#Play.Current.DVDLabel", string.Empty);
+            _gui.SetProperty("#Play.Current.IMDBNumber", string.Empty);
+            _gui.SetProperty("#Play.Current.Rating", string.Empty);
+            _gui.SetProperty("#Play.Current.Votes", string.Empty);
+            _gui.SetProperty("#Play.Current.Runtime", string.Empty);
+            _gui.SetProperty("#Play.Current.MPAARating", string.Empty);
+            _gui.SetProperty("#Play.Current.IsWatched", string.Empty);
+            _gui.SetProperty("#Play.Current.TagLine", string.Empty);
+            _gui.SetProperty("#Play.Current.Director", string.Empty);
+            _gui.SetProperty("#Play.Current.Genre", string.Empty);
+            _gui.SetProperty("#Play.Current.Credits", string.Empty);
+            _gui.SetProperty("#Play.Current.Cast", string.Empty);
+        }
+
         // Updates the movie metadata on the playback screen (for when the user clicks info). 
         // The delay is necessary because Player tries to use metadata from the MyVideos database.
         // We want to update this after that happens so the correct info is there.
         private void UpdatePlaybackInfo() {
             Thread.Sleep(2000);
             if (CurrentMovie != null) {
-                _gui.SetProperty("#Play.Current.Title", CurrentMovie.Title);
-                _gui.SetProperty("#Play.Current.Plot", CurrentMovie.Summary);
-                _gui.SetProperty("#Play.Current.Thumb", CurrentMovie.CoverThumbFullPath);
-                _gui.SetProperty("#Play.Current.Year", CurrentMovie.Year.ToString());
-
-                if (CurrentMovie.Genres.Count > 0)
-                    _gui.SetProperty("#Play.Current.Genre", CurrentMovie.Genres[0]);
-                else
-                    _gui.SetProperty("#Play.Current.Genre", "");
-
+                SetPlayProperties();
             }
         }
 
