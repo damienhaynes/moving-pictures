@@ -56,10 +56,8 @@
           <textalign3>right</textalign3>
           <font3>font9</font3>
           <scrollOffset>2</scrollOffset>
-          <spinCanFocus>yes</spinCanFocus>
+          <spinCanFocus>no</spinCanFocus>
           <unfocusedAlpha>160</unfocusedAlpha>
-          <folderPrefix />
-          <folderSuffix />
           <!-- group headers -->
           <textcolor3>ff3E99D7</textcolor3>
           <onleft>4</onleft>
@@ -74,8 +72,9 @@
           <width>900</width>
           <height>588</height>
           <scrollOffset>1</scrollOffset>
-          <onleft>2</onleft>
-          <onright>2</onright>
+          <onleft>4</onleft>
+          <onright>4</onright>
+          <spinCanFocus>no</spinCanFocus>
           <itemWidth>112</itemWidth>
           <itemHeight>152</itemHeight>
           <textureWidth>100</textureWidth>
@@ -105,8 +104,6 @@
           <imageFolder>-</imageFolder>
           <imageFolderFocus>-</imageFolderFocus>
           <dimColor>ffffffff</dimColor>
-          <folderPrefix />
-          <folderSuffix />
         </control>
         <control>
           <description>Filmstrip view</description>
@@ -118,10 +115,10 @@
           <height>500</height>
           <spinPosX>-800</spinPosX>
           <spinPosY>555</spinPosY>
-          <onleft>2</onleft>
-          <onright>2</onright>
-          <onup>2</onup>
-          <ondown>2</ondown>
+          <onleft>50</onleft>
+          <onright>50</onright>
+          <onup>4</onup>
+          <ondown>4</ondown>
           <frame>videothumbframe.png</frame>
           <frameFocus>videothumbframe.png</frameFocus>
           <itemWidth>170</itemWidth>
@@ -163,8 +160,8 @@
           <posY>200</posY>
           <width>960</width>
           <height>720</height>
-          <onup>2</onup>
-          <onleft>2</onleft>
+          <onup>4</onup>
+          <onleft>50</onleft>
           <selectedCard>0</selectedCard>
           <cardWidth>250</cardWidth>
           <cardHeight>360</cardHeight>
