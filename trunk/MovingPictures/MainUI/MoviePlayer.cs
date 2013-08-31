@@ -378,18 +378,23 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             
             // We start listening to external player events
             listenToExternalPlayerEvents = true;
-            
+
+            // Enter full screen video and then play
+            // prevents OSD showing before playback
+            // Also appears that it enter playback faster!
+            // Note: Playback Indicator will still be shown in skin 
+            // before playback actually starts ie. you're not going to see a black fullscreen
+            GUIGraphicsContext.IsFullScreenVideo = true;
+            GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
+
             // Play the file using the mediaportal player
-            bool success = g_Player.Play(media.Trim());
+            bool success = g_Player.Play(media.Trim(), g_Player.MediaType.Video);
 
             // We stop listening to external player events
             listenToExternalPlayerEvents = false;
 
-            // if the playback started and we are still playing go full screen (internal player)
-            if (success && g_Player.Playing)
-                g_Player.ShowFullScreenWindow();
-            else if (!success) {
-                // if the playback did not happen, reset the player
+            // if the playback did not happen, reset the player
+            if (!success) {
                 logger.Info("Playback failed: Media={0}", media);
                 resetPlayer();
             }
