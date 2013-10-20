@@ -890,6 +890,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PARENT_DIR:
                     GUIWindowManager.ShowPreviousWindow();
                     break;
+
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PREVIOUS_MENU:
 
                     if (browser.CurrentView == BrowserViewMode.DETAILS) {
@@ -929,13 +930,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         // show previous screen (exit the plug-in)
                         GUIWindowManager.ShowPreviousWindow();
                     }
-
                     break;
+
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_PLAY:
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_MUSIC_PLAY:
                     // don't be confused, this in some cases is the generic PLAY action
                     playSelectedMovie();
                     break;
+
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_KEY_PRESSED:
                     // if remote filtering is active, try to route the keypress through the filter
                     bool remoteFilterEnabled = MovingPicturesCore.Settings.UseRemoteControlFiltering;
@@ -954,6 +956,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         base.OnAction(action);
                     }
                     break;
+
                 case MediaPortal.GUI.Library.Action.ActionType.ACTION_MOVE_UP:
                     int _loopDelay = 100; // wait at the last item this amount of msec until loop to the last item
 
@@ -982,6 +985,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         }
                     }
                     break;
+
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_PREV_PICTURE:
+                    CycleArtwork(browser.SelectedMovie, true);
+                    break;
+
+                case MediaPortal.GUI.Library.Action.ActionType.ACTION_NEXT_PICTURE:
+                    CycleArtwork(browser.SelectedMovie);
+                    break;
+
                 default:
                     base.OnAction(action);
                     break;
@@ -1487,6 +1499,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             int selectedIndex = browser.SelectedIndex;
             DBMovieInfo selectedMovie = browser.SelectedMovie;
 
+            detailsItem = new GUIListItem(Translation.UpdateDetailsFromOnline);
+            detailsItem.ItemId = currID;
+            dialog.Add(detailsItem);
+            currID++;
+
             if (selectedMovie.ActiveUserSettings.WatchedCount > 0) {
                 unwatchedItem = new GUIListItem(Translation.MarkAsUnwatched);
                 unwatchedItem.ItemId = currID;
@@ -1519,12 +1536,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 retrieveArtItem.ItemId = currID;
                 dialog.Add(retrieveArtItem);
                 currID++;
-            }
-
-            detailsItem = new GUIListItem(Translation.UpdateDetailsFromOnline);
-            detailsItem.ItemId = currID;
-            dialog.Add(detailsItem);
-            currID++;
+            }            
 
             if (MovingPicturesCore.Settings.AllowRescan) {
                 rescanItem = new GUIListItem(Translation.SendToImporter + " ...");
@@ -1540,29 +1552,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 currID++;
             }
 
-
-
-
             dialog.DoModal(GUIWindowManager.ActiveWindow);
             if (dialog.SelectedId == detailsItem.ItemId) {
                 updateMovieDetails(selectedMovie);
             }
             else if (dialog.SelectedId == cycleArtItem.ItemId) {
-
-                selectedMovie.NextCover();
-                browser.AutoRefresh = false;
-                selectedMovie.Commit();
-                browser.AutoRefresh = true;
-
-                // update the new cover art in the facade
-                GUIListItem listItem = browser.GetMovieListItem(selectedMovie);
-                if (listItem != null) {
-                    listItem.IconImage = selectedMovie.CoverThumbFullPath.Trim();
-                    listItem.IconImageBig = selectedMovie.CoverThumbFullPath.Trim();
-                    listItem.RefreshCoverArt();
-                }
-
-                PublishArtwork(selectedMovie);
+                CycleArtwork(selectedMovie);
             }
             else if (dialog.SelectedId == retrieveArtItem.ItemId) {
                 logger.Info("Updating artwork for " + selectedMovie.Title);
@@ -1592,6 +1587,31 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 MovingPicturesCore.Importer.Reprocess(selectedMovie);
                 GUIWindowManager.ActivateWindow(96743);
             }
+        }
+
+        private void CycleArtwork(DBMovieInfo movie, bool cycleBack = false) {
+            if (movie == null) return;
+
+            if (cycleBack) {
+                movie.PreviousCover();
+            }
+            else {
+                movie.NextCover();
+            }
+
+            browser.AutoRefresh = false;
+            movie.Commit();
+            browser.AutoRefresh = true;
+
+            // update the new cover art in the facade
+            var listItem = browser.GetMovieListItem(movie);
+            if (listItem != null) {
+                listItem.IconImage = movie.CoverThumbFullPath.Trim();
+                listItem.IconImageBig = movie.CoverThumbFullPath.Trim();
+                listItem.RefreshCoverArt();
+            }
+
+            PublishArtwork(movie);
         }
 
         private bool GetUserRating(DBMovieInfo movie) {
