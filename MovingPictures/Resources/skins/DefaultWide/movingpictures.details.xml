@@ -9,7 +9,7 @@
       <posX>71</posX>
       <posY>180</posY>
       <visible>!control.isvisible(50)+!control.isvisible(51)</visible>
-      <layout>StackLayout(0,Vertical,true)</layout>
+      <layout>StackLayout(0, Vertical, true)</layout>
       <control>
         <description>Play Button</description>
         <type>button</type>
@@ -30,28 +30,26 @@
         <onright>7</onright>
         <onleft>7</onleft>
         <onup>6</onup>
-        <ondown>9876</ondown>
+        <ondown>11899</ondown>
         <visible>plugin.isenabled(SubCentral)+!control.isvisible(50)+!control.isvisible(51)</visible>
       </control>
       <control>
-        <description>IMDb Trailer</description>
+        <description>Trailers</description>
         <type>button</type>
-        <id>9876</id>
+        <id>11899</id>
         <onup>7</onup>
         <ondown>97270</ondown>
-        <onright>9876</onright>
-        <onleft>9876</onleft>
-        <hyperlink>4755</hyperlink>
-        <hyperlinkParameter>site:IMDb Movie Trailers|search:#(iif(neq(#MovingPictures.SelectedMovie.imdb_id,''),#MovingPictures.SelectedMovie.imdb_id,#MovingPictures.SelectedMovie.title))|return:Locked</hyperlinkParameter>
-        <label>IMDb #(L(5900))</label>
-        <visible>plugin.isenabled(OnlineVideos)+!control.isvisible(50)+!control.isvisible(51)</visible>
+        <onright>11899</onright>
+        <onleft>11899</onleft>
+        <label>#Trailers.Translation.Trailers.Label...</label>
+        <visible>plugin.isenabled(Trailers)+!control.isvisible(50)+!control.isvisible(51)</visible>
       </control>
       <control>
         <description>Trakt Menu</description>
         <type>button</type>
         <id>97270</id>
-        <label>Trakt</label>
-        <onup>9876</onup>
+        <label>Trakt...</label>
+        <onup>11899</onup>
         <ondown>6</ondown>
         <onright>97270</onright>
         <onleft>97270</onleft>
