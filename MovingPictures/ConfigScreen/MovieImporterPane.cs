@@ -118,6 +118,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             } else 
                 rowNum = unapprovedMatchesBindingSource.IndexOf(obj);
 
+            if (rowNum == -1) return;
 
             // setup tooltip for filename
             DataGridViewTextBoxCell filenameCell = (DataGridViewTextBoxCell)unapprovedGrid.Rows[rowNum].Cells["unapprovedLocalMediaColumn"];
