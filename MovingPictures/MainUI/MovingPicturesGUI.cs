@@ -2633,6 +2633,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     SetProperty("#MovingPictures.Settings.BackdropMovieTitle", "");
                     break;
                 case MenuBackdropType.MOVIE:
+                    // check if the movie is still valid / exists in collection
+                    if (settings.BackdropMovie == null)
+                    {
+                        logger.Warn("Reverting category backdrop to Random movie, current selected movie no longer exists in database.");
+                        settings.BackdropType = MenuBackdropType.RANDOM;
+                        node.AdditionalSettings = settings;
+                        PublishArtwork(node);
+                        return;
+                    }
                     backdrop.Filename = settings.BackdropMovie.BackdropFullPath;
                     SetProperty("#MovingPictures.Settings.BackdropMovieTitle", settings.BackdropMovie.Title);
                     break;
@@ -2652,8 +2661,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                     // change the backdrop or set to null 
                     backdrop.Filename = (movie != null) ? movie.BackdropFullPath : null;
-                    SetProperty("#MovingPictures.Settings.BackdropMovieTitle"
-                        , (movie != null) ? movie.Title : null);
+                    SetProperty("#MovingPictures.Settings.BackdropMovieTitle", (movie != null) ? movie.Title : null);
                     break;
             }
         }
