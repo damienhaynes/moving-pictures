@@ -107,6 +107,11 @@ namespace Cornerstone.Tools {
             set { _accept = value; }
         } private string _accept;
 
+        public string AcceptLanguage {
+            get { return _acceptLanguage; }
+            set { _acceptLanguage = value; }
+        } private string _acceptLanguage;
+
         #endregion
 
         #region Public methods
@@ -126,6 +131,9 @@ namespace Cornerstone.Tools {
                 request.UserAgent = userAgent;
                 request.Method = _method;
                 request.Accept = _accept;
+                if (_acceptLanguage != null) {
+                    request.Headers.Add("Accept-Language", _acceptLanguage);
+                }
                 request.CookieContainer = new CookieContainer();
 
                 while (!completed) {

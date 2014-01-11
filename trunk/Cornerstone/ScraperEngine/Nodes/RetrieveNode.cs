@@ -51,6 +51,10 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return cookies; }
         } protected string cookies = null;
 
+        public string AcceptLanguage {
+            get { return acceptLanguage; }
+        } protected string acceptLanguage = null;
+
         public string Method {
             get { return _method; }
         } protected string _method;
@@ -70,6 +74,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
             timeout = 5000;
             timeoutIncrement = 2000;
             _method = "GET";
+            acceptLanguage = context.Language;
 
             // Load attributes
             foreach (XmlAttribute attr in xmlNode.Attributes) {
@@ -82,6 +87,9 @@ namespace Cornerstone.ScraperEngine.Nodes {
                         break;
                     case "useragent":
                         userAgent = attr.Value;
+                        break;
+                    case "accept_language":
+                        acceptLanguage = attr.Value;
                         break;
                     case "allow_unsafe_header":
                         try { allowUnsafeHeader = bool.Parse(attr.Value); }
@@ -195,7 +203,7 @@ namespace Cornerstone.ScraperEngine.Nodes {
                 grabber.MaxRetries = maxRetries;
                 grabber.AllowUnsafeHeader = allowUnsafeHeader;
                 grabber.CookieHeader = cookies;
-                
+                grabber.AcceptLanguage = acceptLanguage;
                 grabber.Debug = Context.DebugMode;
 
 
