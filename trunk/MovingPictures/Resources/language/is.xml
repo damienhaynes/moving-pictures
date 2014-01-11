@@ -9,6 +9,7 @@
   <string name="BadCategory">Forrit eða útlit reyndi að\nopna MovingPictures flokk sem er\nekki til!</string>
   <string name="BadMovie">Forrit eða útlit reyndi að\nopna kvikmynd sem er ekki til í\nMoving Pictures!</string>
   <string name="BadParam">Forrit eða útlit sendi MovingPictures\nröng gögn!</string>
+  <string name="Backdrop">Bakgrunnur</string>
   <string name="BeginsWith">Byrjar á</string>
   <string name="BelongsToCollection">Tilheyrir safni</string>
   <!--C-->
@@ -24,8 +25,10 @@
   <string name="Collection">Safn</string>
   <string name="Collections">Söfn</string>
   <string name="Completed">Búið</string>
+  <string name="CompletedFiles">Fullunnar skrár</string>
   <string name="ContinueToNextPartBody">Viltu halda áfram með kafla {0}?</string>
   <string name="ContinueToNextPartHeader">halda áfram að næsta kafla?</string>
+  <string name="Cover">Kápa</string>
   <string name="CoverFlowView">Kápumyndaflæði</string>
   <string name="CycleCoverArt">Fletti kápumyndum</string>
   <string name="CycleView">Breyta útliti</string>
@@ -63,6 +66,7 @@
   <string name="Friday">föstudagur</string>
   <string name="Future">Framtíð</string>
   <!--G-->
+  <string name="GlobalActions">Almennar aðgerðir</string>
   <string name="Genre">Flokkur</string>
   <string name="Genres">Flokkar</string>
   <!--I-->
@@ -71,6 +75,7 @@
   <string name="Importer">Innflutningur kvikmynda</string>
   <string name="ImporterDisabled">Innflutningur óvirkur</string>
   <string name="ImporterDisabledMessage">Innflutningur er óvirkur í MediaPortal GUI.\nViltu virkja hann?</string>
+  <string name="ImporterPending">Innflutningur ({0} þarfnast athugunar)</string>
   <string name="InvalidPin">Rangur PIN kódi!</string>
   <string name="InvalidVideoDiscFormat">Annaðhvort inniheldur skráin ekki rétta skráarlýsingu\neða Daemon Tools í MediaPortal configuration ekki rétt.</string>
   <!--L-->
@@ -144,6 +149,7 @@
   <string name="RemoteNumericAlphabet7">pqrs</string>
   <string name="RemoteNumericAlphabet8">tuv</string>
   <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Endurvekja hunsaðar skrár</string>
   <string name="ResumeFrom">Halda áfram frá:</string>
   <string name="ResumeFromLast">Halda áfram frá því síðast?</string>
   <string name="Retry">Reyna aftur</string>

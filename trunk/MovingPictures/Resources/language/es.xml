@@ -134,6 +134,7 @@
   <string name="Saturday">Sábado</string>
   <string name="ScanForNewMovies">Buscar Nuevas Películas</string>
   <string name="Score">Puntuación</string>
+  <string name="Search">Buscar</string>
   <string name="SelectYourRating">Seleccione su puntuación para {0}</string>
   <string name="ShowOnlyUnwatchedMovies">Mostrar sólo películas no vistas</string>
   <string name="ShowWatchedAndUnwatchedMovies">Mostrar películas vistas y no vistas</string>

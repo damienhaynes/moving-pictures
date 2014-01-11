@@ -551,6 +551,7 @@
     <Content Include="DataProviders\ScraperScripts\Daum.xml" />
     <Content Include="DataProviders\ScraperScripts\EmberMediaManager.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmAffinity.xml" />
+    <Content Include="Resources\language\bg.xml" />
     <Content Include="Resources\language\ca.xml" />
     <Content Include="Resources\language\et.xml" />
     <Content Include="Resources\language\fi.xml" />
@@ -558,6 +559,7 @@
     <Content Include="Resources\language\hr.xml" />
     <Content Include="Resources\language\hu.xml" />
     <Content Include="Resources\language\id.xml" />
+    <Content Include="Resources\language\ku.xml" />
     <Content Include="Resources\language\lt.xml" />
     <Content Include="Resources\language\nb.xml" />
     <Content Include="Resources\language\pl.xml" />
