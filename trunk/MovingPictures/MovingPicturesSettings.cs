@@ -1437,7 +1437,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Second Label on List View",
-            Description = "Show a second label on listview. Possible values are none, year, runtime, genre, studio, language, certification or score.",
+            Description = "Show a second label on listview. Possible values are none, year, release_date, runtime, genre, studio, language, certification or score.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "gui_listview_label2",
             Default = "year")]

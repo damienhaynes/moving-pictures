@@ -1054,6 +1054,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case "genre":
                     secondLabelText = movie.Genres.ToPrettyString(1);
                     break;
+                case "release_date":
+                    // check we have a valid release date, otherwise use the year
+                    if (movie.ReleaseDate == null || movie.ReleaseDate.Year < movie.Year) {
+                        int iYear = 1900;
+                        if (movie.Year > 0) iYear = movie.Year;
+                        secondLabelText = new DateTime(movie.Year, 1, 1).ToShortDateString();
+                    }
+                    else {
+                        secondLabelText = movie.ReleaseDate.ToShortDateString();
+                    }
+                    break;
                 default:
                     secondLabelText = string.Empty;
                     break;
