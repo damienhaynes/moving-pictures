@@ -981,7 +981,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (!listItems.ContainsKey(newNode)) {
                 GUIListItem currItem = new GUIListItem();
                 
-                // Try to parse the category name and execute  translations if needed
+                // Try to parse the category name and execute translations if needed
                 currItem.Label = Translation.ParseString(newNode.Name);
                 currItem.TVTag = newNode;
                 currItem.OnItemSelected += new MediaPortal.GUI.Library.GUIListItem.ItemSelectedHandler(onCategoryNodeSelected);
@@ -1002,7 +1002,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (!listItems.ContainsKey(newMovie)) {
                 GUIListItem currItem = new GUIListItem();
                 currItem.Label = newMovie.DisplayTitle;
-                currItem.Label2 = GetSecondItemLabel(newMovie);
                 currItem.IconImage = newMovie.CoverThumbFullPath.Trim();
                 currItem.IconImageBig = newMovie.CoverThumbFullPath.Trim();
                 currItem.TVTag = newMovie;
@@ -1011,14 +1010,55 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 listItems[newMovie] = currItem;
             }
 
+            // the second label on cached item
+            // the second label may need to change based on selected node / sort by
+            listItems[newMovie].Label2 = GetSecondItemLabelForCurrentSortBy(newMovie);
+
             // add the listitem
             facade.Add(listItems[newMovie]);
         }
 
+        /// <summary>
+        /// gets the best second label to display for node based on it's corresponding SortBy
+        /// if the SortBy doesn't match a logical field then the default field selected by user
+        /// in advanced settings is allocated
+        /// </summary>
+        private string GetSecondItemLabelForCurrentSortBy(DBMovieInfo movie) {
+            string secondLabel = string.Empty;
+
+            // get the current sortby field used
+            switch (this.CurrentSortField) {
+                case SortingFields.Certification:
+                    secondLabel = GetSecondItemLabel(movie, "certification");
+                    break;
+                case SortingFields.Year:
+                    secondLabel = GetSecondItemLabel(movie, "year");
+                    break;
+                case SortingFields.ReleaseDate:
+                    secondLabel = GetSecondItemLabel(movie, "release_date");
+                    break;
+                case SortingFields.Score:
+                    secondLabel = GetSecondItemLabel(movie, "score");
+                    break;
+                case SortingFields.Language:
+                    secondLabel = GetSecondItemLabel(movie, "language");
+                    break;
+                default:
+                    // default to user selection
+                    secondLabel = GetSecondItemLabel(movie);
+                    break;
+            }
+
+            return secondLabel;
+        }
+
         // gets the second label to display in list
         private string GetSecondItemLabel(DBMovieInfo movie) {
+            return GetSecondItemLabel(movie, MovingPicturesCore.Settings.SecondLabel.ToLowerInvariant());
+        }
+
+        private string GetSecondItemLabel(DBMovieInfo movie, string secondLabelType) {
             string secondLabelText = string.Empty;
-            string secondLabelType = MovingPicturesCore.Settings.SecondLabel.ToLowerInvariant();
 
             switch (secondLabelType) {
                 case "year":
