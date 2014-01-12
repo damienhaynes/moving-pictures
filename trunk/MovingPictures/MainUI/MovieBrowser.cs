@@ -1043,6 +1043,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case SortingFields.Language:
                     secondLabel = GetSecondItemLabel(movie, "language");
                     break;
+                case SortingFields.DateAdded:
+                    secondLabel = GetSecondItemLabel(movie, "date_added");
+                    break;
                 default:
                     // default to user selection
                     secondLabel = GetSecondItemLabel(movie);
@@ -1104,6 +1107,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     else {
                         secondLabelText = movie.ReleaseDate.ToShortDateString();
                     }
+                    break;
+                case "date_added":
+                    secondLabelText = movie.DateAdded.ToShortDateString();
                     break;
                 default:
                     secondLabelText = string.Empty;
