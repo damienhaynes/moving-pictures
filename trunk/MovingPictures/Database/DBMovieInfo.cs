@@ -69,7 +69,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
           }
         } private StringList _alternateTitles;
 
-        [DBField(Filterable=false)]
+        [DBField(AllowDynamicFiltering = false)]
         public string SortBy {
             get {
                 if (_sortBy.Trim().Length == 0)
@@ -282,7 +282,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private int _runtime;
 
 
-        [DBField(FieldName = "imdb_id", Filterable=false)]
+        [DBField(FieldName = "imdb_id", AllowDynamicFiltering = false)]
         public string ImdbID {
             get { return _imdbID; }
 
