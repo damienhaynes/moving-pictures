@@ -61,7 +61,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                                                                    node.BasicFilteringRelation, 
                                                                    node.GetFilteredItems());
 
-            // build list of decades, each will coorespond to one subnode
+            // build list of decades, each will correspond to one subnode
             HashSet<int> decades = new HashSet<int>();
             foreach (string year in allYears) {
                 int iYear;

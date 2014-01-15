@@ -346,7 +346,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             movieDetailsSubPane.DatabaseObject = CurrentMovie;
 
             if (CurrentMovie == null) {
-                // if we have no movie selcted (or multiple movies selected) clear out details
+                // if we have no movie selected (or multiple movies selected) clear out details
                 titleLabel.Text = "";
                 
                 coverImage.Image = null;

@@ -35,6 +35,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private DBLocalMedia queuedMedia;
         private int _activePart;
         private bool _resumeActive = false;
+        private bool _forcePlay = false;
 
         #endregion
 
@@ -290,6 +291,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             queuedMedia = mediaToPlay;
 
             // start playback
+
+            if (_resumeActive && movie.LocalMedia[0].IsBluray) {
+                _forcePlay = true;
+                g_Player.SetResumeBDTitleState = movie.ActiveUserSettings.ResumeTitleBD;
+
+            }
             logger.Info("Playing: Movie='{0}' FullPath='{1}', VideoPath='{2}', Mounted={3})", movie.Title, mediaToPlay.FullPath, videoPath, mountedPlayback.ToString());
             playFile(videoPath, mediaToPlay.VideoFormat);
         }
@@ -388,10 +395,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
 
             // Play the file using the mediaportal player
-            bool success = g_Player.Play(media.Trim(), g_Player.MediaType.Video);
+            bool success = g_Player.Play(media.Trim(), g_Player.MediaType.Video, g_Player.SetResumeBDTitleState, _forcePlay);
 
             // We stop listening to external player events
             listenToExternalPlayerEvents = false;
+
+            // Need to send Fullscreen for Blu-ray media
+            GUIGraphicsContext.IsFullScreenVideo = true;
+            GUIWindowManager.ActivateWindow((int)GUIWindow.Window.WINDOW_FULLSCREEN_VIDEO);
 
             // if the playback did not happen, reset the player
             if (!success) {
@@ -525,8 +536,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         msg.Param1 = movie.ActiveUserSettings.ResumeTime;
                         GUIGraphicsContext.SendMessage(msg);
                     }
-                    // deactivate resume
+                    // deactivate resume and force play
                     _resumeActive = false;
+                    _forcePlay = false;
                 }
 
                 // Trigger Movie started
@@ -553,6 +565,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             int requiredWatchedPercent = MovingPicturesCore.Settings.MinimumWatchPercentage;
             int watchedPercentage = _activeMovie.GetPercentage(_activePart, timeMovieStopped);
+            int resumeTitleBD = g_Player.SetResumeBDTitleState;
 
             logger.Debug("Watched: Percentage=" + watchedPercentage + ", Required=" + requiredWatchedPercent);
 
@@ -565,7 +578,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else {
                 byte[] resumeData = null;
                 g_Player.Player.GetResumeState(out resumeData);
-                updateMovieResumeState(_activeMovie, _activePart, timeMovieStopped, resumeData);
+                updateMovieResumeState(_activeMovie, _activePart, timeMovieStopped, resumeData, resumeTitleBD);
                 // run movie stopped logic
                 onMovieStopped(_activeMovie);
             }            
@@ -731,6 +744,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             queuedMedia = null;
             _playerState = MoviePlayerState.Idle;
             _resumeActive = false;
+            _forcePlay = false;
             listenToExternalPlayerEvents = false;
             donePlayingCustomIntros = false;
             customIntrosPlayed = 0;
@@ -764,21 +778,22 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
 
         private void clearMovieResumeState(DBMovieInfo movie) {
-            updateMovieResumeState(movie, 0, 0, null);
+            updateMovieResumeState(movie, 0, 0, null, 0);
         }
 
-        private void updateMovieResumeState(DBMovieInfo movie, int part, int timePlayed, byte[] resumeData) {
+        private void updateMovieResumeState(DBMovieInfo movie, int part, int timePlayed, byte[] resumeData, int titleBD) {
             if (movie.UserSettings.Count == 0)
                 return;
 
             // get the user settings for the default profile (for now)
             DBUserMovieSettings userSetting = movie.ActiveUserSettings;
 
-            if (timePlayed > 0) {
+            if (timePlayed > 0 && g_Player.SetResumeBDTitleState >= 0) {
                 // set part and time data 
                 userSetting.ResumePart = part;
                 userSetting.ResumeTime = timePlayed;
                 userSetting.ResumeData = new ByteArray(resumeData);
+                userSetting.ResumeTitleBD = titleBD;
                 logger.Debug("Updating movie resume state.");
             }
             else {
@@ -786,6 +801,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 userSetting.ResumePart = 0;
                 userSetting.ResumeTime = 0;
                 userSetting.ResumeData = null;
+                userSetting.ResumeTitleBD = 1000;
+                g_Player.SetResumeBDTitleState = userSetting.ResumeTitleBD;
                 logger.Debug("Clearing movie resume state.");
             }
             // save the changes to the user setting for this movie

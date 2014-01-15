@@ -82,6 +82,17 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _resumeTime;
 
+        [DBFieldAttribute(FieldName = "resume_titlebd")]
+        public int ResumeTitleBD {
+            get { return _resumeTitleBD; }
+
+            set {
+                _resumeTitleBD = value;
+                commitNeeded = true;
+                FieldChanged("ResumeTitleBD");
+            }
+        } private int _resumeTitleBD;
+
         [DBFieldAttribute(FieldName = "resume_data", Default = null, Filterable = false)]
         public ByteArray ResumeData {
             get { return _resumeData; }
