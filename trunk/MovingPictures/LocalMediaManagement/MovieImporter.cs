@@ -597,22 +597,27 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     while (true) {
                         // if the filesystem scanner found any files, add them
                         lock (filesAdded.SyncRoot) {
-                            if (filesAdded.Count > 0) {
-                                int processed = 0;
-                                int total = filesAdded.Count;
-                                foreach (object currFile in filesAdded) {
-                                    DBLocalMedia addedFile = (DBLocalMedia)currFile;
-                                    if (!fileList.Contains(addedFile))
-                                        fileList.Add((DBLocalMedia)currFile);
+                            try {
+                                if (filesAdded.Count > 0) {
+                                    int processed = 0;
+                                    int total = filesAdded.Count;
+                                    foreach (object currFile in filesAdded) {
+                                        DBLocalMedia addedFile = (DBLocalMedia)currFile;
+                                        if (!fileList.Contains(addedFile))
+                                            fileList.Add((DBLocalMedia)currFile);
 
-                                    processed++;
-                                    if (Progress != null)
-                                        Progress((int)(processed * 100.0 / total), processed, total, "Queueing files..");
-                                    
+                                        processed++;
+                                        if (Progress != null)
+                                            Progress((int)(processed * 100.0 / total), processed, total, "Queueing files..");
+
+                                    }
+
+                                    filesAdded.Clear();
+                                    if (Progress != null) Progress(100, processed, total, "Done!");
                                 }
-
-                                filesAdded.Clear();
-                                Progress(100, processed, total, "Done!");
+                            }
+                            catch (Exception Ex) {
+                                logger.ErrorException("Exception in filesystem scanner {0}.", Ex);
                             }
                         }
                         
