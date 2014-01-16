@@ -193,6 +193,7 @@ namespace Cornerstone.MP {
                 };
 
                 Thread thread = new Thread(actions);
+                thread.IsBackground = true; 
                 thread.Start();
                 return;
             }
