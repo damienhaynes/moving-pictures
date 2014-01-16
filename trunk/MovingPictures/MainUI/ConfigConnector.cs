@@ -44,6 +44,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 LoadingPopup loadingPopup = new LoadingPopup();
 
                 Thread initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
+                initThread.IsBackground = true;
                 initThread.Start();
                 loadingPopup.ShowDialog();
                 configScr = new MovingPicturesConfig();

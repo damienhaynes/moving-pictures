@@ -77,6 +77,7 @@ namespace Cornerstone.Tools {
 
                     Thread thread = new Thread(new ThreadStart(process.WorkRunner));
                     thread.Name = process.Name;
+                    thread.IsBackground = true; 
                     threadLookup[process] = thread;
 
                     thread.Start();

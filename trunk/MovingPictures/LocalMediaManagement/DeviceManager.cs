@@ -154,6 +154,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                     logger.Info("Starting Disk Watcher...");
                     watcherThread = new Thread(new ThreadStart(WatchDisks));
                     watcherThread.Name = "DeviceManager.WatchDisks";
+                    watcherThread.IsBackground = true;
                     watcherThread.Start();
                     logger.Info("Successfully started Disk Watcher.");
                 }
