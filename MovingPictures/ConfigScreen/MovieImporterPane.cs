@@ -432,6 +432,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                     
                     Thread thread = new Thread(actions);
                     thread.Name = "ManualUpdateThread";
+                    thread.IsBackground = true; 
                     thread.Start();
                 }
             }

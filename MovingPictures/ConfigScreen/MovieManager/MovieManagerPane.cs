@@ -775,6 +775,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             Thread thread = new Thread(actions);
             thread.Name = "ArtUpdater";
+            thread.IsBackground = true; 
             thread.Start();
         }
 

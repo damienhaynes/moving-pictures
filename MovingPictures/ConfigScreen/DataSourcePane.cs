@@ -213,6 +213,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             updateDebugModeMenuItem();
 
             Thread newThread = new Thread(new ThreadStart(reinitScrapers));
+            newThread.IsBackground = true; 
             newThread.Start();
         }
 

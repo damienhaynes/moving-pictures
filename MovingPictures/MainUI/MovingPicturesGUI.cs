@@ -412,6 +412,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // start initialization of the moving pictures core services in a seperate thread
             initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
+            initThread.IsBackground = true;
             initThread.Start();
 
             // ... and listen to the progress

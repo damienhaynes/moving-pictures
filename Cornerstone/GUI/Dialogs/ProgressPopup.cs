@@ -76,6 +76,7 @@ namespace Cornerstone.GUI.Dialogs {
             // try setting up the vanilla worker / progress bar
             if (worker != null) {
                 workerThread = new Thread(new ThreadStart(worker));
+                workerThread.IsBackground = true; 
                 workerThread.Start();
                 checkDoneTimer = new System.Threading.Timer(new TimerCallback(checkDoneTimer_Tick), null, 100, 100);
             }
@@ -84,6 +85,7 @@ namespace Cornerstone.GUI.Dialogs {
             else if (trackableWorker != null) {
                 progressBar.Style = ProgressBarStyle.Blocks;
                 workerThread = new Thread(new ThreadStart(paramThreadWrapper));
+                workerThread.IsBackground = true; 
                 workerThread.Start();
                 checkDoneTimer = new System.Threading.Timer(new TimerCallback(checkDoneTimer_Tick), null, 100, 100);
             }

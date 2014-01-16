@@ -684,6 +684,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // Update OSD (delayed)
             Thread newThread = new Thread(new ThreadStart(UpdatePlaybackInfo));
+            newThread.IsBackground = true; 
             newThread.Start();
 
             // only invoke movie started event if we were not playing this movie before

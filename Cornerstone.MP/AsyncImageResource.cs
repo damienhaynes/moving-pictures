@@ -40,6 +40,7 @@ namespace Cornerstone.MP {
                 _active = value;
 
                 Thread newThread = new Thread(new ThreadStart(activeWorker));
+                newThread.IsBackground = true; 
                 newThread.Name = "AsyncImageResource.activeWorker";
                 newThread.Start();
             }
@@ -122,6 +123,7 @@ namespace Cornerstone.MP {
                     value = " ";
 
                 Thread newThread = new Thread(new ParameterizedThreadStart(setFilenameWorker));
+                newThread.IsBackground = true; 
                 newThread.Name = "AsyncImageResource.setFilenameWorker";
                 newThread.Start(value);
             }
