@@ -41,9 +41,16 @@
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\Testing\MovingPicturesConfigLauncher\bin\Release\Moving Pictures Config.exe</LocalFileName>
+              <LocalFileName>..\External\ConfigLauncher\.NET 3\Moving Pictures Config.exe</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{10d7b890-4f19-48a6-aa11-6ed04e0959ab}-Moving Pictures Config.exe</ZipFileName>
-              <DestinationFilename>%Base%\Moving Pictures Config.exe</DestinationFilename>
+              <DestinationFilename>%Base%\Moving Pictures\.NET 3\Moving Pictures Config.exe</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\External\ConfigLauncher\.NET 4\Moving Pictures Config.exe</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0c9b9bde-0063-4d43-9728-e2273f32f904}-Moving Pictures Config.exe</ZipFileName>
+              <DestinationFilename>%Base%\Moving Pictures\.NET 4\Moving Pictures Config.exe</DestinationFilename>
             </FileItem>
           </Items>
         </Files>
@@ -714,13 +721,6 @@
             <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
               <Param1 />
               <UpdateOption>OverwriteIfOlder</UpdateOption>
-              <LocalFileName>..\MovingPictures\Resources\language\pt-BR.xml</LocalFileName>
-              <ZipFileName>Installer{CopyFile}\{f806fcab-c1dd-477a-a81f-b2268cffe889}-pt-BR.xml</ZipFileName>
-              <DestinationFilename>%Language%\MovingPictures\pt-BR.xml</DestinationFilename>
-            </FileItem>
-            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
-              <Param1 />
-              <UpdateOption>OverwriteIfOlder</UpdateOption>
               <LocalFileName>..\MovingPictures\Resources\language\pt.xml</LocalFileName>
               <ZipFileName>Installer{CopyFile}\{efd7a85a-3d80-434c-94dd-941ebc987f0b}-pt.xml</ZipFileName>
               <DestinationFilename>%Language%\MovingPictures\pt.xml</DestinationFilename>
@@ -823,7 +823,7 @@
         <ParentGroup />
         <DisplayName>Launch MovingPictures Configuration</DisplayName>
         <DefaulChecked>false</DefaulChecked>
-        <Description>Launch MovingPictures Configuration (dummy feature used to invoke config at end of installer)</Description>
+        <Description>Launch MovingPictures Configuration</Description>
         <Files>
           <Items />
         </Files>
@@ -992,6 +992,104 @@ public class Script
               </Params>
               <ExecuteLocation>AfterPanelShow</ExecuteLocation>
             </ActionItem>
+            <ActionItem Name="Script" ActionType="Script" ConditionGroup="Default">
+              <Params>
+                <Items>
+                  <SectionParam Name="Script">
+                    <Value>//css_reference "MpeCore.dll";
+
+using System;
+using System.IO;
+using System.Diagnostics;
+using MpeCore.Classes;
+using MpeCore;
+
+public class Script
+{
+        public static void Main(PackageClass packageClass, ActionItem actionItem)
+        {	
+	// get base path for MediaPortal
+	string basePath = MpeInstaller.TransformInRealPath("%Base%");
+
+	// get the file version info for currently installed MediaPortal.
+               FileVersionInfo mpVersionInfo = FileVersionInfo.GetVersionInfo(basePath + "\\MediaPortal.exe");
+	
+	Version mpNet4Version = new System.Version(1, 6, 0, 0);
+                Version mpCurrVersion = new System.Version(mpVersionInfo.ProductVersion);
+
+                string source = string.Empty;
+	string destination = basePath + "\\Moving Pictures Config.exe";
+	
+	// copy the correct compiled version of the config launcher based on installed version
+	if (mpCurrVersion.CompareTo(mpNet4Version) &gt;= 0)
+	{
+		// .Net 4... current MP version is v1.6 or greater
+		source = basePath + @"\Moving Pictures\.NET 4\Moving Pictures Config.exe";
+	}
+	else
+	{
+		// .Net 3... current MP version is less than v1.6
+		source = basePath + @"\Moving Pictures\.NET 3\Moving Pictures Config.exe";
+	}
+	
+	try { File.Copy(source, destination, true); } catch {}
+	
+	return;
+        }
+}
+</Value>
+                    <ValueType>Script</ValueType>
+                    <Description />
+                  </SectionParam>
+                  <SectionParam Name="Uninstall Script">
+                    <Value>//css_reference "MpeCore.dll";
+
+using MpeCore.Classes;
+using MpeCore;
+
+public class Script
+{
+    public static void Main(PackageClass packageClass, UnInstallItem item)
+    {
+        return;
+    }
+}
+</Value>
+                    <ValueType>Script</ValueType>
+                    <Description />
+                  </SectionParam>
+                </Items>
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="CreateShortCut" ActionType="CreateShortCut" ConditionGroup="Default">
+              <Params>
+                <Items>
+                  <SectionParam Name="ShortCut location">
+                    <Value>%Desktop%\Moving Pictures Configuration.lnk</Value>
+                    <ValueType>Template</ValueType>
+                    <Description>Location of shortcut</Description>
+                  </SectionParam>
+                  <SectionParam Name="ShortCut target">
+                    <Value>%Base%\Moving Pictures Config.exe</Value>
+                    <ValueType>Template</ValueType>
+                    <Description>Target of short cut</Description>
+                  </SectionParam>
+                  <SectionParam Name="Description">
+                    <Value>Moving Pictures Configuration</Value>
+                    <ValueType>String</ValueType>
+                    <Description>Description tooltip text </Description>
+                  </SectionParam>
+                  <SectionParam Name="Icon of the shortcut">
+                    <Value />
+                    <ValueType>Template</ValueType>
+                    <Description>Icon of the shortcut, 
+ if is empty the icon of the target will be used</Description>
+                  </SectionParam>
+                </Items>
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
           </Items>
         </Actions>
         <IncludedGroups />
@@ -1141,47 +1239,14 @@ public class Script
     <Version>
       <Major>1</Major>
       <Minor>6</Minor>
-      <Build>0</Build>
-      <Revision>1532</Revision>
+      <Build>1</Build>
+      <Revision>1548</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
-    <VersionDescription>* Support for a native MPEI installation package.
-* Support for translations from Transifex. Users can now submit translations from their website.
-* Added 'Plot Keywords' field.
-** Enhanced 'Theme' search to also include Plot Keywords.
-** TheMovieDB scaper has been updated to support 'Plot Keywords'.
-* Added 'Collections' field:
-** TheMovieDB scaper has been updated to support 'Collections'.
-** Categories updated to allow dynamic category support for Collections.
-** A movie can be added to more than one collection.
-* Added support for localised posters from fanart.tv.
-* Added support to CycleArtwork via a MediaPortal GUI Action (e.g. press of a remote button). Chose the most logical action available which is PREVIOUS_PICTURE and NEXT_PICTURE.
-* Added new skin properties to allow skinner to control the plurality of labels e.g. 'Director' when there is only one director. Updated DefaultWide skin to show example of usage.
-* Publish all MediaPortal Video Play properties including IMDb ID which can be used to display extra artwork on OSD such as Clear Logos.
-* Added 'Release Date' field:
-** TheMovieDB scaper has been updated to support 'Release Date'.
-** Added sorting and group header support.
-** Added support for date modifier in scraper engine, this will allow scripters to specify the format of the date which they are using. (see r1514 for details).
-* Added extra skin properties for fields of type datetime.
-* Added support for date modifier in scraper engine, this will allow scripters to specify the format of the date which they are using. (see r1514 for details).
-* Fixed a crash seen when creating a blank movie template which doesn't have a movie data provider:
-* Fixed IMDb pre-lookup not working.
-* Fixed bugs and cleanup of new DefaultWide skin:
-** Removed animations where applicable to keep in line with design of main skin.
-** Removed unused imports and images.
-** Several bug fixes and missing functionality e.g. play indicator
-** Added new release date field to details view.
-** Fixed GroupHeaders not working in DefaultWide skin.
-** Fixed Rate Dialog not working with MediaPortal 1.3+ (replaced toggle buttons with checkmarks).
-** Added support for 'Trailers' plugin, button added in details view.
-* Fixed OSD showing before fullscreen playback of NEW files.
-* Fixed a possible ArgumentOutOfRangeException when updating Alpha Filter.
-* Fixed an unhandled exception in importer when creating a movie with no IMDb,
-* Improved directory accessibility check to prevent false positives resulting in removal of media from the db.
-* [API] Adjusted tab switching logic so the movie manager can be reused by mpextended.</VersionDescription>
+    <VersionDescription />
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://moving-pictures.googlecode.com/files/moving-pictures-1.6.0-setup.mpei</OnlineLocation>
-    <ReleaseDate>2013-11-30T19:04:46</ReleaseDate>
+    <ReleaseDate>2014-01-18T19:04:46</ReleaseDate>
     <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
     <Location>moving-pictures-setup.mpe1</Location>
     <Params>
@@ -1249,9 +1314,16 @@ public class Script
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\Testing\MovingPicturesConfigLauncher\bin\Release\Moving Pictures Config.exe</LocalFileName>
+        <LocalFileName>..\External\ConfigLauncher\.NET 3\Moving Pictures Config.exe</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{10d7b890-4f19-48a6-aa11-6ed04e0959ab}-Moving Pictures Config.exe</ZipFileName>
-        <DestinationFilename>%Base%\Moving Pictures Config.exe</DestinationFilename>
+        <DestinationFilename>%Base%\Moving Pictures\.NET 3\Moving Pictures Config.exe</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\External\ConfigLauncher\.NET 4\Moving Pictures Config.exe</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0c9b9bde-0063-4d43-9728-e2273f32f904}-Moving Pictures Config.exe</ZipFileName>
+        <DestinationFilename>%Base%\Moving Pictures\.NET 4\Moving Pictures Config.exe</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
         <Param1 />
@@ -1893,13 +1965,6 @@ public class Script
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
-        <LocalFileName>..\MovingPictures\Resources\language\pt-BR.xml</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{f806fcab-c1dd-477a-a81f-b2268cffe889}-pt-BR.xml</ZipFileName>
-        <DestinationFilename>%Language%\MovingPictures\pt-BR.xml</DestinationFilename>
-      </FileItem>
-      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
-        <Param1 />
-        <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\MovingPictures\Resources\language\pt.xml</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{efd7a85a-3d80-434c-94dd-941ebc987f0b}-pt.xml</ZipFileName>
         <DestinationFilename>%Language%\MovingPictures\pt.xml</DestinationFilename>
@@ -1999,7 +2064,7 @@ public class Script
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\MovingPictures\Resources\Images\icon_large.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{100bd770-d2fd-4b8f-bf4a-8683b2229a8b}-icon_large.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{67338292-94d6-4dcf-9f3d-43be9d4490f1}-icon_large.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
