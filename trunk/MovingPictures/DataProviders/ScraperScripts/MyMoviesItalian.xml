@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874909</id>
-    <version major="1" minor="0" point="10"/>
-    <published month="06" day="17" year="2011"/>
+    <version major="1" minor="0" point="11"/>
+    <published month="10" day="19" year="2013"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -38,23 +38,23 @@
     </set>
     <set name="search_Year">
       <![CDATA[
-	   Genere(?:[^<]+<){3}a\shref="http.//www.mymovies.it/film/.anno=(?<movieYear>\d{4})
-	  ]]>
+           Genere(?:[^<]+<){3}a\shref="http.//www.mymovies.it/film/.anno=(?<movieYear>\d{4})
+          ]]>
     </set>
     <set name="search_Details_Title">
       <![CDATA[
-	   <h1>[^\w]+(?<movieTitle>[^\n]+)
-	  ]]>
+           <h1>[^\w]+(?<movieTitle>[^\n]+)
+          ]]>
     </set>
     <set name="search_Details_Year">
       <![CDATA[
-	   www.mymovies.it/film/.anno=(?<movieYear>\d{4})">
-	  ]]>
+           www.mymovies.it/film/.anno=(?<movieYear>\d{4})">
+          ]]>
     </set>
     <set name="rx_ID_Check">
       <![CDATA[
-	   (?<GroupName>\d+)
-	  ]]>
+           (?<GroupName>\d+)
+          ]]>
     </set>
 
     <!-- Search for movie with title as original title. -->
@@ -150,7 +150,7 @@
 
       <set name="it_summary">
         <![CDATA[
-      <img style="float:left;\sborder:solid\s1px\sgray;\spadding:3px;\smargin:5px;".*<div\sstyle="text-align:right;">
+      <img onerror.*style="float:left;\sborder:solid\s1px\sgray;\spadding:3px;\smargin:5px;".*<div\sstyle="text-align:right;">
       ]]>
       </set>
       <set name="score">
@@ -212,45 +212,42 @@
       <parse name='summaryit' input ='${details_page}' regex='${it_summary}'/>
       <set name="movie.summary" value="${summaryit:striptags}" />
      
-	 			<!-- Get IMDb ID via imdb.it to assist in obtaining fanarts -->
-		<set name="rx_details_page">
-			<![CDATA[
-			<title>.+?\((\d{4})\).*?</title>(.+?)</body>
-			]]>
-		</set>
+                                <!-- Get IMDb ID via imdb.it to assist in obtaining fanarts -->
+                <set name="rx_details_page">
+                        <![CDATA[
+                        ="<title>.+?\((\d{4})\).*?</title>(.+?)</body>
+                        ]]>
+                </set>
 
-		<set name="rx_locate_title">
-			<![CDATA[
-			=/title/(tt\d{7})/.*?\((\d{4})\)
-			]]>
-		</set>
+                <set name="rx_locate_title">
+                        <![CDATA[
+                        ="/title/(tt\d{7})/.*?\((\d{4})\)
+                        ]]>
+                </set>
 
-		<!-- We can not rely on user interaction to select the right movie -->
-		<!-- So this will rely solely on imdb.es for a correct match -->
+                <!-- We can not rely on user interaction to select the right movie -->
+                <!-- So this will rely solely on imdb.es for a correct match -->
 
-		<retrieve name="imdb_search" url="http://www.imdb.it/find?s=tt;q=${movie.title:safe(ISO-8859-1)}" />
+                <retrieve name="imdb_search" url="http://www.imdb.com/find?q=${movie.title:safe(ISO-8859-1)};s=tt" />
 
-		<!-- Verify first to see if the search results is an instant match -->
-		<parse name="details_page" input="${imdb_search}" regex="${rx_details_page}" />
-		<!-- Verify Release Year -->
-		<if test="${details_page[0][0]:htmldecode}=${movie.year}">
-			<parse name="imdb_id" input="${details_page[0][1]}" regex="(tt\d{7})/fullcredits" />
-			<set name="movie.imdb_id" value="${imdb_id[0][0]:htmldecode}" />
-		</if>
+                <!-- Verify first to see if the search results is an instant match -->
+                <parse name="details_page" input="${imdb_search}" regex="${rx_details_page}" />
+                <!-- Verify Release Year -->
+                <if test="${details_page[0][0]:htmldecode}=${movie.year}">
+                        <parse name="imdb_id" input="${details_page[0][1]}" regex="(tt\d{7})/fullcredits" />
+                        <set name="movie.imdb_id" value="${imdb_id[0][0]:htmldecode}" />
+                </if>
 
-		<!-- Use the Search page results otherwise -->
-		<if test="${movie.imdb_id}=">
-			<parse name="search_results" input="${imdb_search}" regex='&lt;meta name="title" content="IMDb Ricerca Titolo"&gt;.+&lt;/body&gt;' />
-			<if test="${search_results}!=">
-				<parse name="imdb_id" input="${search_results}" regex="${rx_locate_title}" />
-				<!-- Verify Release Year -->
-				<if test="${imdb_id[0][1]:htmldecode}=${movie.year}">
-					<set name="movie.imdb_id" value="${imdb_id[0][0]:htmldecode}" />
-				</if>
-			</if>
-		</if>
-	 
-	</if>
+                <!-- Use the Search page results otherwise -->
+                <if test="${movie.imdb_id}=">
+                         <parse name="imdb_id" input="${imdb_search}" regex="${rx_locate_title}" />
+                         <!-- Verify Release Year -->
+                         <if test="${imdb_id[0][1]:htmldecode}=${movie.year}">
+                            <set name="movie.imdb_id" value="${imdb_id[0][0]:htmldecode}" />
+                         </if>
+                </if>
+         
+        </if>
 
   </action>
 
