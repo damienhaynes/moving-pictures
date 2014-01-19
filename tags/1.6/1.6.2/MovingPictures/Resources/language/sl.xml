@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--A-->
+  <string name="Actor">Igralec</string>
+  <string name="Actors">Igralci</string>
+  <string name="AllMovies">Vsi Filmi</string>
+  <string name="AllFiles">Vse datoteke</string>
+  <!--B-->
+  <string name="BadCategory">Zunanji vtičnik ali preobleka je poskusila\nodpreti neobstoječo Moving\nPictures kategorijo!</string>
+  <string name="BadMovie">Zunanji vtičnik ali preobleka je poskusila\nodpreti neobstoječ film v Moving\nPictures!</string>
+  <string name="BadParam">Zunanji vtičnik ali preobleka je podal\nMoving Pictures neveljaven parameter!</string>
+  <string name="Backdrop">Ozadje</string>
+  <string name="BeginsWith">Se začne z</string>
+  <string name="BelongsToCollection">Spada v zbirko</string>
+  <!--C-->
+  <string name="Cancel">Prekliči</string>
+  <string name="CannotDeleteOffline">Ni možno izbrisati {0}\n ker datoteka ni na voljo</string>
+  <string name="CannotDeleteReadOnly">Ni možno izbrisati filma, ker je označen kot samo za branje.\nAli želite, da Moving Pictures prezre ta film?</string>
+  <string name="CastAndCrew">Zasedba in osebje</string>
+  <string name="CategoryEmptyDescription">Trenutno ni filmov\nv tej kategoriji</string>
+  <string name="CategoryEmptyHeader">Kategorija je prazna</string>
+  <string name="Certification">Certifikacija</string>
+  <string name="ChangeView">Spremeni pogled</string>
+  <string name="CheckForMissingArtwork">Preveri za manjkajoče plakate na spletu</string>
+  <string name="Collection">Zbirka</string>
+  <string name="Collections">Zbirke</string>
+  <string name="Completed">Končano</string>
+  <string name="CompletedFiles">Končane datoteke</string>
+  <string name="ContinueToNextPartBody">Želite nadaljevati z {0} delom?</string>
+  <string name="ContinueToNextPartHeader">Nadaljevanje na naslednji del?</string>
+  <string name="Cover">Ovitek</string>
+  <string name="CoverFlowView">Coverflow</string>
+  <string name="CycleCoverArt">Rotiraj Cover-Art</string>
+  <string name="CycleView">Rotiraj pogled</string>
+  <!--D-->
+  <string name="DateAdded">Dodano dne</string>
+  <string name="DateDay">dan</string>
+  <string name="DateDays">dnevi</string>
+  <string name="DateMonth">mesec</string>
+  <string name="DateMonths">meseci</string>
+  <string name="DatePartAgo">Pred {0} {1}</string>
+  <string name="DatePartWithinDays">Zadnjih {0} dni</string>
+  <string name="DatePartWithinMonths">Zadnjih {0} mesecev</string>
+  <string name="DatePartWithinWeeks">Zadnjih {0} tednov</string>
+  <string name="DatePartWithinYears">Zadnjih {0} let</string>
+  <string name="DateWeek">teden</string>
+  <string name="DateWeeks">tedni</string>
+  <string name="DateYear">leto</string>
+  <string name="DateYears">leti</string>
+  <string name="DecadeShort">{0}0ta</string>
+  <string name="DeleteFailed">Brisanje je spodletelo</string>
+  <string name="DeleteMovie">Izbriši film</string>
+  <string name="Director">Režiser</string>
+  <string name="Directors">Režiserji</string>
+  <string name="DownAbbreviation">(dol)</string>
+  <string name="DoYouWantToDelete">Ali želite trajno izbrisati\n{0}\ns trdega diska?</string>
+  <!--E-->
+  <string name="EarlierThisYear">Letos</string>
+  <string name="Error">Napaka</string>
+  <!--F-->
+  <string name="FailedMountingImage">Žal ni uspelo naložiti DVD slike</string>
+  <string name="FilePath">Pot datoteke</string>
+  <string name="FilesNeedingAttention">Datoteke, ki rabijo pozornost</string>
+  <string name="FilmstripView">Filmski trak</string>
+  <string name="FilterBy">Filtriraj po</string>
+  <string name="Friday">Petek</string>
+  <string name="Future">Prihodnost</string>
+  <!--G-->
+  <string name="GlobalActions">Globalna dejanja</string>
+  <string name="Genre">Žanr</string>
+  <string name="Genres">Žanri</string>
+  <!--I-->
+  <string name="IgnoreMovie">Prezri film</string>
+  <string name="ImdbId">IMDb Id</string>
+  <string name="Importer">Movie Importer</string>
+  <string name="ImporterDisabled">Importer je onemogočen</string>
+  <string name="ImporterDisabledMessage">Importer je bil onemogočen v \nMediaPortal GUI. Ali ga želite ponovno\nomogočiti?</string>
+  <string name="ImporterPending">Importer ({0} potrebuje pozornost)</string>
+  <string name="InvalidPin">Napačna PIN koda!</string>
+  <string name="InvalidVideoDiscFormat">Slikovna datoteka ne vsebuje\npravega video disk formata, ali pa je vaša Mediaportal\nDaemon Tools nastavitev napačna.</string>
+  <!--L-->
+  <string name="Language">Jezik</string>
+  <string name="LargeThumbnailView">Velike ikone</string>
+  <string name="LastMonth">Prejšnji mesec</string>
+  <string name="LastWeek">Prejšnji teden</string>
+  <string name="LastYear">Prejšnje leto</string>
+  <string name="ListView">Seznam</string>
+  <string name="LockRestrictedMovies">Zakleni omejene filme</string>
+  <!--M-->
+  <string name="MarkAsUnwatched">Označi kot neogledano</string>
+  <string name="MarkAsWatched">Označi kot ogledano</string>
+  <string name="MediaInfo">Informacije o mediju</string>
+  <string name="MediaIsMissing">Medij za izbrani film manjka!\nNa žalost šlo je nekaj narobe...</string>
+  <string name="MediaNotAvailableBody">Medij izbranega filma trenutno\nni na voljo. Prosim vstavite ali vključite medij\noznačen: {0}</string>
+  <string name="MediaNotAvailableHeader">Medij ni na voljo</string>
+  <string name="Missing">Manjkajoče</string>
+  <string name="MissingExternalPlayerExe">Izvršljiva datoteka za HD predvajanje manjka.\nProsim popravite pot do izvršljive datoteke.</string>
+  <string name="Monday">Ponedeljek</string>
+  <string name="MonthName1">Januar</string>
+  <string name="MonthName2">Februar</string>
+  <string name="MonthName3">Marec</string>
+  <string name="MonthName4">April</string>
+  <string name="MonthName5">Maj</string>
+  <string name="MonthName6">Junij</string>
+  <string name="MonthName7">Julij</string>
+  <string name="MonthName8">Avgust</string>
+  <string name="MonthName9">September</string>
+  <string name="MonthName10">Oktober</string>
+  <string name="MonthName11">November</string>
+  <string name="MonthName12">December</string>
+  <string name="Movie">Film</string>
+  <string name="MovieDetails">Podrobnosti filma</string>
+  <string name="MovieOptions">Možnosti filma</string>
+  <string name="Movies">Filmi</string>
+  <!--N-->
+  <string name="NoImportPathsBody">Kot kaže niste nastavili nobene\npoti za uvoz. Zaprite MediaPortal\nin zaženite nastavitev MediaPortala\nin nastavite Moving Pictures.</string>
+  <string name="NoImportPathsHeading">Ni poti za uvoz!</string>
+  <!--O-->
+  <string name="Older">Starejše</string>
+  <!--P-->
+  <string name="ParentalControlsDisabled">Starševski nadzor ni vključen.</string>
+  <string name="PinCodeHeader">Odklepanje omejene vsebine</string>
+  <string name="PinCodePrompt">Za nadaljevanje vnesite PIN kodo:</string>
+  <string name="PlaybackFailed">Predvajanje ni možno, ker \'{0}\'\nkončnica ni navedena v vaši MediaPortal konfiguraciji.\nProsim dodajte to končnico ali nastavite zunanji predvajalnik\nin poskusite znova.</string>
+  <string name="PlaybackFailedHeader">Predvajanje spodletelo</string>
+  <string name="PlayMovie">Predvajaj film</string>
+  <string name="PossibleMatches">Možna ujemanja</string>
+  <string name="ProblemLoadingSkinFile">Oprostite, nastal je problem pri nalaganju datoteke preobleke</string>
+  <!--R-->
+  <string name="Rate">Oceni</string>
+  <string name="Rated">Ocenjeno</string>
+  <string name="RateFiveStarFive">Popolno</string>
+  <string name="RateFiveStarFour">Krasno</string>
+  <string name="RateFiveStarOne">Strašno</string>
+  <string name="RateFiveStarThree">Dobro</string>
+  <string name="RateFiveStarTwo">Povprečno</string>
+  <string name="RateHeading">Oceni film</string>
+  <string name="RecentlyAddedMovies">Zadnje dodani filmi</string>
+  <string name="ReleaseDate">Datum izida</string>
+  <string name="RemoteNumericAlphabet0">
+  </string>
+  <string name="RemoteNumericAlphabet1">
+  </string>
+  <string name="RemoteNumericAlphabet2">abc</string>
+  <string name="RemoteNumericAlphabet3">def</string>
+  <string name="RemoteNumericAlphabet4">ghi</string>
+  <string name="RemoteNumericAlphabet5">jkl</string>
+  <string name="RemoteNumericAlphabet6">mno</string>
+  <string name="RemoteNumericAlphabet7">pqrs</string>
+  <string name="RemoteNumericAlphabet8">tuv</string>
+  <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Obnovi prezrte datoteke</string>
+  <string name="ResumeFrom">Nadaljuj od:</string>
+  <string name="ResumeFromLast">Nadaljujem od zadnjič?</string>
+  <string name="Retry">Poskusi ponovno</string>
+  <string name="Runtime">Dolžina</string>
+  <string name="RuntimeHour">{0} ura</string>
+  <string name="RuntimeHours">{0} ur</string>
+  <string name="RuntimeLong">{0} in {1}</string>
+  <string name="RuntimeLongExtended">{0}, {1} in {2}</string>
+  <string name="RuntimeMinute">{0} minuta</string>
+  <string name="RuntimeMinutes">{0} minut</string>
+  <string name="RuntimeSecond">{0} sekunda</string>
+  <string name="RuntimeSeconds">{0} sekund</string>
+  <string name="RuntimeShort">{0}:{1:00}</string>
+  <string name="RuntimeShortExtended">{0}u{1:00}m{2:00}s</string>
+  <!--S-->
+  <string name="Saturday">Sobota</string>
+  <string name="SendToImporter">Pošlji v Importer</string>
+  <string name="ScanForNewMovies">Preišči za nove filme</string>
+  <string name="Score">Točke</string>
+  <string name="Search">Išči</string>
+  <string name="SearchBy">Išči po</string>
+  <string name="SearchForMore">Poišči več ujemanj</string>
+  <string name="SearchNoResults">Iskanje ni vrnilo rezultatov.</string>
+  <string name="SelectCorrectMovie">Izberite pravilen film</string>
+  <string name="SelectYourRating">Izberi svojo oceno za {0}</string>
+  <string name="ShowOnlyUnwatchedMovies">Prikaži samo neogledane filme</string>
+  <string name="ShowWatchedAndUnwatchedMovies">Prikaži ogledane in neogledane filme</string>
+  <string name="SkinDoesNotSupportCategories">Ta preobleka ne podpira kategorij.</string>
+  <string name="SkinDoesNotSupportImporter">Ta preobleka ne podpira Importer-ja.</string>
+  <string name="SkinDoesNotSupportPinDialog">Ta preobleka ne podpira dialoga PIN kode.</string>
+  <string name="SkinDoesNotSupportRatingDialog">Ta preobleka ne podpira dialoga za ocenjevanje.</string>
+  <string name="SortBy">Sortiraj po</string>
+  <string name="SortDirection">Smer sortiranja</string>
+  <string name="StarRating">Ocena</string>
+  <string name="Sunday">Nedelja</string>
+  <!--T-->
+  <string name="Theme">Tema</string>
+  <string name="ThisMonth">Ta mesec</string>
+  <string name="ThisWeek">Ta teden</string>
+  <string name="ThisYear">Letos</string>
+  <string name="ThreeMonthsAgo">Pred tremi meseci</string>
+  <string name="ThreeWeeksAgo">Pred tremi tedni</string>
+  <string name="ThumbnailView">Ikone</string>
+  <string name="Thursday">Četrtek</string>
+  <string name="Title">Naslov</string>
+  <string name="Today">Danes</string>
+  <string name="ToggleParentalLock">Spremeni starševski nadzor</string>
+  <string name="Tuesday">Torek</string>
+  <string name="TwoMonthsAgo">Pred dvema mesecema</string>
+  <string name="TwoWeeksAgo">Pred dvema tednoma</string>
+  <!--U-->
+  <string name="Unknown">Neznano</string>
+  <string name="UnlockRestrictedMovies">Odkleni omejene filme</string>
+  <string name="UnwatchedMovies">Neogledani filmi</string>
+  <string name="UpAbbreviation">(gor)</string>
+  <string name="UpdateDetailsFromOnline">Osveži podatke s spleta</string>
+  <string name="UpdateMovieDetailsBody">Osvežili boste vse metapodatke filma in s tem\nprepisali vse ročne spremembe.\Ali želite nadaljevati?</string>
+  <string name="UpdateMovieDetailsHeader">Osveži podatke filma</string>
+  <!--V-->
+  <string name="VirtualDriveHeader">Virtualni pogon ni pripravljen</string>
+  <string name="VirtualDriveMessage">Virtualni pogon ni bil pravočasno pripravljen.\nProsim poskusite ponovno ali prekličite predvajanje.</string>
+  <string name="Votes">glasovi</string>
+  <string name="ViewMovieDetails">Poglej podrobnosti filma</string>
+  <!--W-->
+  <string name="Wednesday">Sreda</string>
+  <string name="Writer">Pisec</string>
+  <string name="Writers">Pisci</string>
+  <!--Y-->
+  <string name="Year">Leto</string>
+  <string name="Yesterday">Včeraj</string>
+</resources>
