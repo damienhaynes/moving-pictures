@@ -1258,7 +1258,7 @@ public class Script
 * Updated translations from Transifex.
 </VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
-    <OnlineLocation>http://moving-pictures.googlecode.com/files/moving-pictures-1.6.0-setup.mpei</OnlineLocation>
+    <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=30&amp;cf_id=24</OnlineLocation>
     <ReleaseDate>2014-01-19T19:04:46</ReleaseDate>
     <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
     <Location>moving-pictures-[Version].mpe1</Location>
