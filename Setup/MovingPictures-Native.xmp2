@@ -1239,8 +1239,8 @@ public class Script
     <Version>
       <Major>1</Major>
       <Minor>6</Minor>
-      <Build>1</Build>
-      <Revision>1552</Revision>
+      <Build>2</Build>
+      <Revision>1556</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
     <VersionDescription>* Fixed default IMDb scraper script no longer retrieving metadata and posters, also updated script to support new fields available.
