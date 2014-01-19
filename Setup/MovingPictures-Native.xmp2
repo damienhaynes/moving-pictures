@@ -1240,15 +1240,28 @@ public class Script
       <Major>1</Major>
       <Minor>6</Minor>
       <Build>1</Build>
-      <Revision>1548</Revision>
+      <Revision>1552</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
-    <VersionDescription />
+    <VersionDescription>* Fixed default IMDb scraper script no longer retrieving metadata and posters, also updated script to support new fields available.
+* Fixed MyMovieItalian scraper script, thanks roby71.
+* Fixed score/votes from Kinopoisk scraper script, thanks leonid.kabanov.
+* Fixed MovingPictures configuration launcher failing on MediaPortal 1.6.
+* Fixed shutdown of process not occuring after S3 Resume, thanks seco/sebastii.
+* Fixed a crash when selecting a category using a fixed backdrop if the movie no longer exists in database.
+* Added shortcut to MovingPictures configuration on desktop during installation of MPEI package.
+* Added IMDb and SortBy fields to the available filter fields.
+* Added 'Date Added' and 'Release Date' to available fields to display as 'Label 2' on the facade.
+* Added dynamic field display for 'Label 2' on the facade when choosing different Sort By fields e.g. Sorting by release date will show 'Release Date' instead of the default 'Year'.
+* Added 'Accept-Language' header support in scraper scripts for better results on sites like IMDb. 
+* Improved Bluray support, thanks sebastii.
+* Updated translations from Transifex.
+</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://moving-pictures.googlecode.com/files/moving-pictures-1.6.0-setup.mpei</OnlineLocation>
-    <ReleaseDate>2014-01-18T19:04:46</ReleaseDate>
+    <ReleaseDate>2014-01-19T19:04:46</ReleaseDate>
     <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
-    <Location>moving-pictures-setup.mpe1</Location>
+    <Location>moving-pictures-[Version].mpe1</Location>
     <Params>
       <Items>
         <SectionParam Name="Icon">
@@ -2064,7 +2077,7 @@ public class Script
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\MovingPictures\Resources\Images\icon_large.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{67338292-94d6-4dcf-9f3d-43be9d4490f1}-icon_large.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{1cdce9e5-d0dc-41f5-9990-7aa52135caac}-icon_large.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
