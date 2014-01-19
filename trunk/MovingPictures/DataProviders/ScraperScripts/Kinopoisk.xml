@@ -205,7 +205,7 @@ href=[^\d]+\d+/film/(?<movieID>[\d]+)[^>]+>(?<movieTitle>[^>]+)</a>\s[^>]+>(?<mo
 
     <set name="rx_score_votes">
       <![CDATA[
-	  93% rep[^>]+>\s*<span>(?<MovieScore>[\d.]+)[^>]+>[^>]+>&nbsp;&nbsp;(?<movieVotes>[\d]+)
+          <span class="rating_ball">(?<MovieScore>[\d.]+)</span>\s*<span class="ratingCount"[^>]+>(?<movieVotes>[^<]+)</span>
       ]]>
     </set>
 	
