@@ -1015,7 +1015,7 @@ public class Script
                FileVersionInfo mpVersionInfo = FileVersionInfo.GetVersionInfo(basePath + "\\MediaPortal.exe");
 	
 	Version mpNet4Version = new System.Version(1, 6, 0, 0);
-                Version mpCurrVersion = new System.Version(mpVersionInfo.ProductVersion);
+                Version mpCurrVersion = new System.Version(mpVersionInfo.FileVersion);
 
                 string source = string.Empty;
 	string destination = basePath + "\\Moving Pictures Config.exe";
@@ -1258,7 +1258,7 @@ public class Script
 * Updated translations from Transifex.
 </VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
-    <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=30&amp;cf_id=24</OnlineLocation>
+    <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;amp;task=att_download&amp;amp;link_id=30&amp;amp;cf_id=24</OnlineLocation>
     <ReleaseDate>2014-01-19T19:04:46</ReleaseDate>
     <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
     <Location>moving-pictures-[Version].mpe1</Location>
