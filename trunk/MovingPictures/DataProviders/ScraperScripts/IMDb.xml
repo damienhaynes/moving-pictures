@@ -8,14 +8,14 @@
     <!-- 
     These fields uniquely identify the script. The ID should never 
     change and should be unique (no other script should use this ID). With
-    new versions of the script the version numbers should change. EVEN FOR 
-    MINOR CHANGES, you should change the version number if you are going to
-    disribute it to anyone but internal testers. The point number 
+    new versions of the script the version numbers / published date should change. 
+    EVEN FOR MINOR CHANGES, you should change the version number if you are going to
+    distribute it to anyone but internal testers. The point number 
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="3" minor="0" point="0" />
-    <published month="1" day="11" year="2014" />
+    <version major="3" minor="0" point="1" />
+    <published month="1" day="19" year="2014" />
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -24,8 +24,7 @@
     <type>MovieDetailsFetcher|MovieCoverFetcher</type>
     <language>en</language>
 
-  </details>
-  
+  </details> 
   
   <action name="search">
     
@@ -62,7 +61,7 @@
     ]]>
     </set>
 
-    <!-- Retrieve result using IMDB id (if provided) -->
+    <!-- Retrieve result using IMDb id (if provided) -->
     <if test='${search.imdb_id}!='>
       <retrieve name="imdb_page" url="http://akas.imdb.com/find?s=all&amp;q=${search.imdb_id}" />
       <parse name="details_page_block" input="${imdb_page}" regex="${rx_details_page_block}" />
@@ -386,45 +385,30 @@
     
   </action>
 
-  <!-- Covers -->
-  
   <action name="get_cover_art">
-    
     <!-- if the site id is not set try to set it using the imdb id -->
     <if test="${movie.site_id}=">
-      <if test="${movie.imdb_id}!=">
-        <set name="movie.site_id" value="${movie.imdb_id}" />
-      </if>
+        <if test="${movie.imdb_id}!=">
+            <set name="movie.site_id" value="${movie.imdb_id}" />
+        </if>
     </if>
     
     <!-- if we have a site id (imdb id) we can continue -->
     <if test="${movie.site_id}!=">
+        <!-- Retrieve details -->
+        <retrieve name="details_page" url="http://www.imdb.com/title/${movie.site_id}/" />
 
-      <!-- Retrieve details -->
-      <retrieve name="details_page" url="http://www.imdb.com/title/${movie.site_id}" />
-
-      <!-- Regular Expressions-->
-      <set name="rx_cover_url">
-        <![CDATA[
-        <meta property='og:image' content='([^']+)'>
-        ]]>
-      </set>
-
-      <!-- Get cover url using the Opengraph tag -->
-      <parse name="cover_url" input="${details_page}" regex="${rx_cover_url}" />
-
-      <if test="${cover_url[0][0]}!=">
-
-        <!-- remove suffix that is responsable for sizing the image -->
-        <replace name='cover_url_fullsize' input='${cover_url[0][0]}' pattern='._SX\d+_SY\d+_' with='' />
+        <!-- Get cover directly by manipulating details page thumbnail -->
+        <set name="rx_cover">
+            <![CDATA[
+            title="[^)]+\)\s*Poster"\s*src="([^_]+_V1)[^.]+([^"]+)"
+            ]]>
+        </set>
+        <parse name="cover_src" input="${details_page}" regex="${rx_cover}" />
 
         <!-- set cover -->
-        <set name="cover_art[0].url" value="${cover_url_fullsize}" />
-        
-      </if>
-      
+        <set name="cover_art[0].url" value="${cover_src[0][0]}${cover_src[0][1]}" />
     </if>
-   
   </action>
   
 </ScriptableScraper>
