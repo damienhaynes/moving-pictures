@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="3" minor="0" point="1" />
-    <published month="1" day="19" year="2014" />
+    <version major="3" minor="0" point="2" />
+    <published month="1" day="20" year="2014" />
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -400,9 +400,9 @@
 
         <!-- Get cover directly by manipulating details page thumbnail -->
         <set name="rx_cover">
-            <![CDATA[
-            title="[^)]+\)\s*Poster"\s*src="([^_]+_V1)[^.]+([^"]+)"
-            ]]>
+        <![CDATA[
+        title="[^)]+\)\s*Poster"\s*src="([^_]+_V1)(?:\._CR[^_]+)?[^.]+([^"]+)"
+        ]]>
         </set>
         <parse name="cover_src" input="${details_page}" regex="${rx_cover}" />
 
