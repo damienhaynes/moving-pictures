@@ -188,7 +188,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             logger.Debug("Request: Movie='{0}', Part={1}", movie.Title, requestedPart);
             for (int i = 0; i < movie.LocalMedia.Count; i++) {
-                logger.Debug("LocalMedia[{0}] = {1}  Duration = {2}", i, movie.LocalMedia[i].FullPath, movie.LocalMedia[i].Duration);
+                logger.Debug("LocalMedia[{0}] = {1}, Duration = {2}", i, movie.LocalMedia[i].FullPath, movie.LocalMedia[i].Duration);
             }
 
             int part = requestedPart;
@@ -297,7 +297,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 g_Player.SetResumeBDTitleState = movie.ActiveUserSettings.ResumeTitleBD;
 
             }
-            logger.Info("Playing: Movie='{0}' FullPath='{1}', VideoPath='{2}', Mounted={3})", movie.Title, mediaToPlay.FullPath, videoPath, mountedPlayback.ToString());
+            logger.Info("Playing: Movie='{0}' FullPath='{1}', VideoPath='{2}', Mounted='{3}'", movie.Title, mediaToPlay.FullPath, videoPath, mountedPlayback.ToString());
             playFile(videoPath, mediaToPlay.VideoFormat);
         }
 
