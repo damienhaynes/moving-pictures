@@ -2206,6 +2206,25 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 PublishDetails(movie.ActiveUserSettings, "UserMovieSettings");
                 PublishDetails(movie.LocalMedia[0], "LocalMedia");
 
+                // publish watched history for selected movie
+                if (movie.WatchedHistory != null) {
+                    SetProperty("#MovingPictures.SelectedMovie.WatchedHistory.Count", movie.WatchedHistory.Count.ToString());
+                    int i = 0;
+                    foreach (var watch in movie.WatchedHistory) {
+                        SetProperty(string.Format("#MovingPictures.SelectedMovie.WatchedHistory.{0}.User", i + 1), movie.WatchedHistory[i].User.Name);
+                        SetProperty(string.Format("#MovingPictures.SelectedMovie.WatchedHistory.{0}.DateWatched", i + 1), movie.WatchedHistory[i].DateWatched.ToString());
+                        i++;
+                    }
+                    // helper properties for first and last watched, avoids use of skin expressions
+                    if (movie.WatchedHistory.Count > 0) {
+                        SetProperty("#MovingPictures.SelectedMovie.FirstWatched", movie.WatchedHistory.First().DateWatched.ToString());
+                        SetProperty("#MovingPictures.SelectedMovie.LastWatched", movie.WatchedHistory.Last().DateWatched.ToString());
+                    }
+                }
+                else {
+                    SetProperty("#MovingPictures.SelectedMovie.WatchedHistory.Count", "0");
+                }
+
                 // publish easily usable subtitles info
                 SetProperty("#MovingPictures.LocalMedia.Subtitles", movie.LocalMedia.HasSubtitles() ? "subtitles" : "nosubtitles");
 
