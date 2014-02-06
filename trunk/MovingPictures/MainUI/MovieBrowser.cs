@@ -129,7 +129,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 if (value == BrowserViewMode.LASTUSED)
                     value = MovingPicturesCore.Settings.LastUsedView;
 
-                if (!skinSettings.IsViewAvailable(value))
+                if (value != BrowserViewMode.CATEGORIES && !skinSettings.IsViewAvailable(value))
                     value = GetNextValidView(value);
 
                 // update the state variables
