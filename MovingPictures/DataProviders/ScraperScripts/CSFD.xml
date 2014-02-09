@@ -5,7 +5,7 @@
 
     <!-- These details are for display purposes only. -->
     <name>CSFD.cz</name>
-    <author>Trottel</author>
+    <author>Trottel, Kucheek</author>
     <description>This script pulls data from CSFD and IMDb.</description>
     
     <!-- 
@@ -16,9 +16,30 @@
     distribute it to anyone but internal testers. The point number 
     is for minor bug fix releases. Use it.
     -->
+    
     <id>874940</id>
-    <version major="0" minor="2" point="3" />
-    <published day="26" month="5" year="2011" />
+    <version major="0" minor="3" point="0" />
+    <published day="1" month="2" year="2014" />
+    
+    <!--  Changelog
+    
+    Version  Published   Author     Info
+    =======================================================================
+    0.3.0    1.2.2014    Kucheek    IMDb ID and alternative title from the 
+                                    detail pages of found movies are now 
+                                    retrieved already in the scraper search 
+                                    phase, which is necessary for correct 
+                                    match and also makes the IMDb ID 
+                                    auto-approval possible.
+                                    
+                                    Repaired retrieving Summary from CSFD
+                                    
+                                    Repaired recognizing of details page
+                               
+    0.2.3    26.5.2011   Trottel    Repaired retrieving Directors, Actors 
+                                    and Summary from CSFD                
+    
+    -->
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -37,9 +58,10 @@
     <set name="site" value="http://www.csfd.cz/" />
     
     <!-- Regular Expressions -->
-    <set name="rx_details_site_id">
+          
+    <set name="rx_movie_details_block">
       <![CDATA[
-      <a href="/film/(.+?)/
+      <div id="main">(.+?)<div class="navigation">
       ]]>
     </set>
 
@@ -57,7 +79,13 @@
 
     <set name="rx_verify">
       <![CDATA[
-      <li>.*?<h3.*?><a href="/film/(.+?)".*?">(.+?)</a>.*?(?:<p>.*?(\d{4})</p>.*?)?</li>
+      <li>.*?<h3.*?><a href="/film/(.+?)".*?">(.+?)</a>.*?(?:<span class="search-name">\((.+?)\)</span>.*?)?(?:<p>.*?(\d{4})</p>.*?)?</li>
+      ]]>
+    </set>
+
+    <set name="rx_aka">
+      <![CDATA[
+      <ul class="names">.*?<h3>(.+?)(?:, (The|A|An|Ein|El|Das|Der|Die|Les|Un|Une))?</h3>.*?</ul>
       ]]>
     </set>
 
@@ -66,30 +94,53 @@
 
     <!-- If we got a details page, this is used.
          If not, regex does not match so we don't process it -->
-    <parse name="site_id" input="${search_page}" regex="${rx_details_site_id}" />
-    <if test="${site_id[0][0]}!=">
-      <retrieve name="details_page" url="${site}film/${site_id[0][0]}" encoding="utf-8" retries="10" timeout_increment="3000" allow_unsafe_header="true" />
-      <parse name="title_year" input="${details_page}" regex="${rx_search_titles_years}" />
-      <set name="movie[0].title" value="${title_year[0][0]}" />
-      <set name="movie[0].year" value="${title_year[0][1]}" />
+    <parse name="movie_details_block" input="${search_page}" regex="${rx_movie_details_block}" />
+    <if test="${movie_details_block}!=">
+      <parse name="title" input="${movie_details_block}" regex="&lt;h1&gt;\s*(.+?)(?:, (The|A|An|Ein|El|Das|Der|Die|Les|Un|Une))?\s*(?:&lt;span.+?&lt;/span&gt;)?&lt;/h1&gt;" />
+      <set name="movie[0].title" value="${title[0][1]:htmldecode} ${title[0][0]:htmldecode}" />
+      <parse name="year" input="${search_page}" regex="&lt;title&gt;.*\((\d{4})\).*&lt;/title&gt;" />
+      <set name="movie[0].year" value="${year[0][0]}" />
+      <parse name="site_id" input="${search_page}" regex='&lt;link rel="canonical" href="http://www.csfd.cz/film/(.+?)".*?&gt;' />
       <set name="movie[0].site_id" value="${site_id[0][0]}" />
+      <set name="movie[0].details_url" value="${site}film/${site_id[0][0]}" />
+      <set name="movie[0].popularity" value="100" />
     </if>
-
+   
     <!-- If we got a search result page, this is used.
          If not, regex does not match so we don't process the loop. -->
     <parse name="search_results_block" input="${search_page}" regex="${rx_search_results_block}" />
     <if test="${search_results_block}!=">
-      <loop name="search_results_verified" on="search_results_block">
-        <parse name="movie_details" input="${search_results_verified}" regex="${rx_verify}" />
-        <loop name="curr_details" on="movie_details" limit="20">
-          <add name="counter" value1="${count}" value2="${offset}" />
-          <parse name="title" input="${curr_details[1]:htmldecode}" regex="(.+?)(?:, (The|A|An|Ein|El|Das|Die|Der|Les|Un|Une))?$" />
-          <set name="movie[${counter}].title" value="${title[0][1]} ${title[0][0]}" />
-          <set name="movie[${counter}].year" value="${curr_details[2]:htmldecode}" />
-          <set name="movie[${counter}].site_id" value="${curr_details[0]}" />
-          <set name="movie[${counter}].details_url" value="${site}film/${curr_details[0]}" />
-          <subtract name="movie[${counter}].popularity" value1="100" value2="${counter}" />
-        </loop>
+      <parse name="movie_details" input="${search_results_block}" regex="${rx_verify}" />
+      <loop name="curr_details" on="movie_details" limit="20">
+        <add name="counter" value1="${count}" value2="${offset}" />
+        <parse name="title" input="${curr_details[1]:htmldecode}" regex="(.+?)(?:, (The|A|An|Ein|El|Das|Die|Der|Les|Un|Une))?$" />
+        <set name="movie[${counter}].title" value="${title[0][1]} ${title[0][0]}" />
+        <set name="movie[${counter}].year" value="${curr_details[3]:htmldecode}" />
+        <set name="movie[${counter}].site_id" value="${curr_details[0]}" />
+        <set name="movie[${counter}].details_url" value="${site}film/${curr_details[0]}" />
+          
+        <!-- For each movie found, we will obtain alternative title 
+             from CSFD details page. This will provide a better chance 
+             to match the file with the correct movie. -->
+        <retrieve name="details_page" url="${movie[${counter}].details_url}" encoding="utf-8" retries="10" timeout_increment="3000" allow_unsafe_header="true" />
+        <parse name="aka[${counter}]" input="${details_page}" regex="${rx_aka}" />
+        <if test="${aka[${counter}]}!=">
+          <set name="movie[${counter}].alternate_titles" value="${aka[${counter}][0][1]:htmldecode} ${aka[${counter}][0][0]:htmldecode}" />
+        </if>
+        
+        <subtract name="movie[${counter}].popularity" value1="99" value2="${counter}" />
+                   
+        <!-- If NfoBuilder found IMDb ID for the file, 
+             we will also obtain it from CSFD details page. 
+             This will make the auto approval possible. -->
+        <if test='${search.imdb_id}!='>
+          <parse name="imdb" input="${details_page}" regex="(tt[\d]+)" />
+          <set name="movie[${counter}].imdb_id" value="${imdb[0][0]}" />
+          <if test="${search.imdb_id}=${movie[${counter}].imdb_id}">
+             <set name="movie[${counter}].popularity" value="100" />
+          </if>
+        </if>
+                    
       </loop>
     </if>
  
@@ -107,7 +158,7 @@
 
       <set name="rx_summary">
         <![CDATA[
-        <h3>Obsah(?:\s)?</h3>.*?<ul>.*?<li>(.+?)(?:<span.*?</span>.*?)?</li>
+        <h3>Obsah.*?</h3>.*?<ul>.*?<li>(?:.*?<div.*?>)?(?:.*?<img.*?>)?\s*?(.+?)(?:<.*?)?</li>
         ]]>
       </set>
 
