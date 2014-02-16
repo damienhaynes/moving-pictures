@@ -48,7 +48,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     private double _framerate = 0;
     private int _width = 0;
     private int _height = 0;
-    private int _audioRate = 0;
+    private int _videoBitRate = 0;
+    private int _audioSampleRate = 0;
+    private int _audioBitRate = 0;
     private int _audioChannels = 0;
     private int _numSubtitles = 0;
     private string _aspectRatio = "";
@@ -80,6 +82,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     private bool _isTrueHD = false;  // TrueHD audio
     private bool _isDTSHD = false;  // DTSHD audio
     private int _duration = 0;
+    private long _fileSize = 0;
 
     private bool _hasSubtitles = false;
     private static List<string> _subTitleExtensions = new List<string>();
@@ -126,7 +129,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
                 }
             }
             else if (strFile.ToLowerInvariant().EndsWith(".bdmv") || strFile.ToLowerInvariant().EndsWith(".m2ts")) {
-                bool result = GetLenghtFromPlaylist(strFile);
+                bool result = GetLengthFromPlaylist(strFile);
                 if (!result) {
                     //_duration = (int) currentPlaylistFile.TotalLength;
                     int.TryParse(_mI.Get(StreamKind.Video, 0, "PlayTime"), out _duration);
@@ -144,6 +147,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
             _scanType = _mI.Get(StreamKind.Video, 0, "ScanType").ToLower();
             int.TryParse(_mI.Get(StreamKind.Video, 0, "Width"), out _width);
             int.TryParse(_mI.Get(StreamKind.Video, 0, "Height"), out _height);
+            int.TryParse(_mI.Get(StreamKind.Video, 0, "BitRate"), out _videoBitRate);
             int.TryParse(_mI.Get(StreamKind.General, 0, "TextCount"), out _numSubtitles);
             int intValue;
             int iAudioStreams = _mI.Count_Get(StreamKind.Audio);
@@ -152,7 +156,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
                 if (int.TryParse(sChannels, out intValue) && intValue > _audioChannels) {
                     _audioChannels = intValue;
-                    int.TryParse(_mI.Get(StreamKind.Audio, i, "SamplingRate"), out _audioRate);
+                    int.TryParse(_mI.Get(StreamKind.Audio, i, "SamplingRate"), out _audioSampleRate);
+                    int.TryParse(_mI.Get(StreamKind.Audio, i, "BitRate"), out _audioBitRate);
                     _audioCodec = _mI.Get(StreamKind.Audio, i, "Codec/String").ToLower();
                     _audioFormatProfile = _mI.Get(StreamKind.Audio, i, "Format_Profile").ToLower();
                 }
@@ -214,9 +219,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
                 _hasSubtitles = false;
             }
 
-            logger.Debug("MediaInfoWrapper: inspecting media : {0}", strFile);
-            logger.Debug("MediaInfoWrapper: FrameRate : {0}", _framerate);
-            logger.Debug("MediaInfoWrapper: VideoCodec : {0}", _videoCodec);
+            _fileSize = fileInfo.Length;
+
+            logger.Debug("MediaInfoWrapper: InspectingMedia: {0}", strFile);
+            logger.Debug("MediaInfoWrapper: FrameRate: {0}", _framerate);
+            logger.Debug("MediaInfoWrapper: VideoBitRate: {0}", _videoBitRate);
+            logger.Debug("MediaInfoWrapper: VideoCodec: {0}", _videoCodec);
             if (_isDIVX)
                 logger.Debug("MediaInfoWrapper: IsDIVX: {0}", _isDIVX);
             if (_isXVID)
@@ -232,36 +240,39 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
             if (_isWMV)
                 logger.Debug("MediaInfoWrapper: IsWMV: {0}", _isWMV);
 
-            logger.Debug("MediaInfoWrapper: HasSubtitles : {0}", _hasSubtitles);
-            logger.Debug("MediaInfoWrapper: NumSubtitles : {0}", _numSubtitles);
-            logger.Debug("MediaInfoWrapper: Scan type : {0}", _scanType);
+            logger.Debug("MediaInfoWrapper: HasSubtitles: {0}", _hasSubtitles);
+            logger.Debug("MediaInfoWrapper: NumSubtitles: {0}", _numSubtitles);
+            logger.Debug("MediaInfoWrapper: ScanType: {0}", _scanType);
             logger.Debug("MediaInfoWrapper: IsInterlaced: {0}", _isInterlaced);
-            logger.Debug("MediaInfoWrapper: Width : {0}", _width);
-            logger.Debug("MediaInfoWrapper: Height : {0}", _height);
-            logger.Debug("MediaInfoWrapper: Audiochannels : {0}", _audioChannels);
-            logger.Debug("MediaInfoWrapper: Audiorate : {0}", _audioRate);
-            logger.Debug("MediaInfoWrapper: AspectRatio : {0}", _aspectRatio);
-            logger.Debug("MediaInfoWrapper: AudioCodec : {0}", _audioCodec);
+            logger.Debug("MediaInfoWrapper: Width: {0}", _width);
+            logger.Debug("MediaInfoWrapper: Height: {0}", _height);
+            logger.Debug("MediaInfoWrapper: Audiochannels: {0}", _audioChannels);
+            logger.Debug("MediaInfoWrapper: AudioBitRate: {0}", _audioBitRate);
+            logger.Debug("MediaInfoWrapper: AudioSampleRate: {0}", _audioSampleRate);
+            logger.Debug("MediaInfoWrapper: AspectRatio: {0}", _aspectRatio);
+            logger.Debug("MediaInfoWrapper: AudioCodec: {0}", _audioCodec);
             if (_isAC3)
-                logger.Debug("MediaInfoWrapper: IsAC3 : {0}", _isAC3);
+                logger.Debug("MediaInfoWrapper: IsAC3: {0}", _isAC3);
             if (_isMP3)
-                logger.Debug("MediaInfoWrapper: IsMP3 : {0}", _isMP3);
+                logger.Debug("MediaInfoWrapper: IsMP3: {0}", _isMP3);
             if (_isMP2A)
                 logger.Debug("MediaInfoWrapper: IsMP2A: {0}", _isMP2A);
             if (_isDTS)
-                logger.Debug("MediaInfoWrapper: IsDTS : {0}", _isDTS);
+                logger.Debug("MediaInfoWrapper: IsDTS: {0}", _isDTS);
             if (_isTrueHD)
-                logger.Debug("MediaInfoWrapper: IsTrueHD : {0}", _isTrueHD);
+                logger.Debug("MediaInfoWrapper: IsTrueHD: {0}", _isTrueHD);
             if (_isDTSHD)
-                logger.Debug("MediaInfoWrapper: IsDTSHD : {0}", _isDTSHD);
+                logger.Debug("MediaInfoWrapper: IsDTSHD: {0}", _isDTSHD);
             if (_isOGG)
-                logger.Debug("MediaInfoWrapper: IsOGG : {0}", _isOGG);
+                logger.Debug("MediaInfoWrapper: IsOGG: {0}", _isOGG);
             if (_isAAC)
-                logger.Debug("MediaInfoWrapper: IsAAC : {0}", _isAAC);
+                logger.Debug("MediaInfoWrapper: IsAAC: {0}", _isAAC);
             if (_isWMA)
                 logger.Debug("MediaInfoWrapper: IsWMA: {0}", _isWMA);
             if (_isPCM)
                 logger.Debug("MediaInfoWrapper: IsPCM: {0}", _isPCM);
+
+            logger.Debug("MediaInfoWrapper: FileSize: {0}", _fileSize);
         }
         catch (Exception ex) {
             logger.Error("MediaInfo processing failed ('MediaInfo.dll' may be missing): {0}", ex.Message);
@@ -294,7 +305,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns>True if playback should continue, False if user cancelled.</returns>
-    private bool GetLenghtFromPlaylist(string filePath) {
+    private bool GetLengthFromPlaylist(string filePath) {
         try {
             //bool ChecklistToPlay = false;
             Func<string, BDInfo> scanner = scanWorker;
@@ -413,6 +424,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
           return tempCodec; 
       }
     }
+
+    public int VideoBitrate { 
+        get { return _videoBitRate; }
+    }    
 
     public string VideoResolution
     {
@@ -545,9 +560,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
       }
     }
 
-    public int AudioRate
-    {
-      get { return _audioRate; }
+    public int AudioBitRate {
+        get { return _audioBitRate; }
+    }
+
+    public int AudioSampleRate {
+        get { return _audioSampleRate; }
     }
 
     public int AudioChannels
@@ -632,6 +650,11 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     public int Duration
     {
         get { return _duration; }
+    }
+
+    public long FileSize
+    {
+        get { return _fileSize; }
     }
 
     #endregion

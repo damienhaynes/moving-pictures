@@ -28,7 +28,7 @@ namespace Cornerstone.Database.Tables {
 
     [DBTable("attributes")]
     public class DBAttrDescription : DatabaseTable {
-        public enum ValueTypeEnum { INT, FLOAT, BOOL, STRING }
+        public enum ValueTypeEnum { INT, FLOAT, LONG, BOOL, STRING }
         
         // Denotes the methods that an attribute's value can be modified.
         public enum SelectionModeEnum { 

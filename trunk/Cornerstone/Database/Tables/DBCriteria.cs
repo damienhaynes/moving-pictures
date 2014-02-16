@@ -345,6 +345,7 @@ namespace Cornerstone.Database.Tables {
 
                 case DBField.DBDataType.DATE_TIME:
                 case DBField.DBDataType.INTEGER:
+                case DBField.DBDataType.LONG:
                 case DBField.DBDataType.REAL:
                     rtn.Add(DBCriteria<T>.OperatorEnum.EQUAL);
                     rtn.Add(DBCriteria<T>.OperatorEnum.NOT_EQUAL);

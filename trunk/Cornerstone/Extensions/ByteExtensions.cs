@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Cornerstone.Extensions {
 
@@ -17,5 +18,18 @@ namespace Cornerstone.Extensions {
             return hexBuilder.ToString();
         }
 
+        [DllImport("Shlwapi.dll", CharSet = CharSet.Auto)]
+        static extern long StrFormatByteSize(long fileSize, [MarshalAs(UnmanagedType.LPTStr)] StringBuilder buffer, int bufferSize);
+
+        /// <summary>
+        /// returns localised pretty string for byte size
+        /// </summary>
+        /// <param name="fileSize">filesize in bytes</param>
+        public static string ToFormattedByteString(this long fileSize)
+        {
+            var sbBuffer = new StringBuilder(20);
+            StrFormatByteSize(fileSize, sbBuffer, 20);
+            return sbBuffer.ToString();
+        }
     }
 }
