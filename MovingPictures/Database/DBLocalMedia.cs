@@ -313,6 +313,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int part;
 
+        [DBFieldAttribute(Filterable = false)]
+        public DBImportPath ImportPath {
+            get { return importPath; }
+            set {
+                importPath = value;
+                commitNeeded = true;
+            }
+        } private DBImportPath importPath;
+
         /// <summary>
         /// The duration of the video file in milliseconds
         /// </summary>
@@ -325,6 +334,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _duration;
 
+
+        [DBFieldAttribute(AllowDynamicFiltering = false)]
+        public long FileSize {
+            get { return _fileSize; }
+            set {
+                _fileSize = value;
+                commitNeeded = true;
+            }
+        } private long _fileSize;
+
         [DBFieldAttribute(Default = "false", Filterable = false)]
         public bool Ignored {
             get { return ignored; }
@@ -333,15 +352,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private bool ignored;
-
-        [DBFieldAttribute(Filterable=false)]
-        public DBImportPath ImportPath {
-            get { return importPath; }
-            set {
-                importPath = value;
-                commitNeeded = true;
-            }
-        } private DBImportPath importPath;
 
         [DBRelation(AutoRetrieve = true, Filterable = false)]
         public RelationList<DBLocalMedia, DBMovieInfo> AttachedMovies {
@@ -390,6 +400,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private string _videoCodec;
 
         [DBFieldAttribute(AllowManualFilterInput = false)]
+        public int VideoBitrate {
+            get { return _videoBitRate; }
+            set {
+                _videoBitRate = value;
+                commitNeeded = true;
+            }
+        } private int _videoBitRate;
+
+        [DBFieldAttribute(AllowManualFilterInput = false)]
         public float VideoFrameRate {
             get { return _videoFrameRate; }
             set {
@@ -424,6 +443,24 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private string _audioChannels;
+
+        [DBFieldAttribute(AllowManualFilterInput = false)]
+        public int AudioBitRate {
+            get { return _audioBitRate; }
+            set {
+                _audioBitRate = value;
+                commitNeeded = true;
+            }
+        } private int _audioBitRate;
+
+        [DBFieldAttribute(AllowManualFilterInput = false)]
+        public int AudioSampleRate {
+            get { return _audioSampleRate; }
+            set {
+                _audioSampleRate = value;
+                commitNeeded = true;
+            }
+        } private int _audioSampleRate;
 
         [DBFieldAttribute(AllowDynamicFiltering = false)]
         public bool HasSubtitles {
@@ -518,17 +555,22 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             try {
                 logger.Debug("Updating media info for '{0}'", videoPath);
                 MediaInfoWrapper mInfoWrapper = this.VideoFormat.GetMediaInfo(videoPath);
+
                 this.Duration = mInfoWrapper.Duration;
                 this.VideoWidth = mInfoWrapper.Width;
                 this.VideoHeight = mInfoWrapper.Height;
                 this.VideoFrameRate = (float)mInfoWrapper.Framerate;
                 this.HasSubtitles = mInfoWrapper.HasSubtitles;
                 this.VideoCodec = mInfoWrapper.VideoCodec;
+                this.VideoBitrate = mInfoWrapper.VideoBitrate;
                 this.AudioCodec = mInfoWrapper.AudioCodec;
                 this.VideoResolution = mInfoWrapper.VideoResolution;
                 this.AudioChannels = mInfoWrapper.AudioChannelsFriendly;
+                this.AudioBitRate = mInfoWrapper.AudioBitRate;
+                this.AudioSampleRate = mInfoWrapper.AudioSampleRate;
                 this.AudioCodec = mInfoWrapper.AudioCodec;
                 this.VideoAspectRatio = mInfoWrapper.AspectRatio;
+                this.FileSize = mInfoWrapper.FileSize;
 
                 return UpdateMediaInfoResults.Success;
             }

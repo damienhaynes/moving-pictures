@@ -2346,8 +2346,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     SetProperty(propertyStr + ".second", dt.ToString("ss"), forceLogging);
                 }
                 // Handle string list formatting
-                else if (value.GetType() == typeof(StringList))
-                {
+                else if (value.GetType() == typeof(StringList)) {
                     // make sure we dont go overboard with listing elements :P
                     StringList valueStrList = (StringList)value;
                     int max = maxStringListElements;
@@ -2363,24 +2362,20 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     SetProperty(propertyStr + ".count", valueStrList.Count.ToString(), forceLogging);
 
                     // add each value individually
-                    for (int i = 0; i < maxStringListElements; i++)
-                    {
+                    for (int i = 0; i < maxStringListElements; i++) {
                         // note, the "extra" in the middle is needed due to a bug in skin parser
                         propertyStr = "#MovingPictures." + prefix + ".extra." + currField.FieldName + "." + (i + 1);
-                        if (i < max)
-                        {
+                        if (i < max) {
                             valueStr = valueStrList[i];
                         }
-                        else
-                        {
+                        else {
                             valueStr = null;
                         }
                         SetProperty(propertyStr, valueStr, forceLogging);
                     }
                 }
                 // for the movie score we add some special properties to give skinners more options
-                else if (currField.FieldName == "score" && tableType == typeof(DBMovieInfo))
-                {
+                else if (currField.FieldName == "score" && tableType == typeof(DBMovieInfo)) {
                     float score = (float)currField.GetValue(obj);
                     int percentage = (int)Math.Floor((score * 10));
                     int major = (int)Math.Floor(score);
@@ -2402,8 +2397,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                 }
                 // for the movie runtime we also add some special properties
-                else if (currField.FieldName == "runtime" && tableType == typeof(DBMovieInfo))
-                {
+                else if (currField.FieldName == "runtime" && tableType == typeof(DBMovieInfo)) {
                     DBMovieInfo movie = (DBMovieInfo)obj;
 
                     int seconds = 0;
@@ -2412,15 +2406,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     // Check the user preference and display the runtime requested
                     // If the user choose actual runtime and it is not available default
                     // to the imported runtime
-                    if (MovingPicturesCore.Settings.DisplayActualRuntime && movie.ActualRuntime > 0)
-                    {
+                    if (MovingPicturesCore.Settings.DisplayActualRuntime && movie.ActualRuntime > 0) {
                         // Actual runtime (as calculated by mediainfo)
                         // convert duration from milliseconds to seconds
                         seconds = (movie.ActualRuntime / 1000);
                         actualRuntime = true;
                     }
-                    else
-                    {
+                    else {
                         // Runtime (as provided by the dataprovider)
                         // convert from minutes to seconds
                         seconds = (movie.Runtime * 60);
@@ -2428,11 +2420,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
                     // Publish the runtime
                     PublishRuntime(seconds, actualRuntime, "#MovingPictures." + prefix + ".runtime.", forceLogging);
-
                 }
                 // for the popularity we add a localized property to make it easier to read in skins
-                else if (currField.FieldName == "popularity" && tableType == typeof(DBMovieInfo))
-                {
+                else if (currField.FieldName == "popularity" && tableType == typeof(DBMovieInfo)) {
                     int popularity = (int)currField.GetValue(obj);
 
                     NumberFormatInfo localizedScoreFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
@@ -2443,17 +2433,58 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     SetProperty(propertyStr + ".localized", popularity.ToString("N", localizedScoreFormat), forceLogging);
 
                 }
+                // easy to read MediaInfo fields using MediaInfoGUI units
+                else if (currField.FieldName == "videobitrate") {
+                    int videoBitRate = (int)currField.GetValue(obj);
+                    
+                    NumberFormatInfo localizedScoreFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
+                    localizedScoreFormat.NumberDecimalDigits = 1;
+
+                    // Publish Video BitRate
+                    SetProperty(propertyStr + ".raw", videoBitRate.ToString(), forceLogging);
+                    if (videoBitRate < 1000) {
+                        SetProperty(propertyStr + ".localized", (videoBitRate / 1000.0).ToString("N", localizedScoreFormat) + " Kbps", forceLogging);
+                    }
+                    else {
+                        SetProperty(propertyStr + ".localized", (videoBitRate / 1000000.0).ToString("N", localizedScoreFormat) + " Mbps", forceLogging);
+                    }
+                }
+                else if (currField.FieldName == "audiobitrate") {
+                    int audioBitRate = (int)currField.GetValue(obj);
+
+                    NumberFormatInfo localizedScoreFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
+                    localizedScoreFormat.NumberDecimalDigits = 0;
+
+                    // Publish Audio BitRate
+                    SetProperty(propertyStr + ".raw", audioBitRate.ToString(), forceLogging);
+                    SetProperty(propertyStr + ".localized", (audioBitRate / 1000).ToString("N", localizedScoreFormat) + " Kbps", forceLogging);
+                }
+                else if (currField.FieldName == "audiosamplerate") {
+                    int audioSampleRate = (int)currField.GetValue(obj);
+
+                    NumberFormatInfo localizedScoreFormat = (NumberFormatInfo)CultureInfo.CurrentCulture.NumberFormat.Clone();
+                    localizedScoreFormat.NumberDecimalDigits = 1;
+
+                    // Publish Audio SampleRate
+                    SetProperty(propertyStr + ".raw", audioSampleRate.ToString(), forceLogging);
+                    SetProperty(propertyStr + ".localized", (audioSampleRate / 1000.0).ToString("N", localizedScoreFormat) + " KHz", forceLogging);
+                }
+                else if (currField.FieldName == "filesize") {
+                    long fileSize = (long)currField.GetValue(obj);
+
+                    // Publish FileSize
+                    SetProperty(propertyStr + ".raw", fileSize.ToString(), forceLogging);
+                    SetProperty(propertyStr + ".localized", fileSize.ToFormattedByteString(), forceLogging);
+                }
                 // for floats we need to make sure we use english style printing or imagelist controls
                 // will break. 
-                else if (value.GetType() == typeof(float))
-                {
+                else if (value.GetType() == typeof(float)) {
                     valueStr = ((float)currField.GetValue(obj)).ToString(CultureInfo.CreateSpecificCulture("en-US"));
                     SetProperty(propertyStr, valueStr, forceLogging);
 
                     // vanilla publication
                 }
-                else
-                {
+                else {
                     valueStr = currField.GetValue(obj).ToString().Trim();
 
                     // Category names have an extra translation check

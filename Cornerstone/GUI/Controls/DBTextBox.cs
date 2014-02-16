@@ -127,6 +127,9 @@ namespace Cornerstone.GUI.Controls {
                     case DBField.DBDataType.INTEGER:
                         int.Parse(Text);
                         break;
+                    case DBField.DBDataType.LONG:
+                        long.Parse(Text);
+                        break;
                     case DBField.DBDataType.REAL:
                         float.Parse(Text, new CultureInfo("en-US", false));
                         break;

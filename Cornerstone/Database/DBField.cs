@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Cornerstone.Database {
     public class DBField {
-        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, TYPE, ENUM, DATE_TIME, DB_OBJECT, DB_FIELD, DB_RELATION }
+        public enum DBDataType { INTEGER, REAL, TEXT, STRING_OBJECT, BOOL, TYPE, ENUM, DATE_TIME, DB_OBJECT, DB_FIELD, DB_RELATION, LONG }
 
         #region Private Variables
         
@@ -38,6 +38,10 @@ namespace Cornerstone.Database {
                 type = DBDataType.INTEGER;
             else if (propertyInfo.PropertyType == typeof(int?))
                 type = DBDataType.INTEGER;
+            else if (propertyInfo.PropertyType == typeof(long))
+                type = DBDataType.LONG;
+            else if (propertyInfo.PropertyType == typeof(long?))
+                type = DBDataType.LONG;
             else if (propertyInfo.PropertyType == typeof(float))
                 type = DBDataType.REAL;
             else if (propertyInfo.PropertyType == typeof(float?))
@@ -149,6 +153,11 @@ namespace Cornerstone.Database {
                             return 0;
                         else
                             return int.Parse(attribute.Default);
+                    case DBDataType.LONG:
+                        if (attribute.Default == "")
+                            return 0;
+                        else
+                            return long.Parse(attribute.Default);
                     case DBDataType.REAL:
                         if (attribute.Default == "")
                             return (float)0.0;
@@ -269,7 +278,14 @@ namespace Cornerstone.Database {
                             tmp = tmp.Remove(tmp.IndexOf(','), 1);
 
                         return int.Parse(tmp);
-                    
+
+                    case DBDataType.LONG:
+                        tmp = strVal.ToString();
+                        while (tmp.Contains(","))
+                            tmp = tmp.Remove(tmp.IndexOf(','), 1);
+
+                        return long.Parse(tmp);
+
                     case DBDataType.REAL:
                         if (propertyInfo.PropertyType == typeof(double))
                             return double.Parse(strVal, new CultureInfo("en-US", false));

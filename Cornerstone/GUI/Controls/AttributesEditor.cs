@@ -55,6 +55,9 @@ namespace Cornerstone.GUI.Controls {
                     case DBAttrDescription.ValueTypeEnum.INT:
                         valueCell.DBTypeOverride = DBField.DBDataType.INTEGER;
                         break;
+                    case DBAttrDescription.ValueTypeEnum.LONG:
+                        valueCell.DBTypeOverride = DBField.DBDataType.LONG;
+                        break;
                     case DBAttrDescription.ValueTypeEnum.FLOAT:
                         valueCell.DBTypeOverride = DBField.DBDataType.REAL;
                         break;
