@@ -471,6 +471,16 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private bool _hasSubtitles;
 
+        [DBFieldAttribute(AllowDynamicFiltering = false)]
+        public bool Is3D
+        {
+            get { return _is3D; }
+            set {
+                _is3D = value;
+                commitNeeded = true;
+            }
+        } private bool _is3D;
+
         [DBFieldAttribute(AllowManualFilterInput = false)]
         public VideoFormat VideoFormat {
             get {
@@ -561,6 +571,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 this.VideoHeight = mInfoWrapper.Height;
                 this.VideoFrameRate = (float)mInfoWrapper.Framerate;
                 this.HasSubtitles = mInfoWrapper.HasSubtitles;
+                this.Is3D = mInfoWrapper.Is3D;
                 this.VideoCodec = mInfoWrapper.VideoCodec;
                 this.VideoBitrate = mInfoWrapper.VideoBitrate;
                 this.AudioCodec = mInfoWrapper.AudioCodec;
