@@ -1376,8 +1376,25 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _showRescanMenuItem;
 
         [CornerstoneSetting(
+            Name = "Show Confirmation Prompt when Updating Movie Details",
+            Description = "Shows a confirmation Yes/No dialog when manually updating movie details in GUI.",
+            Groups = "|MediaPortal GUI|Interface Options|",
+            Identifier = "confirm_movie_details_update",
+            Default = true,
+            Hidden = false)]
+        public bool ConfirmMovieDetailsUpdate
+        {
+            get { return _confirmMovieDetailsUpdate; }
+            set {
+                _confirmMovieDetailsUpdate = value;
+                OnSettingChanged("confirm_movie_details_update");
+            }
+        }
+        private bool _confirmMovieDetailsUpdate;
+
+        [CornerstoneSetting(
             Name = "Auto-Prompt For User Rating",
-            Description = "Moving Pictures will prompt you for your rating of a movie after the movie ends",
+            Description = "Moving Pictures will prompt you for your rating of a movie after the movie ends.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "auto_prompt_for_rating",
             Default = false)]

@@ -88,7 +88,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
                     }
                 }
                 catch (Exception e) {
-                    logger.ErrorException("Error create thumbnail for " + currMovie.Title, e);
+                    logger.ErrorException("Error creating thumbnail for " + currMovie.Title, e);
                 }
             }
         }

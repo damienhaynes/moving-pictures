@@ -1809,7 +1809,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// </summary>
         /// <param name="movie"></param>
         private void updateMovieDetails(DBMovieInfo movie) {
-            bool bConfirm = ShowCustomYesNo(Translation.UpdateMovieDetailsHeader, Translation.UpdateMovieDetailsBody, null, null, false);
+            bool bConfirm = true;
+            if (MovingPicturesCore.Settings.ConfirmMovieDetailsUpdate) {
+                bConfirm = ShowCustomYesNo(Translation.UpdateMovieDetailsHeader, Translation.UpdateMovieDetailsBody, null, null, false);
+            }
+
             if (bConfirm && movie != null) {
                 MovieUpdateWorker updater = new MovieUpdateWorker(movieDetailsUpdateWorker);
                 updater.BeginInvoke(movie, new AsyncCallback(movieDetailsUpdateFinished), updater);
