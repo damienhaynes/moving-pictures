@@ -81,6 +81,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     private bool _isPCM = false;  // RAW audio
     private bool _isTrueHD = false;  // TrueHD audio
     private bool _isDTSHD = false;  // DTSHD audio
+    private bool _is3D = false;
+    private int _multiViewCount = 0;
     private int _duration = 0;
     private long _fileSize = 0;
 
@@ -148,7 +150,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
             int.TryParse(_mI.Get(StreamKind.Video, 0, "Width"), out _width);
             int.TryParse(_mI.Get(StreamKind.Video, 0, "Height"), out _height);
             int.TryParse(_mI.Get(StreamKind.Video, 0, "BitRate"), out _videoBitRate);
+            int.TryParse(_mI.Get(StreamKind.Video, 0, "MultiView_Count"), out _multiViewCount);
             int.TryParse(_mI.Get(StreamKind.General, 0, "TextCount"), out _numSubtitles);
+
             int intValue;
             int iAudioStreams = _mI.Count_Get(StreamKind.Audio);
             for (int i = 0; i < iAudioStreams; i++) {
@@ -209,6 +213,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
             _isTrueHD = (_audioCodec.Contains("truehd") || _audioFormatProfile.Contains("truehd"));
             _isDTSHD = (_audioCodec.Contains("dts") && (_audioFormatProfile.Contains("hra") || _audioFormatProfile.Contains("ma")));
 
+            _is3D = (_multiViewCount > 1);
+
             if (checkHasExternalSubtitles(strFile)) {
                 _hasSubtitles = true;
             }
@@ -242,6 +248,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
             logger.Debug("MediaInfoWrapper: HasSubtitles: {0}", _hasSubtitles);
             logger.Debug("MediaInfoWrapper: NumSubtitles: {0}", _numSubtitles);
+            logger.Debug("MediaInfoWrapper: Is3D: {0}", _is3D);
+            logger.Debug("MediaInfoWrapper: MultiViewCount: {0}", _multiViewCount);
             logger.Debug("MediaInfoWrapper: ScanType: {0}", _scanType);
             logger.Debug("MediaInfoWrapper: IsInterlaced: {0}", _isInterlaced);
             logger.Debug("MediaInfoWrapper: Width: {0}", _width);
@@ -524,6 +532,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     public int Height
     {
       get { return _height; }
+    }
+
+    public bool Is3D {
+        get { return _is3D; }
     }
 
     #endregion
