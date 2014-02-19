@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--A-->
+  <string name="Actor">Aktorius</string>
+  <string name="Actors">Aktoriai</string>
+  <string name="AllMovies">Visi filmai</string>
+  <string name="AllFiles">Visi failai</string>
+  <!--B-->
+  <string name="BadCategory">Išorinis įskiepis ar apvalkalas pabandytas⏎\nsiekiant atidaryti neegzistuojančią Moving⏎\nPictures kategoriją!</string>
+  <string name="BadMovie">Išorinis įskiepis ar apvalkalas pabandytas⏎\nsiekiant atidaryti neegzistuojantį Moving⏎\nPictures filmą!</string>
+  <string name="BadParam">Išorinis įskiepis ar apvalkalas suteikė⏎\nMoving Pictures netinkamą prametrą!</string>
+  <string name="Backdrop">Fonas</string>
+  <string name="BeginsWith">Prasideda</string>
+  <string name="BelongsToCollection">Priklauso kolekcijai</string>
+  <!--C-->
+  <string name="Cancel">Atšaukti</string>
+  <string name="CannotDeleteOffline">Nepavyko ištrinti {0}⏎\nkadangi failas nepasiekiamas</string>
+  <string name="CannotDeleteReadOnly">Negalima ištrinti tik-skaitymui skirtą filmą.⏎\nAr norite kad Moving Pictures ignoruotų šį filmą?</string>
+  <string name="CastAndCrew">Filmavimo grupė</string>
+  <string name="CategoryEmptyDescription">Šioje kategorijoje nėra filmų⏎</string>
+  <string name="CategoryEmptyHeader">Kategorija tuščia</string>
+  <string name="Certification">Serifikacija</string>
+  <string name="ChangeView">Keisti išvaizdą</string>
+  <string name="CheckForMissingArtwork">Ieškoti trūkstamų apipavidalinimų internete</string>
+  <string name="Collection">Kolekcija</string>
+  <string name="Collections">Kolekcijos</string>
+  <string name="Completed">Baigta</string>
+  <string name="CompletedFiles">Baigti failai</string>
+  <string name="ContinueToNextPartBody">Ar norite tęsti {0} dalimi?</string>
+  <string name="ContinueToNextPartHeader">Tęsti kita dalimi?</string>
+  <string name="Cover">Viršelis</string>
+  <string name="CoverFlowView">Viršelių ekspozicijos vaizdas</string>
+  <string name="CycleCoverArt">Sukti viršelius ratu</string>
+  <string name="CycleView">Rato vaizdas</string>
+  <!--D-->
+  <string name="DateAdded">Pridėjimo data</string>
+  <string name="DateDay">diena</string>
+  <string name="DateDays">dienos</string>
+  <string name="DateMonth">mėnuo</string>
+  <string name="DateMonths">mėnesiai</string>
+  <string name="DatePartAgo">Liko {0} {1}</string>
+  <string name="DatePartWithinDays">Paskutinės {0} dienos(ų)</string>
+  <string name="DatePartWithinMonths">Paskutiniai {0} mėnesių</string>
+  <string name="DatePartWithinWeeks">Paskutinės {0} savaitės</string>
+  <string name="DatePartWithinYears">Paskutiniai {0} metai(ų)</string>
+  <string name="DateWeek">savaitė</string>
+  <string name="DateWeeks">savaitės</string>
+  <string name="DateYear">metai</string>
+  <string name="DateYears">metai</string>
+  <string name="DecadeShort">{0}0s</string>
+  <string name="DeleteFailed">Nepavyko ištrinti</string>
+  <string name="DeleteMovie">Ištrinti filmą</string>
+  <string name="Director">Režisierius</string>
+  <string name="Directors">Režisieriai</string>
+  <string name="DownAbbreviation">(dienų)</string>
+  <string name="DoYouWantToDelete">Ar norite visiškai ištrinti⏎\n{0}⏎\niš kietojo disko?</string>
+  <!--E-->
+  <string name="EarlierThisYear">Anksčiau šiais metais</string>
+  <string name="Error">Klaida</string>
+  <!--F-->
+  <string name="FailedMountingImage">Atsiprašome, nepavyko prijungti DVD atvaizdo</string>
+  <string name="FilePath">Failo vieta</string>
+  <string name="FilesNeedingAttention">Failai reikalaujantys dėmesio</string>
+  <string name="FilmstripView">Kino juostos vaizdas</string>
+  <string name="FilterBy">Filtruoti pagal</string>
+  <string name="Friday">Penktadienis</string>
+  <string name="Future">Ateitis</string>
+  <!--G-->
+  <string name="GlobalActions">Visaapimantys veiksmai</string>
+  <string name="Genre">Žanras</string>
+  <string name="Genres">Žanrai</string>
+  <!--I-->
+  <string name="IgnoreMovie">Ignoruoti filmą</string>
+  <string name="ImdbId">IMDb ID</string>
+  <string name="Importer">Filmo įkėlėjas</string>
+  <string name="ImporterDisabled">Įkėlėjas išjungtas</string>
+  <string name="ImporterDisabledMessage">Įkėlėjas išjungtas⏎\nMediaPortal GUI. Ar norite⏎\njį įjungti?</string>
+  <string name="ImporterPending">Įkėlėjas ({0} reikalauja dėmesio)</string>
+  <string name="InvalidPin">Neteisingas PIN kodas!</string>
+  <string name="InvalidVideoDiscFormat">Arba jusu failo atvaizdas nėra tinkamo⏎\nvideo disko formato arba DAEMON įrankių⏎\nMediaPortalo nustatymai neteisingi.</string>
+  <!--L-->
+  <string name="Language">Kalba</string>
+  <string name="LargeThumbnailView">Didelių miniatiūrų vaizdas</string>
+  <string name="LastMonth">Pastarąjį mėnesį</string>
+  <string name="LastWeek">Praeitą svaitę</string>
+  <string name="LastYear">Praeitais metais</string>
+  <string name="ListView">Sąrašo vaizdas</string>
+  <string name="LockRestrictedMovies">Užrakinti apribotus filmus</string>
+  <!--M-->
+  <string name="MarkAsUnwatched">Žymėti žiūrėtu</string>
+  <string name="MarkAsWatched">Žymėti žiūrėtu</string>
+  <string name="MediaInfo">Media informacija</string>
+  <string name="MediaIsMissing">Nerasta jūsų pasirinkto filmo media! Labai gail, bet kažkas nepavyko...</string>
+  <string name="MediaNotAvailableBody">Jūsų pasirinkto filmo media⏎\ndabar nepasiekiama. Prašome įdėti ar prijungti media⏎\nužrašu: {0}</string>
+  <string name="MediaNotAvailableHeader">Nerandama media</string>
+  <string name="Missing">Trūksta</string>
+  <string name="MissingExternalPlayerExe">HD grojimo leidžiamas failas nerastas.⏎ Prašome pataisyti kelią iki leidžiamo failo.</string>
+  <string name="Monday">Pirmadienis</string>
+  <string name="MonthName1">Sausis</string>
+  <string name="MonthName2">Vasaris</string>
+  <string name="MonthName3">Kovas</string>
+  <string name="MonthName4">Balandis</string>
+  <string name="MonthName5">Gegužė</string>
+  <string name="MonthName6">Birželis</string>
+  <string name="MonthName7">Liepa</string>
+  <string name="MonthName8">Rugpjūtis</string>
+  <string name="MonthName9">Rugsėjis</string>
+  <string name="MonthName10">Spalis</string>
+  <string name="MonthName11">Lapkritis</string>
+  <string name="MonthName12">Gruodis</string>
+  <string name="Movie">Filmas</string>
+  <string name="MovieDetails">Filmo aprašymas</string>
+  <string name="MovieOptions">Filmo pasirinkimai</string>
+  <string name="Movies">Filmai</string>
+  <!--N-->
+  <string name="NoImportPathsBody">Jūs nesate nurodę įkėlimo vietų.⏎\nPrašome uždaryti Mediaportal⏎\nir paleiskite MP Konfigūratorių.</string>
+  <string name="NoImportPathsHeading">Nėra įkėlimo vietų!</string>
+  <!--O-->
+  <string name="Older">Senesni</string>
+  <!--P-->
+  <string name="ParentalControlsDisabled">Tėvų kontrolė išjungta.</string>
+  <string name="PinCodeHeader">Atrakinamas apribotas turinys</string>
+  <string name="PinCodePrompt">Prašome įvesti PIN kodą:</string>
+  <string name="PlaybackFailed">Nepavyko groti kadangi \'{0}\'⏎ išplėtimas neįtrauktas MediaPortal konfigūracijoje.⏎ Prašome įtraukti šį plėtinį arba nustatyti išorinį grotuvą⏎ bei bandykite dar kartą.</string>
+  <string name="PlaybackFailedHeader">Nepavyko groti</string>
+  <string name="PlayMovie">Groti filmą</string>
+  <string name="PossibleMatches">Gali sutapimai</string>
+  <string name="ProblemLoadingSkinFile">Atsiprašome, įvyko klaida užkraunant apvalkalo failą</string>
+  <!--R-->
+  <string name="Rate">Įvertinti</string>
+  <string name="Rated">Vertinimas</string>
+  <string name="RateFiveStarFive">Puikus</string>
+  <string name="RateFiveStarFour">Super</string>
+  <string name="RateFiveStarOne">Baisus</string>
+  <string name="RateFiveStarThree">Geras</string>
+  <string name="RateFiveStarTwo">Vidutiniškas</string>
+  <string name="RateHeading">Įvertinti filmą</string>
+  <string name="RecentlyAddedMovies">Vėliausiai pridėti filmai</string>
+  <string name="ReleaseDate">Išleidimo data</string>
+  <string name="RemoteNumericAlphabet0">
+  </string>
+  <string name="RemoteNumericAlphabet1">
+  </string>
+  <string name="RemoteNumericAlphabet2">abc</string>
+  <string name="RemoteNumericAlphabet3">def</string>
+  <string name="RemoteNumericAlphabet4">ghi</string>
+  <string name="RemoteNumericAlphabet5">jkl</string>
+  <string name="RemoteNumericAlphabet6">mno</string>
+  <string name="RemoteNumericAlphabet7">pqrs</string>
+  <string name="RemoteNumericAlphabet8">tuv</string>
+  <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Atstatyti ignoruotus failus</string>
+  <string name="ResumeFrom">Atnaujinti nuo:</string>
+  <string name="ResumeFromLast">Tęsti filmą nuo paskutinio laiko?</string>
+  <string name="Retry">Pakartoti</string>
+  <string name="Runtime">Trukmė</string>
+  <string name="RuntimeHour">{0} valanda</string>
+  <string name="RuntimeHours">{0} valandų</string>
+  <string name="RuntimeLong">{0} ir {1}</string>
+  <string name="RuntimeLongExtended">{0}, {1} ir {2}</string>
+  <string name="RuntimeMinute">{0} minutė</string>
+  <string name="RuntimeMinutes">{0} minučių</string>
+  <string name="RuntimeSecond">{0} sekundė</string>
+  <string name="RuntimeSeconds">{0} sekundžių</string>
+  <string name="RuntimeShort">{0}:{1:00}</string>
+  <string name="RuntimeShortExtended">{0}val{1:00}min{2:00}sek</string>
+  <!--S-->
+  <string name="Saturday">Šeštadienis</string>
+  <string name="SendToImporter">Perduoti įkėlėjui</string>
+  <string name="ScanForNewMovies">Skenuoti naujus filmus</string>
+  <string name="Score">Įvertinimas</string>
+  <string name="Search">Ieškoti</string>
+  <string name="SearchBy">Ieškoti pagal</string>
+  <string name="SearchForMore">Ieškoti plačiau</string>
+  <string name="SearchNoResults">Nėra paieškos rezultatų.</string>
+  <string name="SelectCorrectMovie">Pasirinkti teisingą filmą</string>
+  <string name="SelectYourRating">Įvertinti {0}</string>
+  <string name="ShowOnlyUnwatchedMovies">Rodyti tik nematytus filmus</string>
+  <string name="ShowWatchedAndUnwatchedMovies">ROdyti žiūrėtus ir nežiūrėtus filmus</string>
+  <string name="SkinDoesNotSupportCategories">Šis apvalkalas nesupranta Kategorijų.</string>
+  <string name="SkinDoesNotSupportImporter">Šis apvalkalas nesupranta įkėlėjo.</string>
+  <string name="SkinDoesNotSupportPinDialog">Šis apvalkalas nesupranta PIN kodų idalogo.</string>
+  <string name="SkinDoesNotSupportRatingDialog">Šis apvalkalas nesupranta vertinimo dialogo.</string>
+  <string name="SortBy">Rūšiuoti pagal</string>
+  <string name="SortDirection">Rūšiavimo kryptis</string>
+  <string name="StarRating">Vertinimas žvaigždutėmis</string>
+  <string name="Sunday">Sekmadienis</string>
+  <!--T-->
+  <string name="Theme">Tema</string>
+  <string name="ThisMonth">Šį mėnesį</string>
+  <string name="ThisWeek">Šią savaitę</string>
+  <string name="ThisYear">Šiais metais</string>
+  <string name="ThreeMonthsAgo">Prieš tris mėnesius</string>
+  <string name="ThreeWeeksAgo">Prieš tris savaites</string>
+  <string name="ThumbnailView">Miniatiūrų vaizdas</string>
+  <string name="Thursday">Ketvirtadienis</string>
+  <string name="Title">Antraštė</string>
+  <string name="Today">Šiandien</string>
+  <string name="ToggleParentalLock">Įjungti tėvų užraktą</string>
+  <string name="Tuesday">Antradienis</string>
+  <string name="TwoMonthsAgo">Prieš du mėnesius</string>
+  <string name="TwoWeeksAgo">Prieš dvi savaites</string>
+  <!--U-->
+  <string name="Unknown">Nežinomas</string>
+  <string name="UnlockRestrictedMovies">Atrakinti apribotus filmus</string>
+  <string name="UnwatchedMovies">Nematyti filmai</string>
+  <string name="UpAbbreviation">(aukštyn)</string>
+  <string name="UpdateDetailsFromOnline">Antaujinti aprašymą internetu</string>
+  <string name="UpdateMovieDetailsBody">Jūs ketinate atnaujinti visus filmo metaduomenis, užrašant⏎\nant visų rankinių pataisų. Ar norite tęsti?</string>
+  <string name="UpdateMovieDetailsHeader">Atnaujinti filmo aprašymą</string>
+  <!--V-->
+  <string name="VirtualDriveHeader">Neparuoštas virtualus diskas </string>
+  <string name="VirtualDriveMessage">Virtualus diskas nebuvo paruoštas laiku.⏎ Prašome bandyti iš naujo arba atšaukti grojimą.</string>
+  <string name="Votes">Balsai</string>
+  <string name="ViewMovieDetails">Žiūrėti filmo aprašymą</string>
+  <!--W-->
+  <string name="Wednesday">Trečiadienis</string>
+  <string name="Writer">Rašytojas</string>
+  <string name="Writers">Rašytojai</string>
+  <!--Y-->
+  <string name="Year">Metai</string>
+  <string name="Yesterday">Vakar</string>
+</resources>

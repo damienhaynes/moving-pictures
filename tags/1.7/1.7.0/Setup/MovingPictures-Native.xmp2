@@ -1,0 +1,2046 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageClass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Version>2.0</Version>
+  <Groups>
+    <Items>
+      <GroupItem Name="Default">
+        <ParentGroup />
+        <DisplayName>Main</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>This feature contains the main program files and dependencies for the MovingPictures plugin.</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\bin\Release\Cornerstone.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{151ce8ea-528f-46b2-90fd-7754aa74e9c4}-Cornerstone.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\Windows\Cornerstone.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\bin\Release\Cornerstone.MP.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{03ce1fc9-dfc4-482c-b2d5-dea919bf429f}-Cornerstone.MP.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\Windows\Cornerstone.MP.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\bin\Release\MovingPictures.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{52ec67ce-bf16-4e11-b4da-6a033f66131b}-MovingPictures.dll</ZipFileName>
+              <DestinationFilename>%Plugins%\Windows\MovingPictures.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\bin\Release\NLog.dll</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7c63b4a5-d73e-4c64-8a7a-a464e972d0ab}-NLog.dll</ZipFileName>
+              <DestinationFilename>%Base%\NLog.dll</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\External\ConfigLauncher\.NET 4\Moving Pictures Config.exe</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0c9b9bde-0063-4d43-9728-e2273f32f904}-Moving Pictures Config.exe</ZipFileName>
+              <DestinationFilename>%Base%\Moving Pictures Config.exe</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="DefaultSkin">
+        <ParentGroup />
+        <DisplayName>Default Skin</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>Default Skin (4:3) for MovingPictures.</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\dialogGeneralRating.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{2bf67e70-4de1-4962-9562-99cfea90f147}-dialogGeneralRating.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\dialogGeneralRating.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.coverflowview.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{74174df9-fb97-4d61-b3a2-186ad2eed74f}-movingpictures.coverflowview.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.coverflowview.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.details.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{27a3931f-62a2-45fd-a6d8-a004165a7031}-movingpictures.details.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.details.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.facade.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{1344a618-f911-4631-a2e8-eaf54a14d697}-movingpictures.facade.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.facade.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.filmstripview.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{9d9b7a75-bd9c-49a8-b732-5054145531a7}-movingpictures.filmstripview.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.filmstripview.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.hiddenmenu.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d77d0381-5dbd-4192-b26e-0ef418d82602}-movingpictures.hiddenmenu.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.hiddenmenu.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.importer.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a93730c1-9936-48fc-8563-866b2b8d3d90}-movingpictures.importer.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.importer.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.listview.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7b581f30-443e-4ead-8142-7e10cd8f5eb0}-movingpictures.listview.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.listview.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.mediainfo.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d40176ce-4296-43b1-9f56-7565a8f48c7e}-movingpictures.mediainfo.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.mediainfo.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.overlay.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{28f98538-a51c-4163-9f57-9d0122e86ff1}-movingpictures.overlay.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.overlay.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.thumbsview.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{63282e4c-e741-4fe4-a352-c582309aaa2c}-movingpictures.thumbsview.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.thumbsview.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{45d870ba-732e-4fb5-b702-06eb563025db}-movingpictures.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Default\movingpictures.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\Backgroundtop2.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d7b75ae3-9c4b-4ebc-8e55-02bf54d448b0}-Backgroundtop2.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\Backgroundtop2.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\Background_moving.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ad1eb518-32c0-480d-918e-44a473c9c899}-Background_moving.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\Background_moving.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\dialogprogressbg.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a10938e9-d41f-44b1-bdbb-5799f22b99c1}-dialogprogressbg.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\dialogprogressbg.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\diffusemirrorwide.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a8ebe45a-48e9-41d0-bc15-b179c803d08e}-diffusemirrorwide.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\diffusemirrorwide.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\filmstrip_overlay.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{17a4067e-6989-4e41-b4a6-4b3ad098a3bf}-filmstrip_overlay.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\filmstrip_overlay.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\glassoverlay2.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{607e9909-63fe-4ede-84dc-4f9acde09ff2}-glassoverlay2.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\glassoverlay2.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\glasstitlebar.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0a7b4bed-74f9-46d4-a6ce-7599675211f3}-glasstitlebar.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\glasstitlebar.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\hover_moving pictures.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{6f5e4846-bf76-4f2a-9e63-091764541978}-hover_moving pictures.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\hover_moving pictures.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\led_red.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{fcdc7ef2-76ce-44f1-939d-4f15354b865a}-led_red.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\led_red.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\Lock.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{101510d1-a1c2-4c95-8394-053a0a5e953f}-Lock.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\Lock.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\mainoverlay.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{175d7519-4aa2-4d1f-9c70-0385177cebaf}-mainoverlay.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\mainoverlay.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movieviewbg.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{be61f7b5-8363-4295-9540-63497a617564}-movieviewbg.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\movieviewbg.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movingpictures_done.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{802ac8ab-7961-4432-8a3b-f6657bf7fbd5}-movingpictures_done.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\movingpictures_done.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movingpictures_needinput.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{c094b04e-885e-416d-9f44-bab7d5a3999f}-movingpictures_needinput.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\movingpictures_needinput.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movingpictures_processing.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{12840617-6c5b-4a02-9af0-38d0d110fde1}-movingpictures_processing.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\movingpictures_processing.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movingpictures_SortAscending.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{12411f52-7cf6-4fc1-a7f8-715a19524e78}-movingpictures_SortAscending.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\movingpictures_SortAscending.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movingpictures_SortDescending.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b561c53e-eb85-41da-83c6-c8141cdd5701}-movingpictures_SortDescending.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\movingpictures_SortDescending.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\overlayunwatched.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{9451a9ab-2b1c-4999-868e-53f3a4a3d412}-overlayunwatched.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\overlayunwatched.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\overlaywatched.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{5b414e49-5f11-462c-912d-ed750cf51c4b}-overlaywatched.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\overlaywatched.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\overlaywubg.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{344d9dce-8f6d-4678-a1a6-569b92ac9f8b}-overlaywubg.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\overlaywubg.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star0.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{4b7829a5-198a-4673-9f8c-3488ddf1a209}-star0.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star0.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star1.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ad4e7182-d03b-4976-afaa-faa5ad0345da}-star1.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star1.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star10.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d3d7da69-634c-4040-a0fd-e56ba10cec15}-star10.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star10.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star2.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{dfb5db54-c554-43e8-b643-350098a7accd}-star2.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star2.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star3.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f95e3fae-d6aa-4296-9827-2cfe2b178dce}-star3.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star3.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star4.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{6224073e-a38a-4c84-a4b7-3b6d0716af43}-star4.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star4.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star5.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{c516dc09-2309-4377-9388-55577883a0d2}-star5.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star5.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star6.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e1b1a833-320c-4337-ac93-60d8a5bf6a43}-star6.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star6.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star7.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d005fdb9-6e9a-4168-a24e-3d2d42814274}-star7.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star7.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star8.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{59df56d7-3a5e-422e-af90-d5fd65896adb}-star8.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star8.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star9.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{921647c8-2130-4ffb-bf1c-365fef934d72}-star9.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\star9.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\UserRatingStarOff.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{dd8bad08-96c0-440e-b477-1615c3d229f9}-UserRatingStarOff.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\UserRatingStarOff.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\UserRatingStarOn.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{dfe9f9dd-0cc7-4182-8bb6-44cd260d2a83}-UserRatingStarOn.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\UserRatingStarOn.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\Categories\Movies.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{16946323-adf8-434e-a90a-9a21d0c88215}-Movies.png</ZipFileName>
+              <DestinationFilename>%Skin%\Default\Media\Categories\Movies.png</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="DefaultWideSkin">
+        <ParentGroup />
+        <DisplayName>DefaultWide Skin</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>Default Wide Skin (16:9) for MovingPictures.</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\dialogGeneralRating.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{cc531e3c-d39d-47e5-8a28-5632440ac6b5}-dialogGeneralRating.xml</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\dialogGeneralRating.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\DialogPinCode.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7abd8b61-9d2c-4fd9-8e72-8f4426c45188}-DialogPinCode.xml</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\DialogPinCode.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.details.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{92b804ef-63bd-45ee-8c83-042ba6a44880}-movingpictures.details.xml</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\movingpictures.details.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.facade.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{604e55c1-351d-4c3d-853c-53ae586b3692}-movingpictures.facade.xml</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\movingpictures.facade.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.hiddenmenu.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d95a91ce-7dcf-4dbb-a17e-9b7437fb7949}-movingpictures.hiddenmenu.xml</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\movingpictures.hiddenmenu.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.importer.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{6b5a709e-59f2-4d75-afc2-069f1d09e5d4}-movingpictures.importer.xml</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\movingpictures.importer.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.listview.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{8aaaa8c4-96a8-4fac-85ef-89e493ce71a8}-movingpictures.listview.xml</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\movingpictures.listview.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.mediainfo.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a48393a0-b84e-45e1-a95d-91eb53caa59b}-movingpictures.mediainfo.xml</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\movingpictures.mediainfo.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e0c04070-8c97-4edb-9185-a4e3b998b99f}-movingpictures.xml</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\movingpictures.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\led_red.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{cedb4d5d-330a-45a0-ab45-3d9c914ba5de}-led_red.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\led_red.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\Lock.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{6bda8549-3270-42b7-9c18-57999f3bbd11}-Lock.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\Lock.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\movingpictures_done.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a709e2a6-aca0-4044-aa49-b8c29d7cf05c}-movingpictures_done.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\movingpictures_done.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\movingpictures_needinput.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{18b940c9-7f5b-4140-b7b3-9a0afcebce3d}-movingpictures_needinput.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\movingpictures_needinput.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\movingpictures_processing.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{022e64ed-11d9-4c74-ad2e-fa86abad9a93}-movingpictures_processing.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\movingpictures_processing.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\movingpictures_SortAscending.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f2521772-70e9-44a3-954c-6ecd7f8d08b3}-movingpictures_SortAscending.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\movingpictures_SortAscending.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\movingpictures_SortDescending.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{65280b85-6e61-4fb6-a12d-27c53af5868d}-movingpictures_SortDescending.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\movingpictures_SortDescending.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\overlayunwatched.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a12045ae-ea0b-43d4-99f2-06e7073daf34}-overlayunwatched.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\overlayunwatched.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\overlaywatched.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ecbce7e8-e126-4c8c-8008-30f1699328bd}-overlaywatched.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\overlaywatched.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\UserRatingStarOff.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d0586e36-d5ab-4adf-a54d-96b6a181b378}-UserRatingStarOff.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\UserRatingStarOff.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\UserRatingStarOn.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{781ae5af-70c7-41c7-ad29-9f2b9a3ddf36}-UserRatingStarOn.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\UserRatingStarOn.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\Categories\Movies.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{1dce1025-4b34-4156-a4a5-60147e784a2a}-Movies.png</ZipFileName>
+              <DestinationFilename>%Skin%\DefaultWide\Media\Categories\Movies.png</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="Languages">
+        <DisplayName>Languages</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>Languages</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\ca.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d3d459f4-23bd-46ea-a864-3e40449d3127}-ca.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\ca.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\cs.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{15eb84d4-cd6e-4d1b-82aa-1642ce0d0bb4}-cs.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\cs.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\da.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{cb262d17-73aa-4ac7-84e6-302112042c4f}-da.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\da.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\de.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{16c1dfec-13d3-4f86-adb6-914543ba1407}-de.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\de.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\el.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d635202c-24d0-487f-bbf9-55590c3235c8}-el.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\el.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\en-US.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ba21fcda-c599-443a-8453-77e4f0dc0faf}-en-US.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\en-US.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\es.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{acdc1b5f-6d86-4ed8-b904-8e4ed458a4c6}-es.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\es.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\et.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{65013735-dccc-4f9a-a51e-ef9194759c2b}-et.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\et.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\fi.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{44e1a81c-8841-4418-b10b-4d89a49b55c1}-fi.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\fi.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\fr.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a76026c8-cf50-4583-9d54-6ede18081696}-fr.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\fr.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\he.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{830a4302-ba48-44c3-8588-8bb09152d568}-he.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\he.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\hi.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{c2f8968f-fece-4788-a0f8-df52211522d9}-hi.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\hi.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\hr.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{cf7ef1e3-15cd-4121-b1ca-9bc561a8caff}-hr.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\hr.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\hu.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{dc69734d-b4aa-4c5a-8a6e-05f0f072a2a2}-hu.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\hu.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\id.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{753ae35c-af36-4d06-936d-2e4369b5e21d}-id.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\id.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\is.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{1b3ac53d-f36a-41d7-acb9-1e6ccbeceabe}-is.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\is.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\it.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{1948d336-9123-495a-b263-91208266c330}-it.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\it.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\ko.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0ab714b8-a902-4703-8601-f745641ef1ae}-ko.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\ko.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\ku.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{72ab92c5-9270-45cb-a3bc-db7c143633c1}-ku.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\ku.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\lt.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7b7f79a5-addd-4934-bc40-145dc67eec7b}-lt.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\lt.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\nb.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b7b4774c-fa93-4220-89e1-920ffc108de5}-nb.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\nb.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\nl.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{79ad01d9-9815-49aa-b7c5-737f2fc119cd}-nl.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\nl.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\no.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7ac47a4a-6b9b-4712-aed8-33ee9e132b3e}-no.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\no.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\pl.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{6f291655-a146-43a7-b032-48a4fb7eb2cc}-pl.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\pl.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\pt.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{efd7a85a-3d80-434c-94dd-941ebc987f0b}-pt.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\pt.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\pt_BR.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{bd0737a7-1e25-4b4f-9803-8e69544dc5be}-pt_BR.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\pt_BR.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\pt_PT.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d8ae5d1d-8f42-4b23-8338-930f3edcb7fc}-pt_PT.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\pt_PT.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\ru.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0c8ba6db-5178-4afd-97fe-61139395a0cf}-ru.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\ru.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\sk.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{35febb59-ae3d-420e-bc14-60bcfb41bb14}-sk.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\sk.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\sl.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e494367c-2c68-4d43-b354-80e61ff7332e}-sl.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\sl.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\sr.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{94646cee-5e1a-4458-bf34-ef4d7fff9ca4}-sr.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\sr.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\sv.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{dc202113-00cd-4722-8b88-735695df683b}-sv.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\sv.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\tr.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{223fa01a-c029-4442-8782-5dc90a2d1e1b}-tr.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\tr.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\uk.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{9b88b335-12d9-4619-8048-8a0cf8165a5a}-uk.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\uk.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\vi.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b99e47a0-7ee3-458e-9a09-ee916e68b2f9}-vi.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\vi.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\zh-CN.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{8e160017-44a1-47db-98c1-087da55b0e24}-zh-CN.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\zh-CN.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\zh.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{4de3e17d-4efb-49b5-bc5b-df46a7af3b7c}-zh.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\zh.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\bg.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{8670b287-ca96-4bde-9618-de3ceb0ff535}-bg.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\bg.xml</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
+      <GroupItem Name="LaunchConfig">
+        <ParentGroup />
+        <DisplayName>Launch MovingPictures Configuration</DisplayName>
+        <DefaulChecked>false</DefaulChecked>
+        <Description>Launch MovingPictures Configuration</Description>
+        <Files>
+          <Items />
+        </Files>
+      </GroupItem>
+    </Items>
+  </Groups>
+  <Sections>
+    <Items>
+      <SectionItem Guid="994e4e29-2b43-4f4c-978c-f74e3dd641fd" Name="Welcome Screen" ConditionGroup="">
+        <Params>
+          <Items>
+            <SectionParam Name="Header text">
+              <Value>Welcome to the Extension Installer for [Name]</Value>
+              <ValueType>String</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Description">
+              <Value>This will install [Name] version [Version] on your computer.
+
+It is recommended that you close all other applications before continuing.
+
+
+Click Next to continue or Cancel to exit Setup.</Value>
+              <ValueType>String</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Left part image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items />
+        </Actions>
+        <IncludedGroups />
+        <PanelName>Welcome Screen</PanelName>
+        <WizardButtonsEnum>NextCancel</WizardButtonsEnum>
+      </SectionItem>
+      <SectionItem Guid="54a06988-62aa-4e41-ac5c-03255a615493" Name="Tree View Selector" ConditionGroup="">
+        <Params>
+          <Items>
+            <SectionParam Name="Header Title">
+              <Value>Select Features</Value>
+              <ValueType>String</ValueType>
+              <Description>Header title</Description>
+            </SectionParam>
+            <SectionParam Name="Header description">
+              <Value>Select the features setup will install</Value>
+              <ValueType>String</ValueType>
+              <Description>Description of section, shown in under section title</Description>
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+            <SectionParam Name="Description ">
+              <Value>Select the features you want to install, and deselect the features you do not want to install.</Value>
+              <ValueType>String</ValueType>
+              <Description>Description of this operation</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items />
+        </Actions>
+        <IncludedGroups>
+          <string>DefaultSkin</string>
+          <string>DefaultWideSkin</string>
+          <string>Languages</string>
+        </IncludedGroups>
+        <PanelName>Tree View Selector</PanelName>
+        <WizardButtonsEnum>BackNextCancel</WizardButtonsEnum>
+      </SectionItem>
+      <SectionItem Guid="f002f251-2497-423a-b468-098b0605de4f" Name="Install Section" ConditionGroup="">
+        <Params>
+          <Items>
+            <SectionParam Name="Header Title">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Header title</Description>
+            </SectionParam>
+            <SectionParam Name="Header description">
+              <Value />
+              <ValueType>String</ValueType>
+              <Description>Description of section, shown in under section title</Description>
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items>
+            <ActionItem Name="InstallFiles" ActionType="InstallFiles" ConditionGroup="">
+              <Params>
+                <Items />
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="ClearSkinCache" ActionType="ClearSkinCache" ConditionGroup="DefaultWideSkin">
+              <Params>
+                <Items />
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="Database Backup" ActionType="Script" ConditionGroup="Default">
+              <Params>
+                <Items>
+                  <SectionParam Name="Script">
+                    <Value>//css_reference "MpeCore.dll";
+
+using MpeCore.Classes;
+using MpeCore;
+using System;
+using System.IO;
+
+public class Script
+{
+    public static void Main(PackageClass packageClass, ActionItem actionItem)
+    {
+        string dbPath = Path.Combine(MpeInstaller.TransformInRealPath("%Database%"), "movingpictures.db3");
+        if (!File.Exists(dbPath)) return;
+        string backupPath = Path.Combine(MpeInstaller.TransformInRealPath("%Database%"), "MovingPictures_Backup");
+        backupPath = Path.Combine(backupPath, DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+        string backupFile = Path.Combine(backupPath, "movingpictures.db3");
+        try
+        {
+          Directory.CreateDirectory(backupPath);
+          File.Copy(dbPath, backupFile, false);
+        }
+        catch { }
+        return;
+    }
+}</Value>
+                    <ValueType>Script</ValueType>
+                    <Description />
+                  </SectionParam>
+                  <SectionParam Name="Uninstall Script">
+                    <Value>//css_reference "MpeCore.dll";
+
+using MpeCore.Classes;
+using MpeCore;
+
+public class Script
+{
+    public static void Main(PackageClass packageClass, UnInstallItem item)
+    {
+        return;
+    }
+}
+</Value>
+                    <ValueType>Script</ValueType>
+                    <Description />
+                  </SectionParam>
+                </Items>
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+            <ActionItem Name="CreateShortCut" ActionType="CreateShortCut" ConditionGroup="Default">
+              <Params>
+                <Items>
+                  <SectionParam Name="ShortCut location">
+                    <Value>%Desktop%\Moving Pictures Configuration.lnk</Value>
+                    <ValueType>Template</ValueType>
+                    <Description>Location of shortcut</Description>
+                  </SectionParam>
+                  <SectionParam Name="ShortCut target">
+                    <Value>%Base%\Moving Pictures Config.exe</Value>
+                    <ValueType>Template</ValueType>
+                    <Description>Target of short cut</Description>
+                  </SectionParam>
+                  <SectionParam Name="Description">
+                    <Value>Moving Pictures Configuration</Value>
+                    <ValueType>String</ValueType>
+                    <Description>Description tooltip text </Description>
+                  </SectionParam>
+                  <SectionParam Name="Icon of the shortcut">
+                    <Value />
+                    <ValueType>Template</ValueType>
+                    <Description>Icon of the shortcut, 
+ if is empty the icon of the target will be used</Description>
+                  </SectionParam>
+                </Items>
+              </Params>
+              <ExecuteLocation>AfterPanelShow</ExecuteLocation>
+            </ActionItem>
+          </Items>
+        </Actions>
+        <IncludedGroups />
+        <PanelName>Install Section</PanelName>
+        <WizardButtonsEnum>Next</WizardButtonsEnum>
+      </SectionItem>
+      <SectionItem Guid="02af7873-0104-477d-ae20-14d481392540" Name="Setup Complete" ConditionGroup="">
+        <Params>
+          <Items>
+            <SectionParam Name="Header text">
+              <Value>The Extension Installer Wizard has successfully installed [Name].</Value>
+              <ValueType>String</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Left part image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description />
+            </SectionParam>
+            <SectionParam Name="Show radio buttons">
+              <Value />
+              <ValueType>Bool</ValueType>
+              <Description>Use radiobutton in place of combobox</Description>
+            </SectionParam>
+            <SectionParam Name="Header image">
+              <Value />
+              <ValueType>File</ValueType>
+              <Description>Image in upper right part</Description>
+            </SectionParam>
+          </Items>
+        </Params>
+        <Actions>
+          <Items>
+            <ActionItem Name="RunApplication" ActionType="RunApplication" ConditionGroup="LaunchConfig">
+              <Params>
+                <Items>
+                  <SectionParam Name="Path to application">
+                    <Value>%Base%\Moving Pictures Config.exe</Value>
+                    <ValueType>Template</ValueType>
+                    <Description>Path to the application like 
+ %Base%\MediaPortal.exe</Description>
+                  </SectionParam>
+                  <SectionParam Name="Parameters for application">
+                    <Value />
+                    <ValueType>String</ValueType>
+                    <Description>Command line parameters</Description>
+                  </SectionParam>
+                  <SectionParam Name="Wait for exit">
+                    <Value>NO</Value>
+                    <ValueType>Bool</ValueType>
+                    <Description>Wait for exit </Description>
+                  </SectionParam>
+                  <SectionParam Name="Don't run when silent install">
+                    <Value>YES</Value>
+                    <ValueType>Bool</ValueType>
+                    <Description>If set to Yes the aplication don't run when the istalation is silent </Description>
+                  </SectionParam>
+                  <SectionParam Name="Path to uninstall application">
+                    <Value />
+                    <ValueType>Template</ValueType>
+                    <Description>Path to the application which should be executed when uninstall</Description>
+                  </SectionParam>
+                  <SectionParam Name="Parameters for uninstall application">
+                    <Value />
+                    <ValueType>String</ValueType>
+                    <Description>Command line parameters for uninstall app</Description>
+                  </SectionParam>
+                  <SectionParam Name="Wait for exit on uninstall">
+                    <Value>NO</Value>
+                    <ValueType>Bool</ValueType>
+                    <Description>Wait for exit on uninstall </Description>
+                  </SectionParam>
+                </Items>
+              </Params>
+              <ExecuteLocation>AfterPanelHide</ExecuteLocation>
+            </ActionItem>
+          </Items>
+        </Actions>
+        <IncludedGroups>
+          <string>LaunchConfig</string>
+        </IncludedGroups>
+        <PanelName>Setup Complete</PanelName>
+        <WizardButtonsEnum>Finish</WizardButtonsEnum>
+      </SectionItem>
+    </Items>
+  </Sections>
+  <Dependencies>
+    <Items>
+      <DependencyItem>
+        <Type>MediaPortal</Type>
+        <Id />
+        <MinVersion>
+          <Major>1</Major>
+          <Minor>1</Minor>
+          <Build>6</Build>
+          <Revision>27644</Revision>
+        </MinVersion>
+        <MaxVersion>
+          <Major>1</Major>
+          <Minor>1</Minor>
+          <Build>6</Build>
+          <Revision>27644</Revision>
+        </MaxVersion>
+        <WarnOnly>false</WarnOnly>
+        <Message>This version of MovingPictures requires MediaPortal v1.7 or above.</Message>
+        <Name>MediaPortal</Name>
+      </DependencyItem>
+    </Items>
+  </Dependencies>
+  <PluginDependencies>
+    <Items>
+      <PluginDependencyItem AssemblyName="Cornerstone.MP.dll">
+        <CompatibleVersion>
+          <Items>
+            <CompatibleVersionItem>
+              <MinRequiredVersion>1.6.100.0</MinRequiredVersion>
+              <DesignedForVersion>1.6.100.0</DesignedForVersion>
+            </CompatibleVersionItem>
+          </Items>
+        </CompatibleVersion>
+        <SubSystemsUsed>
+          <Items />
+        </SubSystemsUsed>
+      </PluginDependencyItem>
+      <PluginDependencyItem AssemblyName="MovingPictures.dll">
+        <CompatibleVersion>
+          <Items>
+            <CompatibleVersionItem>
+              <MinRequiredVersion>1.6.100.0</MinRequiredVersion>
+              <DesignedForVersion>1.6.100.0</DesignedForVersion>
+            </CompatibleVersionItem>
+          </Items>
+        </CompatibleVersion>
+        <SubSystemsUsed>
+          <Items />
+        </SubSystemsUsed>
+      </PluginDependencyItem>
+    </Items>
+  </PluginDependencies>
+  <GeneralInfo>
+    <Name>Moving Pictures</Name>
+    <Id>284fc21c-86e3-4346-bf31-9e38c75e0242</Id>
+    <Author>Moving Pictures Team</Author>
+    <HomePage>http://code.google.com/p/moving-pictures/</HomePage>
+    <ForumPage>http://forum.team-mediaportal.com/forums/moving-pictures.284/</ForumPage>
+    <UpdateUrl>http://moving-pictures.googlecode.com/svn/trunk/Setup/update.xml</UpdateUrl>
+    <Version>
+      <Major>1</Major>
+      <Minor>7</Minor>
+      <Build>0</Build>
+      <Revision>1572</Revision>
+    </Version>
+    <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
+    <VersionDescription>* Updated support for MediaPortal 1.7.
+* Added new MediaInfo properties:
+** File Size
+** Audio Bit Rate
+** Audio Sample Rate
+** Video Bit Rate
+** 3D Detection
+** Skin properties added for human readable formats.
+* Added an advanced setting so that user can disable confirmation prompt when updating movie details.
+* Added skin properties for users selected movie watched history.
+* Updated Czech scraper, thanks Kucheek. 
+* Fixed warning in log about categories view being unavailable due to skin settings. This is unneeded as there is already a seperate check to determine availability. 
+* Fixed Slovenian translation, was badly formatted on Transifex.
+* Fixed unnecessary publish of skin properties.
+* Improved description of 'script' execution during MPEI installation so it's clear what script is being run.
+* Updated translations from Transifex.
+
+Note: Turn on Skin Debugging in advanced settings to see new MediaInfo and Watched properties. Ensure to turn off under normal use!
+
+</VersionDescription>
+    <DevelopmentStatus>Stable</DevelopmentStatus>
+    <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;amp;task=att_download&amp;amp;link_id=30&amp;amp;cf_id=24</OnlineLocation>
+    <ReleaseDate>2014-02-19T19:04:46</ReleaseDate>
+    <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
+    <Location>moving-pictures-[Version].mpe1</Location>
+    <Params>
+      <Items>
+        <SectionParam Name="Icon">
+          <Value>..\MovingPictures\Resources\Images\icon_large.png</Value>
+          <ValueType>File</ValueType>
+          <Description>The icon file of the package (jpg,png,bmp)</Description>
+        </SectionParam>
+        <SectionParam Name="Online Icon">
+          <Value>http://moving-pictures.googlecode.com/svn/trunk/MovingPictures/Resources/Images/icon_large.png</Value>
+          <ValueType>String</ValueType>
+          <Description>The icon file of the package stored online (jpg,png,bmp)</Description>
+        </SectionParam>
+        <SectionParam Name="Configuration file">
+          <Value>%Base%\Moving Pictures Config.exe</Value>
+          <ValueType>Template</ValueType>
+          <Description>The file used to configure the extension.
+ If it has .exe extension the will be executed.
+ If it has .dll extension it's started like MP plugin configuration.</Description>
+        </SectionParam>
+        <SectionParam Name="Online Screenshots">
+          <Value>http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-01.png;http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-02.png;http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-03.png;http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-04.png;http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-05-thumb.jpg;http://moving-pictures.googlecode.com/svn-history/r1471/wiki/Images/screens-2013/screen-06-thumb.jpg</Value>
+          <ValueType>String</ValueType>
+          <Description>Online stored screenshot urls separated by ; </Description>
+        </SectionParam>
+        <SectionParam Name="Force to uninstall on update">
+          <Value>YES</Value>
+          <ValueType>Bool</ValueType>
+          <Description>Show dialog and force to uninstall previous version when updating an extension. Should only be disabled if you are using an NSIS/MSI installer.</Description>
+        </SectionParam>
+      </Items>
+    </Params>
+  </GeneralInfo>
+  <UniqueFileList>
+    <Items>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\bin\Release\Cornerstone.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{151ce8ea-528f-46b2-90fd-7754aa74e9c4}-Cornerstone.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\Windows\Cornerstone.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\bin\Release\Cornerstone.MP.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{03ce1fc9-dfc4-482c-b2d5-dea919bf429f}-Cornerstone.MP.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\Windows\Cornerstone.MP.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\bin\Release\MovingPictures.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{52ec67ce-bf16-4e11-b4da-6a033f66131b}-MovingPictures.dll</ZipFileName>
+        <DestinationFilename>%Plugins%\Windows\MovingPictures.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\bin\Release\NLog.dll</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7c63b4a5-d73e-4c64-8a7a-a464e972d0ab}-NLog.dll</ZipFileName>
+        <DestinationFilename>%Base%\NLog.dll</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\External\ConfigLauncher\.NET 4\Moving Pictures Config.exe</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0c9b9bde-0063-4d43-9728-e2273f32f904}-Moving Pictures Config.exe</ZipFileName>
+        <DestinationFilename>%Base%\Moving Pictures Config.exe</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\dialogGeneralRating.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{2bf67e70-4de1-4962-9562-99cfea90f147}-dialogGeneralRating.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\dialogGeneralRating.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.coverflowview.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{74174df9-fb97-4d61-b3a2-186ad2eed74f}-movingpictures.coverflowview.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.coverflowview.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.details.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{27a3931f-62a2-45fd-a6d8-a004165a7031}-movingpictures.details.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.details.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.facade.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1344a618-f911-4631-a2e8-eaf54a14d697}-movingpictures.facade.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.facade.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.filmstripview.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{9d9b7a75-bd9c-49a8-b732-5054145531a7}-movingpictures.filmstripview.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.filmstripview.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.hiddenmenu.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d77d0381-5dbd-4192-b26e-0ef418d82602}-movingpictures.hiddenmenu.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.hiddenmenu.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.importer.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a93730c1-9936-48fc-8563-866b2b8d3d90}-movingpictures.importer.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.importer.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.listview.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7b581f30-443e-4ead-8142-7e10cd8f5eb0}-movingpictures.listview.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.listview.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.mediainfo.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d40176ce-4296-43b1-9f56-7565a8f48c7e}-movingpictures.mediainfo.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.mediainfo.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.overlay.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{28f98538-a51c-4163-9f57-9d0122e86ff1}-movingpictures.overlay.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.overlay.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.thumbsview.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{63282e4c-e741-4fe4-a352-c582309aaa2c}-movingpictures.thumbsview.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.thumbsview.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\movingpictures.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{45d870ba-732e-4fb5-b702-06eb563025db}-movingpictures.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Default\movingpictures.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\Backgroundtop2.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d7b75ae3-9c4b-4ebc-8e55-02bf54d448b0}-Backgroundtop2.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\Backgroundtop2.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\Background_moving.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ad1eb518-32c0-480d-918e-44a473c9c899}-Background_moving.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\Background_moving.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\dialogprogressbg.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a10938e9-d41f-44b1-bdbb-5799f22b99c1}-dialogprogressbg.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\dialogprogressbg.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\diffusemirrorwide.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a8ebe45a-48e9-41d0-bc15-b179c803d08e}-diffusemirrorwide.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\diffusemirrorwide.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\filmstrip_overlay.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{17a4067e-6989-4e41-b4a6-4b3ad098a3bf}-filmstrip_overlay.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\filmstrip_overlay.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\glassoverlay2.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{607e9909-63fe-4ede-84dc-4f9acde09ff2}-glassoverlay2.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\glassoverlay2.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\glasstitlebar.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0a7b4bed-74f9-46d4-a6ce-7599675211f3}-glasstitlebar.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\glasstitlebar.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\hover_moving pictures.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{6f5e4846-bf76-4f2a-9e63-091764541978}-hover_moving pictures.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\hover_moving pictures.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\led_red.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{fcdc7ef2-76ce-44f1-939d-4f15354b865a}-led_red.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\led_red.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\Lock.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{101510d1-a1c2-4c95-8394-053a0a5e953f}-Lock.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\Lock.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\mainoverlay.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{175d7519-4aa2-4d1f-9c70-0385177cebaf}-mainoverlay.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\mainoverlay.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movieviewbg.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{be61f7b5-8363-4295-9540-63497a617564}-movieviewbg.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\movieviewbg.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movingpictures_done.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{802ac8ab-7961-4432-8a3b-f6657bf7fbd5}-movingpictures_done.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\movingpictures_done.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movingpictures_needinput.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{c094b04e-885e-416d-9f44-bab7d5a3999f}-movingpictures_needinput.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\movingpictures_needinput.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movingpictures_processing.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{12840617-6c5b-4a02-9af0-38d0d110fde1}-movingpictures_processing.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\movingpictures_processing.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movingpictures_SortAscending.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{12411f52-7cf6-4fc1-a7f8-715a19524e78}-movingpictures_SortAscending.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\movingpictures_SortAscending.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\movingpictures_SortDescending.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b561c53e-eb85-41da-83c6-c8141cdd5701}-movingpictures_SortDescending.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\movingpictures_SortDescending.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\overlayunwatched.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{9451a9ab-2b1c-4999-868e-53f3a4a3d412}-overlayunwatched.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\overlayunwatched.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\overlaywatched.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{5b414e49-5f11-462c-912d-ed750cf51c4b}-overlaywatched.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\overlaywatched.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\overlaywubg.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{344d9dce-8f6d-4678-a1a6-569b92ac9f8b}-overlaywubg.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\overlaywubg.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star0.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{4b7829a5-198a-4673-9f8c-3488ddf1a209}-star0.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star0.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star1.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ad4e7182-d03b-4976-afaa-faa5ad0345da}-star1.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star1.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star10.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d3d7da69-634c-4040-a0fd-e56ba10cec15}-star10.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star10.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star2.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{dfb5db54-c554-43e8-b643-350098a7accd}-star2.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star2.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star3.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f95e3fae-d6aa-4296-9827-2cfe2b178dce}-star3.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star3.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star4.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{6224073e-a38a-4c84-a4b7-3b6d0716af43}-star4.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star4.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star5.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{c516dc09-2309-4377-9388-55577883a0d2}-star5.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star5.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star6.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e1b1a833-320c-4337-ac93-60d8a5bf6a43}-star6.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star6.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star7.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d005fdb9-6e9a-4168-a24e-3d2d42814274}-star7.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star7.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star8.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{59df56d7-3a5e-422e-af90-d5fd65896adb}-star8.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star8.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\star9.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{921647c8-2130-4ffb-bf1c-365fef934d72}-star9.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\star9.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\UserRatingStarOff.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{dd8bad08-96c0-440e-b477-1615c3d229f9}-UserRatingStarOff.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\UserRatingStarOff.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\UserRatingStarOn.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{dfe9f9dd-0cc7-4182-8bb6-44cd260d2a83}-UserRatingStarOn.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\UserRatingStarOn.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Default\Media\Categories\Movies.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{16946323-adf8-434e-a90a-9a21d0c88215}-Movies.png</ZipFileName>
+        <DestinationFilename>%Skin%\Default\Media\Categories\Movies.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\dialogGeneralRating.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{cc531e3c-d39d-47e5-8a28-5632440ac6b5}-dialogGeneralRating.xml</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\dialogGeneralRating.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\DialogPinCode.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7abd8b61-9d2c-4fd9-8e72-8f4426c45188}-DialogPinCode.xml</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\DialogPinCode.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.details.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{92b804ef-63bd-45ee-8c83-042ba6a44880}-movingpictures.details.xml</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\movingpictures.details.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.facade.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{604e55c1-351d-4c3d-853c-53ae586b3692}-movingpictures.facade.xml</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\movingpictures.facade.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.hiddenmenu.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d95a91ce-7dcf-4dbb-a17e-9b7437fb7949}-movingpictures.hiddenmenu.xml</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\movingpictures.hiddenmenu.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.importer.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{6b5a709e-59f2-4d75-afc2-069f1d09e5d4}-movingpictures.importer.xml</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\movingpictures.importer.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.listview.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{8aaaa8c4-96a8-4fac-85ef-89e493ce71a8}-movingpictures.listview.xml</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\movingpictures.listview.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.mediainfo.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a48393a0-b84e-45e1-a95d-91eb53caa59b}-movingpictures.mediainfo.xml</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\movingpictures.mediainfo.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\movingpictures.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e0c04070-8c97-4edb-9185-a4e3b998b99f}-movingpictures.xml</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\movingpictures.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\led_red.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{cedb4d5d-330a-45a0-ab45-3d9c914ba5de}-led_red.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\led_red.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\Lock.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{6bda8549-3270-42b7-9c18-57999f3bbd11}-Lock.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\Lock.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\movingpictures_done.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a709e2a6-aca0-4044-aa49-b8c29d7cf05c}-movingpictures_done.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\movingpictures_done.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\movingpictures_needinput.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{18b940c9-7f5b-4140-b7b3-9a0afcebce3d}-movingpictures_needinput.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\movingpictures_needinput.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\movingpictures_processing.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{022e64ed-11d9-4c74-ad2e-fa86abad9a93}-movingpictures_processing.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\movingpictures_processing.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\movingpictures_SortAscending.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f2521772-70e9-44a3-954c-6ecd7f8d08b3}-movingpictures_SortAscending.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\movingpictures_SortAscending.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\movingpictures_SortDescending.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{65280b85-6e61-4fb6-a12d-27c53af5868d}-movingpictures_SortDescending.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\movingpictures_SortDescending.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\overlayunwatched.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a12045ae-ea0b-43d4-99f2-06e7073daf34}-overlayunwatched.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\overlayunwatched.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\overlaywatched.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ecbce7e8-e126-4c8c-8008-30f1699328bd}-overlaywatched.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\overlaywatched.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\UserRatingStarOff.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d0586e36-d5ab-4adf-a54d-96b6a181b378}-UserRatingStarOff.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\UserRatingStarOff.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\UserRatingStarOn.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{781ae5af-70c7-41c7-ad29-9f2b9a3ddf36}-UserRatingStarOn.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\UserRatingStarOn.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\DefaultWide\Media\Categories\Movies.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1dce1025-4b34-4156-a4a5-60147e784a2a}-Movies.png</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide\Media\Categories\Movies.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\ca.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d3d459f4-23bd-46ea-a864-3e40449d3127}-ca.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\ca.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\cs.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{15eb84d4-cd6e-4d1b-82aa-1642ce0d0bb4}-cs.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\cs.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\da.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{cb262d17-73aa-4ac7-84e6-302112042c4f}-da.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\da.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\de.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{16c1dfec-13d3-4f86-adb6-914543ba1407}-de.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\de.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\el.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d635202c-24d0-487f-bbf9-55590c3235c8}-el.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\el.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\en-US.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ba21fcda-c599-443a-8453-77e4f0dc0faf}-en-US.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\en-US.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\es.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{acdc1b5f-6d86-4ed8-b904-8e4ed458a4c6}-es.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\es.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\et.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{65013735-dccc-4f9a-a51e-ef9194759c2b}-et.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\et.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\fi.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{44e1a81c-8841-4418-b10b-4d89a49b55c1}-fi.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\fi.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\fr.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a76026c8-cf50-4583-9d54-6ede18081696}-fr.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\fr.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\he.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{830a4302-ba48-44c3-8588-8bb09152d568}-he.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\he.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\hi.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{c2f8968f-fece-4788-a0f8-df52211522d9}-hi.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\hi.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\hr.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{cf7ef1e3-15cd-4121-b1ca-9bc561a8caff}-hr.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\hr.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\hu.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{dc69734d-b4aa-4c5a-8a6e-05f0f072a2a2}-hu.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\hu.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\id.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{753ae35c-af36-4d06-936d-2e4369b5e21d}-id.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\id.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\is.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1b3ac53d-f36a-41d7-acb9-1e6ccbeceabe}-is.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\is.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\it.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1948d336-9123-495a-b263-91208266c330}-it.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\it.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\ko.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0ab714b8-a902-4703-8601-f745641ef1ae}-ko.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\ko.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\ku.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{72ab92c5-9270-45cb-a3bc-db7c143633c1}-ku.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\ku.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\lt.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7b7f79a5-addd-4934-bc40-145dc67eec7b}-lt.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\lt.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\nb.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b7b4774c-fa93-4220-89e1-920ffc108de5}-nb.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\nb.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\nl.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{79ad01d9-9815-49aa-b7c5-737f2fc119cd}-nl.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\nl.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\no.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7ac47a4a-6b9b-4712-aed8-33ee9e132b3e}-no.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\no.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\pl.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{6f291655-a146-43a7-b032-48a4fb7eb2cc}-pl.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\pl.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\pt.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{efd7a85a-3d80-434c-94dd-941ebc987f0b}-pt.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\pt.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\pt_BR.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{bd0737a7-1e25-4b4f-9803-8e69544dc5be}-pt_BR.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\pt_BR.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\pt_PT.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d8ae5d1d-8f42-4b23-8338-930f3edcb7fc}-pt_PT.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\pt_PT.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\ru.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0c8ba6db-5178-4afd-97fe-61139395a0cf}-ru.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\ru.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\sk.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{35febb59-ae3d-420e-bc14-60bcfb41bb14}-sk.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\sk.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\sl.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e494367c-2c68-4d43-b354-80e61ff7332e}-sl.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\sl.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\sr.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{94646cee-5e1a-4458-bf34-ef4d7fff9ca4}-sr.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\sr.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\sv.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{dc202113-00cd-4722-8b88-735695df683b}-sv.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\sv.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\tr.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{223fa01a-c029-4442-8782-5dc90a2d1e1b}-tr.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\tr.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\uk.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{9b88b335-12d9-4619-8048-8a0cf8165a5a}-uk.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\uk.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\vi.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b99e47a0-7ee3-458e-9a09-ee916e68b2f9}-vi.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\vi.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\zh-CN.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{8e160017-44a1-47db-98c1-087da55b0e24}-zh-CN.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\zh-CN.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\zh.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{4de3e17d-4efb-49b5-bc5b-df46a7af3b7c}-zh.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\zh.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\bg.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{8670b287-ca96-4bde-9618-de3ceb0ff535}-bg.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\bg.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\Images\icon_large.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1cdce9e5-d0dc-41f5-9990-7aa52135caac}-icon_large.png</ZipFileName>
+        <DestinationFilename />
+      </FileItem>
+    </Items>
+  </UniqueFileList>
+  <ProjectSettings>
+    <FolderGroups>
+      <FolderGroup InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName />
+        <ZipFileName>Installer{CopyFile}\{9ff0d1ca-a70b-4762-a678-3ca07f6ca5ab}-</ZipFileName>
+        <DestinationFilename>%Skin%\Default</DestinationFilename>
+        <Folder>..\MovingPictures\Resources\skins\Default</Folder>
+        <Group>DefaultSkin</Group>
+        <Recursive>true</Recursive>
+      </FolderGroup>
+      <FolderGroup InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName />
+        <ZipFileName>Installer{CopyFile}\{1a7ddac0-ac28-42d4-98ae-6ffe7a27b8e1}-</ZipFileName>
+        <DestinationFilename>%Skin%\DefaultWide</DestinationFilename>
+        <Folder>..\MovingPictures\Resources\skins\DefaultWide</Folder>
+        <Group>DefaultWideSkin</Group>
+        <Recursive>true</Recursive>
+      </FolderGroup>
+      <FolderGroup InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName />
+        <ZipFileName>Installer{CopyFile}\{0678ae77-e562-46e3-a4e0-6d6d98731005}-</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures</DestinationFilename>
+        <Folder>..\MovingPictures\Resources\language</Folder>
+        <Group>Languages</Group>
+        <Recursive>false</Recursive>
+      </FolderGroup>
+    </FolderGroups>
+    <ProjectFilename>MovingPictures-Native.xmp2</ProjectFilename>
+    <UpdatePath1>update.xml</UpdatePath1>
+    <UpdatePath2 />
+    <UpdatePath3 />
+  </ProjectSettings>
+  <IsSkin>false</IsSkin>
+</PackageClass>

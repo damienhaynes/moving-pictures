@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--A-->
+  <string name="Actor">Skuespiller</string>
+  <string name="Actors">Skuespillere</string>
+  <string name="AllMovies">Alle film</string>
+  <string name="AllFiles">Alle filer</string>
+  <!--B-->
+  <string name="BadCategory">En ekstern plugin eller skin forsøgte ⏎\nat åbne en eksisterende Moving ⏎\nPictures kategori!</string>
+  <string name="BadMovie">En ekstern plugin eller skin forsøgte ⏎\nat åbne en ikke eksisterende film ⏎\ni Moving Pictures!</string>
+  <string name="BadParam">En ekstern plugin eller skin overførte ⏎\net ugyldigt paramater til Moving Pictures!</string>
+  <string name="Backdrop">Baggrund</string>
+  <string name="BeginsWith">Begynder med</string>
+  <string name="BelongsToCollection">Tilhører Samling</string>
+  <!--C-->
+  <string name="Cancel">Annuller</string>
+  <string name="CannotDeleteOffline">Det er ikke muligt at slette {0}\n fordi filen er offline</string>
+  <string name="CannotDeleteReadOnly">Kan ikke slette en skrivebeskyttet film.\nVil du have Moving Pictures til ignorere denne film?</string>
+  <string name="CastAndCrew">Skuespillere og filmhold</string>
+  <string name="CategoryEmptyDescription">Der er ingen film i denne\nkategori.</string>
+  <string name="CategoryEmptyHeader">Kategorien er tom</string>
+  <string name="Certification">Censur</string>
+  <string name="ChangeView">Skift syn</string>
+  <string name="CheckForMissingArtwork">Check for manglende illustrationer på nettet</string>
+  <string name="Collection">Samling</string>
+  <string name="Collections">Samlinger</string>
+  <string name="Completed">Færdig</string>
+  <string name="CompletedFiles">Færdige filer</string>
+  <string name="ContinueToNextPartBody">Ønsker du at fortsætte med del {0}?</string>
+  <string name="ContinueToNextPartHeader">Forsæt til næste del?</string>
+  <string name="Cover">Omslag</string>
+  <string name="CoverFlowView">Omslagsvisning</string>
+  <string name="CycleCoverArt">Roter Cover-billedet</string>
+  <string name="CycleView">Roter synet</string>
+  <!--D-->
+  <string name="DateAdded">Dato tilføjet</string>
+  <string name="DateDay">dag</string>
+  <string name="DateDays">dage</string>
+  <string name="DateMonth">måned</string>
+  <string name="DateMonths">måneder</string>
+  <string name="DatePartAgo">{0} {1} siden</string>
+  <string name="DatePartWithinDays">Sidste {0} dage</string>
+  <string name="DatePartWithinMonths">Sidste {0} måneder</string>
+  <string name="DatePartWithinWeeks">Sidste {0} uger</string>
+  <string name="DatePartWithinYears">Sidste {0} år</string>
+  <string name="DateWeek">uge</string>
+  <string name="DateWeeks">uger</string>
+  <string name="DateYear">år</string>
+  <string name="DateYears">år</string>
+  <string name="DecadeShort">{0}0erne</string>
+  <string name="DeleteFailed">Sletningen mislykkedes</string>
+  <string name="DeleteMovie">Slet film</string>
+  <string name="Director">Instruktør</string>
+  <string name="Directors">Instruktører</string>
+  <string name="DownAbbreviation">(ned)</string>
+  <string name="DoYouWantToDelete">Ønsker du at slette \n{0}\npermanent fra din harddisk?</string>
+  <!--E-->
+  <string name="EarlierThisYear">Tidligere i år</string>
+  <string name="Error">Fejl</string>
+  <!--F-->
+  <string name="FailedMountingImage">Mountningen af DVD imaget fejlede desværre.</string>
+  <string name="FilePath">File sti</string>
+  <string name="FilesNeedingAttention">Filer, der kræver opmærksomhed</string>
+  <string name="FilmstripView">Filmrulle overblik</string>
+  <string name="FilterBy">Filtrer efter</string>
+  <string name="Friday">Fredag</string>
+  <string name="Future">Fremtid</string>
+  <!--G-->
+  <string name="GlobalActions">Globale muligheder</string>
+  <string name="Genre">Genre</string>
+  <string name="Genres">Genre</string>
+  <!--I-->
+  <string name="IgnoreMovie">Ignorer film</string>
+  <string name="ImdbId">IMDb ID</string>
+  <string name="Importer">Importer film</string>
+  <string name="ImporterDisabled">Import ikke aktiv</string>
+  <string name="ImporterDisabledMessage">Importøren er blevet deaktiveret i ⏎\nMediaPortal GUI. Vil du gerne ⏎\ngenaktivere det?</string>
+  <string name="ImporterPending">Impoter ({0} kræver opmærksomhed)</string>
+  <string name="InvalidPin">Forkert kode!</string>
+  <string name="InvalidVideoDiscFormat">Enten indeholdet image-filen ikke et\n korrekt videoformat, ellers er din opsæning i\nTools MediaPortal konfiguration forkert.</string>
+  <!--L-->
+  <string name="Language">Sprog</string>
+  <string name="LargeThumbnailView">Stor miniatureportræt overblik</string>
+  <string name="LastMonth">Sidste måned</string>
+  <string name="LastWeek">Sidste uge</string>
+  <string name="LastYear">Sidste år</string>
+  <string name="ListView">Liste overblik</string>
+  <string name="LockRestrictedMovies">Lås klassificerede film</string>
+  <!--M-->
+  <string name="MarkAsUnwatched">Marker som uset</string>
+  <string name="MarkAsWatched">Marker som set</string>
+  <string name="MediaInfo">MediaInfo</string>
+  <string name="MediaIsMissing">Mediet for den film du har valgt mangler!\nDesværre noget er gået galt...</string>
+  <string name="MediaNotAvailableBody">Mediet for den valgte film er ikke tilgængelig\nIndsæt eller forbind til medie: {0}</string>
+  <string name="MediaNotAvailableHeader">Mediet er ikke tilgængelig</string>
+  <string name="Missing">Mangler</string>
+  <string name="MissingExternalPlayerExe">Den eksekverbare fil til HD afspilning mangler.\nVælg en korrekt sti til den eksekverbare fil.</string>
+  <string name="Monday">Mandag</string>
+  <string name="MonthName1">Januar</string>
+  <string name="MonthName2">Februar</string>
+  <string name="MonthName3">Marts</string>
+  <string name="MonthName4">April</string>
+  <string name="MonthName5">Maj</string>
+  <string name="MonthName6">Juni</string>
+  <string name="MonthName7">Juli</string>
+  <string name="MonthName8">August</string>
+  <string name="MonthName9">September</string>
+  <string name="MonthName10">Oktober</string>
+  <string name="MonthName11">November</string>
+  <string name="MonthName12">December</string>
+  <string name="Movie">Film</string>
+  <string name="MovieDetails">Film fakta</string>
+  <string name="MovieOptions">Film muligheder</string>
+  <string name="Movies">Film</string>
+  <!--N-->
+  <string name="NoImportPathsBody">Det ser ud som, at du ikke har defineret\ndefined nogle import stier. Du\nskal lukke MediaPortal og\nstarte MediaPortal\nKonfiguration vinduet for\nat konfigurere Moving Pictures.</string>
+  <string name="NoImportPathsHeading">Ingen import stier!</string>
+  <!--O-->
+  <string name="Older">Ældre</string>
+  <!--P-->
+  <string name="ParentalControlsDisabled">Forælder kontrol er ikke slået til.</string>
+  <string name="PinCodeHeader">Åbner klassificeret indhold</string>
+  <string name="PinCodePrompt">Indtast venligst en adgangskode for at fortsætte:</string>
+  <string name="PlaybackFailed">Afspilning var ikke mulig på grund af, at \'{0}\'\nfiletypenavn ikke er listet i mediaportal konfigurationen.\nTilføj dette filetypenavn eller sæt en ekstern afspiller op\nog prøv igen.</string>
+  <string name="PlaybackFailedHeader">Afspilningen mislykkedes</string>
+  <string name="PlayMovie">Spil film</string>
+  <string name="PossibleMatches">Mulige match</string>
+  <string name="ProblemLoadingSkinFile">Der var desværre et problem med at indlæse skinfilen</string>
+  <!--R-->
+  <string name="Rate">Vurder</string>
+  <string name="Rated">Vurderet</string>
+  <string name="RateFiveStarFive">Perfekt</string>
+  <string name="RateFiveStarFour">Fortrinlig</string>
+  <string name="RateFiveStarOne">Forfærdelig</string>
+  <string name="RateFiveStarThree">God</string>
+  <string name="RateFiveStarTwo">Middelmådig</string>
+  <string name="RateHeading">Vurder film</string>
+  <string name="RecentlyAddedMovies">Nylig tilføjet</string>
+  <string name="ReleaseDate">Udgivelses Dato</string>
+  <string name="RemoteNumericAlphabet0">
+  </string>
+  <string name="RemoteNumericAlphabet1">
+  </string>
+  <string name="RemoteNumericAlphabet2">abcæåä</string>
+  <string name="RemoteNumericAlphabet3">def</string>
+  <string name="RemoteNumericAlphabet4">ghi</string>
+  <string name="RemoteNumericAlphabet5">jkl</string>
+  <string name="RemoteNumericAlphabet6">mnoøö</string>
+  <string name="RemoteNumericAlphabet7">pqrs</string>
+  <string name="RemoteNumericAlphabet8">tuvü</string>
+  <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Restore ignorerede filer</string>
+  <string name="ResumeFrom">Forsæt fra:</string>
+  <string name="ResumeFromLast">Forsæt film fra sidste afspilning?</string>
+  <string name="Retry">Prøv igen</string>
+  <string name="Runtime">Spilletid</string>
+  <string name="RuntimeHour">{0} time</string>
+  <string name="RuntimeHours">{0} timer</string>
+  <string name="RuntimeLong">{0} og {1}</string>
+  <string name="RuntimeLongExtended">{0}, {1} og {2}</string>
+  <string name="RuntimeMinute">{0} minut</string>
+  <string name="RuntimeMinutes">{0} minutter</string>
+  <string name="RuntimeSecond">{0} sekund</string>
+  <string name="RuntimeSeconds">{0} sekunder</string>
+  <string name="RuntimeShort">{0}:{1:00}</string>
+  <string name="RuntimeShortExtended">{0}t{1:00}m{2:00}s</string>
+  <!--S-->
+  <string name="Saturday">Lørdag</string>
+  <string name="SendToImporter">Send til importør</string>
+  <string name="ScanForNewMovies">Scan efter nye film</string>
+  <string name="Score">Score</string>
+  <string name="Search">Søg</string>
+  <string name="SearchBy">Søg per</string>
+  <string name="SearchForMore">Søg efter flere match</string>
+  <string name="SearchNoResults">Ingen søgeresultat.</string>
+  <string name="SelectCorrectMovie">Vælg rigtig film</string>
+  <string name="SelectYourRating">Vælg din vurdering for {0}</string>
+  <string name="ShowOnlyUnwatchedMovies">Vis kun usete film</string>
+  <string name="ShowWatchedAndUnwatchedMovies">Vis sete og usete film</string>
+  <string name="SkinDoesNotSupportCategories">Dette skin understøtter ikke kategorier</string>
+  <string name="SkinDoesNotSupportImporter">Dette skin understøtter ikke denne importør.</string>
+  <string name="SkinDoesNotSupportPinDialog">Dette skin understøtter ikke adgangskodedialogen.</string>
+  <string name="SkinDoesNotSupportRatingDialog">Dette skin understøtter ikke klassificerings dialogen</string>
+  <string name="SortBy">Sorter efter</string>
+  <string name="SortDirection">Sorterings retning</string>
+  <string name="StarRating">Stjerne vurdering</string>
+  <string name="Sunday">Søndag</string>
+  <!--T-->
+  <string name="Theme">Tema</string>
+  <string name="ThisMonth">Denne månede</string>
+  <string name="ThisWeek">Denne uge</string>
+  <string name="ThisYear">I år</string>
+  <string name="ThreeMonthsAgo">3 måneder siden</string>
+  <string name="ThreeWeeksAgo">3 uger siden</string>
+  <string name="ThumbnailView">Miniatureportræt overblik</string>
+  <string name="Thursday">Torsdag</string>
+  <string name="Title">Title</string>
+  <string name="Today">I dag</string>
+  <string name="ToggleParentalLock">Slå forælder lås fra</string>
+  <string name="Tuesday">Tirsdag</string>
+  <string name="TwoMonthsAgo">For 2 måneder siden</string>
+  <string name="TwoWeeksAgo">For 2 uger siden</string>
+  <!--U-->
+  <string name="Unknown">Ukendt</string>
+  <string name="UnlockRestrictedMovies">Åben for klassificerede film</string>
+  <string name="UnwatchedMovies">Usete film</string>
+  <string name="UpAbbreviation">(op)</string>
+  <string name="UpdateDetailsFromOnline">Opdater oplysninger fra nettet</string>
+  <string name="UpdateMovieDetailsBody">Du er ved at opdatere alle film opslyninger\n overskrivning vil fjerne dine egne ændringer af denne film.\nVil du fortsætte?</string>
+  <string name="UpdateMovieDetailsHeader">Opdater film oplysningerne</string>
+  <!--V-->
+  <string name="VirtualDriveHeader">Det virtuelle drev er ikke klar</string>
+  <string name="VirtualDriveMessage">Det virtuelle drev blev ikke klar i tide. \nPrøv igen eller annuller afspilningen.</string>
+  <string name="Votes">Vurdering</string>
+  <string name="ViewMovieDetails">Vis film oplysningerne</string>
+  <!--W-->
+  <string name="Wednesday">Onsdag</string>
+  <string name="Writer">Manuskript</string>
+  <string name="Writers">Forfattere</string>
+  <!--Y-->
+  <string name="Year">År</string>
+  <string name="Yesterday">I går</string>
+</resources>

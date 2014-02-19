@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--A-->
+  <string name="Actor">Actor</string>
+  <string name="Actors">Actors</string>
+  <string name="AllMovies">All Movies</string>
+  <string name="AllFiles">All Files</string>
+  <!--B-->
+  <string name="BadCategory">An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!</string>
+  <string name="BadMovie">An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!</string>
+  <string name="BadParam">An external plugin or skin passed\nMoving Pictures an invalid paramater!</string>
+  <string name="Backdrop">Backdrop</string>
+  <string name="BeginsWith">Begins With</string>
+  <string name="BelongsToCollection">Belongs To Collection</string>
+  <!--C-->
+  <string name="Cancel">Cancel</string>
+  <string name="CannotDeleteOffline">Not able to delete {0}\n because the file is offline</string>
+  <string name="CannotDeleteReadOnly">Cannot delete a read-only movie.\nWould you like Moving Pictures to ignore this movie?</string>
+  <string name="CastAndCrew">Cast and Crew</string>
+  <string name="CategoryEmptyDescription">There are currently no movies\nlisted in this category.</string>
+  <string name="CategoryEmptyHeader">Category is empty</string>
+  <string name="Certification">Certification</string>
+  <string name="ChangeView">Change View</string>
+  <string name="CheckForMissingArtwork">Check for Missing Artwork Online</string>
+  <string name="Collection">Collection</string>
+  <string name="Collections">Collections</string>
+  <string name="Completed">Completed</string>
+  <string name="CompletedFiles">Completed Files</string>
+  <string name="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>
+  <string name="ContinueToNextPartHeader">Continue to next part?</string>
+  <string name="Cover">Cover</string>
+  <string name="CoverFlowView">Coverflow View</string>
+  <string name="CycleCoverArt">Cycle Cover-Art</string>
+  <string name="CycleView">Cycle View</string>
+  <!--D-->
+  <string name="DateAdded">Date Added</string>
+  <string name="DateDay">day</string>
+  <string name="DateDays">days</string>
+  <string name="DateMonth">month</string>
+  <string name="DateMonths">months</string>
+  <string name="DatePartAgo">{0} {1} ago</string>
+  <string name="DatePartWithinDays">Last {0} days</string>
+  <string name="DatePartWithinMonths">Last {0} months</string>
+  <string name="DatePartWithinWeeks">Last {0} weeks</string>
+  <string name="DatePartWithinYears">Last {0} years</string>
+  <string name="DateWeek">week</string>
+  <string name="DateWeeks">weeks</string>
+  <string name="DateYear">year</string>
+  <string name="DateYears">years</string>
+  <string name="DecadeShort">{0}0s</string>
+  <string name="DeleteFailed">Delete Failed</string>
+  <string name="DeleteMovie">Delete Movie</string>
+  <string name="Director">Director</string>
+  <string name="Directors">Directors</string>
+  <string name="DownAbbreviation">(dn)</string>
+  <string name="DoYouWantToDelete">Do you want to permanently delete\n{0}\nfrom your hard drive?</string>
+  <!--E-->
+  <string name="EarlierThisYear">Earlier This Year</string>
+  <string name="Error">Error</string>
+  <!--F-->
+  <string name="FailedMountingImage">Sorry, failed mounting DVD Image</string>
+  <string name="FilePath">File Path</string>
+  <string name="FilesNeedingAttention">Files Needing Attention</string>
+  <string name="FilmstripView">Filmstrip View</string>
+  <string name="FilterBy">Filter By</string>
+  <string name="Friday">Friday</string>
+  <string name="Future">Future</string>
+  <!--G-->
+  <string name="GlobalActions">Global Actions</string>
+  <string name="Genre">Genre</string>
+  <string name="Genres">Genres</string>
+  <!--I-->
+  <string name="IgnoreMovie">Ignore Movie</string>
+  <string name="ImdbId">IMDb Id</string>
+  <string name="Importer">Movie Importer</string>
+  <string name="ImporterDisabled">Importer Disabled</string>
+  <string name="ImporterDisabledMessage">The importer has been disabled in the\nMediaPortal GUI. Would you like to\nreenable it?</string>
+  <string name="ImporterPending">Importer ({0} Need Attention)</string>
+  <string name="InvalidPin">Invalid PIN code!</string>
+  <string name="InvalidVideoDiscFormat">Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.</string>
+  <!--L-->
+  <string name="Language">Language</string>
+  <string name="LargeThumbnailView">Large Thumbnail View</string>
+  <string name="LastMonth">Last Month</string>
+  <string name="LastWeek">Last Week</string>
+  <string name="LastYear">Last Year</string>
+  <string name="ListView">List View</string>
+  <string name="LockRestrictedMovies">Lock Restricted Movies</string>
+  <!--M-->
+  <string name="MarkAsUnwatched">Mark as Unwatched</string>
+  <string name="MarkAsWatched">Mark as Watched</string>
+  <string name="MediaInfo">MediaInfo</string>
+  <string name="MediaIsMissing">The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...</string>
+  <string name="MediaNotAvailableBody">The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}</string>
+  <string name="MediaNotAvailableHeader">Media Not Available</string>
+  <string name="Missing">Missing</string>
+  <string name="MissingExternalPlayerExe">The executable for HD playback is missing.\nPlease correct the path to the executable.</string>
+  <string name="Monday">Monday</string>
+  <string name="MonthName1">January</string>
+  <string name="MonthName2">February</string>
+  <string name="MonthName3">March</string>
+  <string name="MonthName4">April</string>
+  <string name="MonthName5">May</string>
+  <string name="MonthName6">June</string>
+  <string name="MonthName7">July</string>
+  <string name="MonthName8">August</string>
+  <string name="MonthName9">September</string>
+  <string name="MonthName10">October</string>
+  <string name="MonthName11">November</string>
+  <string name="MonthName12">December</string>
+  <string name="Movie">Movie</string>
+  <string name="MovieDetails">Movie Details</string>
+  <string name="MovieOptions">Movie Options</string>
+  <string name="Movies">Movies</string>
+  <!--N-->
+  <string name="NoImportPathsBody">You do not have any import\npaths defined. Please close\nclose MediaPortal and launch\nlaunch MP Configuration.</string>
+  <string name="NoImportPathsHeading">No Import Paths!</string>
+  <!--O-->
+  <string name="Older">Older</string>
+  <!--P-->
+  <string name="ParentalControlsDisabled">Parental controls are not enabled.</string>
+  <string name="PinCodeHeader">Unlocking Restricted Content</string>
+  <string name="PinCodePrompt">Please enter PIN code to continue:</string>
+  <string name="PlaybackFailed">Playback is not possible because the \'{0}\'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.</string>
+  <string name="PlaybackFailedHeader">Playback Failed</string>
+  <string name="PlayMovie">Play Movie</string>
+  <string name="PossibleMatches">Possible Matches</string>
+  <string name="ProblemLoadingSkinFile">Sorry, there was a problem loading the skin file</string>
+  <!--R-->
+  <string name="Rate">Rate</string>
+  <string name="Rated">Rated</string>
+  <string name="RateFiveStarFive">Perfect</string>
+  <string name="RateFiveStarFour">Superb</string>
+  <string name="RateFiveStarOne">Terrible</string>
+  <string name="RateFiveStarThree">Good</string>
+  <string name="RateFiveStarTwo">Mediocre</string>
+  <string name="RateHeading">Rate Movie</string>
+  <string name="RecentlyAddedMovies">Recently Added Movies</string>
+  <string name="ReleaseDate">Release Date</string>
+  <string name="RemoteNumericAlphabet0">
+  </string>
+  <string name="RemoteNumericAlphabet1">
+  </string>
+  <string name="RemoteNumericAlphabet2">abc</string>
+  <string name="RemoteNumericAlphabet3">def</string>
+  <string name="RemoteNumericAlphabet4">ghi</string>
+  <string name="RemoteNumericAlphabet5">jkl</string>
+  <string name="RemoteNumericAlphabet6">mno</string>
+  <string name="RemoteNumericAlphabet7">pqrs</string>
+  <string name="RemoteNumericAlphabet8">tuv</string>
+  <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Restore Ignored Files</string>
+  <string name="ResumeFrom">Resume from:</string>
+  <string name="ResumeFromLast">Resume movie from last time?</string>
+  <string name="Retry">Retry</string>
+  <string name="Runtime">Runtime</string>
+  <string name="RuntimeHour">{0} hour</string>
+  <string name="RuntimeHours">{0} hours</string>
+  <string name="RuntimeLong">{0} and {1}</string>
+  <string name="RuntimeLongExtended">{0}, {1} and {2}</string>
+  <string name="RuntimeMinute">{0} minute</string>
+  <string name="RuntimeMinutes">{0} minutes</string>
+  <string name="RuntimeSecond">{0} second</string>
+  <string name="RuntimeSeconds">{0} seconds</string>
+  <string name="RuntimeShort">{0}:{1:00}</string>
+  <string name="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
+  <!--S-->
+  <string name="Saturday">Saturday</string>
+  <string name="SendToImporter">Send to Importer</string>
+  <string name="ScanForNewMovies">Scan for New Movies</string>
+  <string name="Score">Score</string>
+  <string name="Search">Search</string>
+  <string name="SearchBy">Search By</string>
+  <string name="SearchForMore">Search for More Matches</string>
+  <string name="SearchNoResults">There are no search results.</string>
+  <string name="SelectCorrectMovie">Select Correct Movie</string>
+  <string name="SelectYourRating">Select your rating for {0}</string>
+  <string name="ShowOnlyUnwatchedMovies">Show Only Unwatched Movies</string>
+  <string name="ShowWatchedAndUnwatchedMovies">Show Watched and Unwatched Movies</string>
+  <string name="SkinDoesNotSupportCategories">This skin does not support Categories.</string>
+  <string name="SkinDoesNotSupportImporter">This skin does not support the Importer.</string>
+  <string name="SkinDoesNotSupportPinDialog">This skin does not support the Pin Code Dialog.</string>
+  <string name="SkinDoesNotSupportRatingDialog">This skin does not support the Rating Dialog.</string>
+  <string name="SortBy">Sort By</string>
+  <string name="SortDirection">Sort Direction</string>
+  <string name="StarRating">Star Rating</string>
+  <string name="Sunday">Sunday</string>
+  <!--T-->
+  <string name="Theme">Theme</string>
+  <string name="ThisMonth">This Month</string>
+  <string name="ThisWeek">This Week</string>
+  <string name="ThisYear">This Year</string>
+  <string name="ThreeMonthsAgo">Three Months Ago</string>
+  <string name="ThreeWeeksAgo">Three Weeks Ago</string>
+  <string name="ThumbnailView">Thumbnail View</string>
+  <string name="Thursday">Thursday</string>
+  <string name="Title">Title</string>
+  <string name="Today">Today</string>
+  <string name="ToggleParentalLock">Toggle Parental Lock</string>
+  <string name="Tuesday">Tuesday</string>
+  <string name="TwoMonthsAgo">Two Months Ago</string>
+  <string name="TwoWeeksAgo">Two Weeks Ago</string>
+  <!--U-->
+  <string name="Unknown">Unknown</string>
+  <string name="UnlockRestrictedMovies">Unlock Restricted Movies</string>
+  <string name="UnwatchedMovies">Unwatched Movies</string>
+  <string name="UpAbbreviation">(up)</string>
+  <string name="UpdateDetailsFromOnline">Update Details from Online</string>
+  <string name="UpdateMovieDetailsBody">You are about to refresh all movie metadata, overwriting\nany custom modifications to this film. Do you want\nto continue?</string>
+  <string name="UpdateMovieDetailsHeader">Update Movie Details</string>
+  <!--V-->
+  <string name="VirtualDriveHeader">Virtual drive not ready</string>
+  <string name="VirtualDriveMessage">The virtual drive wasn\'t ready in time.\nPlease try again or cancel playback.</string>
+  <string name="Votes">votes</string>
+  <string name="ViewMovieDetails">View Movie Details</string>
+  <!--W-->
+  <string name="Wednesday">Wednesday</string>
+  <string name="Writer">Writer</string>
+  <string name="Writers">Writers</string>
+  <!--Y-->
+  <string name="Year">Year</string>
+  <string name="Yesterday">Yesterday</string>
+</resources>
