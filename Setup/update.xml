@@ -870,11 +870,13 @@
         <Version>
           <Major>1</Major>
           <Minor>7</Minor>
-          <Build>0</Build>
-          <Revision>1572</Revision>
+          <Build>1</Build>
+          <Revision>1576</Revision>
         </Version>
         <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
-        <VersionDescription>* Updated support for MediaPortal 1.7.
+        <VersionDescription>* Fixed Compatibility issues reported by some users in v1.7.0.
+
+* Updated support for MediaPortal 1.7.
 * Added new MediaInfo properties:
 ** File Size
 ** Audio Bit Rate
@@ -892,11 +894,10 @@
 * Updated translations from Transifex.
 
 Note: Turn on Skin Debugging in advanced settings to see new MediaInfo and Watched properties. Ensure to turn off under normal use!
-
 </VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
         <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=30&amp;cf_id=64</OnlineLocation>
-        <ReleaseDate>2014-02-19T19:04:46</ReleaseDate>
+        <ReleaseDate>2014-02-20T19:04:46</ReleaseDate>
         <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
         <Location>moving-pictures-[Version].mpe1</Location>
         <Params>
