@@ -617,7 +617,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                                 }
                             }
                             catch (Exception Ex) {
-                                logger.ErrorException("Exception in filesystem scanner {0}.", Ex);
+                                logger.ErrorException("Exception in filesystem scanner.", Ex);
                             }
                         }
                         
