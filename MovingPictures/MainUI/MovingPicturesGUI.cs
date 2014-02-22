@@ -410,6 +410,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIPropertyManager.SetProperty("#MovingPictures.Importer.Menu.Label", importerStr);
             SetProperty("#MovingPictures.Importer.NeedInput.Count", "0");
 
+            // publish categories available for skin custom menus
+            // we could wait until core is initialised, but we want access to these as soon as possible
+            // we only need the names and id's, there need be no maintenance on their contents at this stage
+            PublishCategoriesAvailableToSkin();
+
             // start initialization of the moving pictures core services in a seperate thread
             initThread = new Thread(new ThreadStart(MovingPicturesCore.Initialize));
             initThread.IsBackground = true;
@@ -2281,6 +2286,33 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // Publish Category Artwork
             PublishArtwork(node);
+        }
+
+        /// <summary>
+        /// Publishes skin properties for all the users root categories
+        /// </summary>
+        private void PublishCategoriesAvailableToSkin() {
+            // get the users categories
+            var categoryMenu = MovingPicturesCore.Settings.CategoriesMenu;
+
+            if (categoryMenu == null || categoryMenu.RootNodes == null) {
+                // new database, very rare scenario
+                SetProperty("#MovingPictures.Category.Count", "0");
+                return;
+            }
+
+            // publish category count so skin knows how many items to deal with
+            SetProperty("#MovingPictures.Category.Count", categoryMenu.RootNodes.Count.ToString());
+
+            // go through all of the nodes to get their details
+            int i = 1;
+            foreach (var node in categoryMenu.RootNodes) {
+                // publish properties for skin menu
+                SetProperty(string.Format("#MovingPictures.Category.Item.{0}.Name", i.ToString()), Translation.ParseString(node.Name));
+                SetProperty(string.Format("#MovingPictures.Category.Item.{0}.ID", i.ToString()), node.ID == null ? "null" : node.ID.ToString());
+                SetProperty(string.Format("#MovingPictures.Category.Item.{0}.HyerlinkParameter", i.ToString()), "categoryid:" + (node.ID == null ? "null" : node.ID.ToString()));
+                i++;
+            }
         }
 
         /// <summary>
