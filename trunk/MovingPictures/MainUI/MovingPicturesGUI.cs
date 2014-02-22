@@ -2310,7 +2310,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // publish properties for skin menu
                 SetProperty(string.Format("#MovingPictures.Category.Item.{0}.Name", i.ToString()), Translation.ParseString(node.Name));
                 SetProperty(string.Format("#MovingPictures.Category.Item.{0}.ID", i.ToString()), node.ID == null ? "null" : node.ID.ToString());
-                SetProperty(string.Format("#MovingPictures.Category.Item.{0}.HyerlinkParameter", i.ToString()), "categoryid:" + (node.ID == null ? "null" : node.ID.ToString()));
+                SetProperty(string.Format("#MovingPictures.Category.Item.{0}.HyperlinkParameter", i.ToString()), "categoryid:" + (node.ID == null ? "null" : node.ID.ToString()));
                 i++;
             }
         }
