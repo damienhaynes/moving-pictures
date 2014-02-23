@@ -25,8 +25,7 @@ namespace Cornerstone.Extensions {
         /// returns localised pretty string for byte size
         /// </summary>
         /// <param name="fileSize">filesize in bytes</param>
-        public static string ToFormattedByteString(this long fileSize)
-        {
+        public static string ToFormattedByteString(this long fileSize) {
             var sbBuffer = new StringBuilder(20);
             StrFormatByteSize(fileSize, sbBuffer, 20);
             return sbBuffer.ToString();

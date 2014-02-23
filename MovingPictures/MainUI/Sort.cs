@@ -21,6 +21,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         Runtime = 7,
         FilePath = 8,
         ReleaseDate = 9,
+        FileSize = 10
     }
 
     public enum SortingDirections {
@@ -49,11 +50,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return Translation.FilePath;
                 case SortingFields.ReleaseDate:
                     return Translation.ReleaseDate;
+                case SortingFields.FileSize:
+                    return Translation.FileSize;
                 default:
                     return "";
             }
         }
-
 
         public static SortingDirections GetLastSortDirection(SortingFields field) {
             bool ascending;
@@ -85,6 +87,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case SortingFields.FilePath:
                     ascending = DBSortPreferences.Instance.SortFilePathAscending;
                     break;
+                case SortingFields.FileSize:
+                    ascending = DBSortPreferences.Instance.SortFileSizeAscending;
+                    break;
                 default:
                     ascending = true;
                     break;
@@ -92,7 +97,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (ascending) return SortingDirections.Ascending;
             else return SortingDirections.Descending;
         }
-
 
         public static void StoreLastSortDirection(SortingFields field, SortingDirections sortDirection) {
 
@@ -134,7 +138,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case SortingFields.FilePath:
                     DBSortPreferences.Instance.SortFilePathAscending = isAscending;
                     break;
-                
+
+                case SortingFields.FileSize:
+                    DBSortPreferences.Instance.SortFileSizeAscending = isAscending;
+                    break;
 
                 default:
                     break;
@@ -142,7 +149,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             if (DBSortPreferences.Instance.CommitNeeded)
                 DBSortPreferences.Instance.Commit();
         }
-
     }
 
 
@@ -211,6 +217,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         rtn = movieX.LocalMedia[0].FullPath.CompareTo(movieY.LocalMedia[0].FullPath);
                         break;
 
+                    case SortingFields.FileSize:
+                        rtn = movieX.LocalMedia[0].FileSize.CompareTo(movieY.LocalMedia[0].FileSize);
+                        break;
+
                     // default to the title field
                     case SortingFields.Title:
                     default:
@@ -235,7 +245,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return 0;
             }
         }
-
 
         private int GetCertificationValue(string certification) {
             switch (certification) {

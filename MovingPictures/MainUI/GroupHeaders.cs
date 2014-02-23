@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using MediaPortal.GUI.Library;
 using MediaPortal.Plugins.MovingPictures.Database;
+using Cornerstone.Extensions;
 using Cornerstone.MP.Extensions;
 using NLog;
 
@@ -74,6 +75,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return Math.Round(movie.Score).ToString();
                 case SortingFields.Runtime:
                     return "";
+                case SortingFields.FileSize:
+                    string size = movie.LocalMedia[0].FileSize.ToFormattedByteString();
+                    // split the string to get size and unit
+                    string[] splits = size.Split(' ');
+                    // round the size to the nearest unit
+                    int roundedSize = (int)Math.Round(double.Parse(splits[0]), MidpointRounding.ToEven);
+                    // group by rounded size
+                    return roundedSize.ToString() + " " + splits[1];
                 case SortingFields.FilePath:
                     if (movie.LocalMedia.Count > 0)
                         return movie.LocalMedia[0].File.Directory.ToString();

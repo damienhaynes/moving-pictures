@@ -109,18 +109,27 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private bool _sortFilePathAscending;
 
         [DBFieldAttribute(Default = "False")]
-        public bool SortReleaseDateAscending
-        {
+        public bool SortReleaseDateAscending {
             get { return _sortReleaseDateAscending; }
-            set
-            {
-                if (_sortReleaseDateAscending != value)
-                {
+            set {
+                if (_sortReleaseDateAscending != value) {
                     _sortReleaseDateAscending = value;
                     commitNeeded = true;
                 }
             }
         } private bool _sortReleaseDateAscending;
+
+        [DBFieldAttribute(Default = "False")]
+        public bool SortFileSizeAscending {
+            get { return _sortFileSizeAscending; }
+            set
+            {
+                if (_sortFileSizeAscending != value) {
+                    _sortFileSizeAscending = value;
+                    commitNeeded = true;
+                }
+            }
+        } private bool _sortFileSizeAscending;
 
         #endregion
 
