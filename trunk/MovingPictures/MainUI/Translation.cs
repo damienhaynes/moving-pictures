@@ -211,6 +211,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // F
         public static string FailedMountingImage = "Sorry, failed mounting DVD Image";
         public static string FilePath = "File Path";
+        public static string FileSize = "File Size";
         public static string FilesNeedingAttention = "Files Needing Attention";
         public static string FilmstripView = "Filmstrip View";
         public static string FilterBy = "Filter By";

@@ -9,6 +9,7 @@ using MediaPortal.Plugins.MovingPictures.Database;
 using NLog;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database;
+using Cornerstone.Extensions;
 using Cornerstone.MP.Extensions;
 using System.Collections.ObjectModel;
 using Cornerstone.Database.CustomTypes;
@@ -1046,6 +1047,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 case SortingFields.DateAdded:
                     secondLabel = GetSecondItemLabel(movie, "date_added");
                     break;
+                case SortingFields.FileSize:
+                    secondLabel = GetSecondItemLabel(movie, "file_size");
+                    break;
                 default:
                     // default to user selection
                     secondLabel = GetSecondItemLabel(movie);
@@ -1110,6 +1114,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     break;
                 case "date_added":
                     secondLabelText = movie.DateAdded.ToShortDateString();
+                    break;
+                case "file_size":
+                    secondLabelText = movie.LocalMedia[0].FileSize.ToFormattedByteString();
                     break;
                 default:
                     secondLabelText = string.Empty;

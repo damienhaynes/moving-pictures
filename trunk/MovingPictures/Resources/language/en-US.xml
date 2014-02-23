@@ -60,6 +60,7 @@
   <!--F-->
   <string name="FailedMountingImage">Sorry, failed mounting DVD Image</string>
   <string name="FilePath">File Path</string>
+  <string name="FileSize">File Size</string>
   <string name="FilesNeedingAttention">Files Needing Attention</string>
   <string name="FilmstripView">Filmstrip View</string>
   <string name="FilterBy">Filter By</string>
