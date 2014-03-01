@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file should contain the facade view and all gui
+elements that should remain on screen during all or
+multiple view modes.
+-->
+<window>
+	<id>96742</id>
+	<defaultcontrol>50</defaultcontrol>
+	<allowoverlay>no</allowoverlay>
+
+	<!--
+	This set of defines are read by the plug-in and used to determine aspects of it's behavior. These
+	are parameters to give the skinner a tiny bit more control over the presentation.
+	-->
+	<define>#largeicons.available:true</define>      	<!-- true if this skin implements the largeicons view -->
+	<define>#largeicons.backdrop.used:false</define> 	<!-- true if backdrop (fanart) should be displayed in this view -->
+
+	<define>#smallicons.available:true</define>      	<!-- Set to true if this skin implements the smallicons view -->
+	<define>#smallicons.backdrop.used:false</define> 	<!-- true if backdrop (fanart) should be displayed in this view -->
+
+	<define>#list.available:true</define>            	<!-- Set to true if this skin implements the list view -->
+	<define>#list.backdrop.used:true</define>        	<!-- true if backdrop (fanart) should be displayed in this view -->
+
+	<define>#filmstrip.available:true</define>       	<!-- Set to true if this skin implements the filmstrip view -->
+	<define>#filmstrip.backdrop.used:true</define>   	<!-- true if backdrop (fanart) should be displayed in this view -->
+
+	<define>#coverflow.available:true</define>       	<!-- Set to true if this skin implements the coverflow view -->
+	<define>#coverflow.backdrop.used:true</define>   	<!-- true if backdrop (fanart) should be displayed in this view -->
+	
+	<define>#categories.backdrop.used:true</define>     <!-- true if backdrop (fanart) should be displayed in this view -->
+  <define>#details.backdrop.used:true</define>        <!-- true if backdrop (fanart) should be displayed in this view -->
+
+	<!-- Change the values below to adjust the delay  in (seconds) that text scrolls in movie overviews -->
+	<define>#textboxscrolldelay.details:10</define>
+	
+	<!-- Shadows under blue/grey text -->
+  <define>#shadow.dark:ff111111</define>						
+  <!-- Shadows under white text -->
+  <define>#shadow.light:ff222222</define>
+	
+	<controls>		
+		<!--            :: DUMMY CONTROLS ::             -->
+
+		<control>
+		  <description>Visibile when filtering by watched flag. Only unwatched movies are listed.</description>
+		  <type>label</type>
+		  <id>8</id>
+		  <posX>-50</posX>
+		  <posY>-50</posY>
+		  <width>0</width>
+		</control>
+
+		<control>
+		  <description>Visibile when the currently selected movie has been watched</description>
+		  <type>label</type>
+		  <id>9</id>
+		  <posX>-50</posX>
+		  <posY>-50</posY>
+		  <width>0</width>
+		</control>
+
+		<control>
+		  <description>Visibile when filtering by remote control searching.</description>
+		  <type>label</type>
+		  <id>10</id>
+		  <posX>-50</posX>
+		  <posY>-50</posY>
+		  <width>0</width>
+		</control>
+		
+		<control>
+		  <description>Visibile when movies are filtered.</description>
+		  <type>image</type>
+		  <id>17</id>
+		  <posX>-50</posX>
+		  <posY>-50</posY>
+		  <width>0</width>
+		</control>
+		
+		<control>
+		  <description>Visibile when movie playback has started</description>
+		  <type>image</type>
+		  <id>18</id>
+		  <posX>-50</posX>
+		  <posY>-50</posY>
+		  <width>0</width>
+		</control>
+
+		<!--            :: BACKGROUNDS :: MOVIE BACKDROP :: OVERLAYS ::            -->	
+		
+		<control>
+			<description>Background</description>
+			<type>image</type>
+			<id>0</id>
+			<posX>0</posX>
+			<posY>0</posY>
+			<width>720</width>
+			<height>576</height>
+			<dimColor>50ffffff</dimColor>
+			<texture>Background.png</texture>
+		</control>
+	
+		<!-- centre 1024x576 image in a 720x576 window -->
+		<control>
+		  <description>Movie Backdrop (Fan Art) - Plug-in sets to invisible, if no art.</description>
+		  <type>image</type>
+		  <id>1</id>
+		  <posX>-152</posX>
+		  <posY>0</posY>
+		  <width>1024</width>
+		  <height>576</height>
+		  <texture>#MovingPictures.Backdrop</texture>
+		  <dimColor>50ffffff</dimColor>
+		  <animation effect="fade" start="0" end="100" time="3000">WindowOpen</animation>
+		  <animation effect="fade" start="0" end="100" time="200">Visible</animation>
+		  <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>		 
+		</control>
+
+		<!-- centre 1024x576 image in a 720x576 window -->
+		<control>
+		  <description>Alternate Movie Backdrop - Toggles Load with Component 1 for animations on visibiltiy</description>
+		  <type>image</type>
+		  <id>11</id>
+		  <posX>-152</posX>
+		  <posY>0</posY>
+		  <width>1024</width>
+		  <height>576</height>
+		  <texture>#MovingPictures.Backdrop2</texture>
+		  <dimColor>50ffffff</dimColor>
+		  <animation effect="fade" start="0" end="100" time="200">Visible</animation>
+		  <animation effect="fade" start="100" end="0" time="200" delay="200">Hidden</animation>	
+		</control>
+
+		<!-- Backdrop Overlay -->
+		<control>
+		  <id>0</id>
+		  <type>image</type>
+		  <posX>0</posX>
+		  <posY>0</posY>
+		  <width>720</width>
+		  <height>576</height>
+		  <dimColor>50ffffff</dimColor>
+		  <texture>Backgroundtop2.png</texture>
+		  <visible>control.isvisible(50)|control.isvisible(51)</visible>
+		</control>
+	
+		<!-- VIEWS -->
+		<import>movingpictures.hiddenmenu.xml</import>
+		<import>movingpictures.listview.xml</import>
+		<import>movingpictures.thumbsview.xml</import>
+		<import>movingpictures.filmstripview.xml</import>
+		<import>movingpictures.details.xml</import>
+		
+		<import>movingpictures.facade.xml</import>
+		<import>movingpictures.overlay.xml</import>
+		<import>movingpictures.mediainfo.xml</import>
+		
+		<!-- Top Bar Controls -->
+		<control>      
+		  <type>image</type>
+		  <id>0</id>
+		  <posX>50</posX>
+		  <posY>0</posY>
+		  <width>70</width>
+		  <height>70</height>
+		  <texture>hover_moving pictures.png</texture>
+		  <animation effect="fade" time="250">WindowOpen</animation>
+		  <animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Date</description>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>700</posX>
+		  <posY>7</posY>
+		  <label>#date</label>
+		  <align>right</align>
+		  <font>font14</font>
+		  <textcolor>ffa9d0f7</textcolor>
+		  <animation effect="fade" time="250">WindowOpen</animation>
+		  <animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Time</description>
+		  <type>label</type>
+		  <id>0</id>
+		  <posX>700</posX>
+		  <posY>26</posY>
+		  <label>#time</label>
+		  <align>right</align>
+		  <font>font14</font>
+		  <textcolor>ffFFFFFF</textcolor>
+		  <animation effect="fade" time="250">WindowOpen</animation>
+		  <animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Parental Controls Lock Indicator</description>
+		  <type>image</type>
+		  <id>16</id>
+		  <posX>3</posX>
+		  <posY>2</posY>
+		  <width>44</width>
+		  <height>44</height>
+		  <texture>lock.png</texture>
+		  <animation effect="fade" time="250">WindowOpen</animation>
+		  <animation effect="fade" time="250">WindowClose</animation>
+		</control>
+		<control>
+		  <description>Current Category</description>
+		  <type>label</type>
+		  <id>16</id>
+		  <posX>127</posX>
+		  <posY>12</posY>
+		  <width>420</width>
+		  <font>font14</font>		  
+		  <label>#MovingPictures.Translation.MovieDetails.Label</label>
+		  <textcolor>ffa9d0f7</textcolor>		  
+		  <animation effect="fade" time="250">WindowOpen</animation>
+		  <animation effect="fade" time="250">WindowClose</animation>
+		  <visible>!control.isvisible(50)+!control.isvisible(51)]</visible>
+		</control>
+		<control>
+		  <description>Current Category</description>
+		  <type>label</type>
+		  <id>16</id>
+		  <posX>127</posX>
+		  <posY>12</posY>
+		  <width>420</width>
+		  <font>font14</font>		  
+		  <label>#MovingPictures.CurrentNode.name</label>
+		  <textcolor>ffa9d0f7</textcolor>		  
+		  <animation effect="fade" time="250">WindowOpen</animation>
+		  <animation effect="fade" time="250">WindowClose</animation>
+		  <visible>[control.isvisible(50)|control.isvisible(51)]+!control.isvisible(17)</visible>
+		</control>
+		<control>
+		  <description>Current Category / Filter</description>
+		  <type>label</type>
+		  <id>16</id>
+		  <posX>127</posX>
+		  <posY>12</posY>
+		  <width>420</width>
+		  <font>font14</font>		  
+		  <label>#MovingPictures.CurrentNode.name / #MovingPictures.Filter.Combined</label>
+		  <textcolor>ffa9d0f7</textcolor>		  
+		  <animation effect="fade" time="250">WindowOpen</animation>
+		  <animation effect="fade" time="250">WindowClose</animation>
+		  <visible>[control.isvisible(50)|control.isvisible(51)]+control.isvisible(17)</visible>
+		</control>
+
+		<!-- Dim background when movie starts -->
+		<!-- This is to provide feedback to the user something is happening when there are long pauses before playback -->
+		<control>
+			<description>Movie Start Indicator</description>
+			 <type>image</type>
+			 <id>0</id>			 
+			 <posX>0</posX>
+			 <posY>0</posY>  
+			 <width>720</width>
+			 <height>576</height>
+			 <texture>backgroundtop2.png</texture>	
+			 <visible>control.isvisible(18)+!control.isvisible(50)+!control.isvisible(51)</visible>
+		</control>
+		
+		<control>
+			<description>Working Animation</description>
+			<type>animation</type>
+			<id>13</id>
+			<posX>330</posX>
+			<posY>3</posY>
+			<width>48</width>
+			<height>48</height>
+			<textures>common.waiting.1.png;common.waiting.2.png;common.waiting.3.png;common.waiting.4.png;common.waiting.5.png;common.waiting.6.png;common.waiting.7.png;common.waiting.8.png</textures>
+			<Duration>0:0:01.5</Duration>
+			<keepaspectratio>yes</keepaspectratio>		
+		</control>	
+	
+	</controls>
+</window>
