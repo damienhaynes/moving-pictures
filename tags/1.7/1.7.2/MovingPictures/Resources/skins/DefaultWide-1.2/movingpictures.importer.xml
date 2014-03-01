@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<window>
+  <id>96743</id>
+  <defaultcontrol>310</defaultcontrol>
+  <allowoverlay>yes</allowoverlay>
+  <disabletopbar>no</disabletopbar>
+  <define>#header.label:#MovingPictures.Translation.Importer.Label</define>
+  <controls>
+    <control>
+      <description>BG</description>
+      <type>image</type>
+      <id>1</id>
+      <texture>BH TV.jpg</texture>
+      <width>1280</width>
+      <height>720</height>
+      <colordiffuse>90ffffff</colordiffuse>
+    </control>
+    <control>
+      <description>background top overlay</description>
+      <type>image</type>
+      <id>1</id>
+      <posX>0</posX>
+      <posY>0</posY>
+      <width>1280</width>
+      <height>270</height>
+      <texture>overlay_top.png</texture>
+      <colordiffuse>ccffffff</colordiffuse>
+    </control>
+    <control>
+      <description>background selecteditem</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>-20</posX>
+      <posY>65</posY>
+      <width>1350</width>
+      <height>60</height>
+      <texture>general_overlay_selecteditem.png</texture>
+      <colordiffuse>bbffffff</colordiffuse>
+    </control>
+    <control>
+      <description>General Overlay</description>
+      <id>0</id>
+      <type>image</type>
+      <posX>0</posX>
+      <posY>30</posY>
+      <width>1280</width>
+      <height>720</height>
+      <texture>general_overlay.png</texture>
+    </control>
+    <control>
+      <description>File List</description>
+      <type>listcontrol</type>
+      <id>310</id>
+      <scrollOffset>1</scrollOffset>
+      <posX>130</posX>
+      <posY>221</posY>
+      <height>467</height>
+      <width>1199</width>
+      <textXOff>33</textXOff>
+      <textXOff2>1000</textXOff2>
+      <textXOff3>2500</textXOff3>
+      <PinIconXOff>3</PinIconXOff>
+      <PinIconYOff>1</PinIconYOff>
+      <IconYOff>5000</IconYOff>
+      <dimColor>ffffffff</dimColor>
+      <textureFocus>listcontrol_item_selected_wide.png</textureFocus>
+      <textureNoFocus>-</textureNoFocus>
+      <spinPosX>1000</spinPosX>
+      <spinPosY>667</spinPosY>
+    </control>
+    <control>
+    <description>text label</description>
+    <type>label</type>
+    <id>0</id>
+    <posX>230</posX>
+    <posY>664</posY>
+    <label>#MovingPictures.Importer.Status</label>
+    <align>left</align>
+    </control>
+    <import>common.time.xml</import>
+  </controls>
+</window>
+<!--Checksum:5e07f09b7dd8095e1d56dd227d3fd170-->

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--A-->
+  <!--B-->
+  <!--C-->
+  <!--D-->
+  <string name="Director">Yönetmen</string>
+  <!--E-->
+  <!--F-->
+  <!--G-->
+  <!--I-->
+  <!--L-->
+  <!--M-->
+  <!--N-->
+  <!--O-->
+  <!--P-->
+  <!--R-->
+  <string name="Rated">Oylandý</string>
+  <string name="ReleaseDate">Yayýn Tarihi</string>
+  <string name="RemoteNumericAlphabet0">
+  </string>
+  <string name="RemoteNumericAlphabet1">
+  </string>
+  <string name="Runtime">Süre</string>
+  <!--S-->
+  <!--T-->
+  <!--U-->
+  <!--V-->
+  <string name="Votes">oylar</string>
+  <!--W-->
+  <!--Y-->
+</resources>
