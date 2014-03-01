@@ -1163,13 +1163,15 @@ public class Script
       <Major>1</Major>
       <Minor>7</Minor>
       <Build>2</Build>
-      <Revision>1579</Revision>
+      <Revision>1582</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
-    <VersionDescription>* Publish the users GUI category menu to skin, skin designers can use these properties to create custom home screen menus.</VersionDescription>
+    <VersionDescription>* Publish the users GUI category menu to skin, skin designers can use these properties to create custom home screen menus.
+* Added SortBy for 'FileSize' field. Group Headers and Facade SecondLabel support added.
+* Updated translations from Transifex.</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;amp;task=att_download&amp;amp;link_id=30&amp;amp;cf_id=24</OnlineLocation>
-    <ReleaseDate>2014-02-22T19:04:46</ReleaseDate>
+    <ReleaseDate>2014-03-01T19:04:46</ReleaseDate>
     <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
     <Location>moving-pictures-[Version].mpe1</Location>
     <Params>
@@ -1980,7 +1982,7 @@ public class Script
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\MovingPictures\Resources\Images\icon_large.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{1cdce9e5-d0dc-41f5-9990-7aa52135caac}-icon_large.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{13a1c1b0-7fc9-457a-a024-b167124b4ff7}-icon_large.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
