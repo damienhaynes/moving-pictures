@@ -60,6 +60,7 @@
   <!--F-->
   <string name="FailedMountingImage">Fel vid \"mount\" av DVD Image</string>
   <string name="FilePath">Sökväg</string>
+  <string name="FileSize">Filstorlek</string>
   <string name="FilesNeedingAttention">Filer som kräver åtgärd</string>
   <string name="FilmstripView">Filmremsa Vy</string>
   <string name="FilterBy">Sortera efter</string>
