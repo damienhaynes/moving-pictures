@@ -60,6 +60,7 @@
   <!--F-->
   <string name="FailedMountingImage">Atsiprašome, nepavyko prijungti DVD atvaizdo</string>
   <string name="FilePath">Failo vieta</string>
+  <string name="FileSize">Failo dydis</string>
   <string name="FilesNeedingAttention">Failai reikalaujantys dėmesio</string>
   <string name="FilmstripView">Kino juostos vaizdas</string>
   <string name="FilterBy">Filtruoti pagal</string>
