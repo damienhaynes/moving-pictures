@@ -18,13 +18,18 @@
     -->
     
     <id>874940</id>
-    <version major="0" minor="3" point="0" />
-    <published day="1" month="2" year="2014" />
+    <version major="0" minor="3" point="1" />
+    <published day="12" month="4" year="2014" />
     
     <!--  Changelog
     
     Version  Published   Author     Info
     =======================================================================
+    0.3.1    12.4.2014   Kucheek    Fixed title recognition for case when 
+                                    CSFD returns details page upon search 
+                                    and the movie has a film type defined 
+                                    (TV Movie, Drama etc.)
+    
     0.3.0    1.2.2014    Kucheek    IMDb ID and alternative title from the 
                                     detail pages of found movies are now 
                                     retrieved already in the scraper search 
@@ -96,7 +101,7 @@
          If not, regex does not match so we don't process it -->
     <parse name="movie_details_block" input="${search_page}" regex="${rx_movie_details_block}" />
     <if test="${movie_details_block}!=">
-      <parse name="title" input="${movie_details_block}" regex="&lt;h1&gt;\s*(.+?)(?:, (The|A|An|Ein|El|Das|Der|Die|Les|Un|Une))?\s*(?:&lt;span.+?&lt;/span&gt;)?&lt;/h1&gt;" />
+      <parse name="title" input="${movie_details_block}" regex="&lt;h1&gt;\s*(.+?)(?:, (The|A|An|Ein|El|Das|Der|Die|Les|Un|Une))?(?:\s*&lt;span.+?&lt;/span&gt;)?\s*&lt;/h1&gt;" />
       <set name="movie[0].title" value="${title[0][1]:htmldecode} ${title[0][0]:htmldecode}" />
       <parse name="year" input="${search_page}" regex="&lt;title&gt;.*\((\d{4})\).*&lt;/title&gt;" />
       <set name="movie[0].year" value="${year[0][0]}" />
