@@ -22,7 +22,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
         // genrate a filename for a backdrop. should be unique based on the source hash
         private static string GenerateFilename(DBMovieInfo movie, string source) {
             string artFolder = MovingPicturesCore.Settings.BackdropFolder;
-            string safeName = movie.Title.Replace(' ', '.').ToValidFilename();
+            string safeName = movie.Title.Replace(' ', '.').ToValidFilename() + "-" + movie.Year;
             return artFolder + "\\{" + safeName + "} [" + source.GetHashCode() + "].jpg";
         }
 

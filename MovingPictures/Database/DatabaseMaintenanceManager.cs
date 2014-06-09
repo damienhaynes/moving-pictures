@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.IO;
+using System.Linq;
 using NLog;
 using Cornerstone.Extensions.IO;
 using Cornerstone.GUI.Dialogs;
 using Cornerstone.Database.Tables;
 using Cornerstone.Database;
+using Cornerstone.Database.CustomTypes;
+using Cornerstone.Extensions;
 using System.Reflection;
 using MediaPortal.Plugins.MovingPictures.MainUI;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
@@ -280,7 +284,43 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             List<DBMovieInfo> movies = DBMovieInfo.GetAll();
             float total = movies.Count;
 
-            foreach (DBMovieInfo movie in movies) {
+            #region Upgrades required for 1.7.3 (Initial)
+
+            // Do this once for all movies in this upgrade
+            // as its an expensive task
+
+            DirectoryInfo coverartFolder = null;
+            DirectoryInfo coverartThumbFolder = null;
+            DirectoryInfo backdropFolder = null;
+
+            List<string> coverartFiles = null;
+            List<string> coverartThumbFiles = null;
+            List<string> backdropFiles = null;
+
+            if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.7.3")) {
+                logger.Info("Getting current artwork stored on disk...");
+
+                try {
+                    // get artwork locations
+                    coverartFolder = new DirectoryInfo(MovingPicturesCore.Settings.CoverArtFolder);
+                    coverartThumbFolder = new DirectoryInfo(MovingPicturesCore.Settings.CoverArtThumbsFolder);
+                    backdropFolder = new DirectoryInfo(MovingPicturesCore.Settings.BackdropFolder);
+
+                    // get existing artwork
+                    coverartFiles = coverartFolder.GetFiles().Select(f => f.FullName).ToList();
+                    coverartThumbFiles = coverartThumbFolder.GetFiles().Select(f => f.FullName).ToList();
+                    backdropFiles = backdropFolder.GetFiles().ToList().Select(f => f.FullName).ToList();;
+                }
+                catch (Exception e) {
+                    logger.ErrorException("Failed to get current artwork from disk.", e);
+                }
+
+                logger.Info("Finished getting current artwork from disk.");
+            }
+
+            #endregion
+
+            foreach (DBMovieInfo movie in movies.OrderBy(m => m.DateAdded)) {
                 if (MaintenanceProgress != null) MaintenanceProgress("", (int)(count * 100 / total));
                 count++;
 
@@ -322,11 +362,185 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
                 #endregion
 
+                #region Upgrades required for 1.7.3
+                // Upgrade filenames and db entries for coverart and backdrops.
+                // Movies are sorted by data_added, first movie of its title should
+                // have correct artwork, delete any artwork reference if another movie
+                // of the same title is encountered so it will be refreshed.
+                
+                // NB: we don't need to do this but in the event that the user
+                // deletes their database in the future, the local artwork provider
+                // will be able to find existing artwork from this upgrade.
+
+                if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.7.3")) {
+                    if (coverartFiles == null || coverartThumbFiles == null || backdropFiles == null)
+                        continue;
+
+                    string safeName = movie.Title.Replace(' ', '.').ToValidFilename();
+
+                    #region Upgrade CoverFullPath
+                    // ensure we get the thumb before it gets cleared from the 
+                    // fullsize 'set', Otherwise we needlessly cause a re-generation of the thumb
+                    string coverThumbFullPath = movie.CoverThumbFullPath;
+                    string coverFullPath = movie.CoverFullPath;
+                    string newCoverFullPath = string.Empty;
+
+                    if (coverartFiles.Contains(coverFullPath)) {
+                        // the source hash should be the last match
+                        var matchCollection = Regex.Matches(coverFullPath, @"\[[^]]+\]");
+                        string sourceHash = matchCollection[matchCollection.Count - 1].Value;
+
+                        // build up new filename
+                        newCoverFullPath = coverartFolder + "\\{" + safeName + "-" + movie.Year + "} " + sourceHash + Path.GetExtension(coverFullPath);
+
+                        // rename old file to new file ID
+                        if (coverFullPath.MoveTo(newCoverFullPath)) {
+                            logger.Info("Successfully upgraded old coverart '{0}' to new format '{1}'.", coverFullPath, newCoverFullPath);
+                            movie.CoverFullPath = newCoverFullPath;
+                        }
+                        else {
+                            logger.Warn("Failed to upgrade old coverart '{0}' to new format.", coverFullPath);
+                        }
+
+                        // remove so we don't process again for another movie with same title
+                        coverartFiles.Remove(coverFullPath);
+                    }
+                    else {
+                        // looks like we have encountered another movie with the same title
+                        // remove reference to it so we refresh artwork later for this movie
+                        logger.Info("Removing coverart for '{0} ({1})', reference no longer exists on disk.", movie.Title, movie.Year);
+
+                        coverartThumbFiles.Remove(coverThumbFullPath);
+                        backdropFiles.Remove(movie.BackdropFullPath);
+                        foreach (var altCover in movie.AlternateCovers) {
+                            coverartFiles.Remove(altCover);
+                        }
+
+                        movie.CoverFullPath = string.Empty;
+                        movie.CoverThumbFullPath = string.Empty;
+                        movie.AlternateCovers = new StringList();
+                        movie.BackdropFullPath = string.Empty;
+                        movie.Commit();
+                        continue;
+                    }
+                    #endregion
+
+                    #region Upgrade AlternateCovers
+                    var newAlternativeCovers = new StringList();
+                    foreach (var altCover in movie.AlternateCovers) {
+                        // the main cover will also be in the alternative covers as well.
+                        // add the already processed cover to the list and move on
+                        if (altCover == coverFullPath) {
+                            newAlternativeCovers.Add(newCoverFullPath);
+                            continue;
+                        }
+
+                        if (coverartFiles.Contains(altCover)) {
+                            var matchCollection = Regex.Matches(altCover, @"\[[^]]+\]");
+                            string sourceHash = matchCollection[matchCollection.Count - 1].Value;
+
+                            // build up new filename
+                            string newAlternativeCoverFullPath = coverartFolder + "\\{" + safeName + "-" + movie.Year + "} " + sourceHash + Path.GetExtension(altCover);
+
+                            // rename old file to new file ID
+                            if (altCover.MoveTo(newAlternativeCoverFullPath)) {
+                                logger.Info("Successfully upgraded old coverart '{0}' to new format '{1}'.", altCover, newAlternativeCoverFullPath);
+                                newAlternativeCovers.Add(newAlternativeCoverFullPath);
+                            }
+                            else {
+                                logger.Warn("Failed to upgrade old coverart '{0}' to new format.", altCover);
+                            }
+
+                            coverartFiles.Remove(altCover);
+                        }
+                    }
+                    movie.AlternateCovers = newAlternativeCovers;
+                    #endregion
+
+                    #region Upgrade CoverThumbFullPath
+                    if (coverartThumbFiles.Contains(coverThumbFullPath)) {
+                        // the source hash should be the last match
+                        var matchCollection = Regex.Matches(coverThumbFullPath, @"\[[^]]+\]");
+                        string sourceHash = matchCollection[matchCollection.Count - 1].Value;
+
+                        // build up new filename
+                        string newCoverThumbFullPath = coverartThumbFolder + "\\{" + safeName + "-" + movie.Year + "} " + sourceHash + Path.GetExtension(coverThumbFullPath);
+
+                        // rename old file to new file ID
+                        if (coverThumbFullPath.MoveTo(newCoverThumbFullPath)) {
+                            logger.Info("Successfully upgraded old coverart thumb '{0}' to new format '{1}'.", coverThumbFullPath, newCoverThumbFullPath);
+                            movie.CoverThumbFullPath = newCoverThumbFullPath;
+                        }
+                        else {
+                            logger.Warn("Failed to upgrade old coverart thumb '{0}' to new format.", coverThumbFullPath);
+                        }
+
+                        // remove so we don't process again for another movie with same title
+                        coverartThumbFiles.Remove(coverThumbFullPath);
+                    }
+                    #endregion
+
+                    #region Upgrade Backdrop
+                    string backdropFullPath = movie.BackdropFullPath;
+                    if (backdropFiles.Contains(backdropFullPath)) {
+                        // the source hash should be the last match
+                        var matchCollection = Regex.Matches(backdropFullPath, @"\[[^]]+\]");
+                        string sourceHash = matchCollection[matchCollection.Count - 1].Value;
+
+                        // build up new filename
+                        string newBackdropFullPath = backdropFolder + "\\{" + safeName + "-" + movie.Year + "} " + sourceHash + Path.GetExtension(backdropFullPath);
+
+                        // rename old file to new file ID
+                        if (backdropFullPath.MoveTo(newBackdropFullPath)) {
+                            logger.Info("Successfully upgraded old backdrop '{0}' to new format '{1}'.", backdropFullPath, newBackdropFullPath);
+                            movie.BackdropFullPath = newBackdropFullPath;
+                        }
+                        else
+                        {
+                            logger.Warn("Failed to upgrade old backdrop '{0}' to new format.", coverThumbFullPath);
+                        }
+
+                        // remove so we don't process again for another movie with same title
+                        backdropFiles.Remove(backdropFullPath);
+                    }
+                    #endregion
+                }
+
+                #endregion
+
                 // commit movie
                 movie.Commit();
             }
 
+            #region Upgrades required for 1.7.3 (Finalise)
+
+            if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.7.3")) {
+                // finialise tasks for this upgrade
+                // remove any artwork on disk not referenced in database.
+
+                // This could probably be a standalone maintenance task later
+                coverartFiles.ForEach(DeleteOrphanedArtwork);
+                coverartThumbFiles.ForEach(DeleteOrphanedArtwork);
+                backdropFiles.ForEach(DeleteOrphanedArtwork);
+            }
+            #endregion
+
             if (MaintenanceProgress != null) MaintenanceProgress("", 100);
+        }
+
+        /// <summary>
+        /// Removed orphaned artwork in maintenance task for v1.7.3
+        /// </summary>
+        /// <param name="artwork">Path to artwork to remove</param>
+        static void DeleteOrphanedArtwork(string artwork) {
+            logger.Info("Removing orphaned artwork '{0}'.", artwork);
+
+            try {
+                File.Delete(artwork);
+            }
+            catch (Exception e) {
+                logger.Warn("Failed to remove orphaned artwork '{0}', due to error '{1}'.", artwork, e.Message);
+            }
         }
 
         // One time upgrades tasks for file information
@@ -418,7 +632,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             #endregion
 
-
             #region Upgrades required for 1.1.2
 
             if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.1.2.1216")) {
@@ -454,7 +667,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             #endregion
 
-            #region 1.4.2
+            #region Upgrades required for 1.4.2
 
             if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.4.2.0")) {
                 if (MovingPicturesCore.Settings.UserAgent == @"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2)")

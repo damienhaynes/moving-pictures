@@ -84,7 +84,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _sortBy;
         
-
         [DBField]
         public StringList Directors {
             
@@ -96,7 +95,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         } private StringList _directors;
 
-
         [DBField]
         public StringList Writers {
             get { return _writers; }
@@ -106,7 +104,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private StringList _writers;
-
 
         [DBField]
         public StringList Actors {
@@ -147,7 +144,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _year;
 
-
         [DBField]
         public StringList Genres {
             get { return _genres; }
@@ -158,7 +154,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private StringList _genres;
 
-
         [DBField]
         public string Certification {
             get { return _certification; }
@@ -168,8 +163,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private string _certification;
-        
-        
+             
         [DBField(AllowManualFilterInput=true)]
         public string Language {
             get { return _language; }
@@ -180,7 +174,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private string _language;
 
-
         [DBField(AllowDynamicFiltering = false)]
         public string Tagline {
             get { return _tagline; }
@@ -190,7 +183,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private string _tagline;
-
 
         [DBField(AllowDynamicFiltering = false)]
         public string Summary {
@@ -221,7 +213,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             commitNeeded = true;
           }
         } private StringList _collections;
-
 
         [DBField]
         public StringList PlotKeywords
@@ -270,7 +261,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private DateTime _dateAdded;
 
-
         [DBField(AllowDynamicFiltering = false)]
         public int Runtime {
             get { return _runtime; }
@@ -281,7 +271,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _runtime;
 
-
         [DBField(FieldName = "imdb_id", AllowDynamicFiltering = false)]
         public string ImdbID {
             get { return _imdbID; }
@@ -291,7 +280,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private string _imdbID;
-
 
         [DBRelation(AutoRetrieve=true)]
         public RelationList<DBMovieInfo, DBLocalMedia> LocalMedia {
@@ -388,7 +376,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private StringList _covers;
 
-
         [DBField(AllowAutoUpdate = false, Filterable=true)]
         public String CoverFullPath
         {
@@ -404,7 +391,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 commitNeeded = true;
             }
         } private String _coverFullPath;
-
 
         [DBField(AllowAutoUpdate = false, Filterable=false)]
         public String CoverThumbFullPath {
@@ -643,7 +629,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 logger.Error("Failed loading cover artwork for '" + Title + "' [" + ID + "] from " + filename + ".");
                 return false;
             }
-
             
             // check if the image file is already in the cover folder
             FileInfo newFile = new FileInfo(filename);
@@ -651,7 +636,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // if the file isnt in the cover folder, generate a name and save it there
             if (!alreadyInFolder) {
-                string safeName = Title.Replace(' ', '.').ToValidFilename();
+                string safeName = Title.Replace(' ', '.').ToValidFilename() + "-" + Year;
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 
                 if (!File.Exists(newFileName) && saveImage(newFileName, newCover)) {
@@ -747,7 +732,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             // if the file isnt in the backdrop folder, generate a name and save it there
             if (!alreadyInFolder) {
-                string safeName = Title.Replace(' ', '.').ToValidFilename();
+                string safeName = Title.Replace(' ', '.').ToValidFilename() + "-" + Year;
                 string newFileName = artFolder + "\\{" + safeName + "} [" + filename.GetHashCode() + "].jpg";
                 
                 // save the backdrop

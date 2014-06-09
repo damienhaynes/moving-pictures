@@ -25,7 +25,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources
         // genrate a filename for a cover. should be unique based on the source hash
         private static string GenerateFilename(DBMovieInfo movie, string source) {
             string artFolder = MovingPicturesCore.Settings.CoverArtFolder;
-            string safeName = movie.Title.Replace(' ', '.').ToValidFilename();
+            string safeName = movie.Title.Replace(' ', '.').ToValidFilename() + "-" + movie.Year;
             return artFolder + "\\{" + safeName + "} [" + source.GetHashCode() + "].jpg";
         }
 

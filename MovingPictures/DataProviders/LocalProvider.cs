@@ -127,7 +127,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             return found;
         }
 
-        
         // check for backdrops in the backdrop folder loaded from previous installs
         private bool getOldBackdrops(DBMovieInfo movie) {
             bool found = false;
@@ -135,7 +134,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             string backdropFolderPath = MovingPicturesCore.Settings.BackdropFolder;
             DirectoryInfo backdropFolder = new DirectoryInfo(backdropFolderPath);
 
-            string safeName = movie.Title.Replace(' ', '.').ToValidFilename();
+            string safeName = movie.Title.Replace(' ', '.').ToValidFilename() + "-" + movie.Year;
             Regex oldBackdropRegex = new Regex("^{?" + Regex.Escape(safeName) + "}? \\[-?\\d+\\]\\.(jpg|png)");
 
             foreach (FileInfo currFile in backdropFolder.GetFiles()) {
@@ -207,8 +206,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
             string coverartFolderPath = MovingPicturesCore.Settings.CoverArtFolder;
             DirectoryInfo coverFolder = new DirectoryInfo(coverartFolderPath);
-            
-            string safeName = movie.Title.Replace(' ', '.').ToValidFilename();
+
+            string safeName = movie.Title.Replace(' ', '.').ToValidFilename() + "-" + movie.Year;
             Regex oldCoverRegex = new Regex("^{?" + Regex.Escape(safeName) + "}? \\[-?\\d+\\]\\.(jpg|png)");
             
             foreach (FileInfo currFile in coverFolder.GetFiles()) {
