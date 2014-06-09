@@ -47,6 +47,26 @@ namespace Cornerstone.Extensions.IO {
             return new DirectoryInfo(self);
         }
 
+        /// <summary>
+        /// Moves a file to a new location
+        /// </summary>
+        /// <param name="oldFilePath">Full path of old file</param>
+        /// <param name="newFilePath">Full path of where to move new file</param>
+        /// <returns>True if move was successful</returns>
+        public static bool MoveTo(this string oldFilePath, string newFilePath) {
+            try {
+                if (File.Exists(newFilePath))
+                    return true;
 
+                if (!File.Exists(oldFilePath))
+                    return false;
+
+                File.Move(oldFilePath, newFilePath);
+            }
+            catch {
+                return false;
+            }
+            return true;
+        }
     }
 }
