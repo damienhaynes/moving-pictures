@@ -60,6 +60,7 @@
   <!--F-->
   <string name="FailedMountingImage">Désolé, impossible de monter l\'image du DVD</string>
   <string name="FilePath">Chemin du fichier</string>
+  <string name="FileSize">Taille du Fichier</string>
   <string name="FilesNeedingAttention">Fichiers nécessitant votre attention</string>
   <string name="FilmstripView">Pellicule</string>
   <string name="FilterBy">Filtrer par</string>

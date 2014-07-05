@@ -60,6 +60,7 @@
   <!--F-->
   <string name="FailedMountingImage">Problema durante il mount dell\'immagine DVD</string>
   <string name="FilePath">Percorso file</string>
+  <string name="FileSize">Dimensioni file</string>
   <string name="FilesNeedingAttention">Files che richiedono attenzione</string>
   <string name="FilmstripView">Vista titoli</string>
   <string name="FilterBy">Filtra per</string>

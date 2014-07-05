@@ -60,6 +60,7 @@
   <!--F-->
   <string name="FailedMountingImage">Leider konnte das DVD-Image nicht eingebunden werden.</string>
   <string name="FilePath">Dateipfad</string>
+  <string name="FileSize">Dateigröße</string>
   <string name="FilesNeedingAttention">Dateien die Aufmerksamkeit benötigen</string>
   <string name="FilmstripView">Filmstrip</string>
   <string name="FilterBy">Filtere nach</string>
