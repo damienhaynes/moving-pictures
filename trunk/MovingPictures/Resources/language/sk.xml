@@ -60,6 +60,7 @@
   <!--F-->
   <string name="FailedMountingImage">Pripojenie obrazu DVD zlyhalo.</string>
   <string name="FilePath">Cesta k súboru</string>
+  <string name="FileSize">Veľkosť súboru</string>
   <string name="FilesNeedingAttention">Súbory vyžadujúce pozornosť</string>
   <string name="FilmstripView">Filmový pás</string>
   <string name="FilterBy">Filtrovať podľa</string>

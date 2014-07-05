@@ -47,6 +47,7 @@
   <!--F-->
   <string name="FailedMountingImage">К сожалению, не удалось подключить образ DVD</string>
   <string name="FilePath">Путь к файлу</string>
+  <string name="FileSize">Размер файла</string>
   <string name="FilmstripView">Обложки</string>
   <string name="FilterBy">Фильтр</string>
   <string name="Friday">Пятница</string>

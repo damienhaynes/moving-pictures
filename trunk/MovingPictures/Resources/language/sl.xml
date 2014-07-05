@@ -60,6 +60,7 @@
   <!--F-->
   <string name="FailedMountingImage">Žal ni uspelo naložiti DVD slike</string>
   <string name="FilePath">Pot datoteke</string>
+  <string name="FileSize">Velikost datoteke</string>
   <string name="FilesNeedingAttention">Datoteke, ki rabijo pozornost</string>
   <string name="FilmstripView">Filmski trak</string>
   <string name="FilterBy">Filtriraj po</string>
@@ -206,7 +207,7 @@
   <string name="UnwatchedMovies">Neogledani filmi</string>
   <string name="UpAbbreviation">(gor)</string>
   <string name="UpdateDetailsFromOnline">Osveži podatke s spleta</string>
-  <string name="UpdateMovieDetailsBody">Osvežili boste vse metapodatke filma in s tem\nprepisali vse ročne spremembe.\nAli želite nadaljevati?</string>
+  <string name="UpdateMovieDetailsBody">Osvežili boste vse metapodatke filma in s tem\nprepisali vse ročne spremembe.\Ali želite nadaljevati?</string>
   <string name="UpdateMovieDetailsHeader">Osveži podatke filma</string>
   <!--V-->
   <string name="VirtualDriveHeader">Virtualni pogon ni pripravljen</string>

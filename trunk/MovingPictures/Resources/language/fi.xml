@@ -60,6 +60,7 @@
   <!--F-->
   <string name="FailedMountingImage">DVD-levykuvan liittäminen epäonnistui</string>
   <string name="FilePath">Tiedoston polku</string>
+  <string name="FileSize">Tiedoston koko</string>
   <string name="FilesNeedingAttention">Huomiota vaativat tiedostot</string>
   <string name="FilmstripView">Filminauha</string>
   <string name="FilterBy">Suodata</string>

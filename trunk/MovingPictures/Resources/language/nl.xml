@@ -60,6 +60,7 @@
   <!--F-->
   <string name="FailedMountingImage">Het mounten van DVD-image is mislukt.</string>
   <string name="FilePath">Bestandspad</string>
+  <string name="FileSize">Bestandsgrootte</string>
   <string name="FilesNeedingAttention">Bestanden die aandacht nodig hebben</string>
   <string name="FilmstripView">Filmstripweergave</string>
   <string name="FilterBy">Filter op</string>
