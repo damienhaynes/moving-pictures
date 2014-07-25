@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 namespace MediaPortal.Plugins.MovingPictures.DataProviders.FanartTV {
 
     public class Artwork {
+        public string name { get; set; }
         public string imdb_id { get; set; }
         public string tmdb_id { get; set; }
         public List<Image> moviebackground { get; set; }
