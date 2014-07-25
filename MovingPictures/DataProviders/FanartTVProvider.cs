@@ -76,13 +76,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return false;
 
             // de-serialize json response
-            var movies = response.FromJsonDictionary<Dictionary<string, Artwork>>();
-            if (movies == null || movies.Count == 0)
+            var movieImages = response.FromJson<Artwork>();
+            if (movieImages == null)
                 return false;
 
-            // we are only getting back 1 movie in dictionary so lets get it
-            var movieImages = movies.First().Value;
-
+            // check if we have any backdrops
             if (movieImages.moviebackground == null || movieImages.moviebackground.Count == 0)
                 return false;
 
@@ -125,12 +123,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return false;
 
             // de-serialize json response
-            var movies = response.FromJsonDictionary<Dictionary<string, Artwork>>();
-            if (movies == null || movies.Count == 0)
+            var movieImages = response.FromJson<Artwork>();
+            if (movieImages == null)
                 return false;
 
-            // we are only getting back 1 movie in dictionary so lets get it
-            var movieImages = movies.First().Value;
+            // check if we have any posters
             if (movieImages.movieposter == null || movieImages.movieposter.Count == 0)
                 return false;
 
