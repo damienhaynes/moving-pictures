@@ -24,7 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
 
         #region API variables
 
-        private const string apiMovieArtwork = "http://fanart.tv/webservice/movie/4f26c36ab3d97e3a4a0c1e081710e3a6/{0}/JSON/all/";
+        private const string apiMovieArtwork = "http://webservice.fanart.tv/v3/movies/{0}?api_key=4f26c36ab3d97e3a4a0c1e081710e3a6";
 
         #endregion
 
