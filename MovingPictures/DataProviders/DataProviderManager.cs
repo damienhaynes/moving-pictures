@@ -156,37 +156,15 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
         public void ArrangeDataProviders(string languageCode) {
             foreach (DataType currType in Enum.GetValues(typeof(DataType))) {
                 int nextRank = 10;
-                foreach (DBSourceInfo currSource in getEditableList(currType)) {
+                foreach (DBSourceInfo currSource in getEditableList(currType)) {                    
+                    // special case for themoviedb provider. should always be used for details - supports all languages
+                    if (currSource.Provider is TheMovieDbProvider && currType == DataType.DETAILS) {
+                        currSource.SetPriority(currType, 1);
+                        currSource.Commit();
+                    }
+
                     // special case for imdb provider. should always be used as a last resort details provider
-                    if (currSource.IsScriptable() && ((ScriptableProvider)currSource.Provider).ScriptID == 874902 &&
-                        currType == DataType.DETAILS) {
-
-                        if (languageCode != "en") {
-                            currSource.SetPriority(currType, 98);
-                            currSource.Commit();
-                        }
-                        else {
-                            currSource.SetPriority(currType, 1);
-                            currSource.Commit();
-                        }
-                    }
-
-                    // special case for impawards script
-                    else if (currType == DataType.COVERS && currSource.IsScriptable() && ((ScriptableProvider)currSource.Provider).ScriptID == 874903) {
-                        if (languageCode != "en") {
-                            currSource.SetPriority(currType, 98);
-                            currSource.Commit();
-                        }
-                        else {
-                            currSource.SetPriority(currType, 1);
-                            currSource.Commit();
-                        }
-                    }
-
-                    // special case for themoviedb provider. should always be used for covers and backdrops
-                    else if ((currType == DataType.COVERS || currType == DataType.BACKDROPS) &&
-                              currSource.Provider is TheMovieDbProvider) {
-
+                    else if (currSource.IsScriptable() && ((ScriptableProvider)currSource.Provider).ScriptID == 874902 && currType == DataType.DETAILS) {
                         if (languageCode != "en") {
                             currSource.SetPriority(currType, 98);
                             currSource.Commit();
@@ -195,6 +173,18 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                             currSource.SetPriority(currType, 2);
                             currSource.Commit();
                         }
+                    }
+
+                    // special case for themoviedb provider. should always be used for covers and backdrops
+                    else if (currSource.Provider is TheMovieDbProvider && (currType == DataType.COVERS || currType == DataType.BACKDROPS)) {
+                        currSource.SetPriority(currType, 2);
+                        currSource.Commit();
+                    }
+
+                    // special case for fanart.tv provider. should always be used for covers and backdrops
+                    else if ((currType == DataType.COVERS || currType == DataType.BACKDROPS) && currSource.Provider is FanartTVProvider) {
+                        currSource.SetPriority(currType, 3);
+                        currSource.Commit();
                     }
 
                     // not a generic language script and not for the selected language, disable
