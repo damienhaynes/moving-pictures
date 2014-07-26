@@ -833,10 +833,13 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             _gui.SetProperty("#Play.Current.MPAARating", CurrentMovie.Certification);
             _gui.SetProperty("#Play.Current.IsWatched", (CurrentMovie.UserSettings[0].WatchedCount > 0).ToString().ToLowerInvariant());
             _gui.SetProperty("#Play.Current.TagLine", CurrentMovie.Tagline);
-            _gui.SetProperty("#Play.Current.Director", CurrentMovie.Directors.ToPrettyString(1));
-            _gui.SetProperty("#Play.Current.Genre", CurrentMovie.Genres.ToPrettyString(1));
-            _gui.SetProperty("#Play.Current.Credits", CurrentMovie.Writers.ToPrettyString(MovingPicturesCore.Settings.MaxElementsToDisplay));
-            _gui.SetProperty("#Play.Current.Cast", CurrentMovie.Actors.ToPrettyString(MovingPicturesCore.Settings.MaxElementsToDisplay));
+            _gui.SetProperty("#Play.Current.Director", CurrentMovie.Directors == null ? " " : CurrentMovie.Directors.ToPrettyString(1));
+            _gui.SetProperty("#Play.Current.Genre", CurrentMovie.Genres == null ? " " : CurrentMovie.Genres.ToPrettyString(1));
+            _gui.SetProperty("#Play.Current.Credits", CurrentMovie.Writers == null ? " " : CurrentMovie.Writers.ToPrettyString(MovingPicturesCore.Settings.MaxElementsToDisplay));
+            _gui.SetProperty("#Play.Current.Cast", CurrentMovie.Actors == null ? " " : CurrentMovie.Actors.ToPrettyString(MovingPicturesCore.Settings.MaxElementsToDisplay));
+            _gui.SetProperty("#Play.Current.Studios", CurrentMovie.Studios == null ? " " : CurrentMovie.Studios.ToPrettyString(MovingPicturesCore.Settings.MaxElementsToDisplay));
+            _gui.SetProperty("#Play.Current.Collections", CurrentMovie.Collections == null ? " " : CurrentMovie.Collections.ToPrettyString(MovingPicturesCore.Settings.MaxElementsToDisplay));
+            _gui.SetProperty("#Play.Current.PlotKeywords", CurrentMovie.PlotKeywords == null ? " " : CurrentMovie.PlotKeywords.ToPrettyString());
         }
 
         private void ClearPlayProperties() {
@@ -858,6 +861,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             _gui.SetProperty("#Play.Current.Genre", string.Empty);
             _gui.SetProperty("#Play.Current.Credits", string.Empty);
             _gui.SetProperty("#Play.Current.Cast", string.Empty);
+            _gui.SetProperty("#Play.Current.Studios", string.Empty);
+            _gui.SetProperty("#Play.Current.Collections", string.Empty);
+            _gui.SetProperty("#Play.Current.PlotKeywords", string.Empty);
         }
 
         // Updates the movie metadata on the playback screen (for when the user clicks info). 
