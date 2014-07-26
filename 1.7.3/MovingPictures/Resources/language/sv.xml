@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <!--A-->
+  <string name="Actor">Skådespelare</string>
+  <string name="Actors">Skådespelare</string>
+  <string name="AllMovies">Alla filmer</string>
+  <string name="AllFiles">Alla filer</string>
+  <!--B-->
+  <string name="BadCategory">En annan plugin eller ett skin försökte\nöppna en kategori i Moving Pictures\nsom inte existerar!</string>
+  <string name="BadMovie">En annan plugin eller ett skin försökte\nöppna en film som inte existerar i\nMoving Pictures!</string>
+  <string name="BadParam">En annan plugin eller ett skin skickade\nen ogiltig parameter till Moving Pictures!</string>
+  <string name="Backdrop">Bakgrundsbild</string>
+  <string name="BeginsWith">Börjar på</string>
+  <string name="BelongsToCollection">Tillhör en samling</string>
+  <!--C-->
+  <string name="Cancel">Avbryt</string>
+  <string name="CannotDeleteOffline">Kan ej ta bort, {0}\n filen är offline</string>
+  <string name="CannotDeleteReadOnly">Kan ej ta bort en \"read-only\"-fil.\nVill du att MP ignorerar filmen?</string>
+  <string name="CastAndCrew">Rollbesättning och filmcrew</string>
+  <string name="CategoryEmptyDescription">Det finns för närvarande inga\nfilmer i den här kategorin.</string>
+  <string name="CategoryEmptyHeader">Kategorin är tom</string>
+  <string name="Certification">Åldersgräns</string>
+  <string name="ChangeView">Ändra vy</string>
+  <string name="CheckForMissingArtwork">Hitta omslag på internet</string>
+  <string name="Collection">Samling</string>
+  <string name="Collections">Samlingar</string>
+  <string name="Completed">Färdig</string>
+  <string name="CompletedFiles">Klara filer</string>
+  <string name="ContinueToNextPartBody">Vill du fortsätta med del {0}?</string>
+  <string name="ContinueToNextPartHeader">Fortsätt till nästa del?</string>
+  <string name="Cover">Omslag</string>
+  <string name="CoverFlowView">Coverflow-vy</string>
+  <string name="CycleCoverArt">Nästa omslag</string>
+  <string name="CycleView">Nästa Vy</string>
+  <!--D-->
+  <string name="DateAdded">Datum tillagd</string>
+  <string name="DateDay">dag</string>
+  <string name="DateDays">dagar</string>
+  <string name="DateMonth">månad</string>
+  <string name="DateMonths">månader</string>
+  <string name="DatePartAgo">{0} {1} sedan</string>
+  <string name="DatePartWithinDays">senaste {0} dagarna</string>
+  <string name="DatePartWithinMonths">senaste {0} månaderna</string>
+  <string name="DatePartWithinWeeks">senaste {0} veckorna</string>
+  <string name="DatePartWithinYears">senaste {0} åren</string>
+  <string name="DateWeek">vecka</string>
+  <string name="DateWeeks">veckor</string>
+  <string name="DateYear">år</string>
+  <string name="DateYears">år</string>
+  <string name="DecadeShort">{0}0-talet</string>
+  <string name="DeleteFailed">Kunde ej ta bort</string>
+  <string name="DeleteMovie">Ta bort film</string>
+  <string name="Director">Regissör</string>
+  <string name="Directors">Regissörer</string>
+  <string name="DownAbbreviation">(ner)</string>
+  <string name="DoYouWantToDelete">Vill du ta bort\n{0}\nfilen permanent?</string>
+  <!--E-->
+  <string name="EarlierThisYear">Tidigare i år</string>
+  <string name="Error">Fel</string>
+  <!--F-->
+  <string name="FailedMountingImage">Fel vid \"mount\" av DVD Image</string>
+  <string name="FilePath">Sökväg</string>
+  <string name="FileSize">Filstorlek</string>
+  <string name="FilesNeedingAttention">Filer som kräver åtgärd</string>
+  <string name="FilmstripView">Filmremsa Vy</string>
+  <string name="FilterBy">Sortera efter</string>
+  <string name="Friday">Fredag</string>
+  <string name="Future">Framtid</string>
+  <!--G-->
+  <string name="GlobalActions">Globala åtgärder</string>
+  <string name="Genre">Genre</string>
+  <string name="Genres">Genrer</string>
+  <!--I-->
+  <string name="IgnoreMovie">Hoppa över film</string>
+  <string name="ImdbId">IMDb Id</string>
+  <string name="Importer">Filmimportör</string>
+  <string name="ImporterDisabled">Importören är inaktiverad</string>
+  <string name="ImporterDisabledMessage">Importören har inaktiverats i\nMediaPortal GUI. \nVill du aktivera den?</string>
+  <string name="ImporterPending">Importören ({0} kräver åtgärd)</string>
+  <string name="InvalidPin">Fel PIN-kod!</string>
+  <string name="InvalidVideoDiscFormat">Fel på image-fil eller\ninställningarna i Daemon Tools.</string>
+  <!--L-->
+  <string name="Language">Språk</string>
+  <string name="LargeThumbnailView">Stor tumnagel-vy</string>
+  <string name="LastMonth">Senaste månaden</string>
+  <string name="LastWeek">Senaste veckan</string>
+  <string name="LastYear">Senaste året</string>
+  <string name="ListView">Lista-vy</string>
+  <string name="LockRestrictedMovies">Lås skyddade filmer</string>
+  <!--M-->
+  <string name="MarkAsUnwatched">Markera som ej sedd</string>
+  <string name="MarkAsWatched">Markera som sedd</string>
+  <string name="MediaInfo">MediaInfo</string>
+  <string name="MediaIsMissing">Platsen eller skivan där filmen du valt saknas!\nTyvärr har något gått fel...</string>
+  <string name="MediaNotAvailableBody">Platsen eller skivan där filmen du valt är\nför närvarande inte tillgänglig. Anslut enheten eller stoppa i skivan \nmärkt: {0}</string>
+  <string name="MediaNotAvailableHeader">Lagringsmedia saknas!</string>
+  <string name="Missing">Saknas</string>
+  <string name="MissingExternalPlayerExe">Startfilen för programmet saknas.\nKontrollera sökvägen för exe-filen.</string>
+  <string name="Monday">Måndag</string>
+  <string name="MonthName1">Januari</string>
+  <string name="MonthName2">Februari</string>
+  <string name="MonthName3">Mars</string>
+  <string name="MonthName4">April</string>
+  <string name="MonthName5">Maj</string>
+  <string name="MonthName6">Juni</string>
+  <string name="MonthName7">Juli</string>
+  <string name="MonthName8">Augusti</string>
+  <string name="MonthName9">September</string>
+  <string name="MonthName10">Oktober</string>
+  <string name="MonthName11">November</string>
+  <string name="MonthName12">December</string>
+  <string name="Movie">Film</string>
+  <string name="MovieDetails">Filmdetaljer</string>
+  <string name="MovieOptions">Filmval</string>
+  <string name="Movies">Filmer</string>
+  <!--N-->
+  <string name="NoImportPathsBody">Du har inte valt några\nmappar där du har filmer.\nGå till konfigurations-\nverktyget och gör detta!</string>
+  <string name="NoImportPathsHeading">Inga sökmappar!</string>
+  <!--O-->
+  <string name="Older">Äldre</string>
+  <!--P-->
+  <string name="ParentalControlsDisabled">Föräldraskydd är på.</string>
+  <string name="PinCodeHeader">Låser upp skyddat innehåll</string>
+  <string name="PinCodePrompt">Ange PIN-kod:</string>
+  <string name="PlaybackFailed">Uppspelning är inte möjligt eftersom \'{0}\'\nfiländelsen inte är med i listan över kompatibla format i MediaPortals inställningar.\nLägg till denna filändelse eller välj en extern uppspelare\noch försök igen.</string>
+  <string name="PlaybackFailedHeader">Kan ej spela upp</string>
+  <string name="PlayMovie">Spela film</string>
+  <string name="PossibleMatches">Möjliga träffar</string>
+  <string name="ProblemLoadingSkinFile">Fel vid laddning av skin-fil.</string>
+  <!--R-->
+  <string name="Rate">Betygsätt</string>
+  <string name="Rated">Betygsatt</string>
+  <string name="RateFiveStarFive">Mycket bra</string>
+  <string name="RateFiveStarFour">Bra</string>
+  <string name="RateFiveStarOne">Usel</string>
+  <string name="RateFiveStarThree">Godkänd</string>
+  <string name="RateFiveStarTwo">Dålig</string>
+  <string name="RateHeading">Betygsätt film</string>
+  <string name="RecentlyAddedMovies">Senaste filmerna</string>
+  <string name="ReleaseDate">Släpptes</string>
+  <string name="RemoteNumericAlphabet0">
+  </string>
+  <string name="RemoteNumericAlphabet1">
+  </string>
+  <string name="RemoteNumericAlphabet2">abcåä</string>
+  <string name="RemoteNumericAlphabet3">def</string>
+  <string name="RemoteNumericAlphabet4">ghi</string>
+  <string name="RemoteNumericAlphabet5">jkl</string>
+  <string name="RemoteNumericAlphabet6">mnoö</string>
+  <string name="RemoteNumericAlphabet7">pqrs</string>
+  <string name="RemoteNumericAlphabet8">tuv</string>
+  <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Återställ överhoppade filer </string>
+  <string name="ResumeFrom">Återuppta från:</string>
+  <string name="ResumeFromLast">Återuppta från senast?</string>
+  <string name="Retry">Försök igen</string>
+  <string name="Runtime">Speltid</string>
+  <string name="RuntimeHour">{0} timme</string>
+  <string name="RuntimeHours">{0} timmar</string>
+  <string name="RuntimeLong">{0} och {1}</string>
+  <string name="RuntimeLongExtended">{0}, {1} och {2}</string>
+  <string name="RuntimeMinute">{0} minut</string>
+  <string name="RuntimeMinutes">{0} minuter</string>
+  <string name="RuntimeSecond">{0} sekund</string>
+  <string name="RuntimeSeconds">{0} sekunder</string>
+  <string name="RuntimeShort">{0}:{1:00}</string>
+  <string name="RuntimeShortExtended">{0}t{1:00}m{2:00}s</string>
+  <!--S-->
+  <string name="Saturday">Lördag</string>
+  <string name="SendToImporter">Skicka till importören</string>
+  <string name="ScanForNewMovies">Starta sökning efter nya filmer</string>
+  <string name="Score">Betyg</string>
+  <string name="Search">Sök</string>
+  <string name="SearchBy">Sök efter</string>
+  <string name="SearchForMore">Sök efter fler träffar</string>
+  <string name="SearchNoResults">Inga träffar funna.</string>
+  <string name="SelectCorrectMovie">Välj rätt film</string>
+  <string name="SelectYourRating">Välj ditt betyg för {0}</string>
+  <string name="ShowOnlyUnwatchedMovies">Visa endast ej sedda filmer</string>
+  <string name="ShowWatchedAndUnwatchedMovies">Visa filmer oavsett om de är sedda eller ej</string>
+  <string name="SkinDoesNotSupportCategories">Detta skin stödjer ej kategorier.</string>
+  <string name="SkinDoesNotSupportImporter">Detta skin stödjer inte importören.</string>
+  <string name="SkinDoesNotSupportPinDialog">Detta skin stödjer ej PIN-kod.</string>
+  <string name="SkinDoesNotSupportRatingDialog">Detta skin stödjer ej betygsättning.</string>
+  <string name="SortBy">Sortera efter</string>
+  <string name="SortDirection">Sorteringsriktning</string>
+  <string name="StarRating">Betyg</string>
+  <string name="Sunday">Söndag</string>
+  <!--T-->
+  <string name="Theme">Tema</string>
+  <string name="ThisMonth">Denna månad</string>
+  <string name="ThisWeek">Denna vecka</string>
+  <string name="ThisYear">Detta år</string>
+  <string name="ThreeMonthsAgo">Tre månader sedan</string>
+  <string name="ThreeWeeksAgo">Tre veckor sedan</string>
+  <string name="ThumbnailView">Tumnagel-vy</string>
+  <string name="Thursday">Torsdag</string>
+  <string name="Title">Titel</string>
+  <string name="Today">Idag</string>
+  <string name="ToggleParentalLock">Föräldralås PÅ/AV</string>
+  <string name="Tuesday">Tisdag</string>
+  <string name="TwoMonthsAgo">Två månader sedan</string>
+  <string name="TwoWeeksAgo">Två veckor sedan</string>
+  <!--U-->
+  <string name="Unknown">Okänd</string>
+  <string name="UnlockRestrictedMovies">Lås upp skyddade filmer</string>
+  <string name="UnwatchedMovies">Ej sedda filmer</string>
+  <string name="UpAbbreviation">(upp)</string>
+  <string name="UpdateDetailsFromOnline">Updatera detaljer</string>
+  <string name="UpdateMovieDetailsBody">Du kommer uppdatera all information, \näven det du ändrat själv.\nVill du fortsätta?</string>
+  <string name="UpdateMovieDetailsHeader">Uppdatera filmens information</string>
+  <!--V-->
+  <string name="VirtualDriveHeader">\"Virtual drive\" inte redo</string>
+  <string name="VirtualDriveMessage">\"Virtual drive\" hann inte bli redo.\nFörsök igen!</string>
+  <string name="Votes">röster</string>
+  <string name="ViewMovieDetails">Se filmdetaljer</string>
+  <!--W-->
+  <string name="Wednesday">Onsdag</string>
+  <string name="Writer">Manus</string>
+  <string name="Writers">Manus</string>
+  <!--Y-->
+  <string name="Year">År</string>
+  <string name="Yesterday">Igår</string>
+</resources>
