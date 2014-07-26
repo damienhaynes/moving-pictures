@@ -3,7 +3,7 @@
 	<!-- These details are for display purposes only. -->
 	<name>filmtipset.se</name>
 	<author>vuego</author>
-	<description>This script pulls data from www.nyheter24.se/filmtipset and score + certification + language + tagline from imdb.com.</description>
+	<description>This script pulls data from www.nyheter24.se/filmtipset and score + certification + language + tagline + studios + keywords from imdb.com.</description>
 
 	<!-- 
 	These fields uniquely identify the script. The ID should never 
@@ -14,8 +14,8 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="5" point="5"/>
-	<published month="08" day="20" year="2011"/>
+	<version major="1" minor="6" point="0"/>
+	<published month="07" day="11" year="2014"/>
 
 	<!--
 	These fields are used for categorization purposes. Seperate multiple 
@@ -149,7 +149,7 @@
 
 	<action name="get_details">
 		<!-- if we have a site id we can continue -->
-		<!-- use IMDbScore value to enable IMDb score instead of filmtipset's grade -->
+			<!-- use IMDbScore value to enable IMDb score instead of filmtipset's grade -->
 			<set name="IMDbScore" value="true" />
 
 			<retrieve name="details_page" url="${movie.details_url}"/>
@@ -199,11 +199,6 @@
 				<tr><td colspan="2" valign="top" align="left"><h2>Om.*?</h2>(.*?)</td></tr>
 				]]>
 			</set>
-			<set name="rx_aka">
-				<![CDATA[
-				<b>Originaltitel:</b></td><td class="list" align="left" valign="top"> (.*?)</td>
-				]]>
-			</set>
 			<set name="rx_imdb">
 				<![CDATA[
 				http://www.imdb.com/title/(tt\d+)/
@@ -216,15 +211,31 @@
 			</set>
 			<set name="rx_language">
 				<![CDATA[
-				<a\shref=./language/[^/]+/?">\s*(?<movieLanguage>[^<]+)</a>
+				<a[^<]*?href=./language/[^>]+>(?<movieLanguage>[^<]+)</a>
 				]]>
 			</set>
-			<set name="rx_imdbscore">
+			<set name="rx_imdb_votes">
 				<![CDATA[
-				<span[^>]*itemprop="ratingValue"[^>]*>(\d\.\d)</span>
+				([\d\s]+) IMDb users have given a weighted average vote of (\d,\d)/10
 				]]>
 			</set>
-			
+			<set name="rx_studios_block">
+				<![CDATA[
+				<h4 class="inline">Production Co:</h4>\s*(?<movieStudios>(?:[,]*\s*<span itemprop="creator"[^>]+>\s*)?(?:[^<]*<a[^>]+href="[^"]+"[^>]*>(?:<span[^>]+>)?[^<]+(?:</span></a></span>|</a>)))*
+				]]>
+			</set>
+			<set name="rx_studios">
+				<![CDATA[
+				<a[^>]+href="[^"]+"[^>]*>(?:<span[^>]+>)?(?<movieStudios>[^<]+)(?:</span>)?</a>
+				]]>
+			</set>
+
+			<set name="rx_plotkeywords">
+				<![CDATA[
+				<h4[^>]+>Plot Keywords:</h4>\s*(?<moviePlotKeywords>.+?)(?:&nbsp;|<nobr>|See more|</div>)
+				]]>
+			</set>
+
 			<!-- Directors -->
 			<parse name="directors_block" input="${details_page}" regex='${rx_directors_block}'/>
 			<parse name='directors' input='${directors_block}' regex='${rx_directors_writers_actors}'/>
@@ -251,7 +262,7 @@
 
 			<!-- Genres -->
 			<parse name="genres_block" input="${details_page}" regex='${rx_genre_block}'/>
-			<parse name='genres' input='${genres_block}' regex='${rx_genre}'/>
+			<parse name='genres' input='${genres_block[1]}' regex='${rx_genre}'/>
 			<set name='movie.genres' value=''/>
 			<loop name='currGenre' on='genres'>
 				<set name='movie.genres' value='${movie.genres}|${currGenre[0]:htmldecode}'/>
@@ -289,11 +300,26 @@
 			<parse name="tagline" input="${imdb_page}" regex='${rx_tagline}'/>
 			<set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
 
-			<!-- Score IMDb -->
+			<!-- Score and Popularity -->
 			<if test="${IMDbScore}=true">
-				<parse name="score" input="${imdb_page}" regex='${rx_imdbscore}'/>
-				<set name='movie.score' value='${score[0][0]:htmldecode}'/>
+				<parse name="imdb_votes" input="${imdb_page}" regex="${rx_imdb_votes}" />
+				<set name="movie.score" value="${imdb_votes[0][1]:htmldecode}" />
+				<replace name="imdb_votes_clean" input="${imdb_votes[0][0]:htmldecode}" pattern=' ' with='' />
+				<set name="movie.popularity" value="${imdb_votes_clean}" />
 			</if>
+
+			<!-- Studios -->
+			<parse name="studios_block" input="${imdb_page}" regex="${rx_studios_block}" />
+			<parse name="studios" input="${studios_block}" regex="${rx_studios}" />
+			<set name="movie.studios" value="|" />
+			<loop name="currStudio" on="studios" limit="10">
+				<set name="movie.studios" value="${movie.studios}${currStudio[0]:htmldecode}|" />
+			</loop>
+
+			<!-- Plot Keywords -->
+			<parse name="plotkeywords" input="${imdb_page}" regex="${rx_plotkeywords}" />
+			<set name="plotkeywords_clean" value="|${plotkeywords[0][0]:striptags}|" />
+			<replace name="movie.plotkeywords" input="${plotkeywords_clean:htmldecode}" pattern="\s*[|]+\s*" with="|" />
 
 	</action>
 
