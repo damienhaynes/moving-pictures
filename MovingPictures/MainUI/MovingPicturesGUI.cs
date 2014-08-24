@@ -1802,11 +1802,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // (re-)publish movie details if the movie is still the same
             if (browser.SelectedMovie == movie)
                 PublishMovieDetails(movie);
-
-            if (newWatchedCount == 0)
-                MovingPicturesCore.Follwit.UnwatchMovie(movie);
-            else
-                MovingPicturesCore.Follwit.WatchMovie(movie, false);
         }
 
         /// <summary>

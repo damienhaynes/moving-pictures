@@ -632,21 +632,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
             #endregion
 
-            #region Upgrades required for 1.1.2
-
-            if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.1.2.1216")) {
-                MovingPicturesCore.Settings.FollwitURLBase = "http://follw.it/";
-                MovingPicturesCore.Settings.FollwitBatchSize = 30;
-            }
-
-            if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.1.2")) {
-                // force a full follw.it synchronization for follw.it ID changes, watched status changes and ratings changes as these are new features
-                if (MovingPicturesCore.Settings.FollwitEnabled)
-                    MovingPicturesCore.Follwit.ProcessTasks(DateTime.MinValue);
-            }
-
-            #endregion
-
             #region Upgrades required for 1.3.0
 
             if (MovingPicturesCore.GetDBVersionNumber() < new Version("1.3.0")) {

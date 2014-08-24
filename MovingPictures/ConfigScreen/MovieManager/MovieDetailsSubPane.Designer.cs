@@ -209,8 +209,6 @@
             fieldProperty37.Visible = true;
             fieldProperty37.ReadOnly = true;
             fieldProperty38.ColumnWidth = null;
-            fieldProperty38.DisplayName = "Follw.it ID";
-            fieldProperty38.FieldName = "FitId";
             fieldProperty38.Visible = true;
             fieldProperty38.ReadOnly = true;
             fieldProperty39.ColumnWidth = null;
