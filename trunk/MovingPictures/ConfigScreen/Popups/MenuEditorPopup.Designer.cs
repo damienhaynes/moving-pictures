@@ -218,8 +218,6 @@
             fieldProperty24.FieldName = "OriginalDirectoryName";
             fieldProperty24.Visible = false;
             fieldProperty25.ColumnWidth = null;
-            fieldProperty25.DisplayName = "Follw.it Id";
-            fieldProperty25.FieldName = "FitId";
             fieldProperty25.Visible = false;
             fieldProperty26.ColumnWidth = null;
             fieldProperty26.DisplayName = "Studios";
@@ -341,8 +339,6 @@
             fieldProperty51.DisplayName = "Original Directory Name";
             fieldProperty51.FieldName = "OriginalDirectoryName";
             fieldProperty52.ColumnWidth = null;
-            fieldProperty52.DisplayName = "Follw.it Id";
-            fieldProperty52.FieldName = "FitId";
             fieldProperty53.ColumnWidth = null;
             fieldProperty53.DisplayName = "Studios";
             fieldProperty53.FieldName = "Studios";

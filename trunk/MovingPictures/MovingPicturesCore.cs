@@ -151,19 +151,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             }
         }
 
-        // The Social object that should be used by all components of the plugin.
-        public static FollwitConnector Follwit {
-            get {
-                lock (socialLock) {
-                    if (_social == null) {
-                        _social = new FollwitConnector();
-                    }
-                    return _social;
-                }
-
-            }
-        } private static FollwitConnector _social = null;
-
         #endregion
 
         #region Public Methods
@@ -181,8 +168,6 @@ namespace MediaPortal.Plugins.MovingPictures {
             Microsoft.Win32.SystemEvents.PowerModeChanged += new Microsoft.Win32.PowerModeChangedEventHandler(onSystemPowerModeChanged);
 
             DatabaseMaintenanceManager.MaintenanceProgress += new ProgressDelegate(DatabaseMaintenanceManager_MaintenanceProgress);
-
-            _social = new MovingPictures.FollwitConnector();
 
             // setup the data structures sotring our list of startup actions
             // we use this setup so we can easily add new tasks without having to 

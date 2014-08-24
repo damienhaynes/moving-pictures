@@ -121,7 +121,6 @@
   <ItemGroup>
     <Compile Include="BackgroundProcesses\FileSyncProcess.cs" />
     <Compile Include="BackgroundProcesses\MediaInfoUpdateProcess.cs" />
-    <Compile Include="BackgroundProcesses\FollwitBackgroundProcess.cs" />
     <Compile Include="BackgroundProcesses\UpdateArtworkProcess.cs" />
     <Compile Include="ConfigScreen\AboutPane.cs">
       <SubType>UserControl</SubType>
@@ -311,12 +310,6 @@
     <Compile Include="ConfigScreen\Popups\TranslationPopup.Designer.cs">
       <DependentUpon>TranslationPopup.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConfigScreen\FollwitPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ConfigScreen\FollwitPanel.Designer.cs">
-      <DependentUpon>FollwitPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="ConfigScreen\SplashPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -430,7 +423,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="FollwitConnector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\MediaPortal.Plugins.MoviesPlugin.Database.MoviesPluginTables.DBUser.datasource" />
@@ -547,9 +539,6 @@
     <EmbeddedResource Include="ConfigScreen\Popups\TranslationPopup.resx">
       <DependentUpon>TranslationPopup.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConfigScreen\FollwitPanel.resx">
-      <DependentUpon>FollwitPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigScreen\SplashPane.resx">
       <DependentUpon>SplashPane.cs</DependentUpon>
@@ -693,10 +682,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\External\FollwitApi\FollwitApi.csproj">
-      <Project>{75EBA361-8137-4107-A5B5-753CE959983B}</Project>
-      <Name>FollwitApi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Cornerstone.MP\Cornerstone.MP.csproj">
       <Project>{77C78161-3206-45FD-A419-60218F3354C0}</Project>
       <Name>Cornerstone.MP</Name>

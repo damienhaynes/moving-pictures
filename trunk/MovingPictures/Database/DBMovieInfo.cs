@@ -436,16 +436,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         }
 
-        [DBField(FieldName="mpsid", Filterable= false)]
-        public int? FitId {
-            get { return _fitId; }
-
-            set {
-                _fitId = value;
-                commitNeeded = true;
-            }
-        } private int? _fitId;
-
         #endregion
 
         #region General Management Methods
@@ -841,16 +831,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
 
         public static DBMovieInfo Get(int id) {
             return MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(id);
-        }
-
-        public static DBMovieInfo GetByFitId(int id) {
-            ICriteria fitIdFilter = new BaseCriteria(DBField.GetField(typeof(DBMovieInfo), "FitId"), "=", id);
-            List<DBMovieInfo> foundMovies = MovingPicturesCore.DatabaseManager.Get<DBMovieInfo>(fitIdFilter);
-
-            if (foundMovies.Count > 0)
-                return foundMovies[0];
-
-            return null;
         }
 
         public static List<DBMovieInfo> GetAll() {

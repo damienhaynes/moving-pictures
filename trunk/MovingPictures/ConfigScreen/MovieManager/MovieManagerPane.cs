@@ -801,7 +801,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
         private void unwatchedToggleButton_Click(object sender, EventArgs e) {
             foreach (ListViewItem currItem in movieListBox.SelectedItems) {
                 ((DBMovieInfo)currItem.Tag).UserSettings[0].WatchedCount = 0;
-                MovingPicturesCore.Follwit.UnwatchMovie((DBMovieInfo)currItem.Tag);
             }
 
             updateMoviePanel();
@@ -811,7 +810,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             foreach (ListViewItem currItem in movieListBox.SelectedItems)
                 if (((DBMovieInfo)currItem.Tag).UserSettings[0].WatchedCount == 0) {
                     ((DBMovieInfo)currItem.Tag).UserSettings[0].WatchedCount = 1;
-                    MovingPicturesCore.Follwit.WatchMovie((DBMovieInfo)currItem.Tag, false);
                 }
 
             updateMoviePanel();
