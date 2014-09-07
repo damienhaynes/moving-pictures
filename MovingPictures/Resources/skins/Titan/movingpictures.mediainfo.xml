@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<window>
+	<controls>
+	<!--            :: LISTVIEW ::            -->
+	<control Style="MediaLogos">
+  	<description>Video resolution</description>
+    <type>image</type>
+    <id>0</id>
+		<posX>660</posX>
+		<posY>890</posY>
+    <width>92</width>
+    <height>60</height>
+    <texture>Logos\resolution\#MovingPictures.LocalMedia.videoresolution.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+ 		<visible>facadeview.list+Control.IsVisible(50)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+  </control>
+	<control Style="MediaLogos">
+  	<description>Video codec</description>
+    <type>image</type>
+    <id>0</id>
+		<posX>740</posX>
+		<posY>890</posY>
+    <width>92</width>
+    <height>60</height>
+    <texture>Logos\video\#MovingPictures.LocalMedia.videocodec.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+ 		<visible>facadeview.list+Control.IsVisible(50)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+  </control>
+	<control Style="MediaLogos">
+  	<description>Audio codec</description>
+    <type>image</type>
+    <id>0</id>
+		<posX>825</posX>
+		<posY>890</posY>
+    <width>92</width>
+    <height>60</height>
+    <texture>Logos\audio\#MovingPictures.LocalMedia.audiocodec.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+ 		<visible>facadeview.list+Control.IsVisible(50)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+  </control>
+	<control Style="MediaLogos">
+  	<description>Audio channels</description>
+    <type>image</type>
+    <id>0</id>
+		<posX>905</posX>
+		<posY>890</posY>
+    <width>92</width>
+    <height>60</height>
+    <texture>Logos\audio\#MovingPictures.LocalMedia.audiochannels.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+ 		<visible>facadeview.list+Control.IsVisible(50)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+  </control>
+	<control Style="MediaLogos">
+  	<description>Aspect ratio</description>
+    <type>image</type>
+    <id>0</id>
+		<posX>975</posX>
+		<posY>890</posY>
+    <width>92</width>
+    <height>60</height>
+    <texture>Logos\aspectratio\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+ 		<visible>facadeview.list+Control.IsVisible(50)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+  </control>
+	<control Style="MediaLogos">
+  	<description>Subtitle</description>
+		<type>image</type>
+		<id>0</id>
+		<posX>1065</posX>
+		<posY>900</posY>
+		<width>39</width>
+		<height>40</height>
+		<texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
+ 		<visible>facadeview.list+Control.IsVisible(50)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+	</control>
+	<!--            :: THUMBVIEW ::            -->
+	<control Style="MediaLogos">
+  	<description>Video resolution</description>
+    <type>image</type>
+    <id>0</id>
+    <posX>209</posX>
+    <posY>880</posY>
+    <width>92</width>
+    <height>60</height>
+    <texture>Logos\resolution\#MovingPictures.LocalMedia.videoresolution.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+ 		<visible>[facadeview.smallicons | facadeview.largeicons]+Control.IsVisible(50)+string.equals(#skin.layout.movingpictures.thumbview,default)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+  </control>
+	<control Style="MediaLogos">
+  	<description>Video codec</description>
+    <type>image</type>
+    <id>0</id>
+    <posX>289</posX>
+    <posY>880</posY>
+    <width>92</width>
+    <height>60</height>
+    <texture>Logos\video\#MovingPictures.LocalMedia.videocodec.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+ 		<visible>[facadeview.smallicons | facadeview.largeicons]+Control.IsVisible(50)+string.equals(#skin.layout.movingpictures.thumbview,default)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+  </control>
+	<control Style="MediaLogos">
+  	<description>Audio codec</description>
+    <type>image</type>
+    <id>0</id>
+   	<posX>376</posX>
+    <posY>880</posY>
+    <width>92</width>
+    <height>60</height>
+    <texture>Logos\audio\#MovingPictures.LocalMedia.audiocodec.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+ 		<visible>[facadeview.smallicons | facadeview.largeicons]+Control.IsVisible(50)+string.equals(#skin.layout.movingpictures.thumbview,default)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+  </control>
+	<control Style="MediaLogos">
+  	<description>Audio channels</description>
+    <type>image</type>
+    <id>0</id>
+   	<posX>456</posX>
+    <posY>880</posY>
+    <width>92</width>
+    <height>60</height>
+    <texture>Logos\audio\#MovingPictures.LocalMedia.audiochannels.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+ 		<visible>[facadeview.smallicons | facadeview.largeicons]+Control.IsVisible(50)+string.equals(#skin.layout.movingpictures.thumbview,default)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+  </control>
+	<control Style="MediaLogos">
+  	<description>Aspect ratio</description>
+    <type>image</type>
+    <id>0</id>
+   	<posX>526</posX>
+    <posY>880</posY>
+    <width>92</width>
+    <height>60</height>
+    <texture>Logos\aspectratio\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+ 		<visible>[facadeview.smallicons | facadeview.largeicons]+Control.IsVisible(50)+string.equals(#skin.layout.movingpictures.thumbview,default)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+  </control>
+	<control Style="MediaLogos">
+  	<description>Subtitle</description>
+		<type>image</type>
+		<id>0</id>
+		<posX>616</posX>
+		<posY>894</posY>
+		<width>39</width>
+		<height>40</height>
+		<texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
+ 		<visible>[facadeview.smallicons | facadeview.largeicons]+Control.IsVisible(50)+string.equals(#skin.layout.movingpictures.thumbview,default)</visible>
+	  <animation effect="fade" time="250">WindowOpen</animation>
+	  <animation effect="fade" time="250">WindowClose</animation>
+	</control>
+	</controls>
+</window>
