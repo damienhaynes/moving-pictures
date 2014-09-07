@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<window>
+	<controls>
+
+	<control Style="MediaLogos">
+  	<description>Video resolution</description>
+    <type>image</type>
+    <id>0</id>
+		<posX>1305</posX>
+		<posY>886</posY>
+    <width>99</width>
+    <height>65</height>
+    <texture>Logos\resolution\#MovingPictures.LocalMedia.videoresolution.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+		<visible>!Control.IsVisible(50)+ !Control.IsVisible(51) + !Control.HasFocus(10001)+ !Control.HasFocus(10002) + !Control.HasFocus(10003)</visible>
+ 		<animation effect="fade" time="250">Visible</animation>
+		<animation effect="fade" time="0">WindowClose</animation>
+  </control>
+	
+	<control Style="MediaLogos">
+  	<description>Video codec</description>
+    <type>image</type>
+    <id>0</id>
+		<posX>1395</posX>
+		<posY>886</posY>
+    <width>99</width>
+    <height>65</height>
+    <texture>Logos\video\#MovingPictures.LocalMedia.videocodec.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+		<visible>!Control.IsVisible(50)+ !Control.IsVisible(51) + !Control.HasFocus(10001)+ !Control.HasFocus(10002) + !Control.HasFocus(10003)</visible>
+ 		<animation effect="fade" time="250">Visible</animation>
+		<animation effect="fade" time="0">WindowClose</animation>
+  </control>
+	
+	<control Style="MediaLogos">
+  	<description>Audio codec</description>
+    <type>image</type>
+    <id>0</id>
+		<posX>1495</posX>
+		<posY>886</posY>
+    <width>99</width>
+    <height>65</height>
+    <texture>Logos\audio\#MovingPictures.LocalMedia.audiocodec.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+		<visible>!Control.IsVisible(50)+ !Control.IsVisible(51) + !Control.HasFocus(10001)+ !Control.HasFocus(10002) + !Control.HasFocus(10003)</visible>
+ 		<animation effect="fade" time="250">Visible</animation>
+		<animation effect="fade" time="0">WindowClose</animation>
+  </control>
+  
+	<control Style="MediaLogos">
+  	<description>Audio channels</description>
+    <type>image</type>
+    <id>0</id>
+		<posX>1585</posX>
+		<posY>886</posY>
+    <width>99</width>
+    <height>65</height>
+    <texture>Logos\audio\#MovingPictures.LocalMedia.audiochannels.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+		<visible>!Control.IsVisible(50)+ !Control.IsVisible(51) + !Control.HasFocus(10001)+ !Control.HasFocus(10002) + !Control.HasFocus(10003)</visible>
+ 		<animation effect="fade" time="250">Visible</animation>
+		<animation effect="fade" time="0">WindowClose</animation>
+  </control>
+  
+	<control Style="MediaLogos">
+  	<description>Aspect ratio</description>
+    <type>image</type>
+    <id>0</id>
+		<posX>1665</posX>
+		<posY>886</posY>
+    <width>99</width>
+    <height>65</height>
+    <texture>Logos\aspectratio\#MovingPictures.LocalMedia.videoaspectratio.png</texture>
+    <keepaspectratio>yes</keepaspectratio>
+		<visible>!Control.IsVisible(50)+ !Control.IsVisible(51) + !Control.HasFocus(10001)+ !Control.HasFocus(10002) + !Control.HasFocus(10003)</visible>
+ 		<animation effect="fade" time="250">Visible</animation>
+		<animation effect="fade" time="0">WindowClose</animation>
+  </control>
+
+	<!-- Subtitle -->
+	
+	<control Style="MediaLogos">
+		<type>image</type>
+		<id>0</id>
+		<posX>1775</posX>
+		<posY>899</posY>
+		<width>36</width>
+		<height>37</height>
+		<texture>Logos\#MovingPictures.LocalMedia.Subtitles.png</texture>
+		<visible>!Control.IsVisible(50)+ !Control.IsVisible(51) + !Control.HasFocus(10001)+ !Control.HasFocus(10002) + !Control.HasFocus(10003)</visible>
+ 		<animation effect="fade" time="250">Visible</animation>
+		<animation effect="fade" time="0">WindowClose</animation>
+	</control>
+	
+	</controls>
+</window>

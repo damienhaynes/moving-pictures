@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<window>
+  <id>28380</id>
+  <defaultcontrol>10</defaultcontrol>
+  <allowoverlay>yes</allowoverlay>
+  <controls>
+  	<import>common.dialog.xml</import>
+	  <control>
+    	<description>group element</description>
+      <type>group</type>
+			<animation effect="fade" time="250">WindowOpen</animation>
+			<animation effect="fade" time="0">WindowClose</animation>
+			<animation effect="slide" start="0,200" end="0,0" tween="quadratic" easing="in" time="150" delay="0">WindowOpen</animation>    
+			<control>
+				<description>1 Star</description>
+				<type>checkmark</type>
+				<id>100</id>
+				<posX>830</posX>
+				<posY>766</posY>
+				<width>53</width>
+				<height>41</height>
+				<textureCheckmark>starblue_rating.png</textureCheckmark>
+				<textureCheckmarkNoFocus>starblack_rating.png</textureCheckmarkNoFocus>
+			</control>
+			<control>
+				<description>2 Star</description>
+				<type>checkmark</type>
+				<id>101</id>
+				<posX>880</posX>
+				<posY>766</posY>
+				<width>53</width>
+				<height>41</height>
+				<textureCheckmark>starblue_rating.png</textureCheckmark>
+				<textureCheckmarkNoFocus>starblack_rating.png</textureCheckmarkNoFocus>
+			</control>
+			<control>
+				<description>3 Star</description>
+				<type>checkmark</type>
+				<id>102</id>
+				<posX>930</posX>
+				<posY>766</posY>
+				<width>53</width>
+				<height>41</height>
+				<textureCheckmark>starblue_rating.png</textureCheckmark>
+				<textureCheckmarkNoFocus>starblack_rating.png</textureCheckmarkNoFocus>
+			</control>
+			<control>
+				<description>4 Star</description>
+				<type>checkmark</type>
+				<id>103</id>
+				<posX>980</posX>
+				<posY>766</posY>
+				<width>53</width>
+				<height>41</height>
+				<textureCheckmark>starblue_rating.png</textureCheckmark>
+				<textureCheckmarkNoFocus>starblack_rating.png</textureCheckmarkNoFocus>
+			</control>
+			<control>
+				<description>5 Star</description>
+				<type>checkmark</type>
+				<id>104</id>
+				<posX>1030</posX>
+				<posY>766</posY>
+				<width>53</width>
+				<height>41</height>
+				<textureCheckmark>starblue_rating.png</textureCheckmark>
+				<textureCheckmarkNoFocus>starblack_rating.png</textureCheckmarkNoFocus>
+			</control>
+			<control>
+				<id>7</id>
+				<description>Selected Rating</description>
+				<type>label</type>
+				<posX>575</posX>
+				<posY>866</posY>
+				<width>768</width>
+				<align>center</align>
+				<textcolor>ff393939</textcolor>
+			</control>
+		</control>
+  </controls>
+</window>
