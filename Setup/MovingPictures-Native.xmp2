@@ -1302,6 +1302,7 @@ Click Next to continue or Cancel to exit Setup.</Value>
         <IncludedGroups>
           <string>DefaultSkin</string>
           <string>DefaultWideSkin</string>
+          <string>TitanSkin</string>
           <string>Languages</string>
         </IncludedGroups>
         <PanelName>Tree View Selector</PanelName>
