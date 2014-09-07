@@ -396,11 +396,11 @@ This file should contain the details view
     <control Style="InfoLabel">
       <description>Score</description>
       <type>label</type>
-      <label>#MovingPictures.SelectedMovie.score.localized</label>
+      <label>#MovingPictures.SelectedMovie.score.localized (#MovingPictures.SelectedMovie.popularity.localized #MovingPictures.Translation.Votes.Label)</label>
       <id>0</id>
       <posX>1348</posX>
       <posY>423</posY>
-      <width>240</width>
+      <width>480</width>
       <align>left</align>
       <font>fontB12</font>
       <textcolor>FF00b7ff</textcolor>
