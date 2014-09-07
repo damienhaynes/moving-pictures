@@ -835,6 +835,401 @@
           <Items />
         </Files>
       </GroupItem>
+      <GroupItem Name="TitanSkin">
+        <ParentGroup />
+        <DisplayName>Titan Skin</DisplayName>
+        <DefaulChecked>true</DefaulChecked>
+        <Description>Titan Skin (16:9 / 1080P) for MovingPictures. Originally part of TitanExtended,</Description>
+        <Files>
+          <Items>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\dialogGeneralRating.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{5103f25e-26b4-41d1-9c58-b52e480f7aa9}-dialogGeneralRating.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\dialogGeneralRating.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\DialogPinCode.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{2d08c709-a243-4002-ba5d-25a8ce01ada4}-DialogPinCode.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\DialogPinCode.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.background.thumbs.noinfo.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{5edc1b40-c861-4725-8e8d-89da3909c243}-movingpictures.background.thumbs.noinfo.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.background.thumbs.noinfo.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.background.thumbs.XL.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{c046fe0a-57b0-41e0-be64-8e00a2998d76}-movingpictures.background.thumbs.XL.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.background.thumbs.XL.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.background.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{9600c6ee-c845-4eb4-8776-23521471c79b}-movingpictures.background.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.background.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.details.lite.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f3fa7a75-ae32-4aef-ae55-d3577c2b0c7c}-movingpictures.details.lite.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.details.lite.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.details.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{8ff6f2e4-0a6b-4b75-8c06-dfd5b44d69f1}-movingpictures.details.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.details.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.dummy.lite.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{1601039d-3129-4925-a738-23a7dd4060da}-movingpictures.dummy.lite.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.dummy.lite.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.dummy.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b8847e4a-9f81-45b4-8bd7-3743b7e74451}-movingpictures.dummy.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.dummy.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.facade.thumbs.noinfo.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{57d795d7-004f-4b29-9aa9-de66399f58ff}-movingpictures.facade.thumbs.noinfo.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.facade.thumbs.noinfo.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.facade.thumbs.XL.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{aaf069c1-3d82-41a9-bafe-fd559f74957a}-movingpictures.facade.thumbs.XL.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.facade.thumbs.XL.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.facade.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{aaff2234-f03d-488a-bc89-44da7d912f8a}-movingpictures.facade.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.facade.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.hiddenmenu.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{cef549c2-1698-4458-ad98-4017d93d0997}-movingpictures.hiddenmenu.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.hiddenmenu.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.importer.hiddenmenu.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{cd696ee5-5e46-43e7-a001-a7ed09787794}-movingpictures.importer.hiddenmenu.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.importer.hiddenmenu.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.importer.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{78c5f07d-42ab-46f5-b781-1a23299cb495}-movingpictures.importer.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.importer.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.mediainfo.details.lite.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{fece4531-3845-477e-b106-a245dcc4b02e}-movingpictures.mediainfo.details.lite.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.mediainfo.details.lite.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.mediainfo.details.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{45149466-58cb-49f5-b439-7e4eb911d5d0}-movingpictures.mediainfo.details.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.mediainfo.details.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.mediainfo.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{4a4a112f-a329-4b0e-9e08-72041683e2a6}-movingpictures.mediainfo.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.mediainfo.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.views.thumbs.noinfo.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{6ac2e3b8-0620-46f9-8dbb-d29aa5b68580}-movingpictures.views.thumbs.noinfo.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.views.thumbs.noinfo.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.views.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{8704d10c-4dc7-4296-b3b0-180756a50f75}-movingpictures.views.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.views.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{85c8cf38-4abf-4fce-95ed-2562a8e561cf}-movingpictures.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\movingpictures.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\references.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{9b96b3eb-ab2b-430a-a683-805d0795a0c4}-references.xml</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\references.xml</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\circle-empty.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{8e4d5394-b6f1-416d-b724-328a48c1273c}-circle-empty.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\circle-empty.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\circle-full.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{402723b2-44a3-4848-869f-2a0f43796a80}-circle-full.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\circle-full.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\fanart_overlay_top.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0ae67976-05ab-4f44-bbc9-eed2f8ff7989}-fanart_overlay_top.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\fanart_overlay_top.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\hover_moving pictures.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0ed1e040-8f61-4e5b-91ed-478900250727}-hover_moving pictures.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\hover_moving pictures.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_play_focus.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{ff5c39bb-895c-48f4-8dc4-07f86e156aed}-movie_details_play_focus.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\movie_details_play_focus.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_play_nofocus.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{21d049e9-538c-4825-afb0-fef930e958c7}-movie_details_play_nofocus.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\movie_details_play_nofocus.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_sub_focus.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{fe1d8057-7ead-4003-95ea-c9494bf965bc}-movie_details_sub_focus.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\movie_details_sub_focus.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_sub_nofocus.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e7feb15a-3036-4cf5-aa62-f8b936c0df6c}-movie_details_sub_nofocus.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\movie_details_sub_nofocus.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_trailer_focus.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{cd7d7324-59f9-4a39-be0a-5f6e25bd40ed}-movie_details_trailer_focus.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\movie_details_trailer_focus.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_trailer_nofocus.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e127155b-6063-4dfc-b347-c22a7956a03d}-movie_details_trailer_nofocus.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\movie_details_trailer_nofocus.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movingpictures_done.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{90025785-481b-45d0-ae24-aa1a9f1cb3b3}-movingpictures_done.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\movingpictures_done.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movingpictures_importer_list_focus.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{c601d02c-d8b6-4a4a-aa25-d2f270ebe594}-movingpictures_importer_list_focus.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\movingpictures_importer_list_focus.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movingpictures_needinput.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{51661e03-8d61-4795-bb36-7855c2d47131}-movingpictures_needinput.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\movingpictures_needinput.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movingpictures_processing.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{4ad9fefb-c141-4db0-b13a-9ddec0fffbfb}-movingpictures_processing.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\movingpictures_processing.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\panel_movingpictures_importer.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{59344610-9c2e-4bbc-88d8-93c27a84bcef}-panel_movingpictures_importer.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\panel_movingpictures_importer.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\parental_lock.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{1d900f36-e546-45f1-a256-8572b009ed75}-parental_lock.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\parental_lock.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\starblue_rating.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e9f67d2a-2e4c-413b-83a2-83e8cd08c35e}-starblue_rating.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\starblue_rating.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\-10.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{77c10f38-bb21-41c5-9b2f-3b5c7d1eccc8}--10.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\-10.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\-12.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{53977bbe-0b88-4c4a-8d7d-c240bbfb5e0a}--12.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\-12.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\-16.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b03830c5-d7b4-4213-8c9a-e5aad998c19f}--16.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\-16.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\-18.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{c0d6f5ab-b673-419a-8361-7391023da6f0}--18.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\-18.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\M.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{955df868-89f6-4fa1-82cc-0fc6c63f5c57}-M.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\M.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\MA.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{51ab1331-6548-4100-b335-f340c9f9bbed}-MA.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\MA.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\MA15+.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{5ab84dd0-0e64-40f2-acb6-25f4439e2031}-MA15+.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\MA15+.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\NR.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a3b10840-1311-41ba-a68c-8cab6832f453}-NR.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\NR.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R13.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{31ab2e95-eda6-47a3-8355-060e86580ce8}-R13.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\R13.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R15+.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{cc04f293-5573-4acc-bdf7-72d6a971fb2c}-R15+.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\R15+.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R15.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d8d872d9-1f11-4b16-8d2b-45af2525c14a}-R15.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\R15.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R16.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d0dd86fb-37aa-481e-8a2b-cd4b2e0a89fe}-R16.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\R16.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R18+.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{4d72f86e-7292-4220-9fea-97e44c66f941}-R18+.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\R18+.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R18.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{fc4a3299-97e9-4ffa-b085-2105a9c62cbc}-R18.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\R18.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\U.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b82be576-6bff-4d21-847e-c0986291315c}-U.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\U.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\X.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{becba7ca-a47a-4de6-9732-c023890dfe54}-X.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\certification\X.png</DestinationFilename>
+            </FileItem>
+          </Items>
+        </Files>
+      </GroupItem>
     </Items>
   </Groups>
   <Sections>
@@ -1134,6 +1529,25 @@ public class Script
         <Message>This version of MovingPictures requires MediaPortal v1.7 or above.</Message>
         <Name>MediaPortal</Name>
       </DependencyItem>
+      <DependencyItem>
+        <Type>Skin</Type>
+        <Id />
+        <MinVersion>
+          <Major>1</Major>
+          <Minor>4</Minor>
+          <Build>0</Build>
+          <Revision>0</Revision>
+        </MinVersion>
+        <MaxVersion>
+          <Major>1</Major>
+          <Minor>4</Minor>
+          <Build>0</Build>
+          <Revision>0</Revision>
+        </MaxVersion>
+        <WarnOnly>false</WarnOnly>
+        <Message>requires Skin version 1.4.0.0 to 1.4.0.0.</Message>
+        <Name>Skin</Name>
+      </DependencyItem>
     </Items>
   </Dependencies>
   <PluginDependencies>
@@ -1175,24 +1589,13 @@ public class Script
     <UpdateUrl>http://moving-pictures.googlecode.com/svn/trunk/Setup/update.xml</UpdateUrl>
     <Version>
       <Major>1</Major>
-      <Minor>7</Minor>
-      <Build>3</Build>
-      <Revision>1594</Revision>
+      <Minor>8</Minor>
+      <Build>0</Build>
+      <Revision>1603</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
-    <VersionDescription>* Fixed artwork being re-used for movies of the same title name.
-** Database upgrade is performed on first start to update existing artwork references.
-** Any orphaned artwork will be removed from disk i.e. anything not referenced in the database.
-* Fixed a possible crash on start of movie playback, issue occurred if the some fields of the movie contained empty values when publishing skin Play properties (this would not affect everybody).
-* Added a few new Play skin properties for Studios, Collections and PlotKeywords.
-* Updated the fanart.tv poster and backdrop provider to use v3 of the API.
-* Updated scraper priority defaults when handled automatically by MovingPictures.
-** Primary details source is now themoviedb scraper for all languages.
-** Primary and Secondary cover and backdrop sources are handled by themoviedb and fanart.tv.
-** Users can still override these by manually prioritising sources in configuration.
-* Updated Swedish Filmtipset.se scraper script, thanks hexago.
-** Fixed Genres, Language, Score and Popularity.
-** Added Studios and PlotKeywords.
+    <VersionDescription>* Removed follw.it support (site is shutting down end of Sep 2014).
+* Added Titan skin files to installer.
 * Updated translations from Transifex.</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;amp;task=att_download&amp;amp;link_id=30&amp;amp;cf_id=65</OnlineLocation>
@@ -2017,6 +2420,391 @@ public class Script
         <ZipFileName>Installer{CopyFile}\{3b2b4390-d001-4272-935e-31765df3a412}-ro.xml</ZipFileName>
         <DestinationFilename>%Language%\MovingPictures\ro.xml</DestinationFilename>
       </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\dialogGeneralRating.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{5103f25e-26b4-41d1-9c58-b52e480f7aa9}-dialogGeneralRating.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\dialogGeneralRating.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\DialogPinCode.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{2d08c709-a243-4002-ba5d-25a8ce01ada4}-DialogPinCode.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\DialogPinCode.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.background.thumbs.noinfo.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{5edc1b40-c861-4725-8e8d-89da3909c243}-movingpictures.background.thumbs.noinfo.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.background.thumbs.noinfo.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.background.thumbs.XL.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{c046fe0a-57b0-41e0-be64-8e00a2998d76}-movingpictures.background.thumbs.XL.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.background.thumbs.XL.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.background.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{9600c6ee-c845-4eb4-8776-23521471c79b}-movingpictures.background.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.background.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.details.lite.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f3fa7a75-ae32-4aef-ae55-d3577c2b0c7c}-movingpictures.details.lite.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.details.lite.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.details.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{8ff6f2e4-0a6b-4b75-8c06-dfd5b44d69f1}-movingpictures.details.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.details.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.dummy.lite.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1601039d-3129-4925-a738-23a7dd4060da}-movingpictures.dummy.lite.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.dummy.lite.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.dummy.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b8847e4a-9f81-45b4-8bd7-3743b7e74451}-movingpictures.dummy.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.dummy.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.facade.thumbs.noinfo.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{57d795d7-004f-4b29-9aa9-de66399f58ff}-movingpictures.facade.thumbs.noinfo.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.facade.thumbs.noinfo.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.facade.thumbs.XL.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{aaf069c1-3d82-41a9-bafe-fd559f74957a}-movingpictures.facade.thumbs.XL.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.facade.thumbs.XL.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.facade.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{aaff2234-f03d-488a-bc89-44da7d912f8a}-movingpictures.facade.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.facade.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.hiddenmenu.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{cef549c2-1698-4458-ad98-4017d93d0997}-movingpictures.hiddenmenu.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.hiddenmenu.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.importer.hiddenmenu.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{cd696ee5-5e46-43e7-a001-a7ed09787794}-movingpictures.importer.hiddenmenu.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.importer.hiddenmenu.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.importer.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{78c5f07d-42ab-46f5-b781-1a23299cb495}-movingpictures.importer.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.importer.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.mediainfo.details.lite.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{fece4531-3845-477e-b106-a245dcc4b02e}-movingpictures.mediainfo.details.lite.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.mediainfo.details.lite.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.mediainfo.details.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{45149466-58cb-49f5-b439-7e4eb911d5d0}-movingpictures.mediainfo.details.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.mediainfo.details.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.mediainfo.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{4a4a112f-a329-4b0e-9e08-72041683e2a6}-movingpictures.mediainfo.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.mediainfo.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.views.thumbs.noinfo.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{6ac2e3b8-0620-46f9-8dbb-d29aa5b68580}-movingpictures.views.thumbs.noinfo.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.views.thumbs.noinfo.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.views.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{8704d10c-4dc7-4296-b3b0-180756a50f75}-movingpictures.views.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.views.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\movingpictures.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{85c8cf38-4abf-4fce-95ed-2562a8e561cf}-movingpictures.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\movingpictures.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\references.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{9b96b3eb-ab2b-430a-a683-805d0795a0c4}-references.xml</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\references.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\circle-empty.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{8e4d5394-b6f1-416d-b724-328a48c1273c}-circle-empty.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\circle-empty.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\circle-full.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{402723b2-44a3-4848-869f-2a0f43796a80}-circle-full.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\circle-full.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\fanart_overlay_top.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0ae67976-05ab-4f44-bbc9-eed2f8ff7989}-fanart_overlay_top.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\fanart_overlay_top.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\hover_moving pictures.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0ed1e040-8f61-4e5b-91ed-478900250727}-hover_moving pictures.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\hover_moving pictures.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_play_focus.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{ff5c39bb-895c-48f4-8dc4-07f86e156aed}-movie_details_play_focus.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\movie_details_play_focus.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_play_nofocus.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{21d049e9-538c-4825-afb0-fef930e958c7}-movie_details_play_nofocus.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\movie_details_play_nofocus.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_sub_focus.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{fe1d8057-7ead-4003-95ea-c9494bf965bc}-movie_details_sub_focus.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\movie_details_sub_focus.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_sub_nofocus.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e7feb15a-3036-4cf5-aa62-f8b936c0df6c}-movie_details_sub_nofocus.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\movie_details_sub_nofocus.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_trailer_focus.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{cd7d7324-59f9-4a39-be0a-5f6e25bd40ed}-movie_details_trailer_focus.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\movie_details_trailer_focus.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movie_details_trailer_nofocus.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e127155b-6063-4dfc-b347-c22a7956a03d}-movie_details_trailer_nofocus.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\movie_details_trailer_nofocus.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movingpictures_done.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{90025785-481b-45d0-ae24-aa1a9f1cb3b3}-movingpictures_done.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\movingpictures_done.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movingpictures_importer_list_focus.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{c601d02c-d8b6-4a4a-aa25-d2f270ebe594}-movingpictures_importer_list_focus.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\movingpictures_importer_list_focus.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movingpictures_needinput.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{51661e03-8d61-4795-bb36-7855c2d47131}-movingpictures_needinput.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\movingpictures_needinput.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\movingpictures_processing.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{4ad9fefb-c141-4db0-b13a-9ddec0fffbfb}-movingpictures_processing.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\movingpictures_processing.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\panel_movingpictures_importer.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{59344610-9c2e-4bbc-88d8-93c27a84bcef}-panel_movingpictures_importer.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\panel_movingpictures_importer.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\parental_lock.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{1d900f36-e546-45f1-a256-8572b009ed75}-parental_lock.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\parental_lock.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\starblue_rating.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e9f67d2a-2e4c-413b-83a2-83e8cd08c35e}-starblue_rating.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\starblue_rating.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\-10.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{77c10f38-bb21-41c5-9b2f-3b5c7d1eccc8}--10.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\-10.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\-12.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{53977bbe-0b88-4c4a-8d7d-c240bbfb5e0a}--12.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\-12.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\-16.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b03830c5-d7b4-4213-8c9a-e5aad998c19f}--16.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\-16.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\-18.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{c0d6f5ab-b673-419a-8361-7391023da6f0}--18.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\-18.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\M.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{955df868-89f6-4fa1-82cc-0fc6c63f5c57}-M.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\M.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\MA.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{51ab1331-6548-4100-b335-f340c9f9bbed}-MA.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\MA.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\MA15+.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{5ab84dd0-0e64-40f2-acb6-25f4439e2031}-MA15+.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\MA15+.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\NR.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a3b10840-1311-41ba-a68c-8cab6832f453}-NR.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\NR.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R13.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{31ab2e95-eda6-47a3-8355-060e86580ce8}-R13.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\R13.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R15+.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{cc04f293-5573-4acc-bdf7-72d6a971fb2c}-R15+.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\R15+.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R15.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d8d872d9-1f11-4b16-8d2b-45af2525c14a}-R15.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\R15.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R16.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d0dd86fb-37aa-481e-8a2b-cd4b2e0a89fe}-R16.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\R16.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R18+.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{4d72f86e-7292-4220-9fea-97e44c66f941}-R18+.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\R18+.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\R18.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{fc4a3299-97e9-4ffa-b085-2105a9c62cbc}-R18.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\R18.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\U.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b82be576-6bff-4d21-847e-c0986291315c}-U.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\U.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\X.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{becba7ca-a47a-4de6-9732-c023890dfe54}-X.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\certification\X.png</DestinationFilename>
+      </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
@@ -2058,11 +2846,21 @@ public class Script
         <Group>Languages</Group>
         <Recursive>false</Recursive>
       </FolderGroup>
+      <FolderGroup InstallType="CopyFile" SystemFile="false" Modified="true">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName />
+        <ZipFileName>Installer{CopyFile}\{ddde8179-0df8-4914-b432-054c3f993a80}-</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\</DestinationFilename>
+        <Folder>..\MovingPictures\Resources\skins\Titan</Folder>
+        <Group>TitanSkin</Group>
+        <Recursive>true</Recursive>
+      </FolderGroup>
     </FolderGroups>
     <ProjectFilename>MovingPictures-Native.xmp2</ProjectFilename>
     <UpdatePath1>update.xml</UpdatePath1>
     <UpdatePath2 />
     <UpdatePath3 />
   </ProjectSettings>
-  <IsSkin>false</IsSkin>
+  <IsSkin>true</IsSkin>
 </PackageClass>
