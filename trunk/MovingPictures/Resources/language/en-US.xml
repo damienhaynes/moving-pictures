@@ -5,6 +5,9 @@
   <string name="Actors">Actors</string>
   <string name="AllMovies">All Movies</string>
   <string name="AllFiles">All Files</string>
+  <string name="AspectRatio">Aspect Ratio</string>
+  <string name="AudioChannels">Audio Channels</string>
+  <string name="AudioFormat">Audio Format</string>
   <!--B-->
   <string name="BadCategory">An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!</string>
   <string name="BadMovie">An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!</string>
@@ -64,6 +67,7 @@
   <string name="FilesNeedingAttention">Files Needing Attention</string>
   <string name="FilmstripView">Filmstrip View</string>
   <string name="FilterBy">Filter By</string>
+  <string name="FrameRate">Frame Rate</string>
   <string name="Friday">Friday</string>
   <string name="Future">Future</string>
   <!--G-->
@@ -77,6 +81,7 @@
   <string name="ImporterDisabled">Importer Disabled</string>
   <string name="ImporterDisabledMessage">The importer has been disabled in the\nMediaPortal GUI. Would you like to\nreenable it?</string>
   <string name="ImporterPending">Importer ({0} Need Attention)</string>
+  <string name="InfoUrl">Info URL</string>
   <string name="InvalidPin">Invalid PIN code!</string>
   <string name="InvalidVideoDiscFormat">Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.</string>
   <!--L-->
@@ -94,6 +99,7 @@
   <string name="MediaIsMissing">The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...</string>
   <string name="MediaNotAvailableBody">The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}</string>
   <string name="MediaNotAvailableHeader">Media Not Available</string>
+  <string name="MediaType">Media Type</string>
   <string name="Missing">Missing</string>
   <string name="MissingExternalPlayerExe">The executable for HD playback is missing.\nPlease correct the path to the executable.</string>
   <string name="Monday">Monday</string>
@@ -118,12 +124,14 @@
   <string name="NoImportPathsHeading">No Import Paths!</string>
   <!--O-->
   <string name="Older">Older</string>
+  <string name="Overview">Overview</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Parental controls are not enabled.</string>
   <string name="PinCodeHeader">Unlocking Restricted Content</string>
   <string name="PinCodePrompt">Please enter PIN code to continue:</string>
   <string name="PlaybackFailed">Playback is not possible because the \'{0}\'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.</string>
   <string name="PlaybackFailedHeader">Playback Failed</string>
+  <string name="PlayCount">Play Count</string>
   <string name="PlayMovie">Play Movie</string>
   <string name="PossibleMatches">Possible Matches</string>
   <string name="ProblemLoadingSkinFile">Sorry, there was a problem loading the skin file</string>
@@ -153,6 +161,7 @@
   <string name="RestoreIgnoredFiles">Restore Ignored Files</string>
   <string name="ResumeFrom">Resume from:</string>
   <string name="ResumeFromLast">Resume movie from last time?</string>
+  <string name="Resolution">Resolution</string>
   <string name="Retry">Retry</string>
   <string name="Runtime">Runtime</string>
   <string name="RuntimeHour">{0} hour</string>
@@ -182,11 +191,14 @@
   <string name="SkinDoesNotSupportImporter">This skin does not support the Importer.</string>
   <string name="SkinDoesNotSupportPinDialog">This skin does not support the Pin Code Dialog.</string>
   <string name="SkinDoesNotSupportRatingDialog">This skin does not support the Rating Dialog.</string>
+  <string name="Source">Source</string>
   <string name="SortBy">Sort By</string>
   <string name="SortDirection">Sort Direction</string>
   <string name="StarRating">Star Rating</string>
+  <string name="Start">Start</string>
   <string name="Sunday">Sunday</string>
   <!--T-->
+  <string name="TechnicalInfo">Technical Info</string>
   <string name="Theme">Theme</string>
   <string name="ThisMonth">This Month</string>
   <string name="ThisWeek">This Week</string>
@@ -210,11 +222,13 @@
   <string name="UpdateMovieDetailsBody">You are about to refresh all movie metadata, overwriting\nany custom modifications to this film. Do you want\nto continue?</string>
   <string name="UpdateMovieDetailsHeader">Update Movie Details</string>
   <!--V-->
+  <string name="VideoFormat">Video Format</string>
+  <string name="ViewMovieDetails">View Movie Details</string>
   <string name="VirtualDriveHeader">Virtual drive not ready</string>
   <string name="VirtualDriveMessage">The virtual drive wasn\'t ready in time.\nPlease try again or cancel playback.</string>
   <string name="Votes">votes</string>
-  <string name="ViewMovieDetails">View Movie Details</string>
   <!--W-->
+  <string name="WatchedCount">Watched Count</string>
   <string name="Wednesday">Wednesday</string>
   <string name="Writer">Writer</string>
   <string name="Writers">Writers</string>

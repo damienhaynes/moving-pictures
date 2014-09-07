@@ -437,7 +437,7 @@ This file should contain the details view
       <id>1</id>
       <posX>1020</posX>
       <posY>366</posY>
-      <label>#Titan.VideoFormat</label>
+      <label>#MovingPictures.Translation.VideoFormat.Label</label>
       <visible>Control.HasFocus(10002)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
@@ -463,7 +463,7 @@ This file should contain the details view
       <id>1</id>
       <posX>1020</posX>
       <posY>398</posY>
-      <label>#Titan.Aspectratio</label>
+      <label>#MovingPictures.Translation.AspectRatio.Label</label>
       <visible>Control.HasFocus(10002)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
@@ -489,7 +489,7 @@ This file should contain the details view
       <id>1</id>
       <posX>1020</posX>
       <posY>430</posY>
-      <label>#Titan.Resolution</label>
+      <label>#MovingPictures.Translation.Resolution.Label</label>
       <visible>Control.HasFocus(10002)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
@@ -516,7 +516,7 @@ This file should contain the details view
       <posX>1020</posX>
       <posY>462</posY>
       <label>174</label>
-      <label>#Titan.Framerate</label>
+      <label>#MovingPictures.Translation.FrameRate.Label</label>
       <visible>Control.HasFocus(10002)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
@@ -542,7 +542,7 @@ This file should contain the details view
       <id>1</id>
       <posX>1020</posX>
       <posY>494</posY>
-      <label>#Titan.AudioFormat</label>
+      <label>#MovingPictures.Translation.AudioFormat.Label</label>
       <visible>Control.HasFocus(10002)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
@@ -568,7 +568,7 @@ This file should contain the details view
       <id>1</id>
       <posX>1020</posX>
       <posY>526</posY>
-      <label>#Titan.AudioChannels</label>
+      <label>#MovingPictures.Translation.AudioChannels.Label</label>
       <visible>Control.HasFocus(10002)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
@@ -646,7 +646,7 @@ This file should contain the details view
       <id>1</id>
       <posX>1020</posX>
       <posY>622</posY>
-      <label>#Titan.MediaType</label>
+      <label>#MovingPictures.Translation.MediaType.Label</label>
       <visible>Control.HasFocus(10002)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
@@ -702,7 +702,7 @@ This file should contain the details view
       <id>1</id>
       <posX>1020</posX>
       <posY>718</posY>
-      <label>#Titan.WatchedCount</label>
+      <label>#MovingPictures.Translation.PlayCount.Label</label>
       <visible>Control.HasFocus(10002)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
@@ -728,7 +728,7 @@ This file should contain the details view
       <id>1</id>
       <posX>585</posX>
       <posY>845</posY>
-      <label>#Titan.InfoUrl</label>
+      <label>#MovingPictures.Translation.InfoUrl.Label</label>
       <visible>Control.HasFocus(10002)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
@@ -756,7 +756,7 @@ This file should contain the details view
       <id>1</id>
       <posX>585</posX>
       <posY>877</posY>
-      <label>#Titan.Source</label>
+      <label>#MovingPictures.Translation.Source.Label</label>
       <visible>Control.HasFocus(10002)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
