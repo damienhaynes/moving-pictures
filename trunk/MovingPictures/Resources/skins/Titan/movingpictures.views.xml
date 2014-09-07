@@ -541,7 +541,7 @@
       <label>#MovingPictures.SelectedMovie.score.localized</label>
       <font>fontB12</font>
       <textcolor>FF00b7ff</textcolor>
-      <visible>[facadeview.smallicons | facadeview.largeicons] + Control.IsVisible(50) + string.equals(#hideinfo, False)</visible>
+      <visible>[facadeview.smallicons | facadeview.largeicons] + Control.IsVisible(50) + string.equals(#hideinfo, False) + !string.starts(#MovingPictures.SelectedMovie.score.localized,0)</visible>
       <animation effect="fade"
                  time="250">WindowOpen</animation>
       <animation effect="fade"
@@ -600,7 +600,7 @@
       <label>#MovingPictures.SelectedMovie.score.localized</label>
       <font>fontB12</font>
       <textcolor>000000</textcolor>
-      <visible>[facadeview.filmstrip | facadeview.coverflow] + Control.IsVisible(50)</visible>
+      <visible>[facadeview.filmstrip | facadeview.coverflow] + Control.IsVisible(50) + !string.starts(#MovingPictures.SelectedMovie.score.localized,0)</visible>
       <animation effect="fade"
                  time="250">WindowOpen</animation>
       <animation effect="fade"
@@ -640,7 +640,7 @@
       <label>#MovingPictures.SelectedMovie.score.localized</label>
       <font>fontB12</font>
       <textcolor>FF00b7ff</textcolor>
-      <visible>facadeview.list + Control.IsVisible(50)</visible>
+      <visible>facadeview.list + Control.IsVisible(50) + !string.starts(#MovingPictures.SelectedMovie.score.localized,0)</visible>
       <animation effect="fade"
                  time="250">WindowOpen</animation>
       <animation effect="fade"

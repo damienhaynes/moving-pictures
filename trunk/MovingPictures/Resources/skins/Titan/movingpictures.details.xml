@@ -404,7 +404,7 @@ This file should contain the details view
       <align>left</align>
       <font>fontB12</font>
       <textcolor>FF00b7ff</textcolor>
-      <visible>!Control.IsVisible(50)+!Control.IsVisible(51) + !Control.HasFocus(10001)+ !Control.HasFocus(10002) + !Control.HasFocus(10005)</visible>
+      <visible>!Control.IsVisible(50)+!Control.IsVisible(51) + !Control.HasFocus(10001)+ !Control.HasFocus(10002) + !Control.HasFocus(10005) + !string.starts(#MovingPictures.SelectedMovie.score.localized,0)</visible>
       <animation effect="fade"
                  time="250">Visible</animation>
       <animation effect="fade"
