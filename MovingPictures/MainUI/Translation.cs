@@ -150,6 +150,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Actors = "Actors";
         public static string AllMovies = "All Movies";
         public static string AllFiles = "All Files";
+        public static string AudioChannels = "Audio Channels";
+        public static string AudioFormat = "Audio Format";
+        public static string AspectRatio = "Aspect Ratio";
 
         // B
         public static string BadCategory = "An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!";
@@ -215,6 +218,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string FilesNeedingAttention = "Files Needing Attention";
         public static string FilmstripView = "Filmstrip View";
         public static string FilterBy = "Filter By";
+        public static string FrameRate = "Frame Rate";
         public static string Friday = "Friday";
         public static string Future = "Future";
 
@@ -230,6 +234,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string ImporterDisabled = "Importer Disabled";
         public static string ImporterDisabledMessage = "The importer has been disabled in the\nMediaPortal GUI. Would you like to\nreenable it?";
         public static string ImporterPending = "Importer ({0} Need Attention)";
+        public static string InfoUrl = "Info URL";
         public static string InvalidPin = "Invalid PIN code!";
         public static string InvalidVideoDiscFormat = "Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.";
 
@@ -249,6 +254,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string MediaIsMissing = "The media for the Movie you have selected is missing!\nVery sorry but something has gone wrong...";
         public static string MediaNotAvailableBody = "The media for the movie you have selected is not\ncurrently available. Please insert or connect media\nlabeled: {0}";
         public static string MediaNotAvailableHeader = "Media Not Available";
+        public static string MediaType = "Media Type";
         public static string Missing = "Missing";
         public static string MissingExternalPlayerExe = "The executable for HD playback is missing.\nPlease correct the path to the executable.";
         public static string Monday = "Monday";
@@ -275,6 +281,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // O
         public static string Older = "Older";
+        public static string Overview = "Overview";
 
         // P
         public static string ParentalControlsDisabled = "Parental controls are not enabled.";
@@ -282,6 +289,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string PinCodePrompt = "Please enter PIN code to continue:";
         public static string PlaybackFailed = "Playback is not possible because the '{0}'\nextension is not listed in your mediaportal configuration.\nPlease add this extension or setup an external player\nand try again.";
         public static string PlaybackFailedHeader = "Playback Failed";
+        public static string PlayCount = "Play Count";
         public static string PlayMovie = "Play Movie";
         public static string PossibleMatches = "Possible Matches";
         public static string ProblemLoadingSkinFile = "Sorry, there was a problem loading the skin file";
@@ -310,6 +318,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string RestoreIgnoredFiles = "Restore Ignored Files";
         public static string ResumeFrom = "Resume from:";
         public static string ResumeFromLast = "Resume movie from last time?";
+        public static string Resolution = "Resolution";
         public static string Retry = "Retry";
         public static string Runtime = "Runtime";
         public static string RuntimeHour = "{0} hour";
@@ -340,12 +349,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string SkinDoesNotSupportImporter = "This skin does not support the Importer.";
         public static string SkinDoesNotSupportPinDialog = "This skin does not support the Pin Code Dialog.";
         public static string SkinDoesNotSupportRatingDialog = "This skin does not support the Rating Dialog.";
+        public static string Source = "Source";
         public static string SortBy = "Sort By";
         public static string SortDirection = "Sort Direction";
         public static string StarRating = "Star Rating";
+        public static string Start = "Start";
         public static string Sunday = "Sunday";
 
         // T
+        public static string TechnicalInfo = "Technical Info";
         public static string Theme = "Theme";
         public static string ThisMonth = "This Month";
         public static string ThisWeek = "This Week";
@@ -371,12 +383,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string UpdateMovieDetailsHeader = "Update Movie Details";
 
         // V
+        public static string VideoFormat = "Video Format";
+        public static string ViewMovieDetails = "View Movie Details";
         public static string VirtualDriveHeader = "Virtual drive not ready";
         public static string VirtualDriveMessage = "The virtual drive wasn't ready in time.\nPlease try again or cancel playback.";
         public static string Votes = "votes";
-        public static string ViewMovieDetails = "View Movie Details";
 
         // W
+        public static string WatchedCount = "Watched Count";
         public static string Wednesday = "Wednesday";
         public static string Writer = "Writer";
         public static string Writers = "Writers";
