@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window>
+<controls>
+
+	<!--            :: Title ::            -->
+	
+	<control Style="smallTitle">
+		<description>Selected item Label</description>
+		<type>fadelabel</type>
+		<id>1</id>
+		<posX>510</posX>
+		<posY>1015</posY>
+		<label>#MovingPictures.SelectedMovie.title</label>
+		<visible>control.isvisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+    
+	
+	<!--            :: LISTVIEW ::            -->
+	
+	<control>
+		<description>Poster shadow</description>
+		<type>image</type>
+		<id>1</id>
+		<posX>105</posX>
+		<posY>346</posY>
+		<width>429</width>
+		<height>613</height>
+		<texture>list_poster_shadow.png</texture>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+	
+	<control>
+		<description>Default Cover Art</description>
+		<type>image</type>
+		<id>0</id>
+		<posX>123</posX>
+		<posY>360</posY>
+		<width>379</width>
+		<height>563</height>
+		<texture>defaultVideoBig.png</texture>
+		<visible>facadeview.list + Control.IsVisible(50) + !Control.HasThumb(60)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+
+	<control>
+		<description>Cover Art</description>
+		<type>image</type>
+		<id>60</id>
+		<posX>123</posX>
+		<posY>360</posY>
+		<width>379</width>
+		<height>563</height>
+		<texture>#MovingPictures.Coverart</texture>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+    
+	<control Style="InfoLabel">
+		<description>Release Date Label</description>
+		<type>label</type>
+		<id>0</id>
+		<posX>565</posX>
+		<posY>387</posY>
+		<label>#(string.rtrim(L(172),' :'))</label>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+
+	<control Style="InfoValueSmall">
+		<description>Release Date Value</description>
+		<type>label</type>
+		<id>0</id>
+		<posX>798</posX>
+		<posY>387</posY>
+		<label>#MovingPictures.SelectedMovie.year</label>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+    </control>
+
+	<control Style="InfoLabel">
+		<description>Runtime Label</description>
+		<type>label</type>
+		<id>0</id>
+		<posX>565</posX>
+		<posY>419</posY>
+		<label>#(string.rtrim(L(299),' :'))</label>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+    </control>
+	
+	<control Style="InfoValueSmall">
+		<description>Runtime Value</description>
+		<type>label</type>
+		<id>0</id>
+		<posX>798</posX>
+		<posY>419</posY>
+		<label>#MovingPictures.SelectedMovie.runtime.totalminutes min</label>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+    </control>
+	
+	<control Style="InfoLabel">
+		<description>Genre Label</description>
+		<type>label</type>
+		<id>0</id>
+		<posX>565</posX>
+		<posY>451</posY>
+		<label>#MovingPictures.Translation.Genre.Label</label>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+    </control>
+	
+	<control Style="InfoValueSmall">
+		<description>Genre Value</description>
+		<type>fadelabel</type>
+		<id>0</id>
+		<posX>798</posX>
+		<posY>451</posY>
+		<label>#MovingPictures.SelectedMovie.genres</label>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+    </control>
+	
+	<control Style="InfoLabel">
+		<description>Director Label</description>
+		<type>label</type>
+		<id>0</id>
+		<posX>565</posX>
+		<posY>483</posY>
+		<label>#MovingPictures.Translation.Director.Label</label>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+    </control>
+	
+	<control Style="InfoValueSmall">
+		<description>Director Value</description>
+		<type>fadelabel</type>
+		<id>0</id>
+		<posX>798</posX>
+		<posY>483</posY>
+		<label>#MovingPictures.SelectedMovie.directors</label>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+    </control>
+	
+	<control Style="InfoLabel">
+		<description>Cast Label</description>
+		<type>label</type>
+		<id>0</id>
+		<posX>565</posX>
+		<posY>515</posY>
+		<label>#MovingPictures.Translation.Actors.Label</label>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+    </control>
+	
+	<control Style="InfoValueSmall">
+		<description>Cast Value</description>
+		<type>fadelabel</type>
+		<id>0</id>
+		<posX>798</posX>
+		<posY>515</posY>
+		<label>#MovingPictures.SelectedMovie.extra.actors.1, #MovingPictures.SelectedMovie.extra.actors.2, #MovingPictures.SelectedMovie.extra.actors.3</label>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+    </control>
+	
+	<control Style="textBox">
+		<description>Summary (list)</description>
+		<type>textboxscrollup</type>
+		<id>1025</id>
+		<posX>568</posX>
+		<posY>570</posY>
+		<height>275</height>
+		<label>#MovingPictures.SelectedMovie.summary</label>
+		<seperator>---------------------------------------------------------------------------------------------------------</seperator>
+		<onleft>1026</onleft>
+		<onright>1026</onright>
+		<onup>1026</onup>
+		<ondown>1026</ondown>
+		<visible>facadeview.list+Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+	
+	<control>
+		<description>Logo frame</description>
+		<type>image</type>
+		<id>0</id>
+		<posX>569</posX>
+		<posY>882</posY>
+		<width>550</width>
+		<height>73</height>
+		<texture>logoframe.png</texture>
+		<visible>facadeview.list + Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+    
+	<control>
+		<description>certification logo</description>
+		<type>image</type>
+		<id>101</id>
+		<posX>588</posX>
+		<posY>893</posY>
+		<width>55</width>
+		<height>55</height>
+    <keepaspectratio>yes</keepaspectratio>
+    <centered>yes</centered>
+		<texture>certification\#MovingPictures.SelectedMovie.certification.png</texture>
+		<visible>facadeview.list + Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+    
+  <control>
+    <description>Unwatched Icon</description>
+    <type>image</type>
+    <id>0</id>
+    <posX>68</posX>
+    <posY>306</posY>
+    <width>114</width>
+    <height>114</height>
+    <texture>unwatched_flag_big.png</texture>
+    <visible>facadeview.list + Control.IsVisible(50) + !Control.IsVisible(9) + Control.HasThumb(60)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+  </control>
+    
+	<!--            :: THUMBVIEW ::            -->
+	
+	<!--            :: FILMSTRIP ::            -->
+	
+	<control>
+		<description>Year / Runtime / Genre</description>
+		<type>label</type>
+		<id>0</id>
+		<posX>122</posX>
+		<posY>996</posY>
+		<width>475</width>
+		<font>TitanLight12</font>
+		<textcolor>FF000000</textcolor>
+		<label>#MovingPictures.SelectedMovie.year - #MovingPictures.SelectedMovie.runtime.totalminutes min - #MovingPictures.SelectedMovie.extra.genres.1</label>
+		<visible>[facadeview.filmstrip | facadeview.coverflow] + Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+    
+	<control>
+		<type>imagelist</type>
+		<id>101</id>
+		<posX>1460</posX>
+		<posY>1001</posY>
+		<width>315</width>
+		<height>29</height>
+		<textureWidth>32</textureWidth>
+		<textureHeight>27</textureHeight>
+		<subitems>
+		<subitem>starblue2.png</subitem>
+		<subitem>starblack2.png</subitem>
+		</subitems>
+		<orientation>horizontal</orientation>
+		<align>left</align>
+		<imagesToDraw>10</imagesToDraw>
+		<percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
+		<visible>[facadeview.filmstrip | facadeview.coverflow] + Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+	
+	<control>
+		<description>Rating Value</description>
+		<type>label</type>
+		<id>0</id>
+		<posX>1790</posX>
+		<posY>998</posY>
+		<label>#MovingPictures.SelectedMovie.score.localized</label>
+		<font>fontB12</font>
+		<textcolor>000000</textcolor>
+		<visible>[facadeview.filmstrip | facadeview.coverflow] + Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>				
+	</control>
+    
+	<control>
+		<type>imagelist</type>
+		<id>101</id>
+		<posX>561</posX>
+		<posY>345</posY>
+		<width>315</width>
+		<height>29</height>
+		<textureWidth>32</textureWidth>
+		<textureHeight>27</textureHeight>
+		<subitems>
+		<subitem>starblack.png</subitem>
+		<subitem>starblue.png</subitem>
+		</subitems>
+		<orientation>horizontal</orientation>
+		<align>left</align>
+		<imagesToDraw>10</imagesToDraw>
+		<percentage>#MovingPictures.SelectedMovie.score.rounded</percentage>
+		<visible>facadeview.list + Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>
+	</control>
+	
+	<control>
+		<description>Rating Value</description>
+		<type>label</type>
+		<id>0</id>
+		<posX>894</posX>
+		<posY>343</posY>
+		<label>#MovingPictures.SelectedMovie.score.localized</label>
+		<font>fontB12</font>
+		<textcolor>FF00b7ff</textcolor>
+		<visible>facadeview.list + Control.IsVisible(50)</visible>
+		<animation effect="fade" time="250">WindowOpen</animation>
+		<animation effect="fade" time="250">WindowClose</animation>				
+	</control>
+	
+</controls>
+</window>

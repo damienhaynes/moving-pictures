@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window>
+  <controls>
+    <!--            :: DUMMY CONTROLS ::             -->
+    <control>
+      <description>Visibile when filtering by watched flag. Only unwatched movies are listed.</description>
+      <type>label</type>
+      <id>8</id>
+      <posX>-50</posX>
+      <posY>-50</posY>
+      <width>0</width>
+    </control>
+    <control>
+      <description>Visibile when the currently selected movie has been watched</description>
+      <type>label</type>
+      <id>9</id>
+      <posX>-50</posX>
+      <posY>-50</posY>
+      <width>0</width>
+    </control>
+    <control>
+      <description>Visibile when filtering by remote control searching</description>
+      <type>label</type>
+      <id>10</id>
+      <posX>-50</posX>
+      <posY>-50</posY>
+      <width>0</width>
+    </control>
+    <control>
+      <description>Visibile when Parental Controls are enabled</description>
+      <type>image</type>
+      <id>16</id>
+      <posX>-50</posX>
+      <posY>-50</posY>
+      <width>0</width>
+    </control>
+    <control>
+      <description>Visibile when Filtering is enabled</description>
+      <type>image</type>
+      <id>17</id>
+      <posX>-50</posX>
+      <posY>-50</posY>
+      <width>0</width>
+    </control>
+    <control>
+      <description>dummy poster control</description>
+      <type>label</type>
+      <id>111</id>
+      <posX>-2000</posX>
+      <posY>-2000</posY>
+      <label>#Titan.EnablePosterHide</label>
+    </control>
+    <control>
+      <description>dummy fullfanart control</description>
+      <type>button</type>
+      <id>10003</id>
+      <posX>-2000</posX>
+      <posY>-2000</posY>
+      <onleft>10002</onleft>
+      <onright>6</onright>
+      <label>-</label>
+    </control>
+</controls>
+</window>
