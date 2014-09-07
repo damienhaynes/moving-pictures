@@ -215,6 +215,14 @@
               <Items />
             </Files>
           </GroupItem>
+          <GroupItem Name="TitanSkin">
+            <DisplayName>TitanSkin</DisplayName>
+            <DefaulChecked>true</DefaulChecked>
+            <Description>TitanSkin</Description>
+            <Files>
+              <Items />
+            </Files>
+          </GroupItem>
         </Items>
       </Groups>
       <Sections>
@@ -240,6 +248,25 @@
             <WarnOnly>false</WarnOnly>
             <Message>This version of MovingPictures requires MediaPortal v1.7 or above.</Message>
             <Name>MediaPortal</Name>
+          </DependencyItem>
+          <DependencyItem>
+            <Type>Skin</Type>
+            <Id />
+            <MinVersion>
+              <Major>1</Major>
+              <Minor>4</Minor>
+              <Build>0</Build>
+              <Revision>0</Revision>
+            </MinVersion>
+            <MaxVersion>
+              <Major>1</Major>
+              <Minor>4</Minor>
+              <Build>0</Build>
+              <Revision>0</Revision>
+            </MaxVersion>
+            <WarnOnly>false</WarnOnly>
+            <Message>requires Skin version 1.4.0.0 to 1.4.0.0.</Message>
+            <Name>Skin</Name>
           </DependencyItem>
         </Items>
       </Dependencies>
@@ -282,24 +309,13 @@
         <UpdateUrl>http://moving-pictures.googlecode.com/svn/trunk/Setup/update.xml</UpdateUrl>
         <Version>
           <Major>1</Major>
-          <Minor>7</Minor>
-          <Build>3</Build>
-          <Revision>1594</Revision>
+          <Minor>8</Minor>
+          <Build>0</Build>
+          <Revision>1607</Revision>
         </Version>
         <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
-        <VersionDescription>* Fixed artwork being re-used for movies of the same title name.
-** Database upgrade is performed on first start to update existing artwork references.
-** Any orphaned artwork will be removed from disk i.e. anything not referenced in the database.
-* Fixed a possible crash on start of movie playback, issue occurred if the some fields of the movie contained empty values when publishing skin Play properties (this would not affect everybody).
-* Added a few new Play skin properties for Studios, Collections and PlotKeywords.
-* Updated the fanart.tv poster and backdrop provider to use v3 of the API.
-* Updated scraper priority defaults when handled automatically by MovingPictures.
-** Primary details source is now themoviedb scraper for all languages.
-** Primary and Secondary cover and backdrop sources are handled by themoviedb and fanart.tv.
-** Users can still override these by manually prioritising sources in configuration.
-* Updated Swedish Filmtipset.se scraper script, thanks hexago.
-** Fixed Genres, Language, Score and Popularity.
-** Added Studios and PlotKeywords.
+        <VersionDescription>* Removed follw.it support (site is shutting down end of Sep 2014).
+* Added Titan skin files to installer. Includes some bug fixes and minor changes.
 * Updated translations from Transifex.</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
         <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;task=att_download&amp;link_id=30&amp;cf_id=65</OnlineLocation>

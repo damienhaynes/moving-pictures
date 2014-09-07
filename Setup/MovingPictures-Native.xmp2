@@ -1591,11 +1591,11 @@ public class Script
       <Major>1</Major>
       <Minor>8</Minor>
       <Build>0</Build>
-      <Revision>1603</Revision>
+      <Revision>1607</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
     <VersionDescription>* Removed follw.it support (site is shutting down end of Sep 2014).
-* Added Titan skin files to installer.
+* Added Titan skin files to installer. Includes some bug fixes and minor changes.
 * Updated translations from Transifex.</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;amp;task=att_download&amp;amp;link_id=30&amp;amp;cf_id=65</OnlineLocation>
