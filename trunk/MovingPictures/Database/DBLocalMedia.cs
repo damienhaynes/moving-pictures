@@ -334,7 +334,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _duration;
 
-
         [DBFieldAttribute(AllowDynamicFiltering = false)]
         public long FileSize {
             get { return _fileSize; }
@@ -481,6 +480,15 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private bool _is3D;
 
+        [DBFieldAttribute(AllowDynamicFiltering = false)]
+        public bool IsInterlaced {
+            get { return _isInterlaced; }
+            set {
+                _isInterlaced = value;
+                commitNeeded = true;
+            }
+        } private bool _isInterlaced;
+
         [DBFieldAttribute(AllowManualFilterInput = false)]
         public VideoFormat VideoFormat {
             get {
@@ -572,6 +580,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 this.VideoFrameRate = (float)mInfoWrapper.Framerate;
                 this.HasSubtitles = mInfoWrapper.HasSubtitles;
                 this.Is3D = mInfoWrapper.Is3D;
+                this.IsInterlaced = mInfoWrapper.IsInterlaced;
                 this.VideoCodec = mInfoWrapper.VideoCodec;
                 this.VideoBitrate = mInfoWrapper.VideoBitrate;
                 this.AudioCodec = mInfoWrapper.AudioCodec;
