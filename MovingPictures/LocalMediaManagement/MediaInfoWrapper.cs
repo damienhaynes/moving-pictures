@@ -68,6 +68,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     private bool _is720P = false; // is 1280x720 video
     private bool _is1080P = false; // is 1980x1080 video, progressive
     private bool _is1080I = false; // is 1920x1080 video, interlaced
+    private bool _is480I = false;
+    private bool _is480P = false;
+    private bool _is576I = false;
+    private bool _is576P = false;
+    private bool _is2160P = false; // 4K UHD
+    private bool _is4320P = false; // 8K UHD
     private bool _isInterlaced = false; // is interlaced
     private bool _isHDTV = false; // is HDTV resolution
     private bool _isSDTV = false; // is SDTV resolution
@@ -192,6 +198,30 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
             if ((_width == 1920 || _height == 1080) && _isInterlaced) {
                 _is1080I = true;
+            }
+
+            if ((_width == 640 || _height == 480) && !_isInterlaced) {
+                _is480P = true;
+            }
+
+            if ((_width == 640 || _height == 480) && _isInterlaced) {
+                _is480I = true;
+            }
+
+            if ((_width == 720 || _width == 704 || _height == 576) && !_isInterlaced) {
+                _is576P = true;
+            }
+
+            if ((_width == 720 || _width == 704 || _height == 576) && _isInterlaced) {
+                _is576I = true;
+            }
+
+            if (_width == 3840 || _height == 2160) {
+                _is2160P = true;
+            }
+
+            if (_width == 7680 || _height == 4320) {
+                _is4320P = true;
             }
 
             _isDIVX = (_videoCodec.IndexOf("dx50") > -1) | (_videoCodec.IndexOf("div3") > -1); // DivX 5 and DivX 3
@@ -437,16 +467,26 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
         get { return _videoBitRate; }
     }    
 
-    public string VideoResolution
-    {
-        get
-        {
+    public string VideoResolution {
+        get {
             if (Is1080P)
                 return "1080p";
             else if (Is1080I)
                 return "1080i";
             else if (Is720P)
                 return "720p";
+            else if (Is480P)
+                return "480p";
+            else if (Is480I)
+                return "480i";
+            else if (Is576P)
+                return "576p";
+            else if (Is576I)
+                return "576i";
+            else if (Is2160P)
+                return "4K UHDTV";
+            else if (Is4320P)
+                return "8K UHDTV";
             else if (IsHDTV)
                 return "HD";
             else
@@ -499,6 +539,16 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
       get { return _is720P; }
     }
 
+    public bool Is4320P
+    {
+        get { return _is4320P; }
+    }
+
+    public bool Is2160P
+    {
+        get { return _is2160P; }
+    }
+
     public bool Is1080P
     {
       get { return _is1080P; }
@@ -507,6 +557,26 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
     public bool Is1080I
     {
       get { return _is1080I; }
+    }
+
+    public bool Is480I
+    {
+        get { return _is480I; }
+    }
+
+    public bool Is480P
+    {
+        get { return _is480P; }
+    }
+
+    public bool Is576I
+    {
+        get { return _is576I; }
+    }
+
+    public bool Is576P
+    {
+        get { return _is576P; }
     }
 
     public bool IsHDTV
