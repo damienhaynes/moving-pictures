@@ -663,6 +663,8 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
             {
                 case 8:
                     return "7.1";
+                case 7:
+                    return "6.1";
                 case 6:
                     return "5.1";
                 case 2:
