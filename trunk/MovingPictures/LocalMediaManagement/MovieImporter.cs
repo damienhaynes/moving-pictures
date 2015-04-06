@@ -759,25 +759,31 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
         // When a FileSystemWatcher gets corrupted this handler will add it to the queue again
         private void OnWatcherError(object source, ErrorEventArgs e) {
             Exception watchException = e.GetException();
-            FileSystemWatcher watcher = (FileSystemWatcher)source;
-            DBImportPath importPath = pathLookup[watcher];
-            logger.Info("Stopped watching '{0}' ({1}) - Reason: {2}", importPath, importPath.GetDriveType(), watchException.Message);
+            FileSystemWatcher watcher = source as FileSystemWatcher;
+            DBImportPath importPath = null;
 
             // remove the watcher from the lookups
-            if (pathLookup.ContainsKey(watcher))
+            if (pathLookup.TryGetValue(watcher, out importPath)) {
+                logger.Info("Stopped watching '{0}' ({1}) - Reason: {2}", importPath, importPath.GetDriveType(), watchException.Message);
                 pathLookup.Remove(watcher);
-            if (fileSystemWatchers.Contains(watcher))
-                fileSystemWatchers.Remove(watcher);
+            }
 
-            // Clean the old watcher
-            watcher.Dispose();
+            if (watcher != null) {
+                if (fileSystemWatchers.Contains(watcher))
+                    fileSystemWatchers.Remove(watcher);
 
-            // Add the importPath to the watcher queue
-            watcherQueue.Add(importPath);
-            
-            // Add the importPath to the rescan queue
-            if (!rescanQueue.Contains(importPath))
-                rescanQueue.Add(importPath);
+                // Clean the old watcher
+                watcher.Dispose();
+
+                // Add the importPath to the watcher queue
+                if (importPath != null) {
+                    watcherQueue.Add(importPath);
+
+                    // Add the importPath to the rescan queue
+                    if (!rescanQueue.Contains(importPath))
+                        rescanQueue.Add(importPath);
+                }
+            }
         }
 
         // When a FileSystemWatcher detects a new file, this method queues it up for processing.
