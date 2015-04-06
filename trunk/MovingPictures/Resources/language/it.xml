@@ -6,18 +6,12 @@
   <string name="AllMovies">Tutti i films</string>
   <string name="AllFiles">Tutti i files</string>
   <!--B-->
-  <string name="BadCategory">Un plugin esterno o la skin ha tentato\ndi aprire una categoria inesistente!</string>
-  <string name="BadMovie">Un plugin esterno o la skin ha tentato\ndi aprire un film inesistente!</string>
-  <string name="BadParam">Un plugin esterno o la skin ha passato\ndei parametri invalidi!</string>
   <string name="Backdrop">Sfondo</string>
   <string name="BeginsWith">Inizia con</string>
   <string name="BelongsToCollection">appartiene alla collezione</string>
   <!--C-->
   <string name="Cancel">Cancella</string>
-  <string name="CannotDeleteOffline">Impossibile cancellare {0}\n perchè il file è offline</string>
-  <string name="CannotDeleteReadOnly">Impossibile cancellare un film di sola lettura.\nVuoi che questo film venga ignorato?</string>
   <string name="CastAndCrew">Cast e troupe</string>
-  <string name="CategoryEmptyDescription">Non ci sono films elencati\nin questa categoria</string>
   <string name="CategoryEmptyHeader">Categoria vuota</string>
   <string name="Certification">Certificazione</string>
   <string name="ChangeView">Cambia vista</string>
@@ -53,7 +47,6 @@
   <string name="Director">Regista</string>
   <string name="Directors">Registi</string>
   <string name="DownAbbreviation">(giù)</string>
-  <string name="DoYouWantToDelete">Vuoi definitivamente cancellare\n{0}\ndal disco?</string>
   <!--E-->
   <string name="EarlierThisYear">Precedenti in quest\'anno</string>
   <string name="Error">Errore</string>
@@ -75,10 +68,8 @@
   <string name="ImdbId">Identificativo IMDb</string>
   <string name="Importer">Importazione film</string>
   <string name="ImporterDisabled">Importazione disabilitata</string>
-  <string name="ImporterDisabledMessage">L\'importazione è stata disabilitata\nnell\'interfaccia di MediaPortal. Desideri riabilitarla?</string>
   <string name="ImporterPending">Importazione ({0} pendenti)</string>
   <string name="InvalidPin">Codice PIN non valido!</string>
-  <string name="InvalidVideoDiscFormat">O l\'immagine non contiene un formato video valido\no la configurazione di Daemon Tools in MediaPortal non è corretta.</string>
   <!--L-->
   <string name="Language">Lingua</string>
   <string name="LargeThumbnailView">Vista icone grandi</string>
@@ -91,11 +82,8 @@
   <string name="MarkAsUnwatched">Marca come non visto</string>
   <string name="MarkAsWatched">Marca come visto</string>
   <string name="MediaInfo">Informazioni multimediali</string>
-  <string name="MediaIsMissing">Il supporto per il film che è stato selezionato, manca!\nPurtroppo ogni tanto qualcosa va storto...</string>
-  <string name="MediaNotAvailableBody">Il supporto per il film selezionato non è attualmente disponibile.\nInserire o collegare il supporto {0}</string>
   <string name="MediaNotAvailableHeader">Supporto non disponibile</string>
   <string name="Missing">Mancante</string>
-  <string name="MissingExternalPlayerExe">L\'eseguibile per la riproduzione HD manca.\nCorreggere il percorso dell\'eseguibile.</string>
   <string name="Monday">Lunedì</string>
   <string name="MonthName1">Gennaio</string>
   <string name="MonthName2">Febbraio</string>
@@ -114,15 +102,14 @@
   <string name="MovieOptions">Opzioni film</string>
   <string name="Movies">Films</string>
   <!--N-->
-  <string name="NoImportPathsBody">Non è stato definito alcun percorso di importazione.\nChiudere MediaPortal e verificare la configurazione di Moving Pictures.</string>
   <string name="NoImportPathsHeading">Nessun percorso di importazione!</string>
   <!--O-->
   <string name="Older">Più vecchi</string>
+  <string name="Overview">Panoramica</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Controlli parentali non abilitati.</string>
   <string name="PinCodeHeader">Sblocca i contenuti con restrizioni</string>
   <string name="PinCodePrompt">Inserire il codice PIN per continuare:</string>
-  <string name="PlaybackFailed">La riproduzione non è possibile perchè l\'estensione\'{0}\'\nnon è presente nella configurazione di MediaPortal.\nAggiungere questa estensione o configurare un player esterno e riprovare.</string>
   <string name="PlaybackFailedHeader">Riproduzione fallita</string>
   <string name="PlayMovie">Riproduci film</string>
   <string name="PossibleMatches">Corrispondenze possibili</string>
@@ -153,6 +140,7 @@
   <string name="RestoreIgnoredFiles">Ripristina i files ignorati</string>
   <string name="ResumeFrom">Riparti da:</string>
   <string name="ResumeFromLast">Riprendere il film dall\'ultima volta?</string>
+  <string name="Resolution">Risoluzione</string>
   <string name="Retry">Riprova</string>
   <string name="Runtime">Durata</string>
   <string name="RuntimeHour">{0} ora</string>
@@ -207,13 +195,11 @@
   <string name="UnwatchedMovies">Films da vedere</string>
   <string name="UpAbbreviation">(su)</string>
   <string name="UpdateDetailsFromOnline">Aggiornamento online dettagli</string>
-  <string name="UpdateMovieDetailsBody">Si sta procedendo all\'aggiornamento di tutti i metadati,\nsovrascrivendo le modifiche manuali di questo film.\nSi vuole continuare?</string>
   <string name="UpdateMovieDetailsHeader">Aggiorna dettagli film</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Disco virtuale non pronto</string>
-  <string name="VirtualDriveMessage">Il disco virtuale non era pronto in tempo.\nRiprovare o cancellare la riproduzione.</string>
-  <string name="Votes">voti</string>
   <string name="ViewMovieDetails">Vista dettagli film</string>
+  <string name="VirtualDriveHeader">Disco virtuale non pronto</string>
+  <string name="Votes">voti</string>
   <!--W-->
   <string name="Wednesday">Mercoledì</string>
   <string name="Writer">Sceneggiatore</string>

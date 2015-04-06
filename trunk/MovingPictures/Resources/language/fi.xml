@@ -6,18 +6,12 @@
   <string name="AllMovies">Kaikki elokuvat</string>
   <string name="AllFiles">Kaikki tiedostot</string>
   <!--B-->
-  <string name="BadCategory">Ulkopuolinen lisäosa tai ulkoasu yritti\navata olematonta kategoriaa!</string>
-  <string name="BadMovie">Ulkopuolinen lisäosa ta ulkoasu yritti\navata olematonta elokuvaa!</string>
-  <string name="BadParam">Ulkopuolinen lisäosa tai ulkoasu välitti\nMoving Picturesille väärän paramatrin!</string>
   <string name="Backdrop">Tausta</string>
   <string name="BeginsWith">Alkaa kirjaimella...</string>
   <string name="BelongsToCollection">Kuuluu kokoelmaan</string>
   <!--C-->
   <string name="Cancel">Peruuta</string>
-  <string name="CannotDeleteOffline">Ei voi poistaa {0}\n koska tiedosto ei ole saatavilla</string>
-  <string name="CannotDeleteReadOnly">Ei voi poistaa vain-luku elokuvaa.\nHaluatko että Moving Pictures ei huomioi tätä elokuvan?</string>
   <string name="CastAndCrew">Näyttelijät ja Avustajat</string>
-  <string name="CategoryEmptyDescription">Tässä kategoriassa ei ole\ntällä hetkellä yhtään elokuvaa.</string>
   <string name="CategoryEmptyHeader">Kategoria on tyhjä</string>
   <string name="Certification">Sertifiointi</string>
   <string name="ChangeView">Vaihda näkymää</string>
@@ -53,7 +47,6 @@
   <string name="Director">Ohjaaja</string>
   <string name="Directors">Ohjaajat</string>
   <string name="DownAbbreviation">(al)</string>
-  <string name="DoYouWantToDelete">Haluatko poistaa\n{0}\npysyvästi kiintolevyltäsi?</string>
   <!--E-->
   <string name="EarlierThisYear">Aiemmin tänä vuonna</string>
   <string name="Error">Virhe</string>
@@ -75,10 +68,8 @@
   <string name="ImdbId">IMDb Id</string>
   <string name="Importer">Elokuvien tuoja</string>
   <string name="ImporterDisabled">Tuoja ei käytössä</string>
-  <string name="ImporterDisabledMessage">Tuoja on poistettu käytöstä MediaPortalissa. \nHaluatko ottaa sen käyttöön?</string>
   <string name="ImporterPending">Tuoja ({0} Tarvitsee huomiota)</string>
   <string name="InvalidPin">Väärä PIN-koodi!</string>
-  <string name="InvalidVideoDiscFormat">Joko levykuva ei ole oikeassa\nvideolevy-muodossa tai MediaPortalin Daemon Tools\nasetukset ovat virheelliset.</string>
   <!--L-->
   <string name="Language">Kieli</string>
   <string name="LargeThumbnailView">Suurikuvake</string>
@@ -91,11 +82,8 @@
   <string name="MarkAsUnwatched">Merkitse katsomattomaksi</string>
   <string name="MarkAsWatched">Merkitse katsotuksi</string>
   <string name="MediaInfo">Median tiedot</string>
-  <string name="MediaIsMissing">Valitsemasi elokuvan tallennusmedia puuttuu!\nValitettavasti jokin on mennyt pieleen...</string>
-  <string name="MediaNotAvailableBody">Valitsemasi elokuvan tallennusmedia ei\nole saatavilla. Liitä tai yhdistä tallenusmedia\nnimeltään: {0}</string>
   <string name="MediaNotAvailableHeader">Media ei saatavilla</string>
   <string name="Missing">Kateissa</string>
-  <string name="MissingExternalPlayerExe">HD-toiston ajotiedosto puuttuu.\nKorjaa ajotiedoston polku.</string>
   <string name="Monday">Maanantai</string>
   <string name="MonthName1">Tammikuu</string>
   <string name="MonthName2">Helmikuu</string>
@@ -114,15 +102,14 @@
   <string name="MovieOptions">Elokuvan asetukset</string>
   <string name="Movies">Elokuvat</string>
   <!--N-->
-  <string name="NoImportPathsBody">Sinulla ei ole yhtään tuontikansiota\nmääriteltynä. Sulje MediaPortal\nja suorita\nMP-asetusohjelma.</string>
   <string name="NoImportPathsHeading">Ei tuontipolkuja!</string>
   <!--O-->
   <string name="Older">Vanhempi</string>
+  <string name="Overview">Yleiskatsaus</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Lapsilukko ei ole käytössä.</string>
   <string name="PinCodeHeader">Poistetaan K-18 lukitus</string>
   <string name="PinCodePrompt">Anna PIN-koodi jatkaaksesi:</string>
-  <string name="PlaybackFailed">Toisto ei ole mahdollista, koska \'{0}\'\nlisäosa ei ole listattuna mediaportalin asetuksissa.\nLisää tämä lisäosa tai määritä ulkoinen soitin\nja yritä uudelleen.</string>
   <string name="PlaybackFailedHeader">Toisto epäonnistui</string>
   <string name="PlayMovie">Toista elokuva</string>
   <string name="PossibleMatches">Mahdollisia tuloksia</string>
@@ -153,6 +140,7 @@
   <string name="RestoreIgnoredFiles">Palauta huomiotta jätetyt tiedostot</string>
   <string name="ResumeFrom">Jatka kohdasta:</string>
   <string name="ResumeFromLast">Jatketaan elokuvaa kohdasta mihin viimeksi jäätiin?</string>
+  <string name="Resolution">Piirtotarkkuus</string>
   <string name="Retry">Yritä uudelleen</string>
   <string name="Runtime">Kestoaika</string>
   <string name="RuntimeHour">{0} tunti</string>
@@ -207,13 +195,11 @@
   <string name="UnwatchedMovies">Katsomattomat elokuvat</string>
   <string name="UpAbbreviation">(yl)</string>
   <string name="UpdateDetailsFromOnline">Päivitä yksityiskohdat verkosta</string>
-  <string name="UpdateMovieDetailsBody">Olet päivittämässä kaikkia elokuvan tietoja, kaikki\n itse tehdyt muokkaukset menetetään. Haluatko varmasti\njatkaa?</string>
   <string name="UpdateMovieDetailsHeader">Päivitä elokuvan tiedot</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Virtuaaliasema ei ole valmis</string>
-  <string name="VirtualDriveMessage">Virtuaaliasema ei ollut valmis ajoissa.\nYritä uudelleen tai peruuta toisto.</string>
-  <string name="Votes">äänet</string>
   <string name="ViewMovieDetails">Näytä elokuvan tiedot</string>
+  <string name="VirtualDriveHeader">Virtuaaliasema ei ole valmis</string>
+  <string name="Votes">äänet</string>
   <!--W-->
   <string name="Wednesday">Keskiviikko</string>
   <string name="Writer">Käsikirjoittaja</string>

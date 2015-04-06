@@ -9,7 +9,6 @@
   <string name="BeginsWith">Begynner med</string>
   <!--C-->
   <string name="Cancel">Avbryt</string>
-  <string name="CategoryEmptyDescription">Det er for øyeblikket ingen filmer\n listet i denne kategorien.</string>
   <string name="Certification">Aldersgrense</string>
   <string name="ChangeView">Endre visning</string>
   <string name="Completed">Fullført</string>
@@ -39,6 +38,7 @@
   </string>
   <string name="RemoteNumericAlphabet1">
   </string>
+  <string name="Resolution">Oppløsning</string>
   <string name="Runtime">Lengde</string>
   <!--S-->
   <string name="SortBy">Sorter etter</string>

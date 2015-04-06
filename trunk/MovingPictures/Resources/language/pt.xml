@@ -6,14 +6,10 @@
   <string name="AllMovies">Todos os filmes</string>
   <string name="AllFiles">Todos os ficheiros</string>
   <!--B-->
-  <string name="BadCategory">Um plugin ou um tema tentou\nabrir uma categoria do Moving\nPictures inexistente!</string>
   <string name="BeginsWith">Começa por</string>
   <string name="BelongsToCollection">Pertence à Coleção</string>
   <!--C-->
   <string name="Cancel">Cancelar</string>
-  <string name="CannotDeleteOffline">Não se pode apagar {0}\n porque o ficheiro está offline</string>
-  <string name="CannotDeleteReadOnly">Não se pode apagar um filme protegido contra escrita.\n¿Quer que o Moving Pictures ignore este filme ?</string>
-  <string name="CategoryEmptyDescription">Actualmente não há filmes que\nfigurem  nesta categoria.</string>
   <string name="CategoryEmptyHeader">A categoria está vazia</string>
   <string name="Certification">Qualificação</string>
   <string name="ChangeView">Trocar visualização</string>
@@ -47,7 +43,6 @@
   <string name="Director">Director</string>
   <string name="Directors">Directores</string>
   <string name="DownAbbreviation">(des)</string>
-  <string name="DoYouWantToDelete">Quer apagar permanentemente\n{0}\ndo seu disco ?</string>
   <!--E-->
   <string name="EarlierThisYear">No início do ano</string>
   <string name="Error">Erro</string>
@@ -64,7 +59,6 @@
   <!--I-->
   <string name="IgnoreMovie">Ignorar filme</string>
   <string name="InvalidPin">Código PIN errado!</string>
-  <string name="InvalidVideoDiscFormat">O ficheiro de imagem não contêm\num formato de disco válido, ou a sua configuração\nde Daemon Tools no MediaPortal está incorrecta.</string>
   <!--L-->
   <string name="Language">Idioma</string>
   <string name="LargeThumbnailView">Vista de Fotos</string>
@@ -76,10 +70,7 @@
   <!--M-->
   <string name="MarkAsUnwatched">Marcar como não visto</string>
   <string name="MarkAsWatched">Marcar como visto</string>
-  <string name="MediaIsMissing">Não se encontra o suporte de media do filme seleccionado! \nlamento mas algo correu mal...</string>
-  <string name="MediaNotAvailableBody">O suporte de media do filme que seleccionou não está\ndisponivel actualmente. Por favor, insera ou conecte o suporte\netiquetado como: {0}</string>
   <string name="MediaNotAvailableHeader">Suporte de media não disponivel</string>
-  <string name="MissingExternalPlayerExe">Não se encontra o  executável para a reproducção HD.\nPor favor, corrija o caminho para o executável.</string>
   <string name="Monday">Segunda-feira</string>
   <string name="MonthName1">Janeiro</string>
   <string name="MonthName2">Fevereiro</string>
@@ -98,7 +89,6 @@
   <string name="MovieOptions">Opções do filme</string>
   <string name="Movies">Filmes</string>
   <!--N-->
-  <string name="NoImportPathsBody">Não parece que tenha definido\n alguma rota de importação. \nDeverá fechar o MediaPortal e\nexecutar a \nConfiguração para\nconfigurar o Moving Pictures.</string>
   <string name="NoImportPathsHeading">Não há caminhos para a importação!</string>
   <!--O-->
   <string name="Older">Mais antigo</string>
@@ -106,7 +96,6 @@
   <string name="ParentalControlsDisabled">Control parental não activado</string>
   <string name="PinCodeHeader">Desbloquear conteúdo marcado como restrito</string>
   <string name="PinCodePrompt">Por favor, introduzca o código PIN para continuar:</string>
-  <string name="PlaybackFailed">Não é possivel reproduzir porque a extensão \'{0}\'\nnão existe na configuração do MediaPortal.\nPor favor, adicione a extensão ou condigure um programa externo\npara fazer a reprodução e tente de novo.</string>
   <string name="PlaybackFailedHeader">Falha na reprodução</string>
   <string name="PlayMovie">Reproduzir filme</string>
   <string name="ProblemLoadingSkinFile">Lamento, houve um problema a carregar o arquivo de skin...</string>
@@ -183,13 +172,11 @@
   <string name="UnwatchedMovies">Filmes não vistos</string>
   <string name="UpAbbreviation">(sub)</string>
   <string name="UpdateDetailsFromOnline">Actualizar detalhes a partir da Internet</string>
-  <string name="UpdateMovieDetailsBody">Rever e actualizar todos os dados do filme, sobre-escrevendo\nqualquer modificação feita sobre o filme.\n¿Quer continuar ?</string>
   <string name="UpdateMovieDetailsHeader">Actualizar detalhes do filme</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Unidade virtual não está preparada</string>
-  <string name="VirtualDriveMessage">A unidade virtual não se preparou a tempo.\nTente de novo ou cancele a reprodução.</string>
-  <string name="Votes">votos</string>
   <string name="ViewMovieDetails">Ver detalhes do filme</string>
+  <string name="VirtualDriveHeader">Unidade virtual não está preparada</string>
+  <string name="Votes">votos</string>
   <!--W-->
   <string name="Wednesday">quarta-feira</string>
   <string name="Writer">Guionista</string>

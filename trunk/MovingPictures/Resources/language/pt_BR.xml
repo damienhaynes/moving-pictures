@@ -7,9 +7,6 @@
   <!--B-->
   <!--C-->
   <string name="Cancel">Cancelar</string>
-  <string name="CannotDeleteOffline">Não foi possível remover {0}\n porque o arquivo está indisponível</string>
-  <string name="CannotDeleteReadOnly">Não é possível remover um filme\nem modo somente-leitura.\nGostaria que Moving Pictures ignorasse o filme?</string>
-  <string name="CategoryEmptyDescription">Não há filmes listados\nnesta categoria no momento.</string>
   <string name="CategoryEmptyHeader">A categoria está vazia</string>
   <string name="Certification">Classificação indicativa</string>
   <string name="ChangeView">Mudar visualização</string>
@@ -40,7 +37,6 @@
   <string name="Director">Dirigido por</string>
   <string name="Directors">Diretores</string>
   <string name="DownAbbreviation">(dn)</string>
-  <string name="DoYouWantToDelete">Deseja remover de forma permanente\n{0}\ndo seu disco rígido?</string>
   <!--E-->
   <string name="EarlierThisYear">No começo deste ano</string>
   <string name="Error">Erro</string>
@@ -56,7 +52,6 @@
   <string name="Genres">Gêneros</string>
   <!--I-->
   <string name="InvalidPin">Código PIN inválido!</string>
-  <string name="InvalidVideoDiscFormat">Ou o arquivo de imagem não contêm\num formato de disco de vídeo válido\nou seu Daemon\nTools não está configurado corretamente\nno MediaPortal.</string>
   <!--L-->
   <string name="Language">Idioma</string>
   <string name="LargeThumbnailView">Visualização em miniatura grande</string>
@@ -68,17 +63,13 @@
   <!--M-->
   <string name="MarkAsUnwatched">Marcar como não-assistido</string>
   <string name="MarkAsWatched">Marcar como assistido</string>
-  <string name="MediaIsMissing">A mídia para o arquivo que você selecionou não foi encontrada!\nSentimos muito mas algo deu errado...</string>
-  <string name="MediaNotAvailableBody">A mídia para o filme que você selecionou não\nestá disponível. Insira ou conecte a mídia com\na etiqueta: {0}</string>
   <string name="MediaNotAvailableHeader">Mídia indisponível</string>
-  <string name="MissingExternalPlayerExe">O executável para reprodução\nem alta definição não foi encontrado!\nSelecione o caminho correto do executável.</string>
   <string name="Monday">Segunda-feira</string>
   <string name="Movie">Filme</string>
   <string name="MovieDetails">Detalhes do filme</string>
   <string name="MovieOptions">Opções do filme</string>
   <string name="Movies">Filmes</string>
   <!--N-->
-  <string name="NoImportPathsBody">Parece que você não definiu nenhum\ncaminho para importação.\nFeche o MediaPortal e\nabra tela de configuração\ndo MediaPortal para\nconfigurar o Moving Pictures.</string>
   <string name="NoImportPathsHeading">Não há caminhos para importação!</string>
   <!--O-->
   <string name="Older">Mais antigo</string>
@@ -86,7 +77,6 @@
   <string name="ParentalControlsDisabled">Controle de acesso indefinido.</string>
   <string name="PinCodeHeader">Desbloqueando conteúdo restrito</string>
   <string name="PinCodePrompt">Por favor insira o código PIN para continuar:</string>
-  <string name="PlaybackFailed">Reprodução impossível devido a extensão\n\'{0}\'\nnão estar listada na configuração do seu mediaportal.\nPor favor adicione essa extensão ou\nconfigure um player externo e tente de novo.</string>
   <string name="PlaybackFailedHeader">Falha na reprodução</string>
   <string name="ProblemLoadingSkinFile">Desculpe, houve um problema ao carregar o arquivo da skin</string>
   <!--R-->
@@ -113,6 +103,7 @@
   <string name="RemoteNumericAlphabet9">wxyz</string>
   <string name="ResumeFrom">Continuar a partir de:</string>
   <string name="ResumeFromLast">Deseja continuar o filme de onde você parou?</string>
+  <string name="Resolution">Resolução</string>
   <string name="Retry">Tentar de novo</string>
   <string name="Runtime">Duração</string>
   <string name="RuntimeHour">{0} hora</string>
@@ -158,11 +149,9 @@
   <string name="UnwatchedMovies">Filmes não-assistidos</string>
   <string name="UpAbbreviation">(up)</string>
   <string name="UpdateDetailsFromOnline">Atualizar detalhes on-line</string>
-  <string name="UpdateMovieDetailsBody">Você está prestes a atualizar os meta-dados do filme\nsobrescrevendo rwriting\nany custom modifications to this film. Do you want\nto continue?</string>
   <string name="UpdateMovieDetailsHeader">Atualizar detalhes do filme</string>
   <!--V-->
   <string name="VirtualDriveHeader">O drive virtual não está preparado</string>
-  <string name="VirtualDriveMessage">O drive virtual não estava preparado.\nPor favor, tente novamente ou cancele\na reprodução.</string>
   <!--W-->
   <string name="Wednesday">Quarta-feira</string>
   <string name="Writer">Roteirista</string>

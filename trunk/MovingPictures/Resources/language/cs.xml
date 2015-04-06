@@ -4,19 +4,35 @@
   <string name="Actor">Herec</string>
   <string name="Actors">Herci</string>
   <string name="AllMovies">Všechny filmy</string>
+  <string name="AllFiles">Všechny soubory</string>
+  <string name="AspectRatio">Poměr stran</string>
+  <string name="AudioChannels">Zvukové stopy</string>
+  <string name="AudioFormat">Formát zvuku</string>
   <!--B-->
+  <string name="BadCategory">Externí modul nebo vzhled se pokusil\notevřít neexistující kategorii\nMoving Pictures!</string>
+  <string name="BadMovie">Externí modul nebo vzhled se pokusil\notevřít neexistující film\nMoving Pictures!</string>
+  <string name="BadParam">Externí modul nebo vzhled předal\nMoving Pictures neplatný paramater!</string>
+  <string name="Backdrop">Backdrop</string>
+  <string name="BeginsWith">Začíná na</string>
+  <string name="BelongsToCollection">Je součástí kolekce</string>
   <!--C-->
   <string name="Cancel">Zrušit</string>
   <string name="CannotDeleteOffline">Nelze odstranit {0},\nprotože soubor není dostupný.</string>
   <string name="CannotDeleteReadOnly">Nelze odstranit film pouze ke čtení.\nPřejete si ignorovat tento film?</string>
+  <string name="CastAndCrew">Osoby a obsazení</string>
   <string name="CategoryEmptyDescription">V této kategorii v současnosti\nnejsou žádné filmy.</string>
   <string name="CategoryEmptyHeader">Prázná kategorie</string>
   <string name="Certification">Klasifikace</string>
   <string name="ChangeView">Změnit zobrazení</string>
   <string name="CheckForMissingArtwork">Vyhledat chybějící grafiku online</string>
+  <string name="Collection">Kolekce</string>
+  <string name="Collections">Kolekce</string>
   <string name="Completed">Dokončeno</string>
+  <string name="CompletedFiles">Zpracované soubory</string>
   <string name="ContinueToNextPartBody">Přejete si pokračovat dílem {0}?</string>
   <string name="ContinueToNextPartHeader">Přejít na další díl?</string>
+  <string name="Cover">Obal</string>
+  <string name="CoverFlowView">Zobrazení toku obalů</string>
   <string name="CycleCoverArt">Další grafika</string>
   <string name="CycleView">Další zobrazení</string>
   <!--D-->
@@ -47,14 +63,25 @@
   <!--F-->
   <string name="FailedMountingImage">Připojení obrazu DVD selhalo.</string>
   <string name="FilePath">Cesta k souboru</string>
+  <string name="FileSize">Velikost souboru</string>
+  <string name="FilesNeedingAttention">Soubory vyžadující pozornost</string>
   <string name="FilmstripView">Filmový pás</string>
   <string name="FilterBy">Změnit pohled</string>
+  <string name="FrameRate">Snímková frekvence</string>
   <string name="Friday">pátek</string>
   <string name="Future">Budoucnost</string>
   <!--G-->
+  <string name="GlobalActions">Globální akce</string>
   <string name="Genre">Žánr</string>
   <string name="Genres">Žánry</string>
   <!--I-->
+  <string name="IgnoreMovie">Ignorovat film</string>
+  <string name="ImdbId">IMDb Id</string>
+  <string name="Importer">Import filmů</string>
+  <string name="ImporterDisabled">Importování je zakázáno</string>
+  <string name="ImporterDisabledMessage">Nástroj pro import byl zakázán.\nPřejete si jej povolit?</string>
+  <string name="ImporterPending">Import (Vyžadující pozornost: {0})</string>
+  <string name="InfoUrl">Zdroj informací</string>
   <string name="InvalidPin">Neplatný PIN kód!</string>
   <string name="InvalidVideoDiscFormat">Soubor s obrazem neobsahuje platný formát\nobrazového disku, nebo jsou Daemon Tools\nv MediaPortalu chybně nastaveny.</string>
   <!--L-->
@@ -66,28 +93,47 @@
   <string name="ListView">Seznam</string>
   <string name="LockRestrictedMovies">Zamknout zakázané filmy</string>
   <!--M-->
-  <string name="MarkAsUnwatched">Označit za nezhlédnuté</string>
-  <string name="MarkAsWatched">Označit za zhlédnuté</string>
+  <string name="MarkAsUnwatched">Označit jako nezhlédnuté</string>
+  <string name="MarkAsWatched">Označit jako zhlédnuté</string>
+  <string name="MediaInfo">Informace o médiu</string>
   <string name="MediaIsMissing">Médium vámi zvoleného filmu nebylo nalezeno.</string>
   <string name="MediaNotAvailableBody">Médium vámi zvoleného filmu není v současnosti\nk dispozici. Vložte či připojte prosím médium s popiskem:\n{0}</string>
   <string name="MediaNotAvailableHeader">Nedostupné médium</string>
+  <string name="MediaType">Typ média</string>
+  <string name="Missing">Chybějící</string>
   <string name="MissingExternalPlayerExe">Chybí externí přehrávač pro HD obsah.\nOpravte prosím cestu ke spustitelnému souboru.</string>
   <string name="Monday">pondělí</string>
+  <string name="MonthName1">Leden</string>
+  <string name="MonthName2">Únor</string>
+  <string name="MonthName3">Březen</string>
+  <string name="MonthName4">Duben</string>
+  <string name="MonthName5">Květen</string>
+  <string name="MonthName6">Červen</string>
+  <string name="MonthName7">Červenec</string>
+  <string name="MonthName8">Srpen</string>
+  <string name="MonthName9">Září</string>
+  <string name="MonthName10">Říjen</string>
+  <string name="MonthName11">Listopad</string>
+  <string name="MonthName12">Prosinec</string>
   <string name="Movie">Film</string>
-  <string name="MovieDetails">Detaily o filmu</string>
+  <string name="MovieDetails">Detaily filmu</string>
   <string name="MovieOptions">Volby filmu</string>
-  <string name="Movies">filmů</string>
+  <string name="Movies">Filmy</string>
   <!--N-->
   <string name="NoImportPathsBody">Pravděpodobně nemáte nastavenou žádnou\ncestu pro import. Uzavřete MediaPortal a spusťte\nkonfigurátor MediaPortalu pro nastavení\nmodulu Moving Pictures.</string>
   <string name="NoImportPathsHeading">Chybí cesty pro import!</string>
   <!--O-->
   <string name="Older">starší</string>
+  <string name="Overview">Přehled</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Rodičovská kontrola není aktivní.</string>
   <string name="PinCodeHeader">Odemknutí zakázaného obsahu</string>
   <string name="PinCodePrompt">Zadejte prosím PIN kód pro pokračování:</string>
   <string name="PlaybackFailed">Přehrávání není možné, protože přípona \'{0}\'\nse nenachází v konfiguraci vašeho MediaPortalu.\nPřidejte prosím tuto příponu nebo nastavte\nexterní přehrávač a zkuste to znovu.</string>
   <string name="PlaybackFailedHeader">Přehrávání se nezdařilo</string>
+  <string name="PlayCount">Počet přehrání</string>
+  <string name="PlayMovie">Přehrát film</string>
+  <string name="PossibleMatches">Možné shody</string>
   <string name="ProblemLoadingSkinFile">Vyskytla se chyba při nahrávání souboru se vzhledem.</string>
   <!--R-->
   <string name="Rate">Hodnocení</string>
@@ -112,8 +158,10 @@
   <string name="RemoteNumericAlphabet7">pqrs</string>
   <string name="RemoteNumericAlphabet8">tuv</string>
   <string name="RemoteNumericAlphabet9">wxyz</string>
+  <string name="RestoreIgnoredFiles">Obnovit ignorované soubory</string>
   <string name="ResumeFrom">Pokračovat od:</string>
   <string name="ResumeFromLast">Pokračovat v přehrávání v místě přerušení?</string>
+  <string name="Resolution">Rozlišení</string>
   <string name="Retry">Opakovat</string>
   <string name="Runtime">Délka</string>
   <string name="RuntimeHour">{0} hodina</string>
@@ -128,19 +176,30 @@
   <string name="RuntimeShortExtended">{0}h{1:00}m{2:00}s</string>
   <!--S-->
   <string name="Saturday">sobota</string>
+  <string name="SendToImporter">Odeslat do nástroje pro import</string>
+  <string name="ScanForNewMovies">Vyhledat další filmy</string>
   <string name="Score">Hodnocení</string>
   <string name="Search">Vyhledat</string>
+  <string name="SearchBy">Hledat podle</string>
+  <string name="SearchForMore">Vyhledat více možných filmů</string>
+  <string name="SearchNoResults">Nebyly nalezeny žádné výsledky.</string>
+  <string name="SelectCorrectMovie">Výběr správného filmu</string>
   <string name="SelectYourRating">Zvolte hodnocení pro {0}</string>
   <string name="ShowOnlyUnwatchedMovies">Zobrazit jen nezhlédnuté filmy</string>
   <string name="ShowWatchedAndUnwatchedMovies">Zobrazit zhlédnuté i nezhlédnuté filmy</string>
   <string name="SkinDoesNotSupportCategories">Tento vzhled nepodporuje kategorie.</string>
+  <string name="SkinDoesNotSupportImporter">Tento vzhled nepodporuje nástroj pro import.</string>
   <string name="SkinDoesNotSupportPinDialog">Tento vzhled nepodporuje dialog pro PIN kód.</string>
   <string name="SkinDoesNotSupportRatingDialog">Tento vzhled nepodporuje dialog hodnocení.</string>
+  <string name="Source">Místní zdroj</string>
   <string name="SortBy">Řadit podle</string>
   <string name="SortDirection">Směr řazení</string>
   <string name="StarRating">Hodnocení</string>
+  <string name="Start">Start</string>
   <string name="Sunday">neděle</string>
   <!--T-->
+  <string name="TechnicalInfo">Technické informace</string>
+  <string name="Theme">Téma</string>
   <string name="ThisMonth">tento měsíc</string>
   <string name="ThisWeek">tento týden</string>
   <string name="ThisYear">tento rok</string>
@@ -148,7 +207,7 @@
   <string name="ThreeWeeksAgo">před třemi týdny</string>
   <string name="ThumbnailView">Ikony</string>
   <string name="Thursday">čtvrtek</string>
-  <string name="Title">Titul</string>
+  <string name="Title">Název</string>
   <string name="Today">dnes</string>
   <string name="ToggleParentalLock">Přepnout rodičovský zámek</string>
   <string name="Tuesday">úterý</string>
@@ -163,10 +222,13 @@
   <string name="UpdateMovieDetailsBody">Chystáte se obnovit detaily o filmu,\ncož přepíše jakékoliv vlastní úpravy.\nPřejete si pokračovat?</string>
   <string name="UpdateMovieDetailsHeader">Aktualizovat detaily filmu</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Virtualní mechanika není připravena</string>
-  <string name="VirtualDriveMessage">Virtuální mechanika nebyla včas k dispozici.\nZkuste to prosím znovu nebo zrušte přehrávání.</string>
+  <string name="VideoFormat">Formát videa</string>
+  <string name="ViewMovieDetails">Zobrazit informace o filmu</string>
+  <string name="VirtualDriveHeader">Virtuální disk není připraven</string>
+  <string name="VirtualDriveMessage">Virtuální disk nebyl včas k dispozici.\nZkuste to prosím znovu nebo zrušte přehrávání.</string>
   <string name="Votes">hlasů</string>
   <!--W-->
+  <string name="WatchedCount">Počet zhlédnutí</string>
   <string name="Wednesday">středa</string>
   <string name="Writer">Scénárista</string>
   <string name="Writers">Scénáristé</string>

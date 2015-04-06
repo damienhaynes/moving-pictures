@@ -5,16 +5,19 @@
   <string name="Actors">Schauspieler</string>
   <string name="AllMovies">Alle Filme</string>
   <string name="AllFiles">Alle Dateien</string>
+  <string name="AspectRatio">Seitenverhältnis</string>
+  <string name="AudioChannels">Audio Kanäle</string>
+  <string name="AudioFormat">Audioformat</string>
   <!--B-->
-  <string name="BadCategory">Ein externes Plugin oder Skin \nhat versucht, eine nicht vorhandene\nMoving Pictures Kategorie zu öffnen!</string>
-  <string name="BadMovie">Ein externes Plugin oder Skin \nhat versucht, einen\nfehlenden Film zu öffnen!</string>
-  <string name="BadParam">Ein externes Plugin oder Skin hat\neinen ungültigen Parameter\nübergeben.</string>
+  <string name="BadCategory">Ein externes Plugin oder Skin\nversucht, eine fehlende\nKategorie zu öffnen!</string>
+  <string name="BadMovie">Ein externes Plugin oder Skin\nhat versucht, einen\nfehlenden Film zu öffnen!</string>
+  <string name="BadParam">Ein externes Plugin oder\nSkin hat einen ungültigen \nParameter übergeben.</string>
   <string name="Backdrop">Hintergrundbild</string>
   <string name="BeginsWith">Beginnt mit</string>
   <string name="BelongsToCollection">Gehört zu der Sammlung</string>
   <!--C-->
   <string name="Cancel">Abbrechen</string>
-  <string name="CannotDeleteOffline">Kann {0}\n nicht löschen, da die Datei offline ist</string>
+  <string name="CannotDeleteOffline">Kann {0} nicht löschen,\nda die Datei offline ist</string>
   <string name="CannotDeleteReadOnly">Kann keine schreibgeschützen Dateien löschen.\nSoll Moving Pictures diesen Film ignorieren?</string>
   <string name="CastAndCrew">Cast und Crew</string>
   <string name="CategoryEmptyDescription">Momentan sind keine Filme\nin dieser Kategorie vorhanden.</string>
@@ -53,7 +56,7 @@
   <string name="Director">Regisseur</string>
   <string name="Directors">Regisseure</string>
   <string name="DownAbbreviation">(ab)</string>
-  <string name="DoYouWantToDelete">Soll der Film\n{0}\ndauerhaft von der Festplatte gelöscht werden?</string>
+  <string name="DoYouWantToDelete">Soll der Film {0}\ndauerhaft von der Festplatte\ngelöscht werden?</string>
   <!--E-->
   <string name="EarlierThisYear">Anfang des Jahres</string>
   <string name="Error">Fehler</string>
@@ -64,6 +67,7 @@
   <string name="FilesNeedingAttention">Dateien die Aufmerksamkeit benötigen</string>
   <string name="FilmstripView">Filmstrip</string>
   <string name="FilterBy">Filtere nach</string>
+  <string name="FrameRate">Frame Rate</string>
   <string name="Friday">Freitag</string>
   <string name="Future">Zukunft</string>
   <!--G-->
@@ -75,10 +79,12 @@
   <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Film Importer</string>
   <string name="ImporterDisabled">Importer deaktiviert</string>
-  <string name="ImporterDisabledMessage">Der Importer wurde in der Gui von\nMediaPortal deaktiviert. \nWillst du ihn reaktivieren?</string>
+  <string name="ImporterDisabledMessage">Der Importer wurde in der GUI\nvon
+MediaPortal deaktiviert.\nWillst du ihn reaktivieren?</string>
   <string name="ImporterPending">Importer ({0} kontrollieren)</string>
+  <string name="InfoUrl">Info URL</string>
   <string name="InvalidPin">Falscher PIN Code!</string>
-  <string name="InvalidVideoDiscFormat">Entweder das Image-File enthält kein\ngültiges Videodiscformat oder die Daemon Tools\nMediaportal Konfiguration ist nicht korrekt.</string>
+  <string name="InvalidVideoDiscFormat">Entweder das Image-File enthält kein\ngültiges Videodiscformat oder die\nDaemon Tools Mediaportal Konfiguration\nist nicht korrekt.</string>
   <!--L-->
   <string name="Language">Sprache</string>
   <string name="LargeThumbnailView">Grosse Vorschaubilder</string>
@@ -91,11 +97,12 @@
   <string name="MarkAsUnwatched">Als ungesehen markieren</string>
   <string name="MarkAsWatched">Als gesehen markieren</string>
   <string name="MediaInfo">Medium Informationen</string>
-  <string name="MediaIsMissing">Das Medium für den gewählten Film ist nicht vorhanden!\nLeider ging irgendetwas schief...</string>
-  <string name="MediaNotAvailableBody">Das Medium für den gewählten Film ist zur Zeit\nnicht verfügbar. Bitte verbinden oder folgenden\nDatenträger einlegen: {0}</string>
+  <string name="MediaIsMissing">Das Medium für den gewählten Film ist nicht vorhanden!\nLeider ging etwas schief...</string>
+  <string name="MediaNotAvailableBody">Das Medium für den gewählten Film\nist zur Zeit nicht verfügbar.\nBitte verbinden oder folgenden Datenträger einlegen:\n{0}</string>
   <string name="MediaNotAvailableHeader">Medium nicht verfügbar</string>
+  <string name="MediaType">Medientyp</string>
   <string name="Missing">Fehlend</string>
-  <string name="MissingExternalPlayerExe">Die Anwendung für HD-Wiedergabe ist nicht vorhanden.\nBitte den Pfad zu der Anwendung angeben/korrigieren.</string>
+  <string name="MissingExternalPlayerExe">Die Anwendung für HD-Wiedergabe\nist nicht vorhanden. Bitte den Pfad zu\nder Anwendung angeben/korrigieren.</string>
   <string name="Monday">Montag</string>
   <string name="MonthName1">Januar</string>
   <string name="MonthName2">Februar</string>
@@ -114,16 +121,18 @@
   <string name="MovieOptions">Film Optionen</string>
   <string name="Movies">Filme</string>
   <!--N-->
-  <string name="NoImportPathsBody">Es sind keine Importpfade definiert.\nSie sollten Mediaportal schließen und\ndie Konfiguration von Mediaportal öffnen,\num Moving Pictures zu konfigurieren.</string>
+  <string name="NoImportPathsBody">Es sind keine Importpfade definiert.\nSchließe MediaPortal und öffne die\nKonfiguration von Mediaportal, um\nMoving Pictures zu konfigurieren.</string>
   <string name="NoImportPathsHeading">Keine Importpfade!</string>
   <!--O-->
   <string name="Older">Älter</string>
+  <string name="Overview">Übersicht</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Die Kindersicherung ist ausgeschaltet.</string>
   <string name="PinCodeHeader">Eingeschränkte Filme freigeben</string>
   <string name="PinCodePrompt">Bitte PIN Code eingeben um fortzufahren:</string>
-  <string name="PlaybackFailed">Wiedergabe nicht möglich, weil die Erweiterung \'{0}\' nicht in der Mediaportalkonfiguration aufgeführt ist.\nBitte diese Dateierweiterung hinzufügen oder einen externen Player\neinrichten und noch einmal versuchen.</string>
+  <string name="PlaybackFailed">Wiedergabe nicht möglich, weil die\nErweiterung \'{0}\' nicht\nin der Mediaportalkonfiguration aufgeführt ist.\nBitte diese Erweiterung hinzufügen oder einen\nexternen Player einrichten.</string>
   <string name="PlaybackFailedHeader">Wiedergabe fehlgeschlagen</string>
+  <string name="PlayCount">Anzahl gespielt</string>
   <string name="PlayMovie">Spiele Film</string>
   <string name="PossibleMatches">Mögliche Übereinstimmungen</string>
   <string name="ProblemLoadingSkinFile">Leider gab es ein Problem beim Laden der Skin-Datei ...</string>
@@ -153,6 +162,7 @@
   <string name="RestoreIgnoredFiles">Ignorierte Dateien wiederherstellen</string>
   <string name="ResumeFrom">Fortsetzen bei</string>
   <string name="ResumeFromLast">Wiedergabe an letzter Position fortsetzen?</string>
+  <string name="Resolution">Auflösung:</string>
   <string name="Retry">Wiederholen</string>
   <string name="Runtime">Laufzeit</string>
   <string name="RuntimeHour">{0} Stunde</string>
@@ -182,11 +192,14 @@
   <string name="SkinDoesNotSupportImporter">Dieser Skin unterstützt den Importer nicht.</string>
   <string name="SkinDoesNotSupportPinDialog">Dieser Skin unterstützt den PIN Code Dialog nicht.</string>
   <string name="SkinDoesNotSupportRatingDialog">Dieser Skin unterstützt den Bewertungsdialog nicht.</string>
+  <string name="Source">Quelle</string>
   <string name="SortBy">Sortiere nach</string>
   <string name="SortDirection">Sortier Richtung</string>
   <string name="StarRating">Bewertung</string>
+  <string name="Start">Start</string>
   <string name="Sunday">Sonntag</string>
   <!--T-->
+  <string name="TechnicalInfo">Technische Info</string>
   <string name="Theme">Theme</string>
   <string name="ThisMonth">Diesen Monat</string>
   <string name="ThisWeek">Diese Woche</string>
@@ -210,11 +223,13 @@
   <string name="UpdateMovieDetailsBody">Alle benutzerdefinierten Änderungen werden\nbei diesem Vorgang überschrieben.\nTrotzdem fortfahren?</string>
   <string name="UpdateMovieDetailsHeader">Aktualisiere Filmdetails</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Virtuelles Laufwerk ist nicht verfügbar</string>
-  <string name="VirtualDriveMessage">Das virtuelle Laufwerk stand nicht rechtzeitig zur Verfügung.\nBitte erneut versuchen oder die Wiedergabe abbrechen.</string>
-  <string name="Votes">Abstimmungen</string>
+  <string name="VideoFormat">Videoformat</string>
   <string name="ViewMovieDetails">Film Details ansehen</string>
+  <string name="VirtualDriveHeader">Virtuelles Laufwerk ist nicht verfügbar</string>
+  <string name="VirtualDriveMessage">Das virtuelle Laufwerk stand nicht\nrechtzeitig zur Verfügung. Bitte erneut versuchen\noder die Wiedergabe abbrechen.</string>
+  <string name="Votes">Abstimmungen</string>
   <!--W-->
+  <string name="WatchedCount">Anzahl gesehen</string>
   <string name="Wednesday">Mittwoch</string>
   <string name="Writer">Autor</string>
   <string name="Writers">Autoren</string>

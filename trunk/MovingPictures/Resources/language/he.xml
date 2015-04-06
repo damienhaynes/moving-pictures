@@ -6,18 +6,12 @@
   <string name="AllMovies">כל הסרטים</string>
   <string name="AllFiles">כל הקבצים</string>
   <!--B-->
-  <string name="BadCategory">פלאגין חיצוני או סקין\nניסו לפתוח קטגוריה\nשלא קיימת!</string>
-  <string name="BadMovie">פלאגין חיצוני או סקין\nניסו לפתוח סרט\nשלא קיים!</string>
-  <string name="BadParam">פלאגין חיצוני או סקין\nהעבירו פרמטר לא חוקי!</string>
   <string name="Backdrop">רקע</string>
   <string name="BeginsWith">מתחיל ב</string>
   <string name="BelongsToCollection">שייך לאוסף</string>
   <!--C-->
   <string name="Cancel">ביטול</string>
-  <string name="CannotDeleteOffline">לא ניתן למחוק {0}\n כיוון שהקובץ לא זמין</string>
-  <string name="CannotDeleteReadOnly">לא ניתן למחוק קובץ המוגדר לקריאה בלבד\nהאם אתה מעוניין להתעלם מסרט זה?</string>
   <string name="CastAndCrew">שחקנים ואנשי צוות</string>
-  <string name="CategoryEmptyDescription">אין סרטים השייכים\nלקטגוריה זו.</string>
   <string name="CategoryEmptyHeader">הקטגוריה ריקה</string>
   <string name="Certification">אישור צפייה</string>
   <string name="ChangeView">שנה תצוגה</string>
@@ -53,7 +47,6 @@
   <string name="Director">במאי</string>
   <string name="Directors">במאים</string>
   <string name="DownAbbreviation">(dn)</string>
-  <string name="DoYouWantToDelete">האם אתה מעוניין למחוק לצמיתות את\n{0}?</string>
   <!--E-->
   <string name="EarlierThisYear">בשנה הנוכחית</string>
   <string name="Error">שגיאה</string>
@@ -74,10 +67,8 @@
   <string name="ImdbId">מזהה IMDB</string>
   <string name="Importer">ייבוא סרטים</string>
   <string name="ImporterDisabled">ייבוא כבוי</string>
-  <string name="ImporterDisabledMessage">הייבוא כבוי בתצוגת MediaPortal.\nהאם להפעיל אותו?</string>
   <string name="ImporterPending">ייבוא ({0} זקוק לטיפול)</string>
   <string name="InvalidPin">קוד לא חוקי!</string>
-  <string name="InvalidVideoDiscFormat">קובץ תמונה אינו תקין או שהגדרות\nDaemon Tools אינן נכונות.</string>
   <!--L-->
   <string name="Language">שפה</string>
   <string name="LargeThumbnailView">תמונות גדולות</string>
@@ -90,11 +81,8 @@
   <string name="MarkAsUnwatched">סמן כלא נצפה</string>
   <string name="MarkAsWatched">סמן כנצפה</string>
   <string name="MediaInfo">מאפייני קובץ הסרט</string>
-  <string name="MediaIsMissing">ההתקן עבור הסרט שבחרת אינו קיים!\nככל הנראה חלה שגיאה...</string>
-  <string name="MediaNotAvailableBody">ההתקן עבור הסרט שבחרת אינו זמין כעת.\nאנא הכנס או חבר את ההתקן המתאים:\n {0}</string>
   <string name="MediaNotAvailableHeader">מדיה אינה זמינה</string>
   <string name="Missing">חסר</string>
-  <string name="MissingExternalPlayerExe">קובץ הרצה עבור ניגון HD חסר.\nאנא עדכן את מיקום קובץ ההרצה.</string>
   <string name="Monday">יום שני</string>
   <string name="MonthName1">ינואר</string>
   <string name="MonthName2">פברואר</string>
@@ -113,7 +101,6 @@
   <string name="MovieOptions">אפשרויות סרט</string>
   <string name="Movies">סרטים</string>
   <!--N-->
-  <string name="NoImportPathsBody">לא הוגדרו תיקיות ייבוא\nיש לסגור את מדיה פורטל\nולהגדיר תיקיות ייבוא עבור סרטים</string>
   <string name="NoImportPathsHeading">אין תיקיות ייבוא!</string>
   <!--O-->
   <string name="Older">ישן יותר</string>
@@ -121,7 +108,6 @@
   <string name="ParentalControlsDisabled">בקרת הורים אינה פעילה</string>
   <string name="PinCodeHeader">מאפשר תוכן חסום</string>
   <string name="PinCodePrompt">אנא הכנס את קוד על מנת להמשיך:</string>
-  <string name="PlaybackFailed">ניגון לא אפשרי בגלל \'{0}\'\nשסיומת הקובץ לא הוגדרה\nהוסף סיומת זו או הגדר נגן חיצוני</string>
   <string name="PlaybackFailedHeader">ניגון נכשל</string>
   <string name="PlayMovie">נגן סרט</string>
   <string name="PossibleMatches">תוצאות אפשריות</string>
@@ -152,6 +138,7 @@
   <string name="RestoreIgnoredFiles">שחזר קבצים מוסתרים</string>
   <string name="ResumeFrom">המשך מ:</string>
   <string name="ResumeFromLast">המשך סרט מפעם קודמת?</string>
+  <string name="Resolution">רזולוציה:</string>
   <string name="Retry">נסה שנית</string>
   <string name="Runtime">זמן ריצה</string>
   <string name="RuntimeHour">{0} שעה</string>
@@ -206,13 +193,11 @@
   <string name="UnwatchedMovies">סרטים שלא נצפו</string>
   <string name="UpAbbreviation">(up)</string>
   <string name="UpdateDetailsFromOnline">עדכן פרטים מהרשת</string>
-  <string name="UpdateMovieDetailsBody">אתה עומד לעדכן את המידע עבור כל הסרטים.\nפעולה זו תמחק כל שינויים ידניים שבוצעו.\nto האם ברצונך להמשיך?</string>
   <string name="UpdateMovieDetailsHeader">עדכן פרטי סרט</string>
   <!--V-->
-  <string name="VirtualDriveHeader">כונן וירטואלי אינו זמין</string>
-  <string name="VirtualDriveMessage">הכונן הוירטואלי לא היה זמין.\nנסה שני או בטל את הפעולה.</string>
-  <string name="Votes">הצבעות</string>
   <string name="ViewMovieDetails">צפה בפרטי הסרט</string>
+  <string name="VirtualDriveHeader">כונן וירטואלי אינו זמין</string>
+  <string name="Votes">הצבעות</string>
   <!--W-->
   <string name="Wednesday">יום רביעי</string>
   <string name="Writer">כותב</string>

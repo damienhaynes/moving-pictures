@@ -6,18 +6,12 @@
   <string name="AllMovies">Wszystkie filmy</string>
   <string name="AllFiles">Wszystkie pliki</string>
   <!--B-->
-  <string name="BadCategory">Zewnętrzny dodatek lub skóra próbuje\notworzyć nieistniejącą kategorię\nMoving Pictures!</string>
-  <string name="BadMovie">Zewnętrzny dodatek lub skóra próbuje\notworzyć nieistniejący film\nw Moving Pictures!</string>
-  <string name="BadParam">Zewnętrzny dodatek lub skóra przekazuje\ndo Moving Pictures nieprawidłowy parametr!</string>
   <string name="Backdrop">Tło</string>
   <string name="BeginsWith">Zaczyna się</string>
   <string name="BelongsToCollection">Należy do kolekcji</string>
   <!--C-->
   <string name="Cancel">Anuluj</string>
-  <string name="CannotDeleteOffline">Nie można usunąć {0},\nponieważ plik jest niedostępny</string>
-  <string name="CannotDeleteReadOnly">Nie można usunąć filmu, który jest\nTylko do odczytu. Czy chcesz go zignorować?</string>
   <string name="CastAndCrew">Obsada i zespół</string>
-  <string name="CategoryEmptyDescription">Aktualnie nie ma filmów\nw tej kategorii.</string>
   <string name="CategoryEmptyHeader">Kategoria jest pusta</string>
   <string name="Certification">Ograniczenia wiekowe</string>
   <string name="ChangeView">Zmień widok</string>
@@ -53,7 +47,6 @@
   <string name="Director">Reżyser</string>
   <string name="Directors">Reżyserzy</string>
   <string name="DownAbbreviation">(dół)</string>
-  <string name="DoYouWantToDelete">Czy chcesz nieodwracalnie usunąć\n{0} z dysku?</string>
   <!--E-->
   <string name="EarlierThisYear">Wcześniej w tym roku</string>
   <string name="Error">Błąd</string>
@@ -74,10 +67,8 @@
   <string name="ImdbId">Identyfikator IMDB</string>
   <string name="Importer">Importer filmów </string>
   <string name="ImporterDisabled">Importer wyłączony</string>
-  <string name="ImporterDisabledMessage">Importer został wyłączony w MediaPortal.\nChcesz go włączyć?</string>
   <string name="ImporterPending">Importer ({0} wymaga uwagi)</string>
   <string name="InvalidPin">Niewłaściwy kod PIN!</string>
-  <string name="InvalidVideoDiscFormat">Format tego obrazu jest niewłaściwy\nlub konfiguracja Daemon Tools\nw MediaPoral jest nieprawidłowa.</string>
   <!--L-->
   <string name="Language">Język</string>
   <string name="LargeThumbnailView">Widok dużych miniatur</string>
@@ -90,11 +81,8 @@
   <string name="MarkAsUnwatched">Oznacz jako nieobejrzany</string>
   <string name="MarkAsWatched">Oznacz jako obejrzany</string>
   <string name="MediaInfo">MediaInfo</string>
-  <string name="MediaIsMissing">Plik filmu, który wybrałeś jest niedostępny!\nNiestety coś poszło nie tak...</string>
-  <string name="MediaNotAvailableBody">Film, który wybrałeś nie jest teraz dostępny.\nWłóż napęd o oznaczeniu: {0}</string>
   <string name="MediaNotAvailableHeader">Napęd niedostępny</string>
   <string name="Missing">Brakuje</string>
-  <string name="MissingExternalPlayerExe">Aplikacja dla odtwarzania HD jest niedostępna.\nPopraw ścieżkę do niej.</string>
   <string name="Monday">Poniedziałek</string>
   <string name="MonthName1">Styczeń</string>
   <string name="MonthName2">Luty</string>
@@ -113,7 +101,6 @@
   <string name="MovieOptions">Opcje filmu</string>
   <string name="Movies">Filmy</string>
   <!--N-->
-  <string name="NoImportPathsBody">Nie zdefiniowano ścieżek importu.\nZamknij MediaPortal i uruchom Konfigurację.</string>
   <string name="NoImportPathsHeading">Brak ścieżek do importu.</string>
   <!--O-->
   <string name="Older">Starsze</string>
@@ -121,7 +108,6 @@
   <string name="ParentalControlsDisabled">Blokada rodzicielska wyłączona.</string>
   <string name="PinCodeHeader">Odblokowanie treści z ograniczeniami</string>
   <string name="PinCodePrompt">Wpisz kod PIN:</string>
-  <string name="PlaybackFailed">Odtwarzanie jest niemożliwe ponieważ\nrozszerzenie {0} nie występuje na liście w konfiguracji MediaPortal.\nDodaj to rozszerzenie lub skonfiguruj zewnętrzny odtwarzacz\ni spróbuj ponownie.</string>
   <string name="PlaybackFailedHeader">Odtwarzanie nie udało się</string>
   <string name="PlayMovie">Odtwarzaj film</string>
   <string name="PossibleMatches">Możliwe dopasowania</string>
@@ -152,6 +138,7 @@
   <string name="RestoreIgnoredFiles">Przywróć ignorowane pliki</string>
   <string name="ResumeFrom">Wznów od:</string>
   <string name="ResumeFromLast">Wznowić film od ostatniego zatrzymania?</string>
+  <string name="Resolution">Rozdzielczość</string>
   <string name="Retry">Powtórz</string>
   <string name="Runtime">Czas</string>
   <string name="RuntimeHour">{0} godzina</string>
@@ -206,13 +193,11 @@
   <string name="UnwatchedMovies">Nieoglądane filmy</string>
   <string name="UpAbbreviation">(góra)</string>
   <string name="UpdateDetailsFromOnline">Aktualizuj szczegóły z sieci</string>
-  <string name="UpdateMovieDetailsBody">Zamierzasz zaktualizować wszystkie informacje o filmie, zastępując\nwszystkie własne modyfikacje wykonane do tej pory.\nCzy chcesz kontynuować?</string>
   <string name="UpdateMovieDetailsHeader">Aktualizuj szczegóły filmu</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Wirtualny napęd nie jest gotowy</string>
-  <string name="VirtualDriveMessage">Wirtualny napęd nie odpowiedział w spodziewanym czasie.\nSpróbuj ponownie lub przerwij odtwarzanie.</string>
-  <string name="Votes">głosy</string>
   <string name="ViewMovieDetails">Widok szczegółów filmu</string>
+  <string name="VirtualDriveHeader">Wirtualny napęd nie jest gotowy</string>
+  <string name="Votes">głosy</string>
   <!--W-->
   <string name="Wednesday">Środa</string>
   <string name="Writer">Scenarzysta</string>

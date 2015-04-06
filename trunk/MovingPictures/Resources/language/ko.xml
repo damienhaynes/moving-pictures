@@ -7,9 +7,6 @@
   <!--B-->
   <!--C-->
   <string name="Cancel">취소</string>
-  <string name="CannotDeleteOffline">파일이 오프라인이기 때문에\n{0}을 삭제할 수 없습니다.</string>
-  <string name="CannotDeleteReadOnly">읽기전용 파일을 삭제할 수 없습니다.\n이 영화를 무시하도록 하시겠습니까?</string>
-  <string name="CategoryEmptyDescription">카테고리에 속한 영화가\n없습니다.</string>
   <string name="CategoryEmptyHeader">카테고리가 비어있습니다.</string>
   <string name="Certification">증명서</string>
   <string name="ChangeView">보기변경</string>
@@ -40,7 +37,6 @@
   <string name="Director">감독</string>
   <string name="Directors">감독</string>
   <string name="DownAbbreviation">(dn)</string>
-  <string name="DoYouWantToDelete">하드디스크에서\n{0}\n를 삭제하시겠습니까?</string>
   <!--E-->
   <string name="EarlierThisYear">올해초</string>
   <string name="Error">오류</string>
@@ -56,7 +52,6 @@
   <string name="Genres">장르</string>
   <!--I-->
   <string name="InvalidPin">잘못된 핀코드!</string>
-  <string name="InvalidVideoDiscFormat">이미지 파일이 올바른 비디오 디스크\n포맷이 아니거나, MediaPortal 데몬툴\n설정이 잘 못되었습니다.</string>
   <!--L-->
   <string name="Language">언어</string>
   <string name="LargeThumbnailView">큰 미리보기 보기</string>
@@ -68,17 +63,13 @@
   <!--M-->
   <string name="MarkAsUnwatched">미시청으로 표시</string>
   <string name="MarkAsWatched">시청으로 표시</string>
-  <string name="MediaIsMissing">선택한 영화에 대한 미디어가 존재하지 않습니다.\n뭔가 잘못됐군요...</string>
-  <string name="MediaNotAvailableBody">선택한 영화에 대한 미디오 현재 사용가능하지 않습니다. 다음 미디어를 넣거나 연결해주세요: {0}</string>
   <string name="MediaNotAvailableHeader">미디오 사용불가</string>
-  <string name="MissingExternalPlayerExe">HD 재생을 위한 실행파일이 없습니다.\n실행파일에 대한 경로를 확인해주세요.</string>
   <string name="Monday">월요일</string>
   <string name="Movie">영화</string>
   <string name="MovieDetails">영화 상세정보</string>
   <string name="MovieOptions">영화 옵션</string>
   <string name="Movies">영화</string>
   <!--N-->
-  <string name="NoImportPathsBody">읽어오기 경로가 없는 것 같습니다.\nMediaPortal을 종료하고 설정프로그램을\n띄워 Moving Picture를\n설정해주세요.</string>
   <string name="NoImportPathsHeading">읽어오기 경로가 없음!</string>
   <!--O-->
   <string name="Older">Older</string>
@@ -86,7 +77,6 @@
   <string name="ParentalControlsDisabled">자녀보호 기능이 꺼져있음.</string>
   <string name="PinCodeHeader">접근금지를 해제</string>
   <string name="PinCodePrompt">계속하려면 핀코드를 넣으세요:</string>
-  <string name="PlaybackFailed">\'{0}\' 확장이 설정에 없기 때문에\n재생이 불가능합니다. 이 확장을\n추가하거나 외부플레이어를 설정하고\n다시 시도해 주십시요.</string>
   <string name="PlaybackFailedHeader">재생실표</string>
   <string name="ProblemLoadingSkinFile">스킨파일 로딩에 문제가 발생했습니다</string>
   <!--R-->
@@ -113,6 +103,7 @@
   <string name="RemoteNumericAlphabet9">wxyz</string>
   <string name="ResumeFrom">연속재생:</string>
   <string name="ResumeFromLast">지난지점부터 재생하시겠습니까?</string>
+  <string name="Resolution">해상도</string>
   <string name="Retry">재시도</string>
   <string name="Runtime">상영시간</string>
   <string name="RuntimeHour">{0} 시간</string>
@@ -158,11 +149,9 @@
   <string name="UnwatchedMovies">미시청 영화</string>
   <string name="UpAbbreviation">(up)</string>
   <string name="UpdateDetailsFromOnline">온라인에서 상세정보 갱신</string>
-  <string name="UpdateMovieDetailsBody">모든 영화의 메타정보를 갱신하고, 사용자\n변경사항을 덮어쓰려고 합니다.\n계속하시겠습니까?</string>
   <string name="UpdateMovieDetailsHeader">영화 상세정보 갱신</string>
   <!--V-->
   <string name="VirtualDriveHeader">가상드라이브가 준비되지 않음</string>
-  <string name="VirtualDriveMessage">제때 가상드라이브가 준비되지 않았습니다.\n다시 시작하거나 실행을 취소하세요.</string>
   <string name="Votes">투표수</string>
   <!--W-->
   <string name="Wednesday">수요일</string>

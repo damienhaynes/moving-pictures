@@ -6,18 +6,12 @@
   <string name="AllMovies">Visi filmai</string>
   <string name="AllFiles">Visi failai</string>
   <!--B-->
-  <string name="BadCategory">Išorinis įskiepis ar apvalkalas pabandytas⏎\nsiekiant atidaryti neegzistuojančią Moving⏎\nPictures kategoriją!</string>
-  <string name="BadMovie">Išorinis įskiepis ar apvalkalas pabandytas⏎\nsiekiant atidaryti neegzistuojantį Moving⏎\nPictures filmą!</string>
-  <string name="BadParam">Išorinis įskiepis ar apvalkalas suteikė⏎\nMoving Pictures netinkamą prametrą!</string>
   <string name="Backdrop">Fonas</string>
   <string name="BeginsWith">Prasideda</string>
   <string name="BelongsToCollection">Priklauso kolekcijai</string>
   <!--C-->
   <string name="Cancel">Atšaukti</string>
-  <string name="CannotDeleteOffline">Nepavyko ištrinti {0}⏎\nkadangi failas nepasiekiamas</string>
-  <string name="CannotDeleteReadOnly">Negalima ištrinti tik-skaitymui skirtą filmą.⏎\nAr norite kad Moving Pictures ignoruotų šį filmą?</string>
   <string name="CastAndCrew">Filmavimo grupė</string>
-  <string name="CategoryEmptyDescription">Šioje kategorijoje nėra filmų⏎</string>
   <string name="CategoryEmptyHeader">Kategorija tuščia</string>
   <string name="Certification">Serifikacija</string>
   <string name="ChangeView">Keisti išvaizdą</string>
@@ -53,7 +47,6 @@
   <string name="Director">Režisierius</string>
   <string name="Directors">Režisieriai</string>
   <string name="DownAbbreviation">(dienų)</string>
-  <string name="DoYouWantToDelete">Ar norite visiškai ištrinti⏎\n{0}⏎\niš kietojo disko?</string>
   <!--E-->
   <string name="EarlierThisYear">Anksčiau šiais metais</string>
   <string name="Error">Klaida</string>
@@ -75,10 +68,8 @@
   <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Filmo įkėlėjas</string>
   <string name="ImporterDisabled">Įkėlėjas išjungtas</string>
-  <string name="ImporterDisabledMessage">Įkėlėjas išjungtas⏎\nMediaPortal GUI. Ar norite⏎\njį įjungti?</string>
   <string name="ImporterPending">Įkėlėjas ({0} reikalauja dėmesio)</string>
   <string name="InvalidPin">Neteisingas PIN kodas!</string>
-  <string name="InvalidVideoDiscFormat">Arba jusu failo atvaizdas nėra tinkamo⏎\nvideo disko formato arba DAEMON įrankių⏎\nMediaPortalo nustatymai neteisingi.</string>
   <!--L-->
   <string name="Language">Kalba</string>
   <string name="LargeThumbnailView">Didelių miniatiūrų vaizdas</string>
@@ -91,11 +82,8 @@
   <string name="MarkAsUnwatched">Žymėti žiūrėtu</string>
   <string name="MarkAsWatched">Žymėti žiūrėtu</string>
   <string name="MediaInfo">Media informacija</string>
-  <string name="MediaIsMissing">Nerasta jūsų pasirinkto filmo media! Labai gail, bet kažkas nepavyko...</string>
-  <string name="MediaNotAvailableBody">Jūsų pasirinkto filmo media⏎\ndabar nepasiekiama. Prašome įdėti ar prijungti media⏎\nužrašu: {0}</string>
   <string name="MediaNotAvailableHeader">Nerandama media</string>
   <string name="Missing">Trūksta</string>
-  <string name="MissingExternalPlayerExe">HD grojimo leidžiamas failas nerastas.⏎ Prašome pataisyti kelią iki leidžiamo failo.</string>
   <string name="Monday">Pirmadienis</string>
   <string name="MonthName1">Sausis</string>
   <string name="MonthName2">Vasaris</string>
@@ -114,15 +102,14 @@
   <string name="MovieOptions">Filmo pasirinkimai</string>
   <string name="Movies">Filmai</string>
   <!--N-->
-  <string name="NoImportPathsBody">Jūs nesate nurodę įkėlimo vietų.⏎\nPrašome uždaryti Mediaportal⏎\nir paleiskite MP Konfigūratorių.</string>
   <string name="NoImportPathsHeading">Nėra įkėlimo vietų!</string>
   <!--O-->
   <string name="Older">Senesni</string>
+  <string name="Overview">Apžvalga</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Tėvų kontrolė išjungta.</string>
   <string name="PinCodeHeader">Atrakinamas apribotas turinys</string>
   <string name="PinCodePrompt">Prašome įvesti PIN kodą:</string>
-  <string name="PlaybackFailed">Nepavyko groti kadangi \'{0}\'⏎ išplėtimas neįtrauktas MediaPortal konfigūracijoje.⏎ Prašome įtraukti šį plėtinį arba nustatyti išorinį grotuvą⏎ bei bandykite dar kartą.</string>
   <string name="PlaybackFailedHeader">Nepavyko groti</string>
   <string name="PlayMovie">Groti filmą</string>
   <string name="PossibleMatches">Gali sutapimai</string>
@@ -153,6 +140,7 @@
   <string name="RestoreIgnoredFiles">Atstatyti ignoruotus failus</string>
   <string name="ResumeFrom">Atnaujinti nuo:</string>
   <string name="ResumeFromLast">Tęsti filmą nuo paskutinio laiko?</string>
+  <string name="Resolution">Rezoliucija</string>
   <string name="Retry">Pakartoti</string>
   <string name="Runtime">Trukmė</string>
   <string name="RuntimeHour">{0} valanda</string>
@@ -207,13 +195,11 @@
   <string name="UnwatchedMovies">Nematyti filmai</string>
   <string name="UpAbbreviation">(aukštyn)</string>
   <string name="UpdateDetailsFromOnline">Antaujinti aprašymą internetu</string>
-  <string name="UpdateMovieDetailsBody">Jūs ketinate atnaujinti visus filmo metaduomenis, užrašant⏎\nant visų rankinių pataisų. Ar norite tęsti?</string>
   <string name="UpdateMovieDetailsHeader">Atnaujinti filmo aprašymą</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Neparuoštas virtualus diskas </string>
-  <string name="VirtualDriveMessage">Virtualus diskas nebuvo paruoštas laiku.⏎ Prašome bandyti iš naujo arba atšaukti grojimą.</string>
-  <string name="Votes">Balsai</string>
   <string name="ViewMovieDetails">Žiūrėti filmo aprašymą</string>
+  <string name="VirtualDriveHeader">Neparuoštas virtualus diskas </string>
+  <string name="Votes">Balsai</string>
   <!--W-->
   <string name="Wednesday">Trečiadienis</string>
   <string name="Writer">Rašytojas</string>

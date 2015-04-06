@@ -6,18 +6,12 @@
   <string name="AllMovies">Alle film</string>
   <string name="AllFiles">Alle filer</string>
   <!--B-->
-  <string name="BadCategory">En ekstern plugin eller skin forsøgte ⏎\nat åbne en eksisterende Moving ⏎\nPictures kategori!</string>
-  <string name="BadMovie">En ekstern plugin eller skin forsøgte ⏎\nat åbne en ikke eksisterende film ⏎\ni Moving Pictures!</string>
-  <string name="BadParam">En ekstern plugin eller skin overførte ⏎\net ugyldigt paramater til Moving Pictures!</string>
   <string name="Backdrop">Baggrund</string>
   <string name="BeginsWith">Begynder med</string>
   <string name="BelongsToCollection">Tilhører Samling</string>
   <!--C-->
   <string name="Cancel">Annuller</string>
-  <string name="CannotDeleteOffline">Det er ikke muligt at slette {0}\n fordi filen er offline</string>
-  <string name="CannotDeleteReadOnly">Kan ikke slette en skrivebeskyttet film.\nVil du have Moving Pictures til ignorere denne film?</string>
   <string name="CastAndCrew">Skuespillere og filmhold</string>
-  <string name="CategoryEmptyDescription">Der er ingen film i denne\nkategori.</string>
   <string name="CategoryEmptyHeader">Kategorien er tom</string>
   <string name="Certification">Censur</string>
   <string name="ChangeView">Skift syn</string>
@@ -53,7 +47,6 @@
   <string name="Director">Instruktør</string>
   <string name="Directors">Instruktører</string>
   <string name="DownAbbreviation">(ned)</string>
-  <string name="DoYouWantToDelete">Ønsker du at slette \n{0}\npermanent fra din harddisk?</string>
   <!--E-->
   <string name="EarlierThisYear">Tidligere i år</string>
   <string name="Error">Fejl</string>
@@ -74,10 +67,8 @@
   <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Importer film</string>
   <string name="ImporterDisabled">Import ikke aktiv</string>
-  <string name="ImporterDisabledMessage">Importøren er blevet deaktiveret i ⏎\nMediaPortal GUI. Vil du gerne ⏎\ngenaktivere det?</string>
   <string name="ImporterPending">Impoter ({0} kræver opmærksomhed)</string>
   <string name="InvalidPin">Forkert kode!</string>
-  <string name="InvalidVideoDiscFormat">Enten indeholdet image-filen ikke et\n korrekt videoformat, ellers er din opsæning i\nTools MediaPortal konfiguration forkert.</string>
   <!--L-->
   <string name="Language">Sprog</string>
   <string name="LargeThumbnailView">Stor miniatureportræt overblik</string>
@@ -90,11 +81,8 @@
   <string name="MarkAsUnwatched">Marker som uset</string>
   <string name="MarkAsWatched">Marker som set</string>
   <string name="MediaInfo">MediaInfo</string>
-  <string name="MediaIsMissing">Mediet for den film du har valgt mangler!\nDesværre noget er gået galt...</string>
-  <string name="MediaNotAvailableBody">Mediet for den valgte film er ikke tilgængelig\nIndsæt eller forbind til medie: {0}</string>
   <string name="MediaNotAvailableHeader">Mediet er ikke tilgængelig</string>
   <string name="Missing">Mangler</string>
-  <string name="MissingExternalPlayerExe">Den eksekverbare fil til HD afspilning mangler.\nVælg en korrekt sti til den eksekverbare fil.</string>
   <string name="Monday">Mandag</string>
   <string name="MonthName1">Januar</string>
   <string name="MonthName2">Februar</string>
@@ -113,15 +101,14 @@
   <string name="MovieOptions">Film muligheder</string>
   <string name="Movies">Film</string>
   <!--N-->
-  <string name="NoImportPathsBody">Det ser ud som, at du ikke har defineret\ndefined nogle import stier. Du\nskal lukke MediaPortal og\nstarte MediaPortal\nKonfiguration vinduet for\nat konfigurere Moving Pictures.</string>
   <string name="NoImportPathsHeading">Ingen import stier!</string>
   <!--O-->
   <string name="Older">Ældre</string>
+  <string name="Overview">Overblik</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Forælder kontrol er ikke slået til.</string>
   <string name="PinCodeHeader">Åbner klassificeret indhold</string>
   <string name="PinCodePrompt">Indtast venligst en adgangskode for at fortsætte:</string>
-  <string name="PlaybackFailed">Afspilning var ikke mulig på grund af, at \'{0}\'\nfiletypenavn ikke er listet i mediaportal konfigurationen.\nTilføj dette filetypenavn eller sæt en ekstern afspiller op\nog prøv igen.</string>
   <string name="PlaybackFailedHeader">Afspilningen mislykkedes</string>
   <string name="PlayMovie">Spil film</string>
   <string name="PossibleMatches">Mulige match</string>
@@ -152,6 +139,7 @@
   <string name="RestoreIgnoredFiles">Restore ignorerede filer</string>
   <string name="ResumeFrom">Forsæt fra:</string>
   <string name="ResumeFromLast">Forsæt film fra sidste afspilning?</string>
+  <string name="Resolution">Opløsning:</string>
   <string name="Retry">Prøv igen</string>
   <string name="Runtime">Spilletid</string>
   <string name="RuntimeHour">{0} time</string>
@@ -206,13 +194,11 @@
   <string name="UnwatchedMovies">Usete film</string>
   <string name="UpAbbreviation">(op)</string>
   <string name="UpdateDetailsFromOnline">Opdater oplysninger fra nettet</string>
-  <string name="UpdateMovieDetailsBody">Du er ved at opdatere alle film opslyninger\n overskrivning vil fjerne dine egne ændringer af denne film.\nVil du fortsætte?</string>
   <string name="UpdateMovieDetailsHeader">Opdater film oplysningerne</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Det virtuelle drev er ikke klar</string>
-  <string name="VirtualDriveMessage">Det virtuelle drev blev ikke klar i tide. \nPrøv igen eller annuller afspilningen.</string>
-  <string name="Votes">Vurdering</string>
   <string name="ViewMovieDetails">Vis film oplysningerne</string>
+  <string name="VirtualDriveHeader">Det virtuelle drev er ikke klar</string>
+  <string name="Votes">Vurdering</string>
   <!--W-->
   <string name="Wednesday">Onsdag</string>
   <string name="Writer">Manuskript</string>

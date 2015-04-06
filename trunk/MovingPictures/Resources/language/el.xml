@@ -7,9 +7,6 @@
   <!--B-->
   <!--C-->
   <string name="Cancel">Άκυρο</string>
-  <string name="CannotDeleteOffline">Αδύνατη η διαγραφή του {0}\n επειδή το αρχείο είναι εκτός σύνδεσης</string>
-  <string name="CannotDeleteReadOnly">Αδύνατη η διαγραφή μιας \"μόνο για ανάγνωση\" ταινίας.\nΘέλετε το Moving Pictures να την αγνοήσει;</string>
-  <string name="CategoryEmptyDescription">Δεν υπάρχουν ταινίες\nσε αυτή την κατηγορία.</string>
   <string name="CategoryEmptyHeader">Αυτή η κατηγορία είναι κενή</string>
   <string name="Certification">Καταλληλότητα</string>
   <string name="ChangeView">Αλλαγή προβολής</string>
@@ -40,7 +37,6 @@
   <string name="Director">Σκηνοθέτης</string>
   <string name="Directors">Σκηνοθέτες</string>
   <string name="DownAbbreviation">(κάτω)</string>
-  <string name="DoYouWantToDelete">Θέλετε να διαγράψετε μόνιμα το \n{0}\nαπό το σκληρό δίσκο;</string>
   <!--E-->
   <string name="EarlierThisYear">Νωρίτερα αυτό το έτος</string>
   <string name="Error">Σφάλμα</string>
@@ -56,7 +52,6 @@
   <string name="Genres">Είδη</string>
   <!--I-->
   <string name="InvalidPin">Μη έγκυρος κωδικός PIN!</string>
-  <string name="InvalidVideoDiscFormat">Είτε η εικόνα δεν περιέχει\nέγκυρο φορμά βίντεο, είτε οι ρυθμίσεις του Daemon\nTools, στις ρυθμίσεις του MediaPortal, δεν είναι σωστές.</string>
   <!--L-->
   <string name="Language">Γλώσσα</string>
   <string name="LargeThumbnailView">Προβολή μεγάλων μικρογραφιών</string>
@@ -68,17 +63,13 @@
   <!--M-->
   <string name="MarkAsUnwatched">Σημείωση ως μη προβληθείσας</string>
   <string name="MarkAsWatched">Σημείωση ως προβληθείσας</string>
-  <string name="MediaIsMissing">Λείπει το μέσο για την ταινία που επιλέξατε!\nΛυπούμαστε...</string>
-  <string name="MediaNotAvailableBody">Το μέσο για την ταινία που επιλέξατε \nδεν είναι διαθέσιμο. Εισάγετε ή συνδέστε το μέσο\nμε ετικέτα: {0}</string>
   <string name="MediaNotAvailableHeader">Το μέσο δεν είναι διαθέσιμο</string>
-  <string name="MissingExternalPlayerExe">Η εφαρμογή για την αναπαραγωγή HD λείπει.\nΔιορθώστε το μονοπάτι της εφαρμογής.</string>
   <string name="Monday">Δευτέρα</string>
   <string name="Movie">Ταινία</string>
   <string name="MovieDetails">Λεπτομέρειες ταινίας</string>
   <string name="MovieOptions">Επιλογές ταινίας</string>
   <string name="Movies">Ταινίες</string>
   <!--N-->
-  <string name="NoImportPathsBody">Δεν φαίνεται να έχετε\nορίσει μονοπάτι(α) εισαγωγής. Θα πρέπει\nνα κλείσετε το MediaPortal και να\nτρέξετε τις ρυθμίσεις του MediaPortal\nγια να\nρυθμίσετε το Moving Pictures.</string>
   <string name="NoImportPathsHeading">Κανένα μονοπάτι(α) εισαγωγής!</string>
   <!--O-->
   <string name="Older">Παλαιότερο</string>
@@ -86,7 +77,6 @@
   <string name="ParentalControlsDisabled">Ο γονικός έλεγχος είναι απενεργοποιημένος.</string>
   <string name="PinCodeHeader">Ξεκλείδωμα ακατάλληλου περιεχομένου</string>
   <string name="PinCodePrompt">Εισάγετε τον κωδικό PIN για να συνεχίσετε:</string>
-  <string name="PlaybackFailed">Η αναπαραγωγή δεν είναι δυνατή, επειδή η επέκταση\'{0}\'\nδεν υπάρχει στις ρυθμίσεις του mediaportal.\nΠροσθέστε την επέκταση\nκαι δοκιμάστε ξανά.</string>
   <string name="PlaybackFailedHeader">Αποτυχία αναπαραγωγής</string>
   <string name="ProblemLoadingSkinFile">Παρουσιάστηκε κάποιο πρόβλημα στη φόρτωση του θέματος</string>
   <!--R-->
@@ -114,6 +104,7 @@
   <string name="RemoteNumericAlphabet9">wxyz</string>
   <string name="ResumeFrom">Συνέχεια από:</string>
   <string name="ResumeFromLast">Συνέχεια ταινίας από το τελευταίο σημείο;</string>
+  <string name="Resolution">Ανάλυση</string>
   <string name="Retry">Επανάληψη</string>
   <string name="Runtime">Διάρκεια</string>
   <string name="RuntimeHour">{0} ώρα</string>
@@ -160,11 +151,9 @@
   <string name="UnwatchedMovies">Μη προβληθείσες ταινίες</string>
   <string name="UpAbbreviation">(πάνω)</string>
   <string name="UpdateDetailsFromOnline">Ενημέρωση λεπτομερειών από το διαδύκτιο</string>
-  <string name="UpdateMovieDetailsBody">Πρόκειται να ενημερώσετε τις λεπτομέρειες της ταινίας, \nδιαγράφοντας οποιεσδήποτε προσωπικές μεταβολές. Θέλετε\nνα συνεχίσετε;</string>
   <string name="UpdateMovieDetailsHeader">Ενημέρωση λεπτομερειών ταινίας</string>
   <!--V-->
   <string name="VirtualDriveHeader">Ο εικονικός οδηγός δεν είναι έτοιμος.</string>
-  <string name="VirtualDriveMessage">Ο εικονικός οδηγός δεν είναι έτοιμος.\nΔοκιμάστε ξανά ή ακυρώστε την αναπαραγωγή.</string>
   <string name="Votes">ψήφοι</string>
   <!--W-->
   <string name="Wednesday">Τετάρτη</string>

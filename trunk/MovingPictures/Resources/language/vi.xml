@@ -6,18 +6,12 @@
   <string name="AllMovies">Tất cả phim</string>
   <string name="AllFiles">Tất cả tập tin</string>
   <!--B-->
-  <string name="BadCategory">Một tiện ích mở rộng hoặc giao diện tự chọn\nđang mở một phân loại phim\nkhông có trong hệ dữ liệu!</string>
-  <string name="BadMovie">Một tiện ích mở rộng hoặc giao diện tự chọn\nđang mở một phân loại phim\nkhông có trong hệ dữ liệu!</string>
-  <string name="BadParam">Một tiện ích mở rộng hoặc giao diện tự chọn\nchứa thông số về phim không chính xác!</string>
   <string name="Backdrop">Backdrop</string>
   <string name="BeginsWith">Bắt đầu với</string>
   <string name="BelongsToCollection">Thuộc bộ sưu tập</string>
   <!--C-->
   <string name="Cancel">Hủy bỏ</string>
-  <string name="CannotDeleteOffline">Không thể xóa {0}\nvì tập tin này ở dạng offline</string>
-  <string name="CannotDeleteReadOnly">Không thể xóa phim có dạng chỉ-đọc.\nBạn có muốn chương trình bỏ qua phim này không?</string>
   <string name="CastAndCrew">Đội ngũ diễn viên</string>
-  <string name="CategoryEmptyDescription">Hiện không có bộ phim nào\nđược lập danh sách cho phần phân loại này.</string>
   <string name="CategoryEmptyHeader">Phân loại hiện đang rỗng</string>
   <string name="Certification">Chứng chỉ</string>
   <string name="ChangeView">Thay đổi Khung Nhìn</string>
@@ -53,7 +47,6 @@
   <string name="Director">Đạo diễn</string>
   <string name="Directors">Đồng đạo diễn</string>
   <string name="DownAbbreviation">(dn)</string>
-  <string name="DoYouWantToDelete">Bạn có thực sự muốn xóa\n{0}\nkhỏi ổ cứng?</string>
   <!--E-->
   <string name="EarlierThisYear">Trước năm ngoái</string>
   <string name="Error">Lỗi</string>
@@ -74,10 +67,8 @@
   <string name="ImdbId">Chỉ số IMDb</string>
   <string name="Importer">Nhập dữ liệu phim</string>
   <string name="ImporterDisabled">Nhập dữ liệu thất bại</string>
-  <string name="ImporterDisabledMessage">Phần nhập dữ liệu bị vô hiêu hóa trong chế độ\nđồ họa của MediaPortal. Bạn có muốn\nbật lại tính năng này không?</string>
   <string name="ImporterPending">Nhập dữ liệu ({0} Cần chú ý)</string>
   <string name="InvalidPin">Mã Pin bị sai</string>
-  <string name="InvalidVideoDiscFormat">Có thể dữ liệu mà bạn nhập vào không chứa đúng\nđịnh dạng video hợp lệ, hoặc chương trình Daemon\nTools MediaPortal bị lỗi về mặt thiết lập.</string>
   <!--L-->
   <string name="Language">Ngôn ngữ</string>
   <string name="LargeThumbnailView">Xem hình ảnh dạng lớn</string>
@@ -90,11 +81,8 @@
   <string name="MarkAsUnwatched">Đánh dấu dạng chưa xem</string>
   <string name="MarkAsWatched">Đánh đấu đã xem</string>
   <string name="MediaInfo">Thông tin</string>
-  <string name="MediaIsMissing">Phần media dành cho bộ phim bạn chọn bị thiếu!\nRất tiếc, nhưng đã có lỗi gì đó xảy ra...</string>
-  <string name="MediaNotAvailableBody">Phần media cho bộ phim mà bạn chọn hiện\nkhông sẵn có. Hãy kết nối lại dữ liệu có\'\ntên: {0}</string>
   <string name="MediaNotAvailableHeader">Media hiện không sẵn có</string>
   <string name="Missing">Đang thiếu</string>
-  <string name="MissingExternalPlayerExe">Chế độ phát lại dạng HD đang bị thiếu.\nHãy điền vào đường dẫn để thực thi tính năng này.</string>
   <string name="Monday">Thứ hai</string>
   <string name="MonthName1">Tháng một</string>
   <string name="MonthName2">Tháng hai</string>
@@ -113,7 +101,6 @@
   <string name="MovieOptions">Lựa chọn về phim</string>
   <string name="Movies">Phim</string>
   <!--N-->
-  <string name="NoImportPathsBody">Bạn có thể nhập vào\ncác đường dẫn bạn chọn. Xin đóng lại\nchương trình và truy cập vào phần MP Configuration.</string>
   <string name="NoImportPathsHeading">Đường dẫn nhập dữ liệu bị thiếu!</string>
   <!--O-->
   <string name="Older">Cũ hơn</string>
@@ -121,7 +108,6 @@
   <string name="ParentalControlsDisabled">Tính năng kiểm soát phụ huynh chưa được kích hoạt.</string>
   <string name="PinCodeHeader">Mở khóa đối với nội dung hạn chế</string>
   <string name="PinCodePrompt">Điền vào mã Pin để tiếp tục:</string>
-  <string name="PlaybackFailed">Chế độ phát lại không thể thực thi vì \'{0}\'\nphần định dạng này không được thiết lập trong chương trình.\nĐiền vào phần định dạng hoặc chạy một phần mềm\nthay thế khác.</string>
   <string name="PlaybackFailedHeader">Chế độ phát lại thất bại</string>
   <string name="PlayMovie">Chiếu phim</string>
   <string name="PossibleMatches">Có thể trùng</string>
@@ -206,13 +192,11 @@
   <string name="UnwatchedMovies">Phim chưa xem</string>
   <string name="UpAbbreviation">(tăng)</string>
   <string name="UpdateDetailsFromOnline">Cập nhật chi tiết về phim trên mạng</string>
-  <string name="UpdateMovieDetailsBody">Bạn sắp sửa cập nhật lại toàn bộ thông tin về phim, ghi đè\nlên các thiết lập tự chọn đối với phim này. Bạn có muốn\ntiếp tục không?</string>
   <string name="UpdateMovieDetailsHeader">Cập nhật thông tin về phim</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Ổ đĩa ảo chưa sẵn sàng</string>
-  <string name="VirtualDriveMessage">Ổ đĩa ảo hiện chưa sẵn sàng lúc này.\nHãy thử lại lần nữa hoặc hủy bỏ chế độ phát lại.</string>
-  <string name="Votes">bình chọn</string>
   <string name="ViewMovieDetails">Xem thông tin chi tiết về phim</string>
+  <string name="VirtualDriveHeader">Ổ đĩa ảo chưa sẵn sàng</string>
+  <string name="Votes">bình chọn</string>
   <!--W-->
   <string name="Wednesday">Thứ tư</string>
   <string name="Writer">Kịch bản</string>
