@@ -5,19 +5,22 @@
   <string name="Actors">Acteurs</string>
   <string name="AllMovies">Tous les films</string>
   <string name="AllFiles">Tous les fichiers</string>
+  <string name="AspectRatio">Ratio d\'aspect (format)</string>
+  <string name="AudioChannels">Cannaux Audios</string>
+  <string name="AudioFormat">Format Audio</string>
   <!--B-->
-  <string name="BadCategory">Un plugin externe ou un thème⏎ essaye d\'ouvrir une catégorie⏎ inexistante dans Moving Pictures !</string>
-  <string name="BadMovie">Un plugin externe ou un thème⏎ essaye d\'ouvrir un film⏎ inexistant dans Moving Pictures !</string>
-  <string name="BadParam">Un plugin externe ou un thème⏎ transmet un paramètre incorrecte⏎ vers  Moving Pictures </string>
+  <string name="BadCategory">Un plugin externe ou un thème \nessaye d\'ouvrir une catégorie \n inexistante dans Moving Pictures !</string>
+  <string name="BadMovie">Un plugin externe ou un thème \nessaye d\'ouvrir un film \ninexistant dans Moving Pictures !</string>
+  <string name="BadParam">Un plugin externe ou un thème \ntransmet un paramètre incorrecte \n vers Moving Pictures</string>
   <string name="Backdrop">Backdrop (fond d\'écran)</string>
   <string name="BeginsWith">Débuter par</string>
   <string name="BelongsToCollection">Appartient à la collection</string>
   <!--C-->
   <string name="Cancel">Annuler</string>
-  <string name="CannotDeleteOffline">Impossible de supprimer {0}\n parce que le fichier est hors ligne</string>
-  <string name="CannotDeleteReadOnly">Impossible de supprimer un film en lecture seule.\n Voulez vous que Moving Pictures ignore ce film ?</string>
+  <string name="CannotDeleteOffline">Impossible de supprimer {0} \nparce que le fichier est hors ligne</string>
+  <string name="CannotDeleteReadOnly">Impossible de supprimer un film en lecture seule. \nVoulez vous que Moving Pictures ignore ce film ?</string>
   <string name="CastAndCrew">Distribution et équipe </string>
-  <string name="CategoryEmptyDescription">Il n\'y a actuellement aucun film\n dans cette catégorie.</string>
+  <string name="CategoryEmptyDescription">Il n\'y a actuellement aucun film \ndans cette catégorie.</string>
   <string name="CategoryEmptyHeader">Catégorie vide</string>
   <string name="Certification">Certification</string>
   <string name="ChangeView">Changer la vue</string>
@@ -53,7 +56,7 @@
   <string name="Director">Réalisateur</string>
   <string name="Directors">Réalisateurs</string>
   <string name="DownAbbreviation">(bs)</string>
-  <string name="DoYouWantToDelete">Voulez vous supprimer \n{0}\nde votre disque dur ?</string>
+  <string name="DoYouWantToDelete">Voulez vous supprimer \n{0} de votre disque dur ?</string>
   <!--E-->
   <string name="EarlierThisYear">Plus tôt cette année</string>
   <string name="Error">Erreur</string>
@@ -64,9 +67,11 @@
   <string name="FilesNeedingAttention">Fichiers nécessitant votre attention</string>
   <string name="FilmstripView">Pellicule</string>
   <string name="FilterBy">Filtrer par</string>
+  <string name="FrameRate">Frame Rate (nbre d\'images par seconde)</string>
   <string name="Friday">Vendredi</string>
   <string name="Future">Future</string>
   <!--G-->
+  <string name="GlobalActions">Actions globales</string>
   <string name="Genre">Genre</string>
   <string name="Genres">Genres</string>
   <!--I-->
@@ -74,10 +79,11 @@
   <string name="ImdbId">Id IMDb</string>
   <string name="Importer">Importateur de film</string>
   <string name="ImporterDisabled">Importateur inactif</string>
-  <string name="ImporterDisabledMessage">L\'importateur a été désactivé ⏎au niveau de l\'interface de MediaPortal.⏎ Voulez vous le réactiver ?</string>
+  <string name="ImporterDisabledMessage">L\'importateur a été désactivé \nau niveau de l\'interface de MediaPortal. Voulez vous le \nréactiver ?</string>
   <string name="ImporterPending">Importateur ({0} ont besoin d\'attention)</string>
+  <string name="InfoUrl">Info URL</string>
   <string name="InvalidPin">Mot de passe invalide !</string>
-  <string name="InvalidVideoDiscFormat">Soit le fichier image ne contient\npas un format de disque vidéo valide, soit votre configuration\nde Daemon Tools dans MediaPortal est incorrecte.</string>
+  <string name="InvalidVideoDiscFormat">Soit le fichier image ne contient pas \nun format de disque vidéo valide, soit votre configuration de Daemon Tools \ndans MediaPortal est incorrecte.</string>
   <!--L-->
   <string name="Language">Langue</string>
   <string name="LargeThumbnailView">Miniature large</string>
@@ -90,11 +96,12 @@
   <string name="MarkAsUnwatched">Marquer comme non vu</string>
   <string name="MarkAsWatched">Marquer comme vu</string>
   <string name="MediaInfo">Info Média</string>
-  <string name="MediaIsMissing">Le média pour le film que vous avez sélectionné est introuvable !\nDésolé mais quelque chose a mal tourné...</string>
-  <string name="MediaNotAvailableBody">Le média pour le film sélectionné n\'est pas\nactuellement disponible. Merci d\'insérer ou connecter le media\n : {0}</string>
+  <string name="MediaIsMissing">Le média pour le film que vous avez sélectionné est introuvable !\n Désolé mais quelque chose a mal tourné...</string>
+  <string name="MediaNotAvailableBody">Le média pour le film sélectionné n\'est pas \nactuellement disponible. Merci d\'insérer ou connecter \nle media : {0}</string>
   <string name="MediaNotAvailableHeader">Média indisponible</string>
+  <string name="MediaType">Type de Média</string>
   <string name="Missing">Manquant</string>
-  <string name="MissingExternalPlayerExe">L\'exécutable du lecteur externe est introuvable.\nMerci de corriger le chemin vers l\'exécutable.</string>
+  <string name="MissingExternalPlayerExe">L\'exécutable du lecteur externe est introuvable. Merci de corriger le chemin vers l\'exécutable.</string>
   <string name="Monday">Lundi</string>
   <string name="MonthName1">Janvier</string>
   <string name="MonthName2">Février</string>
@@ -113,16 +120,18 @@
   <string name="MovieOptions">Options du film</string>
   <string name="Movies">Films</string>
   <!--N-->
-  <string name="NoImportPathsBody">Vous n\'avez pas configuré\nde chemins d\'import. Vous\ndevez fermer MediaPortal et\nlancer l\'écran de configuration\nde MediaPortal pour\nconfigurer Moving Pictures.</string>
+  <string name="NoImportPathsBody">Vous n\'avez pas configuré de chemins \nd\'importation. Vous devez fermer MediaPortal \net lancer l\'écran de configuration de \nMediaPortal pour configurer Moving Pictures.</string>
   <string name="NoImportPathsHeading">Aucun chemin d\'import !</string>
   <!--O-->
   <string name="Older">Ancien</string>
+  <string name="Overview">Vue d\'ensemble</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Le contrôle parental est désactivé.</string>
   <string name="PinCodeHeader">Dévérouiller le contenu réservé</string>
   <string name="PinCodePrompt">Entrez le mot de passe pour continuer:</string>
-  <string name="PlaybackFailed">La lecture est impossible parce que l\'extension \'{0}\'\nn\'est pas listée dans votre configuration MediaPortal.\nAjoutez cette extension ou exécuter un lecteur externe\net essayez à nouveau.</string>
+  <string name="PlaybackFailed">La lecture est impossible parce que l\'extension \'{0}\' \nn\'est pas listée dans votre configuration MediaPortal. \nAjoutez cette extension ou exécuter un lecteur externe et essayez à nouveau.</string>
   <string name="PlaybackFailedHeader">Erreur lors de la lecture</string>
+  <string name="PlayCount">Utiliser le compteur</string>
   <string name="PlayMovie">Lecture du film</string>
   <string name="PossibleMatches">Correspondances possibles</string>
   <string name="ProblemLoadingSkinFile">Désolé, il y a eu un problème lors du chargement du skin...</string>
@@ -152,6 +161,7 @@
   <string name="RestoreIgnoredFiles">Restaurer les fichiers ignorés</string>
   <string name="ResumeFrom">Reprendre depuis :</string>
   <string name="ResumeFromLast">Reprendre le film depuis la dernière lecture ?</string>
+  <string name="Resolution">Résolution</string>
   <string name="Retry">Réessayer</string>
   <string name="Runtime">Durée</string>
   <string name="RuntimeHour">{0} heure</string>
@@ -181,11 +191,14 @@
   <string name="SkinDoesNotSupportImporter">Ce thème ne gère pas l\'importateur</string>
   <string name="SkinDoesNotSupportPinDialog">Ce skin ne prend pas en charge la fenêtre de saisie du mot de passe.</string>
   <string name="SkinDoesNotSupportRatingDialog">Ce skin ne prend pas en charge la fenêtre de notation.</string>
+  <string name="Source">Source</string>
   <string name="SortBy">Trier par</string>
   <string name="SortDirection">Sens du tri</string>
   <string name="StarRating">Etoile de notation</string>
+  <string name="Start">Démarrer</string>
   <string name="Sunday">Dimanche</string>
   <!--T-->
+  <string name="TechnicalInfo">Infos techniques</string>
   <string name="Theme">Thème</string>
   <string name="ThisMonth">Ce mois</string>
   <string name="ThisWeek">Cette semaine</string>
@@ -206,14 +219,16 @@
   <string name="UnwatchedMovies">Films non visionnés</string>
   <string name="UpAbbreviation">(ht)</string>
   <string name="UpdateDetailsFromOnline">Mettre à jour les détails en ligne</string>
-  <string name="UpdateMovieDetailsBody">Vous allez mettre à jour toutes les données du film, écrasant\ntoutes les modifications. Voulez vous\ncontinuer ?</string>
+  <string name="UpdateMovieDetailsBody">Vous allez mettre à jour toutes les données du film, écrasant \ntoutes les modifications. Voulez vous \ncontinuer ?</string>
   <string name="UpdateMovieDetailsHeader">Mettre à jour les détails du film</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Le lecteur virtuel n\'est pas prêt</string>
-  <string name="VirtualDriveMessage">Le lecteur virtuel n\'a pas été prêt à temps.\n Merci de réessayer ou d\'arrêter la lecture.</string>
-  <string name="Votes">votes</string>
+  <string name="VideoFormat">Format Vidéo</string>
   <string name="ViewMovieDetails">Afficher les détails du film</string>
+  <string name="VirtualDriveHeader">Le lecteur virtuel n\'est pas prêt</string>
+  <string name="VirtualDriveMessage">Le lecteur virtuel n\'a pas été prêt à temps. \nMerci de réessayer ou d\'arrêter la lecture.</string>
+  <string name="Votes">votes</string>
   <!--W-->
+  <string name="WatchedCount">Compteur affiché</string>
   <string name="Wednesday">Mercredi</string>
   <string name="Writer">Auteur</string>
   <string name="Writers">Auteurs</string>

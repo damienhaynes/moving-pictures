@@ -5,6 +5,9 @@
   <string name="Actors">Igralci</string>
   <string name="AllMovies">Vsi Filmi</string>
   <string name="AllFiles">Vse datoteke</string>
+  <string name="AspectRatio">Razmerje slike</string>
+  <string name="AudioChannels">Avdio kanali</string>
+  <string name="AudioFormat">Avdio format</string>
   <!--B-->
   <string name="BadCategory">Zunanji vtičnik ali preobleka je poskusila\nodpreti neobstoječo Moving\nPictures kategorijo!</string>
   <string name="BadMovie">Zunanji vtičnik ali preobleka je poskusila\nodpreti neobstoječ film v Moving\nPictures!</string>
@@ -13,14 +16,14 @@
   <string name="BeginsWith">Se začne z</string>
   <string name="BelongsToCollection">Spada v zbirko</string>
   <!--C-->
-  <string name="Cancel">Prekliči</string>
+  <string name="Cancel">Preklici</string>
   <string name="CannotDeleteOffline">Ni možno izbrisati {0}\n ker datoteka ni na voljo</string>
   <string name="CannotDeleteReadOnly">Ni možno izbrisati filma, ker je označen kot samo za branje.\nAli želite, da Moving Pictures prezre ta film?</string>
   <string name="CastAndCrew">Zasedba in osebje</string>
   <string name="CategoryEmptyDescription">Trenutno ni filmov\nv tej kategoriji</string>
   <string name="CategoryEmptyHeader">Kategorija je prazna</string>
   <string name="Certification">Certifikacija</string>
-  <string name="ChangeView">Spremeni pogled</string>
+  <string name="ChangeView">Sortiraj po</string>
   <string name="CheckForMissingArtwork">Preveri za manjkajoče plakate na spletu</string>
   <string name="Collection">Zbirka</string>
   <string name="Collections">Zbirke</string>
@@ -56,14 +59,15 @@
   <string name="DoYouWantToDelete">Ali želite trajno izbrisati\n{0}\ns trdega diska?</string>
   <!--E-->
   <string name="EarlierThisYear">Letos</string>
-  <string name="Error">Napaka</string>
+  <string name="Error">#Napaka</string>
   <!--F-->
   <string name="FailedMountingImage">Žal ni uspelo naložiti DVD slike</string>
   <string name="FilePath">Pot datoteke</string>
-  <string name="FileSize">Velikost datoteke</string>
+  <string name="FileSize">Velikost</string>
   <string name="FilesNeedingAttention">Datoteke, ki rabijo pozornost</string>
   <string name="FilmstripView">Filmski trak</string>
   <string name="FilterBy">Filtriraj po</string>
+  <string name="FrameRate">Število sličic</string>
   <string name="Friday">Petek</string>
   <string name="Future">Prihodnost</string>
   <!--G-->
@@ -77,6 +81,7 @@
   <string name="ImporterDisabled">Importer je onemogočen</string>
   <string name="ImporterDisabledMessage">Importer je bil onemogočen v \nMediaPortal GUI. Ali ga želite ponovno\nomogočiti?</string>
   <string name="ImporterPending">Importer ({0} potrebuje pozornost)</string>
+  <string name="InfoUrl">URL informacij</string>
   <string name="InvalidPin">Napačna PIN koda!</string>
   <string name="InvalidVideoDiscFormat">Slikovna datoteka ne vsebuje\npravega video disk formata, ali pa je vaša Mediaportal\nDaemon Tools nastavitev napačna.</string>
   <!--L-->
@@ -94,6 +99,7 @@
   <string name="MediaIsMissing">Medij za izbrani film manjka!\nNa žalost šlo je nekaj narobe...</string>
   <string name="MediaNotAvailableBody">Medij izbranega filma trenutno\nni na voljo. Prosim vstavite ali vključite medij\noznačen: {0}</string>
   <string name="MediaNotAvailableHeader">Medij ni na voljo</string>
+  <string name="MediaType">Tip medija</string>
   <string name="Missing">Manjkajoče</string>
   <string name="MissingExternalPlayerExe">Izvršljiva datoteka za HD predvajanje manjka.\nProsim popravite pot do izvršljive datoteke.</string>
   <string name="Monday">Ponedeljek</string>
@@ -118,21 +124,23 @@
   <string name="NoImportPathsHeading">Ni poti za uvoz!</string>
   <!--O-->
   <string name="Older">Starejše</string>
+  <string name="Overview">Pregled</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Starševski nadzor ni vključen.</string>
   <string name="PinCodeHeader">Odklepanje omejene vsebine</string>
   <string name="PinCodePrompt">Za nadaljevanje vnesite PIN kodo:</string>
-  <string name="PlaybackFailed">Predvajanje ni možno, ker \'{0}\'\nkončnica ni navedena v vaši MediaPortal konfiguraciji.\nProsim dodajte to končnico ali nastavite zunanji predvajalnik\nin poskusite znova.</string>
+  <string name="PlaybackFailed">&gt;Predvajanje ni možno, ker \'{0}\'\nkončnica ni navedena v vaši MediaPortal konfiguraciji.\nProsim dodajte to končnico ali nastavite zunanji predvajalnik\nin poskusite znova.</string>
   <string name="PlaybackFailedHeader">Predvajanje spodletelo</string>
+  <string name="PlayCount">Število predvajanj</string>
   <string name="PlayMovie">Predvajaj film</string>
   <string name="PossibleMatches">Možna ujemanja</string>
   <string name="ProblemLoadingSkinFile">Oprostite, nastal je problem pri nalaganju datoteke preobleke</string>
   <!--R-->
   <string name="Rate">Oceni</string>
-  <string name="Rated">Ocenjeno</string>
+  <string name="Rated">Ocena</string>
   <string name="RateFiveStarFive">Popolno</string>
   <string name="RateFiveStarFour">Krasno</string>
-  <string name="RateFiveStarOne">Strašno</string>
+  <string name="RateFiveStarOne">Slabo</string>
   <string name="RateFiveStarThree">Dobro</string>
   <string name="RateFiveStarTwo">Povprečno</string>
   <string name="RateHeading">Oceni film</string>
@@ -153,8 +161,9 @@
   <string name="RestoreIgnoredFiles">Obnovi prezrte datoteke</string>
   <string name="ResumeFrom">Nadaljuj od:</string>
   <string name="ResumeFromLast">Nadaljujem od zadnjič?</string>
+  <string name="Resolution">Resolucija</string>
   <string name="Retry">Poskusi ponovno</string>
-  <string name="Runtime">Dolžina</string>
+  <string name="Runtime">Trajanje</string>
   <string name="RuntimeHour">{0} ura</string>
   <string name="RuntimeHours">{0} ur</string>
   <string name="RuntimeLong">{0} in {1}</string>
@@ -182,11 +191,14 @@
   <string name="SkinDoesNotSupportImporter">Ta preobleka ne podpira Importer-ja.</string>
   <string name="SkinDoesNotSupportPinDialog">Ta preobleka ne podpira dialoga PIN kode.</string>
   <string name="SkinDoesNotSupportRatingDialog">Ta preobleka ne podpira dialoga za ocenjevanje.</string>
-  <string name="SortBy">Sortiraj po</string>
+  <string name="Source">Izvor</string>
+  <string name="SortBy">Razvrsti po</string>
   <string name="SortDirection">Smer sortiranja</string>
   <string name="StarRating">Ocena</string>
+  <string name="Start">Začetek</string>
   <string name="Sunday">Nedelja</string>
   <!--T-->
+  <string name="TechnicalInfo">Tehnične informacije</string>
   <string name="Theme">Tema</string>
   <string name="ThisMonth">Ta mesec</string>
   <string name="ThisWeek">Ta teden</string>
@@ -210,14 +222,16 @@
   <string name="UpdateMovieDetailsBody">Osvežili boste vse metapodatke filma in s tem\nprepisali vse ročne spremembe.\Ali želite nadaljevati?</string>
   <string name="UpdateMovieDetailsHeader">Osveži podatke filma</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Virtualni pogon ni pripravljen</string>
-  <string name="VirtualDriveMessage">Virtualni pogon ni bil pravočasno pripravljen.\nProsim poskusite ponovno ali prekličite predvajanje.</string>
-  <string name="Votes">glasovi</string>
+  <string name="VideoFormat">Format videa</string>
   <string name="ViewMovieDetails">Poglej podrobnosti filma</string>
+  <string name="VirtualDriveHeader">Virtualni pogon ni pripravljen</string>
+  <string name="VirtualDriveMessage">Virtualni pogon ni bil pravočasno pripravljen.\nProsim, poskusite ponovno ali prekličite predvajanje.</string>
+  <string name="Votes">glasovi</string>
   <!--W-->
+  <string name="WatchedCount">Število ogledanih</string>
   <string name="Wednesday">Sreda</string>
-  <string name="Writer">Pisec</string>
-  <string name="Writers">Pisci</string>
+  <string name="Writer">Scenarij</string>
+  <string name="Writers">Scenarij</string>
   <!--Y-->
   <string name="Year">Leto</string>
   <string name="Yesterday">Včeraj</string>

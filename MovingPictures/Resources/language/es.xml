@@ -5,19 +5,22 @@
   <string name="Actors">Actores</string>
   <string name="AllMovies">Todas las Películas</string>
   <string name="AllFiles">Todos los Archivos</string>
+  <string name="AspectRatio">Relación de Aspecto</string>
+  <string name="AudioChannels">Canales de Audio</string>
+  <string name="AudioFormat">Formato de Audio</string>
   <!--B-->
-  <string name="BadCategory">¡Un plugin o skin externo\ntrató de abrir una categoría\ninexistente de Moving Pictures!</string>
-  <string name="BadMovie">¡Un plugin o skin externo\ntrató de abrir una película\ninexistente de Moving Pictures!</string>
-  <string name="BadParam">¡Un plugin o skin externo\nenvió un parámetro inválido a Moving Pictures!</string>
+  <string name="BadCategory">¡Un plugin o skin externo intentó abrir una categoría de Moving Pictures que no existe!</string>
+  <string name="BadMovie">¡Un plugin o skin externo intentó abrir una película de Moving Pictures que no existe!</string>
+  <string name="BadParam">¡Un plugin o skin externo intentó pasar\nun parámetro inválido de Moving Pictures!</string>
   <string name="Backdrop">Fondo</string>
   <string name="BeginsWith">Empieza Con</string>
   <string name="BelongsToCollection">Pertenece a la Colección</string>
   <!--C-->
   <string name="Cancel">Cancelar</string>
-  <string name="CannotDeleteOffline">No se pudo borrar {0}\n porque el archivo está offline</string>
-  <string name="CannotDeleteReadOnly">No se puede borrar una película de sólo lectura.\n¿Quiere que Moving Pictures ignore esta película?</string>
+  <string name="CannotDeleteOffline">No se pudo borrar {0}\n porque no hay conexión con el archivo</string>
+  <string name="CannotDeleteReadOnly">No se puede borrar una película de sólo lectura. \n¿Quieres que Moving Pictures ignore esta película?</string>
   <string name="CastAndCrew">Reparto y Equipo</string>
-  <string name="CategoryEmptyDescription">Actualmente no hay películas que\nfiguren en esta categoría.</string>
+  <string name="CategoryEmptyDescription">No hay películas\nen esta categoría.</string>
   <string name="CategoryEmptyHeader">La categoría está vacía</string>
   <string name="Certification">Calificación</string>
   <string name="ChangeView">Cambiar vista</string>
@@ -53,7 +56,7 @@
   <string name="Director">Director</string>
   <string name="Directors">Directores</string>
   <string name="DownAbbreviation">(abj)</string>
-  <string name="DoYouWantToDelete">¿Quiere borrar permanentemente\n{0}\nde su disco duro?</string>
+  <string name="DoYouWantToDelete">¿Quieres borrar definitivamente\n{0}\nde tu disco duro?</string>
   <!--E-->
   <string name="EarlierThisYear">A comienzos de año</string>
   <string name="Error">Error</string>
@@ -64,6 +67,7 @@
   <string name="FilesNeedingAttention">Archivos que requieren Atención</string>
   <string name="FilmstripView">Vista de Diapositivas</string>
   <string name="FilterBy">Filtrar por</string>
+  <string name="FrameRate">Velocidad Fotogramas</string>
   <string name="Friday">Viernes</string>
   <string name="Future">Futuro</string>
   <!--G-->
@@ -75,10 +79,11 @@
   <string name="ImdbId">Id de IMDB</string>
   <string name="Importer">Importador de Película</string>
   <string name="ImporterDisabled">Importador Deshabilitado</string>
-  <string name="ImporterDisabledMessage">El importador ha sido deshabilitado en la\nInterfaz de MediaPortal. ¿Te gustaría\nvolver a habilitarlo?</string>
+  <string name="ImporterDisabledMessage">El importador ha sido deshabilitado en la Interfaz de\nMediaPortal. ¿Te gustaría volver a\n habilitarlo?</string>
   <string name="ImporterPending">Importador ({0} Necesita Atención)</string>
+  <string name="InfoUrl">Información URL</string>
   <string name="InvalidPin">¡Código PIN incorrecto!</string>
-  <string name="InvalidVideoDiscFormat">O el archivo de imagen no contiene\nun formato de disco válido, o su configuración\nde Daemon Tools en MediaPortal es incorrecta.</string>
+  <string name="InvalidVideoDiscFormat">O bien el archivo de imagen no contiene\nun formato de disco de vídeo válida, o tu configuración de Daemon\n Tools en MediaPortal es incorrecta.</string>
   <!--L-->
   <string name="Language">Idioma</string>
   <string name="LargeThumbnailView">Vista de Miniaturas Grandes</string>
@@ -91,11 +96,12 @@
   <string name="MarkAsUnwatched">Marcar como no visto</string>
   <string name="MarkAsWatched">Marcar como visto</string>
   <string name="MediaInfo">MediaInfo</string>
-  <string name="MediaIsMissing">¡No se encuentra el medio de la película seleccionada! \nLo siento pero algo ha ido mal...</string>
-  <string name="MediaNotAvailableBody">El medio de la película que ha seleccionado no está\ndisponible actualmente. Por favor, inserte o conecte el medio\netiquetado como: {0}</string>
+  <string name="MediaIsMissing">¡No se encuentra el archivo de la Película seleccionada!\nLo siento pero algo no debido ir mal...</string>
+  <string name="MediaNotAvailableBody">El archivo de la película seleccionada no está\ndisponible. Por favor, inserta o conecta la \nunidad: {0}</string>
   <string name="MediaNotAvailableHeader">Medio no disponible</string>
+  <string name="MediaType">Tipo de Archivo</string>
   <string name="Missing">Ausente</string>
-  <string name="MissingExternalPlayerExe">No se encuentra el ejecutable para la reproducción HD.\nPor favor, corrija la ruta al ejecutable.</string>
+  <string name="MissingExternalPlayerExe">No se encuentra el ejecutable para la reproducción HD.\nPor favor, corrige la dirección del ejecutable.</string>
   <string name="Monday">Lunes</string>
   <string name="MonthName1">Enero</string>
   <string name="MonthName2">Febrero</string>
@@ -114,16 +120,18 @@
   <string name="MovieOptions">Opciones de película</string>
   <string name="Movies">Películas</string>
   <!--N-->
-  <string name="NoImportPathsBody">No parece que haya definido\n ninguna ruta de importación. \nDeberá cerrar MediaPortal y\nlanzar la pantalla de \nConfiguración para\nconfigurar Moving Pictures.</string>
+  <string name="NoImportPathsBody">No tienes definida ninguna \ndirección de importación. Por favor, cierra\nclose MediaPortal y abre\nlaunch Configuración MP.</string>
   <string name="NoImportPathsHeading">¡No hay rutas de importación!</string>
   <!--O-->
   <string name="Older">Más antiguo</string>
+  <string name="Overview">Overview</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Control parental no activado</string>
   <string name="PinCodeHeader">Desbloquear contenido restringido</string>
   <string name="PinCodePrompt">Por favor, introduzca el código PIN para continuar:</string>
-  <string name="PlaybackFailed">No es posible la reproducción porque la extensión \'{0}\'\nno está listada en la configuración de MediaPortal.\nPor favor, añada la extensión o configure un reproductor externo\ne inténtelo de nuevo.</string>
+  <string name="PlaybackFailed">La reproducción no es posible porque la \nextensión  \'{0}\' no está listada en tu configuración.\nPor favor, añade esta extensión o configura un reproductor externo\y vuelve a intentarlo.</string>
   <string name="PlaybackFailedHeader">Error al Reproducir</string>
+  <string name="PlayCount">Contador Reproducciones</string>
   <string name="PlayMovie">Reproducir Película</string>
   <string name="PossibleMatches">Posibles Coincidencias</string>
   <string name="ProblemLoadingSkinFile">Lo siento, hubo un problema cargando el archivo del skin...</string>
@@ -153,6 +161,7 @@
   <string name="RestoreIgnoredFiles">Restaurar Archivos Ignorados</string>
   <string name="ResumeFrom">Reanudar desde:</string>
   <string name="ResumeFromLast">¿Reanudar desde el último punto?</string>
+  <string name="Resolution">Resolución</string>
   <string name="Retry">Reintentar</string>
   <string name="Runtime">Duración</string>
   <string name="RuntimeHour">{0} hora</string>
@@ -182,11 +191,14 @@
   <string name="SkinDoesNotSupportImporter">Este skin no soporta el Importador.</string>
   <string name="SkinDoesNotSupportPinDialog">Este skin no soporta el Diálogo de Código PIN.</string>
   <string name="SkinDoesNotSupportRatingDialog">Este skin no soporta el Diálogo de Puntuaciones.</string>
+  <string name="Source">Fuente</string>
   <string name="SortBy">Ordenar por</string>
   <string name="SortDirection">Dirección de ordenación</string>
   <string name="StarRating">Valoración</string>
+  <string name="Start">Inicio</string>
   <string name="Sunday">Domingo</string>
   <!--T-->
+  <string name="TechnicalInfo">Información Técnica</string>
   <string name="Theme">Tema</string>
   <string name="ThisMonth">Este mes</string>
   <string name="ThisWeek">Esta semana</string>
@@ -207,14 +219,16 @@
   <string name="UnwatchedMovies">Películas no vistas</string>
   <string name="UpAbbreviation">(arr)</string>
   <string name="UpdateDetailsFromOnline">Actualizar detalles Online</string>
-  <string name="UpdateMovieDetailsBody">Va a refrescar todos los datos de la película, sobreescribiendo\ncualquier modificación hecha sobre el film.\n¿Quiere continuar?</string>
+  <string name="UpdateMovieDetailsBody">Vas a actualizar todos los metadatos de la película, se sobrescribirá\ncualquier modificación que hayas hecho. ¿Quieres \ncontinuar?</string>
   <string name="UpdateMovieDetailsHeader">Actualizar detalles de película</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Unidad virtual no preparada</string>
-  <string name="VirtualDriveMessage">La unidad virtual no se preparó a tiempo.\nInténtelo de nuevo o cancele la reproducción.</string>
-  <string name="Votes">votos</string>
+  <string name="VideoFormat">Formato de Vídeo</string>
   <string name="ViewMovieDetails">Ver Detalles de Película</string>
+  <string name="VirtualDriveHeader">Unidad virtual no preparada</string>
+  <string name="VirtualDriveMessage">La unidad virtual no estaba preparada.\n Por favor inténtalo otra vez o cancela la reproducción.</string>
+  <string name="Votes">votos</string>
   <!--W-->
+  <string name="WatchedCount">Contador de vistos</string>
   <string name="Wednesday">Miércoles</string>
   <string name="Writer">Guionista</string>
   <string name="Writers">Guionistas</string>

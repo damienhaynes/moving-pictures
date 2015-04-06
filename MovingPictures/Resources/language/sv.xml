@@ -5,19 +5,30 @@
   <string name="Actors">Skådespelare</string>
   <string name="AllMovies">Alla filmer</string>
   <string name="AllFiles">Alla filer</string>
+  <string name="AspectRatio">Bildformat</string>
+  <string name="AudioChannels">Ljudkanaler</string>
+  <string name="AudioFormat">Ljudformat</string>
   <!--B-->
-  <string name="BadCategory">En annan plugin eller ett skin försökte\nöppna en kategori i Moving Pictures\nsom inte existerar!</string>
-  <string name="BadMovie">En annan plugin eller ett skin försökte\nöppna en film som inte existerar i\nMoving Pictures!</string>
-  <string name="BadParam">En annan plugin eller ett skin skickade\nen ogiltig parameter till Moving Pictures!</string>
+  <string name="BadCategory">En annan plugin eller ett skin försökte
+öppna en kategori i Moving Pictures
+som inte existerar!</string>
+  <string name="BadMovie">En annan plugin eller ett skin försökte
+öppna en film som inte existerar i
+Moving Pictures!</string>
+  <string name="BadParam">En annan plugin eller ett skin skickade
+en ogiltig parameter till Moving Pictures!</string>
   <string name="Backdrop">Bakgrundsbild</string>
   <string name="BeginsWith">Börjar på</string>
   <string name="BelongsToCollection">Tillhör en samling</string>
   <!--C-->
   <string name="Cancel">Avbryt</string>
-  <string name="CannotDeleteOffline">Kan ej ta bort, {0}\n filen är offline</string>
-  <string name="CannotDeleteReadOnly">Kan ej ta bort en \"read-only\"-fil.\nVill du att MP ignorerar filmen?</string>
+  <string name="CannotDeleteOffline">Kan ej ta bort, {0}
+ filen är offline</string>
+  <string name="CannotDeleteReadOnly">Kan ej ta bort en \"read-only\"-fil.
+Vill du att MP ignorerar filmen?</string>
   <string name="CastAndCrew">Rollbesättning och filmcrew</string>
-  <string name="CategoryEmptyDescription">Det finns för närvarande inga\nfilmer i den här kategorin.</string>
+  <string name="CategoryEmptyDescription">Det finns för närvarande inga
+filmer i den här kategorin.</string>
   <string name="CategoryEmptyHeader">Kategorin är tom</string>
   <string name="Certification">Åldersgräns</string>
   <string name="ChangeView">Ändra vy</string>
@@ -53,7 +64,9 @@
   <string name="Director">Regissör</string>
   <string name="Directors">Regissörer</string>
   <string name="DownAbbreviation">(ner)</string>
-  <string name="DoYouWantToDelete">Vill du ta bort\n{0}\nfilen permanent?</string>
+  <string name="DoYouWantToDelete">Vill du ta bort
+{0}
+filen permanent?</string>
   <!--E-->
   <string name="EarlierThisYear">Tidigare i år</string>
   <string name="Error">Fel</string>
@@ -64,6 +77,7 @@
   <string name="FilesNeedingAttention">Filer som kräver åtgärd</string>
   <string name="FilmstripView">Filmremsa Vy</string>
   <string name="FilterBy">Sortera efter</string>
+  <string name="FrameRate">Bildfrekvens</string>
   <string name="Friday">Fredag</string>
   <string name="Future">Framtid</string>
   <!--G-->
@@ -75,10 +89,14 @@
   <string name="ImdbId">IMDb Id</string>
   <string name="Importer">Filmimportör</string>
   <string name="ImporterDisabled">Importören är inaktiverad</string>
-  <string name="ImporterDisabledMessage">Importören har inaktiverats i\nMediaPortal GUI. \nVill du aktivera den?</string>
+  <string name="ImporterDisabledMessage">Importören har inaktiverats i
+MediaPortal GUI. 
+Vill du aktivera den?</string>
   <string name="ImporterPending">Importören ({0} kräver åtgärd)</string>
+  <string name="InfoUrl">Info adress</string>
   <string name="InvalidPin">Fel PIN-kod!</string>
-  <string name="InvalidVideoDiscFormat">Fel på image-fil eller\ninställningarna i Daemon Tools.</string>
+  <string name="InvalidVideoDiscFormat">Fel på image-fil eller
+inställningarna i Daemon Tools.</string>
   <!--L-->
   <string name="Language">Språk</string>
   <string name="LargeThumbnailView">Stor tumnagel-vy</string>
@@ -91,11 +109,16 @@
   <string name="MarkAsUnwatched">Markera som ej sedd</string>
   <string name="MarkAsWatched">Markera som sedd</string>
   <string name="MediaInfo">MediaInfo</string>
-  <string name="MediaIsMissing">Platsen eller skivan där filmen du valt saknas!\nTyvärr har något gått fel...</string>
-  <string name="MediaNotAvailableBody">Platsen eller skivan där filmen du valt är\nför närvarande inte tillgänglig. Anslut enheten eller stoppa i skivan \nmärkt: {0}</string>
+  <string name="MediaIsMissing">Platsen eller skivan där filmen du valt saknas!
+Tyvärr har något gått fel...</string>
+  <string name="MediaNotAvailableBody">Platsen eller skivan där filmen du valt är
+för närvarande inte tillgänglig. Anslut enheten eller stoppa i skivan 
+märkt: {0}</string>
   <string name="MediaNotAvailableHeader">Lagringsmedia saknas!</string>
+  <string name="MediaType">Mediatyp</string>
   <string name="Missing">Saknas</string>
-  <string name="MissingExternalPlayerExe">Startfilen för programmet saknas.\nKontrollera sökvägen för exe-filen.</string>
+  <string name="MissingExternalPlayerExe">Startfilen för programmet saknas.
+Kontrollera sökvägen för exe-filen.</string>
   <string name="Monday">Måndag</string>
   <string name="MonthName1">Januari</string>
   <string name="MonthName2">Februari</string>
@@ -114,16 +137,24 @@
   <string name="MovieOptions">Filmval</string>
   <string name="Movies">Filmer</string>
   <!--N-->
-  <string name="NoImportPathsBody">Du har inte valt några\nmappar där du har filmer.\nGå till konfigurations-\nverktyget och gör detta!</string>
+  <string name="NoImportPathsBody">Du har inte valt några
+mappar där du har filmer.
+Gå till konfigurations-
+verktyget och gör detta!</string>
   <string name="NoImportPathsHeading">Inga sökmappar!</string>
   <!--O-->
   <string name="Older">Äldre</string>
+  <string name="Overview">Översikt</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Föräldraskydd är på.</string>
   <string name="PinCodeHeader">Låser upp skyddat innehåll</string>
   <string name="PinCodePrompt">Ange PIN-kod:</string>
-  <string name="PlaybackFailed">Uppspelning är inte möjligt eftersom \'{0}\'\nfiländelsen inte är med i listan över kompatibla format i MediaPortals inställningar.\nLägg till denna filändelse eller välj en extern uppspelare\noch försök igen.</string>
+  <string name="PlaybackFailed">Uppspelning är inte möjligt eftersom \'{0}\'
+filändelsen inte är med i listan över kompatibla format i MediaPortals inställningar.
+Lägg till denna filändelse eller välj en extern uppspelare
+och försök igen.</string>
   <string name="PlaybackFailedHeader">Kan ej spela upp</string>
+  <string name="PlayCount">Spelad antal ggr</string>
   <string name="PlayMovie">Spela film</string>
   <string name="PossibleMatches">Möjliga träffar</string>
   <string name="ProblemLoadingSkinFile">Fel vid laddning av skin-fil.</string>
@@ -153,6 +184,7 @@
   <string name="RestoreIgnoredFiles">Återställ överhoppade filer </string>
   <string name="ResumeFrom">Återuppta från:</string>
   <string name="ResumeFromLast">Återuppta från senast?</string>
+  <string name="Resolution">Upplösning:</string>
   <string name="Retry">Försök igen</string>
   <string name="Runtime">Speltid</string>
   <string name="RuntimeHour">{0} timme</string>
@@ -182,11 +214,14 @@
   <string name="SkinDoesNotSupportImporter">Detta skin stödjer inte importören.</string>
   <string name="SkinDoesNotSupportPinDialog">Detta skin stödjer ej PIN-kod.</string>
   <string name="SkinDoesNotSupportRatingDialog">Detta skin stödjer ej betygsättning.</string>
+  <string name="Source">Källa</string>
   <string name="SortBy">Sortera efter</string>
   <string name="SortDirection">Sorteringsriktning</string>
   <string name="StarRating">Betyg</string>
+  <string name="Start">Start</string>
   <string name="Sunday">Söndag</string>
   <!--T-->
+  <string name="TechnicalInfo">Teknisk information</string>
   <string name="Theme">Tema</string>
   <string name="ThisMonth">Denna månad</string>
   <string name="ThisWeek">Denna vecka</string>
@@ -207,14 +242,19 @@
   <string name="UnwatchedMovies">Ej sedda filmer</string>
   <string name="UpAbbreviation">(upp)</string>
   <string name="UpdateDetailsFromOnline">Updatera detaljer</string>
-  <string name="UpdateMovieDetailsBody">Du kommer uppdatera all information, \näven det du ändrat själv.\nVill du fortsätta?</string>
+  <string name="UpdateMovieDetailsBody">Du kommer uppdatera all information, 
+även det du ändrat själv.
+Vill du fortsätta?</string>
   <string name="UpdateMovieDetailsHeader">Uppdatera filmens information</string>
   <!--V-->
-  <string name="VirtualDriveHeader">\"Virtual drive\" inte redo</string>
-  <string name="VirtualDriveMessage">\"Virtual drive\" hann inte bli redo.\nFörsök igen!</string>
-  <string name="Votes">röster</string>
+  <string name="VideoFormat">Video format</string>
   <string name="ViewMovieDetails">Se filmdetaljer</string>
+  <string name="VirtualDriveHeader">\"Virtual drive\" inte redo</string>
+  <string name="VirtualDriveMessage">\"Virtual drive\" hann inte bli redo.
+Försök igen!</string>
+  <string name="Votes">röster</string>
   <!--W-->
+  <string name="WatchedCount">Sedd antal ggr</string>
   <string name="Wednesday">Onsdag</string>
   <string name="Writer">Manus</string>
   <string name="Writers">Manus</string>

@@ -10,9 +10,6 @@
   <string name="BelongsToCollection">Hører til samling</string>
   <!--C-->
   <string name="Cancel">Avbryt</string>
-  <string name="CannotDeleteOffline">Ikke mulig å slette {0}\n siden filen er offline</string>
-  <string name="CannotDeleteReadOnly">Kan ikke slette skrivebeskyttet film.\nVil du at Moving Pictures skal ignorere\ndenne filmen?</string>
-  <string name="CategoryEmptyDescription">Det er for tiden ingen filmer\ni denne kategorien.</string>
   <string name="CategoryEmptyHeader">Kategorien er tom</string>
   <string name="Certification">Aldersgrense</string>
   <string name="ChangeView">Endre visning</string>
@@ -45,7 +42,6 @@
   <string name="Director">Regissør</string>
   <string name="Directors">Regissører</string>
   <string name="DownAbbreviation">(ned)</string>
-  <string name="DoYouWantToDelete">Ønsker du å slette \n{0}\npermanent fra harddisken?</string>
   <!--E-->
   <string name="EarlierThisYear">Tidligere i år</string>
   <string name="Error">Feil</string>
@@ -61,7 +57,6 @@
   <string name="Genres">Sjangere</string>
   <!--I-->
   <string name="InvalidPin">Feil PIN-kode!</string>
-  <string name="InvalidVideoDiscFormat">Enten inneholder ikke image-filen\n ett korrekt videoformat, eller så er ikke Daemon\nTools MediaPortalkonfigurering riktig.</string>
   <!--L-->
   <string name="Language">Språk</string>
   <string name="LargeThumbnailView">Store miniatyrbilder</string>
@@ -73,11 +68,8 @@
   <!--M-->
   <string name="MarkAsUnwatched">Marker som usett</string>
   <string name="MarkAsWatched">Marker som sett</string>
-  <string name="MediaIsMissing">Media for valgte film mangler!\nEn feil har oppstått</string>
-  <string name="MediaNotAvailableBody">Mediet for filmen du har valgt er ikke\ntilgjengelig. Vennligst sett inn er koble til\nmediet med navn: {0}</string>
   <string name="MediaNotAvailableHeader">Mediet ikke tilgjengelig</string>
   <string name="Missing">Mangler</string>
-  <string name="MissingExternalPlayerExe">Programmet for HD avspilling mangler.\nVennligst korriger filbanen til programmet.</string>
   <string name="Monday">Mandag</string>
   <string name="MonthName1">Januar</string>
   <string name="MonthName2">Februar</string>
@@ -96,15 +88,14 @@
   <string name="MovieOptions">Film innstillinger</string>
   <string name="Movies">Filmer</string>
   <!--N-->
-  <string name="NoImportPathsBody">Det ser ikke ut til at du har lagt til\nnoen import mapper. Du må lukke MediaPortal\nog starte MediaPortal konfigurering for å\nkonfigurere Moving Pictures riktig.</string>
   <string name="NoImportPathsHeading">Ingen importbaner!</string>
   <!--O-->
   <string name="Older">Eldre</string>
+  <string name="Overview">Oversikt</string>
   <!--P-->
   <string name="ParentalControlsDisabled">Foreldrekontroll er ikke aktivert.</string>
   <string name="PinCodeHeader">Låser opp begrenset innhold</string>
   <string name="PinCodePrompt">Vennligst skriv PIN-kode for å fortsette:</string>
-  <string name="PlaybackFailed">Avspilling er ikke mulig siden \'{0}\' filtype\nikke er listet i din MediaPortal konfig.\nVennligst legg til denne filtypen eller legg\ntil en ekstern spiller og prøv på nytt.</string>
   <string name="PlaybackFailedHeader">Avspilling feilet</string>
   <string name="PlayMovie">Spill av film</string>
   <string name="PossibleMatches">Mulige samsvar</string>
@@ -134,6 +125,7 @@
   <string name="RemoteNumericAlphabet9">wxyz</string>
   <string name="ResumeFrom">Fortsett fra:</string>
   <string name="ResumeFromLast">Fortsette film fra sist avspilling?</string>
+  <string name="Resolution">Oppløsning</string>
   <string name="Retry">Prøv igjen</string>
   <string name="Runtime">Spilletid</string>
   <string name="RuntimeHour">{0} time</string>
@@ -181,13 +173,11 @@
   <string name="UnwatchedMovies">Usette filmer</string>
   <string name="UpAbbreviation">(opp)</string>
   <string name="UpdateDetailsFromOnline">Oppdater opplysninger fra nett</string>
-  <string name="UpdateMovieDetailsBody">Du er i ferd med å oppdatere alle filmdata,\ndette vil overskrive alle egne endringer på\ndenne filmen. Vil du fortsette?</string>
   <string name="UpdateMovieDetailsHeader">Oppdater filmdetaljer</string>
   <!--V-->
-  <string name="VirtualDriveHeader">Virtuell disk ikke klar</string>
-  <string name="VirtualDriveMessage">Den virtuelle disken var ikke klar.\nVennligst prøv igjen eller avbryt avspilling.</string>
-  <string name="Votes">votes</string>
   <string name="ViewMovieDetails">Se filmdetaljer</string>
+  <string name="VirtualDriveHeader">Virtuell disk ikke klar</string>
+  <string name="Votes">votes</string>
   <!--W-->
   <string name="Wednesday">Onsdag</string>
   <string name="Writer">Manus</string>
