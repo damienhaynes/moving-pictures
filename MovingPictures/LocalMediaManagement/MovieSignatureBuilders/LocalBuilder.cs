@@ -27,6 +27,11 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
 
         // Filters "noise" from the input string
         private static string removeNoise(string input) {
+            string noiseFilter = MovingPicturesCore.Settings.NoiseFilter;
+            if (string.IsNullOrEmpty(noiseFilter)) {
+                return input;
+            }
+
             Regex expr = new Regex(MovingPicturesCore.Settings.NoiseFilter, RegexOptions.IgnoreCase);
             string denoisedTitle = expr.Replace(input, "");
             denoisedTitle = denoisedTitle.TrimWhiteSpace();
