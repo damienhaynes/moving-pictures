@@ -2,25 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using Cornerstone.Database;
+using Cornerstone.GUI.Dialogs;
+using Cornerstone.Tools;
+using Cornerstone.Tools.Search;
 using MediaPortal.Configuration;
+using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
 using MediaPortal.Plugins.MovingPictures.Database;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Plugins.MovingPictures.MainUI;
 using MediaPortal.Profile;
 using MediaPortal.Services;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using MediaPortal.Plugins.MovingPictures.Properties;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
-using Cornerstone.Database.Tables;
-using Cornerstone.GUI.Dialogs;
-using Cornerstone.Tools;
-using MediaPortal.Plugins.MovingPictures.BackgroundProcesses;
-using System.Threading;
-using MediaPortal.Plugins.MovingPictures.MainUI;
-using Cornerstone.Tools.Search;
 
 namespace MediaPortal.Plugins.MovingPictures {
     public enum BrowserViewMode {
@@ -48,6 +45,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private const string dbFileName = "movingpictures.db3";
         private const string logFileName = "movingpictures.log";
         private const string oldLogFileName = "movingpictures.old.log";
+        private const string dbBackupPath = "MovingPictures_Backup";
 
         private static float loadingProgress;
         private static float loadingTotal;
@@ -292,7 +290,7 @@ namespace MediaPortal.Plugins.MovingPictures {
             _importer = null;
             _settings = null;
             _databaseManager.Close();
-            _databaseManager = null;
+            //_databaseManager = null;
 
             logger.Info("Plugin Closed");
         }
@@ -301,15 +299,14 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #region Private Methods
 
-        
-
         // Initializes the database connection to the Movies Plugin database
         private static void initDB() {
             if (_databaseManager != null)
                 return;
 
+            string fullDBBackupPath = Config.GetSubFolder(Config.Dir.Database, dbBackupPath);
             string fullDBFileName = Config.GetFile(Config.Dir.Database, dbFileName);
-            _databaseManager = new DatabaseManager(fullDBFileName);
+            _databaseManager = new DatabaseManager(fullDBFileName, fullDBBackupPath);
 
             // check that we at least have a default user
             List<DBUser> users = DBUser.GetAll();
