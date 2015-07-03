@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
-using NLog;
-using Cornerstone.Extensions.IO;
-using Cornerstone.GUI.Dialogs;
-using Cornerstone.Database.Tables;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
+using Cornerstone.Database.Tables;
 using Cornerstone.Extensions;
-using System.Reflection;
+using Cornerstone.Extensions.IO;
+using Cornerstone.GUI.Dialogs;
 using MediaPortal.Plugins.MovingPictures.MainUI;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.Database {
     public class DatabaseMaintenanceManager {

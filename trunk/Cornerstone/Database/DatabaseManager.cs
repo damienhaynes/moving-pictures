@@ -1,15 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Collections;
-using System.Text;
-using System.Runtime.InteropServices;
-using SQLite.NET;
-using System.Windows.Forms;
-using System.Reflection;
-using NLog;
-using Cornerstone.Database.Tables;
-using Cornerstone.Database.CustomTypes;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using Cornerstone.Database.CustomTypes;
+using Cornerstone.Database.Tables;
+using NLog;
+using SQLite.NET;
 
 namespace Cornerstone.Database {
     public class DatabaseManager {
@@ -17,6 +14,7 @@ namespace Cornerstone.Database {
         #region Private
 
         private string dbFilename;
+        private string dbBackupDirectory;
         private DatabaseCache cache;
         private Dictionary<Type, bool> isVerified;
         private Dictionary<Type, bool> doneFullRetrieve;
@@ -30,6 +28,36 @@ namespace Cornerstone.Database {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         
         private readonly object lockObject = new object();
+
+        private SQLiteClient dbClient {
+            get {
+                lock (lockObject) {
+                    if (!_connected) {
+                        try {
+                            sqliteClient = new SQLiteClient(dbFilename);
+                            // verify integrity of database before going any further
+                            if (verifyIntegrity(sqliteClient)) {
+                                backupDatabase();
+                            }
+                            else {
+                                restoreDatabase();
+                            }
+                            sqliteClient.Execute("PRAGMA synchronous=OFF");
+                            logger.Info("Successfully Opened Database: " + dbFilename);
+                            _connected = true;
+                        }
+                        catch (Exception e) {
+                            logger.FatalException("Could Not Open Database: " + dbFilename, e);
+                            sqliteClient = null;
+                        }
+                    }
+                }
+
+                return sqliteClient;
+            }
+        } 
+        private SQLiteClient sqliteClient;
+        private bool _connected = false;
 
         #endregion
 
@@ -47,33 +75,10 @@ namespace Cornerstone.Database {
 
         #region Public Methods
 
-        private bool _connected = false;
-
         public bool IsClosed()
         {         
           return _connected == false;
         }
-
-        private SQLiteClient dbClient {
-            get {
-                lock (lockObject) {
-                    if (!_connected) {
-                        try {
-                            sqliteClient = new SQLiteClient(dbFilename);
-                            sqliteClient.Execute("PRAGMA synchronous=OFF");
-                            logger.Info("Successfully Opened Database: " + dbFilename);
-                            _connected = true;
-                        }
-                        catch (Exception e) {
-                            logger.FatalException("Could Not Open Database: " + dbFilename, e);
-                            sqliteClient = null;
-                        }
-                    }
-                }
-
-                return sqliteClient;
-            }
-        } private SQLiteClient sqliteClient;
 
         public void Close() {
             lock (lockObject) {
@@ -93,9 +98,14 @@ namespace Cornerstone.Database {
             }
         }
 
-        // Creates a new DatabaseManager based on the given filename.
-        public DatabaseManager(string dbFilename) {
+        /// <summary>
+        /// Creates a new DatabaseManager based on the given filename.
+        /// </summary>
+        /// <param name="dbFilename">Filename of database</param>
+        /// <param name="dbBackupDirectory">Optionally specify location to store backups</param>
+        public DatabaseManager(string dbFilename, string dbBackupDirectory = null) {
             this.dbFilename = dbFilename;
+            this.dbBackupDirectory = dbBackupDirectory;
 
             isVerified = new Dictionary<Type, bool>();
             doneFullRetrieve = new Dictionary<Type, bool>();
@@ -410,33 +420,6 @@ namespace Cornerstone.Database {
             return uniqueStrings;
         }
 
-        private static List<string> getValues(object obj) {
-            List<string> results = new List<string>();
-
-            if (obj == null)
-                return results;
-
-            if (obj is string) {
-                if (((string)obj).Trim().Length != 0)
-                    results.Add((string)obj);
-            }
-            else if (obj is StringList) {
-                foreach (string currValue in (StringList)obj) {
-                    if (currValue != null && currValue.Trim().Length != 0)
-                        results.Add(currValue);
-                }
-            }
-            else if (obj is bool || obj is bool?) {
-                results.Add("true");
-                results.Add("false");
-            }
-            else {
-                results.Add(obj.ToString());
-            }
-
-            return results;
-        }
-
         public DynamicFilterHelper<T> GetFilterHelper<T>() where T : DatabaseTable {
             if (filterHelperLookup.ContainsKey(typeof(T)))
                 return (DynamicFilterHelper<T>) filterHelperLookup[typeof(T)];
@@ -474,13 +457,64 @@ namespace Cornerstone.Database {
             return false;
         }
 
-
-
         #endregion
 
         #region Private Methods
 
-        // Checks that the table coorisponding to this type exists, and if it is missing, it creates it.
+        private static List<string> getValues(object obj) {
+            List<string> results = new List<string>();
+
+            if (obj == null)
+                return results;
+
+            if (obj is string) {
+                if (((string)obj).Trim().Length != 0)
+                    results.Add((string)obj);
+            }
+            else if (obj is StringList) {
+                foreach (string currValue in (StringList)obj) {
+                    if (currValue != null && currValue.Trim().Length != 0)
+                        results.Add(currValue);
+                }
+            }
+            else if (obj is bool || obj is bool?) {
+                results.Add("true");
+                results.Add("false");
+            }
+            else {
+                results.Add(obj.ToString());
+            }
+
+            return results;
+        }
+
+        private bool verifyIntegrity(SQLiteClient client) {
+            string query = "PRAGMA integrity_check;";
+            logger.Info("Executing SQL integrity check");
+
+            try {
+                SQLiteResultSet results = client.Execute(query);
+                if (results != null) {
+                    if (results.Rows.Count == 1) {
+                        SQLiteResultSet.Row arr = results.Rows[0];
+                        if (arr.fields.Count == 1) {
+                            if (arr.fields[0] == "ok") {
+                                logger.Info("Database integrity check succeeded");
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e) {
+                logger.Info("Integrity check failed, database is corrupt. Reason = '{0}', Filename = '{1}'", e.Message, client.DatabaseName);
+                return false;
+            }
+            logger.Info("Integrity check failed, database is corrupt. Filename = '{0}'", client.DatabaseName);
+            return false;
+        }
+
+        // Checks that the table corresponding to this type exists, and if it is missing, it creates it.
         // Also verifies all columns represented in the class are also present in the table, creating 
         // any missing. Needs to be enhanced to allow for changed defaults.
         private void verifyTable(Type tableType) {
@@ -853,6 +887,59 @@ namespace Cornerstone.Database {
             // update flags as needed
             list.CommitNeeded = false;
             dbObject.CommitNeeded = oldCommitNeededFlag;
+        }
+       
+        private void backupDatabase() {
+            if (this.dbBackupDirectory == null)
+                return;
+
+            logger.Info("Backing up database");
+
+            string backupDirectory = this.dbBackupDirectory;
+            string sourceFile = this.dbFilename;
+            string destinationFile = Path.Combine(backupDirectory, Path.GetFileName(this.dbFilename));
+
+            try {
+                if (!Directory.Exists(backupDirectory)) {
+                    Directory.CreateDirectory(backupDirectory);
+                }
+
+                File.Copy(sourceFile, destinationFile, true);
+            }
+            catch (Exception ex) {
+                logger.Warn("Failed to backup database. Source File = '{0}', Destination File = '{1}', Reason = '{2}'", sourceFile, destinationFile, ex.Message);
+            }
+        }
+
+        private void restoreDatabase() {
+            if (this.dbBackupDirectory == null)
+                return;
+
+            // backup the corrupt database in case user wants to fix themselves
+            string backupDirectory = this.dbBackupDirectory;
+            string sourceFile = this.dbFilename;
+            string destinationFile = Path.Combine(backupDirectory, string.Format("{0}-Corrupt-{1}.db3", Path.GetFileNameWithoutExtension(this.dbFilename), DateTime.Now.ToString("yyyyMMddHHmmss")));
+
+            logger.Info("Backing up corrupt database. Filename = '{0}'", destinationFile);
+
+            try {
+                File.Copy(sourceFile, destinationFile, true);
+            }
+            catch (Exception ex) {
+                logger.Warn("Failed to backup corrupt database. Source File = '{0}', Destination File = '{1}', Reason = '{2}'", sourceFile, destinationFile, ex.Message);
+            }
+
+            logger.Info("Restoring last known good database");
+
+            sourceFile = Path.Combine(backupDirectory, Path.GetFileName(this.dbFilename));
+            destinationFile = this.dbFilename;
+
+            try {
+                File.Copy(sourceFile, destinationFile, true);
+            }
+            catch (Exception ex) {
+                logger.Warn("Failed to restore database. Source File = '{0}', Destination File = '{1}', Reason = '{2}'", sourceFile, destinationFile, ex.Message);
+            }
         }
 
         #endregion

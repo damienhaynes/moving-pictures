@@ -28,7 +28,7 @@ namespace Cornerstone.Database.CustomTypes {
                 while (startIndex + len < strList.Length && strList[startIndex + len] != '|')
                     len++;
 
-                // grab the cooresponding DB object
+                // grab the corresponding DB object
                 string token = strList.Substring(startIndex, len).Trim();
                 if (startIndex < strList.Length && token.Length > 0) {
                     try {
