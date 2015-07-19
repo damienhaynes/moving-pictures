@@ -285,7 +285,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 // evaluate where we are
                 if ( SubNodes == null || SubNodes.Count == 0) {
                     // we don't have any sub categories to show so we switch to 
-                    // the view defined for the category if we are not in that view
+                    // the layout defined for the category if we are not in that layout
                     BrowserViewMode movieView = GetViewFromNode(_currentNode);
                     if (movieView == BrowserViewMode.LASTUSED) {
                         DBMovieNodeSettings nodeSettings = (DBMovieNodeSettings)_currentNode.AdditionalSettings;
@@ -521,7 +521,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }       
 
         /// <summary>
-        /// Rotates the current view.
+        /// Rotates the current layout.
         /// </summary>
         public void CycleView() {
             if (CurrentView == BrowserViewMode.DETAILS || CurrentView == BrowserViewMode.CATEGORIES)
@@ -535,7 +535,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             BrowserViewMode newView = startView;
 
             do {
-                // rotate view until one is available
+                // rotate layout until one is available
                 if (newView == BrowserViewMode.COVERFLOW)
                     newView = BrowserViewMode.LIST;
                 else

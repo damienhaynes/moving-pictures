@@ -1,35 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Threading;
 using System.Linq;
-using System.Xml;
+using System.Reflection;
+using System.Threading;
+using System.Windows.Media.Animation;
+using Cornerstone.Collections;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
-using Cornerstone.MP;
-using Cornerstone.Collections;
 using Cornerstone.Extensions;
 using Cornerstone.Extensions.Collections;
-using Cornerstone.MP.Extensions;
 using Cornerstone.GUI.Dialogs;
+using Cornerstone.MP;
+using Cornerstone.MP.Extensions;
 using MediaPortal.Dialogs;
 using MediaPortal.GUI.Library;
-using MediaPortal.Player;
 using MediaPortal.Plugins.MovingPictures.Database;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.DataProviders;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using MediaPortal.Plugins.MovingPictures.MainUI.Filters;
-using MediaPortal.Plugins.MovingPictures.Extensions;
-using MediaPortal.Profile;
-using MediaPortal.Util;
 using MediaPortal.Ripper;
 using NLog;
-using System.IO;
-using System.Diagnostics;
-using System.Windows.Media.Animation;
-using System.Reflection;
-
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public class MovingPicturesGUI : GUIWindow {
@@ -145,7 +137,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         protected GUIImage movieStartIndicator = null;
 
         #endregion
-
 
         public MovingPicturesGUI() {
         }
@@ -845,9 +836,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     browser.CycleView();
                     break;
 
-                // a click on the view menu button
+                // a click on the layout menu button
                 case 3:
-                    showChangeViewContext();
+                    showChangeLayoutContext();
                     break;
 
                 // a click on the filter button
@@ -1172,9 +1163,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIListItem filterItem = new GUIListItem(Translation.FilterBy + " ...");
             GUIListItem searchItem = new GUIListItem(Translation.SearchBy + "...");
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
-            GUIListItem viewItem = new GUIListItem(Translation.ChangeView + " ...");
+            GUIListItem layoutItem = new GUIListItem(Translation.ChangeLayout + " ...");
             GUIListItem importerItem = new GUIListItem(String.Format(Translation.ImporterPending, MovingPicturesCore.Importer.MatchesNeedingInput.Count) + " ...");
-            GUIListItem movieDetailsItem = new GUIListItem(Translation.ViewMovieDetails + "...");
+            GUIListItem movieDetailsItem = new GUIListItem(Translation.ViewMovieDetails + " ...");
 
             int currID = 1;
 
@@ -1202,8 +1193,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 sortItem.ItemId = currID++;
                 dialog.Add(sortItem);
 
-                viewItem.ItemId = currID++;
-                dialog.Add(viewItem);
+                layoutItem.ItemId = currID++;
+                dialog.Add(layoutItem);
             }
 
             importerItem.ItemId = currID++;
@@ -1222,8 +1213,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             else if (dialog.SelectedId == sortItem.ItemId) {
                 showSortContext();
             }
-            else if (dialog.SelectedId == viewItem.ItemId) {
-                showChangeViewContext();
+            else if (dialog.SelectedId == layoutItem.ItemId) {
+                showChangeLayoutContext();
             }
             else if (dialog.SelectedId == movieOptionsItem.ItemId) {
                 showDetailsContext();
@@ -1401,7 +1392,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void showSearchContext() {
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
-            dialog.SetHeading("Moving Pictures - " + Translation.SearchBy);
+            dialog.SetHeading(Translation.SearchBy);
 
             int currID = 1;
             GUIListItem titleItem = new GUIListItem(Translation.Title);
@@ -1429,37 +1420,37 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
-        private void showChangeViewContext() {
+        private void showChangeLayoutContext() {
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
-            dialog.SetHeading("Moving Pictures - " + Translation.ChangeView);
+            dialog.SetHeading(Translation.ChangeLayout);
 
             int currID = 1;
-            GUIListItem listItem = new GUIListItem(Translation.ListView);
+            GUIListItem listItem = new GUIListItem(Translation.ListLayout);
             if (skinSettings.ListViewAvailable) {
                 listItem.ItemId = currID++;
                 dialog.Add(listItem);
             }
 
-            GUIListItem thumbItem = new GUIListItem(Translation.ThumbnailView);
+            GUIListItem thumbItem = new GUIListItem(Translation.ThumbnailLayout);
             if (skinSettings.IconViewAvailable) {
                 thumbItem.ItemId = currID++;
                 dialog.Add(thumbItem);
             }
 
-            GUIListItem largeThumbItem = new GUIListItem(Translation.LargeThumbnailView);
+            GUIListItem largeThumbItem = new GUIListItem(Translation.LargeThumbnailLayout);
             if (skinSettings.LargeIconViewAvailable) {
                 largeThumbItem.ItemId = currID++;
                 dialog.Add(largeThumbItem);
             }
 
-            GUIListItem filmItem = new GUIListItem(Translation.FilmstripView);
+            GUIListItem filmItem = new GUIListItem(Translation.FilmstripLayout);
             if (skinSettings.FilmstripViewAvailable) {
                 filmItem.ItemId = currID++;
                 dialog.Add(filmItem);
             }
 
-            GUIListItem flowItem = new GUIListItem(Translation.CoverFlowView);
+            GUIListItem flowItem = new GUIListItem(Translation.CoverFlowLayout);
             if (skinSettings.CoverFlowViewAvailable)
             {
                 flowItem.ItemId = currID++;
@@ -1489,7 +1480,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private void showDetailsContext() {
             IDialogbox dialog = (IDialogbox)GUIWindowManager.GetWindow((int)GUIWindow.Window.WINDOW_DIALOG_MENU);
             dialog.Reset();
-            dialog.SetHeading("Moving Pictures");
+            dialog.SetHeading(Translation.MovieOptions);
 
             // initialize list items
             GUIListItem detailsItem = new GUIListItem();

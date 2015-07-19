@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Xml;
 using System.Text.RegularExpressions;
+using System.Xml;
 using MediaPortal.Configuration;
 using MediaPortal.GUI.Library;
 using NLog;
-using MediaPortal.Localisation;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
     public static class Translation {
@@ -171,6 +170,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string CategoryEmptyDescription = "There are currently no movies\nlisted in this category.";
         public static string CategoryEmptyHeader = "Category is empty";
         public static string Certification = "Certification";
+        public static string ChangeLayout = "Change Layout";
         public static string ChangeView = "Change View";
         public static string CheckForMissingArtwork = "Check for Missing Artwork Online";
         public static string Collection = "Collection";
@@ -180,8 +180,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string ContinueToNextPartBody = "Do you wish to continue with part {0}?";
         public static string ContinueToNextPartHeader = "Continue to next part?";
         public static string CycleCoverArt = "Cycle Cover-Art";
+        public static string CycleLayout = "Cycle Layout";
         public static string CycleView = "Cycle View";
         public static string Cover = "Cover";
+        public static string CoverFlowLayout = "Coverflow Layout";
         public static string CoverFlowView = "Coverflow View";
 
         // D
@@ -216,6 +218,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string FilePath = "File Path";
         public static string FileSize = "File Size";
         public static string FilesNeedingAttention = "Files Needing Attention";
+        public static string FilmstripLayout = "Filmstrip Layout";
         public static string FilmstripView = "Filmstrip View";
         public static string FilterBy = "Filter By";
         public static string FrameRate = "Frame Rate";
@@ -229,7 +232,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // I
         public static string IgnoreMovie = "Ignore Movie";
-        public static string ImdbId = "IMDb Id";
+        public static string ImdbId = "IMDb ID";
         public static string Importer = "Movie Importer";
         public static string ImporterDisabled = "Importer Disabled";
         public static string ImporterDisabledMessage = "The importer has been disabled in the\nMediaPortal GUI. Would you like to\nreenable it?";
@@ -240,10 +243,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         // L
         public static string Language = "Language";
+        public static string LargeThumbnailLayout = "Large Thumbnail Layout";
         public static string LargeThumbnailView = "Large Thumbnail View";
         public static string LastMonth = "Last Month";
         public static string LastWeek = "Last Week";
         public static string LastYear = "Last Year";
+        public static string ListLayout = "List Layout";
         public static string ListView = "List View";
         public static string LockRestrictedMovies = "Lock Restricted Movies";
 
@@ -364,6 +369,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string ThisYear = "This Year";
         public static string ThreeMonthsAgo = "Three Months Ago";
         public static string ThreeWeeksAgo = "Three Weeks Ago";
+        public static string ThumbnailLayout = "Thumbnail Layout";
         public static string ThumbnailView = "Thumbnail View";
         public static string Thursday = "Thursday";
         public static string Title = "Title";

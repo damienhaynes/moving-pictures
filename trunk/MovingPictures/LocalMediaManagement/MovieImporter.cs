@@ -1963,7 +1963,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (!this.Result.AutoApprove() && otherResult.AutoApprove())
                 return 1;
 
-            // IMDB Score - matching id's rank higher
+            // IMDb Score - matching id's rank higher
             if (this.Result.ImdbMatch && !otherResult.ImdbMatch)
                 return -1;
 

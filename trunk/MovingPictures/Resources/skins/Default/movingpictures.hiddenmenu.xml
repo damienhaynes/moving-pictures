@@ -81,10 +81,10 @@
             <visible>!string.equals(#MovingPictures.ScanForNewMovies.Visible, false)</visible>
           </control>
           <control>
-            <description>Change View</description>
+            <description>Change Layout</description>
             <type>button</type>
             <id>3</id>
-            <label>#MovingPictures.Translation.ChangeView.Label ...</label>
+            <label>#MovingPictures.Translation.ChangeLayout.Label ...</label>
             <onright>50</onright>
             <onup>20</onup>
             <ondown>14</ondown>

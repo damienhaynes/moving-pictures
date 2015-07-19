@@ -210,7 +210,7 @@
         <layout>StackLayout(0, Vertical, true)</layout>
 
         <control>
-          <description>Toggle View</description>
+          <description>Toggle Layout</description>
           <type>button</type>
           <id>3</id>
           <textureFocus>hiddenmenu_item_selected.png</textureFocus>
@@ -219,7 +219,7 @@
           <height>69</height>
           <textXOff>62</textXOff>
           <textYOff>16</textYOff>
-          <label>#MovingPictures.Translation.ChangeView.Label</label>
+          <label>#MovingPictures.Translation.ChangeLayout.Label</label>
           <onleft>50</onleft>
           <onright>50</onright>
           <ondown>14</ondown>

@@ -64,7 +64,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         public int? Year = null;
 
         /// <summary>
-        /// The IMDB Id including the "tt" prefix
+        /// The IMDb ID including the "tt" prefix
         /// </summary>
         /// <example>
         /// "tt0168122"
@@ -302,7 +302,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             if (MovingPicturesCore.Settings.AutoApproveOnlyPrimarySource && !FromTopSource)
                 return false;
 
-            // IMDB Auto-Approval
+            // IMDb Auto-Approval
             if (ImdbMatch && MovingPicturesCore.Settings.AutoApproveOnIMDBMatch)
                 return true;
 

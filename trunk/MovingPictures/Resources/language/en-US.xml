@@ -23,6 +23,7 @@
   <string name="CategoryEmptyDescription">There are currently no movies\nlisted in this category.</string>
   <string name="CategoryEmptyHeader">Category is empty</string>
   <string name="Certification">Certification</string>
+  <string name="ChangeLayout">Change Layout</string>
   <string name="ChangeView">Change View</string>
   <string name="CheckForMissingArtwork">Check for Missing Artwork Online</string>
   <string name="Collection">Collection</string>
@@ -32,8 +33,10 @@
   <string name="ContinueToNextPartBody">Do you wish to continue with part {0}?</string>
   <string name="ContinueToNextPartHeader">Continue to next part?</string>
   <string name="Cover">Cover</string>
+  <string name="CoverFlowLayout">Coverflow Layout</string>
   <string name="CoverFlowView">Coverflow View</string>
   <string name="CycleCoverArt">Cycle Cover-Art</string>
+  <string name="CycleLayout">Cycle Layout</string>
   <string name="CycleView">Cycle View</string>
   <!--D-->
   <string name="DateAdded">Date Added</string>
@@ -65,6 +68,7 @@
   <string name="FilePath">File Path</string>
   <string name="FileSize">File Size</string>
   <string name="FilesNeedingAttention">Files Needing Attention</string>
+  <string name="FilmstripLayout">Filmstrip Layout</string>
   <string name="FilmstripView">Filmstrip View</string>
   <string name="FilterBy">Filter By</string>
   <string name="FrameRate">Frame Rate</string>
@@ -76,7 +80,7 @@
   <string name="Genres">Genres</string>
   <!--I-->
   <string name="IgnoreMovie">Ignore Movie</string>
-  <string name="ImdbId">IMDb Id</string>
+  <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Movie Importer</string>
   <string name="ImporterDisabled">Importer Disabled</string>
   <string name="ImporterDisabledMessage">The importer has been disabled in the\nMediaPortal GUI. Would you like to\nreenable it?</string>
@@ -86,10 +90,12 @@
   <string name="InvalidVideoDiscFormat">Either the image file does not contain\na valid video disc format, or your Daemon\nTools MediaPortal configuration is incorrect.</string>
   <!--L-->
   <string name="Language">Language</string>
+  <string name="LargeThumbnailLayout">Large Thumbnail Layout</string>
   <string name="LargeThumbnailView">Large Thumbnail View</string>
   <string name="LastMonth">Last Month</string>
   <string name="LastWeek">Last Week</string>
   <string name="LastYear">Last Year</string>
+  <string name="ListLayout">List Layout</string>
   <string name="ListView">List View</string>
   <string name="LockRestrictedMovies">Lock Restricted Movies</string>
   <!--M-->
@@ -205,6 +211,7 @@
   <string name="ThisYear">This Year</string>
   <string name="ThreeMonthsAgo">Three Months Ago</string>
   <string name="ThreeWeeksAgo">Three Weeks Ago</string>
+  <string name="ThumbnailLayout">Thumbnail Layout</string>
   <string name="ThumbnailView">Thumbnail View</string>
   <string name="Thursday">Thursday</string>
   <string name="Title">Title</string>
