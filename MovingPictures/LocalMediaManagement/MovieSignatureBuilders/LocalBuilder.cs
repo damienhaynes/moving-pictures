@@ -85,7 +85,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                     source = Path.GetFileNameWithoutExtension(signature.File);
             }
 
-            // Detect IMDB ID in the source string, and put it in the signature on success
+            // Detect IMDb ID in the source string, and put it in the signature on success
             Match match = Regex.Match(source, @"tt\d{7}", RegexOptions.IgnoreCase);
             if (match.Success) signature.ImdbId = match.Value;
 

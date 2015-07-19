@@ -105,12 +105,12 @@
             this.defaultViewComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.defaultViewComboBox.FormattingEnabled = true;
             this.defaultViewComboBox.Items.AddRange(new object[] {
-            "Last Used View",
-            "List View",
-            "Poster View",
-            "Large Poster View",
-            "Filmstrip View",
-            "Coverflow View"});
+            "Last Used Layout",
+            "List Layout",
+            "Poster Layout",
+            "Large Poster Layout",
+            "Filmstrip Layout",
+            "Coverflow Layout"});
             this.defaultViewComboBox.Location = new System.Drawing.Point(261, 63);
             this.defaultViewComboBox.Name = "defaultViewComboBox";
             this.defaultViewComboBox.Size = new System.Drawing.Size(128, 21);

@@ -7,7 +7,7 @@ using NLog;
 namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
     
     /// <summary>
-    /// The IMDB Builder looks up details from IMDB.com when a signature contains an imdbid.
+    /// The IMDb Builder looks up details from IMDb.com when a signature contains an imdbid.
     /// note: signature property values get overwritten
     /// </summary>
     class ImdbBuilder: ISignatureBuilder {
@@ -27,7 +27,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             if (!imdbLookup || String.IsNullOrEmpty(signature.ImdbId))
                 return SignatureBuilderResult.INCONCLUSIVE;
 
-            // Try to retrieve the IMDB details page
+            // Try to retrieve the IMDb details page
             string detailsPage = getImdbDetailsPage(signature.ImdbId);
             
             // if we don't have a details page then return the signature
@@ -61,10 +61,10 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region Static Methods
 
         /// <summary>
-        /// Prefetches some IMDB details like title and year to assist other data providers
+        /// Prefetches some IMDb details like title and year to assist other data providers
         /// </summary>
         /// <remarks>
-        /// We might have to replace/link this to the data provider for IMDB so we don't have redundant logic
+        /// We might have to replace/link this to the data provider for IMDb so we don't have redundant logic
         /// </remarks>
         /// <param name="ImdbId"></param>
         /// <returns></returns>

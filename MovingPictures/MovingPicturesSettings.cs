@@ -365,7 +365,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Enable NFO Scanner",
-            Description = "Scan for NFO file and if available parse out the IMDB id.",
+            Description = "Scan for NFO file and if available parse out the IMDb ID.",
             Groups = "|Movie Importer|Preprocessing|",
             Identifier = "importer_nfoscan",
             Default = true,
@@ -398,8 +398,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         [CornerstoneSetting(
-            Name = "Auto-Approve on NFO File IMDB Match",
-            Description = "If we found a match on IMDB id always auto-approve this match even if the other criteria doesn't match closely enough. ",
+            Name = "Auto-Approve on NFO File IMDb Match",
+            Description = "If we found a match on IMDb ID always auto-approve this match even if the other criteria doesn't match closely enough. ",
             Groups = "|Movie Importer|Preprocessing|",
             Identifier = "importer_autoimdb",
             Default = true,
@@ -429,8 +429,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _enableDiscIdLookup;
 
         [CornerstoneSetting(
-            Name = "Enable IMDB Lookup",
-            Description = "Enables pre-search lookup for title and year from imdb.com when an imdbid is available. This generally improves results from data providers that don't support imdb id searches.",
+            Name = "Enable IMDb Lookup",
+            Description = "Enables pre-search lookup for title and year from IMDb.com when an IMDb ID is available. This generally improves results from data providers that don't support IMDb ID searches.",
             Groups = "|Movie Importer|Preprocessing|",
             Identifier = "importer_lookup_imdb",
             Default = true)]
@@ -1137,7 +1137,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         [CornerstoneSetting(
             Name = "Last Importer Mode",
-            Description = "The last used view in the in GUI Importer.",
+            Description = "The last used layout in the in GUI Importer.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "last_gui_importer_mode",
             Default = "ALL",
@@ -1168,8 +1168,8 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         [CornerstoneSetting(
-            Name = "Default View",
-            Description = "The default view used in the MediaPortal GUI when the plug-in is first opened. Valid options are \"lastused\", \"list\", \"thumbs\", \"largethumbs\", \"coverflow\" and \"filmstrip\".",
+            Name = "Default Layout",
+            Description = "The default layout used in the MediaPortal GUI when the plug-in is first opened. Valid options are \"lastused\", \"list\", \"thumbs\", \"largethumbs\", \"coverflow\" and \"filmstrip\".",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "default_view",
             Default = "lastused",
@@ -1184,7 +1184,7 @@ namespace MediaPortal.Plugins.MovingPictures {
         private string _defaultViewStr;
 
         /// <summary>
-        /// The default view mode to start the plug-in in, as defined by the user.
+        /// The default layout mode to start the plug-in in, as defined by the user.
         /// </summary>
         public BrowserViewMode DefaultView {
             get {
@@ -1202,15 +1202,15 @@ namespace MediaPortal.Plugins.MovingPictures {
                 else if (defaultView.Equals("lastused"))
                     return BrowserViewMode.LASTUSED;
                 else {
-                    logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List View.");
+                    logger.Warn("The DEFAULT_VIEW setting contains an invalid value. Defaulting to List Layout.");
                     return BrowserViewMode.LIST;
                 }
             }
         }
 
         [CornerstoneSetting(
-            Name = "Last Used View",
-            Description = "The last view used in the GUI. This only applies when categories are disabled. When categories are enabled, this is stored on a node by node basis. Valid options are \"list\", \"thumbs\", \"largethumbs\", and \"filmstrip\".",
+            Name = "Last Used Layout",
+            Description = "The last layout used in the GUI. This only applies when categories are disabled. When categories are enabled, this is stored on a node by node basis. Valid options are \"list\", \"thumbs\", \"largethumbs\", and \"filmstrip\".",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "last_used_view",
             Default = "list",
@@ -1453,8 +1453,8 @@ namespace MediaPortal.Plugins.MovingPictures {
         private bool _resetSelectedMovieWhenSwitchingCategories;
 
         [CornerstoneSetting(
-            Name = "Second Label on List View",
-            Description = "Show a second label on listview. Possible values are none, year, file_size, release_date, date_added, runtime, genre, studio, language, certification or score. This is only used when there is no logical matching field based on the current Sorty By item e.g. Sorting by 'Release Date' will show 'Release Date' as second label by default.",
+            Name = "Second Label on List Layout",
+            Description = "Show a second label on list layout. Possible values are none, year, file_size, release_date, date_added, runtime, genre, studio, language, certification or score. This is only used when there is no logical matching field based on the current Sorty By item e.g. Sorting by 'Release Date' will show 'Release Date' as second label by default.",
             Groups = "|MediaPortal GUI|Interface Options|",
             Identifier = "gui_listview_label2",
             Default = "year")]
@@ -1671,7 +1671,7 @@ namespace MediaPortal.Plugins.MovingPictures {
 
 
         [CornerstoneSetting(
-            Name = "External Player Arguements",
+            Name = "External Player Arguments",
             Description = "The command-line arguments that should be appended when calling the executable. (available variables: %filename% will be replaced with the path to the movie, %fps% will be replaced with the framerate for the movie)",
             Groups = "|MediaPortal GUI|Bluray/HD-DVD Playback|",
             Identifier = "playback_hd_arguments",

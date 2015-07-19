@@ -143,7 +143,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 19;
-            this.label3.Text = "IMDB Id";
+            this.label3.Text = "IMDb ID";
             // 
             // SearchStringPopup
             // 

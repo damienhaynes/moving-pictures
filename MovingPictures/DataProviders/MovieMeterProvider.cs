@@ -144,7 +144,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 mmId = idObj.Identifier;
             }
             else {
-                // Translate IMDB code to MovieMeter ID
+                // Translate IMDb code to MovieMeter ID
                 string imdbId = movie.ImdbID.Trim();
                 if (imdbId != string.Empty) {
                     mmId = Api.GetMovieMeterId(imdbId);

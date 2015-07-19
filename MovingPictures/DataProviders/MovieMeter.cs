@@ -273,9 +273,9 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
         #region Public Methods
 
         /// <summary>
-        /// Gets the MovieMeter ID linked to a IMDB code
+        /// Gets the MovieMeter ID linked to a IMDb code
         /// </summary>
-        /// <param name="imdbId">the numeric part of the IMDB code</param>
+        /// <param name="imdbId">the numeric part of the IMDb code</param>
         /// <returns>MovieMeter ID</returns>
         public string GetMovieMeterId(string imdbId) {
             int retryCount = 0;
@@ -354,7 +354,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.MovieMeter {
                         if (!mmFilmDetailCache.ContainsKey(movieMeterID))
                             mmFilmDetailCache.Add(movieMeterID, details);
 
-                        // Update IMDB Cache
+                        // Update IMDb Cache
                         if (!mmIdLookupCache.ContainsKey(details.imdb))
                             mmIdLookupCache.Add(details.imdb, movieMeterID);
                     }
