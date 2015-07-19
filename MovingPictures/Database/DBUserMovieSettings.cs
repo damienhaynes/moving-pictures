@@ -29,7 +29,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private DBUser user;
 
         // Value between 1 and 5
-        [DBFieldAttribute(FieldName = "user_rating", Default = null, AllowDynamicFiltering = false)]
+        [DBFieldAttribute(FieldName = "user_rating", Default = null)]
         public int? UserRating {
             get { return _userRating; }
             set {
@@ -46,7 +46,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private int? _userRating;
 
         // Value between 1 and 10
-        [DBFieldAttribute(FieldName = "user_rating_base_10", Default = null, AllowDynamicFiltering = false)]
+        [DBFieldAttribute(FieldName = "user_rating_base_10", Default = null)]
         public int? UserRatingBase10 {
             get { return _userRatingBase10; }
             set {
@@ -85,7 +85,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _resumePart;
 
-        [DBFieldAttribute(FieldName = "resume_time")]
+        [DBFieldAttribute(FieldName = "resume_time", AllowDynamicFiltering = false)]
         public int ResumeTime {
             get { return _resumeTime; }
 
@@ -96,7 +96,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private int _resumeTime;
 
-        [DBFieldAttribute(FieldName = "resume_titlebd")]
+        [DBFieldAttribute(FieldName = "resume_titlebd", AllowDynamicFiltering = false)]
         public int ResumeTitleBD {
             get { return _resumeTitleBD; }
 
