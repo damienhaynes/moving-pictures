@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
@@ -29,8 +28,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             }
         } private DBUser user;
 
-        // Value between 0 and 10
-        [DBFieldAttribute(FieldName = "user_rating", Default = null, AllowDynamicFiltering=false)]
+        // Value between 1 and 5
+        [DBFieldAttribute(FieldName = "user_rating", Default = null, AllowDynamicFiltering = false)]
         public int? UserRating {
             get { return _userRating; }
             set {
@@ -45,6 +44,22 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 }
             }
         } private int? _userRating;
+
+        // Value between 1 and 10
+        [DBFieldAttribute(FieldName = "user_rating_base_10", Default = null, AllowDynamicFiltering = false)]
+        public int? UserRatingBase10 {
+            get { return _userRatingBase10; }
+            set {
+                if (value > 10) value = 10;
+                if (value < 1) value = 1;
+
+                if (_userRatingBase10 != value) {
+                    _userRatingBase10 = value;
+                    commitNeeded = true;
+                    FieldChanged("UserRatingBase10");
+                }
+            }
+        } private int? _userRatingBase10;
 
         [DBFieldAttribute(FieldName = "watched", AllowDynamicFiltering=false)]
         public int WatchedCount {
@@ -69,7 +84,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 FieldChanged("ResumePart");
             }
         } private int _resumePart;
-
 
         [DBFieldAttribute(FieldName = "resume_time")]
         public int ResumeTime {

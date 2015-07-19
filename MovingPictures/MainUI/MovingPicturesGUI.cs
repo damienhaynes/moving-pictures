@@ -2224,10 +2224,15 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 SetProperty("#MovingPictures.LocalMedia.Subtitles", movie.LocalMedia.HasSubtitles() ? "subtitles" : "nosubtitles");
 
                 // publish rating in 10 scale
-                if (movie.ActiveUserSettings.UserRating == null)
+                if (movie.ActiveUserSettings.UserRatingBase10 == null && movie.ActiveUserSettings.UserRating == null) {
                     SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", null);
-                else
-                    SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", (movie.ActiveUserSettings.UserRating.GetValueOrDefault() * 2).ToString());                
+                }
+                else {
+                    if (movie.ActiveUserSettings.UserRatingBase10 == null)
+                        SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", (movie.ActiveUserSettings.UserRating.GetValueOrDefault() * 2).ToString());
+                    else
+                        SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", movie.ActiveUserSettings.UserRatingBase10.GetValueOrDefault().ToString());
+                }
 
                 // publish the selected index in the facade
                 int selectedIndex = browser.SelectedIndex + 1;
