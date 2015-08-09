@@ -510,7 +510,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 return;
             }
 
-            // if user does not what scan button hide from gui
+            // if user does not want scan button hidden in gui
             if (!MovingPicturesCore.Settings.ShowRescanMenuItem) {
                 if (scanNewMoviesButton != null) {
                     scanNewMoviesButton.Visible = false;
