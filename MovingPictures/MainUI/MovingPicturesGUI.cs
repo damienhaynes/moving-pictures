@@ -600,13 +600,18 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     browser.CurrentView = BrowserViewMode.CATEGORIES;
                 }
                 else {
-                    browser.TopLevelView = MovingPicturesCore.Settings.DefaultView;
-                    browser.CurrentView = MovingPicturesCore.Settings.DefaultView;
+                    if (browser.LastView != BrowserViewMode.CATEGORIES) {
+                        browser.TopLevelView = browser.LastView;
+                        browser.CurrentView = browser.LastView;
+                    }
+                    else {
+                        browser.LastView = browser.CurrentView;
+                        browser.CurrentView = browser.LastView;
+                    }
                 }
 
                 loaded = true;
                 preventDialogOnLoad = false;
-
             }
 
             else if (SearchStringLoadParameter != null && SearchModeLoadParameter != null) {
@@ -919,13 +924,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         browser.CurrentNode = browser.CurrentNode.Parent;
                     }
                     else {
+                        // show previous screen (exit the plug-in)
+                        GUIWindowManager.ShowPreviousWindow();
+
                         // The user presses back in the topmost node -> clear the history and exit
                         browser.LastNode = null;
                         browser.LastView = BrowserViewMode.CATEGORIES;
                         browser.LastSelectedMovie = null;
                         browser.SelectedMovie = null;
-                        // show previous screen (exit the plug-in)
-                        GUIWindowManager.ShowPreviousWindow();
                     }
                     break;
 
