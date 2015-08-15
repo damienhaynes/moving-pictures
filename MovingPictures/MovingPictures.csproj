@@ -584,7 +584,6 @@
     <Content Include="Resources\language\vi.xml" />
     <Content Include="Resources\language\zh-CN.xml" />
     <Content Include="Resources\language\zh.xml" />
-    <Content Include="Resources\moving-pictures-release-notes.txt" />
     <None Include="DataProviders\ScraperScripts\filmtipset.se.xml" />
     <Content Include="DataProviders\ScraperScripts\FilmWeb.xml" />
     <Content Include="DataProviders\ScraperScripts\Kinopoisk.xml" />
