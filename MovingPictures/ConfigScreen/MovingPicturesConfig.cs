@@ -1,17 +1,17 @@
-using Cornerstone.GUI.Dialogs;
-using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Cornerstone.GUI.Dialogs;
+using MediaPortal.Plugins.MovingPictures.ConfigScreen.Popups;
 
 namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
     public partial class MovingPicturesConfig : Form {
         public MovingPicturesConfig() {
             InitializeComponent();
 
-            #if DEBUG
             ShowInTaskbar = true;
-            #endif
+            MaximizeBox = true;
+            MinimizeBox = true;
 
             // if we are in designer, break to prevent errors with rendering, it cant access the DB...
             if (LicenseManager.UsageMode == LicenseUsageMode.Designtime)
