@@ -43,9 +43,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         CachedDictionary<DBNode<DBMovieInfo>, DBMovieInfo> activeMovieLookup = new CachedDictionary<DBNode<DBMovieInfo>, DBMovieInfo>();
         private readonly object backdropSync = new object();
 
-
-        private bool loaded = false;
-
         GUIDialogProgress initDialog;
         private bool initComplete = false;
         private string initProgressLastAction = string.Empty;
@@ -610,7 +607,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     }
                 }
 
-                loaded = true;
                 preventDialogOnLoad = false;
             }
 
