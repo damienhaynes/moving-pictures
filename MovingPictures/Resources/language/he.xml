@@ -14,6 +14,7 @@
   <string name="CastAndCrew">שחקנים ואנשי צוות</string>
   <string name="CategoryEmptyHeader">הקטגוריה ריקה</string>
   <string name="Certification">אישור צפייה</string>
+  <string name="ChangeLayout">שנה סידור</string>
   <string name="ChangeView">שנה תצוגה</string>
   <string name="CheckForMissingArtwork">בדוק עבור תמונות רקע ברשת</string>
   <string name="Collection">אוסף</string>
@@ -64,7 +65,6 @@
   <string name="Genres">ז\'אנרים</string>
   <!--I-->
   <string name="IgnoreMovie">התעלם מסרט</string>
-  <string name="ImdbId">מזהה IMDB</string>
   <string name="Importer">ייבוא סרטים</string>
   <string name="ImporterDisabled">ייבוא כבוי</string>
   <string name="ImporterPending">ייבוא ({0} זקוק לטיפול)</string>

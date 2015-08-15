@@ -9,6 +9,7 @@
   <string name="Cancel">Άκυρο</string>
   <string name="CategoryEmptyHeader">Αυτή η κατηγορία είναι κενή</string>
   <string name="Certification">Καταλληλότητα</string>
+  <string name="ChangeLayout">Αλλαγή διάταξης</string>
   <string name="ChangeView">Αλλαγή προβολής</string>
   <string name="CheckForMissingArtwork">Έλεγχος για ελλιπή Artwork στο διαδίκτυο</string>
   <string name="Completed">Ολοκληρώθηκε</string>
@@ -51,6 +52,7 @@
   <string name="Genre">Είδος</string>
   <string name="Genres">Είδη</string>
   <!--I-->
+  <string name="ImdbId">IMDb ID</string>
   <string name="InvalidPin">Μη έγκυρος κωδικός PIN!</string>
   <!--L-->
   <string name="Language">Γλώσσα</string>

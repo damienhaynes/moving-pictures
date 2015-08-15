@@ -23,6 +23,7 @@
   <string name="CategoryEmptyDescription">Il n\'y a actuellement aucun film \ndans cette catégorie.</string>
   <string name="CategoryEmptyHeader">Catégorie vide</string>
   <string name="Certification">Certification</string>
+  <string name="ChangeLayout">Type de mise en page</string>
   <string name="ChangeView">Changer la vue</string>
   <string name="CheckForMissingArtwork">Vérifier les artwork manquants en ligne</string>
   <string name="Collection">Collection</string>
@@ -32,8 +33,10 @@
   <string name="ContinueToNextPartBody">Voulez vous continuer avec la partie {0} ?</string>
   <string name="ContinueToNextPartHeader">Continuer à la partie suivante ?</string>
   <string name="Cover">Couverture</string>
+  <string name="CoverFlowLayout">Mise en page type Layout</string>
   <string name="CoverFlowView">Vu Coverflow</string>
   <string name="CycleCoverArt">Changer de Cover-Art</string>
+  <string name="CycleLayout">Mise en page style cycle</string>
   <string name="CycleView">Changer de vue</string>
   <!--D-->
   <string name="DateAdded">Ajouté le</string>
@@ -65,6 +68,7 @@
   <string name="FilePath">Chemin du fichier</string>
   <string name="FileSize">Taille du Fichier</string>
   <string name="FilesNeedingAttention">Fichiers nécessitant votre attention</string>
+  <string name="FilmstripLayout">Mise en page style pellicule</string>
   <string name="FilmstripView">Pellicule</string>
   <string name="FilterBy">Filtrer par</string>
   <string name="FrameRate">Frame Rate (nbre d\'images par seconde)</string>
@@ -76,7 +80,7 @@
   <string name="Genres">Genres</string>
   <!--I-->
   <string name="IgnoreMovie">Film ignoré</string>
-  <string name="ImdbId">Id IMDb</string>
+  <string name="ImdbId">ID IMDb</string>
   <string name="Importer">Importateur de film</string>
   <string name="ImporterDisabled">Importateur inactif</string>
   <string name="ImporterDisabledMessage">L\'importateur a été désactivé \nau niveau de l\'interface de MediaPortal. Voulez vous le \nréactiver ?</string>
@@ -86,10 +90,12 @@
   <string name="InvalidVideoDiscFormat">Soit le fichier image ne contient pas \nun format de disque vidéo valide, soit votre configuration de Daemon Tools \ndans MediaPortal est incorrecte.</string>
   <!--L-->
   <string name="Language">Langue</string>
+  <string name="LargeThumbnailLayout">Mise en page style grande mosaique</string>
   <string name="LargeThumbnailView">Miniature large</string>
   <string name="LastMonth">Le mois dernier</string>
   <string name="LastWeek">La semaine dernière</string>
   <string name="LastYear">L\'année dernière</string>
+  <string name="ListLayout">Mise en page style liste</string>
   <string name="ListView">Liste</string>
   <string name="LockRestrictedMovies">Vérouiller les films réservés</string>
   <!--M-->
@@ -205,6 +211,7 @@
   <string name="ThisYear">Cette année</string>
   <string name="ThreeMonthsAgo">Il y a trois mois</string>
   <string name="ThreeWeeksAgo">Il y a trois semaine</string>
+  <string name="ThumbnailLayout">Mise en page style mosaique</string>
   <string name="ThumbnailView">Miniature</string>
   <string name="Thursday">Jeudi</string>
   <string name="Title">Titre</string>

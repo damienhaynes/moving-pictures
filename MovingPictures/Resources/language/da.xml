@@ -14,6 +14,7 @@
   <string name="CastAndCrew">Skuespillere og filmhold</string>
   <string name="CategoryEmptyHeader">Kategorien er tom</string>
   <string name="Certification">Censur</string>
+  <string name="ChangeLayout">Ændre layout</string>
   <string name="ChangeView">Skift syn</string>
   <string name="CheckForMissingArtwork">Check for manglende illustrationer på nettet</string>
   <string name="Collection">Samling</string>
@@ -53,9 +54,11 @@
   <!--F-->
   <string name="FailedMountingImage">Mountningen af DVD imaget fejlede desværre.</string>
   <string name="FilePath">File sti</string>
+  <string name="FileSize">Filstørrelse</string>
   <string name="FilesNeedingAttention">Filer, der kræver opmærksomhed</string>
   <string name="FilmstripView">Filmrulle overblik</string>
   <string name="FilterBy">Filtrer efter</string>
+  <string name="FrameRate">Opdateringsrate</string>
   <string name="Friday">Fredag</string>
   <string name="Future">Fremtid</string>
   <!--G-->
@@ -71,18 +74,24 @@
   <string name="InvalidPin">Forkert kode!</string>
   <!--L-->
   <string name="Language">Sprog</string>
+  <string name="LargeThumbnailLayout">Stor miniatureportræt overblik</string>
   <string name="LargeThumbnailView">Stor miniatureportræt overblik</string>
   <string name="LastMonth">Sidste måned</string>
   <string name="LastWeek">Sidste uge</string>
   <string name="LastYear">Sidste år</string>
+  <string name="ListLayout">List layout</string>
   <string name="ListView">Liste overblik</string>
   <string name="LockRestrictedMovies">Lås klassificerede film</string>
   <!--M-->
   <string name="MarkAsUnwatched">Marker som uset</string>
   <string name="MarkAsWatched">Marker som set</string>
   <string name="MediaInfo">MediaInfo</string>
+  <string name="MediaIsMissing">Mediet til filmen du har valgt mangler!\nKed af det, men noget gik galt...</string>
+  <string name="MediaNotAvailableBody">Mediet til den film du har valgt er\nikke tilgængelig. Indsæt eller forbind  venligst det korrekte medie navngivet: {0}</string>
   <string name="MediaNotAvailableHeader">Mediet er ikke tilgængelig</string>
+  <string name="MediaType">Medie type</string>
   <string name="Missing">Mangler</string>
+  <string name="MissingExternalPlayerExe">Den eksekverbare fil til HD afspilning mangler.\nVælg venligst en korrekt sti til den eksekverbare fil.</string>
   <string name="Monday">Mandag</string>
   <string name="MonthName1">Januar</string>
   <string name="MonthName2">Februar</string>
@@ -101,6 +110,7 @@
   <string name="MovieOptions">Film muligheder</string>
   <string name="Movies">Film</string>
   <!--N-->
+  <string name="NoImportPathsBody">Du har ingen import\nsti defineret. Venligst luk\nluk MediaPortal og start\nstart MP konfiguration.</string>
   <string name="NoImportPathsHeading">Ingen import stier!</string>
   <!--O-->
   <string name="Older">Ældre</string>
@@ -169,17 +179,21 @@
   <string name="SkinDoesNotSupportImporter">Dette skin understøtter ikke denne importør.</string>
   <string name="SkinDoesNotSupportPinDialog">Dette skin understøtter ikke adgangskodedialogen.</string>
   <string name="SkinDoesNotSupportRatingDialog">Dette skin understøtter ikke klassificerings dialogen</string>
+  <string name="Source">Kilde</string>
   <string name="SortBy">Sorter efter</string>
   <string name="SortDirection">Sorterings retning</string>
   <string name="StarRating">Stjerne vurdering</string>
+  <string name="Start">Start</string>
   <string name="Sunday">Søndag</string>
   <!--T-->
+  <string name="TechnicalInfo">Teknisk info</string>
   <string name="Theme">Tema</string>
   <string name="ThisMonth">Denne månede</string>
   <string name="ThisWeek">Denne uge</string>
   <string name="ThisYear">I år</string>
   <string name="ThreeMonthsAgo">3 måneder siden</string>
   <string name="ThreeWeeksAgo">3 uger siden</string>
+  <string name="ThumbnailLayout">Miniatureportræt layout</string>
   <string name="ThumbnailView">Miniatureportræt overblik</string>
   <string name="Thursday">Torsdag</string>
   <string name="Title">Title</string>
@@ -196,8 +210,10 @@
   <string name="UpdateDetailsFromOnline">Opdater oplysninger fra nettet</string>
   <string name="UpdateMovieDetailsHeader">Opdater film oplysningerne</string>
   <!--V-->
+  <string name="VideoFormat">Video format</string>
   <string name="ViewMovieDetails">Vis film oplysningerne</string>
   <string name="VirtualDriveHeader">Det virtuelle drev er ikke klar</string>
+  <string name="VirtualDriveMessage">Det virtuelle drev blev ikke klar i tide. \nPrøv venligst igen eller annuller afspilningen.</string>
   <string name="Votes">Vurdering</string>
   <!--W-->
   <string name="Wednesday">Onsdag</string>

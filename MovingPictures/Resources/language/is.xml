@@ -14,6 +14,7 @@
   <string name="CastAndCrew">Leikarar og starfsmenn</string>
   <string name="CategoryEmptyHeader">Flokkurinn er tómur</string>
   <string name="Certification">Aldurstakmark</string>
+  <string name="ChangeLayout">Skipta um útlit</string>
   <string name="ChangeView">Breyta röðun</string>
   <string name="CheckForMissingArtwork">Athuga með kápumyndir á netinu</string>
   <string name="Collection">Safn</string>
@@ -64,7 +65,7 @@
   <string name="Genres">Flokkar</string>
   <!--I-->
   <string name="IgnoreMovie">Sleppa kvikmynd</string>
-  <string name="ImdbId">IMDB einkenni</string>
+  <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Innflutningur kvikmynda</string>
   <string name="ImporterDisabled">Innflutningur óvirkur</string>
   <string name="ImporterPending">Innflutningur ({0} þarfnast athugunar)</string>

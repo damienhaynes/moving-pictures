@@ -23,6 +23,7 @@
   <string name="CategoryEmptyDescription">V tejto kategórii nie sú žiadne filmy.</string>
   <string name="CategoryEmptyHeader">Prázdna kategória</string>
   <string name="Certification">Klasifikácia</string>
+  <string name="ChangeLayout">Zmeniť rozloženie</string>
   <string name="ChangeView">Zmeniť zobrazenie</string>
   <string name="CheckForMissingArtwork">Vyhľadať chýbajúcu grafiku online</string>
   <string name="Collection">Zbierka</string>

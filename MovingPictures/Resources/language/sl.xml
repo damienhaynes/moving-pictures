@@ -23,6 +23,7 @@
   <string name="CategoryEmptyDescription">Trenutno ni filmov\nv tej kategoriji</string>
   <string name="CategoryEmptyHeader">Kategorija je prazna</string>
   <string name="Certification">Certifikacija</string>
+  <string name="ChangeLayout">Spremeni pogled</string>
   <string name="ChangeView">Sortiraj po</string>
   <string name="CheckForMissingArtwork">Preveri za manjkajoče plakate na spletu</string>
   <string name="Collection">Zbirka</string>
@@ -76,7 +77,7 @@
   <string name="Genres">Žanri</string>
   <!--I-->
   <string name="IgnoreMovie">Prezri film</string>
-  <string name="ImdbId">IMDb Id</string>
+  <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Movie Importer</string>
   <string name="ImporterDisabled">Importer je onemogočen</string>
   <string name="ImporterDisabledMessage">Importer je bil onemogočen v \nMediaPortal GUI. Ali ga želite ponovno\nomogočiti?</string>

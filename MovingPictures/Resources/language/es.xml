@@ -23,6 +23,7 @@
   <string name="CategoryEmptyDescription">No hay películas\nen esta categoría.</string>
   <string name="CategoryEmptyHeader">La categoría está vacía</string>
   <string name="Certification">Calificación</string>
+  <string name="ChangeLayout">Cambiar Diseño</string>
   <string name="ChangeView">Cambiar vista</string>
   <string name="CheckForMissingArtwork">Comprobar online fondos (Artwork) ausentes </string>
   <string name="Collection">Colección</string>
@@ -32,8 +33,10 @@
   <string name="ContinueToNextPartBody">¿Quiere continuar con la parte {0}?</string>
   <string name="ContinueToNextPartHeader">¿Continuar en la siguiente parte?</string>
   <string name="Cover">Carátula</string>
+  <string name="CoverFlowLayout">Diseño Coverflow</string>
   <string name="CoverFlowView">Vista Coverflow</string>
   <string name="CycleCoverArt">Alternar portada</string>
+  <string name="CycleLayout">Diseño en Ciclo</string>
   <string name="CycleView">Alternar vista</string>
   <!--D-->
   <string name="DateAdded">Añadido</string>
@@ -65,6 +68,7 @@
   <string name="FilePath">Ruta de archivo</string>
   <string name="FileSize">Tamaño de Archivo</string>
   <string name="FilesNeedingAttention">Archivos que requieren Atención</string>
+  <string name="FilmstripLayout">Diseño Diapositivas</string>
   <string name="FilmstripView">Vista de Diapositivas</string>
   <string name="FilterBy">Filtrar por</string>
   <string name="FrameRate">Velocidad Fotogramas</string>
@@ -76,7 +80,7 @@
   <string name="Genres">Géneros</string>
   <!--I-->
   <string name="IgnoreMovie">ignorar Película</string>
-  <string name="ImdbId">Id de IMDB</string>
+  <string name="ImdbId">ID IMDb</string>
   <string name="Importer">Importador de Película</string>
   <string name="ImporterDisabled">Importador Deshabilitado</string>
   <string name="ImporterDisabledMessage">El importador ha sido deshabilitado en la Interfaz de\nMediaPortal. ¿Te gustaría volver a\n habilitarlo?</string>
@@ -86,10 +90,12 @@
   <string name="InvalidVideoDiscFormat">O bien el archivo de imagen no contiene\nun formato de disco de vídeo válida, o tu configuración de Daemon\n Tools en MediaPortal es incorrecta.</string>
   <!--L-->
   <string name="Language">Idioma</string>
+  <string name="LargeThumbnailLayout">Diseño Miniaturas Grandes</string>
   <string name="LargeThumbnailView">Vista de Miniaturas Grandes</string>
   <string name="LastMonth">El mes pasado</string>
   <string name="LastWeek">La semana pasada</string>
   <string name="LastYear">El año pasado</string>
+  <string name="ListLayout">Diseño Lista</string>
   <string name="ListView">Vista de Lista</string>
   <string name="LockRestrictedMovies">Bloquear películas restringidas</string>
   <!--M-->
@@ -205,6 +211,7 @@
   <string name="ThisYear">Este año</string>
   <string name="ThreeMonthsAgo">Hace tres meses</string>
   <string name="ThreeWeeksAgo">Hace tres semanas</string>
+  <string name="ThumbnailLayout">Diseño Miniaturas</string>
   <string name="ThumbnailView">Vista de Miniaturas</string>
   <string name="Thursday">Jueves</string>
   <string name="Title">Título</string>

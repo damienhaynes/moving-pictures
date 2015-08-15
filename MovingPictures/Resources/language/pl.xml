@@ -14,6 +14,7 @@
   <string name="CastAndCrew">Obsada i zespół</string>
   <string name="CategoryEmptyHeader">Kategoria jest pusta</string>
   <string name="Certification">Ograniczenia wiekowe</string>
+  <string name="ChangeLayout">Zmień układ</string>
   <string name="ChangeView">Zmień widok</string>
   <string name="CheckForMissingArtwork">Szukaj brakującej ilustracji w sieci</string>
   <string name="Collection">Kolekcja</string>
@@ -64,7 +65,7 @@
   <string name="Genres">Gatunki</string>
   <!--I-->
   <string name="IgnoreMovie">Ignoruj film</string>
-  <string name="ImdbId">Identyfikator IMDB</string>
+  <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Importer filmów </string>
   <string name="ImporterDisabled">Importer wyłączony</string>
   <string name="ImporterPending">Importer ({0} wymaga uwagi)</string>

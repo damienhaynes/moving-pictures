@@ -23,6 +23,7 @@
   <string name="CategoryEmptyDescription">Er zijn momenteel geen films beschikbaar in deze categorie.</string>
   <string name="CategoryEmptyHeader">Categorie is leeg.</string>
   <string name="Certification">Classificatie</string>
+  <string name="ChangeLayout">Wijzig layout</string>
   <string name="ChangeView">Wijzig weergave</string>
   <string name="CheckForMissingArtwork">Online zoeken naar ontbrekend artwork</string>
   <string name="Collection">Collectie</string>
@@ -32,8 +33,10 @@
   <string name="ContinueToNextPartBody">Wilt u verdergaan met deel {0}?</string>
   <string name="ContinueToNextPartHeader">Verder gaan met het volgende deel?</string>
   <string name="Cover">Filmhoes</string>
+  <string name="CoverFlowLayout">Coverflow lay-out</string>
   <string name="CoverFlowView">Coverflow weergave</string>
   <string name="CycleCoverArt">Wissel filmhoes</string>
+  <string name="CycleLayout">Blader lay-out</string>
   <string name="CycleView">Wissel weergave</string>
   <!--D-->
   <string name="DateAdded">Datum toegevoegd</string>
@@ -65,6 +68,7 @@
   <string name="FilePath">Bestandspad</string>
   <string name="FileSize">Bestandsgrootte</string>
   <string name="FilesNeedingAttention">Bestanden die aandacht nodig hebben</string>
+  <string name="FilmstripLayout">Filmstrip lay-out</string>
   <string name="FilmstripView">Filmstripweergave</string>
   <string name="FilterBy">Filter op</string>
   <string name="FrameRate">Frame Rate</string>
@@ -76,7 +80,7 @@
   <string name="Genres">Genres</string>
   <!--I-->
   <string name="IgnoreMovie">Negeer film</string>
-  <string name="ImdbId">IMDb Id</string>
+  <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Film importeerder</string>
   <string name="ImporterDisabled">Importeerder uitgeschakeld</string>
   <string name="ImporterDisabledMessage">De importeerder is uitgeschakeld in de Mediaportal GUI. Wil je hem weer inschakelen?</string>
@@ -86,10 +90,12 @@
   <string name="InvalidVideoDiscFormat">Het imagebestand bevat geen geldig videodisc-formaat, of uw Daemon Tools MediaPortal configuratie is fout.</string>
   <!--L-->
   <string name="Language">Taal</string>
+  <string name="LargeThumbnailLayout">Grote Pictogrammen lay-out</string>
   <string name="LargeThumbnailView">Grote pictogrammenweergave</string>
   <string name="LastMonth">Afgelopen maand</string>
   <string name="LastWeek">Afgelopen week</string>
   <string name="LastYear">Afgelopen jaar</string>
+  <string name="ListLayout">Lijst lay-out</string>
   <string name="ListView">Lijstweergave</string>
   <string name="LockRestrictedMovies">Vergrendel afgeschermde films</string>
   <!--M-->
@@ -205,6 +211,7 @@
   <string name="ThisYear">Dit jaar</string>
   <string name="ThreeMonthsAgo">Drie maanden deleden</string>
   <string name="ThreeWeeksAgo">Drie weken geleden</string>
+  <string name="ThumbnailLayout">Pictogrammen lay-out</string>
   <string name="ThumbnailView">Pictogramweergave</string>
   <string name="Thursday">Donderdag</string>
   <string name="Title">Titel</string>

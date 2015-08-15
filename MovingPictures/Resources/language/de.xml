@@ -23,6 +23,7 @@
   <string name="CategoryEmptyDescription">Momentan sind keine Filme\nin dieser Kategorie vorhanden.</string>
   <string name="CategoryEmptyHeader">Kategorie ist leer</string>
   <string name="Certification">Altersfreigaben</string>
+  <string name="ChangeLayout">Layout ändern</string>
   <string name="ChangeView">Ansicht ändern</string>
   <string name="CheckForMissingArtwork">Suche online nach fehlenden Postern</string>
   <string name="Collection">Sammlung</string>

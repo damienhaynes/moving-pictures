@@ -9,6 +9,7 @@
   <string name="Cancel">취소</string>
   <string name="CategoryEmptyHeader">카테고리가 비어있습니다.</string>
   <string name="Certification">증명서</string>
+  <string name="ChangeLayout">보기변경</string>
   <string name="ChangeView">보기변경</string>
   <string name="CheckForMissingArtwork">없는 아트웍을 온라인에서 검색</string>
   <string name="Completed">완료</string>

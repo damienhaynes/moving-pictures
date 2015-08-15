@@ -14,6 +14,7 @@
   <string name="CastAndCrew">Uloge i ekipa</string>
   <string name="CategoryEmptyHeader">Kategorija je prazna</string>
   <string name="Certification">Potvrda</string>
+  <string name="ChangeLayout">Izmijenite izgled</string>
   <string name="ChangeView">Promjeni pogled</string>
   <string name="CheckForMissingArtwork">Traži ilustracije koje nedostaju na internetu</string>
   <string name="Collection">Kolekcija</string>
@@ -64,7 +65,6 @@
   <string name="Genres">Zanrovi</string>
   <!--I-->
   <string name="IgnoreMovie">Zanemari Film</string>
-  <string name="ImdbId">IMDb Id</string>
   <string name="Importer">Uvoznik filmova</string>
   <string name="ImporterDisabled">Uvoznik je onemogućen</string>
   <string name="ImporterPending">Uvoznik ({0} Traži pozornost)</string>

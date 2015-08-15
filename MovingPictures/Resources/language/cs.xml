@@ -23,6 +23,7 @@
   <string name="CategoryEmptyDescription">V této kategorii v současnosti\nnejsou žádné filmy.</string>
   <string name="CategoryEmptyHeader">Prázná kategorie</string>
   <string name="Certification">Klasifikace</string>
+  <string name="ChangeLayout">Změnit zobrazení</string>
   <string name="ChangeView">Změnit zobrazení</string>
   <string name="CheckForMissingArtwork">Vyhledat chybějící grafiku online</string>
   <string name="Collection">Kolekce</string>
@@ -76,7 +77,7 @@
   <string name="Genres">Žánry</string>
   <!--I-->
   <string name="IgnoreMovie">Ignorovat film</string>
-  <string name="ImdbId">IMDb Id</string>
+  <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Import filmů</string>
   <string name="ImporterDisabled">Importování je zakázáno</string>
   <string name="ImporterDisabledMessage">Nástroj pro import byl zakázán.\nPřejete si jej povolit?</string>

@@ -9,6 +9,7 @@
   <string name="Cancel">Отмена</string>
   <string name="CategoryEmptyHeader">В категории пусто</string>
   <string name="Certification">Рейтинг MPAA</string>
+  <string name="ChangeLayout">Изменить отображение</string>
   <string name="ChangeView">Изм. вид</string>
   <string name="CheckForMissingArtwork">Проверить отсутствующие постеры в интернет</string>
   <string name="Completed">Завершено</string>

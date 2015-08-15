@@ -14,6 +14,7 @@
   <string name="CastAndCrew">Näyttelijät ja Avustajat</string>
   <string name="CategoryEmptyHeader">Kategoria on tyhjä</string>
   <string name="Certification">Sertifiointi</string>
+  <string name="ChangeLayout">Vaihda asettelua</string>
   <string name="ChangeView">Vaihda näkymää</string>
   <string name="CheckForMissingArtwork">Hae puuttuva taidetta verkosta</string>
   <string name="Collection">Kokoelma</string>
@@ -65,7 +66,7 @@
   <string name="Genres">Lajityypit</string>
   <!--I-->
   <string name="IgnoreMovie">Hylkää elokuva</string>
-  <string name="ImdbId">IMDb Id</string>
+  <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Elokuvien tuoja</string>
   <string name="ImporterDisabled">Tuoja ei käytössä</string>
   <string name="ImporterPending">Tuoja ({0} Tarvitsee huomiota)</string>

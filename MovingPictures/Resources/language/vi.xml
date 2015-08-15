@@ -64,7 +64,6 @@
   <string name="Genres">Loại</string>
   <!--I-->
   <string name="IgnoreMovie">Bỏ qua phim</string>
-  <string name="ImdbId">Chỉ số IMDb</string>
   <string name="Importer">Nhập dữ liệu phim</string>
   <string name="ImporterDisabled">Nhập dữ liệu thất bại</string>
   <string name="ImporterPending">Nhập dữ liệu ({0} Cần chú ý)</string>

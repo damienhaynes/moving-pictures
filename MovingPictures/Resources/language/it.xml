@@ -14,6 +14,7 @@
   <string name="CastAndCrew">Cast e troupe</string>
   <string name="CategoryEmptyHeader">Categoria vuota</string>
   <string name="Certification">Certificazione</string>
+  <string name="ChangeLayout">Vista</string>
   <string name="ChangeView">Cambia vista</string>
   <string name="CheckForMissingArtwork">Controlla online Artwork mancanti</string>
   <string name="Collection">Collezione</string>
@@ -65,7 +66,6 @@
   <string name="Genres">Generi</string>
   <!--I-->
   <string name="IgnoreMovie">Ignora film</string>
-  <string name="ImdbId">Identificativo IMDb</string>
   <string name="Importer">Importazione film</string>
   <string name="ImporterDisabled">Importazione disabilitata</string>
   <string name="ImporterPending">Importazione ({0} pendenti)</string>

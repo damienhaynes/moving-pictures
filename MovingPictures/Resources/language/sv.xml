@@ -31,6 +31,7 @@ Vill du att MP ignorerar filmen?</string>
 filmer i den här kategorin.</string>
   <string name="CategoryEmptyHeader">Kategorin är tom</string>
   <string name="Certification">Åldersgräns</string>
+  <string name="ChangeLayout">Byt layout</string>
   <string name="ChangeView">Ändra vy</string>
   <string name="CheckForMissingArtwork">Hitta omslag på internet</string>
   <string name="Collection">Samling</string>
@@ -40,8 +41,10 @@ filmer i den här kategorin.</string>
   <string name="ContinueToNextPartBody">Vill du fortsätta med del {0}?</string>
   <string name="ContinueToNextPartHeader">Fortsätt till nästa del?</string>
   <string name="Cover">Omslag</string>
+  <string name="CoverFlowLayout">Omslagslayout</string>
   <string name="CoverFlowView">Coverflow-vy</string>
   <string name="CycleCoverArt">Nästa omslag</string>
+  <string name="CycleLayout">Roterade layout</string>
   <string name="CycleView">Nästa Vy</string>
   <!--D-->
   <string name="DateAdded">Datum tillagd</string>
@@ -75,6 +78,7 @@ filen permanent?</string>
   <string name="FilePath">Sökväg</string>
   <string name="FileSize">Filstorlek</string>
   <string name="FilesNeedingAttention">Filer som kräver åtgärd</string>
+  <string name="FilmstripLayout">Filmremsa layout</string>
   <string name="FilmstripView">Filmremsa Vy</string>
   <string name="FilterBy">Sortera efter</string>
   <string name="FrameRate">Bildfrekvens</string>
@@ -86,7 +90,7 @@ filen permanent?</string>
   <string name="Genres">Genrer</string>
   <!--I-->
   <string name="IgnoreMovie">Hoppa över film</string>
-  <string name="ImdbId">IMDb Id</string>
+  <string name="ImdbId">IMDb-ID</string>
   <string name="Importer">Filmimportör</string>
   <string name="ImporterDisabled">Importören är inaktiverad</string>
   <string name="ImporterDisabledMessage">Importören har inaktiverats i
@@ -99,10 +103,12 @@ Vill du aktivera den?</string>
 inställningarna i Daemon Tools.</string>
   <!--L-->
   <string name="Language">Språk</string>
+  <string name="LargeThumbnailLayout">Stora miniatyrer layout</string>
   <string name="LargeThumbnailView">Stor tumnagel-vy</string>
   <string name="LastMonth">Senaste månaden</string>
   <string name="LastWeek">Senaste veckan</string>
   <string name="LastYear">Senaste året</string>
+  <string name="ListLayout">Listlayout</string>
   <string name="ListView">Lista-vy</string>
   <string name="LockRestrictedMovies">Lås skyddade filmer</string>
   <!--M-->
@@ -228,6 +234,7 @@ och försök igen.</string>
   <string name="ThisYear">Detta år</string>
   <string name="ThreeMonthsAgo">Tre månader sedan</string>
   <string name="ThreeWeeksAgo">Tre veckor sedan</string>
+  <string name="ThumbnailLayout">Miniatyrlayout</string>
   <string name="ThumbnailView">Tumnagel-vy</string>
   <string name="Thursday">Torsdag</string>
   <string name="Title">Titel</string>
