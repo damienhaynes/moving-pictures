@@ -1161,9 +1161,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             dialog.SetHeading("Moving Pictures");  // not translated because it's a proper noun
 
             GUIListItem movieOptionsItem = new GUIListItem(Translation.MovieOptions + " ...");
-            GUIListItem parentalControlsItem = new GUIListItem(parentalControlsFilter.Active ? Translation.UnlockRestrictedMovies : Translation.LockRestrictedMovies);
+            GUIListItem parentalControlsItem = new GUIListItem(parentalControlsFilter.Active ? Translation.UnlockRestrictedMovies + " ..." : Translation.LockRestrictedMovies);
             GUIListItem filterItem = new GUIListItem(Translation.FilterBy + " ...");
-            GUIListItem searchItem = new GUIListItem(Translation.SearchBy + "...");
+            GUIListItem searchItem = new GUIListItem(Translation.SearchBy + " ...");
             GUIListItem sortItem = new GUIListItem(Translation.SortBy + " ...");
             GUIListItem layoutItem = new GUIListItem(Translation.ChangeLayout + " ...");
             GUIListItem importerItem = new GUIListItem(String.Format(Translation.ImporterPending, MovingPicturesCore.Importer.MatchesNeedingInput.Count) + " ...");
@@ -1176,13 +1176,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 movieOptionsItem.ItemId = currID++;
                 dialog.Add(movieOptionsItem);
             }
-
             
             if (MovingPicturesCore.Settings.ParentalControlsEnabled) {
                 parentalControlsItem.ItemId = currID++;
                 dialog.Add(parentalControlsItem);
             }
-
             
             filterItem.ItemId = currID++;
             dialog.Add(filterItem);
