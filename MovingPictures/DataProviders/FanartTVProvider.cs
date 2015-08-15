@@ -71,7 +71,11 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             if (string.IsNullOrEmpty(movieId))
                 return false;
 
-            string response = getJson(string.Format(apiMovieArtwork, movieId));
+            string url = apiMovieArtwork;
+            if (!string.IsNullOrEmpty(MovingPicturesCore.Settings.FanartTVClientKey))
+                url = url + "&client_key=" + MovingPicturesCore.Settings.FanartTVClientKey;
+
+            string response = getJson(string.Format(url, movieId));
             if (response == null)
                 return false;
 
@@ -116,6 +120,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             string movieId = getMovieId(movie);
             if (string.IsNullOrEmpty(movieId))
                 return false;
+
+            string url = apiMovieArtwork;
+            if (!string.IsNullOrEmpty(MovingPicturesCore.Settings.FanartTVClientKey))
+                url = url + "&client_key=" + MovingPicturesCore.Settings.FanartTVClientKey;
 
             // try to get movie artwork
             string response = getJson(string.Format(apiMovieArtwork, movieId));

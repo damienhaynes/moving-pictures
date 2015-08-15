@@ -2,3 +2,5 @@ bin
 obj
 /Moving Pictures.suo
 /MovingPictures/MovingPictures.csproj.user
+/Setup/*.mpe1
+/Transifex/pull.log

@@ -1129,6 +1129,26 @@ namespace MediaPortal.Plugins.MovingPictures {
 
         #endregion
 
+        #region Fanart.tv
+        [CornerstoneSetting(
+            Name = "Personal API Key",
+            Description = "This setting stores the users personal API key from fanart.tv, if set you get faster access to new artwork. Get your personal key from https://fanart.tv/get-an-api-key/",
+            Groups = "|Movie Importer|FanartTV Settings|",
+            Identifier = "fanart_tv_client_key",
+            Default = "",
+            Hidden = false)]
+        public string FanartTVClientKey
+        {
+            get { return fanart_tv_client_key; }
+            set
+            {
+                fanart_tv_client_key = value;
+                OnSettingChanged("fanart_tv_client_key");
+            }
+        }
+        private string fanart_tv_client_key;
+        #endregion
+
         #endregion
 
         #region GUI Settings
