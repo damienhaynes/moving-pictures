@@ -281,7 +281,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         public static string Movies = "Movies";
 
         // N
-        public static string NoImportPathsBody = "You do not have any import\npaths defined. Please close\nclose MediaPortal and launch\nlaunch MP Configuration.";
+        public static string NoImportPathsBody = "You do not have any import paths\ndefined. Please close MediaPortal\nand launch MP Configuration.";
         public static string NoImportPathsHeading = "No Import Paths!";
 
         // O

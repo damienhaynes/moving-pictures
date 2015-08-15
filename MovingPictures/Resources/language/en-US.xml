@@ -126,7 +126,7 @@
   <string name="MovieOptions">Movie Options</string>
   <string name="Movies">Movies</string>
   <!--N-->
-  <string name="NoImportPathsBody">You do not have any import\npaths defined. Please close\nclose MediaPortal and launch\nlaunch MP Configuration.</string>
+  <string name="NoImportPathsBody">You do not have any import paths\ndefined. Please close MediaPortal\nand launch MP Configuration.</string>
   <string name="NoImportPathsHeading">No Import Paths!</string>
   <!--O-->
   <string name="Older">Older</string>
