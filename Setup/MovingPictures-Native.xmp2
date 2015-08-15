@@ -823,6 +823,13 @@
               <ZipFileName>Installer{CopyFile}\{3b2b4390-d001-4272-935e-31765df3a412}-ro.xml</ZipFileName>
               <DestinationFilename>%Language%\MovingPictures\ro.xml</DestinationFilename>
             </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\language\sq.xml</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{dd07ed0b-2048-47dd-b8d0-9fad0564fb10}-sq.xml</ZipFileName>
+              <DestinationFilename>%Language%\MovingPictures\sq.xml</DestinationFilename>
+            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -1587,20 +1594,32 @@ public class Script
     <Author>Moving Pictures Team</Author>
     <HomePage>http://code.google.com/p/moving-pictures/</HomePage>
     <ForumPage>http://forum.team-mediaportal.com/forums/moving-pictures.284/</ForumPage>
-    <UpdateUrl>http://moving-pictures.googlecode.com/svn/trunk/Setup/update.xml</UpdateUrl>
+    <UpdateUrl>https://raw.githubusercontent.com/damienhaynes/moving-pictures/master/Setup/update.xml</UpdateUrl>
     <Version>
       <Major>1</Major>
       <Minor>8</Minor>
-      <Build>0</Build>
-      <Revision>1607</Revision>
+      <Build>1</Build>
+      <Revision>0</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
-    <VersionDescription>* Removed follw.it support (site is shutting down end of Sep 2014).
-* Added Titan skin files to installer. Includes some bug fixes and minor changes.
+    <VersionDescription>* Added automatic backup and restore of corrupt databases. When a corrupt database is detected on startup it will revert to the last known good one. Corrupt databases are also backed up but never restored.
+* Added a new user rating field to store ratings out of 10, this will be used to store user ratings from trakt in a future update so there will be no rounding issues. Skins can use the following property #MovingPictures.UserMovieSettings.10point_user_rating, if the new field is not populated then it will be double the rating out of 5.
+* Added support for a fanart.tv personal API key. This allows you to get faster access to artwork esp. for VIP members. The personal API key can be entered in Advanced Settings.
+* Added support to search for adult content from themoviedb.org, this is disabled by default. This can be enabled in Advanced Settings.
+* Added dynamic filtering for User Ratings. Removed dynamic filtering for ResumeTime/ResumeTitleBD.
+* Improved configuration UI such that it can be seen in taskbar when open, maximise and minimise button also added.
+* Removed ResumeTimeBD from the ConfigScreen sub-pane.
+* Renamed 'View' to 'Layout' to keep consistent with MediaPortal nomenclature.
+* Improved error handling with with Noise filter.
+* Improved error handling when watching for new files on disk.
+* Fixed display of 7 channel audio as 6.1.
+* Added support for 4K UHD, 8K UHD, 480p, 480i, 576p and 576i video resolutions.
+* Added IsInterlaced flag for Video MediaInfo.
+* Fixed Titan skin not listed as an installable feature in install dialog.
 * Updated translations from Transifex.</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;amp;task=att_download&amp;amp;link_id=30&amp;amp;cf_id=65</OnlineLocation>
-    <ReleaseDate>2014-07-26T19:04:46</ReleaseDate>
+    <ReleaseDate>2014-08-15T19:04:46</ReleaseDate>
     <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
     <Location>moving-pictures-[Version].mpe1</Location>
     <Params>
@@ -2420,6 +2439,13 @@ public class Script
         <LocalFileName>..\MovingPictures\Resources\language\ro.xml</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{3b2b4390-d001-4272-935e-31765df3a412}-ro.xml</ZipFileName>
         <DestinationFilename>%Language%\MovingPictures\ro.xml</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\language\sq.xml</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{dd07ed0b-2048-47dd-b8d0-9fad0564fb10}-sq.xml</ZipFileName>
+        <DestinationFilename>%Language%\MovingPictures\sq.xml</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
         <Param1 />

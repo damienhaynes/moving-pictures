@@ -10,6 +10,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigLauncher", "Testing\MovingPicturesConfigLauncher\ConfigLauncher.csproj", "{5D751473-DCC5-4044-A6E3-403D97C5B9F9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{1A6450EB-C026-4C84-AE11-2A6389049734}"
+	ProjectSection(SolutionItems) = preProject
+		External\merge.bat = External\merge.bat
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchTester", "Testing\SearchTester\SearchTester.csproj", "{1B3CB474-9C7B-459F-9927-A882D3457950}"
 EndProject
@@ -20,6 +23,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transifex", "Transifex", "{1C637437-D8E8-447B-8C00-1274FB140EEC}"
 	ProjectSection(SolutionItems) = preProject
 		.tx\config = .tx\config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{1CA245D5-846D-4645-9145-AA389BD3B928}"
+	ProjectSection(SolutionItems) = preProject
+		Setup\MovingPictures-Native.xmp2 = Setup\MovingPictures-Native.xmp2
+		Setup\update.xml = Setup\update.xml
 	EndProjectSection
 EndProject
 Global
