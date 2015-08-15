@@ -69,7 +69,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                             FileInfo fileInfo = new FileInfo(path);
 
                             string ext = fileInfo.Extension.ToLower();
-                            string name = fileInfo.Name.ToLower(); ;
+                            string name = fileInfo.Name.ToLower();
 
                             // DVD: Non-Standalone content is invalid
                             if (ext == ".vob" && Regex.Match(name, @"(video_ts|vts_).+", RegexOptions.IgnoreCase).Success)

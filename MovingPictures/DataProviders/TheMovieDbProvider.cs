@@ -216,8 +216,10 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             List<DBMovieInfo> results = new List<DBMovieInfo>();
 
             string releaseYear = year == null ? string.Empty : year.ToString();
+            bool adultSearch = false;
+            bool.TryParse(MovingPicturesCore.Settings.TMDbAdultSearch, out adultSearch);
 
-            var searchResults = TheMovieDbAPI.SearchMovies(title, language: MovingPicturesCore.Settings.DataProviderLanguageCode, year: releaseYear);
+            var searchResults = TheMovieDbAPI.SearchMovies(title, language: MovingPicturesCore.Settings.DataProviderLanguageCode, includeAdult: adultSearch, year: releaseYear);
             if (searchResults == null || searchResults.TotalResults == 0)
                 return results;
             

@@ -1127,6 +1127,24 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string tmdb_base_url;
 
+        [CornerstoneSetting(
+            Name = "Adult Search",
+            Description = "Include adult movies when searching for a match at themoviedb.org",
+            Groups = "|Movie Importer|TheMovieDb Settings|",
+            Identifier = "tmdb_adult_search",
+            Default = "false",
+            Hidden = false)]
+        public string TMDbAdultSearch
+        {
+            get { return tmdb_adult_search; }
+            set
+            {
+                tmdb_adult_search = value;
+                OnSettingChanged("tmdb_adult_search");
+            }
+        }
+        private string tmdb_adult_search;
+
         #endregion
 
         #region Fanart.tv
