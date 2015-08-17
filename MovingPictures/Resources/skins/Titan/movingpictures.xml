@@ -21,6 +21,7 @@ multiple view modes.
   <define>#list.backdrop.used:true</define>
   <define>#filmstrip.available:true</define>
   <define>#filmstrip.backdrop.used:true</define>
+  <define>#details.available:true</define>
   <define>#details.backdrop.used:true</define>
   <define>#categories.backdrop.used:true</define>
   <define>#coverflow.available:true</define>

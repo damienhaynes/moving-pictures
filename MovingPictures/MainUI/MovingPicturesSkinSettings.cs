@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Cornerstone.MP;
+﻿using Cornerstone.MP;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.MainUI {
@@ -33,6 +30,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                     return IconViewAvailable;
                 case BrowserViewMode.LIST:
                     return ListViewAvailable;
+                case BrowserViewMode.DETAILS:
+                    return DetailsViewAvailable;
                 default:
                     logger.Warn("No \"IsViewAvailable\" skin setting for " + view.ToString() + " view.");
                     return true;
@@ -49,7 +48,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
         private bool _listViewAvailable;
 
-
         /// <summary>
         /// True if the current skin has implemented the small icon view.
         /// </summary>
@@ -60,7 +58,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
         private bool _iconViewAvailable;
 
-
         /// <summary>
         /// True if the current skin has implemented the large icon view.
         /// </summary>
@@ -70,7 +67,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             private set { _largeIconViewAvailable = value; }
         }
         private bool _largeIconViewAvailable;
-
 
         /// <summary>
         /// True if the current skin has implemented the filmstrip view.
@@ -92,6 +88,17 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             private set { _coverflowViewAvailable = value; }
         }
         private bool _coverflowViewAvailable;
+
+        /// <summary>
+        /// True if the current skin has implemented the details view.
+        /// </summary>
+        [SkinSetting("#details.available", false)]
+        public bool DetailsViewAvailable
+        {
+            get { return _detailsViewAvailable; }
+            private set { _detailsViewAvailable = value; }
+        }
+        private bool _detailsViewAvailable;
 
         #endregion
 
@@ -132,7 +139,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
         private bool _useBackdropInListView;
 
-
         /// <summary>
         /// True if the backdrop should be used in the small icon view.
         /// </summary>
@@ -143,8 +149,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
         private bool _useBackdropInIconView;
 
-
-
         /// <summary>
         /// True if the backdrop should be used in the large icon view.
         /// </summary>
@@ -154,7 +158,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             private set { _useBackdropInLargeIconView = value; }
         }
         private bool _useBackdropInLargeIconView;
-
 
         /// <summary>
         /// True if the backdrop should be used in the filmstrip view.
@@ -177,7 +180,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
         private bool _useBackdropInCoverFlowView;
 
-
         /// <summary>
         /// True if the backdrop should be used in the details view.
         /// </summary>
@@ -188,7 +190,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         }
         private bool _useBackdropInDetailsView;
 
-
         /// <summary>
         /// True if the backdrop should be used in the categories view.
         /// </summary>
@@ -198,7 +199,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             private set { _useBackdropInCategoriesView = value; }
         }
         private bool _useBackdropInCategoriesView;
-
 
         #endregion
     }

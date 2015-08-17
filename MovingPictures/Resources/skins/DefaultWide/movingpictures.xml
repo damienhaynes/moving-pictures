@@ -26,6 +26,8 @@
   <define>#coverflow.backdrop.used:true</define>
   <!-- true if backdrop (fanart) should be displayed in this view -->
   <define>#categories.backdrop.used:true</define>
+  <!-- Set to true if this skin implements the details view -->
+  <define>#details.available:true</define>
   <!-- true if backdrop (fanart) should be displayed in this view -->
   <define>#details.backdrop.used:true</define>
   <!-- true if backdrop (fanart) should be displayed in this view -->
