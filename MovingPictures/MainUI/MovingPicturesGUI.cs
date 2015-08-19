@@ -398,6 +398,11 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             GUIPropertyManager.SetProperty("#MovingPictures.Importer.Menu.Label", importerStr);
             SetProperty("#MovingPictures.Importer.NeedInput.Count", "0");
 
+            // Load all available translation strings
+            foreach (string name in Translation.Strings.Keys) {
+                SetProperty("#MovingPictures.Translation." + name + ".Label", Translation.Strings[name]);
+            }
+
             // publish categories available for skin custom menus
             // we could wait until core is initialised, but we want access to these as soon as possible
             // we only need the names and id's, there need be no maintenance on their contents at this stage
@@ -541,11 +546,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                 browser.ContentsChanged += new MovieBrowser.ContentsChangedDelegate(OnBrowserContentsChanged);
                 browser.ViewChanged += new MovieBrowser.ViewChangedDelegate(OnBrowserViewChanged);
 
-                // Load all available translation strings
-                foreach (string name in Translation.Strings.Keys) {
-                    SetProperty("#MovingPictures.Translation." + name + ".Label", Translation.Strings[name]);
-                }
-
+                // publish sort properties
                 SetProperty("#MovingPictures.Sort.Field", Sort.GetFriendlySortName(browser.CurrentSortField));
                 SetProperty("#MovingPictures.Sort.Direction", browser.CurrentSortDirection.ToString());
 
@@ -605,6 +606,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         browser.LastView = browser.CurrentView;
                         browser.CurrentView = browser.LastView;
                     }
+                    logger.Debug("Category Load Parameter: Name={0}, BrowserTopLevelView={1}, BrowserCurrentView={2}, BrowserLastView={3}",
+                                 CategoryLoadParamater.Name, browser.TopLevelView.ToString(), browser.CurrentView.ToString(), browser.LastView.ToString());
                 }
 
                 preventDialogOnLoad = false;
@@ -676,6 +679,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             // if we cant load params or there is no param passed, quit
             if (string.IsNullOrEmpty(UnparsedLoadParameter)) return;
+
+            logger.Debug("Page loading with parameter: {0}", UnparsedLoadParameter);
 
             try {
                 foreach (String currParam in UnparsedLoadParameter.Split('|')) {
