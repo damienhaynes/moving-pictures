@@ -72,7 +72,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return false;
 
             string url = apiMovieArtwork;
-            if (!string.IsNullOrEmpty(MovingPicturesCore.Settings.FanartTVClientKey))
+            if (!string.IsNullOrWhiteSpace(MovingPicturesCore.Settings.FanartTVClientKey))
                 url = url + "&client_key=" + MovingPicturesCore.Settings.FanartTVClientKey;
 
             string response = getJson(string.Format(url, movieId));
