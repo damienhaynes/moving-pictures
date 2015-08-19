@@ -24,7 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
         }
 
         public override void Work() {
-            logger.Info("Begining artwork updater background process.");
+            logger.Info("Starting artwork updater background process.");
 
             RemoveOrphanArtwork();
             CreateMissingThumbnails();

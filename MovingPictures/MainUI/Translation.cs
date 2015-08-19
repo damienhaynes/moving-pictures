@@ -156,11 +156,10 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         // B
         public static string BadCategory = "An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!";
         public static string BadMovie = "An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!";
-        public static string BadParam = "An external plugin or skin passed\nMoving Pictures an invalid paramater!";
+        public static string BadParam = "An external plugin or skin passed\nMoving Pictures an invalid parameter!";
         public static string Backdrop = "Backdrop";
         public static string BeginsWith = "Begins With";
         public static string BelongsToCollection = "Belongs To Collection";
-
 
         // C
         public static string Cancel = "Cancel";

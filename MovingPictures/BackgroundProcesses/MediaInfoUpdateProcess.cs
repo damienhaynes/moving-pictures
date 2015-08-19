@@ -26,7 +26,7 @@ namespace MediaPortal.Plugins.MovingPictures.BackgroundProcesses {
             if (!MovingPicturesCore.Settings.AutoRetrieveMediaInfo)
                 return;
 
-            logger.Info("Begining background media info update process.");
+            logger.Info("Starting background media info update process.");
 
             List<DBLocalMedia> allLocalMedia = DBLocalMedia.GetAll();
             foreach (DBLocalMedia lm in allLocalMedia) {

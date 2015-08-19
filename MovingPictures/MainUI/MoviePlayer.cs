@@ -193,7 +193,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
             int part = requestedPart;
 
-            // if this is a request to start the movie from the begining, check if we should resume
+            // if this is a request to start the movie from the beginning, check if we should resume
             // or prompt the user for disk selection
             if (requestedPart == 1) {
                 // check if we should be resuming, and if not, clear resume data

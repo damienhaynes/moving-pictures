@@ -11,7 +11,7 @@
   <!--B-->
   <string name="BadCategory">An external plugin or skin tried\nto open a nonexistent Moving\nPictures category!</string>
   <string name="BadMovie">An external plugin or skin tried\nto open a nonexistent movie in\nMoving Pictures!</string>
-  <string name="BadParam">An external plugin or skin passed\nMoving Pictures an invalid paramater!</string>
+  <string name="BadParam">An external plugin or skin passed\nMoving Pictures an invalid parameter!</string>
   <string name="Backdrop">Backdrop</string>
   <string name="BeginsWith">Begins With</string>
   <string name="BelongsToCollection">Belongs To Collection</string>
