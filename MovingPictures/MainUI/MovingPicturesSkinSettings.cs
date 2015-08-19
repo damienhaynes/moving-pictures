@@ -81,7 +81,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// <summary>
         /// True if the current skin has implemented the coverflow view.
         /// </summary>
-        [SkinSetting("#coverflow.available", false)]
+        [SkinSetting("#coverflow.available", true)]
         public bool CoverFlowViewAvailable
         {
             get { return _coverflowViewAvailable; }
@@ -92,7 +92,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         /// <summary>
         /// True if the current skin has implemented the details view.
         /// </summary>
-        [SkinSetting("#details.available", false)]
+        [SkinSetting("#details.available", true)]
         public bool DetailsViewAvailable
         {
             get { return _detailsViewAvailable; }
