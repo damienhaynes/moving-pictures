@@ -1604,6 +1604,7 @@ public class Script
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
     <VersionDescription>* Added automatic backup and restore of corrupt databases. When a corrupt database is detected on startup it will revert to the last known good one. Corrupt databases are also backed up but never restored.
 * Added a new user rating field to store ratings out of 10, this will be used to store user ratings from trakt in a future update so there will be no rounding issues. Skins can use the following property #MovingPictures.UserMovieSettings.10point_user_rating, if the new field is not populated then it will be double the rating out of 5.
+* Added a new skin property which publishes the progress watched as a percentage. Skins can use the following property #MovingPictures.UserMovieSettings.Progress.
 * Added support for a fanart.tv personal API key. This allows you to get faster access to artwork esp. for VIP members. The personal API key can be entered in Advanced Settings.
 * Added support to search for adult content from themoviedb.org, this is disabled by default. This can be enabled in Advanced Settings.
 * Added dynamic filtering for User Ratings. Removed dynamic filtering for ResumeTime/ResumeTitleBD.
@@ -1619,7 +1620,7 @@ public class Script
 * Updated translations from Transifex.</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;amp;task=att_download&amp;amp;link_id=30&amp;amp;cf_id=65</OnlineLocation>
-    <ReleaseDate>2014-08-15T19:04:46</ReleaseDate>
+    <ReleaseDate>2015-08-20T19:04:46</ReleaseDate>
     <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
     <Location>moving-pictures-[Version].mpe1</Location>
     <Params>

@@ -2250,10 +2250,16 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         progress = (int)Math.Round((double)(100 * movie.ActiveUserSettings.ResumeTime) / (movie.Runtime * 60), MidpointRounding.AwayFromZero);
                     }
 
+                    if (progress > 100) progress = 100;
                     SetProperty("#MovingPictures.UserMovieSettings.Progress", progress.ToString());
                 }
                 else {
-                    SetProperty("#MovingPictures.UserMovieSettings.Progress", "0");
+                    if (movie.ActiveUserSettings.WatchedCount == 0) {
+                        SetProperty("#MovingPictures.UserMovieSettings.Progress", "0");
+                    }
+                    else {
+                        SetProperty("#MovingPictures.UserMovieSettings.Progress", "100");
+                    }
                 }
 
                 // publish the selected index in the facade
