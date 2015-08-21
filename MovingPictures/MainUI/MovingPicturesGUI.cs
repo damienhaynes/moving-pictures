@@ -680,7 +680,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // if we cant load params or there is no param passed, quit
             if (string.IsNullOrEmpty(UnparsedLoadParameter)) return;
 
-            logger.Debug("Page loading with parameter: {0}", UnparsedLoadParameter);
+            logger.Debug("Page loading with parameter: '{0}'", UnparsedLoadParameter);
 
             try {
                 foreach (String currParam in UnparsedLoadParameter.Split('|')) {
@@ -2237,6 +2237,23 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", (movie.ActiveUserSettings.UserRating.GetValueOrDefault() * 2).ToString());
                     else
                         SetProperty("#MovingPictures.UserMovieSettings.10point_user_rating", movie.ActiveUserSettings.UserRatingBase10.GetValueOrDefault().ToString());
+                }
+
+                // publish the progress watched 
+                if (movie.ActiveUserSettings.ResumeTime > 0) {
+                    int progress = 0;
+
+                    if (movie.ActualRuntime > 0) {
+                        progress = (int)Math.Round((double)(100 * movie.ActiveUserSettings.ResumeTime) / (movie.ActualRuntime / 1000), MidpointRounding.AwayFromZero);
+                    }
+                    else if (movie.Runtime > 0) {
+                        progress = (int)Math.Round((double)(100 * movie.ActiveUserSettings.ResumeTime) / (movie.Runtime * 60), MidpointRounding.AwayFromZero);
+                    }
+
+                    SetProperty("#MovingPictures.UserMovieSettings.Progress", progress.ToString());
+                }
+                else {
+                    SetProperty("#MovingPictures.UserMovieSettings.Progress", "0");
                 }
 
                 // publish the selected index in the facade
