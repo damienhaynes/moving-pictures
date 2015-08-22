@@ -29,7 +29,7 @@ multiple view modes.
   <controls>
     <!--            :: DUMMY CONTROLS ::             -->
     <include condition="#(not(eq(#skin.layout.movingpictures.details,'lite')))">movingpictures.dummy.xml</include>
-    <include condition="#(eq(#skin.layout.movingpictures.details,'lite'))">movingpictures.dummy.lite.xml</include>	
+    <include condition="#(eq(#skin.layout.movingpictures.details,'lite'))">movingpictures.dummy.lite.xml</include>
     <!--            :: MOVIE BACKDROP ::            -->
     <control>
       <description>DEFAULT BACKGROUND</description>
@@ -87,29 +87,29 @@ multiple view modes.
     <control>
       <id>0</id>
       <type>image</type>
-			<posX>1123</posX>
-			<posY>252</posY>
-			<width>790</width>
-			<height>790</height>
-			<texture>panel_myfilms_menu.png</texture>
+      <posX>1123</posX>
+      <posY>252</posY>
+      <width>790</width>
+      <height>790</height>
+      <texture>panel_myfilms_menu.png</texture>
       <visible>Control.IsVisible(51)</visible>
       <animation effect="fade" time="250">WindowOpen</animation>
       <animation effect="fade" time="250">WindowClose</animation>
     </control>
-		<control Style="smallTitle">
-			<description>Selected item Label</description>
-			<type>fadelabel</type>
-			<id>1</id>
-			<posX>1220</posX>
-			<posY>998</posY>
-			<align>left</align>
-			<label>#selecteditem</label>
+    <control Style="smallTitle">
+      <description>Selected item Label</description>
+      <type>fadelabel</type>
+      <id>1</id>
+      <posX>1220</posX>
+      <posY>998</posY>
+      <align>left</align>
+      <label>#selecteditem</label>
       <visible>Control.IsVisible(51)</visible>
-			<animation effect="fade" time="250">WindowOpen</animation>
-			<animation effect="fade" time="250">WindowClose</animation>
-		</control>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
     <!--            :: IMPORT ::            -->
-		<!--Background-->
+    <!--Background-->
     <include condition="#(eq(#skin.layout.movingpictures.thumbview,'default'))">movingpictures.background.xml</include>
     <include condition="#(eq(#skin.layout.movingpictures.thumbview,'without info'))">movingpictures.background.thumbs.noinfo.xml</include>
     <include condition="#(eq(#skin.layout.movingpictures.thumbview,'XL'))">movingpictures.background.thumbs.XL.xml</include>
@@ -121,30 +121,30 @@ multiple view modes.
       <width>68</width>
       <height>60</height>
       <texture>icon_movies.png</texture>
-	  	<visible>control.isvisible(50)|control.isvisible(51)</visible>
+      <visible>control.isvisible(50)|control.isvisible(51)</visible>
       <animation effect="fade" time="250">WindowOpen</animation>
       <animation effect="fade" time="250">WindowClose</animation>
     </control>
     <import>common.time.xml</import>
     <import>movingpictures.hiddenmenu.xml</import>
-		<!--Views-->
+    <!--Views-->
     <include condition="#(eq(#skin.layout.movingpictures.thumbview,'default'))">movingpictures.views.xml</include>
     <include condition="#(eq(#skin.layout.movingpictures.thumbview,'without info'))">movingpictures.views.thumbs.noinfo.xml</include>
     <include condition="#(eq(#skin.layout.movingpictures.thumbview,'XL'))">movingpictures.views.thumbs.noinfo.xml</include>
-		<!--facade-->
+    <!--facade-->
     <include condition="#(eq(#skin.layout.movingpictures.thumbview,'default'))">movingpictures.facade.xml</include>
     <include condition="#(eq(#skin.layout.movingpictures.thumbview,'without info'))">movingpictures.facade.thumbs.noinfo.xml</include>
     <include condition="#(eq(#skin.layout.movingpictures.thumbview,'XL'))">movingpictures.facade.thumbs.XL.xml</include>
 
     <import>movingpictures.mediainfo.xml</import>
-		
-		<!--Details-->
+
+    <!--Details-->
     <include condition="#(not(eq(#skin.layout.movingpictures.details,'lite')))">movingpictures.details.xml</include>
     <include condition="#(eq(#skin.layout.movingpictures.details,'lite'))">movingpictures.details.lite.xml</include>
-		<!--MediaInfo Details-->
+    <!--MediaInfo Details-->
     <include condition="#(not(eq(#skin.layout.movingpictures.details,'lite')))">movingpictures.mediainfo.details.xml</include>
     <include condition="#(eq(#skin.layout.movingpictures.details,'lite'))">movingpictures.mediainfo.details.lite.xml</include>
-		
+
     <import>common.overlay.xml</import>
     <!-- Fade out the screen when playback starts -->
     <control>

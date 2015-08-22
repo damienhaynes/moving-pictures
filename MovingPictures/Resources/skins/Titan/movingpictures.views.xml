@@ -31,10 +31,8 @@
       <height>613</height>
       <texture>list_poster_shadow.png</texture>
       <visible>facadeview.list+Control.IsVisible(50)</visible>
-      <animation effect="fade"
-                 time="250">WindowOpen</animation>
-      <animation effect="fade"
-                 time="250">WindowClose</animation>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
     </control>
 
     <control>
@@ -47,10 +45,8 @@
       <height>563</height>
       <texture>defaultVideoBig.png</texture>
       <visible>facadeview.list + Control.IsVisible(50) + !Control.HasThumb(60)</visible>
-      <animation effect="fade"
-                 time="250">WindowOpen</animation>
-      <animation effect="fade"
-                 time="250">WindowClose</animation>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
     </control>
 
     <control>
@@ -63,12 +59,80 @@
       <height>563</height>
       <texture>#MovingPictures.Coverart</texture>
       <visible>facadeview.list+Control.IsVisible(50)</visible>
-      <animation effect="fade"
-                 time="250">WindowOpen</animation>
-      <animation effect="fade"
-                 time="250">WindowClose</animation>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
     </control>
 
+    <control>
+      <description>User Rating (out of 10)</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>388</posX>
+      <posY>360</posY>
+      <width>114</width>
+      <height>114</height>
+      <texture>traktHeart#MovingPictures.UserMovieSettings.10point_user_rating.png</texture>
+      <visible>facadeview.list+Control.IsVisible(50)</visible>
+      <animation effect="fade" time="0">Visible</animation>
+      <animation effect="fade" time="0">WindowClose</animation>
+    </control>
+
+    <control>
+      <description>Unwatched Icon</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>68</posX>
+      <posY>306</posY>
+      <width>114</width>
+      <height>114</height>
+      <texture>unwatched_flag_big.png</texture>
+      <visible>facadeview.list+Control.IsVisible(50)+string.equals(#MovingPictures.UserMovieSettings.watched,0)+string.equals(#MovingPictures.UserMovieSettings.Progress,0)</visible>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+    
+    <control>
+      <description>Progress Icon</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>68</posX>
+      <posY>306</posY>
+      <width>114</width>
+      <height>114</height>
+      <texture>watched_flag_big.png</texture>
+      <visible>facadeview.list+Control.IsVisible(50)+!string.equals(#MovingPictures.UserMovieSettings.Progress,0)</visible>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+    <control>
+      <description>Progress Label</description>
+      <type>label</type>
+      <id>1</id>
+      <posX>122</posX>
+      <posY>360</posY>
+      <label>#MovingPictures.UserMovieSettings.Progress%</label>
+      <font>TitanLight12</font>
+      <align>center</align>
+      <textcolor>FFFFFFFF</textcolor>
+      <visible>facadeview.list+Control.IsVisible(50)+!string.equals(#MovingPictures.UserMovieSettings.Progress, 0)</visible>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+    <control>
+      <description>Progress Indicator</description>
+      <type>image</type>
+      <id>0</id>
+      <posX>68</posX>
+      <posY>306</posY>
+      <width>114</width>
+      <height>114</height>
+      <texture>watched_percentage_#(string.format('{0:000}',mul(math.round(div(cint(#MovingPictures.UserMovieSettings.Progress),5)),5))).png</texture>
+      <visible>facadeview.list+Control.IsVisible(50)+!string.equals(#MovingPictures.UserMovieSettings.Progress, 0)</visible>
+      <animation effect="fade" time="250">WindowOpen</animation>
+      <animation effect="fade" time="250">WindowClose</animation>
+    </control>
+    
+    
     <control Style="InfoLabel">
       <description>Release Date Label</description>
       <type>label</type>
@@ -263,21 +327,6 @@
                  time="250">WindowClose</animation>
     </control>
 
-    <control>
-      <description>Unwatched Icon</description>
-      <type>image</type>
-      <id>0</id>
-      <posX>68</posX>
-      <posY>306</posY>
-      <width>114</width>
-      <height>114</height>
-      <texture>unwatched_flag_big.png</texture>
-      <visible>facadeview.list + Control.IsVisible(50) + !Control.IsVisible(9) + Control.HasThumb(60)</visible>
-      <animation effect="fade"
-                 time="250">WindowOpen</animation>
-      <animation effect="fade"
-                 time="250">WindowClose</animation>
-    </control>
 
     <!--            :: THUMBVIEW ::            -->
 
