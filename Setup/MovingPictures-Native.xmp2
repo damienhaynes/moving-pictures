@@ -1234,6 +1234,244 @@
               <ZipFileName>Installer{CopyFile}\{becba7ca-a47a-4de6-9732-c023890dfe54}-X.png</ZipFileName>
               <DestinationFilename>%Skin%\Titan\Media\certification\X.png</DestinationFilename>
             </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated1.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{28c45fdf-8cab-4ae0-bb22-b3cc71451fba}-Rated1.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Rated1.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated10.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{454fca7a-6a4d-4c12-acf0-0e18d07b5f58}-Rated10.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Rated10.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated2.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{64a002b4-7b4a-4728-97ce-b50986fb8d20}-Rated2.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Rated2.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated3.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7c0e0867-194e-4cd3-a25d-f3c78c3f6a7b}-Rated3.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Rated3.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated4.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b52da093-bd56-4081-89ba-3471a64867af}-Rated4.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Rated4.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated5.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f8add9e1-0e90-4259-b9a1-0a7f8a14b1cb}-Rated5.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Rated5.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated6.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{b1ce7101-4d13-4028-8491-123bc9611008}-Rated6.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Rated6.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated7.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7a06778b-b628-42e5-81f2-1c70384807c2}-Rated7.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Rated7.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated8.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f0c6b376-ac79-42d5-99fc-e14645a93194}-Rated8.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Rated8.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated9.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{8bbd6bbd-e4d2-45ed-ab2d-6d3c9a7af40e}-Rated9.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Rated9.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\unwatched_flag.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7c0dc9d8-eb89-494d-9aaf-5e0870225463}-unwatched_flag.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\unwatched_flag.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\unwatched_flag_big.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{2b28d38f-3146-4694-9046-0a120e66f2c9}-unwatched_flag_big.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\unwatched_flag_big.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_flag_big.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{24983f05-372d-45cf-b075-df9dc52c9ba8}-watched_flag_big.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_flag_big.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_000.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e798ad64-a8b7-47ae-b819-70872029db7d}-watched_percentage_000.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_000.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_005.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0b3801ef-f7b9-4d05-b184-61efdc6294b9}-watched_percentage_005.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_005.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_010.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0c689fe5-9194-4571-8f43-9b4c8a75e08f}-watched_percentage_010.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_010.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_015.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7e50adc9-fba8-43c0-8821-62ef49579425}-watched_percentage_015.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_015.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_020.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a0e6b247-9d30-47a3-95da-c18e5883572b}-watched_percentage_020.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_020.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_025.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{34171c12-081f-49ec-8357-7832302f720d}-watched_percentage_025.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_025.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_030.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e41ce796-504b-40eb-8b5b-d4458bded671}-watched_percentage_030.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_030.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_035.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a04bd5a8-3724-404e-b8d9-791eca58633d}-watched_percentage_035.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_035.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_040.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{0f234268-5ee9-4ca3-a616-8ee00d6388d0}-watched_percentage_040.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_040.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_045.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{93d97641-2751-4d60-a3ba-b5f4d02043e1}-watched_percentage_045.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_045.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_050.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e5db3f1b-7886-4882-a74c-74d5a98c8022}-watched_percentage_050.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_050.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_055.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{2f8d23dc-4236-47e2-86bc-f07684a43d07}-watched_percentage_055.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_055.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_060.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{f9db0960-11f2-4c9f-a4ec-fa0dd9fbb743}-watched_percentage_060.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_060.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_065.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e399b5c9-0fb0-46d2-812e-d871981d0ff2}-watched_percentage_065.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_065.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_070.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{36a05639-76d3-4458-8992-6577470b7762}-watched_percentage_070.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_070.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_075.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{7f37d75b-f3d0-488d-b910-4e3eacd2e94b}-watched_percentage_075.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_075.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_080.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{bdc76c65-64e2-484b-b4c7-3841593df81a}-watched_percentage_080.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_080.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_085.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{a9b8e619-9c64-4091-b92d-00d96d130c4f}-watched_percentage_085.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_085.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_090.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{c4d8f5f2-fb48-436b-ac1a-e5657244bb42}-watched_percentage_090.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_090.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_095.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{32ede1d5-2c4f-4bf7-96e0-49cfae7a9ab7}-watched_percentage_095.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_095.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_100.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{78946977-912f-4fe3-97ac-22703755e602}-watched_percentage_100.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\watched_percentage_100.png</DestinationFilename>
+            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -1602,12 +1840,13 @@ public class Script
       <Revision>0</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
-    <VersionDescription>* Added automatic backup and restore of corrupt databases. When a corrupt database is detected on startup it will revert to the last known good one. Corrupt databases are also backed up but never restored.
+    <VersionDescription>* Added automatic backup and restore of corrupt databases. When a corrupt database is detected on startup it will revert to the last known good one if it exists. Corrupt databases are also backed up but never restored.
 * Added a new user rating field to store ratings out of 10, this will be used to store user ratings from trakt in a future update so there will be no rounding issues. Skins can use the following property #MovingPictures.UserMovieSettings.10point_user_rating, if the new field is not populated then it will be double the rating out of 5.
 * Added a new skin property which publishes the progress watched as a percentage. Skins can use the following property #MovingPictures.UserMovieSettings.Progress.
 * Added support for a fanart.tv personal API key. This allows you to get faster access to artwork esp. for VIP members. The personal API key can be entered in Advanced Settings.
 * Added support to search for adult content from themoviedb.org, this is disabled by default. This can be enabled in Advanced Settings.
 * Added dynamic filtering for User Ratings. Removed dynamic filtering for ResumeTime/ResumeTitleBD.
+* Updated Titan skin to display the UserRating and Watched Progress on Posters.
 * Improved configuration UI such that it can be seen in taskbar when open, maximise and minimise button also added.
 * Removed ResumeTimeBD from the ConfigScreen sub-pane.
 * Renamed 'View' to 'Layout' to keep consistent with MediaPortal nomenclature.
@@ -1620,7 +1859,7 @@ public class Script
 * Updated translations from Transifex.</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>http://www.team-mediaportal.com/index.php?option=com_mtree&amp;amp;task=att_download&amp;amp;link_id=30&amp;amp;cf_id=65</OnlineLocation>
-    <ReleaseDate>2015-08-20T19:04:46</ReleaseDate>
+    <ReleaseDate>2015-08-22T19:04:46</ReleaseDate>
     <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
     <Location>moving-pictures-[Version].mpe1</Location>
     <Params>
@@ -2832,6 +3071,244 @@ public class Script
         <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\certification\X.png</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{becba7ca-a47a-4de6-9732-c023890dfe54}-X.png</ZipFileName>
         <DestinationFilename>%Skin%\Titan\Media\certification\X.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated1.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{28c45fdf-8cab-4ae0-bb22-b3cc71451fba}-Rated1.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Rated1.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated10.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{454fca7a-6a4d-4c12-acf0-0e18d07b5f58}-Rated10.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Rated10.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated2.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{64a002b4-7b4a-4728-97ce-b50986fb8d20}-Rated2.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Rated2.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated3.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7c0e0867-194e-4cd3-a25d-f3c78c3f6a7b}-Rated3.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Rated3.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated4.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b52da093-bd56-4081-89ba-3471a64867af}-Rated4.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Rated4.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated5.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f8add9e1-0e90-4259-b9a1-0a7f8a14b1cb}-Rated5.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Rated5.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated6.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{b1ce7101-4d13-4028-8491-123bc9611008}-Rated6.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Rated6.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated7.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7a06778b-b628-42e5-81f2-1c70384807c2}-Rated7.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Rated7.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated8.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f0c6b376-ac79-42d5-99fc-e14645a93194}-Rated8.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Rated8.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Rated9.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{8bbd6bbd-e4d2-45ed-ab2d-6d3c9a7af40e}-Rated9.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Rated9.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\unwatched_flag.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7c0dc9d8-eb89-494d-9aaf-5e0870225463}-unwatched_flag.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\unwatched_flag.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\unwatched_flag_big.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{2b28d38f-3146-4694-9046-0a120e66f2c9}-unwatched_flag_big.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\unwatched_flag_big.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_flag_big.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{24983f05-372d-45cf-b075-df9dc52c9ba8}-watched_flag_big.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_flag_big.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_000.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e798ad64-a8b7-47ae-b819-70872029db7d}-watched_percentage_000.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_000.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_005.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0b3801ef-f7b9-4d05-b184-61efdc6294b9}-watched_percentage_005.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_005.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_010.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0c689fe5-9194-4571-8f43-9b4c8a75e08f}-watched_percentage_010.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_010.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_015.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7e50adc9-fba8-43c0-8821-62ef49579425}-watched_percentage_015.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_015.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_020.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a0e6b247-9d30-47a3-95da-c18e5883572b}-watched_percentage_020.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_020.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_025.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{34171c12-081f-49ec-8357-7832302f720d}-watched_percentage_025.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_025.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_030.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e41ce796-504b-40eb-8b5b-d4458bded671}-watched_percentage_030.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_030.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_035.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a04bd5a8-3724-404e-b8d9-791eca58633d}-watched_percentage_035.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_035.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_040.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{0f234268-5ee9-4ca3-a616-8ee00d6388d0}-watched_percentage_040.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_040.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_045.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{93d97641-2751-4d60-a3ba-b5f4d02043e1}-watched_percentage_045.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_045.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_050.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e5db3f1b-7886-4882-a74c-74d5a98c8022}-watched_percentage_050.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_050.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_055.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{2f8d23dc-4236-47e2-86bc-f07684a43d07}-watched_percentage_055.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_055.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_060.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{f9db0960-11f2-4c9f-a4ec-fa0dd9fbb743}-watched_percentage_060.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_060.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_065.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e399b5c9-0fb0-46d2-812e-d871981d0ff2}-watched_percentage_065.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_065.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_070.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{36a05639-76d3-4458-8992-6577470b7762}-watched_percentage_070.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_070.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_075.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{7f37d75b-f3d0-488d-b910-4e3eacd2e94b}-watched_percentage_075.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_075.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_080.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{bdc76c65-64e2-484b-b4c7-3841593df81a}-watched_percentage_080.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_080.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_085.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{a9b8e619-9c64-4091-b92d-00d96d130c4f}-watched_percentage_085.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_085.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_090.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{c4d8f5f2-fb48-436b-ac1a-e5657244bb42}-watched_percentage_090.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_090.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_095.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{32ede1d5-2c4f-4bf7-96e0-49cfae7a9ab7}-watched_percentage_095.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_095.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_100.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{78946977-912f-4fe3-97ac-22703755e602}-watched_percentage_100.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\watched_percentage_100.png</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
         <Param1 />

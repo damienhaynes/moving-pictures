@@ -936,6 +936,8 @@ namespace Cornerstone.Database {
 
             try {
                 File.Copy(sourceFile, destinationFile, true);
+                // it may not be immediately accessible so sleep a little
+                System.Threading.Thread.Sleep(250);
             }
             catch (Exception ex) {
                 logger.Warn("Failed to restore database. Source File = '{0}', Destination File = '{1}', Reason = '{2}'", sourceFile, destinationFile, ex.Message);
