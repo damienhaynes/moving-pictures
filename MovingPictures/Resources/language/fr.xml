@@ -11,7 +11,7 @@
   <!--B-->
   <string name="BadCategory">Un plugin externe ou un thème \nessaye d\'ouvrir une catégorie \n inexistante dans Moving Pictures !</string>
   <string name="BadMovie">Un plugin externe ou un thème \nessaye d\'ouvrir un film \ninexistant dans Moving Pictures !</string>
-  <string name="BadParam">Un plugin externe ou un thème \ntransmet un paramètre incorrecte \n vers Moving Pictures</string>
+  <string name="BadParam">Un plugin (ou un thème) obsolète \ngénère  un paramètre invalide dans Moving Pictures </string>
   <string name="Backdrop">Backdrop (fond d\'écran)</string>
   <string name="BeginsWith">Débuter par</string>
   <string name="BelongsToCollection">Appartient à la collection</string>
@@ -126,7 +126,7 @@
   <string name="MovieOptions">Options du film</string>
   <string name="Movies">Films</string>
   <!--N-->
-  <string name="NoImportPathsBody">Vous n\'avez pas configuré de chemins \nd\'importation. Vous devez fermer MediaPortal \net lancer l\'écran de configuration de \nMediaPortal pour configurer Moving Pictures.</string>
+  <string name="NoImportPathsBody">Tous les chemins d\'importation ne sont pas définis\.  S.V.P,  Fermer MediaPortal \ npuis lancer la configuration de Mediaportal.</string>
   <string name="NoImportPathsHeading">Aucun chemin d\'import !</string>
   <!--O-->
   <string name="Older">Ancien</string>

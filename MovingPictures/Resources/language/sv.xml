@@ -15,8 +15,7 @@ som inte existerar!</string>
   <string name="BadMovie">En annan plugin eller ett skin försökte
 öppna en film som inte existerar i
 Moving Pictures!</string>
-  <string name="BadParam">En annan plugin eller ett skin skickade
-en ogiltig parameter till Moving Pictures!</string>
+  <string name="BadParam">En annan plugin eller ett skin försökte\nskicka en ogiltig parameter till Moving Pictures!</string>
   <string name="Backdrop">Bakgrundsbild</string>
   <string name="BeginsWith">Börjar på</string>
   <string name="BelongsToCollection">Tillhör en samling</string>
@@ -143,10 +142,7 @@ Kontrollera sökvägen för exe-filen.</string>
   <string name="MovieOptions">Filmval</string>
   <string name="Movies">Filmer</string>
   <!--N-->
-  <string name="NoImportPathsBody">Du har inte valt några
-mappar där du har filmer.
-Gå till konfigurations-
-verktyget och gör detta!</string>
+  <string name="NoImportPathsBody">Du har inga importsökvägar definierade\n Stäng MediaPortal och\nstarta MP configuration</string>
   <string name="NoImportPathsHeading">Inga sökmappar!</string>
   <!--O-->
   <string name="Older">Äldre</string>

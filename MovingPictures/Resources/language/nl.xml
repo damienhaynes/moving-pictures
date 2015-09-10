@@ -126,7 +126,7 @@
   <string name="MovieOptions">Filmopties</string>
   <string name="Movies">Films</string>
   <!--N-->
-  <string name="NoImportPathsBody">Het blijkt dat u geen import locaties heeft gedefinieerd. U moet MediaPortal sluiten en het MediaPortal Configuratiescherm openen zodat u Moving Pictures kunt configureren.</string>
+  <string name="NoImportPathsBody">Je hebt geen import paden gedefinieerd. Sluit MediaPortal en start MP Configuration</string>
   <string name="NoImportPathsHeading">Geen importlocaties!</string>
   <!--O-->
   <string name="Older">Ouder</string>

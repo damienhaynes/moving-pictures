@@ -11,7 +11,6 @@
   <!--B-->
   <string name="BadCategory">Externý doplnok alebo vzhľad\nsa pokúsil otvoriť neexistujúcu\nkategóriu v Moving Pictures.</string>
   <string name="BadMovie">Externý doplnok alebo vzhľad\nsa pokúsil otvoriť neexistujúci\nfilm v Moving Pictures.</string>
-  <string name="BadParam">Externý doplnok alebo vzhľad poslal\nMoving Pictures neplatný parameter.</string>
   <string name="Backdrop">Kulisa</string>
   <string name="BeginsWith">Začína na</string>
   <string name="BelongsToCollection">Patrí do zbierky</string>
@@ -121,7 +120,6 @@
   <string name="MovieOptions">Voľby filmu</string>
   <string name="Movies">filmov</string>
   <!--N-->
-  <string name="NoImportPathsBody">Nie sú nastavené žiadne\ncesty pre import. Zatvorte\nMediaPortal a spustte prosím\nkonfiguráciu MP.</string>
   <string name="NoImportPathsHeading">Chýbajú cesty pre import.</string>
   <!--O-->
   <string name="Older">staršie</string>

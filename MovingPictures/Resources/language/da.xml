@@ -110,7 +110,6 @@
   <string name="MovieOptions">Film muligheder</string>
   <string name="Movies">Film</string>
   <!--N-->
-  <string name="NoImportPathsBody">Du har ingen import\nsti defineret. Venligst luk\nluk MediaPortal og start\nstart MP konfiguration.</string>
   <string name="NoImportPathsHeading">Ingen import stier!</string>
   <!--O-->
   <string name="Older">Ældre</string>

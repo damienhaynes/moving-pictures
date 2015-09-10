@@ -11,7 +11,7 @@
   <!--B-->
   <string name="BadCategory">¡Un plugin o skin externo intentó abrir una categoría de Moving Pictures que no existe!</string>
   <string name="BadMovie">¡Un plugin o skin externo intentó abrir una película de Moving Pictures que no existe!</string>
-  <string name="BadParam">¡Un plugin o skin externo intentó pasar\nun parámetro inválido de Moving Pictures!</string>
+  <string name="BadParam">¡Un plugin o skin externo pasó\nun parámetro inválido a Moving Pictures!</string>
   <string name="Backdrop">Fondo</string>
   <string name="BeginsWith">Empieza Con</string>
   <string name="BelongsToCollection">Pertenece a la Colección</string>
@@ -126,7 +126,7 @@
   <string name="MovieOptions">Opciones de película</string>
   <string name="Movies">Películas</string>
   <!--N-->
-  <string name="NoImportPathsBody">No tienes definida ninguna \ndirección de importación. Por favor, cierra\nclose MediaPortal y abre\nlaunch Configuración MP.</string>
+  <string name="NoImportPathsBody">No tienes ninguna dirección definida\npara importar. Por favor, cierra MediaPortal\ne inicia MP Configuration.</string>
   <string name="NoImportPathsHeading">¡No hay rutas de importación!</string>
   <!--O-->
   <string name="Older">Más antiguo</string>
@@ -135,7 +135,7 @@
   <string name="ParentalControlsDisabled">Control parental no activado</string>
   <string name="PinCodeHeader">Desbloquear contenido restringido</string>
   <string name="PinCodePrompt">Por favor, introduzca el código PIN para continuar:</string>
-  <string name="PlaybackFailed">La reproducción no es posible porque la \nextensión  \'{0}\' no está listada en tu configuración.\nPor favor, añade esta extensión o configura un reproductor externo\y vuelve a intentarlo.</string>
+  <string name="PlaybackFailed">La reproducción no es posible porque la \nextensión \'{0}\' no está listada en tu configuración.\nPor favor, añade esta extensión o configura un reproductor externo\nvuelve a intentarlo.</string>
   <string name="PlaybackFailedHeader">Error al Reproducir</string>
   <string name="PlayCount">Contador Reproducciones</string>
   <string name="PlayMovie">Reproducir Película</string>

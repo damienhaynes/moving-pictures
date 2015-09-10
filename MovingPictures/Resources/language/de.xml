@@ -11,7 +11,7 @@
   <!--B-->
   <string name="BadCategory">Ein externes Plugin oder Skin\nversucht, eine fehlende\nKategorie zu öffnen!</string>
   <string name="BadMovie">Ein externes Plugin oder Skin\nhat versucht, einen\nfehlenden Film zu öffnen!</string>
-  <string name="BadParam">Ein externes Plugin oder\nSkin hat einen ungültigen \nParameter übergeben.</string>
+  <string name="BadParam">Ein externes Plugin oder Skin hat\n Moving Pictures mit einem falschen\n Parameter angesprochen!</string>
   <string name="Backdrop">Hintergrundbild</string>
   <string name="BeginsWith">Beginnt mit</string>
   <string name="BelongsToCollection">Gehört zu der Sammlung</string>
@@ -33,8 +33,10 @@
   <string name="ContinueToNextPartBody">Mit dem Teil {0} fortsetzen?</string>
   <string name="ContinueToNextPartHeader">Mit dem nächsten Teil fortsetzen?</string>
   <string name="Cover">Cover</string>
+  <string name="CoverFlowLayout">Coverflow Ansicht</string>
   <string name="CoverFlowView">Coverflow Ansicht</string>
   <string name="CycleCoverArt">Wechsle Poster</string>
+  <string name="CycleLayout">Nächste Ansichten</string>
   <string name="CycleView">Ansicht wechseln</string>
   <!--D-->
   <string name="DateAdded">Erstelldatum</string>
@@ -66,6 +68,7 @@
   <string name="FilePath">Dateipfad</string>
   <string name="FileSize">Dateigröße</string>
   <string name="FilesNeedingAttention">Dateien die Aufmerksamkeit benötigen</string>
+  <string name="FilmstripLayout">Filmstreifen Ansicht</string>
   <string name="FilmstripView">Filmstrip</string>
   <string name="FilterBy">Filtere nach</string>
   <string name="FrameRate">Frame Rate</string>
@@ -88,10 +91,12 @@ MediaPortal deaktiviert.\nWillst du ihn reaktivieren?</string>
   <string name="InvalidVideoDiscFormat">Entweder das Image-File enthält kein\ngültiges Videodiscformat oder die\nDaemon Tools Mediaportal Konfiguration\nist nicht korrekt.</string>
   <!--L-->
   <string name="Language">Sprache</string>
+  <string name="LargeThumbnailLayout">Große Thumbnail Ansicht</string>
   <string name="LargeThumbnailView">Grosse Vorschaubilder</string>
   <string name="LastMonth">Letzten Monat</string>
   <string name="LastWeek">Letzte Woche</string>
   <string name="LastYear">Letztes Jahr</string>
+  <string name="ListLayout">Listenansicht</string>
   <string name="ListView">Liste</string>
   <string name="LockRestrictedMovies">Eingeschränkte Filme sperren</string>
   <!--M-->
@@ -122,7 +127,7 @@ MediaPortal deaktiviert.\nWillst du ihn reaktivieren?</string>
   <string name="MovieOptions">Film Optionen</string>
   <string name="Movies">Filme</string>
   <!--N-->
-  <string name="NoImportPathsBody">Es sind keine Importpfade definiert.\nSchließe MediaPortal und öffne die\nKonfiguration von Mediaportal, um\nMoving Pictures zu konfigurieren.</string>
+  <string name="NoImportPathsBody">Du hast keine Importpfade definiert.\n Bitte MediaPortal schließen und\n die MP Konfiguration öffnen.</string>
   <string name="NoImportPathsHeading">Keine Importpfade!</string>
   <!--O-->
   <string name="Older">Älter</string>
@@ -207,6 +212,7 @@ MediaPortal deaktiviert.\nWillst du ihn reaktivieren?</string>
   <string name="ThisYear">Dieses Jahr</string>
   <string name="ThreeMonthsAgo">Vor drei Monaten</string>
   <string name="ThreeWeeksAgo">Vor drei Wochen</string>
+  <string name="ThumbnailLayout">Thumbnail Ansicht</string>
   <string name="ThumbnailView">Kleine Vorschaubilder</string>
   <string name="Thursday">Donnerstag</string>
   <string name="Title">Titel</string>
