@@ -24,6 +24,7 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
 
         private static Logger logger = LogManager.GetCurrentClassLogger();
         public enum MoviePlayerState { Idle, Processing, Playing }
+        private enum ResumeDialogResult { Resume, FromBeginning, Cancel }
 
         #region Private variables
 
@@ -197,11 +198,12 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             // or prompt the user for disk selection
             if (requestedPart == 1) {
                 // check if we should be resuming, and if not, clear resume data
-                _resumeActive = PromptUserToResume(movie);
-                if (_resumeActive)
-                    part = movie.ActiveUserSettings.ResumePart;
-                else
-                    clearMovieResumeState(movie);
+                switch (PromptUserToResume(movie))
+                {
+                  case ResumeDialogResult.Resume: _resumeActive = true; part = movie.ActiveUserSettings.ResumePart; break;
+                  case ResumeDialogResult.FromBeginning: _resumeActive = false; clearMovieResumeState(movie); break;
+                  case ResumeDialogResult.Cancel:return;
+                }
 
                 // if we have a multi-part movie composed of disk images and we are not resuming 
                 // ask which part the user wants to play
@@ -868,9 +870,9 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
         }
 
-        private bool PromptUserToResume(DBMovieInfo movie) {
+        private ResumeDialogResult PromptUserToResume(DBMovieInfo movie) {
             if (movie.UserSettings == null || movie.UserSettings.Count == 0 || (movie.ActiveUserSettings.ResumePart < 2 && movie.ActiveUserSettings.ResumeTime <= 30))
-                return false;
+                return ResumeDialogResult.FromBeginning;
 
             logger.Debug("Resume Prompt: Movie='{0}', ResumePart={1}, ResumeTime={2}", movie.Title, movie.ActiveUserSettings.ResumePart, movie.ActiveUserSettings.ResumeTime);
 
@@ -884,12 +886,14 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
             }
 
             string sbody = movie.Title + "\n" + Translation.ResumeFrom + " " + Util.Utils.SecondsToHMSString(displayTime);
-            bool bResume = _gui.ShowCustomYesNo(Translation.ResumeFromLast, sbody, null, null, true);
-
-            if (bResume)
-                return true;
-
-            return false;
+            GUIResumeDialog.Result result = GUIResumeDialog.ShowResumeDialog(Translation.ResumeFromLast, displayTime,
+                                                     GUIResumeDialog.MediaType.Video);
+            switch (result)
+            {
+              case GUIResumeDialog.Result.PlayFromBeginning: return ResumeDialogResult.FromBeginning;
+              case GUIResumeDialog.Result.PlayFromLastStopTime: return ResumeDialogResult.Resume;
+              default: return ResumeDialogResult.Cancel;
+            }
         }
 
         #endregion
