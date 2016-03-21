@@ -54,7 +54,7 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
             this.HandleDestroyed += new EventHandler(ImportPathsPane_HandleDestroyed);
         }
 
-        // Commits new and existing itmes on addition or modification.
+        // Commits new and existing items on addition or modification.
         void pathBindingSource_ListChanged(object sender, ListChangedEventArgs e) {
             if (e.ListChangedType != ListChangedType.ItemDeleted) {
                 DBImportPath changedObj = (DBImportPath)pathBindingSource[e.NewIndex];
