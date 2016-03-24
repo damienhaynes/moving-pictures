@@ -32,6 +32,8 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
         private bool donePlayingCustomIntros = false;
         private int customIntrosPlayed = 0;
         private bool mountedPlayback = false;
+        private bool hdExternal = MovingPicturesCore.Settings.UseExternalPlayer;
+        private bool hdPreMounting = MovingPicturesCore.Settings.ExternalPlayerPreMounting;
         private bool listenToExternalPlayerEvents = false;
         private DBLocalMedia queuedMedia;
         private int _activePart;
@@ -244,43 +246,54 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         }
                         break;
                     case MediaState.NotMounted:
-                        // Mount this media
-                        MountResult result = mediaToPlay.Mount();
-                        while (result == MountResult.Pending) {
-                            if (_gui.ShowCustomYesNo(Translation.VirtualDriveHeader, Translation.VirtualDriveMessage, Translation.Retry, Translation.Cancel, true)) {
-                                // User has chosen to retry
-                                // We stay in the mount loop
-                                result = mediaToPlay.Mount();
+                        // Check if the media have to be mounted before playing (via internal player = NEEDED | via external = depends on PreMounting bool set in advanced settings)
+                        if (!hdExternal || hdPreMounting) {
+                            // Mount this media
+                            MountResult result = mediaToPlay.Mount();
+                            while (result == MountResult.Pending)
+                            {
+                                if (_gui.ShowCustomYesNo(Translation.VirtualDriveHeader, Translation.VirtualDriveMessage, Translation.Retry, Translation.Cancel, true))
+                                {
+                                    // User has chosen to retry
+                                    // We stay in the mount loop
+                                    result = mediaToPlay.Mount();
+                                }
+                                else {
+                                    // Exit the player
+                                    resetPlayer();
+                                    return;
+                                }
                             }
-                            else {
+
+                            // If the mounting failed (can not be solved within the loop) show error and return
+                            if (result == MountResult.Failed)
+                            {
+                                _gui.ShowMessage(Translation.Error, Translation.FailedMountingImage);
                                 // Exit the player
                                 resetPlayer();
                                 return;
                             }
-                        }
 
-                        // If the mounting failed (can not be solved within the loop) show error and return
-                        if (result == MountResult.Failed) {
-                            _gui.ShowMessage(Translation.Error, Translation.FailedMountingImage);
-                            // Exit the player
-                            resetPlayer();
-                            return;
+                            // Mounting was succesfull, break the mount loop
                         }
-                        
-                        // Mounting was succesfull, break the mount loop
                         break;
                 }
 
                 // Check mediaState again
                 mediaState = mediaToPlay.State;
+
+                if (mediaState == MediaState.NotMounted && hdExternal && !hdPreMounting) {
+                    // Media is an Image and not mounted, but the User wants it that way - so set MediaState 'Online' to proceed
+                    mediaState = MediaState.Online;
+                }
             }
             
             // Get the path to the playable video.
             string videoPath = mediaToPlay.GetVideoPath();
 
-            // If the media is an image, it will be mounted by this point so
+            // If the media is an image and we do preMounting, it will be mounted by this point so
             // we flag the mounted playback variable
-            mountedPlayback = mediaToPlay.IsImageFile;
+            mountedPlayback = (mediaToPlay.IsImageFile && hdPreMounting);
 
             // if we do not have MediaInfo but have the AutoRetrieveMediaInfo setting toggled
             // get the media info
@@ -373,10 +386,6 @@ namespace MediaPortal.Plugins.MovingPictures.MainUI {
                         
             // HD Playback
             if (videoFormat == VideoFormat.Bluray || videoFormat == VideoFormat.HDDVD) {
-
-                // Take proper action according to playback setting
-                bool hdExternal = MovingPicturesCore.Settings.UseExternalPlayer;
-
                 // Launch external player if user has configured it for HD playback.
                 if (hdExternal) {
                     LaunchHDPlayer(media);
