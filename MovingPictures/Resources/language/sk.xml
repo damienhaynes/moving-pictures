@@ -11,6 +11,7 @@
   <!--B-->
   <string name="BadCategory">Externý doplnok alebo vzhľad\nsa pokúsil otvoriť neexistujúcu\nkategóriu v Moving Pictures.</string>
   <string name="BadMovie">Externý doplnok alebo vzhľad\nsa pokúsil otvoriť neexistujúci\nfilm v Moving Pictures.</string>
+  <string name="BadParam">Externý doplnok alebo vzhľad poslal\nMoving Pictures neplatný parameter.</string>
   <string name="Backdrop">Kulisa</string>
   <string name="BeginsWith">Začína na</string>
   <string name="BelongsToCollection">Patrí do zbierky</string>
@@ -32,8 +33,10 @@
   <string name="ContinueToNextPartBody">Prajete si pokračovat dielom {0}?</string>
   <string name="ContinueToNextPartHeader">Prejsť na ďalši diel?</string>
   <string name="Cover">Obal</string>
+  <string name="CoverFlowLayout">Rozloženie Obaly</string>
   <string name="CoverFlowView">Pohľad na obaly</string>
   <string name="CycleCoverArt">Iná grafika</string>
+  <string name="CycleLayout">Rozloženie Cyklus</string>
   <string name="CycleView">Iné zobrazenie</string>
   <!--D-->
   <string name="DateAdded">Dátum pridania</string>
@@ -65,6 +68,7 @@
   <string name="FilePath">Cesta k súboru</string>
   <string name="FileSize">Veľkosť súboru</string>
   <string name="FilesNeedingAttention">Súbory vyžadujúce pozornosť</string>
+  <string name="FilmstripLayout">Rozloženie Filmový pás</string>
   <string name="FilmstripView">Filmový pás</string>
   <string name="FilterBy">Filtrovať podľa</string>
   <string name="FrameRate">Snímková frekvencia</string>
@@ -86,10 +90,12 @@
   <string name="InvalidVideoDiscFormat">Buď súbor s obrazom disku neobsahuje použiteľné video, alebo je Daemon Tools v MediaPortali nevhodne nastavený.</string>
   <!--L-->
   <string name="Language">Jazyk</string>
+  <string name="LargeThumbnailLayout">Rozloženie Veľké ikony</string>
   <string name="LargeThumbnailView">Veľké ikony</string>
   <string name="LastMonth">Minulý mesiac</string>
   <string name="LastWeek">Minulý týždeň</string>
   <string name="LastYear">Minulý rok</string>
+  <string name="ListLayout">Rozloženie zoznam</string>
   <string name="ListView">Zoznam</string>
   <string name="LockRestrictedMovies">Zamknúť zakázané filmy</string>
   <!--M-->
@@ -120,6 +126,7 @@
   <string name="MovieOptions">Voľby filmu</string>
   <string name="Movies">filmov</string>
   <!--N-->
+  <string name="NoImportPathsBody">Nie sú definované žiadne importovacie cesty.\nZatvorte prosím MediaPortal a spustite MP Configuration.</string>
   <string name="NoImportPathsHeading">Chýbajú cesty pre import.</string>
   <!--O-->
   <string name="Older">staršie</string>
@@ -204,6 +211,7 @@
   <string name="ThisYear">tento rok</string>
   <string name="ThreeMonthsAgo">pred tromi mesiacmi</string>
   <string name="ThreeWeeksAgo">pred tromi týždňami</string>
+  <string name="ThumbnailLayout">Rozloženie Ikony</string>
   <string name="ThumbnailView">Ikony</string>
   <string name="Thursday">štvrtok</string>
   <string name="Title">Titul</string>

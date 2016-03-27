@@ -5,13 +5,22 @@
   <string name="Actors">Näyttelijät</string>
   <string name="AllMovies">Kaikki elokuvat</string>
   <string name="AllFiles">Kaikki tiedostot</string>
+  <string name="AspectRatio">Kuvasuhde</string>
+  <string name="AudioChannels">Audio kanavat</string>
+  <string name="AudioFormat">Audio muoto</string>
   <!--B-->
+  <string name="BadCategory">Ulkopuolinen lisäosa tai ulkoasu yritti\navata olematonta Moving\nPictures kategoriaa!</string>
+  <string name="BadMovie">Ulkopuolinen lisäosa tai ulkoasu yritti\navata olematonta elokuvaa!</string>
+  <string name="BadParam">Ulkopuolinen lisäosa tai ulkoasu välitti Moving Picturesille väärän paramatrin!</string>
   <string name="Backdrop">Tausta</string>
   <string name="BeginsWith">Alkaa kirjaimella...</string>
   <string name="BelongsToCollection">Kuuluu kokoelmaan</string>
   <!--C-->
   <string name="Cancel">Peruuta</string>
+  <string name="CannotDeleteOffline">Ei voida poistaa {0}\nkoska tiedosto on Offline tilassa</string>
+  <string name="CannotDeleteReadOnly">Ei voida poistaa \"Vain luku\" elokuvaa.\nHaluaisitko Moving Pictureson sivuuttaa tämän\nelokuvan?</string>
   <string name="CastAndCrew">Näyttelijät ja Avustajat</string>
+  <string name="CategoryEmptyDescription">Tässä kategoriassa ei ole tällä\nhetkellä ainuttakaan elokuvaa.</string>
   <string name="CategoryEmptyHeader">Kategoria on tyhjä</string>
   <string name="Certification">Sertifiointi</string>
   <string name="ChangeLayout">Vaihda asettelua</string>
@@ -24,8 +33,10 @@
   <string name="ContinueToNextPartBody">Haluatko jatkaa osalla {0}?</string>
   <string name="ContinueToNextPartHeader">Jatketaanko seuraavaan osaan?</string>
   <string name="Cover">Kansi</string>
+  <string name="CoverFlowLayout">Coverflow ulkoasu</string>
   <string name="CoverFlowView">Kansivirta</string>
   <string name="CycleCoverArt">Kierrätä kansikuvia</string>
+  <string name="CycleLayout">Cycle ulkoasu</string>
   <string name="CycleView">Kierrätä näkymä</string>
   <!--D-->
   <string name="DateAdded">Lisäyspäivä</string>
@@ -48,6 +59,7 @@
   <string name="Director">Ohjaaja</string>
   <string name="Directors">Ohjaajat</string>
   <string name="DownAbbreviation">(al)</string>
+  <string name="DoYouWantToDelete">Haluatko pysyvästi poistaa\n{0}\nkovalevyltäsi?</string>
   <!--E-->
   <string name="EarlierThisYear">Aiemmin tänä vuonna</string>
   <string name="Error">Virhe</string>
@@ -56,8 +68,10 @@
   <string name="FilePath">Tiedoston polku</string>
   <string name="FileSize">Tiedoston koko</string>
   <string name="FilesNeedingAttention">Huomiota vaativat tiedostot</string>
+  <string name="FilmstripLayout">Filmstrip ulkoasu</string>
   <string name="FilmstripView">Filminauha</string>
   <string name="FilterBy">Suodata</string>
+  <string name="FrameRate">Kuvataajuus</string>
   <string name="Friday">Perjantai</string>
   <string name="Future">Tulevaisuus</string>
   <!--G-->
@@ -69,22 +83,31 @@
   <string name="ImdbId">IMDb ID</string>
   <string name="Importer">Elokuvien tuoja</string>
   <string name="ImporterDisabled">Tuoja ei käytössä</string>
+  <string name="ImporterDisabledMessage">Elokuvien tuoja on otettu pois käytöstä\nMediaPortalista. Haluaisitko ottaa sen\nuudelleen käyttöön?</string>
   <string name="ImporterPending">Tuoja ({0} Tarvitsee huomiota)</string>
+  <string name="InfoUrl">URL tiedot</string>
   <string name="InvalidPin">Väärä PIN-koodi!</string>
+  <string name="InvalidVideoDiscFormat">Joko kuva tiedosto ei sisällä oikeanlaista\nvideo formaattia, tai sinun Daemon työkalu\nMediaPortal asetuksissa on väärin.</string>
   <!--L-->
   <string name="Language">Kieli</string>
+  <string name="LargeThumbnailLayout">Suurikuvake ulkoasu</string>
   <string name="LargeThumbnailView">Suurikuvake</string>
   <string name="LastMonth">Viime kuukausi</string>
   <string name="LastWeek">Viime viikko</string>
   <string name="LastYear">Viime vuosi</string>
+  <string name="ListLayout">Lista ulkoasu</string>
   <string name="ListView">Lista</string>
   <string name="LockRestrictedMovies">Lukitse K-18 elokuvat</string>
   <!--M-->
   <string name="MarkAsUnwatched">Merkitse katsomattomaksi</string>
   <string name="MarkAsWatched">Merkitse katsotuksi</string>
   <string name="MediaInfo">Median tiedot</string>
+  <string name="MediaIsMissing">Valitsemasi elokuvan tallennusmedia puuttuu!\nValitettavasti jokin on mennyt pieleen...</string>
+  <string name="MediaNotAvailableBody">Valitsemasi elokuvan tallennusmedia ei ole\nsaatavilla. Liitä tai yhdistä tallenusmedia\nnimeltään: {0}</string>
   <string name="MediaNotAvailableHeader">Media ei saatavilla</string>
+  <string name="MediaType">Mediatyyppi</string>
   <string name="Missing">Kateissa</string>
+  <string name="MissingExternalPlayerExe">HD-toiston ajotiedosto puuttuu.\nKorjaa ajotiedoston polku.</string>
   <string name="Monday">Maanantai</string>
   <string name="MonthName1">Tammikuu</string>
   <string name="MonthName2">Helmikuu</string>
@@ -103,6 +126,7 @@
   <string name="MovieOptions">Elokuvan asetukset</string>
   <string name="Movies">Elokuvat</string>
   <!--N-->
+  <string name="NoImportPathsBody">Sinulla ei ole yhtään tuonti polkua\nmääritetty. Sulje MediaPortal ja\nkäynnistä MP Configuration.</string>
   <string name="NoImportPathsHeading">Ei tuontipolkuja!</string>
   <!--O-->
   <string name="Older">Vanhempi</string>
@@ -111,7 +135,9 @@
   <string name="ParentalControlsDisabled">Lapsilukko ei ole käytössä.</string>
   <string name="PinCodeHeader">Poistetaan K-18 lukitus</string>
   <string name="PinCodePrompt">Anna PIN-koodi jatkaaksesi:</string>
+  <string name="PlaybackFailed">Toisto ei ole mahdollista, koska \'{0}\'\nlisäosa ei ole listattuna mediaportalin asetuksissa.\n Lisää tämä lisäosa tai määritä ulkoinen soitin\nja yritä uudelleen.</string>
   <string name="PlaybackFailedHeader">Toisto epäonnistui</string>
+  <string name="PlayCount">Toistokerrat</string>
   <string name="PlayMovie">Toista elokuva</string>
   <string name="PossibleMatches">Mahdollisia tuloksia</string>
   <string name="ProblemLoadingSkinFile">Virhe ladattaessa ulkoasun tiedostoa</string>
@@ -171,17 +197,21 @@
   <string name="SkinDoesNotSupportImporter">Tämä ulkoasu ei tue tuontia</string>
   <string name="SkinDoesNotSupportPinDialog">Tämä ulkoasu ei tue Pin-koodi-ikkunaa.</string>
   <string name="SkinDoesNotSupportRatingDialog">Tämä ulkoasu ei tue arvosana ikkunaa.</string>
+  <string name="Source">Lähde</string>
   <string name="SortBy">Lajittele</string>
   <string name="SortDirection">Lajittelun suunta</string>
   <string name="StarRating">Arvosana</string>
+  <string name="Start">Alku</string>
   <string name="Sunday">Sunnuntai</string>
   <!--T-->
+  <string name="TechnicalInfo">Tekniset tiedot</string>
   <string name="Theme">Teema</string>
   <string name="ThisMonth">Tämä kuukausi</string>
   <string name="ThisWeek">Tämä viikko</string>
   <string name="ThisYear">Tämä vuosi</string>
   <string name="ThreeMonthsAgo">Kolme kuukautta sitten</string>
   <string name="ThreeWeeksAgo">Kolme viikkoa sitten</string>
+  <string name="ThumbnailLayout">Pienoiskuvake ulkoasu</string>
   <string name="ThumbnailView">Pienoiskuvake</string>
   <string name="Thursday">Torstai</string>
   <string name="Title">Otsikko</string>
@@ -196,12 +226,16 @@
   <string name="UnwatchedMovies">Katsomattomat elokuvat</string>
   <string name="UpAbbreviation">(yl)</string>
   <string name="UpdateDetailsFromOnline">Päivitä yksityiskohdat verkosta</string>
+  <string name="UpdateMovieDetailsBody">Olet aikeissa päivittää kaikkien elokuvien metatiedot, ylikirjoittaa\nminkä tahansa muutoksen elokuviin.\nHaluatko jatkaa?</string>
   <string name="UpdateMovieDetailsHeader">Päivitä elokuvan tiedot</string>
   <!--V-->
+  <string name="VideoFormat">Video formaatti</string>
   <string name="ViewMovieDetails">Näytä elokuvan tiedot</string>
   <string name="VirtualDriveHeader">Virtuaaliasema ei ole valmis</string>
+  <string name="VirtualDriveMessage">Virtuaalinen asema ei ollut valmis ajoissa.\nYritä uudelleen tai peruuta toisto.</string>
   <string name="Votes">äänet</string>
   <!--W-->
+  <string name="WatchedCount">Katselukerrat</string>
   <string name="Wednesday">Keskiviikko</string>
   <string name="Writer">Käsikirjoittaja</string>
   <string name="Writers">Käsikirjoittajat</string>

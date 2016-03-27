@@ -1,18 +1,29 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!--A-->
+  <string name="Actor">Oyuncu</string>
+  <string name="Actors">Oyuncular</string>
   <!--B-->
   <!--C-->
+  <string name="Cancel">İptal</string>
+  <string name="CastAndCrew">Oyuncular ve Ekip</string>
+  <string name="Certification">Belgeleme</string>
   <!--D-->
   <string name="Director">Yönetmen</string>
+  <string name="Directors">Yönetmenler</string>
   <!--E-->
   <!--F-->
   <!--G-->
+  <string name="Genre">Tip</string>
   <!--I-->
   <!--L-->
+  <string name="Language">Dil</string>
   <!--M-->
+  <string name="Movie">Film</string>
+  <string name="Movies">Filmler</string>
   <!--N-->
   <!--O-->
+  <string name="Overview">Genel</string>
   <!--P-->
   <!--R-->
   <string name="Rated">Oylandý</string>
@@ -24,9 +35,15 @@
   <string name="Runtime">Süre</string>
   <!--S-->
   <!--T-->
+  <string name="Title">Başlık</string>
+  <string name="Today">Bugün</string>
   <!--U-->
   <!--V-->
   <string name="Votes">oylar</string>
   <!--W-->
+  <string name="Writer">Yazar</string>
+  <string name="Writers">Yazarlar</string>
   <!--Y-->
+  <string name="Year">Yıl</string>
+  <string name="Yesterday">Dün</string>
 </resources>
