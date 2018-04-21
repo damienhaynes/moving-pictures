@@ -125,6 +125,12 @@ namespace Cornerstone.Tools {
                 // enable unsafe header parsing if needed
                 if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(true);
 
+                // In .NET 4.0 default transport level security standard is TLS 1.1,
+                // Some endpoints will reject this older insecure standard.
+                // SecurityProtocolType in .NET 4.0 doesn’t have an entry for TLS1.2, 
+                // so we have to use a numerical representation of this enum value.
+                ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072;
+
                 // setup some request properties
                 request.Proxy = WebRequest.DefaultWebProxy;
                 request.Proxy.Credentials = CredentialCache.DefaultCredentials;
