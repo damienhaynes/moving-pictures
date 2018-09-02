@@ -1472,6 +1472,27 @@
               <ZipFileName>Installer{CopyFile}\{78946977-912f-4fe3-97ac-22703755e602}-watched_percentage_100.png</ZipFileName>
               <DestinationFilename>%Skin%\Titan\Media\watched_percentage_100.png</DestinationFilename>
             </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\panel_myfilms_menu.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{d9b55774-1683-4db0-9753-f07fa641df9f}-panel_myfilms_menu.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\panel_myfilms_menu.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\starblack_rating.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{bff43adc-c9f4-4a63-8d8a-1eb035cb6b50}-starblack_rating.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\starblack_rating.png</DestinationFilename>
+            </FileItem>
+            <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+              <Param1 />
+              <UpdateOption>OverwriteIfOlder</UpdateOption>
+              <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Logos\audio\ac3.png</LocalFileName>
+              <ZipFileName>Installer{CopyFile}\{e1b0e71b-05ea-445d-8844-6f245e9a2f42}-ac3.png</ZipFileName>
+              <DestinationFilename>%Skin%\Titan\Media\Logos\audio\ac3.png</DestinationFilename>
+            </FileItem>
           </Items>
         </Files>
       </GroupItem>
@@ -1836,62 +1857,24 @@ public class Script
     <Version>
       <Major>1</Major>
       <Minor>8</Minor>
-      <Build>1</Build>
+      <Build>2</Build>
       <Revision>0</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
-    <VersionDescription>* Added automatic backup and restore of corrupt databases. When a corrupt database is detected on startup it will revert to the last known good one if it exists. Corrupt databases are also backed up but never restored.
+    <VersionDescription>* Updated VideoCodecs (HEVC) and AudioCodecs (TrueHD+Atmos, DTSX, EAC3+Atmos, EAC3) support;
 
+* Added support for TLS (Transport Level Security) 1.2 standard. Required for some endpoints which no longer support the default 1.0/1.1 in .NET 4.0;
 
-* Added a new user rating field to store ratings out of 10, this will be used to store user ratings from trakt in a future update so there will be no rounding issues. Skins can use the following property #MovingPictures.UserMovieSettings.10point_user_rating, if the new field is not populated then it will be double the rating out of 5.
+* Adding some missing Titan skin image resources;
 
+* Updating debug logging for scraper scripts when executing an if condiion. Will only log the condition part;
 
-* Added a new skin property which publishes the progress watched as a percentage. Skins can use the following property #MovingPictures.UserMovieSettings.Progress.
+* Fixed issue with resume dialog not closing on ESC;
 
-
-* Added support for a fanart.tv personal API key. This allows you to get faster access to artwork esp. for VIP members. The personal API key can be entered in Advanced Settings.
-
-
-* Added support to search for adult content from themoviedb.org, this is disabled by default. This can be enabled in Advanced Settings.
-
-
-* Added dynamic filtering for User Ratings. Removed dynamic filtering for ResumeTime/ResumeTitleBD.
-
-
-* Added UserRating and Watched Progress on Posters in Titan skin.
-
-
-* Improved configuration UI such that it can be seen in taskbar when open, maximise and minimise button also added.
-
-
-* Removed ResumeTimeBD from the ConfigScreen sub-pane.
-
-
-* Renamed 'View' to 'Layout' to keep consistent with MediaPortal nomenclature.
-
-
-* Improved error handling with with Noise filter.
-
-
-* Improved error handling when watching for new files on disk.
-
-
-* Fixed display of 7 channel audio as 6.1.
-
-
-* Added support for 4K UHD, 8K UHD, 480p, 480i, 576p and 576i video resolutions.
-
-
-* Added IsInterlaced flag for Video MediaInfo.
-
-
-* Fixed Titan skin not listed as an installable feature in install dialog.
-
-
-* Updated translations from Transifex.</VersionDescription>
+* Updated translations;</VersionDescription>
     <DevelopmentStatus>Stable</DevelopmentStatus>
     <OnlineLocation>https://github.com/damienhaynes/moving-pictures/releases/download/[Version]/moving-pictures-[Version].mpe1</OnlineLocation>
-    <ReleaseDate>2015-08-22T19:04:46</ReleaseDate>
+    <ReleaseDate>2018-09-02T19:04:46</ReleaseDate>
     <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
     <Location>moving-pictures-[Version].mpe1</Location>
     <Params>
@@ -3341,6 +3324,27 @@ public class Script
         <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\watched_percentage_100.png</LocalFileName>
         <ZipFileName>Installer{CopyFile}\{78946977-912f-4fe3-97ac-22703755e602}-watched_percentage_100.png</ZipFileName>
         <DestinationFilename>%Skin%\Titan\Media\watched_percentage_100.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\panel_myfilms_menu.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{d9b55774-1683-4db0-9753-f07fa641df9f}-panel_myfilms_menu.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\panel_myfilms_menu.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\starblack_rating.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{bff43adc-c9f4-4a63-8d8a-1eb035cb6b50}-starblack_rating.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\starblack_rating.png</DestinationFilename>
+      </FileItem>
+      <FileItem InstallType="CopyFile" SystemFile="false" Modified="false">
+        <Param1 />
+        <UpdateOption>OverwriteIfOlder</UpdateOption>
+        <LocalFileName>..\MovingPictures\Resources\skins\Titan\Media\Logos\audio\ac3.png</LocalFileName>
+        <ZipFileName>Installer{CopyFile}\{e1b0e71b-05ea-445d-8844-6f245e9a2f42}-ac3.png</ZipFileName>
+        <DestinationFilename>%Skin%\Titan\Media\Logos\audio\ac3.png</DestinationFilename>
       </FileItem>
       <FileItem InstallType="CopyFile" SystemFile="true" Modified="true">
         <Param1 />
