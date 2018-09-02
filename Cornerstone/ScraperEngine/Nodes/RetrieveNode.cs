@@ -59,7 +59,6 @@ namespace Cornerstone.ScraperEngine.Nodes {
             get { return _method; }
         } protected string _method;
 
-
         #endregion
 
         #region Methods
@@ -267,9 +266,6 @@ namespace Cornerstone.ScraperEngine.Nodes {
 
             return fileContents;
         }
-
-        
-
         #endregion
     }
 }
