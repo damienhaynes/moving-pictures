@@ -712,7 +712,7 @@
 
 * Updated translations;</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
-        <OnlineLocation>https://github.com/damienhaynes/moving-pictures/releases/download/1.8.2/moving-pictures-1.8.2.0.mpe1</OnlineLocation>
+        <OnlineLocation>http://github.com/damienhaynes/moving-pictures/releases/download/1.8.2/moving-pictures-1.8.2.0.mpe1</OnlineLocation>
         <ReleaseDate>2018-09-02T19:04:46</ReleaseDate>
         <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
         <Location>moving-pictures-[Version].mpe1</Location>
