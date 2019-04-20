@@ -163,6 +163,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
 
                 double.TryParse(_mI.Get(StreamKind.Video, 0, "FrameRate"), NumberStyles.AllowDecimalPoint, providerNumber, out _framerate);
                 _videoCodec = _mI.Get(StreamKind.Video, 0, "Codec").ToLower();
+                if (string.IsNullOrEmpty(_videoCodec))
+                {
+                    _videoCodec = _mI.Get(StreamKind.Video, 0, "CodecID").ToLower();
+                }
                 _scanType = _mI.Get(StreamKind.Video, 0, "ScanType").ToLower();
                 int.TryParse(_mI.Get(StreamKind.Video, 0, "Width"), out _width);
                 int.TryParse(_mI.Get(StreamKind.Video, 0, "Height"), out _height);
@@ -182,6 +186,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
                         int.TryParse(_mI.Get(StreamKind.Audio, i, "SamplingRate"), out _audioSampleRate);
                         int.TryParse(_mI.Get(StreamKind.Audio, i, "BitRate"), out _audioBitRate);
                         _audioCodec = _mI.Get(StreamKind.Audio, i, "Codec/String").ToLower();
+                        if (string.IsNullOrEmpty(_audioCodec))
+                        {
+                            _audioCodec = _mI.Get(StreamKind.Audio, i, "CodecID").ToLower();
+                        }
                         _audioFormatProfile = _mI.Get(StreamKind.Audio, i, "Format_Profile").ToLower();
                     }
                 }
@@ -251,7 +259,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
                 _isDIVX = (_videoCodec.IndexOf("dx50") > -1) | (_videoCodec.IndexOf("div3") > -1); // DivX 5 and DivX 3
                 _isXVID = (_videoCodec.IndexOf("xvid") > -1);
                 _isH264 = (_videoCodec.IndexOf("avc") > -1 || _videoCodec.IndexOf("h264") > -1);
-                _isHEVC = (_videoCodec.IndexOf("hevc") > -11);
+                _isHEVC = (_videoCodec.IndexOf("hevc") > -1);
                 _isMP1V = (_videoCodec.IndexOf("mpeg-1v") > -1);
                 _isMP2V = (_videoCodec.IndexOf("mpeg-2v") > -1);
                 _isMP4V = (_videoCodec.IndexOf("fmp4") > -1); // add more
