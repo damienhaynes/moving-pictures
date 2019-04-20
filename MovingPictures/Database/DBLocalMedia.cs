@@ -471,6 +471,18 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         } private bool _hasSubtitles;
 
         [DBFieldAttribute(AllowDynamicFiltering = false)]
+        public bool IsHDR
+        {
+            get { return _isHDR; }
+            set
+            {
+                _isHDR = value;
+                commitNeeded = true;
+            }
+        }
+        private bool _isHDR;
+
+        [DBFieldAttribute(AllowDynamicFiltering = false)]
         public bool Is3D
         {
             get { return _is3D; }
@@ -590,6 +602,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 this.AudioSampleRate = mInfoWrapper.AudioSampleRate;
                 this.AudioCodec = mInfoWrapper.AudioCodec;
                 this.VideoAspectRatio = mInfoWrapper.AspectRatio;
+                this.IsHDR = mInfoWrapper.IsHDR;
                 this.FileSize = mInfoWrapper.FileSize;
 
                 return UpdateMediaInfoResults.Success;

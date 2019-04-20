@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Globalization;
-using System.Threading;
-using BDInfo;
+﻿using BDInfo;
 using Cornerstone.Extensions.IO;
-using MediaPortal.GUI.Library;
 using MediaPortal.Player;
-using System.IO;
 using NLog;
-using System.Text.RegularExpressions;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 #region API
 
@@ -93,6 +90,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
         private bool _isDTSX = false;  // DTSX audio
         private bool _isDTSHD = false;  // DTSHD audio
         private bool _is3D = false;
+        private bool _isHDR = false;
         private int _multiViewCount = 0;
         private int _duration = 0;
         private long _fileSize = 0;
@@ -274,6 +272,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
                 _isDTSHD = (_audioCodec.Contains("dts") && (_audioFormatProfile.Contains("hra") || _audioFormatProfile.Contains("ma")));
                 _isDTSX = (_audioCodec.Contains("dts") && _audioFormatProfile.Contains("x"));
 
+                // will return HDR10 (and/or colour_primaries == BT.2020)
+                _isHDR = _mI.Get(StreamKind.Video, 0, "Format_Commercial_IfAny").Contains("HDR");
+
                 _is3D = (_multiViewCount > 1);
 
                 if (checkHasExternalSubtitles(strFile))
@@ -297,6 +298,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
                 logger.Debug("MediaInfoWrapper: VideoCodec: {0}", _videoCodec);
                 logger.Debug("MediaInfoWrapper: HasSubtitles: {0}", _hasSubtitles);
                 logger.Debug("MediaInfoWrapper: NumSubtitles: {0}", _numSubtitles);
+                logger.Debug("MediaInfoWrapper: IsHDR: {0}", _isHDR);
                 logger.Debug("MediaInfoWrapper: Is3D: {0}", _is3D);
                 logger.Debug("MediaInfoWrapper: MultiViewCount: {0}", _multiViewCount);
                 logger.Debug("MediaInfoWrapper: ScanType: {0}", _scanType);
@@ -627,6 +629,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
             get { return _is3D; }
         }
 
+        public bool IsHDR
+        {
+            get { return _isHDR; }
+        }
         #endregion
 
         #region public audio related properties
