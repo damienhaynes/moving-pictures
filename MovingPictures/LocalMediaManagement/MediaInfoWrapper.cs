@@ -140,7 +140,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
                     {
                         mi.Open(file);
                         int durationPart = 0;
-                        int.TryParse(_mI.Get(StreamKind.Video, 0, "PlayTime"), out durationPart);
+                        int.TryParse(_mI.Get(StreamKind.General, 0, "Duration"), out durationPart);
                         _duration += durationPart;
                     }
                 }
@@ -150,12 +150,12 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
                     if (!result)
                     {
                         //_duration = (int) currentPlaylistFile.TotalLength;
-                        int.TryParse(_mI.Get(StreamKind.Video, 0, "PlayTime"), out _duration);
+                        int.TryParse(_mI.Get(StreamKind.General, 0, "Duration"), out _duration);
                     }
                 }
                 else
                 {
-                    int.TryParse(_mI.Get(StreamKind.Video, 0, "PlayTime"), out _duration);
+                    int.TryParse(_mI.Get(StreamKind.General, 0, "Duration"), out _duration);
                 }
 
                 NumberFormatInfo providerNumber = new NumberFormatInfo();
@@ -319,6 +319,7 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement
                 logger.Debug("MediaInfoWrapper: AspectRatio: {0}", _aspectRatio);
                 logger.Debug("MediaInfoWrapper: AudioCodec: {0}", _audioCodec);
                 logger.Debug("MediaInfoWrapper: AudioFormatProfile: {0}", _audioFormatProfile);
+                logger.Debug("MediaInfoWrapper: Duration: {0}", _duration);
                 logger.Debug("MediaInfoWrapper: FileSize: {0}", _fileSize);
             }
             catch (Exception ex)
