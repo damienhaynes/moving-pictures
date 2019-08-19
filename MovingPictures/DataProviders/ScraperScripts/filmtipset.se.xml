@@ -14,8 +14,8 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="6" point="0"/>
-	<published month="07" day="11" year="2014"/>
+	<version major="1" minor="6" point="1"/>
+	<published month="02" day="20" year="2016"/>
 
 	<!--
 	These fields are used for categorization purposes. Seperate multiple 
@@ -27,15 +27,22 @@
 	</details>
 
 	<action name="search">
+	    <set name="offset" value="0" />
+
 		<!-- Regular Expressions -->
 		<set name="rx_title">
 			<![CDATA[
 			<h1>(.*?)</h1>
 			]]>
 		</set>
+		<set name="rx_title_alt">
+			<![CDATA[
+			<b>Originaltitel:</b></td><td align="left" valign="top"> (.*?)</td>
+			]]>
+		</set>
 		<set name="rx_year_alt">
 			<![CDATA[
-			<b>Originaltitel:</b></td><td class="list" align="left" valign="top"> (.*?)</td>.*?<b>Utgivnings&aring;r:</b></td><td class="list" align="left" valign="top">(.*?)</td>
+			<b>Utgivnings&aring;r:</b></td><td align="left" valign="top">(.*?)</td></tr>
 			]]>
 		</set>
 		<set name="rx_site_id">
@@ -46,33 +53,13 @@
 
 		<set name="rx_search_results_block">
 			<![CDATA[
-			\d+px"><a href="film.*?</div></div></div></div>
+			<div class="grade_h">(.*?)<tr><td colspan="11" height="3" style="height: 3px;">
 			]]>
 		</set>
-		<set name="rx_search_title">
-			<![CDATA[
-			<i>Titel:</i></b> (.*?)</div>
-			]]>
-		</set>
-		<set name="rx_search_orig_title">
-			<![CDATA[
-			<i>Originaltitel:</i></b> (.*?)</div>
-			]]>
-		</set>
-		<set name="rx_search_alt_title_block">
-			<![CDATA[
-			<i>Alternativ titel:</i></b> (.*?)</div>
-			]]>
-		</set>
-		<set name="rx_search_year">
-			<![CDATA[
-			r:</i></b> (\d{4})</div>
-			]]>
-		</set>
-		<set name="rx_search_site_id">
-			<![CDATA[
-			<a href="film/(.*?)\?search
-			]]>
+		<set name="rx_search_results">
+		<![CDATA[
+		18px;"><a href="film/(.*?)\?search.*?<i>Titel:</i></b> (.*?)</div><div class="movie_pop_info"><b><i>Originaltitel:</i></b> (.*?)</div>(<div class="movie_pop_info"><b><i>Alternativ titel:</i></b> (.*?)</div><div class="movie_pop_info"><b><i>Regissör:</i></b> .*?</div><div class="movie_pop_info"><b><i>)?.*?År:</i></b> (\d+)</div>
+		]]>
 		</set>
 		<set name="rx_imdb">
 			<![CDATA[
@@ -87,7 +74,7 @@
 		</if>
 		<set name="search.title" value="${title[0][1]}${title[0][0]}"/>
 
-		<!-- Perform search using IMDb or Title -->
+		<!-- Perform search using IMDb number or Title -->
 		<if test='${search.imdb_id}!='>
 			<retrieve name="search_page" url="http://www.nyheter24.se/filmtipset/imdb/${search.imdb_id}" />
 		</if>
@@ -98,15 +85,16 @@
 		<!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
 		<parse name="details_page_verified" input="${search_page}" regex="${rx_title}"/>
 		<loop name="title" on="details_page_verified">
+			<parse name="title_alt" input="${search_page}" regex="${rx_title_alt}"/>
 			<parse name="year_alt" input="${search_page}" regex="${rx_year_alt}"/>
 			<parse name="site_id" input="${search_page}" regex="${rx_site_id}"/>
 			<parse name="imdb" input="${search_page}" regex='${rx_imdb}'/>
 
 			<set name="movie[0].title" value="${title[0]:htmldecode}"/>
-			<if test="${movie[0].title}!=${year_alt[0][0]}">
-				<set name="movie[0].alternate_titles" value="${year_alt[0][0]:htmldecode}"/>
+			<if test="${movie[0].title}!=${title_alt[0][0]}">
+				<set name="movie[0].alternate_titles" value="${title_alt[0][0]:htmldecode}"/>
 			</if>
-			<set name="movie[0].year" value="${year_alt[0][1]}"/>
+			<set name="movie[0].year" value="${year_alt[0][0]}"/>
 			<set name="movie[0].site_id" value="${site_id[0][0]}"/>
 			<set name="movie[0].details_url" value="http://www.nyheter24.se/filmtipset/film/${site_id[0][0]}"/>
 			<set name="movie[0].popularity" value="100"/>
@@ -114,36 +102,29 @@
 		</loop>
 
 		<!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop. -->
-		<parse name="search_results_verified" input="${search_page}" regex="${rx_search_results_block}"/>
-		<loop name="search_movielist" on="search_results_verified" limit="5">
-			<parse name="search_title" input="${search_movielist}" regex="${rx_search_title}"/>
-			<set name="movie[${count}].title" value="${search_title[0][0]:htmldecode}"/>
+		<parse name="search_results_block" input="${search_page}" regex='${rx_search_results_block}' />
+		<if test="${search_results_block}!=">
 
-			<parse name="search_orig_title" input="${search_movielist}" regex="${rx_search_orig_title}"/>
-			<set name="search_orig_title[0][0]" value="${search_orig_title[0][0]:striptags}"/>
-			<if test="${movie[${count}].title}!=${search_orig_title[0][0]:htmldecode}">
-				<set name="movie[${count}].alternate_titles" value="${search_orig_title[0][0]:htmldecode}"/>
-			</if>
+			<loop name="search_results_verified" on="search_results_block">
+				<parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
+				<loop name='curr_details' on='movie_details'>
+					<add name="counter" value1="${count}" value2="${offset}" />
+					<set name="movie[${counter}].title" value="${curr_details[1]}" />
+					<set name="movie[${counter}].alternate_titles" value="${curr_details[2]:striptags}" />
+					<replace name='movie[${counter}].alternate_titles' input='${movie[${counter}].alternate_titles}|${curr_details[4]:striptags}' pattern=',' with='|' />
+					<set name="movie[${counter}].year" value="${curr_details[5]}" />
+					<set name="movie[${counter}].site_id" value="${curr_details[0]:htmldecode}" />
+					<set name="movie[${counter}].details_url" value="http://www.nyheter24.se/filmtipset/film/${curr_details[0]:htmldecode}"/>
 
-			<parse name="search_year" input="${search_movielist}" regex="${rx_search_year}"/>
-			<set name="movie[${count}].year" value="${search_year[0][0]}"/>
+					<retrieve name="details_page" url="${movie[${counter}].details_url}" />
+					<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
+					<set name='movie[${counter}].imdb_id' value='${imdb[0][0]}'/>
 
-			<parse name="search_site_id" input="${search_movielist}" regex="${rx_search_site_id}"/>
-			<set name="movie[${count}].site_id" value="${search_site_id[0][0]}"/>
-			<set name="movie[${count}].details_url" value="http://www.nyheter24.se/filmtipset/film/${search_site_id[0][0]}"/>
-
-			<parse name="search_alt_title" input="${search_movielist}" regex="${rx_search_alt_title_block}"/>
-			<if test="${search_alt_title[0][0]}!=">
-				<replace name='movie[${count}].alternate_titles' input='${movie[${count}].alternate_titles}|${search_alt_title[0][0]:striptags}' pattern=',' with='|' />
-				<set name="search_alt_title[0][0]" value=""/>
-			</if>
-			
-			<retrieve name="details_page" url="${movie[${count}].details_url}" />
-			<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
-			<set name='movie[${count}].imdb_id' value='${imdb[0][0]}'/>
-
-			<subtract name="movie[${count}].popularity" value1="100" value2="${count}"/>
-		</loop>
+					<subtract name="movie[${counter}].popularity" value1="100" value2="${counter}"/>
+				</loop>
+			</loop>
+		  
+		</if>
 
 	</action>
 
@@ -186,17 +167,17 @@
 			</set>
 			<set name="rx_runtime">
 				<![CDATA[
-				 <b>L&auml;ngd:</b></td><td class="list" align="left" valign="top"> (\d+) min
+				 <b>L&auml;ngd:</b></td><td align="left" valign="top"> (\d+) min
 				]]>
 			</set>
 			<set name="rx_score">
 				<![CDATA[
-				grade_images/grade1(\d)_large.gif
+				grade_images/grade_1(\d)_large.png
 				]]>
 			</set>
 			<set name="rx_plot">
 				<![CDATA[
-				<tr><td colspan="2" valign="top" align="left"><h2>Om.*?</h2>(.*?)</td></tr>
+				<td colspan="2" valign="top" align="left"><h2>Om.*?</h2>(.*?)</td>
 				]]>
 			</set>
 			<set name="rx_imdb">
@@ -206,17 +187,17 @@
 			</set>
 			<set name="rx_tagline">
 				<![CDATA[
-				<h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)|<h4[^>]*>Tagline[s]?:</h4>[\s\f\r]*(?<movieTagline>[^<]+)
+				<h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)|Tagline[s]?:</h4>[\s\f\r]*(?<movieTagline>[^<]+)
+				]]>
+			</set>
+			<set name="rx_imdb_votes">
+				<![CDATA[
+				<span itemprop="ratingValue">(\d.\d)</span>
 				]]>
 			</set>
 			<set name="rx_language">
 				<![CDATA[
 				<a[^<]*?href=./language/[^>]+>(?<movieLanguage>[^<]+)</a>
-				]]>
-			</set>
-			<set name="rx_imdb_votes">
-				<![CDATA[
-				([\d\s]+) IMDb users have given a weighted average vote of (\d,\d)/10
 				]]>
 			</set>
 			<set name="rx_studios_block">
@@ -303,8 +284,8 @@
 			<!-- Score and Popularity -->
 			<if test="${IMDbScore}=true">
 				<parse name="imdb_votes" input="${imdb_page}" regex="${rx_imdb_votes}" />
-				<set name="movie.score" value="${imdb_votes[0][1]:htmldecode}" />
-				<replace name="imdb_votes_clean" input="${imdb_votes[0][0]:htmldecode}" pattern=' ' with='' />
+				<set name="movie.score" value="${imdb_votes[0][0]:htmldecode}" />
+				<replace name="imdb_votes_clean" input="${imdb_votes[0][0]:htmldecode}" pattern=',' with='.' />
 				<set name="movie.popularity" value="${imdb_votes_clean}" />
 			</if>
 
