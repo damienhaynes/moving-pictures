@@ -3,7 +3,7 @@
 	<!-- These details are for display purposes only. -->
 	<name>filmtipset.se</name>
 	<author>vuego</author>
-	<description>This script pulls data from www.nyheter24.se/filmtipset and score + certification + language + tagline + studios + keywords from imdb.com.</description>
+	<description>This script pulls data from www.filmtipset.se and score + certification + language + tagline + studios + keywords + release date from imdb.com.</description>
 
 	<!-- 
 	These fields uniquely identify the script. The ID should never 
@@ -14,8 +14,8 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="6" point="1"/>
-	<published month="02" day="20" year="2016"/>
+	<version major="1" minor="6" point="4"/>
+	<published month="02" day="12" year="2019"/>
 
 	<!--
 	These fields are used for categorization purposes. Seperate multiple 
@@ -76,10 +76,10 @@
 
 		<!-- Perform search using IMDb number or Title -->
 		<if test='${search.imdb_id}!='>
-			<retrieve name="search_page" url="http://www.nyheter24.se/filmtipset/imdb/${search.imdb_id}" />
+			<retrieve name="search_page" url="http://www.filmtipset.se/imdb/${search.imdb_id}" />
 		</if>
 		<if test='${search.imdb_id}='>
-			<retrieve name="search_page" url="http://www.nyheter24.se/filmtipset/search.cgi?search_value=${search.title:safe(ISO-8859-1)}&amp;field=name&amp;field=orgname" />
+			<retrieve name="search_page" url="http://www.filmtipset.se/search.cgi?search_value=${search.title:safe(ISO-8859-1)}&amp;field=name&amp;field=orgname" />
 		</if>
 
 		<!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
@@ -96,7 +96,7 @@
 			</if>
 			<set name="movie[0].year" value="${year_alt[0][0]}"/>
 			<set name="movie[0].site_id" value="${site_id[0][0]}"/>
-			<set name="movie[0].details_url" value="http://www.nyheter24.se/filmtipset/film/${site_id[0][0]}"/>
+			<set name="movie[0].details_url" value="http://www.filmtipset.se/film/${site_id[0][0]}"/>
 			<set name="movie[0].popularity" value="100"/>
 			<set name='movie[0].imdb_id' value='${imdb[0][0]}'/>
 		</loop>
@@ -114,7 +114,7 @@
 					<replace name='movie[${counter}].alternate_titles' input='${movie[${counter}].alternate_titles}|${curr_details[4]:striptags}' pattern=',' with='|' />
 					<set name="movie[${counter}].year" value="${curr_details[5]}" />
 					<set name="movie[${counter}].site_id" value="${curr_details[0]:htmldecode}" />
-					<set name="movie[${counter}].details_url" value="http://www.nyheter24.se/filmtipset/film/${curr_details[0]:htmldecode}"/>
+					<set name="movie[${counter}].details_url" value="http://www.filmtipset.se/film/${curr_details[0]:htmldecode}"/>
 
 					<retrieve name="details_page" url="${movie[${counter}].details_url}" />
 					<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
@@ -138,6 +138,11 @@
 			<set name="rx_directors_block">
 				<![CDATA[
 				<b>Regiss&ouml;r:.*?</tr>
+				]]>
+			</set>
+			<set name="rx_release_date">
+				<![CDATA[
+				<h4 class="inline">Release Date:</h4>\s*(?<releaseDate>\d{1,2}\s*[^\s]+\s*\d{4})
 				]]>
 			</set>
 			<set name="rx_writers_block">
@@ -197,7 +202,7 @@
 			</set>
 			<set name="rx_language">
 				<![CDATA[
-				<a[^<]*?href=./language/[^>]+>(?<movieLanguage>[^<]+)</a>
+				Language:</h4>\s*<a href.*?>(?<movieLanguage>[^<]+)?</a>(?:<nobr>|</div>)
 				]]>
 			</set>
 			<set name="rx_studios_block">
@@ -296,6 +301,16 @@
 			<loop name="currStudio" on="studios" limit="10">
 				<set name="movie.studios" value="${movie.studios}${currStudio[0]:htmldecode}|" />
 			</loop>
+
+			<!-- Release Date -->
+			<parse name="release_date" input="${imdb_page}" regex="${rx_release_date}" />
+			<!-- If IMDb.com does not have a release date, then we will use the release year -->
+			<if test="${release_date[0][0]}=">
+				<if test="${movie.year}!=">
+					<set name="release_date[0][0]" value="1/1/${movie.year}" />
+				</if>
+			</if>
+			<set name="movie.release_date" value="${release_date[0][0]}" />
 
 			<!-- Plot Keywords -->
 			<parse name="plotkeywords" input="${imdb_page}" regex="${rx_plotkeywords}" />
