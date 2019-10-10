@@ -7,6 +7,7 @@ using DirectShowLib;
 using DirectShowLib.Dvd;
 using Cornerstone.Extensions;
 using Cornerstone.Extensions.IO;
+using MediaInfo;
 using NLog;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {

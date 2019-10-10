@@ -6,6 +6,8 @@ using Cornerstone.Extensions.IO;
 using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
+using MediaInfo;
+using MediaPortal.Util;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
 
@@ -593,17 +595,43 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 this.HasSubtitles = mInfoWrapper.HasSubtitles;
                 this.Is3D = mInfoWrapper.Is3D;
                 this.IsInterlaced = mInfoWrapper.IsInterlaced;
-                this.VideoCodec = mInfoWrapper.VideoCodec;
-                this.VideoBitrate = mInfoWrapper.VideoBitrate;
-                this.AudioCodec = mInfoWrapper.AudioCodec;
-                this.VideoResolution = mInfoWrapper.VideoResolution;
-                this.AudioChannels = mInfoWrapper.AudioChannelsFriendly;
-                this.AudioBitRate = mInfoWrapper.AudioBitRate;
-                this.AudioSampleRate = mInfoWrapper.AudioSampleRate;
-                this.AudioCodec = mInfoWrapper.AudioCodec;
+                this.IsHDR = mInfoWrapper.IsHdr;
+                // this.FileSize = mInfoWrapper.FileSize; ??? ajs ???
+                // this.VideoCodec = mInfoWrapper.VideoCodec;
+                // this.VideoBitrate = mInfoWrapper.VideoBitrate;
+                // this.VideoResolution = mInfoWrapper.VideoResolution;
+                // this.AudioChannels = mInfoWrapper.AudioChannelsFriendly;
+                // this.AudioBitRate = mInfoWrapper.AudioBitRate;
+                // this.AudioSampleRate = mInfoWrapper.AudioSampleRate;
+                // this.AudioCodec = mInfoWrapper.AudioCodec;
                 this.VideoAspectRatio = mInfoWrapper.AspectRatio;
-                this.IsHDR = mInfoWrapper.IsHDR;
-                this.FileSize = mInfoWrapper.FileSize;
+                if (mInfoWrapper.BestVideoStream == null || mInfoWrapper.BestVideoStream.Codec == MediaInfo.Model.VideoCodec.Undefined)
+                {
+                  this.VideoCodec = String.Empty;
+                  this.VideoBitrate = 0;
+                  this.VideoResolution = String.Empty;
+        }
+                else
+                {
+                  this.VideoCodec = mInfoWrapper.BestVideoStream.Codec.ToCodecString() ?? String.Empty;
+                  this.VideoBitrate = Convert.ToInt32(mInfoWrapper.BestVideoStream.Bitrate);
+                  this.VideoResolution = mInfoWrapper.BestVideoStream.Resolution;
+
+                }
+                if (mInfoWrapper.BestAudioStream == null || mInfoWrapper.BestAudioStream.Codec == MediaInfo.Model.AudioCodec.Undefined)
+                {
+                  this.AudioCodec = String.Empty;
+                  this.AudioChannels = String.Empty;
+                  this.AudioBitRate = 0;
+                  this.AudioSampleRate = 0;
+                }
+                else
+                {
+                  this.AudioCodec = mInfoWrapper.BestAudioStream.Codec.ToCodecString() ?? String.Empty;
+                  this.AudioChannels = mInfoWrapper.BestAudioStream.AudioChannelsFriendly;
+                  this.AudioBitRate = Convert.ToInt32(mInfoWrapper.BestAudioStream.Bitrate);
+                  this.AudioSampleRate = Convert.ToInt32(mInfoWrapper.BestAudioStream.SamplingRate);
+                }
 
                 return UpdateMediaInfoResults.Success;
             }

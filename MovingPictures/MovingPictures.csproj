@@ -86,6 +86,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External\MediaPortal\DirectShowLib.dll</HintPath>
     </Reference>
+    <Reference Include="MediaInfo.Wrapper">
+      <HintPath>..\External\MediaPortal\MediaInfo.Wrapper.dll</HintPath>
+    </Reference>
     <Reference Include="MediaPortal.Support, Version=1.1.6.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\External\MediaPortal\MediaPortal.Support.dll</HintPath>
@@ -369,9 +372,6 @@
     <Compile Include="LocalMediaManagement\MovieResources\Cover.cs" />
     <Compile Include="LocalMediaManagement\MovieResources\FileBasedResource.cs" />
     <Compile Include="Database\FilterHelperDBMovieInfo.cs" />
-    <Compile Include="LocalMediaManagement\MediaInfoWrapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Database\MovingPicturesDBTable.cs" />
     <Compile Include="DataProviders\InternalProvider.cs" />
     <Compile Include="DataProviders\MovieMeterProvider.cs" />
