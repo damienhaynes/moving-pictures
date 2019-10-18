@@ -188,7 +188,9 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
                 logger.Debug("Format={0}, FeatureFilmFile='{1}'", self, mainFeatureFile);
 
             var miLogger = GlobalServiceProvider.Get<MediaInfo.ILogger>();
-            return new MediaInfoWrapper(mainFeatureFile, miLogger);
+            MediaInfoWrapper miWrapper= new MediaInfoWrapper(mainFeatureFile, miLogger);
+            miWrapper.WriteInfo();
+            return miWrapper;
         }
 
         /// <summary>
