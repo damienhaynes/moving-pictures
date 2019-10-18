@@ -861,8 +861,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
             foreach (DBMovieInfo currMovie in processingMovies) {
                 foreach (DBLocalMedia localMedia in currMovie.LocalMedia) {
-                    count++;
-
                     // if we are processing just one movie and we encounter a disk image ask (only once) if we should mount
                     // all disk images contained in this movie
                     if (processingMovies.Count == 1 && localMedia.IsImageFile && !askMount) {
@@ -875,8 +873,6 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
 
                         if (result == DialogResult.Yes) mount = true;
                     }
-                    
-                    progress("", (int)((count / (processingMovies.Count + 1.0))*100));
                     
                     UpdateMediaInfoResults updateResult = localMedia.UpdateMediaInfo(mount);
 
@@ -908,6 +904,10 @@ namespace MediaPortal.Plugins.MovingPictures.ConfigScreen {
                         }
                     }
                 }
+
+                count++;
+                progress("", count * 100 / processingMovies.Count);
+
             }
         }
 
