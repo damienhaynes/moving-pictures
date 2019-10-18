@@ -7,6 +7,7 @@ using Cornerstone.Database;
 using Cornerstone.Database.CustomTypes;
 using Cornerstone.Database.Tables;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Util;
 using NLog;
 using MediaInfo;
 
@@ -594,13 +595,13 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 this.HasSubtitles = mInfoWrapper.HasSubtitles;
                 this.Is3D = mInfoWrapper.Is3D;
                 this.IsInterlaced = mInfoWrapper.IsInterlaced;
-                this.VideoCodec = mInfoWrapper.VideoCodec;
+                this.VideoCodec = mInfoWrapper.BestVideoStream?.Codec.ToCodecString() ?? String.Empty;
                 this.VideoBitrate = mInfoWrapper.VideoRate;
                 this.VideoResolution = mInfoWrapper.VideoResolution;
                 this.AudioChannels = mInfoWrapper.AudioChannelsFriendly;
                 this.AudioBitRate = mInfoWrapper.AudioRate;
                 this.AudioSampleRate = mInfoWrapper.AudioSampleRate;
-                this.AudioCodec = mInfoWrapper.AudioCodec;
+                this.AudioCodec = mInfoWrapper.BestAudioStream?.Codec.ToCodecString() ?? String.Empty;
                 this.VideoAspectRatio = mInfoWrapper.AspectRatio;
                 this.IsHDR = mInfoWrapper.IsHdr;
                 this.FileSize = mInfoWrapper.Size;
