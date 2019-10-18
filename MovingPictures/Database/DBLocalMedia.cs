@@ -606,6 +606,9 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 this.IsHDR = mInfoWrapper.IsHdr;
                 this.FileSize = mInfoWrapper.Size;
 
+                if (mInfoWrapper.VideoStreams.Count == 0 && mInfoWrapper.AudioStreams.Count == 0)
+                    logger.Error("No video or audio stream found in '{0}'", videoPath);
+
                 return UpdateMediaInfoResults.Success;
             }
             catch (Exception ex) {
