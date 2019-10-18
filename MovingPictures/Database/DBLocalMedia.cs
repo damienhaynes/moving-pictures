@@ -596,7 +596,6 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
                 this.IsInterlaced = mInfoWrapper.IsInterlaced;
                 this.VideoCodec = mInfoWrapper.VideoCodec;
                 this.VideoBitrate = mInfoWrapper.VideoRate;
-                this.AudioCodec = mInfoWrapper.AudioCodec;
                 this.VideoResolution = mInfoWrapper.VideoResolution;
                 this.AudioChannels = mInfoWrapper.AudioChannelsFriendly;
                 this.AudioBitRate = mInfoWrapper.AudioRate;
