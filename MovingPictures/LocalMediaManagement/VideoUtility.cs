@@ -8,6 +8,8 @@ using DirectShowLib.Dvd;
 using Cornerstone.Extensions;
 using Cornerstone.Extensions.IO;
 using NLog;
+using MediaInfo;
+using MediaPortal.Services;
 
 namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
 
@@ -185,7 +187,10 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             if (videoPath != mainFeatureFile)
                 logger.Debug("Format={0}, FeatureFilmFile='{1}'", self, mainFeatureFile);
 
-            return new MediaInfoWrapper(mainFeatureFile);
+            var miLogger = GlobalServiceProvider.Get<MediaInfo.ILogger>();
+            MediaInfoWrapper miWrapper= new MediaInfoWrapper(mainFeatureFile, miLogger);
+            miWrapper.WriteInfo();
+            return miWrapper;
         }
 
         /// <summary>
