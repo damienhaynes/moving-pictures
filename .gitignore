@@ -4,3 +4,30 @@ obj
 /MovingPictures/MovingPictures.csproj.user
 /Setup/*.mpe1
 /Transifex/pull.log
+/.vs/Moving Pictures/v14/.suo
+/.vs/Moving Pictures/v16/.suo
+/.vs/Moving Pictures/v16/Server/sqlite3/db.lock
+/.vs/Moving Pictures/v16/Server/sqlite3/storage.ide
+/.vs/Moving Pictures/v16/Server/sqlite3/storage.ide-shm
+/.vs/Moving Pictures/v16/Server/sqlite3/storage.ide-wal
+/packages/MediaInfo.Native.19.4.0/.signature.p7s
+/packages/MediaInfo.Native.19.4.0/MediaInfo.Native.19.4.0.nupkg
+/packages/MediaInfo.Native.19.4.0/build/History_Curl.txt
+/packages/MediaInfo.Native.19.4.0/build/History_MediaInfo.txt
+/packages/MediaInfo.Native.19.4.0/build/History_OpenSSL.txt
+/packages/MediaInfo.Native.19.4.0/build/MediaInfo.Native.targets
+/packages/MediaInfo.Native.19.4.0/build/Release-Notes_LibSSH2.txt
+/packages/MediaInfo.Native.19.4.0/build/native/x64/MediaInfo.dll
+/packages/MediaInfo.Native.19.4.0/build/native/x64/libcrypto-1_1-x64.dll
+/packages/MediaInfo.Native.19.4.0/build/native/x64/libcurl.dll
+/packages/MediaInfo.Native.19.4.0/build/native/x64/libssl-1_1-x64.dll
+/packages/MediaInfo.Native.19.4.0/build/native/x86/MediaInfo.dll
+/packages/MediaInfo.Native.19.4.0/build/native/x86/libcrypto-1_1.dll
+/packages/MediaInfo.Native.19.4.0/build/native/x86/libcurl.dll
+/packages/MediaInfo.Native.19.4.0/build/native/x86/libssl-1_1.dll
+/packages/MediaInfo.Wrapper.19.4.0/.signature.p7s
+/packages/MediaInfo.Wrapper.19.4.0/MediaInfo.Wrapper.19.4.0.nupkg
+/packages/MediaInfo.Wrapper.19.4.0/lib/net40/MediaInfo.Wrapper.dll
+/packages/MediaInfo.Wrapper.19.4.0/lib/net40/MediaInfo.Wrapper.xml
+/packages/MediaInfo.Wrapper.19.4.0/lib/net45/MediaInfo.Wrapper.dll
+/packages/MediaInfo.Wrapper.19.4.0/lib/net45/MediaInfo.Wrapper.xml
