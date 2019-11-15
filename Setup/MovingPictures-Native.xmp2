@@ -2739,7 +2739,7 @@ public class Script
           <Revision>27644</Revision>
         </MaxVersion>
         <WarnOnly>false</WarnOnly>
-        <Message>This version of MovingPictures requires MediaPortal v1.23 or above.</Message>
+        <Message>requires MediaPortal version 1.1.6.27644 to 1.1.6.27644.</Message>
         <Name>MediaPortal</Name>
       </DependencyItem>
       <DependencyItem>
@@ -2769,8 +2769,8 @@ public class Script
         <CompatibleVersion>
           <Items>
             <CompatibleVersionItem>
-              <MinRequiredVersion>1.6.100.0</MinRequiredVersion>
-              <DesignedForVersion>1.6.100.0</DesignedForVersion>
+              <MinRequiredVersion>1.23.0.0</MinRequiredVersion>
+              <DesignedForVersion>1.23.0.0</DesignedForVersion>
             </CompatibleVersionItem>
           </Items>
         </CompatibleVersion>
@@ -2782,8 +2782,8 @@ public class Script
         <CompatibleVersion>
           <Items>
             <CompatibleVersionItem>
-              <MinRequiredVersion>1.6.100.0</MinRequiredVersion>
-              <DesignedForVersion>1.6.100.0</DesignedForVersion>
+              <MinRequiredVersion>1.23.0.0</MinRequiredVersion>
+              <DesignedForVersion>1.23.0.0</DesignedForVersion>
             </CompatibleVersionItem>
           </Items>
         </CompatibleVersion>
@@ -2807,7 +2807,8 @@ public class Script
       <Revision>0</Revision>
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
-    <VersionDescription>* Improved MediaInfo support and compatibility with MediaInfo 1.23;
+    <VersionDescription>* Improved MediaInfo support and compatibility with MediaInfo 1.23;
+
 
 This version is only compatible with MP 1.23+</VersionDescription>
     <DevelopmentStatus>Beta</DevelopmentStatus>

@@ -34,6 +34,6 @@ using MediaPortal.Common.Utils;
 [assembly: AssemblyVersion("1.8.3.0")]
 
 // mediaportal compatible version
-[assembly: CompatibleVersion("1.6.100.0")]
+[assembly: CompatibleVersion("1.23.0.0")]
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("MovingPicturesUnitTest")]
