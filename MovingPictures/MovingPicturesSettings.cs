@@ -1723,6 +1723,24 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _externalPlayerArguements;
 
+
+        [CornerstoneSetting(
+            Name = "External Player PreMounting",
+            Description = "A boolean which defines, if we should do pre-mount images for the external player or not (available states: 'True' is doing a pre-mount of images for the external player, 'False' no pre-mounting of images will be done)",
+            Groups = "|MediaPortal GUI|Bluray/HD-DVD Playback|",
+            Identifier = "playback_hd_premounting",
+            Default = true)]
+        public bool ExternalPlayerPreMounting
+        {
+            get { return _externalPlayerPreMounting; }
+            set
+            {
+                _externalPlayerPreMounting = value;
+                OnSettingChanged("playback_hd_premounting");
+            }
+        }
+        private bool _externalPlayerPreMounting;
+
         #endregion
 
         #region Sorting
