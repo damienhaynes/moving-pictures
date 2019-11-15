@@ -2512,8 +2512,6 @@ Click Next to continue or Cancel to exit Setup.</Value>
           <Items />
         </Actions>
         <IncludedGroups>
-          <string>DefaultSkin</string>
-          <string>DefaultWideSkin</string>
           <string>TitanSkin</string>
           <string>Languages</string>
         </IncludedGroups>
@@ -2739,7 +2737,7 @@ public class Script
           <Revision>27644</Revision>
         </MaxVersion>
         <WarnOnly>false</WarnOnly>
-        <Message>requires MediaPortal version 1.1.6.27644 to 1.1.6.27644.</Message>
+        <Message>Requires MediaPortal version MP 1.23+</Message>
         <Name>MediaPortal</Name>
       </DependencyItem>
       <DependencyItem>
@@ -2808,7 +2806,6 @@ public class Script
     </Version>
     <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
     <VersionDescription>* Improved MediaInfo support and compatibility with MediaInfo 1.23;
-
 
 This version is only compatible with MP 1.23+</VersionDescription>
     <DevelopmentStatus>Beta</DevelopmentStatus>
@@ -5255,7 +5252,7 @@ This version is only compatible with MP 1.23+</VersionDescription>
         <Param1 />
         <UpdateOption>OverwriteIfOlder</UpdateOption>
         <LocalFileName>..\MovingPictures\Resources\Images\icon_large.png</LocalFileName>
-        <ZipFileName>Installer{CopyFile}\{9fdf9372-7475-405a-942b-896d07c7edc2}-icon_large.png</ZipFileName>
+        <ZipFileName>Installer{CopyFile}\{738c50ae-5d11-4ebd-9701-0a7cd0e0052c}-icon_large.png</ZipFileName>
         <DestinationFilename />
       </FileItem>
     </Items>
