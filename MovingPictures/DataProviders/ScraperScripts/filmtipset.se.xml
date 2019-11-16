@@ -14,8 +14,8 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="6" point="5"/>
-	<published month="09" day="30" year="2019"/>
+	<version major="1" minor="6" point="6"/>
+	<published month="11" day="16" year="2019"/>
 
 	<!--
 	These fields are used for categorization purposes. Seperate multiple 
@@ -42,12 +42,12 @@
 		</set>
 		<set name="rx_imdb">
 			<![CDATA[
-			https://www.imdb.com/title/(tt\d+)"
+			(tt)0*(\d{7})"
 			]]>
 		</set>
 		<set name="rx_alternate_title_block">
 			<![CDATA[
-			Originaltitel<\/td>[\w\W]+<td>.*?<\/td>[\w\W]+Regissör
+			Originaltitel<\/td>[\w\W]+<td>.*?<\/td>[\w\W]+<td class="label">Regissör
 			]]>
 		</set>
 		<set name="rx_alternate_title">
@@ -68,6 +68,9 @@
 		</if>
 		<set name="search.title" value="${title[0][1]}${title[0][0]}"/>
 
+		<!-- Let the user put ; in the filename since : isn't allowed -->
+		<replace name="search.title" input="${search.title}" pattern=";" with=":" />
+
 		<!-- Perform search using Title -->
 		<retrieve name="search_page" url="http://www.filmtipset.se/hitta?q=${search.title}" />
 
@@ -86,7 +89,7 @@
 
 					<retrieve name="details_page" url="${movie[${counter}].details_url}" />
 					<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
-					<set name='movie[${counter}].imdb_id' value='${imdb[0][0]}'/>
+					<set name='movie[${counter}].imdb_id' value='${imdb[0][0]}${imdb[0][1]}'/>
 
 					<parse name="alternate_title_block" input="${details_page}" regex='${rx_alternate_title_block}'/>
 					<parse name='alternate_title' input='${alternate_title_block}' regex='${rx_alternate_title}'/>
@@ -154,7 +157,7 @@
 			</set>
 			<set name="rx_imdb">
 				<![CDATA[
-				https://www.imdb.com/title/(tt\d+)"
+				(tt)0*(\d{7})"
 				]]>
 			</set>
 			<set name="rx_tagline">
@@ -247,7 +250,7 @@
 
 			<!-- IMDb ID -->
 			<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
-			<set name='movie.imdb_id' value='${imdb[0][0]}'/>
+			<set name='movie.imdb_id' value='${imdb[0][0]}${imdb[0][1]}'/>
 
 			<!-- Certification -->
 			<retrieve name="imdb_cert" url="http://www.imdb.com/title/${movie.imdb_id}/parentalguide#certification"/>
