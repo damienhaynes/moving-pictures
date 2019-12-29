@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using Cornerstone.Extensions;
+﻿using Cornerstone.Extensions;
 using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.Database;
-using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using NLog;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 using MediaPortal.Plugins.MovingPictures.DataProviders.FanartTV;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
+using NLog;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace MediaPortal.Plugins.MovingPictures.DataProviders {
+namespace MediaPortal.Plugins.MovingPictures.DataProviders
+{
     class FanartTVProvider : InternalProvider, IMovieProvider {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -190,7 +188,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
                 return null;
 
             // check for imdb id
-            if (movie.ImdbID != null && movie.ImdbID.Trim().Length == 9)
+            if (movie.ImdbID != null && movie.ImdbID.Trim().Length >= 9)
                 return movie.ImdbID.Trim();
 
             // check for tmdb id

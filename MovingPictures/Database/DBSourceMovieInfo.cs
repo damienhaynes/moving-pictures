@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Cornerstone.Database;
 using Cornerstone.Database.Tables;
-using Cornerstone.Database;
 using NLog;
+using System;
+using System.Collections.Generic;
 
-namespace MediaPortal.Plugins.MovingPictures.Database {
+namespace MediaPortal.Plugins.MovingPictures.Database
+{
     [DBTable("source_movie_info")]
     public class DBSourceMovieInfo: MovingPicturesDBTable{
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -82,7 +82,7 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
             rtn.Source = source;
 
             // if this is the IMDb data source, populate the id with the imdb_id field
-            if (rtn.ScriptID == 874902 && !string.IsNullOrEmpty(movie.ImdbID) && movie.ImdbID.Trim().Length == 9)
+            if (rtn.ScriptID == 874902 && !string.IsNullOrEmpty(movie.ImdbID) && movie.ImdbID.Trim().Length >= 9)
                 rtn.Identifier = movie.ImdbID;
 
             movie.SourceMovieInfo.Add(rtn);

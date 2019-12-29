@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using Cornerstone.Tools;
+﻿using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.Database;
-using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using NLog;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
 using MediaPortal.Plugins.MovingPictures.DataProviders.TMDbAPI;
+using MediaPortal.Plugins.MovingPictures.LocalMediaManagement.MovieResources;
+using MediaPortal.Plugins.MovingPictures.SignatureBuilders;
+using NLog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace MediaPortal.Plugins.MovingPictures.DataProviders {
+namespace MediaPortal.Plugins.MovingPictures.DataProviders
+{
     class TheMovieDbProvider: InternalProvider, IMovieProvider {
         private static Logger logger = LogManager.GetCurrentClassLogger();
         
@@ -172,7 +169,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
            if (movieSignature == null)
                return results;
 
-           if (movieSignature.ImdbId != null && movieSignature.ImdbId.Trim().Length == 9) {
+           if (movieSignature.ImdbId != null && movieSignature.ImdbId.Trim().Length >= 9) {
                DBMovieInfo movie = getMovieInformation(movieSignature.ImdbId.Trim());
                if (movie != null) {
                    results.Add(movie);
@@ -355,7 +352,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             }
 
             // if available, lookup based on IMDb ID
-            else if (movie.ImdbID != null && movie.ImdbID.Trim().Length == 9) {
+            else if (movie.ImdbID != null && movie.ImdbID.Trim().Length >= 9) {
                 string imdbId = movie.ImdbID.Trim();
                 var movieInfo = TheMovieDbAPI.GetMovieInfo(imdbId);
                 if (movieInfo != null) {

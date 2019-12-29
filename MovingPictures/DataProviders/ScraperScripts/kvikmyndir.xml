@@ -15,8 +15,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>354001</id>
-    <version major="1" minor="3" point="04"></version>
-    <published month="12" day="30" year="2011"></published>
+    <version major="1" minor="3" point="5"></version>
+    <published month="12" day="30" year="2019"></published>
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -46,13 +46,13 @@
 
     <set name="rx_title_exact_match">
       <![CDATA[
-      <p><b>Popular Titles</b> \(Displaying \d{2} Results\).*?<p><b>Titles \(Exact Matches\)</b>.*?>\d+\.<.*?><a href="/title/(tt\d{7})/".*?>(.+?)</a> \((\d{4})\)
+      <p><b>Popular Titles</b> \(Displaying \d{2} Results\).*?<p><b>Titles \(Exact Matches\)</b>.*?>\d+\.<.*?><a href="/title/(tt\d{7,8})/".*?>(.+?)</a> \((\d{4})\)
       ]]>
     </set>
 
     <set name="rx_search_results">
       <![CDATA[
-      ><a href="/title/(tt\d{7})/"[^>]+>(?!&#34;)([^<]+)</a> \((\d{4})[\/IVX]*\)(?! \(VG\))(?:[^<].*?>(?=aka ")?(.+?)?</td>)?
+      ><a href="/title/(tt\d{7,8})/"[^>]+>(?!&#34;)([^<]+)</a> \((\d{4})[\/IVX]*\)(?! \(VG\))(?:[^<].*?>(?=aka ")?(.+?)?</td>)?
       ]]>
     </set>
 
@@ -76,7 +76,7 @@
         <parse name="title_year" input="${imdb_page}" regex="${rx_title_year}"></parse>
         <set name="movie[0].title" value="${title_year[0][0]:htmldecode}"></set>
         <set name="movie[0].year" value="${title_year[0][1]:htmldecode}"></set>
-        <parse name="imdb" input="${imdb_page}" regex="(tt\d{7})/fullcredits"></parse>
+        <parse name="imdb" input="${imdb_page}" regex="(tt\d{7,8})/fullcredits"></parse>
         <set name="movie[0].imdb_id" value="${imdb[0][0]}"></set>
         <set name="movie[0].site_id" value="${imdb[0][0]}"></set>
         <set name="movie[0].popularity" value="100"></set>
@@ -99,7 +99,7 @@
       <parse name="title_year" input="${details_page_verified}" regex="${rx_title_year}"></parse>
       <set name="movie[${counter}].title" value="${title_year[0][0]:htmldecode}"></set>
       <set name="movie[${counter}].year" value="${title_year[0][1]:htmldecode}"></set>
-      <parse name="imdb" input="${details_page_verified}" regex="(tt\d{7})/fullcredits"></parse>
+      <parse name="imdb" input="${details_page_verified}" regex="(tt\d{7,8})/fullcredits"></parse>
       <set name="movie[${counter}].imdb_id" value="${imdb[0][0]}"></set>
       <set name="movie[${counter}].site_id" value="${imdb[0][0]}"></set>
 
@@ -236,7 +236,7 @@
 
       <!-- Directors -->
       <parse name="directors_block" input="${details_page}" regex='&lt;h5&gt;Director[s]?:&lt;/h5&gt;.*?&lt;/div&gt;'></parse>
-      <parse name="directors" input="${directors_block}" regex='&lt;a href="/name/nm\d{7}/"[^&gt;]*&gt;([^&lt;]+)&lt;/a&gt;'></parse>
+      <parse name="directors" input="${directors_block}" regex='&lt;a href="/name/nm\d{7,8}/"[^&gt;]*&gt;([^&lt;]+)&lt;/a&gt;'></parse>
       <set name='movie.directors' value=''></set>
       <loop name="currDirector" on='directors'>
         <set name="movie.directors" value="${movie.directors}|${currDirector[0]:htmldecode}"></set>
@@ -252,7 +252,7 @@
 
       <!-- Actors -->
       <parse name="actors_block" input="${details_page}" regex='&lt;div class="headerinline"&gt;&lt;h3&gt;Cast&lt;/h3&gt;.+?&lt;h3&gt;Additional Details&lt;/h3&gt;'></parse>
-      <parse name='actors' input='${actors_block}' regex='&lt;td class="nm"&gt;&lt;a href="/name/nm\d{7}/"[^&gt;]*&gt;(.+?)&lt;/a&gt;'></parse>
+      <parse name='actors' input='${actors_block}' regex='&lt;td class="nm"&gt;&lt;a href="/name/nm\d{7,8}/"[^&gt;]*&gt;(.+?)&lt;/a&gt;'></parse>
       <set name='movie.actors' value=''></set>
       <loop name='currActor' on='actors'>
         <set name='movie.actors' value='${movie.actors}|${currActor[0]:htmldecode}'></set> 

@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874904</id>
-    <version major="1" minor="0" point="2"/>
-    <published month="11" day="22" year="2008"/>
+    <version major="1" minor="0" point="3"/>
+    <published month="12" day="30" year="2019"/>
 
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -27,7 +27,7 @@
   <action name="get_cover_art">
     <set name="rx_coverurl">
       <![CDATA[
-      IMG SRC="(/covers/(tt\d{7})_largeCover.jpg)"
+      IMG SRC="(/covers/(tt\d{7,8})_largeCover.jpg)"
       ]]>
     </set>
     <set name="index" value="0" />

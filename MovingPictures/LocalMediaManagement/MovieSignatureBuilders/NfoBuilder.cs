@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
+﻿using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
+using System;
+using System.IO;
+using System.Text.RegularExpressions;
 
-namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
-    
+namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders
+{
+
     /// <summary>
     /// The NFO Signature Builder scans for text-based files containing the imdbid format
     /// and updates the signature with the first occurance of an imdbid.
@@ -103,7 +103,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             // Read the nfo file content into a string
             string s = File.ReadAllText(filePath);
             // Check for the existance of a imdb id 
-            Match match = Regex.Match(s, @"tt\d{7}", RegexOptions.IgnoreCase);
+            Match match = Regex.Match(s, @"tt\d{7,8}", RegexOptions.IgnoreCase);
 
             // If success return the id, on failure return empty. 
             if (match.Success) {
@@ -111,7 +111,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
                 logger.Debug("ImdbID Found: {0}", s);
             }
             else {
-                match = Regex.Match(s, @"title\?\d{7}", RegexOptions.IgnoreCase);
+                match = Regex.Match(s, @"title\?\d{7,8}", RegexOptions.IgnoreCase);
                 if (match.Success) {
                     s = "tt" + match.Value.Substring(6, 7);
                     logger.Debug("ImdbID Found: {0}", s);

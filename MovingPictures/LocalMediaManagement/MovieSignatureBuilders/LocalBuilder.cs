@@ -1,14 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Cornerstone.Extensions;
-using MediaPortal.Plugins.MovingPictures.Extensions;
+﻿using Cornerstone.Extensions;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
 using NLog;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
 
-namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
-    
+namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders
+{
+
     /// <summary>
     /// The Local Builder fills the signature properties by using the filesystem names
     /// </summary>
@@ -22,7 +21,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             replacements = new Dictionary<string, string>();
             replacements.Add(@"(?<!\b\p{L})\.", " ");  // Replace dots that are not part of acronyms with spaces
             replacements.Add(@"_", " ");  // Replace underscores with spaces
-            replacements.Add(@"tt\d{7}", ""); // Removes imdb numbers
+            replacements.Add(@"tt\d{7,8}", ""); // Removes imdb numbers
         }
 
         // Filters "noise" from the input string
@@ -86,7 +85,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
             }
 
             // Detect IMDb ID in the source string, and put it in the signature on success
-            Match match = Regex.Match(source, @"tt\d{7}", RegexOptions.IgnoreCase);
+            Match match = Regex.Match(source, @"tt\d{7,8}", RegexOptions.IgnoreCase);
             if (match.Success) signature.ImdbId = match.Value;
 
             // Execute configured string replacements
