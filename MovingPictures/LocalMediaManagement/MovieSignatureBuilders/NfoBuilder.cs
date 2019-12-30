@@ -93,33 +93,26 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders
         }
 
         /// <summary>
-        /// Extract an ImdbID out of a textfile
+        /// Extract an IMDb ID out of a textfile
         /// </summary>
         /// <param name="filePath">full path to the file</param>
-        /// <returns>ImdbID</returns>
+        /// <returns>IMDb ID</returns>
         public static string parseFile(string filePath) {
             logger.Info("Parsing NFO file: {0}", filePath);
 
             // Read the nfo file content into a string
             string s = File.ReadAllText(filePath);
-            // Check for the existance of a imdb id 
+            // Check for the existance of a IMDb ID 
             Match match = Regex.Match(s, @"tt\d{7,8}", RegexOptions.IgnoreCase);
 
-            // If success return the id, on failure return empty. 
+            // If success return the ID, on failure return empty. 
             if (match.Success) {
                 s = match.Value;
-                logger.Debug("ImdbID Found: {0}", s);
+                logger.Debug("IMDb ID Found: {0}", s);
             }
             else {
-                match = Regex.Match(s, @"title\?\d{7,8}", RegexOptions.IgnoreCase);
-                if (match.Success) {
-                    s = "tt" + match.Value.Substring(6, 7);
-                    logger.Debug("ImdbID Found: {0}", s);
-                }
-                else {
-                    s = null;
-                    logger.Debug("No ImdbID Found.");
-                }
+                s = null;
+                logger.Debug("No IMDb ID Found.");
             }
 
             // return the string
