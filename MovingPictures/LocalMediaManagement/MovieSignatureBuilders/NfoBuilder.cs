@@ -103,7 +103,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders
             // Read the nfo file content into a string
             string s = File.ReadAllText(filePath);
             // Check for the existance of a IMDb ID 
-            Match match = Regex.Match(s, @"tt\d{7,8}", RegexOptions.IgnoreCase);
+            Match match = Regex.Match(s, @"tt\d+", RegexOptions.IgnoreCase);
 
             // If success return the ID, on failure return empty. 
             if (match.Success) {
