@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -17,6 +18,7 @@ namespace Cornerstone.Tools {
         private static int unsafeHeaderUserCount;
         private static object lockingObj;
         private string requestUrl;
+        private string maskedRequestUrl;
 
         #endregion
 
@@ -166,14 +168,14 @@ namespace Cornerstone.Tools {
                                 // all other status codes mostly indicate problems that won't be
                                 // solved within the retry period so fail these immediatly
                                 default:
-                                    logger.Error("Connection failed: URL={0}, Status={1}, Description={2}.", requestUrl, statusCode, ((HttpWebResponse)e.Response).StatusDescription);
+                                    logger.Error("Connection failed: URL={0}, Status={1}, Description={2}.", maskedRequestUrl, statusCode, ((HttpWebResponse)e.Response).StatusDescription);
                                     return false;
                             }
                         }
 
                         // Return when hitting maximum retries.
                         if (tryCount == maxRetries) {
-                            logger.Warn("Connection failed: Reached retry limit of " + maxRetries + ". URL=" + requestUrl);
+                            logger.Warn("Connection failed: Reached retry limit of " + maxRetries + ". URL=" + maskedRequestUrl );
                             return false;
                         }
 
@@ -205,7 +207,7 @@ namespace Cornerstone.Tools {
                 cookieHeader = request.CookieContainer.GetCookieHeader(request.RequestUri);
 
                 // Debug
-                if (_debug) logger.Debug("GetResponse: URL={0}, UserAgent={1}, CookieHeader={2}, Accept={3}", requestUrl, userAgent, cookieHeader, _accept);
+                if (_debug) logger.Debug("GetResponse: URL={0}, UserAgent={1}, CookieHeader={2}, Accept={3}", maskedRequestUrl, userAgent, cookieHeader, _accept);
 
                 // disable unsafe header parsing if it was enabled
                 if (_allowUnsafeHeader) SetAllowUnsafeHeaderParsing(false);
@@ -213,7 +215,7 @@ namespace Cornerstone.Tools {
                 return true;
             }
             catch (Exception e) {
-                logger.Warn("Unexpected error getting http response from '{0}': {1}", requestUrl, e.Message);
+                logger.Warn("Unexpected error getting http response from '{0}': {1}", maskedRequestUrl, e.Message);
                 return false;
             }
         }
@@ -281,7 +283,7 @@ namespace Cornerstone.Tools {
                 xml.LoadXml(data);
             }
             catch (XmlException e) {
-                logger.ErrorException("XML Parse error: URL=" + requestUrl, e);
+                logger.ErrorException("XML Parse error: URL=" + maskedRequestUrl, e);
                 return null;
             }
             
@@ -300,6 +302,13 @@ namespace Cornerstone.Tools {
 
         }
 
+        public void SetMaskedKeysForLogger(List<string> aKeys) {
+            maskedRequestUrl = requestUrl;
+            foreach (string key in aKeys) {                
+                maskedRequestUrl = maskedRequestUrl.Replace( key, "<apikey>" );                
+            }
+        }
+        
         #endregion
 
         #region Private methods

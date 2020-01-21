@@ -198,6 +198,17 @@ namespace MediaPortal.Plugins.MovingPictures.LocalMediaManagement {
             grabber.MaxRetries = MovingPicturesCore.Settings.MaxTimeouts;
             grabber.Timeout = MovingPicturesCore.Settings.TimeoutLength;
             grabber.TimeoutIncrement = MovingPicturesCore.Settings.TimeoutIncrement;
+
+            // hide sensitive data
+            List<string> lMaskedKeys = new List<string>();
+            lMaskedKeys.Add( "4f26c36ab3d97e3a4a0c1e081710e3a6" ); // fanart.tv api key
+            lMaskedKeys.Add( "cc25933c4094ca50635f94574491f320" ); // themoviedb.org api key
+            
+            if (!string.IsNullOrWhiteSpace( MovingPicturesCore.Settings.FanartTVClientKey )) {
+                lMaskedKeys.Add( MovingPicturesCore.Settings.FanartTVClientKey ); // fanart.tv user key
+            }
+            grabber.SetMaskedKeysForLogger( lMaskedKeys );
+
             return grabber;
         }
 
