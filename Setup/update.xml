@@ -1047,14 +1047,14 @@ This version is only compatible with MP 1.23+</VersionDescription>
           <Major>1</Major>
           <Minor>8</Minor>
           <Build>4</Build>
-          <Revision>0</Revision>
+          <Revision>1</Revision>
         </Version>
         <ExtensionDescription>Moving Pictures is a movie management plug-in that focuses on ease of use and flexibility. Point it to your movies collection and Moving Pictures will automatically load media rich details about your movies as quickly as possible with as little user interaction as possible. Once imported you can browse your collection via an easy to use but highly customizable interface.</ExtensionDescription>
         <VersionDescription>* Support for IMDb ID's with more than 7 digits;
 * Mask API keys in log messages;</VersionDescription>
         <DevelopmentStatus>Stable</DevelopmentStatus>
-        <OnlineLocation>https://github.com/damienhaynes/moving-pictures/releases/download/1.8.4/moving-pictures-1.8.4.0.mpe1</OnlineLocation>
-        <ReleaseDate>2020-01-25T19:04:46</ReleaseDate>
+        <OnlineLocation>https://github.com/damienhaynes/moving-pictures/releases/download/1.8.4/moving-pictures-1.8.4.1.mpe1</OnlineLocation>
+        <ReleaseDate>2020-01-26T19:04:46</ReleaseDate>
         <Tags>movie,movies,video,moving,pictures,movingpictures,film,films</Tags>
         <Location>moving-pictures-[Version].mpe1</Location>
         <Params>
@@ -1090,7 +1090,7 @@ This version is only compatible with MP 1.23+</VersionDescription>
       <ProjectSettings>
         <FolderGroups />
       </ProjectSettings>
-      <IsSkin>true</IsSkin>
+      <IsSkin>false</IsSkin>
     </PackageClass>
   </Items>
 </ExtensionCollection>
