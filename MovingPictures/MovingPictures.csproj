@@ -344,6 +344,8 @@
     <Compile Include="DataProviders\FanartTV.cs" />
     <Compile Include="DataProviders\FanartTVProvider.cs" />
     <Compile Include="DataProviders\TheMovieDbAPI.cs" />
+    <Compile Include="DataProviders\TraktTVAPI.cs" />
+    <Compile Include="DataProviders\TraktTVProvider.cs" />
     <Compile Include="Extensions\MovieTitleStringExtensions.cs" />
     <Compile Include="LocalMediaManagement\BDInfo.cs" />
     <Compile Include="LocalMediaManagement\BDInfoSettings.cs" />
