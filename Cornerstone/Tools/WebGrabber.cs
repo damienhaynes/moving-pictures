@@ -238,7 +238,7 @@ namespace Cornerstone.Tools {
             }
 
             // Debug
-            if (_debug) logger.Debug("GetString: Encoding={2}", encoding.EncodingName);
+            if (_debug) logger.Debug("GetString: Encoding={0}", encoding.EncodingName);
 
             // Converts the stream to a string
             try {

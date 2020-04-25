@@ -336,6 +336,7 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders {
             AddSource(typeof(LocalProvider));
             AddSource(typeof(ScriptableProvider), Resources.Script_IMDb);
             AddSource(typeof(TheMovieDbProvider));
+            AddSource(typeof(TraktTVProvider));
             AddSource(typeof(FanartTVProvider));
             AddSource(typeof(MovieMeterProvider));
             AddSource(typeof(ScriptableProvider), Resources.Script_OFDb);
