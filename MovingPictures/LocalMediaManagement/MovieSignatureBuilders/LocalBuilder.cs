@@ -20,6 +20,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders
             // todo: design logic to reload these strings when there's a configurable setting for the user
             replacements = new Dictionary<string, string>();
             replacements.Add(@"(?<!\b\p{L})\.", " ");  // Replace dots that are not part of acronyms with spaces
+            replacements.Add(@"(?<=\b\p{L})\.(?!\s)", ". "); // Add space after acronyms lacking one
             replacements.Add(@"_", " ");  // Replace underscores with spaces
             replacements.Add(@"tt\d+", ""); // Removes imdb numbers
         }

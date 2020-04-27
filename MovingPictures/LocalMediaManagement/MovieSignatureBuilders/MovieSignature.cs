@@ -256,7 +256,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region Overrides
 
         public override string ToString() {
-            return String.Format("Path= \"{0}\", Folder= \"{1}\", File= \"{2}\", Keywords= \"{3}\", Title= \"{4}\", Year= {5}, DiscId= \"{6}\", MovieHash= \"{7}\", ImdbId= \"{8}\"",
+            return String.Format("Path=\"{0}\", Folder=\"{1}\", File=\"{2}\", Keywords=\"{3}\", Title=\"{4}\", Year={5}, DiscID=\"{6}\", MovieHash=\"{7}\", IMDbID=\"{8}\"",
             this.Path, this.Folder, this.File, this.Keywords, this.Title, this.Year.ToString(), this.DiscId, this.MovieHash, this.ImdbId);
         }
 
@@ -323,7 +323,7 @@ namespace MediaPortal.Plugins.MovingPictures.SignatureBuilders {
         #region Overrides
 
         public override string ToString() {
-            return String.Format("TitleScore={0}, YearScore={1}, ImdbMatch={2}, AlternateTitleUsed={3}, AlternateTitle='{4}', AutoApprove={5}",
+            return String.Format("TitleScore={0}, YearScore={1}, IMDbMatch={2}, AlternateTitleUsed={3}, AlternateTitle='{4}', AutoApprove={5}",
             TitleScore, YearScore, ImdbMatch, AlternateTitleUsed().ToString(), AlternateTitle, AutoApprove().ToString());
         }
 

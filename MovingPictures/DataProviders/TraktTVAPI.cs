@@ -1,7 +1,6 @@
 ﻿using Cornerstone.Extensions;
 using Cornerstone.Tools;
 using MediaPortal.Plugins.MovingPictures.LocalMediaManagement;
-using NLog;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
@@ -11,8 +10,6 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders.TraktTVAPI
 {
     public static class TraktAPI
     {
-        private static readonly Logger mLogger = LogManager.GetCurrentClassLogger();
-
         #region API variables
 
         private const string mClientId = "7fa4a2d61daadccbf6e7c85cf22635c86fb9392b4cf0b6a38d2cd9bf781bd7b9";
