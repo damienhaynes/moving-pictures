@@ -14,8 +14,8 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="6" point="8"/>
-	<published month="01" day="16" year="2020"/>
+	<version major="1" minor="6" point="9"/>
+	<published month="04" day="16" year="2020"/>
 
 	<!--
 	These fields are used for categorization purposes. Seperate multiple 
@@ -32,7 +32,7 @@
 		<!-- Regular Expressions -->
 		<set name="rx_search_results_block">
 			<![CDATA[
-			</th></tr><tr><td><a href=".*?"><strong>(.*?)</div><br/><h3>Skådespelare/person</h3>
+			</th></tr><tr><td><a href=".*?"><strong>(.*?)</div><br/><h3>Sk.despelare/person</h3>
 			]]>
 		</set>
 		<set name="rx_search_results">
@@ -42,7 +42,7 @@
 		</set>
 		<set name="rx_imdb">
 			<![CDATA[
-			(tt)0*(\d+)"
+			tt\d*(\d{7})"
 			]]>
 		</set>
 		<set name="rx_alternate_title_block">
@@ -60,6 +60,11 @@
 			Betygsantal<\/td>[\w\W]+<td>(\d+)<\/td>
 			]]>
 		</set>
+		<set name="rx_nextpage">
+			<![CDATA[
+			style="float:right;">N.sta sida &raquo;</a>
+			]]>
+		</set>
 		
 		<!-- Rearrange title articles -->
 		<parse name="title" input="${search.title}" regex="(.+?)(?:, (The|A))?$"/>
@@ -74,13 +79,33 @@
 		<!-- Perform search using Title -->
 		<retrieve name="search_page" url="http://www.filmtipset.se/hitta?q=${search.title}" />
 
+		<parse name="search_next_page" input="${search_page}" regex='${rx_nextpage}' />
+		<if test="${rx_nextpage}!=">
+			<retrieve name="search_page2" url="http://www.filmtipset.se/hitta?q=${search.title}&amp;p=1" />
+
+			<parse name="search_next_page" input="${search_page2}" regex='${rx_nextpage}' />
+			<if test="${rx_nextpage}!=">
+				<retrieve name="search_page3" url="http://www.filmtipset.se/hitta?q=${search.title}&amp;p=2" />
+
+				<parse name="search_next_page" input="${search_page3}" regex='${rx_nextpage}' />
+				<if test="${rx_nextpage}!=">
+					<retrieve name="search_page4" url="http://www.filmtipset.se/hitta?q=${search.title}&amp;p=3" />
+
+					<parse name="search_next_page" input="${search_page4}" regex='${rx_nextpage}' />
+					<if test="${rx_nextpage}!=">
+						<retrieve name="search_page5" url="http://www.filmtipset.se/hitta?q=${search.title}&amp;p=4" />
+					</if>
+				</if>
+			</if>
+		</if>
+
 		<!-- if we got a search result page, this is used. if not, regex does not match so we dont process the outer loop. -->
 		<parse name="search_results_block" input="${search_page}" regex='${rx_search_results_block}' />
 		<if test="${search_results_block}!=">
 
 			<loop name="search_results_verified" on="search_results_block">
 				<parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
-				<loop name='curr_details' on='movie_details'>
+				<loop name='curr_details' on='movie_details' limit="25">
 					<add name="counter" value1="${count}" value2="${offset}" />
 					<set name="movie[${counter}].title" value="${curr_details[1]}" />
 					<set name="movie[${counter}].year" value="${curr_details[2]}" />
@@ -89,7 +114,7 @@
 
 					<retrieve name="details_page" url="${movie[${counter}].details_url}" />
 					<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
-					<set name='movie[${counter}].imdb_id' value='${imdb[0][0]}${imdb[0][1]}'/>
+					<set name='movie[${counter}].imdb_id' value='tt${imdb[0][0]}'/>
 
 					<parse name="alternate_title_block" input="${details_page}" regex='${rx_alternate_title_block}'/>
 					<parse name='alternate_title' input='${alternate_title_block}' regex='${rx_alternate_title}'/>
@@ -105,6 +130,129 @@
 		  
 		</if>
 
+		<parse name="search_results_block" input="${search_page2}" regex='${rx_search_results_block}' />
+		<if test="${search_results_block}!=">
+
+			<loop name="search_results_verified" on="search_results_block">
+				<parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
+				<set name="offset" value="25"/>
+				<loop name='curr_details' on='movie_details' limit="25">
+					<add name="counter" value1="${count}" value2="${offset}" />
+					<set name="movie[${counter}].title" value="${curr_details[1]}" />
+					<set name="movie[${counter}].year" value="${curr_details[2]}" />
+					<set name="movie[${counter}].site_id" value="${curr_details[0]:htmldecode}" />
+					<set name="movie[${counter}].details_url" value="http://www.filmtipset.se/film/${curr_details[0]:htmldecode}"/>
+
+					<retrieve name="details_page" url="${movie[${counter}].details_url}" />
+					<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
+					<set name='movie[${counter}].imdb_id' value='tt${imdb[0][0]}'/>
+
+					<parse name="alternate_title_block" input="${details_page}" regex='${rx_alternate_title_block}'/>
+					<parse name='alternate_title' input='${alternate_title_block}' regex='${rx_alternate_title}'/>
+					<set name='movie[${counter}].alternate_titles' value=''/>
+					<loop name="currAlternate_title" on="alternate_title">
+						<set name='movie[${counter}].alternate_titles' value='${movie[${counter}].alternate_titles}|${currAlternate_title[0]}'/>
+					</loop>
+
+					<parse name="popularity" input="${details_page}" regex='${rx_popularity}'/>
+					<set name='movie[${counter}].popularity' value='${popularity[0][0]}'/>
+				</loop>
+			</loop>
+		  
+		</if>
+
+		<parse name="search_results_block" input="${search_page3}" regex='${rx_search_results_block}' />
+		<if test="${search_results_block}!=">
+
+			<loop name="search_results_verified" on="search_results_block">
+				<parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
+				<set name="offset" value="50"/>
+				<loop name='curr_details' on='movie_details' limit="25">
+					<add name="counter" value1="${count}" value2="${offset}" />
+					<set name="movie[${counter}].title" value="${curr_details[1]}" />
+					<set name="movie[${counter}].year" value="${curr_details[2]}" />
+					<set name="movie[${counter}].site_id" value="${curr_details[0]:htmldecode}" />
+					<set name="movie[${counter}].details_url" value="http://www.filmtipset.se/film/${curr_details[0]:htmldecode}"/>
+
+					<retrieve name="details_page" url="${movie[${counter}].details_url}" />
+					<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
+					<set name='movie[${counter}].imdb_id' value='tt${imdb[0][0]}'/>
+
+					<parse name="alternate_title_block" input="${details_page}" regex='${rx_alternate_title_block}'/>
+					<parse name='alternate_title' input='${alternate_title_block}' regex='${rx_alternate_title}'/>
+					<set name='movie[${counter}].alternate_titles' value=''/>
+					<loop name="currAlternate_title" on="alternate_title">
+						<set name='movie[${counter}].alternate_titles' value='${movie[${counter}].alternate_titles}|${currAlternate_title[0]}'/>
+					</loop>
+
+					<parse name="popularity" input="${details_page}" regex='${rx_popularity}'/>
+					<set name='movie[${counter}].popularity' value='${popularity[0][0]}'/>
+				</loop>
+			</loop>
+		  
+		</if>
+
+		<parse name="search_results_block" input="${search_page4}" regex='${rx_search_results_block}' />
+		<if test="${search_results_block}!=">
+
+			<loop name="search_results_verified" on="search_results_block">
+				<parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
+				<set name="offset" value="50"/>
+				<loop name='curr_details' on='movie_details' limit="25">
+					<add name="counter" value1="${count}" value2="${offset}" />
+					<set name="movie[${counter}].title" value="${curr_details[1]}" />
+					<set name="movie[${counter}].year" value="${curr_details[2]}" />
+					<set name="movie[${counter}].site_id" value="${curr_details[0]:htmldecode}" />
+					<set name="movie[${counter}].details_url" value="http://www.filmtipset.se/film/${curr_details[0]:htmldecode}"/>
+
+					<retrieve name="details_page" url="${movie[${counter}].details_url}" />
+					<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
+					<set name='movie[${counter}].imdb_id' value='tt${imdb[0][0]}'/>
+
+					<parse name="alternate_title_block" input="${details_page}" regex='${rx_alternate_title_block}'/>
+					<parse name='alternate_title' input='${alternate_title_block}' regex='${rx_alternate_title}'/>
+					<set name='movie[${counter}].alternate_titles' value=''/>
+					<loop name="currAlternate_title" on="alternate_title">
+						<set name='movie[${counter}].alternate_titles' value='${movie[${counter}].alternate_titles}|${currAlternate_title[0]}'/>
+					</loop>
+
+					<parse name="popularity" input="${details_page}" regex='${rx_popularity}'/>
+					<set name='movie[${counter}].popularity' value='${popularity[0][0]}'/>
+				</loop>
+			</loop>
+		  
+		</if>
+
+		<parse name="search_results_block" input="${search_page5}" regex='${rx_search_results_block}' />
+		<if test="${search_results_block}!=">
+
+			<loop name="search_results_verified" on="search_results_block">
+				<parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
+				<set name="offset" value="50"/>
+				<loop name='curr_details' on='movie_details' limit="25">
+					<add name="counter" value1="${count}" value2="${offset}" />
+					<set name="movie[${counter}].title" value="${curr_details[1]}" />
+					<set name="movie[${counter}].year" value="${curr_details[2]}" />
+					<set name="movie[${counter}].site_id" value="${curr_details[0]:htmldecode}" />
+					<set name="movie[${counter}].details_url" value="http://www.filmtipset.se/film/${curr_details[0]:htmldecode}"/>
+
+					<retrieve name="details_page" url="${movie[${counter}].details_url}" />
+					<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
+					<set name='movie[${counter}].imdb_id' value='tt${imdb[0][0]}'/>
+
+					<parse name="alternate_title_block" input="${details_page}" regex='${rx_alternate_title_block}'/>
+					<parse name='alternate_title' input='${alternate_title_block}' regex='${rx_alternate_title}'/>
+					<set name='movie[${counter}].alternate_titles' value=''/>
+					<loop name="currAlternate_title" on="alternate_title">
+						<set name='movie[${counter}].alternate_titles' value='${movie[${counter}].alternate_titles}|${currAlternate_title[0]}'/>
+					</loop>
+
+					<parse name="popularity" input="${details_page}" regex='${rx_popularity}'/>
+					<set name='movie[${counter}].popularity' value='${popularity[0][0]}'/>
+				</loop>
+			</loop>
+		  
+		</if>
 	</action>
 
 	<action name="get_details">
@@ -157,7 +305,7 @@
 			</set>
 			<set name="rx_imdb">
 				<![CDATA[
-				(tt)0*(\d+)"
+				tt\d*(\d{7})"
 				]]>
 			</set>
 			<set name="rx_tagline">
@@ -250,7 +398,7 @@
 
 			<!-- IMDb ID -->
 			<parse name="imdb" input="${details_page}" regex='${rx_imdb}'/>
-			<set name='movie.imdb_id' value='${imdb[0][0]}${imdb[0][1]}'/>
+			<set name='movie.imdb_id' value='tt${imdb[0][0]}'/>
 
 			<!-- Certification -->
 			<retrieve name="imdb_cert" url="http://www.imdb.com/title/${movie.imdb_id}/parentalguide#certification"/>
