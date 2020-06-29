@@ -14,8 +14,8 @@
     is for minor bug fix releases. Use it.
     -->
     <id>874902</id>
-    <version major="3" minor="0" point="4" />
-    <published month="01" day="16" year="2020" />
+    <version major="3" minor="0" point="5" />
+    <published month="06" day="28" year="2020" />
     
     <!--
     These fields are used for categorization purposes. Seperate multiple 
@@ -63,7 +63,7 @@
 
     <!-- Retrieve result using IMDb id (if provided) -->
     <if test='${search.imdb_id}!='>
-      <retrieve name="imdb_page" url="http://akas.imdb.com/find?s=all&amp;q=${search.imdb_id}" />
+      <retrieve name="imdb_page" url="https://www.imdb.com/find?s=all&amp;q=${search.imdb_id}" encoding="UTF-8" />
       <parse name="details_page_block" input="${imdb_page}" regex="${rx_details_page_block}" />
       <loop name="imdb_page" on="details_page_block">
         <parse name="title_year" input="${imdb_page}" regex="${rx_title_year}" />
@@ -83,7 +83,7 @@
     <if test='${search.year}>1800'>
       <set name="query_year" value="+(${search.year})" />
     </if>
-    <retrieve name="search_page" url="http://akas.imdb.com/find?s=all&amp;q=${search.title:safe(ISO-8859-1)}" />
+    <retrieve name="search_page" url="https://www.imdb.com/find?s=all&amp;q=${search.title:safe(ISO-8859-1)}" encoding="UTF-8" />
  
     <!-- if we got a details page, this is used. if not, regex does not match so we dont process the loop-->
     <parse name="details_page_block" input="${search_page}" regex="${rx_details_page_block}" />
@@ -97,7 +97,7 @@
       <set name="movie[${counter}].site_id" value="${imdb[0][0]}" />
 
       <!-- AKA page -->
-      <retrieve name="aka_page" url="http://www.imdb.com/title/${imdb[0][0]}/releaseinfo" />
+      <retrieve name="aka_page" url="https://www.imdb.com/title/${imdb[0][0]}/releaseinfo" encoding="UTF-8" />
       <parse name="akas" input="${aka_page}" regex="${rx_aka_details}" />
       <set name="movie[${counter}].alternate_titles" value="" />
       <loop name="currAka" on="akas" limit="50">
@@ -141,9 +141,9 @@
     <!-- if we have a site id (imdb id) we can continue -->
     <if test="${movie.site_id}!=">
 
-      <set name="site" value="http://www.imdb.com/title/${movie.site_id}" />
+      <set name="site" value="https://www.imdb.com/title/${movie.site_id}" />
 
-      <retrieve name="details_page" url="${site}" />
+      <retrieve name="details_page" url="${site}" encoding="UTF-8" />
 
         <set name="rx_title_year">
             <![CDATA[
@@ -331,7 +331,7 @@
       <parse name="certification" input="${details_page}" regex="${rx_certification_details}" />
       <set name='movie.certification' value='${certification[0][0]:htmldecode}' />
       <if test="${movie.certification}=">
-        <retrieve name='parentalguide_page' url='${site}/parentalguide' />
+        <retrieve name='parentalguide_page' url='${site}/parentalguide' encoding="UTF-8" />
         <parse name="certification" input="${parentalguide_page}" regex="${rx_certification}" />
         <set name='movie.certification' value='${certification[0][0]:htmldecode}' />
       </if>
@@ -358,7 +358,7 @@
       <set name='movie.language' value='${language[0][0]:htmldecode}' />
 
       <!-- Plot Summary -->
-      <retrieve name="summary_page" url="${site}plotsummary" />
+      <retrieve name="summary_page" url="${site}plotsummary" encoding="UTF-8" />
       <parse name="summary" input="${summary_page}" regex="${rx_plot}" />
       <set name="summary_clean" value="${summary[0][0]:striptags}" />
       <set name="movie.summary" value="${summary_clean:htmldecode}" />
@@ -371,7 +371,7 @@
       </if>
 
       <!-- AKA page -->
-      <retrieve name="aka_page" url="${site}releaseinfo" />
+      <retrieve name="aka_page" url="${site}releaseinfo" encoding="UTF-8" />
       <parse name="akas" input="${aka_page}" regex="${rx_aka}" />
       <set name="movie.alternate_titles" value="|" />
       <loop name="currAka" on="akas" limit="50">
@@ -396,12 +396,22 @@
     <!-- if we have a site id (imdb id) we can continue -->
     <if test="${movie.site_id}!=">
         <!-- Retrieve details -->
-        <retrieve name="details_page" url="http://www.imdb.com/title/${movie.site_id}/" />
+        <retrieve name="details_page" url="https://www.imdb.com/title/${movie.site_id}/" encoding="UTF-8" />
 
         <!-- Get cover directly by manipulating details page thumbnail -->
         <set name="rx_cover">
         <![CDATA[
         title="[^)]+\)\s*Poster"\s*src="([^_]+_V1)(?:\._CR[^_]+)?[^.]+([^"]+)"
+        ]]>
+        </set>
+        <parse name="cover_src" input="${details_page}" regex="${rx_cover}" />
+
+        <!-- set cover -->
+        <set name="cover_art[0].url" value="${cover_src[0][0]}${cover_src[0][1]}" />
+    </if>
+  </action>
+  
+</ScriptableScraper>
         ]]>
         </set>
         <parse name="cover_src" input="${details_page}" regex="${rx_cover}" />
