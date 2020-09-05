@@ -1775,6 +1775,23 @@ namespace MediaPortal.Plugins.MovingPictures {
         }
         private string _articlesForRemoval;
 
+        [CornerstoneSetting(
+            Name = "Replacements",
+            Description = "Regular expression used to remove non-word characters when creating sort by titles.",
+            Groups = "|MediaPortal GUI|Sorting|",
+            Identifier = "replacements",
+            Default = @"[^\w\s]" )]
+        public string Replacements
+        {
+            get { return _replacements; }
+            set
+            {
+                _replacements = value;
+                OnSettingChanged( "replacements" );
+            }
+        }
+        private string _replacements;
+
         /// <summary>
         /// Preposition articles grouped by language.
         /// </summary>

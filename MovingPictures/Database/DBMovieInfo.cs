@@ -927,8 +927,8 @@ namespace MediaPortal.Plugins.MovingPictures.Database {
         public void PopulateSortBy() {
             if (RetrievalInProcess) return;
             
-            // remove all non-word characters and replace them with spaces
-            SortBy = Regex.Replace(_title, @"[^\w\s]", "", RegexOptions.IgnoreCase).ToLower().Trim();
+            // remove all non-word characters and replace them with an empty string
+            SortBy = Regex.Replace(_title, @MovingPicturesCore.Settings.Replacements, "", RegexOptions.IgnoreCase).ToLower().Trim();
 
             // try to remove a possible leading articles
             if (MovingPicturesCore.Settings.RemoveTitleArticles) {

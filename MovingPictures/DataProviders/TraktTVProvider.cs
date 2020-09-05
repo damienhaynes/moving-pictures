@@ -106,7 +106,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders
 
             // Grab the movie using the trakt ID
             // First get from cache, this saves re-requesting information during initial import but will return new data when mp is restarted
-            if (!mMovieCache.TryGetValue(lTraktId, out DBMovieInfo lMovie))
+            DBMovieInfo lMovie;
+            if (!mMovieCache.TryGetValue(lTraktId, out lMovie))
             {
                 lMovie = GetMovieInformation(lTraktId);
             }
@@ -223,7 +224,8 @@ namespace MediaPortal.Plugins.MovingPictures.DataProviders
             }
 
             // add release date and year
-            if (DateTime.TryParse(lMovieDetails.Released, out DateTime lDate))
+            DateTime lDate;
+            if (DateTime.TryParse(lMovieDetails.Released, out lDate))
             {
                 lMovie.Year = lDate.Year;
                 lMovie.ReleaseDate = lDate;
