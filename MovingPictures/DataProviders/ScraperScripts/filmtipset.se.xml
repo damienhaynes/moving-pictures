@@ -14,13 +14,14 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="7" point="0"/>
-	<published month="10" day="05" year="2021"/>
+	<version major="1" minor="8" point="0"/>
+	<published month="2" day="22" year="2023"/>
 
 	<!--
 	1.7.0 Fixed Release Date, Language, Studios, Plot Keywords, Score, Matching movies on search results page 3 and 4
 	These fields are used for categorization purposes. Seperate multiple 
 	types with a pipe | character.
+	1.8.0 Fixed search and taglines, IMDb 8 number id, Will use Swedish release date if available or else the first release date
 	-->
 	<type>MovieDetailsFetcher</type>
 	<language>sv</language>
@@ -33,7 +34,7 @@
 		<!-- Regular Expressions -->
 		<set name="rx_search_results_block">
 			<![CDATA[
-			</th></tr><tr><td><a href=".*?"><strong>(.*?)</div><br/><h3>Sk.despelare/person</h3>
+			</th></tr><tr><td><a href=".*?"><strong>(.*?)<h3>Sk.despelare/crew</h3>
 			]]>
 		</set>
 		<set name="rx_search_results">
@@ -43,7 +44,7 @@
 		</set>
 		<set name="rx_imdb">
 			<![CDATA[
-			tt\d*(\d{7})"
+			tt0{0,2}(\d{7,8})"
 			]]>
 		</set>
 		<set name="rx_alternate_title_block">
@@ -306,12 +307,12 @@
 			</set>
 			<set name="rx_imdb">
 				<![CDATA[
-				tt\d*(\d{7})"
+				tt0{0,2}(\d{7,8})"
 				]]>
 			</set>
 			<set name="rx_tagline">
 				<![CDATA[
-				Taglines</a><div class="ipc-metadata-list-item__content-container"><div class="ipc-overflowText ipc-overflowText--pageSection ipc-overflowText--height-short ipc-overflowText--short ipc-overflowText--base" role="presentation"><ul class="ipc-inline-list ipc-inline-list--show-dividers ipc-inline-list--inline ipc-metadata-list-item__list-content base" role="presentation"><li role="presentation" class="ipc-inline-list__item"><span class="ipc-metadata-list-item__list-content-item">(.+?)</span></li></ul><div class="ipc-overflowText-overlay">
+				ipc-html-content-inner-div">(.*?)</div>
 				]]>
 			</set>
 			<set name="rx_imdb_votes">
@@ -336,7 +337,17 @@
 			</set>
 			<set name="rx_release_date">
 				<![CDATA[
-				tt_dt_rdat">(\w+ \d+, \d+)
+				tt_dt_rdat">(\w+ \d+, \d+) \(Sweden\)
+				]]>
+			</set>
+			<set name="rx_release_date_releaseinfo">
+				<![CDATA[
+				Sweden[\r\n]</a></td>[\r\n]<td class="release-date-item__date" align="right">(\d+ \w+ \d+)<
+				]]>
+			</set>
+			<set name="rx_release_date_releaseinfo_first">
+				<![CDATA[
+				<td class="release-date-item__date" align="right">(\d+ \w+ \d+)</td>
 				]]>
 			</set>
 
@@ -410,7 +421,8 @@
 			</loop>
 
 			<!-- Tagline -->
-			<parse name="tagline" input="${imdb_page}" regex='${rx_tagline}'/>
+			<retrieve name="taglines_page" url="https://www.imdb.com/title/${movie.imdb_id}/taglines/"/>
+			<parse name="tagline" input="${taglines_page}" regex='${rx_tagline}'/>
 			<set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
 
 			<!-- Score and Popularity -->
@@ -430,10 +442,21 @@
 
 			<!-- Release Date -->
 			<parse name="release_date" input="${imdb_page}" regex="${rx_release_date}" />
-			<!-- If IMDb.com does not have a release date, then we will use the release year -->
+			<!-- If IMDb.com does not have a release date, then we will try the release info page -->
 			<if test="${release_date[0][0]}=">
-				<if test="${movie.year}!=">
-					<set name="release_date[0][0]" value="1/1/${movie.year}" />
+				<retrieve name="imdb_releaseinfo" url="https://www.imdb.com/title/${movie.imdb_id}/releaseinfo"/>
+				<parse name="release_date" input="${imdb_releaseinfo}" regex="${rx_release_date_releaseinfo}" />
+
+				<if test="${release_date[0][0]}=">
+					<!-- If the details page does not have a Swedish release date, then we will use the first release date -->
+					<parse name="release_date" input="${imdb_releaseinfo}" regex="${rx_release_date_releaseinfo_first}" />
+					
+					<if test="${release_date[0][0]}=">
+						<!-- If IMDb.com does not have a release date, then we will use the release year -->
+						<if test="${movie.year}!=">
+							<set name="release_date[0][0]" value="1/1/${movie.year}" />
+						</if>
+					</if>
 				</if>
 			</if>
 			<set name="movie.release_date" value="${release_date[0][0]}" />
