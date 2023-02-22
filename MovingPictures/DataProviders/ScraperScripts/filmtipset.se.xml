@@ -14,12 +14,14 @@
 	is for minor bug fix releases. Use it.
 	-->
 	<id>874987</id>
-	<version major="1" minor="6" point="9"/>
-	<published month="04" day="16" year="2020"/>
+	<version major="1" minor="8" point="0"/>
+	<published month="2" day="22" year="2023"/>
 
 	<!--
+	1.7.0 Fixed Release Date, Language, Studios, Plot Keywords, Score, Matching movies on search results page 3 and 4
 	These fields are used for categorization purposes. Seperate multiple 
 	types with a pipe | character.
+	1.8.0 Fixed search and taglines, IMDb 8 number id, Will use Swedish release date if available or else the first release date
 	-->
 	<type>MovieDetailsFetcher</type>
 	<language>sv</language>
@@ -32,7 +34,7 @@
 		<!-- Regular Expressions -->
 		<set name="rx_search_results_block">
 			<![CDATA[
-			</th></tr><tr><td><a href=".*?"><strong>(.*?)</div><br/><h3>Sk.despelare/person</h3>
+			</th></tr><tr><td><a href=".*?"><strong>(.*?)<h3>Sk.despelare/crew</h3>
 			]]>
 		</set>
 		<set name="rx_search_results">
@@ -42,7 +44,7 @@
 		</set>
 		<set name="rx_imdb">
 			<![CDATA[
-			tt\d*(\d{7})"
+			tt0{0,2}(\d{7,8})"
 			]]>
 		</set>
 		<set name="rx_alternate_title_block">
@@ -197,7 +199,7 @@
 
 			<loop name="search_results_verified" on="search_results_block">
 				<parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
-				<set name="offset" value="50"/>
+				<set name="offset" value="75"/>
 				<loop name='curr_details' on='movie_details' limit="25">
 					<add name="counter" value1="${count}" value2="${offset}" />
 					<set name="movie[${counter}].title" value="${curr_details[1]}" />
@@ -228,7 +230,7 @@
 
 			<loop name="search_results_verified" on="search_results_block">
 				<parse name="movie_details" input="${search_results_verified}" regex="${rx_search_results}" />
-				<set name="offset" value="50"/>
+				<set name="offset" value="100"/>
 				<loop name='curr_details' on='movie_details' limit="25">
 					<add name="counter" value1="${count}" value2="${offset}" />
 					<set name="movie[${counter}].title" value="${curr_details[1]}" />
@@ -305,48 +307,53 @@
 			</set>
 			<set name="rx_imdb">
 				<![CDATA[
-				tt\d*(\d{7})"
+				tt0{0,2}(\d{7,8})"
 				]]>
 			</set>
 			<set name="rx_tagline">
 				<![CDATA[
-				<h5>Tagline.</h5>[^>]+>[^\r]?(?<movieTagline>[^<]+)|Tagline[s]?:</h4>[\s\f\r]*(?<movieTagline>[^<]+)
+				ipc-html-content-inner-div">(.*?)</div>
 				]]>
 			</set>
 			<set name="rx_imdb_votes">
 				<![CDATA[
-				<span itemprop="ratingValue">(\d.\d)</span>
-				]]>
-			</set>
-			<set name="rx_language_block">
-				<![CDATA[
-				>Language:<\/h4>[\w\W]+>Release Date:</h4>
+				@type":"AggregateRating","ratingCount":(\d+),"bestRating":10,"worstRating":1,"ratingValue":(\d[.\d]*)}
 				]]>
 			</set>
 			<set name="rx_language">
 				<![CDATA[
-				tt_dt_dt"[\w\W]>(.*?)<\/a>
+				primary_language=\S+">(\w+)
 				]]>
 			</set>
 			<set name="rx_studios_block">
 				<![CDATA[
-				<h4 class="inline">Production Co:</h4>\s*(?<movieStudios>(?:[,]*\s*<span itemprop="creator"[^>]+>\s*)?(?:[^<]*<a[^>]+href="[^"]+"[^>]*>(?:<span[^>]+>)?[^<]+(?:</span></a></span>|</a>)))*
+				Production companies.+?<\/a><\/li><\/ul>
 				]]>
 			</set>
 			<set name="rx_studios">
 				<![CDATA[
-				<a[^>]+href="[^"]+"[^>]*>(?:<span[^>]+>)?(?<movieStudios>[^<]+)(?:</span>)?</a>
+				>([\w ]+)
 				]]>
 			</set>
 			<set name="rx_release_date">
 				<![CDATA[
-				<h4 class="inline">Release Date:</h4>\s*(?<releaseDate>\d{1,2}\s*[^\s]+\s*\d{4})
+				tt_dt_rdat">(\w+ \d+, \d+) \(Sweden\)
+				]]>
+			</set>
+			<set name="rx_release_date_releaseinfo">
+				<![CDATA[
+				Sweden[\r\n]</a></td>[\r\n]<td class="release-date-item__date" align="right">(\d+ \w+ \d+)<
+				]]>
+			</set>
+			<set name="rx_release_date_releaseinfo_first">
+				<![CDATA[
+				<td class="release-date-item__date" align="right">(\d+ \w+ \d+)</td>
 				]]>
 			</set>
 
 			<set name="rx_plotkeywords">
 				<![CDATA[
-				<h4[^>]+>Plot Keywords:</h4>\s*(?<moviePlotKeywords>.+?)(?:&nbsp;|<nobr>|See more|</div>)
+				data-item-keyword="([\w ]+?)">
 				]]>
 			</set>
 
@@ -406,24 +413,23 @@
 			<set name='movie.certification' value='${certification[0][0]:htmldecode}'/>
 
 			<!-- Language -->
-			<retrieve name="imdb_page" url="http://www.imdb.com/title/${movie.imdb_id}"/>
-			<parse name="language_block" input="${imdb_page}" regex='${rx_language_block}' />
-			<parse name="language" input="${language_block}" regex='${rx_language}' />
+			<retrieve name="imdb_page" url="https://www.imdb.com/title/${movie.imdb_id}/?ref_=tt_ql"/>
+			<parse name="language" input="${imdb_page}" regex='${rx_language}' />
 			<set name='movie.language' value=''/>
 			<loop name='currLanguage' on='language'>
 				<set name='movie.language' value='${movie.language}|${currLanguage[0]}'/>
 			</loop>
 
 			<!-- Tagline -->
-			<parse name="tagline" input="${imdb_page}" regex='${rx_tagline}'/>
+			<retrieve name="taglines_page" url="https://www.imdb.com/title/${movie.imdb_id}/taglines/"/>
+			<parse name="tagline" input="${taglines_page}" regex='${rx_tagline}'/>
 			<set name='movie.tagline' value='${tagline[0][0]:htmldecode}'/>
 
 			<!-- Score and Popularity -->
 			<if test="${IMDbScore}=true">
 				<parse name="imdb_votes" input="${imdb_page}" regex="${rx_imdb_votes}" />
-				<set name="movie.score" value="${imdb_votes[0][0]:htmldecode}" />
-				<replace name="imdb_votes_clean" input="${imdb_votes[0][0]:htmldecode}" pattern=',' with='.' />
-				<set name="movie.popularity" value="${imdb_votes_clean}" />
+				<set name="movie.score" value="${imdb_votes[0][1]:htmldecode}" />
+				<set name="movie.popularity" value="${imdb_votes[0][0]:htmldecode}" />
 			</if>
 
 			<!-- Studios -->
@@ -436,18 +442,32 @@
 
 			<!-- Release Date -->
 			<parse name="release_date" input="${imdb_page}" regex="${rx_release_date}" />
-			<!-- If IMDb.com does not have a release date, then we will use the release year -->
+			<!-- If IMDb.com does not have a release date, then we will try the release info page -->
 			<if test="${release_date[0][0]}=">
-				<if test="${movie.year}!=">
-					<set name="release_date[0][0]" value="1/1/${movie.year}" />
+				<retrieve name="imdb_releaseinfo" url="https://www.imdb.com/title/${movie.imdb_id}/releaseinfo"/>
+				<parse name="release_date" input="${imdb_releaseinfo}" regex="${rx_release_date_releaseinfo}" />
+
+				<if test="${release_date[0][0]}=">
+					<!-- If the details page does not have a Swedish release date, then we will use the first release date -->
+					<parse name="release_date" input="${imdb_releaseinfo}" regex="${rx_release_date_releaseinfo_first}" />
+					
+					<if test="${release_date[0][0]}=">
+						<!-- If IMDb.com does not have a release date, then we will use the release year -->
+						<if test="${movie.year}!=">
+							<set name="release_date[0][0]" value="1/1/${movie.year}" />
+						</if>
+					</if>
 				</if>
 			</if>
 			<set name="movie.release_date" value="${release_date[0][0]}" />
 
 			<!-- Plot Keywords -->
-			<parse name="plotkeywords" input="${imdb_page}" regex="${rx_plotkeywords}" />
-			<set name="plotkeywords_clean" value="|${plotkeywords[0][0]:striptags}|" />
-			<replace name="movie.plotkeywords" input="${plotkeywords_clean:htmldecode}" pattern="\s*[|]+\s*" with="|" />
+			<retrieve name="imdb_keywords" url="https://www.imdb.com/title/${movie.imdb_id}/keywords"/>
+			<parse name="plotkeywords" input="${imdb_keywords}" regex="${rx_plotkeywords}" />
+			<set name="movie.plotkeywords" value="|" />
+			<loop name="currKeyword" on="plotkeywords" limit="100">
+				<set name="movie.plotkeywords" value="${movie.plotkeywords}${currKeyword[0]:htmldecode}|" />
+			</loop>
 
 	</action>
 
